@@ -19,3 +19,10 @@ Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Client.dll.config
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Client.XML
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Client.dll
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Client.pdb
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.XML
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.pdb
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Framework.Common.Client.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.dll
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.pdb

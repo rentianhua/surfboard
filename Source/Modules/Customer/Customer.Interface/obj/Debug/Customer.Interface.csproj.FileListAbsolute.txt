@@ -19,3 +19,9 @@ Y:\GitHub\AgileMVC\Lib\Smartac.SR.Modules.Customer.Interface.pdb
 Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.Interface\obj\Debug\Customer.Interface.csprojResolveAssemblyReference.cache
 Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.Interface\obj\Debug\Smartac.SR.Modules.Customer.Interface.dll
 Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.Interface\obj\Debug\Smartac.SR.Modules.Customer.Interface.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\Customer.Interface.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.Interface.xml
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.Interface.dll
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.Interface.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.pdb

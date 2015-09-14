@@ -17,3 +17,10 @@ Y:\GitHub\AgileMVC\Source\Framework\Common\Framework.Common.Server\obj\Debug\Fra
 Y:\GitHub\AgileMVC\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.dll
 Y:\GitHub\AgileMVC\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.pdb
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Server.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.xml
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.pdb
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Framework.Common.Server.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.dll
+\\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.pdb
