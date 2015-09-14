@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/hiip/!svn/ver/209809/branch/R6g/Source/Framework/Logging/Logging.Library/CallHandlers
+END
+MonitoringCallHandler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/209809/branch/R6g/Source/Framework/Logging/Logging.Library/CallHandlers/MonitoringCallHandler.cs
+END
+MonitoringCallHandlerAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging.Library/CallHandlers/MonitoringCallHandlerAttribute.cs
+END
+MonitoringCallHandlerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/203001/branch/R6g/Source/Framework/Logging/Logging.Library/CallHandlers/MonitoringCallHandlerData.cs
+END

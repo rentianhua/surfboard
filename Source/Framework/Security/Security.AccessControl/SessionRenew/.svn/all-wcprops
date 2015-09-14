@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/hiip/!svn/ver/221199/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew
+END
+SessionRenewManager.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/221199/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/SessionRenewManager.cs
+END
+SessionRefreshService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/SessionRefreshService.cs
+END
+SessionRenewProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/199249/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/SessionRenewProxy.cs
+END

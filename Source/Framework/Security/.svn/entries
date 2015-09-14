@@ -1,0 +1,70 @@
+10
+
+dir
+235190
+https://192.168.0.156:8443/svn/hiip/branch/R6g/Source/Framework/Security
+https://192.168.0.156:8443/svn/hiip
+
+
+
+2012-02-02T06:34:09.185913Z
+230845
+xinzhe
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c8768039-c8ac-d848-bd62-85a48e97434a
+
+Security.AccessControl.BusinessEntity
+dir
+
+Security.SessionManagement.DataAccess
+dir
+
+Security.UserManagement.Interface
+dir
+
+Security.UserManagement
+dir
+
+Security.AccessControl.DataAccess
+dir
+
+Security.SessionManagement.BusinessComponent
+dir
+
+Security.SessionManagement.Interface
+dir
+
+Security.SessionManagement
+dir
+
+Security.AccessControl.BusinessComponet
+dir
+
+Security.AccessControl.Interface
+dir
+
+Security.AccessControl
+dir
+
+Security.UserManagement.BusinessEntity
+dir
+
+Security.UserManagement.DataAccess
+dir
+
+Security.UserManagement.BusinessComponent
+dir
+

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess
+END
+ViewAuthorizationDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess/ViewAuthorizationDA.cs
+END
+ProfileCatalogServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess/ProfileCatalogServiceDA.cs
+END
+DataFilterServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess/DataFilterServiceDA.cs
+END
+Framework.Security.AccessControl.DataAccess.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess/Framework.Security.AccessControl.DataAccess.csproj
+END
+SessionRenewDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.DataAccess/SessionRenewDA.cs
+END

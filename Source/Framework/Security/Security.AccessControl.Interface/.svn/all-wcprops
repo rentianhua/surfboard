@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface
+END
+SessionData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/199246/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/SessionData.cs
+END
+AuthenticationException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/AuthenticationException.cs
+END
+Framework.Security.AccessControl.Interface.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/196344/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Framework.Security.AccessControl.Interface.csproj
+END
+ISessionRenewService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/151801/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/ISessionRenewService.cs
+END
+ILoginService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/199246/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/ILoginService.cs
+END
+IViewAuthorizationService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/IViewAuthorizationService.cs
+END
+MembershipUserInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/MembershipUserInfo.cs
+END

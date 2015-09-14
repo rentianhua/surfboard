@@ -1,0 +1,14 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.Interface.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.Interface.pdb
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.Properties.Resources.resources
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\Framework.Security.AccessControl.Interface.csproj.GenerateResource.Cache
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.dll
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.pdb
+C:\HiiP\Developer\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.Interface.dll
+C:\HiiP\Developer\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.Interface.pdb
+C:\HiiP\Developer\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.Properties.Resources.resources
+C:\HiiP\Developer\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.dll
+C:\HiiP\Developer\R6G\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\HiiP.Framework.Security.AccessControl.Interface.pdb
+C:\HiiP\Developer\R6g\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\Framework.Security.AccessControl.Interface.csproj.GenerateResource.Cache
+C:\HiiP\Developer\R6g\Source\Framework\Security\Security.AccessControl.Interface\obj\Debug\Framework.Security.AccessControl.Interface.csprojResolveAssemblyReference.cache

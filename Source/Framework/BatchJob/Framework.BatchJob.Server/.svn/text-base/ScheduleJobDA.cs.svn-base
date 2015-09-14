@@ -1,0 +1,399 @@
+﻿#region Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+
+// ==================================================================================================
+// Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+//
+// SYSTEM NAME       :   Housing Integrated Information Program
+// COMPONENT ID      :   Framework/Batch job
+// COMPONENT DESC    :  
+//
+// CREATED DATE/BY   : 29/12/2010/He Jiang Yan
+//
+// REVISION HISTORY  : DATE/BY                    SR#/CS/PM#/OTHERS          DESCRIPTION OF CHANGE
+// ==================================================================================================
+
+#endregion
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.Common.ApplicationContexts;
+using HiiP.Framework.Common.Server;
+using HiiP.Framework.Logging.Library;
+
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using HiiP.Framework.BatchJob.Interface;
+using System.Configuration;
+using NCS.IConnect.BatchJob.Configuration;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    public class ScheduleJobDA : HiiPDataAccessBase
+    {
+        private const string SearchBatchJobByID = "P_IC_BATCH_JOB_ID_GET";
+        private const string InsertJobSP = "P_IC_BATCH_JOB_I";
+        private const string UpdateJobSP = "P_IC_BATCH_JOB_U";
+
+        private const string InsertParameterSP = "P_IC_BATCH_JOB_PARAM_I";
+        private const string UpdateParameterSP = "P_IC_BATCH_JOB_PARAM_U";
+        private const string DeleteParameterSP = "P_IC_BATCH_JOB_PARAM_D";
+
+        private const string SearchAllBatchJobAsChild = "P_IC_BATCH_JOB_CHILD_S";//retrive all jobs as child
+        private const string SearchAllBatchJobAsParent = "P_IC_BATCH_JOB_PARENT_S";//retrive all jobs as parent
+
+        private const string SearchAllParentsWithJobID = "P_IC_BATCH_JOB_PARENTS_S_WITH_JOB_ID";//retrive all parents with job ID
+        private const string InsertDependencySP = "P_IC_BATCH_JOB_LIST_I";
+        private const string UpdateDependencySP = "P_IC_BATCH_JOB_LIST_U";
+        private const string DeleteDependencySP = "P_IC_BATCH_JOB_LIST_D";
+
+        private const string DependencyCheckSP = "P_IC_BATCH_JOB_DEPENDENCY_CHECK";
+        private static string _applicationName;
+
+        #region IScheduleJobService Members
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public BatchJobDetailInfoDataSet GetBatchJobInfo(string batchJobID)
+        {
+            BatchJobDetailInfoDataSet data = new BatchJobDetailInfoDataSet();
+            var db = DatabaseFactory.CreateDatabase();
+            DbCommand command = db.GetStoredProcCommand(SearchBatchJobByID);
+            db.AddInParameter(command, "p_batch_job_id", DbType.String, batchJobID);
+
+            db.LoadDataSet(command, data,
+                new[]{data.T_IC_BATCH_JOB.TableName,
+                    data.T_IC_BATCH_JOB_PARAM.TableName});
+            return data;
+        }
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ScheduleABatchJobFunctionID)]
+        public void AddBatchJob(BatchJobDetailInfoDataSet batchJobInfo)
+        {
+            var db = DatabaseFactory.CreateDatabase();
+            DbCommand insertCommand = db.GetStoredProcCommand(InsertJobSP);
+            db.AddInParameter(insertCommand, "p_batch_job_id", DbType.String, "BATCH_JOB_ID", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_type_id", DbType.String, "TYPE_ID", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_app_name", DbType.String, "HiiP");
+            db.AddInParameter(insertCommand, "p_batch_job_name", DbType.String, "BATCH_JOB_NAME", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_servers", DbType.String, "SERVERS", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_is_enable", DbType.Int32, "IS_ENABLED", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_estimation_time", DbType.String, "ESTIMATION_TIME", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_batch_job_description", DbType.String, "BATCH_JOB_DESCRIPTION", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_parent_list_id", DbType.String, "PARENT_LIST_ID", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_post_action_status", DbType.String, "POST_ACTION_STATUS", DataRowVersion.Current);
+
+            db.AddInParameter(insertCommand, "p_frequency", DbType.String, "FREQUENCY", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_run_day_of_week", DbType.String, "RUN_DAY_OF_WEEK", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_run_day_of_month", DbType.String, "RUN_DAY_OF_MONTH", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_run_date_of_year", DbType.String, "RUN_DATE_OF_YEAR", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_runonce_datetime", DbType.DateTime, "RUNONCE_DATETIME", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_run_time", DbType.String, "RUN_TIME", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_interval", DbType.Int16, "Interval", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_indexofmonthly", DbType.Int16, "IndexOfMonthly", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_months ", DbType.String, "Months", DataRowVersion.Current);
+
+            db.AddInParameter(insertCommand, "p_priority", DbType.Int32, "PRIORITY", DataRowVersion.Current);
+            db.AddInParameter(insertCommand, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+            db.AddInParameter(insertCommand, "p_created_by", DbType.String, AppContext.Current.UserName);
+            db.AddInParameter(insertCommand, "p_created_time", DbType.DateTime, DateTime.Now);
+            db.AddInParameter(insertCommand, "p_run_in_next_day ", DbType.String, "IS_RUN_IN_NEXT_DAY", DataRowVersion.Current);
+
+            DbCommand insertCommand2 = GenerateInsertParamCommand(db);
+
+            db.UpdateDataSet(batchJobInfo, batchJobInfo.T_IC_BATCH_JOB.TableName, insertCommand, null, null, UpdateBehavior.Transactional);
+            db.UpdateDataSet(batchJobInfo, batchJobInfo.T_IC_BATCH_JOB_PARAM.TableName, insertCommand2, null, null, UpdateBehavior.Transactional);
+
+        }
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.UpdateBatchJobFunctionID)]
+        public void UpdateBatchJob(BatchJobDetailInfoDataSet batchJobInfo)
+        {
+            var db = DatabaseFactory.CreateDatabase();
+            DbCommand updateCommand = GenerateUpdateJobCommand(db);
+            db.UpdateDataSet(batchJobInfo, batchJobInfo.T_IC_BATCH_JOB.TableName, null, updateCommand, null, UpdateBehavior.Transactional);
+
+            var deletedParams = batchJobInfo.T_IC_BATCH_JOB_PARAM.Select("", "", DataViewRowState.Deleted);
+            if ( deletedParams.Length > 0)
+            {
+                DbCommand deleteCommand2 = db.GetStoredProcCommand(DeleteParameterSP);
+                db.AddInParameter(deleteCommand2, "p_batch_job_id", DbType.String, "BATCH_JOB_ID", DataRowVersion.Current);
+                db.AddInParameter(deleteCommand2, "p_parameter_name", DbType.String, "PARAMETER_NAME", DataRowVersion.Current);
+                db.AddInParameter(deleteCommand2, "o_version_no", DbType.String, "VERSION_NO", DataRowVersion.Original);
+                db.AddInParameter(deleteCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+                db.AddInParameter(deleteCommand2, "p_last_updated_by", DbType.String, AppContext.Current.UserName);
+                db.AddInParameter(deleteCommand2, "p_last_updated_time", DbType.DateTime, DateTime.Now);
+
+                db.UpdateDataSet(deletedParams, null, null, deleteCommand2, UpdateBehavior.Transactional);
+            }
+
+            var updatedParams = batchJobInfo.T_IC_BATCH_JOB_PARAM.Select("", "", DataViewRowState.ModifiedCurrent);
+            if (updatedParams.Length > 0)
+            {
+                DbCommand updateCommand2 = db.GetStoredProcCommand(UpdateParameterSP);
+                db.AddInParameter(updateCommand2, "p_batch_job_id", DbType.String, "BATCH_JOB_ID", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "p_parameter_name", DbType.String, "PARAMETER_NAME", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "p_default_value", DbType.String, "DEFAULT_VALUE", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "p_description", DbType.String, "DESCRIPTION", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "o_version_no", DbType.String, "VERSION_NO", DataRowVersion.Original);
+                db.AddInParameter(updateCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+                db.AddInParameter(updateCommand2, "p_last_updated_by", DbType.String, AppContext.Current.UserName);
+                db.AddInParameter(updateCommand2, "p_last_updated_time", DbType.DateTime, DateTime.Now);
+
+                db.UpdateDataSet(updatedParams, null, updateCommand2, null, UpdateBehavior.Transactional);
+            }
+            var insertedParams = batchJobInfo.T_IC_BATCH_JOB_PARAM.Select("", "", DataViewRowState.Added);
+            if ( insertedParams.Length > 0)
+            {
+                DbCommand insertCommand2 = GenerateInsertParamCommand(db);
+
+                db.UpdateDataSet(insertedParams, insertCommand2, null, null, UpdateBehavior.Transactional);
+            }
+        }
+
+        private static DbCommand GenerateInsertParamCommand(Database db)
+        {
+            DbCommand insertCommand2 = db.GetStoredProcCommand(InsertParameterSP);
+            db.AddInParameter(insertCommand2, "p_batch_job_id", DbType.String, "BATCH_JOB_ID", DataRowVersion.Current);
+            db.AddInParameter(insertCommand2, "p_parameter_name", DbType.String, "PARAMETER_NAME", DataRowVersion.Current);
+            db.AddInParameter(insertCommand2, "p_default_value", DbType.String, "DEFAULT_VALUE", DataRowVersion.Current);
+            db.AddInParameter(insertCommand2, "p_description", DbType.String, "DESCRIPTION", DataRowVersion.Current);
+            db.AddInParameter(insertCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+            db.AddInParameter(insertCommand2, "p_created_by", DbType.String, AppContext.Current.UserName);
+            db.AddInParameter(insertCommand2, "p_created_time", DbType.DateTime, DateTime.Now);
+            return insertCommand2;
+        }
+
+        private static DbCommand GenerateUpdateJobCommand(Database db)
+        {
+            DbCommand updateCommand = db.GetStoredProcCommand(UpdateJobSP);
+            db.AddInParameter(updateCommand, "p_batch_job_id", DbType.String, "BATCH_JOB_ID", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_batch_job_name", DbType.String, "BATCH_JOB_NAME", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_type_id", DbType.String, "TYPE_ID", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_servers", DbType.String, "SERVERS", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_is_enable", DbType.Int32, "IS_ENABLED", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_estimation_time", DbType.String, "ESTIMATION_TIME", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_batch_job_description", DbType.String, "BATCH_JOB_DESCRIPTION", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_parent_list_id", DbType.String, "PARENT_LIST_ID", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_post_action_status", DbType.String, "POST_ACTION_STATUS", DataRowVersion.Current);
+
+            db.AddInParameter(updateCommand, "p_frequency", DbType.String, "FREQUENCY", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_run_day_of_week", DbType.String, "RUN_DAY_OF_WEEK", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_run_day_of_month", DbType.String, "RUN_DAY_OF_MONTH", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_run_date_of_year", DbType.String, "RUN_DATE_OF_YEAR", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_runonce_datetime", DbType.DateTime, "RUNONCE_DATETIME", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_run_time", DbType.String, "RUN_TIME", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_interval", DbType.Int16, "Interval", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_indexofmonthly", DbType.Int16, "IndexOfMonthly", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "p_months ", DbType.String, "Months", DataRowVersion.Current);
+
+            db.AddInParameter(updateCommand, "p_priority", DbType.Int32, "PRIORITY", DataRowVersion.Current);
+            db.AddInParameter(updateCommand, "o_version_no", DbType.String, "VERSION_NO", DataRowVersion.Original);
+            db.AddInParameter(updateCommand, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+            db.AddInParameter(updateCommand, "p_last_updated_by", DbType.String, AppContext.Current.UserName);
+            db.AddInParameter(updateCommand, "p_last_updated_time", DbType.DateTime, DateTime.Now);
+            db.AddInParameter(updateCommand, "p_run_in_next_day ", DbType.String, "IS_RUN_IN_NEXT_DAY", DataRowVersion.Current);
+
+            return updateCommand;
+        }
+
+        /// <summary>
+        /// To retrieve all enabled jobs which Frequency is not 'RunOnce'
+        /// And order by job name.
+        /// </summary>
+        /// <returns></returns>
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOBDataTable GetAllBatchJobsAsChild()
+        {
+            DependencyJobsDataSet.T_IC_BATCH_JOBDataTable data = new DependencyJobsDataSet.T_IC_BATCH_JOBDataTable();
+            DbCommand command = Helper.BuildDbCommand(SearchAllBatchJobAsChild);
+            var appName = GetApplicationName();
+            Helper.AssignParameterValues(command, appName);
+            Helper.Fill(data, command);
+            return data;
+        }
+
+        /// <summary>
+        /// Get all parents of the child job with child job ID.
+        /// </summary>
+        /// <param name="jobID"></param>
+        /// <returns>DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable</returns>
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable GetAllParentsWithJobID(string jobID)
+        {
+            DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable data = new DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable();
+            Helper.Fill(data, SearchAllParentsWithJobID, jobID);
+            return data;
+        }
+
+        /// <summary>
+        /// Get all jobs by child job ID, run time and job next run history ID.
+        /// </summary>
+        /// <param name="jobID"></param>
+        /// <param name="frequency"></param>
+        /// <param name="interval"></param>
+        /// <param name="runDayOfWeek"></param>
+        /// <param name="runDateOfYear"></param>
+        /// <param name="runDayOfMonth"></param>
+        /// <param name="Months"></param>
+        /// <param name="indexOfMonth"></param>
+        /// <param name="isRunInNextDay"></param>
+        /// <param name="runtime"></param>
+        /// <param name="nextID"></param>
+        /// <returns>DependencyJobsDataSet.T_IC_BATCH_JOBDataTable</returns>
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOBDataTable GetAllBatchJobsAsParent(string jobID, 
+            string frequency,
+            int?   interval,
+            string runDayOfWeek,
+            string runDateOfYear,
+            string runDayOfMonth,
+            string Months,
+            int?   indexOfMonth,
+            bool   isRunInNextDay,
+            string runtime,
+            ref int? nextID)
+        {
+            DependencyJobsDataSet.T_IC_BATCH_JOBDataTable data = new DependencyJobsDataSet.T_IC_BATCH_JOBDataTable();
+            var command = Helper.BuildDbCommand(SearchAllBatchJobAsParent);
+            Helper.AssignParameterValues(command, new object[] { jobID, 
+                    frequency,
+                    interval,
+                    runDayOfWeek,
+                    runDateOfYear,
+                    runDayOfMonth,
+                    Months,
+                    indexOfMonth,
+                    isRunInNextDay,
+                    runtime,
+                    nextID,
+                    GetApplicationName() });
+            Helper.Fill(data, command);
+
+            nextID = null;
+            var jobs = data.Where<DependencyJobsDataSet.T_IC_BATCH_JOBRow>(x => !x.IsNull("RunningID"));
+            if (jobs.Count()>0)
+            {
+                nextID = jobs.Min<DependencyJobsDataSet.T_IC_BATCH_JOBRow>(x => (int)x["RunningID"]);
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Dependency changes will be updated to database.
+        /// </summary>
+        /// <param name="dependencyInfo"></param>
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public void UpdateDependency(DependencyJobsDataSet dependencyInfo)
+        {
+            var db = DatabaseFactory.CreateDatabase();
+
+            var deletedDependency = dependencyInfo.T_IC_BATCH_JOB_LIST.Select("", "", DataViewRowState.Deleted);
+            if ( deletedDependency.Length > 0)
+            {
+                DbCommand deleteCommand2 = db.GetStoredProcCommand(DeleteDependencySP);
+                db.AddInParameter(deleteCommand2, "p_parent_job_id", DbType.String, "PARENT_JOB_ID", DataRowVersion.Current);
+                db.AddInParameter(deleteCommand2, "p_parent_list_id", DbType.String, "BATCH_JOB_LIST_ID", DataRowVersion.Current);
+                db.AddInParameter(deleteCommand2, "o_version_no", DbType.String, "VERSION_NO", DataRowVersion.Original);
+                db.AddInParameter(deleteCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+                db.AddInParameter(deleteCommand2, "p_last_updated_by", DbType.String, AppContext.Current.UserName);
+                db.AddInParameter(deleteCommand2, "p_last_updated_time", DbType.DateTime, DateTime.Now);
+
+
+                DbCommand updateCommand = GenerateUpdateJobCommand(db);
+                db.UpdateDataSet(dependencyInfo, dependencyInfo.T_IC_BATCH_JOB.TableName, null, updateCommand, null, UpdateBehavior.Transactional);
+                
+                db.UpdateDataSet(deletedDependency, null, null, deleteCommand2, UpdateBehavior.Transactional);
+            }
+
+            var updatedDependency = dependencyInfo.T_IC_BATCH_JOB_LIST.Select("", "", DataViewRowState.ModifiedCurrent);
+            if (updatedDependency.Length > 0)
+            {
+                DbCommand updateCommand2 = db.GetStoredProcCommand(UpdateDependencySP);
+                db.AddInParameter(updateCommand2, "p_parent_job_id", DbType.String, "PARENT_JOB_ID", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "p_parent_list_id", DbType.String, "BATCH_JOB_LIST_ID", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "p_job_dependency", DbType.String, "DEPENDENCY", DataRowVersion.Current);
+                db.AddInParameter(updateCommand2, "o_version_no", DbType.String, "VERSION_NO", DataRowVersion.Original);
+                db.AddInParameter(updateCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+                db.AddInParameter(updateCommand2, "p_last_updated_by", DbType.String, AppContext.Current.UserName);
+                db.AddInParameter(updateCommand2, "p_last_updated_time", DbType.DateTime, DateTime.Now);
+
+                //DbCommand updateCommand = GenerateUpdateJobCommand(db);
+                //db.UpdateDataSet(dependencyInfo, dependencyInfo.T_IC_BATCH_JOB.TableName, null, updateCommand, null, UpdateBehavior.Transactional);
+                
+                db.UpdateDataSet(updatedDependency, null, updateCommand2, null, UpdateBehavior.Transactional);
+            }
+            var insertedDependency = dependencyInfo.T_IC_BATCH_JOB_LIST.Select("", "", DataViewRowState.Added);
+            if (insertedDependency.Length > 0)
+            {
+                DbCommand insertCommand2 = db.GetStoredProcCommand(InsertDependencySP);
+
+                db.AddInParameter(insertCommand2, "p_parent_job_id", DbType.String, "PARENT_JOB_ID", DataRowVersion.Current);
+                db.AddInParameter(insertCommand2, "p_parent_list_id", DbType.String, "BATCH_JOB_LIST_ID", DataRowVersion.Current);
+                db.AddInParameter(insertCommand2, "p_job_dependency", DbType.String, "DEPENDENCY", DataRowVersion.Current);
+                db.AddInParameter(insertCommand2, "p_transaction_id", DbType.String, AppContext.Current.TransactionID);
+                db.AddInParameter(insertCommand2, "p_created_by", DbType.String, AppContext.Current.UserName);
+                db.AddInParameter(insertCommand2, "p_created_time", DbType.DateTime, DateTime.Now);
+
+                db.UpdateDataSet(insertedDependency, insertCommand2, null, null, UpdateBehavior.Transactional);
+
+                DbCommand updateCommand = GenerateUpdateJobCommand(db);
+                db.UpdateDataSet(dependencyInfo, dependencyInfo.T_IC_BATCH_JOB.TableName, null, updateCommand, null, UpdateBehavior.Transactional);
+            }
+
+        }
+
+        /// <summary>
+        /// Check whether the conditions of their match.
+        /// </summary>
+        /// <param name="childJobID"></param>
+        /// <param name="parentJobIDs"></param>
+        /// <returns>string</returns>
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public string DependencyCheck(string childJobID, string parentJobIDs)
+        {
+            var command = Helper.BuildDbCommand(DependencyCheckSP);
+            Helper.AssignParameterValues(command, new object[] { childJobID, parentJobIDs,GetApplicationName() });
+            var invalidJobID = Helper.ExecuteScalar(command);
+            return invalidJobID == null ? string.Empty : invalidJobID.ToString();
+
+        }
+
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public bool CheckDuplicateName(string jobName, string jobID)
+        {
+
+            object propertyNum = Helper.ExecuteScalar("P_IC_BATCH_JOB_CHECK_DUPLICATENAME", jobName, jobID, GetApplicationName());
+
+            return (propertyNum != null && Int32.Parse(propertyNum.ToString()) > 0);
+        }
+
+        internal static string GetApplicationName()
+        {
+            if (string.IsNullOrEmpty(_applicationName))
+            {
+                var jobSettings = ConfigurationManager.GetSection(BatchJobSettings.SectionName) as BatchJobSettings;
+                if (jobSettings == null)
+                {
+                    NCS.IConnect.Common.ExceptionHelper.ThrowConfigSectionNotFoundException(BatchJobSettings.SectionName);
+                    return string.Empty;
+                }
+
+                var defaultSchedulerConfigData = jobSettings.ScheduleControllerProviders.Get(jobSettings.DefaultScheduleControllerName);
+                if (defaultSchedulerConfigData == null)
+                {
+                    NCS.IConnect.Common.ExceptionHelper.ThrowConfigItemNotFoundException(BatchJobSettings.SectionName, jobSettings.DefaultScheduleControllerName);
+                    return string.Empty;
+                }
+
+                _applicationName = defaultSchedulerConfigData.ApplicationName;
+            }
+
+            return _applicationName;
+        }
+
+        #endregion
+    }
+}

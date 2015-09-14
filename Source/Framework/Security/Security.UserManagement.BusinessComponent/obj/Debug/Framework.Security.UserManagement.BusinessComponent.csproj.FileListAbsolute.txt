@@ -1,0 +1,5 @@
+C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Security.UserManagement.BusinessComponent.dll
+C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Security.UserManagement.BusinessComponent.pdb
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.BusinessComponent\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.BusinessComponent\obj\Debug\HiiP.Framework.Security.UserManagement.BusinessComponent.dll
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.BusinessComponent\obj\Debug\HiiP.Framework.Security.UserManagement.BusinessComponent.pdb

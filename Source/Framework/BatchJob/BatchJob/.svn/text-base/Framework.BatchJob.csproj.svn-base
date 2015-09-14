@@ -1,0 +1,271 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{510CC3FC-ECBA-4ED1-B40C-6565F65B3D5A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HiiP.Framework.BatchJob</RootNamespace>
+    <AssemblyName>HiiP.Framework.BatchJob</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AxInterop.R2AXCTRLLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="HiiP.Shell.ISIP.Interface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Infragistics2.Shared.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.Misc.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinEditors.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinGrid.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinTabControl.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinToolbars.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)Lib\Microsoft.Practices.CompositeUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\Lib\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\Lib\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.ApplicationContexts, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.ApplicationContexts.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.BatchJob, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.BatchJob.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.CodeTable, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.CodeTable.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Common, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Messaging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.PolicyInjection.CallHandlers, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.PolicyInjection.CallHandlers.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.PolicyInjection.WcfExtensions, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.PolicyInjection.WcfExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Validation, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Constants\EndpointNames.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="ModuleController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Constants\CommandNames.cs" />
+    <Compile Include="Constants\EventTopicNames.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceProxy\BatchJobServiceProxy.cs" />
+    <Compile Include="ServiceProxy\ScheduleJobProxy.cs" />
+    <Compile Include="Views\AUDBatchJob.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AUDBatchJob.Designer.cs">
+      <DependentUpon>AUDBatchJob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AUDBatchJob.GeneratedCode.cs">
+      <DependentUpon>AUDBatchJob.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AUDBatchJobPresenter.cs" />
+    <Compile Include="Views\AUDBatchJobPresenter.GeneratedCode.cs">
+      <DependentUpon>AUDBatchJobPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IMaintainJobDependencyView.cs" />
+    <Compile Include="Views\IAUDBatchJob.cs" />
+    <Compile Include="Views\IMonitorBatchJobs.cs" />
+    <Compile Include="Views\ISearchBatchJob.cs" />
+    <Compile Include="Views\MaintainJobDependencyView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\MaintainJobDependencyView.Designer.cs">
+      <DependentUpon>MaintainJobDependencyView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MaintainJobDependencyView.GeneratedCode.cs">
+      <DependentUpon>MaintainJobDependencyView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\MaintainJobDependencyViewPresenter.cs" />
+    <Compile Include="Views\MaintainJobDependencyViewPresenter.GeneratedCode.cs">
+      <DependentUpon>MaintainJobDependencyViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MonitorBatchJobs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\MonitorBatchJobs.Designer.cs">
+      <DependentUpon>MonitorBatchJobs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MonitorBatchJobs.GeneratedCode.cs">
+      <DependentUpon>MonitorBatchJobs.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\MonitorBatchJobsPresenter.cs" />
+    <Compile Include="Views\MonitorBatchJobsPresenter.GeneratedCode.cs">
+      <DependentUpon>MonitorBatchJobsPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchBatchJob.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\SearchBatchJob.Designer.cs">
+      <DependentUpon>SearchBatchJob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SearchBatchJob.GeneratedCode.cs">
+      <DependentUpon>SearchBatchJob.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\SearchBatchJobPresenter.cs" />
+    <Compile Include="Views\SearchBatchJobPresenter.GeneratedCode.cs">
+      <DependentUpon>SearchBatchJobPresenter.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Infragistics.CompositeUI.WinForms\Infragistics.CompositeUI.WinForms.csproj">
+      <Project>{E9F028B3-3817-46FB-9324-EAAEF0DF5225}</Project>
+      <Name>Infragistics.CompositeUI.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Interface\Infrastructure.Interface.csproj">
+      <Project>{a4bc0376-0d65-43ff-8646-568050eace56}</Project>
+      <Name>Infrastructure.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common.Client\Framework.Common.Client.csproj">
+      <Project>{3DCC9752-E88E-435B-A433-F2B32800CEE4}</Project>
+      <Name>Framework.Common.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common\Framework.Common.csproj">
+      <Project>{8F6377CB-9102-4B04-9EC2-408EDEAB159C}</Project>
+      <Name>Framework.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.Library\Framework.Logging.Library.csproj">
+      <Project>{139AA242-95E9-4E4C-B9FF-339C513F8D42}</Project>
+      <Name>Framework.Logging.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Message\Framework.Message\Framework.Messaging.csproj">
+      <Project>{8F15741B-96CC-4C7D-86F7-B8BB7588F370}</Project>
+      <Name>Framework.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BatchJob.Interface\Framework.BatchJob.Interface.csproj">
+      <Project>{4D57176F-1A9A-4D6D-86E5-53D58BF2B289}</Project>
+      <Name>Framework.BatchJob.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AUDBatchJob.resx">
+      <DependentUpon>AUDBatchJob.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MaintainJobDependencyView.resx">
+      <DependentUpon>MaintainJobDependencyView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\MonitorBatchJobs.resx">
+      <DependentUpon>MonitorBatchJobs.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SearchBatchJob.resx">
+      <DependentUpon>SearchBatchJob.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Lib\" 
+copy /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Lib\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/219634/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent
+END
+UserCommonServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/219634/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/UserCommonServiceBC.cs
+END
+CustomizationServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/219633/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/CustomizationServiceBC.cs
+END
+DelegationServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/201837/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/DelegationServiceBC.cs
+END
+Framework.Security.UserManagement.BusinessComponent.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 163
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/Framework.Security.UserManagement.BusinessComponent.csproj
+END
+UserProfileServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/UserProfileServiceBC.cs
+END
+OrganisationMaintenanceServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/175398/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/OrganisationMaintenanceServiceBC.cs
+END
+UserMaintenanceServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.BusinessComponent/UserMaintenanceServiceBC.cs
+END

@@ -1,0 +1,519 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AED81FCD-5783-4F9A-ACF3-A2E9DEB503DD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HiiP.Framework.Security.UserManagement</RootNamespace>
+    <AssemblyName>HiiP.Framework.Security.UserManagement</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HiiP.Foundation.DMS.BusinessEntity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Foundation.DMS.BusinessEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Foundation.DMS.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Foundation.DMS.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Foundation.Messaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Foundation.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Foundation.Messaging.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Foundation.Messaging.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Foundation.Workflow, Version=2.0.20108.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Foundation.Workflow.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Foundation.Workflow.Interface, Version=2.0.11202.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\bin\Debug\HiiP.Foundation.Workflow.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Modules.Common.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Modules.Common.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="HiiP.Modules.ExternalParty.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\HiiP.Modules.ExternalParty.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Infragistics2.Win.UltraWinSchedule.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinToolbars.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)Lib\Microsoft.Practices.CompositeUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)Lib\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)Lib\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.PowerPacks.Vs, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="NCS.IConnect.CodeTable, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.CodeTable.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Common, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Messaging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.PolicyInjection.CallHandlers, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.PolicyInjection.CallHandlers.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.PolicyInjection.WcfExtensions, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.PolicyInjection.WcfExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Security, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Infragistics2.Shared.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.Misc.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinDataSource.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinEditors.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinGrid.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinListView.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinTabControl.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinTree.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Constants\FunctionModuleNames.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="ModuleController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Constants\CommandNames.cs" />
+    <Compile Include="Constants\EventTopicNames.cs" />
+    <Compile Include="Constants\WorkspaceNames.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Proxies\DelegationServiceProxy.cs" />
+    <Compile Include="Proxies\OrganisationMaintenanceServiceProxy.cs" />
+    <Compile Include="Proxies\UserMaintenanceServiceProxy.cs" />
+    <Compile Include="Views\DelegationMaintenance\DelegationDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\DelegationDetail.Designer.cs">
+      <DependentUpon>DelegationDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\DelegationDetail.GeneratedCode.cs">
+      <DependentUpon>DelegationDetail.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\DelegationDetailPresenter.cs" />
+    <Compile Include="Views\DelegationMaintenance\DelegationDetailPresenter.GeneratedCode.cs">
+      <DependentUpon>DelegationDetailPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\IDelegationDetail.cs" />
+    <Compile Include="Views\DelegationMaintenance\IMaintainDelegation.cs" />
+    <Compile Include="Views\DelegationMaintenance\MaintainDelegation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\MaintainDelegation.Designer.cs">
+      <DependentUpon>MaintainDelegation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\MaintainDelegation.GeneratedCode.cs">
+      <DependentUpon>MaintainDelegation.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\DelegationMaintenance\MaintainDelegationPresenter.cs" />
+    <Compile Include="Views\DelegationMaintenance\MaintainDelegationPresenter.GeneratedCode.cs">
+      <DependentUpon>MaintainDelegationPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\IMaintainOrganisationName.cs" />
+    <Compile Include="Views\OrganisationMaintenance\IMaintainOrganisationNameDetail.cs" />
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationName.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationName.Designer.cs">
+      <DependentUpon>MaintainOrganisationName.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationName.GeneratedCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetail.Designer.cs">
+      <DependentUpon>MaintainOrganisationNameDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetail.GeneratedCode.cs">
+      <DependentUpon>MaintainOrganisationNameDetail.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetailPresenter.cs" />
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetailPresenter.GeneratedCode.cs">
+      <DependentUpon>MaintainOrganisationNameDetailPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNamePresenter.cs" />
+    <Compile Include="Views\OrganisationMaintenance\MaintainOrganisationNamePresenter.GeneratedCode.cs" />
+    <Compile Include="Views\RoleMaintenance\IListOfUserInRole.cs" />
+    <Compile Include="Views\RoleMaintenance\ListOfUserInRole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\ListOfUserInRole.Designer.cs">
+      <DependentUpon>ListOfUserInRole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\ListOfUserInRolePresenter.cs" />
+    <Compile Include="Views\UserMaintenance\ForwardDestinationPresenter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\GISUserRoleAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\GISUserRoleAssignment.Designer.cs">
+      <DependentUpon>GISUserRoleAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\GISUserRoleAssignmentPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\IGISUserRoleAssignment.cs" />
+    <Compile Include="Views\UserMaintenance\IListOfFunctionAndDatafilter.cs" />
+    <Compile Include="Views\UserMaintenance\IWFUserRoleAssignment.cs" />
+    <Compile Include="Views\UserMaintenance\ListOfFunctionAndDatafilter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ListOfFunctionAndDatafilter.Designer.cs">
+      <DependentUpon>ListOfFunctionAndDatafilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ListOfFunctionAndDatafilter.GeneratedCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ListOfFunctionAndDatafilterPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\ListOfFunctionAndDatafilterPresenter.GeneratedCode.cs" />
+    <Compile Include="Views\UserMaintenance\WFUserRoleAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\WFUserRoleAssignment.Designer.cs">
+      <DependentUpon>WFUserRoleAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\WFUserRoleAssignmentPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\DMS UserRoleAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\DMS UserRoleAssignment.Designer.cs">
+      <DependentUpon>DMS UserRoleAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\DMSUserRoleAssignmentPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\ForwardDestination.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ForwardDestination.Designer.cs">
+      <DependentUpon>ForwardDestination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ForwardDestination.GeneratedCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\ForwardDestinationPresenter.GeneratedCode.cs" />
+    <Compile Include="Views\UserMaintenance\IBatchRoleAssignment.cs" />
+    <Compile Include="Views\UserMaintenance\IDMSUserRoleAssignment.cs" />
+    <Compile Include="Views\UserMaintenance\IForwardDestination.cs" />
+    <Compile Include="Views\UserMaintenance\IntergratedETHelper.cs" />
+    <Compile Include="Views\UserMaintenance\IUserRoleAssignment.cs" />
+    <Compile Include="Views\UserMaintenance\BatchRoleAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\BatchRoleAssignment.Designer.cs">
+      <DependentUpon>BatchRoleAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\MaintainOrganisationForUser.cs" />
+    <Compile Include="Views\UserMaintenance\RoleAssignment.GeneratedCode.cs">
+      <DependentUpon>BatchRoleAssignment.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\BatchRoleAssignmentPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\RoleAssignmentPresenter.GeneratedCode.cs">
+      <DependentUpon>BatchRoleAssignmentPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\IRoleMaintenance.cs" />
+    <Compile Include="Views\RoleMaintenance\IRoleDetail.cs" />
+    <Compile Include="Views\RoleMaintenance\RoleMaintenance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleMaintenance.Designer.cs">
+      <DependentUpon>RoleMaintenance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleMaintenance.GeneratedCode.cs">
+      <DependentUpon>RoleMaintenance.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleMaintenancePresenter.cs" />
+    <Compile Include="Views\RoleMaintenance\RoleMaintenancePresenter.GeneratedCode.cs">
+      <DependentUpon>RoleMaintenancePresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleDetail.Designer.cs">
+      <DependentUpon>RoleDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleUpdate.GeneratedCode.cs">
+      <DependentUpon>RoleDetail.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\RoleMaintenance\RoleDetailPresenter.cs" />
+    <Compile Include="Views\RoleMaintenance\RoleUpdatePresenter.GeneratedCode.cs">
+      <DependentUpon>RoleDetailPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\IStaffMovement.cs" />
+    <Compile Include="Views\UserMaintenance\IUserMaintenance.cs" />
+    <Compile Include="Views\UserMaintenance\IUserDetail.cs" />
+    <Compile Include="Views\UserMaintenance\UserMaintenance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserMaintenance.Designer.cs">
+      <DependentUpon>UserMaintenance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserMainTenance.GeneratedCode.cs">
+      <DependentUpon>UserMaintenance.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserMainTenancePresenter.cs" />
+    <Compile Include="Views\UserMaintenance\UserMainTenancePresenter.GeneratedCode.cs">
+      <DependentUpon>UserMainTenancePresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserRoleAssignment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserRoleAssignment.Designer.cs">
+      <DependentUpon>UserRoleAssignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserRoleAssignment.GeneratedCode.cs">
+      <DependentUpon>UserRoleAssignment.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserRoleAssignmentPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\UserRoleAssignmentPresenter.GeneratedCode.cs">
+      <DependentUpon>UserRoleAssignmentPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserDetail.Designer.cs">
+      <DependentUpon>UserDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserUpdate.GeneratedCode.cs">
+      <DependentUpon>UserDetail.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UserMaintenance\UserDetailPresenter.cs" />
+    <Compile Include="Views\UserMaintenance\UserUpdatePresenter.GeneratedCode.cs">
+      <DependentUpon>UserDetailPresenter.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DelegationMaintenance\DelegationDetail.resx">
+      <DependentUpon>DelegationDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\DelegationMaintenance\MaintainDelegation.resx">
+      <DependentUpon>MaintainDelegation.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\OrganisationMaintenance\MaintainOrganisationName.resx">
+      <DependentUpon>MaintainOrganisationName.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\OrganisationMaintenance\MaintainOrganisationNameDetail.resx">
+      <DependentUpon>MaintainOrganisationNameDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RoleMaintenance\ListOfUserInRole.resx">
+      <DependentUpon>ListOfUserInRole.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RoleMaintenance\RoleDetail.resx">
+      <DependentUpon>RoleDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\BatchRoleAssignment.resx">
+      <DependentUpon>BatchRoleAssignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RoleMaintenance\RoleMaintenance.resx">
+      <DependentUpon>RoleMaintenance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\GISUserRoleAssignment.resx">
+      <DependentUpon>GISUserRoleAssignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\ListOfFunctionAndDatafilter.resx">
+      <DependentUpon>ListOfFunctionAndDatafilter.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\WFUserRoleAssignment.resx">
+      <DependentUpon>WFUserRoleAssignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\DMS UserRoleAssignment.resx">
+      <DependentUpon>DMS UserRoleAssignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\ForwardDestination.resx">
+      <DependentUpon>ForwardDestination.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\UserMaintenance.resx">
+      <DependentUpon>UserMaintenance.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\UserRoleAssignment.resx">
+      <DependentUpon>UserRoleAssignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UserMaintenance\UserDetail.resx">
+      <DependentUpon>UserDetail.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Infragistics.CompositeUI.WinForms\Infragistics.CompositeUI.WinForms.csproj">
+      <Project>{E9F028B3-3817-46FB-9324-EAAEF0DF5225}</Project>
+      <Name>Infragistics.CompositeUI.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.Interface\Infrastructure.Interface.csproj">
+      <Project>{A4BC0376-0D65-43FF-8646-568050EACE56}</Project>
+      <Name>Infrastructure.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Modules\ExternalParty\ExternalParty\ExternalParty.BusinessEntity\ExternalParty.BusinessEntity.csproj">
+      <Project>{B773FA81-4F8C-49E8-A4D4-44B736E515CA}</Project>
+      <Name>ExternalParty.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common.Client\Framework.Common.Client.csproj">
+      <Project>{3DCC9752-E88E-435B-A433-F2B32800CEE4}</Project>
+      <Name>Framework.Common.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common\Framework.Common.csproj">
+      <Project>{8F6377CB-9102-4B04-9EC2-408EDEAB159C}</Project>
+      <Name>Framework.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Logging\Logging.Library\Framework.Logging.Library.csproj">
+      <Project>{139AA242-95E9-4E4C-B9FF-339C513F8D42}</Project>
+      <Name>Framework.Logging.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Message\Framework.Message\Framework.Messaging.csproj">
+      <Project>{8F15741B-96CC-4C7D-86F7-B8BB7588F370}</Project>
+      <Name>Framework.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Security.AccessControl.Interface\Framework.Security.AccessControl.Interface.csproj">
+      <Project>{A7123711-C4B2-457E-A321-0EE336A1DDAF}</Project>
+      <Name>Framework.Security.AccessControl.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Security.UserManagement.BusinessEntity\Framework.Security.UserManagement.BusinessEntity.csproj">
+      <Project>{DA2D1253-27A1-4D24-BCE8-3EC39408CC14}</Project>
+      <Name>Framework.Security.UserManagement.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Security.UserManagement.Interface\Framework.Security.UserManagement.Interface.csproj">
+      <Project>{922E28BB-300C-4415-86E7-44212499B972}</Project>
+      <Name>Framework.Security.UserManagement.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Gear.png" />
+    <Content Include="Resources\group.png" />
+    <Content Include="Resources\single.png" />
+    <None Include="Views\UserMaintenance\ETDataTest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Lib\" 
+copy /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Lib\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

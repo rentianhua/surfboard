@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Smartac.SR.Modules.Customer.Interface</name>
+    </assembly>
+    <members>
+        <member name="T:Smartac.SR.Modules.Customer.Interface.ICustomerManagementService">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Modules.Customer.Interface.ICustomerManagementService.GetALlCustomers">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

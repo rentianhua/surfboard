@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/186739/branch/R6g/Source/Framework/Security/Security.AccessControl/Authorization
+END
+AuthorizationManager.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/174241/branch/R6g/Source/Framework/Security/Security.AccessControl/Authorization/AuthorizationManager.cs
+END
+ViewAuthorizationProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/136128/branch/R6g/Source/Framework/Security/Security.AccessControl/Authorization/ViewAuthorizationProxy.cs
+END
+AuthorizationProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl/Authorization/AuthorizationProxy.cs
+END
+CachableWcfBusinessActionProvider.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/186739/branch/R6g/Source/Framework/Security/Security.AccessControl/Authorization/CachableWcfBusinessActionProvider.cs
+END

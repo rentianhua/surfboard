@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity
+END
+LoggingViewDataSet.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingViewDataSet.xsc
+END
+LoggingViewDataSet.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingViewDataSet.xsd
+END
+AuditLogViewDataSet.xss
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/AuditLogViewDataSet.xss
+END
+LoggingUsageDataSet.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingUsageDataSet.cs
+END
+LoggingViewDataSet.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingViewDataSet.cs
+END
+LoggingUsageDataSet.xss
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingUsageDataSet.xss
+END
+LoggingFilterDataSet.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingFilterDataSet.xsc
+END
+LoggingFilterDataSet.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/157634/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingFilterDataSet.xsd
+END
+LoggingViewDataSet.xss
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingViewDataSet.xss
+END
+AuditLogViewDataSet.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/AuditLogViewDataSet.xsc
+END
+LoggingFilterDataSet.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/157634/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingFilterDataSet.Designer.cs
+END
+LoggingUsageDataSet1.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingUsageDataSet1.Designer.cs
+END
+AuditLogViewDataSet.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/AuditLogViewDataSet.xsd
+END
+LoggingFilterDataSet.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingFilterDataSet.cs
+END
+Framework.Logging.BusinessEntity.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/196342/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/Framework.Logging.BusinessEntity.csproj
+END
+LoggingViewDataSet1.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingViewDataSet1.Designer.cs
+END
+AuditLogViewDataSet.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/AuditLogViewDataSet.Designer.cs
+END
+LoggingUsageDataSet.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingUsageDataSet.xsc
+END
+LoggingUsageDataSet.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingUsageDataSet.xsd
+END
+LoggingFilterDataSet.xss
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/157634/branch/R6g/Source/Framework/Logging/Logging.BusinessEntity/LoggingFilterDataSet.xss
+END

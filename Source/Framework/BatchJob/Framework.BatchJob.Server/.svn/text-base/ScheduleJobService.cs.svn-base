@@ -1,0 +1,216 @@
+﻿#region Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+
+// ==================================================================================================
+// Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+//
+// SYSTEM NAME       :   Housing Integrated Information Program
+// COMPONENT ID      :   Framework/Batch job
+// COMPONENT DESC    :  
+//
+// CREATED DATE/BY   : 29/12/2010/He Jiang Yan
+//
+// REVISION HISTORY  : DATE/BY                    SR#/CS/PM#/OTHERS          DESCRIPTION OF CHANGE
+// ==================================================================================================
+
+#endregion
+
+using System;
+using System.Collections.Generic;
+using System.ServiceModel;
+
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.BatchJob.Interface.Services;
+using HiiP.Framework.Common.InstanceBuilders;
+using HiiP.Framework.Common.Server;
+using HiiP.Framework.Common.Server.CallHandlers;
+using HiiP.Framework.Logging.Library;
+using NCS.IConnect.BatchJob;
+using HiiP.Framework.Messaging;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, Namespace = "http://hiip.ooh.dhs.vic.gov.au/")]
+    public class ScheduleJobService : ServiceBase, IScheduleJobService
+    {
+        #region IScheduleJobService Members
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public BatchJobDetailInfoDataSet GetBatchJobInfo(string batchJobID)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.GetBatchJobInfo(batchJobID);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public IList<BatchJobTypeInfo> GetAvailableBatchJobTypes()
+        {
+            var controller = NCS.IConnect.BatchJob.ScheduleControllerFactory.CreateScheduleController();
+            return controller.GetAvailableBatchJobTypes();
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ScheduleABatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ScheduleABatchJobFunctionID, Ordinal = 2)]
+        [TransactionEnlistCallHandler(Ordinal = 3)]
+        [AuditLogCallHandler(FunctionNames.ScheduleABatchJobFunctionID, Ordinal = 4)]
+        public void AddBatchJob(BatchJobDetailInfoDataSet batchJobInfo)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            bc.AddBatchJob(batchJobInfo);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.DeleteBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.DeleteBatchJobFunctionID, Ordinal = 2)]
+        [TransactionEnlistCallHandler(Ordinal = 3)]
+        [AuditLogCallHandler(FunctionNames.DeleteBatchJobFunctionID, Ordinal = 4)]
+        public void DeleteBatchJob(string batchJobID, int versionNo)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            BatchJobDetailInfoDataSet batchJobData = bc.GetBatchJobInfo(batchJobID);
+
+            if (batchJobData.T_IC_BATCH_JOB == null || batchJobData.T_IC_BATCH_JOB.Rows.Count != 1)
+            {
+                throw new ArgumentException("Unable to delete the job, because of the invalid batchJobID");
+            }
+
+            if (batchJobData.T_IC_BATCH_JOB[0].HasRelation == 1)
+            {
+
+                throw new HiiP.Framework.Common.BusinessException(Messages.Framework.FWE606.Format());
+            }
+
+            var controller = NCS.IConnect.BatchJob.ScheduleControllerFactory.CreateScheduleController();
+            controller.DeleteBatchJob(batchJobID, versionNo);
+         
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.UpdateBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.UpdateBatchJobFunctionID, Ordinal = 2)]
+        [TransactionEnlistCallHandler(Ordinal = 3)]
+        [AuditLogCallHandler(FunctionNames.UpdateBatchJobFunctionID, Ordinal = 4)]
+        public void UpdateBatchJob(BatchJobDetailInfoDataSet batchJobInfo)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            bc.UpdateBatchJob(batchJobInfo);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.MonitorBatchJobsFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MonitorBatchJobsFunctionID, Ordinal = 2)]
+        [TransactionEnlistCallHandler(Ordinal = 3)]
+        [AuditLogCallHandler(FunctionNames.MonitorBatchJobsFunctionID, Ordinal = 4)]
+        public void CancelBatchJob(string batchJobID)
+        {
+            var controller = NCS.IConnect.BatchJob.ScheduleControllerFactory.CreateScheduleController();
+            controller.CancelBatchJob(batchJobID);
+        }
+
+        /// <summary>
+        /// Get all jobs which Frequency != "RunOnce".
+        /// </summary>
+        /// <returns>DependencyJobsDataSet.T_IC_BATCH_JOBDataTable</returns>
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOBDataTable GetAllBatchJobsAsChild()
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.GetAllBatchJobsAsChild();
+        }
+
+        /// <summary>
+        /// Get all jobs by child job ID, run time and job next run history ID.
+        /// </summary>
+        /// <param name="jobID"></param>
+        /// <param name="frequency"></param>
+        /// <param name="interval"></param>
+        /// <param name="runDayOfWeek"></param>
+        /// <param name="runDateOfYear"></param>
+        /// <param name="runDayOfMonth"></param>
+        /// <param name="Months"></param>
+        /// <param name="indexOfMonth"></param>
+        /// <param name="isRunInNextDay"></param>
+        /// <param name="runtime"></param>
+        /// <param name="nextID"></param>
+        /// <returns>DependencyJobsDataSet.T_IC_BATCH_JOBDataTable</returns>
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOBDataTable GetAllBatchJobsAsParent(string jobID,
+            string frequency,
+            int?   interval,
+            string runDayOfWeek,
+            string runDateOfYear,
+            string runDayOfMonth,
+            string Months,
+            int?   indexOfMonth,
+            bool   isRunInNextDay,
+            string runtime,
+            ref int? nextID)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.GetAllBatchJobsAsParent(jobID, 
+                frequency,
+                interval,
+                runDayOfWeek,
+                runDateOfYear,
+                runDayOfMonth,
+                Months,
+                indexOfMonth,
+                isRunInNextDay,
+                runtime,
+                ref nextID);
+        }
+
+        /// <summary>
+        /// Get all parents of the child job with child job ID.
+        /// </summary>
+        /// <param name="jobID"></param>
+        /// <returns>DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable</returns>
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        public DependencyJobsDataSet.T_IC_BATCH_JOB_LISTDataTable GetAllParentsWithJobID(string jobID)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.GetAllParentsWithJobID(jobID);
+        }
+
+        /// <summary>
+        /// Dependency changes will be updated to database.
+        /// </summary>
+        /// <param name="dependencyInfo"></param>
+        [CachableServiceAuthorizationCallHandler(FunctionNames.UpdateBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        [TransactionEnlistCallHandler(Ordinal = 3)]
+        [AuditLogCallHandler(FunctionNames.ScheduleABatchJobFunctionID, Ordinal = 4)]
+        public void UpdateDependency(DependencyJobsDataSet dependencyInfo)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            bc.UpdateDependency(dependencyInfo);
+
+        }
+
+        /// <summary>
+        /// Check whether the conditions of their match.
+        /// </summary>
+        /// <param name="childJobID"></param>
+        /// <param name="parentJobIDs"></param>
+        /// <returns>string</returns>
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        public string DependencyCheck(string childJobID, string parentJobIDs)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.DependencyCheck(childJobID, parentJobIDs);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.MaintainDependencyBatchJobListFunctionID, Ordinal = 2)]
+        public bool CheckDuplicateName(string jobName, string jobID)
+        {
+            ScheduleJobBC bc = InstanceBuilder.Wrap<ScheduleJobBC>(new ScheduleJobBC());
+            return bc.CheckDuplicateName(jobName, jobID);
+        }
+
+        #endregion
+    }
+}

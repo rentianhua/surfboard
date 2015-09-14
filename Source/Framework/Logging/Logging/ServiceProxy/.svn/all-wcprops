@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/hiip/!svn/ver/209752/branch/R6g/Source/Framework/Logging/Logging/ServiceProxy
+END
+MonitoringLogFilterClient.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging/ServiceProxy/MonitoringLogFilterClient.cs
+END
+MonitoringLogFilterServiceProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/ServiceProxy/MonitoringLogFilterServiceProxy.cs
+END
+LoggingViewProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/hiip/!svn/ver/209752/branch/R6g/Source/Framework/Logging/Logging/ServiceProxy/LoggingViewProxy.cs
+END
+AuditLogViewProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/ServiceProxy/AuditLogViewProxy.cs
+END

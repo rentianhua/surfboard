@@ -1,0 +1,155 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes
+END
+ValidRegexAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ValidRegexAttribute.cs
+END
+OrCompositeValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/OrCompositeValidatorNode.cs
+END
+ObjectValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ObjectValidatorNode.cs
+END
+DomainValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/DomainValidatorNode.cs
+END
+StringLengthValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/StringLengthValidatorNode.cs
+END
+ValidatorNodeBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ValidatorNodeBase.cs
+END
+RegexValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/RegexValidatorNode.cs
+END
+CustomValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/CustomValidatorNode.cs
+END
+EnumConversionValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/EnumConversionValidatorNode.cs
+END
+CompositeValidatorNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/CompositeValidatorNode.bmp
+END
+ValueValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ValueValidatorNode.cs
+END
+SingleValidatorNodeBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/SingleValidatorNodeBase.cs
+END
+ContainsCharactersValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ContainsCharactersValidatorNode.cs
+END
+PropertyComparisonValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/PropertyComparisonValidatorNode.cs
+END
+ObjectCollectionValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ObjectCollectionValidatorNode.cs
+END
+ValidatorNodeBase.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/ValidatorNodeBase.bmp
+END
+AndCompositeValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/AndCompositeValidatorNode.cs
+END
+RangeValidatorNodeBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/RangeValidatorNodeBase.cs
+END
+TypeConversionValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/TypeConversionValidatorNode.cs
+END
+DomainValue.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/DomainValue.cs
+END
+RelativeDateTimeValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/RelativeDateTimeValidatorNode.cs
+END
+DateRangeValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/DateRangeValidatorNode.cs
+END
+NotNullValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/NotNullValidatorNode.cs
+END
+RangeValidatorNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/RangeValidatorNode.cs
+END
+CompositeValidatorNodeBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidatorNodes/CompositeValidatorNodeBase.cs
+END

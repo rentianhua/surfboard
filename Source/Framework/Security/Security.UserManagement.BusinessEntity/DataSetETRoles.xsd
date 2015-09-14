@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetETRoles" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/DataSetETRoles.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/DataSetETRoles.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/DataSetETRoles.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetETRoles" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="DataSetETRoles" msprop:Generator_DataSetName="DataSetETRoles" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ETTable" msprop:Generator_UserTableName="ETTable" msprop:Generator_RowDeletedName="ETTableRowDeleted" msprop:Generator_RowChangedName="ETTableRowChanged" msprop:Generator_RowClassName="ETTableRow" msprop:Generator_RowChangingName="ETTableRowChanging" msprop:Generator_RowEvArgName="ETTableRowChangeEvent" msprop:Generator_RowEvHandlerName="ETTableRowChangeEventHandler" msprop:Generator_TableClassName="ETTableDataTable" msprop:Generator_TableVarName="tableETTable" msprop:Generator_RowDeletingName="ETTableRowDeleting" msprop:Generator_TablePropName="ETTable">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="RoleID" msprop:Generator_UserColumnName="RoleID" msprop:Generator_ColumnVarNameInTable="columnRoleID" msprop:Generator_ColumnPropNameInRow="RoleID" msprop:Generator_ColumnPropNameInTable="RoleIDColumn" type="xs:short" minOccurs="0" />
+              <xs:element name="RoleName" msprop:Generator_UserColumnName="RoleName" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnRoleName" msprop:Generator_ColumnPropNameInTable="RoleNameColumn" msprop:Generator_ColumnPropNameInRow="RoleName" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="Description" msprop:Generator_UserColumnName="Description" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnDescription" msprop:Generator_ColumnPropNameInTable="DescriptionColumn" msprop:Generator_ColumnPropNameInRow="Description" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="UserName" msprop:Generator_UserColumnName="UserName" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnUserName" msprop:Generator_ColumnPropNameInTable="UserNameColumn" msprop:Generator_ColumnPropNameInRow="UserName" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="RoleType" msprop:Generator_UserColumnName="RoleType" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnRoleType" msprop:Generator_ColumnPropNameInTable="RoleTypeColumn" msprop:Generator_ColumnPropNameInRow="RoleType" type="xs:string" default="" minOccurs="0" />
+              <xs:element name="IsSupervisor" msprop:Generator_UserColumnName="IsSupervisor" msprop:Generator_ColumnPropNameInRow="IsSupervisor" msprop:Generator_ColumnVarNameInTable="columnIsSupervisor" msprop:Generator_ColumnPropNameInTable="IsSupervisorColumn" type="xs:boolean" default="false" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

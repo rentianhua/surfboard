@@ -1,0 +1,43 @@
+10
+
+dir
+235190
+https://192.168.0.156:8443/svn/hiip/branch/R6g/Source/Framework/Settings
+https://192.168.0.156:8443/svn/hiip
+
+
+
+2011-10-10T10:44:51.485939Z
+221876
+jiangyan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c8768039-c8ac-d848-bd62-85a48e97434a
+
+Settings.Interface
+dir
+
+Settings
+dir
+
+Settings.BusinessEntity
+dir
+
+Settings.DataAccess
+dir
+
+Settings.BusinessComponent
+dir
+

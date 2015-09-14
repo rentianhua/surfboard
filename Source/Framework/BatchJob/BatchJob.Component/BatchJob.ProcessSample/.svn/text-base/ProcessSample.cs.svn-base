@@ -1,0 +1,44 @@
+﻿#region Copyright(C) 2008 NCS Pte. Ltd. All rights reserved.
+// ==============================================================================
+// Copyright(C) 2008 NCS Pte Ltd
+//
+// SYSTEM NAME			: NCS HiiP System
+// COMPONENT ID			: HiiP.Modules.Framework.BatchJob
+// COMPONENT DESC		: Sample
+//
+// CREATED DATE/BY	    : 13 March 2008 /Lu Ya Ming
+//
+// REVISION HISTORY:
+// DATE/BY              ISSUE#/SR#/CS/PM#/OTHERS DESCRIPTION OF CHANGE
+// ==============================================================================
+#endregion
+
+using System;
+using System.Data;
+using System.Diagnostics;
+using System.Threading;
+using System.Timers;
+using Timer = System.Timers.Timer;
+using NCS.IConnect.BatchJob;
+using HiiP.Framework.Common.Server;
+
+namespace HiiP.Framework.BatchJob.ProcessSample
+{
+    public class ProcessSample : HiiPBatchJobBase
+    {
+        protected override void DoWork()
+        {
+            SaveOriginalData(new DataSet());
+
+            for (int i = 1; i < 100; i++)
+            {
+                Percentage = i;
+                Thread.Sleep(4000);
+            }
+
+            SetOutputFilePath("c:\\output");
+            SaveFailureData(new DataSet());
+            AddNote("This is batch job quick start.");
+        }     
+    }
+}

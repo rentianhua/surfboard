@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="AppointmentGroupCalendar" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="HiiP_SZ_R4ConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="HiiP_SZ_R4ConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.HiiP.Framework.Common.Interface.Properties.Settings.GlobalReference.Default.HiiP_SZ_R4ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="AppointmentGroupCalendar" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="AppointmentGroupCalendar" msprop:Generator_DataSetName="AppointmentGroupCalendar" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="SS_AppointmentGroupCalendar" msprop:Generator_UserTableName="SS_AppointmentGroupCalendar" msprop:Generator_RowDeletedName="SS_AppointmentGroupCalendarRowDeleted" msprop:Generator_RowChangedName="SS_AppointmentGroupCalendarRowChanged" msprop:Generator_RowClassName="SS_AppointmentGroupCalendarRow" msprop:Generator_RowChangingName="SS_AppointmentGroupCalendarRowChanging" msprop:Generator_RowEvArgName="SS_AppointmentGroupCalendarRowChangeEvent" msprop:Generator_RowEvHandlerName="SS_AppointmentGroupCalendarRowChangeEventHandler" msprop:Generator_TableClassName="SS_AppointmentGroupCalendarDataTable" msprop:Generator_TableVarName="tableSS_AppointmentGroupCalendar" msprop:Generator_RowDeletingName="SS_AppointmentGroupCalendarRowDeleting" msprop:Generator_TablePropName="SS_AppointmentGroupCalendar">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="AppointmentGroupCalendarID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="AppointmentGroupCalendarID" msprop:Generator_ColumnVarNameInTable="columnAppointmentGroupCalendarID" msprop:Generator_ColumnPropNameInRow="AppointmentGroupCalendarID" msprop:Generator_ColumnPropNameInTable="AppointmentGroupCalendarIDColumn" type="xs:int" />
+              <xs:element name="User_ID" msprop:Generator_UserColumnName="User_ID" msprop:Generator_ColumnVarNameInTable="columnUser_ID" msprop:Generator_ColumnPropNameInRow="User_ID" msprop:Generator_ColumnPropNameInTable="User_IDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="GroupCalendarName" msprop:Generator_UserColumnName="GroupCalendarName" msprop:Generator_ColumnVarNameInTable="columnGroupCalendarName" msprop:Generator_ColumnPropNameInRow="GroupCalendarName" msprop:Generator_ColumnPropNameInTable="GroupCalendarNameColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="GroupCalendarDescription" msprop:Generator_UserColumnName="GroupCalendarDescription" msprop:Generator_ColumnVarNameInTable="columnGroupCalendarDescription" msprop:Generator_ColumnPropNameInRow="GroupCalendarDescription" msprop:Generator_ColumnPropNameInTable="GroupCalendarDescriptionColumn" type="xs:string" />
+              <xs:element name="VersionNo" msprop:Generator_UserColumnName="VersionNo" msprop:Generator_ColumnVarNameInTable="columnVersionNo" msprop:Generator_ColumnPropNameInRow="VersionNo" msprop:Generator_ColumnPropNameInTable="VersionNoColumn" type="xs:int" />
+              <xs:element name="TransactionID" msprop:Generator_UserColumnName="TransactionID" msprop:Generator_ColumnVarNameInTable="columnTransactionID" msprop:Generator_ColumnPropNameInRow="TransactionID" msprop:Generator_ColumnPropNameInTable="TransactionIDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedBy" msprop:Generator_UserColumnName="CreatedBy" msprop:Generator_ColumnVarNameInTable="columnCreatedBy" msprop:Generator_ColumnPropNameInRow="CreatedBy" msprop:Generator_ColumnPropNameInTable="CreatedByColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="256" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedTime" msprop:Generator_UserColumnName="CreatedTime" msprop:Generator_ColumnVarNameInTable="columnCreatedTime" msprop:Generator_ColumnPropNameInRow="CreatedTime" msprop:Generator_ColumnPropNameInTable="CreatedTimeColumn" type="xs:dateTime" />
+              <xs:element name="LastUpdatedBy" msprop:Generator_UserColumnName="LastUpdatedBy" msprop:Generator_ColumnVarNameInTable="columnLastUpdatedBy" msprop:Generator_ColumnPropNameInRow="LastUpdatedBy" msprop:Generator_ColumnPropNameInTable="LastUpdatedByColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="256" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LastUpdatedTime" msprop:Generator_UserColumnName="LastUpdatedTime" msprop:Generator_ColumnVarNameInTable="columnLastUpdatedTime" msprop:Generator_ColumnPropNameInRow="LastUpdatedTime" msprop:Generator_ColumnPropNameInTable="LastUpdatedTimeColumn" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:SS_AppointmentGroupCalendar" />
+      <xs:field xpath="mstns:AppointmentGroupCalendarID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Logging/Logging.Library
+END
+LoggingCategories.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/hiip/!svn/ver/211625/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingCategories.cs
+END
+FilterFlag.cs
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Library/FilterFlag.cs
+END
+MonitoringDatabaseTraceListener.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/213545/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringDatabaseTraceListener.cs
+END
+Framework.Logging.Library.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/204709/branch/R6g/Source/Framework/Logging/Logging.Library/Framework.Logging.Library.csproj
+END
+MonitoringLogEntryDefaults.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringLogEntryDefaults.cs
+END
+MonitoringPopulateLogEntry.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/212335/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringPopulateLogEntry.cs
+END
+FilterCategory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Library/FilterCategory.cs
+END
+ComponentType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/143118/branch/R6g/Source/Framework/Logging/Logging.Library/ComponentType.cs
+END
+MonitoringTracer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringTracer.cs
+END
+LoggingHelper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingHelper.cs
+END
+MonitoringDatabaseTraceListenerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringDatabaseTraceListenerData.cs
+END
+MonitoringLogEntry.cs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/180102/branch/R6g/Source/Framework/Logging/Logging.Library/MonitoringLogEntry.cs
+END

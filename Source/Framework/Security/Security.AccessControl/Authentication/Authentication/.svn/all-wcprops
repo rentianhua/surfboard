@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/221199/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/Authentication
+END
+AuthenticationEventArgs.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/Authentication/AuthenticationEventArgs.cs
+END
+AuthenticationManager.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/221199/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/Authentication/AuthenticationManager.cs
+END
+LoginProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/Authentication/LoginProxy.cs
+END

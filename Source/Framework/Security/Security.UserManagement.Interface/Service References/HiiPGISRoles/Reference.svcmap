@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="d233fd13-85f9-4f15-b965-0a74101a5179" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost/HiiPGISRoles/service.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="Service4.xsd" MetadataType="Schema" ID="ddd75429-6d18-43ba-bd94-bb777374f897" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd1" />
+    <MetadataFile FileName="Service41.xsd" MetadataType="Schema" ID="fb96f836-5979-4407-87a0-11aaab979cb6" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd0" />
+    <MetadataFile FileName="HiiPGISRoles1.wsdl" MetadataType="Wsdl" ID="6c18df7a-a75e-4f25-b7a7-9bef438727d2" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?wsdl" />
+    <MetadataFile FileName="Service1.disco" MetadataType="Disco" ID="edd83f2a-8afa-42da-ab03-550ea46bf555" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?disco" />
+    <MetadataFile FileName="Service43.xsd" MetadataType="Schema" ID="eceaaa45-ae33-4709-8830-dc8be787d365" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd2" />
+    <MetadataFile FileName="Service.wsdl" MetadataType="Wsdl" ID="af338cbf-03c7-4bff-9490-25d38cfc3312" SourceId="1" SourceUrl="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?wsdl=wsdl0" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

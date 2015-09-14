@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D899FD2B-F296-47AC-A4C4-6D376F31BE75}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HiiP.Framework.Logging.BusinessEntity</RootNamespace>
+    <AssemblyName>HiiP.Framework.Logging.BusinessEntity</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\..\bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="AuditLogViewDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AuditLogViewDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LoggingFilterDataSet.cs">
+      <DependentUpon>LoggingFilterDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LoggingFilterDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoggingFilterDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LoggingUsageDataSet.cs">
+      <DependentUpon>LoggingUsageDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LoggingUsageDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoggingUsageDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="LoggingViewDataSet.cs">
+      <DependentUpon>LoggingViewDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LoggingViewDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoggingViewDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AuditLogViewDataSet.xsc">
+      <DependentUpon>AuditLogViewDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="AuditLogViewDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>AuditLogViewDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="AuditLogViewDataSet.xss">
+      <DependentUpon>AuditLogViewDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingFilterDataSet.xsc">
+      <DependentUpon>LoggingFilterDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingFilterDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LoggingFilterDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="LoggingFilterDataSet.xss">
+      <DependentUpon>LoggingFilterDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingUsageDataSet.xsc">
+      <DependentUpon>LoggingUsageDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingUsageDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LoggingUsageDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LoggingUsageDataSet.xss">
+      <DependentUpon>LoggingUsageDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingViewDataSet.xsc">
+      <DependentUpon>LoggingViewDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="LoggingViewDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>LoggingViewDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="LoggingViewDataSet.xss">
+      <DependentUpon>LoggingViewDataSet.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Lib\" 
+copy /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Lib\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

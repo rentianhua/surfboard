@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation
+END
+ValueAccessValidatorBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ValueAccessValidatorBuilder.cs
+END
+ValidationResults.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ValidationResults.cs
+END
+ValidationSpecificationSource.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ValidationSpecificationSource.cs
+END
+ParameterValidatorFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ParameterValidatorFactory.cs
+END
+CompositeValidatorBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/CompositeValidatorBuilder.cs
+END
+IValidatedElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/IValidatedElement.cs
+END
+TagFilter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/TagFilter.cs
+END
+Framework.Validation.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Framework.Validation.csproj
+END
+ValidationFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/ValidationFactory.cs
+END
+ConfigurationValidatorBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ConfigurationValidatorBuilder.cs
+END
+Validator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Validator.cs
+END
+ConfigurationValidatedType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ConfigurationValidatedType.cs
+END
+ValidatorBuilderBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/ValidatorBuilderBase.cs
+END
+PropertyValidationFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/PropertyValidationFactory.cs
+END
+ValidationResult.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ValidationResult.cs
+END
+Validation.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Validation.cs
+END
+IValidatorDescriptor.cs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/IValidatorDescriptor.cs
+END
+MetadataValidatorBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/MetadataValidatorBuilder.cs
+END
+MemberValueAccessBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/MemberValueAccessBuilder.cs
+END
+MemberAccessValidatorBuilderFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/MemberAccessValidatorBuilderFactory.cs
+END
+ConfigurationValidatedElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ConfigurationValidatedElement.cs
+END
+MetadataValidatedType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/MetadataValidatedType.cs
+END
+Validator.Generic.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Validator.Generic.cs
+END
+ValidationReflectionHelper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/ValidationReflectionHelper.cs
+END
+IValidatedType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/IValidatedType.cs
+END
+ReflectionMemberValueAccessBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/ReflectionMemberValueAccessBuilder.cs
+END
+MetadataValidatedElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/MetadataValidatedElement.cs
+END
+MetadataValidatedParameterElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/MetadataValidatedParameterElement.cs
+END

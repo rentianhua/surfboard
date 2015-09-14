@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/211626/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants
+END
+FunctionModuleNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/FunctionModuleNames.cs
+END
+ActionNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/ActionNames.cs
+END
+CommandNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/CommandNames.cs
+END
+ExceptionPolicyNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/ExceptionPolicyNames.cs
+END
+WorkspaceNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/WorkspaceNames.cs
+END
+UIExtensionSiteNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/UIExtensionSiteNames.cs
+END
+EventTopicNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/211626/branch/R6g/Source/Framework/Security/Security.UserManagement/Constants/EventTopicNames.cs
+END

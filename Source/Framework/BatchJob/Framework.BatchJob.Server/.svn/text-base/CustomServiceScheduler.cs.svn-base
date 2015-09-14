@@ -1,0 +1,563 @@
+﻿#region Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+
+// ==================================================================================================
+// Copyright(C) 2010 NCS Pte. Ltd. All rights reserved.
+//
+// SYSTEM NAME       :   Housing Integrated Information Program
+// COMPONENT ID      :   Framework/Batch job
+// COMPONENT DESC    :  
+//
+// CREATED DATE/BY   : 29/12/2010/He Jiang Yan
+//
+// REVISION HISTORY  : DATE/BY                    SR#/CS/PM#/OTHERS          DESCRIPTION OF CHANGE
+// ==================================================================================================
+
+#endregion
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Timers;
+using System.Xml;
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.Common;
+using Microsoft.Practices.EnterpriseLibrary.Logging;
+using NCS.IConnect.BatchJob;
+using Timer = System.Timers.Timer;
+using HiiP.Infrastructure.Interface;
+using NCS.IConnect.Hierarchy.Parameter;
+using NCS.IConnect.AuditTrail;
+using HiiP.Framework.Common.ApplicationContexts;
+using NCS.IConnect.BatchJob.Configuration;
+using HiiP.Framework.Common.Server;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    public class CustomServiceScheduler : ServiceScheduler
+    {
+        private const int ArchiveInterval = 30;//30days
+        private DateTime _archiveTime = DateTime.Now;
+        private DateTime _originalDate;
+
+        private Timer _checkWaitingJobsTimer;
+        private const string TraceCategory = "CheckWaitingJobs";
+
+        
+        protected override IList<BatchJobInfo> GetEnabledBatchJobs()
+        {
+            CultureUtility.SetDateTimeFormat();
+
+            var db = new CustomBatchJobDataAccess();
+
+            IList<BatchJobInfo> batchJobs = db.GetAllJobsWithComputedNextTime(this.Controller.ApplicationName, true,false);            
+
+            return batchJobs;
+        }
+
+        protected override bool ShouldRunNow(BatchJobInfo batchJobInfo)
+        {
+            if (!base.ShouldRunNow(batchJobInfo))
+            {
+                return false;
+            }
+
+            if (!batchJobInfo.Enabled)
+            {
+                return false;
+            }
+
+            var servers = batchJobInfo.Servers;
+
+            if (!string.IsNullOrEmpty(servers) && !(servers.Split(";".ToCharArray(),StringSplitOptions.RemoveEmptyEntries).Contains(Environment.MachineName)))
+            {
+                return false;
+            }
+
+            var jobInfo = batchJobInfo as CustomBatchJobInfo;
+            if (jobInfo == null)
+            {
+                throw new ArgumentException("batchJobInfo is not valid CustomBatchJobInfo instance.");
+            }
+
+            var hasSameTypeJobsNotCompletes = HasSameTypeJobsNotCompletes(jobInfo);
+
+            if (hasSameTypeJobsNotCompletes)
+            {
+                return false;
+            }
+
+            var runIndicator = CheckDependency(jobInfo);
+
+            switch (runIndicator)
+            {
+                case DependencyKeys.WaitIndex:
+                    return false;
+                case DependencyKeys.RunIndex:
+                    return true;
+                case DependencyKeys.CancelledIndex:
+                    var db = new CustomBatchJobDataAccess();
+                    AddCancelledHistoryRecord(db, jobInfo);
+                    return false;
+
+            }
+            return false;
+        }
+
+        private static int CheckDependency(CustomBatchJobInfo batchJobInfo)
+        {
+            if (batchJobInfo==null)
+            {
+                throw new ArgumentNullException("batchJobInfo");
+            }
+            int dependencyIndex = DependencyKeys.RunIndex;
+            foreach (var parentInstance in batchJobInfo.Parents)
+            {
+                var parent = parentInstance as CustomBatchJobInfo;
+                if (parent == null)
+                {
+                    throw new InvalidDataException("batchJobInfo's Parents is not valid CustomBatchJobInfo instance.");
+                }
+                var status = parent.Status;
+
+                if (parent.NextStartDateTime == null
+                    || parent.NextStartDateTime < DateTime.Now)
+                {
+                    if (parent.NextStartDateTime<=batchJobInfo.NextStartDateTime)
+                    {
+                        //The parent still not start
+                        dependencyIndex = DependencyKeys.WaitIndex;
+                        TraceInfo(string.Format("The parent - '{0}' of the job ('{1}') still not start..."
+                                                , parent.Name, batchJobInfo.Name)
+                                  , TraceCategory);
+                        break;
+                    }
+                    //If comes here, means the parent still not start and the job also not start. But the number of parent starts is more than the number of this job.
+                    //For example, Today is Jul 28 15:00. The parent started at Jul 27 12:00. But this job just started at Jul 26. At the Jul 27, it not started.
+                    //So system must run child at this time, should not wait parent.
+                }
+
+                if (parent.Source.Equals( BatchJobSource.EnabledTime.ToString(),StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return DependencyKeys.WaitIndex;
+                }
+                switch (status)
+                {
+                    case BatchJobStatus.Running:
+                    case BatchJobStatus.Unstarted:
+                        dependencyIndex = DependencyKeys.WaitIndex;
+
+                        TraceInfo(string.Format("The parent - '{0}' of the job ('{1}') still {2} ..."
+                                                , parent.Name, batchJobInfo.Name, status.ToString())
+                                  , TraceCategory);
+                        break;
+                    case BatchJobStatus.CompletedWithErrors:
+                    case BatchJobStatus.Error:
+                    case BatchJobStatus.Cancelled:
+                    case BatchJobStatus.CancelFailed:
+                        XmlDocument xml = new XmlDocument();
+                        var dependencySettings = batchJobInfo.Dependencies[parent.BatchJobID];
+                        xml.LoadXml(dependencySettings);
+
+                        dependencyIndex = GetDependencyValue(xml, (status==BatchJobStatus.CancelFailed)? BatchJobStatus.Cancelled.ToString():status.ToString());
+
+                        TraceInfo(
+                            string.Format(
+                                "Because the status of the parent('{0}') is {2} and the dependency is {3}, the job ('{1}') {4}  ..."
+                                , parent.Name, batchJobInfo.Name, status,
+                                (dependencyIndex == DependencyKeys.RunIndex) ? "Run" : "Cancelled",
+                                (dependencyIndex == DependencyKeys.RunIndex) ? "maybe run" : "will be cancelled")
+                            , TraceCategory);
+                        break;
+                    case BatchJobStatus.Cancelling:
+                    case BatchJobStatus.ForcedCancelling:
+                        dependencyIndex = DependencyKeys.WaitIndex;
+
+                        TraceInfo(string.Format("The parent - '{0}' of the job ('{1}') still {2} ..."
+                                                , parent.Name, batchJobInfo.Name, status.ToString())
+                                  , TraceCategory);
+                        break;
+                    //case BatchJobStatus.Completed:
+                    default:
+                        break;
+                }
+
+                if (!(dependencyIndex == DependencyKeys.RunIndex)) break;
+
+            }
+
+            return dependencyIndex;
+        }
+
+        private static int GetDependencyValue(XmlDocument xml, string key)
+        {
+            return DependencyKeys.GetDependencyValue(xml, key);
+        }
+
+        protected override bool OnStartingFailover(BatchJobInfo jobInfo)
+        {
+            //When come here, it means the job is suspended or failover.
+
+            var job = jobInfo as CustomBatchJobInfo;
+
+            if (job==null)
+            {
+                return false;   
+            }
+            var hasSameTypeJobsNotCompletes = HasSameTypeJobsNotCompletes(job);
+
+            if (hasSameTypeJobsNotCompletes)
+            {
+                return true;
+            }
+
+            bool cancel = (job.Parents.Count>0);//Means it has dependency, so it is suspended, no need to handle failover.
+            return cancel;
+        }
+
+        public override void Start()
+        {
+            CultureUtility.SetDateTimeFormat();
+            base.Start();
+
+            _checkWaitingJobsTimer = new Timer(ServiceSettingsEntity.CheckWaitingJobsFrequency * 60 * 1000);
+            _checkWaitingJobsTimer.Elapsed += this.CheckWaitingJobsTimerElapsed;
+            _checkWaitingJobsTimer.Start();
+
+            try
+            {
+                ParameterKey key = GetLastArchiveTimeParameter();
+                if (key == null || !DateTime.TryParse(key.Value ?? string.Empty, out _archiveTime))
+                {
+                    _archiveTime = DateTime.Now;
+                }
+
+                _originalDate = _archiveTime;
+                Console.WriteLine("Last archive at "+_archiveTime.ToString());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Logger.Write(
+                    string.Format("There is error '{0}' thrown from server '{1}' when to stop",
+                        ex.ToString(), Environment.MachineName),
+                    this.ServiceSettingsEntity.LogCategory, 0, 0, TraceEventType.Error);
+            }
+        }
+
+        private ParameterKey GetLastArchiveTimeParameter()
+        {
+            ParameterManager manager = new ParameterManager("dbProvider");
+            return manager.GetKeyByPath("SCS/BatchJobFramework/LastArchiveTime");
+        }
+
+        public override void Stop()
+        {
+            base.Stop();
+
+            if (_checkWaitingJobsTimer != null)
+            {
+                _checkWaitingJobsTimer.Stop();
+            }
+
+            try
+            {
+                Console.WriteLine("CancelRunningJobs...");
+                CancelRunningJobs();
+
+                ParameterKey key = GetLastArchiveTimeParameter();
+                if (key != null && _originalDate!=_archiveTime)
+                {
+                    Console.WriteLine("Saving archive time...");
+                    var dateTimeFormat = Thread.CurrentThread.CurrentCulture.DateTimeFormat;
+                    key.Value = _archiveTime.ToString(dateTimeFormat.ShortDatePattern + " " + dateTimeFormat.ShortTimePattern);
+                    AppContext.Current.TransactionID = Guid.NewGuid().ToString();
+                    AppContext.Current.UserName = BatchJobSettings.GetBatchJobSettings().DefaultSystemUser;
+                    using (AuditLog log = new AuditLogger(this.GetType().FullName+".UpdateArchiveTime"))
+                    {
+                        key.Save();
+                        log.Flush();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Logger.Write(
+                    string.Format("There is error '{0}' thrown from server '{1}' when to stop",
+                        ex.ToString(), Environment.MachineName),
+                    this.ServiceSettingsEntity.LogCategory, 0, 0, TraceEventType.Error);
+            }
+
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(true);
+
+            if (_checkWaitingJobsTimer != null)
+            {
+                _checkWaitingJobsTimer.Dispose();
+                _checkWaitingJobsTimer = null;
+            }
+
+        }
+
+        /// <summary>
+        /// Schedulers the timer elapsed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private void CheckWaitingJobsTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            CultureUtility.SetDateTimeFormat();
+            try
+            {
+                var db = new CustomBatchJobDataAccess();
+
+                CheckDiethProcess(db);
+
+                try
+                {
+                    if (_archiveTime.AddDays(ArchiveInterval) <= DateTime.Now)
+                    {
+                        db.ArchiveJobsHistories();
+                        _archiveTime = DateTime.Now;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Write(
+                        string.Format("There is error '{0}' thrown from server '{1}'",
+                            ex.ToString(), Environment.MachineName),
+                        this.ServiceSettingsEntity.LogCategory, 0, 0, TraceEventType.Error);
+                }
+
+                TraceInfo("The timer of checking waiting jobs" + " wakes..."
+                    , TraceCategory);
+
+                IList<BatchJobInfo> batchJobs = db.GetAllJobsWithComputedNextTime(this.Controller.ApplicationName, false, false);
+
+                IList<string> category = new List<string>();
+                category.Add(this.ServiceSettingsEntity.LogCategory);
+
+                var jobs = batchJobs.Where<BatchJobInfo>(x => x.SchedulingTime != null
+                                                              &&
+                                                              x.SchedulingTime.Frequency != SchedulerFrequency.RunOnce
+                                                              && x.NextStartDateTime != null
+                                                              && x.NextStartDateTime < DateTime.Now.AddSeconds(-30));
+
+                TraceInfo(string.Format("There are {0} jobs waiting to check by the timer of checking waiting jobs...", jobs.Count())
+                , TraceCategory);
+
+                int index = 0;
+                //for each to get the unstart batch jobs
+                foreach (BatchJobInfo jobInfo in jobs)//not so old
+                {
+                    try
+                    {
+
+                        var batchJobInfo = jobInfo as CustomBatchJobInfo;
+                        if (batchJobInfo == null)
+                        {
+                            throw new ArgumentException("jobInfo is not valid CustomBatchJobInfo instance.");
+                        }
+
+                        var hasSameTypeJobsNotCompletes = HasSameTypeJobsNotCompletes(batchJobInfo);
+
+                        if (hasSameTypeJobsNotCompletes)
+                        {
+                            continue;
+                        }
+
+                        if (batchJobInfo.Parents.Count == 0)
+                        {
+                            ExecuteBatchJob(batchJobInfo, BatchJobSource.OtherJob, (batchJobInfo.NextStartDateTime.HasValue) ? batchJobInfo.NextStartDateTime.Value.Ticks.ToString() : DateTime.Now.Ticks.ToString());
+                        }
+                        else
+                        {
+                            HandleDependencyJobs(db, batchJobInfo, ref index);
+                        }
+                        Thread.Sleep(10);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        TraceInfo(string.Format("Executing batch job '{0}' failed. Please refer to log for the detail.", jobInfo.Name)
+                          , TraceCategory);
+                        Logger.Write(
+                            string.Format("There is error '{0}' thrown from server '{1}'",
+                                ex.ToString(), Environment.MachineName),
+                            this.ServiceSettingsEntity.LogCategory, 0, 0, TraceEventType.Error);
+                    }
+                }
+
+
+                TraceInfo(string.Format("There is(are) {0} waiting batch job(s) at the time....", index)
+                    , TraceCategory);
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Write(
+                    string.Format("There is error '{0}' thrown from server '{1}'",
+                        ex.ToString(), Environment.MachineName),
+                    this.ServiceSettingsEntity.LogCategory, 0, 0, TraceEventType.Error);
+            }
+        }
+
+        private void CheckDiethProcess(CustomBatchJobDataAccess db)
+        {
+            var batchJobList = db.GetCurrentRunningBatchJobProcessID(Environment.MachineName);
+
+            List<string> batchJobRunningHistoryIDs = new List<string>();
+
+            foreach (var entity in batchJobList)
+            {
+                Process process = null;
+                try
+                {
+                    process = Process.GetProcessById(int.Parse(entity.ProcessID));
+                }
+                catch (ArgumentException ex)
+                {
+                    TraceInfo(string.Format("Process ID can't find the process. Exception : {0}", ex.Message), "DiethProcess");
+                    batchJobRunningHistoryIDs.Add(entity.BatchJobRunHistoryID);
+                    continue;
+                }
+
+                if (!process.ProcessName.ToLowerInvariant().Contains("NCS.IConnect.BatchJob.Executor".ToLowerInvariant()))
+                {
+                    TraceInfo(string.Format("The process name is not contained NCS.IConnect.BatchJob.Executor.exe, the process name is {0}.", process.ProcessName), "DiethProcess");
+                    batchJobRunningHistoryIDs.Add(entity.BatchJobRunHistoryID);
+                    continue;
+                }
+            }
+
+
+            db.CancelDeathBatchJob(string.Join(",", batchJobRunningHistoryIDs.ToArray()), Environment.MachineName);
+
+        }
+
+        private void HandleDependencyJobs(CustomBatchJobDataAccess db, CustomBatchJobInfo batchJobInfo, ref int index)
+        {
+
+            TraceInfo(string.Format("Checking the waiting job of '{0}' which has {1} parent(s) ..."
+                , batchJobInfo.Name, batchJobInfo.Parents.Count)
+          , TraceCategory);
+
+            if (batchJobInfo.Parents.Count == 0)
+            {
+                return;
+            }
+
+            index++;
+            TraceInfo(string.Format("Checking the waiting job of '{0}' ..."
+            , batchJobInfo.Name)
+            , TraceCategory);
+
+            var dependencyIndex = CheckDependency(batchJobInfo);
+            if (dependencyIndex != DependencyKeys.RunIndex)
+            {
+                TraceInfo(string.Format("The job of '{0}' {1}..."
+                    , batchJobInfo.Name, (dependencyIndex == DependencyKeys.WaitIndex) ? "still has to wait" : "is cancelled")
+                , TraceCategory);
+
+                if ((dependencyIndex == DependencyKeys.CancelledIndex))
+                {
+                    //insert history data into db
+                    AddCancelledHistoryRecord(db, batchJobInfo);
+                }
+                return;
+            }
+
+            //Start
+            TraceInfo(string.Format("Starting to execute the job of '{0}'..."
+            , batchJobInfo.Name)
+            , TraceCategory);
+
+            if (!ExecuteBatchJob(batchJobInfo, BatchJobSource.Dependency, (batchJobInfo.NextStartDateTime.HasValue) ? batchJobInfo.NextStartDateTime.Value.Ticks.ToString() : DateTime.Now.Ticks.ToString()))
+            {
+                //Exceed max running no.
+                return;
+            }
+
+        }
+
+        private bool HasSameTypeJobsNotCompletes(CustomBatchJobInfo batchJobInfo)
+        {
+
+                if (batchJobInfo == null)
+                {
+                    throw new ArgumentNullException("batchJobInfo");
+                }
+
+                var allJobsWithSameType = from jobWithSameType in batchJobInfo.AllJobsWithSameType
+                                          where jobWithSameType.Status==BatchJobStatus.Running
+                                          select jobWithSameType;
+
+                
+                var hasSameTypeJobsNotCompletes = (allJobsWithSameType.Count()>0);
+                return hasSameTypeJobsNotCompletes;
+
+            
+        }
+
+        protected override void ProcessBatchJob(BatchJobInfo batchJobInfo, BatchJobSource source, string ticks)
+        {
+            var job = batchJobInfo as CustomBatchJobInfo;
+            if (job == null)
+            {
+                throw new ArgumentNullException("batchJobInfo");
+            }
+
+            //To set it, so that HasSameTypeJobsNotCompletes() can check the status correctly
+            job.Status = BatchJobStatus.Running;
+            base.ProcessBatchJob(batchJobInfo, source, ticks);
+        }
+        private void AddCancelledHistoryRecord(CustomBatchJobDataAccess db, CustomBatchJobInfo batchJobInfo)
+        {
+            var dataAccess = new CustomBatchJobDataAccess();
+
+            var batchJobRunningInfo = new BatchJobRunningInfo();
+
+            batchJobRunningInfo.Server = Environment.MachineName;
+            batchJobRunningInfo.StartTime = DateTime.Now;
+            batchJobRunningInfo.EndTime = DateTime.Now;
+            batchJobRunningInfo.Percentage = 100;
+            batchJobRunningInfo.Status = BatchJobStatus.Cancelled;
+            batchJobRunningInfo.Source = BatchJobSource.Dependency;
+            batchJobRunningInfo.ElapseTime = new TimeSpan(0, 0, 0);
+            batchJobRunningInfo.RemainingTime = new TimeSpan(0, 0, 0);
+            batchJobRunningInfo.Successful = false;
+            batchJobRunningInfo.RunningParameters = batchJobInfo.Parameters;
+            batchJobRunningInfo.PlanStartTime = batchJobInfo.NextStartDateTime;
+            batchJobRunningInfo.BatchJobInfo = batchJobInfo;
+
+            if (dataAccess.CheckIsCancelledBatchJob(batchJobInfo.BatchJobID, batchJobInfo.NextStartDateTime.Value))
+                return;
+
+            if (db.AddBatchJobHistory(this.Controller.ApplicationName, batchJobRunningInfo) == null)
+            {
+                //Other server added one history for the job. So just continue
+            }
+        }
+
+        private static void TraceInfo(string messsage, string source)
+        {
+            Trace.WriteLine(messsage, "BatchJob->" + source);
+
+            LogEntry entry = new LogEntry();
+            entry.Message = messsage;
+            entry.Severity = TraceEventType.Information;
+            //entry.Priority = 1;
+            entry.Categories.Add("BatchJobTrace");
+            Logger.Write(entry);
+        }
+    }
+}

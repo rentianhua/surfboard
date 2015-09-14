@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/hiip/!svn/ver/162098/branch/R6g/Source/Framework/Logging/Logging.Library/SecurityLogging
+END
+SecurityLogger.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/162098/branch/R6g/Source/Framework/Logging/Logging.Library/SecurityLogging/SecurityLogger.cs
+END
+SecurityExceptionType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Library/SecurityLogging/SecurityExceptionType.cs
+END

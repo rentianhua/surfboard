@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/hiip/!svn/ver/205345/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants
+END
+ContractNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/ContractNames.cs
+END
+CommandNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/205345/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/CommandNames.cs
+END
+WorkspaceNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/WorkspaceNames.cs
+END
+UIExtensionSiteNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/205345/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/UIExtensionSiteNames.cs
+END
+EndpointNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/EndpointNames.cs
+END
+EventTopicNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/EventTopicNames.cs
+END
+FunctionNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging.Interface/Constants/FunctionNames.cs
+END

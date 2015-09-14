@@ -1,0 +1,71 @@
+﻿#region Copyright(C) 2009 NCS Pte. Ltd. All rights reserved.
+
+// ==================================================================================================
+// Copyright(C) 2009 NCS Pte. Ltd. All rights reserved.
+//
+// SYSTEM NAME       :   Housing Integrated Information Program
+// COMPONENT ID      :   Framework/Batch job
+// COMPONENT DESC    :  
+//
+// CREATED DATE/BY   : 12/9/2009/Li Hu Sheng
+//
+// REVISION HISTORY  : DATE/BY                    SR#/CS/PM#/OTHERS          DESCRIPTION OF CHANGE
+// ==================================================================================================
+
+#endregion
+using System.Data;
+using System.ServiceModel;
+
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.BatchJob.Interface.Services;
+
+using HiiP.Framework.Common.InstanceBuilders;
+using HiiP.Framework.Common.Server;
+using HiiP.Framework.Common.Server.CallHandlers;
+
+using HiiP.Framework.Logging.Library;
+using System.Collections.Generic;
+using NCS.IConnect.BatchJob;
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerCall, Namespace = "http://hiip.ooh.dhs.vic.gov.au/")]
+    public class BatchJobSearchService : ServiceBase, IBatchJobSearchService
+    {
+        #region IBatchJobSearchService Members
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public DataTable SearchHistoryList(BatchJobSearchCriteria criteria)
+        {
+            BatchJobSearchServiceBC bc = InstanceBuilder.Wrap<BatchJobSearchServiceBC>(new BatchJobSearchServiceBC());
+            return bc.SearchHistoryList(criteria);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public BatchJobParamDataSet.BatchJobTypeParamDataTable GetParametersByTypeID(string typeID)
+        {
+            BatchJobSearchServiceBC bc = InstanceBuilder.Wrap<BatchJobSearchServiceBC>(new BatchJobSearchServiceBC());
+            return bc.GetParametersByTypeID(typeID);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public DataTable GetLatestJobHistory(int? nextId)
+        {
+            var bc = InstanceBuilder.Wrap<BatchJobSearchServiceBC>(new BatchJobSearchServiceBC());
+            return bc.GetLatestJobHistory(nextId);
+        }
+
+        [CachableServiceAuthorizationCallHandler(FunctionNames.ViewBatchJobFunctionID, Ordinal = 1)]
+        [MonitoringCallHandler(ComponentType.BusinessService, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID, Ordinal = 2)]
+        public List<CustomBatchJobInfo> GetEnabledJobs()
+        {
+            var bc = InstanceBuilder.Wrap<BatchJobSearchServiceBC>(new BatchJobSearchServiceBC());
+            return bc.GetEnabledJobs();
+        }
+
+        #endregion
+    }
+}

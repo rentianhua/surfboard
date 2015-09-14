@@ -1,0 +1,9 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.Library.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.Library.pdb
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Library\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Library\obj\Debug\HiiP.Framework.Logging.Library.Properties.Resources.resources
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Library\obj\Debug\Framework.Logging.Library.csproj.GenerateResource.Cache
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Library\obj\Debug\HiiP.Framework.Logging.Library.dll
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Library\obj\Debug\HiiP.Framework.Logging.Library.pdb
+C:\HiiP\R6G\MSMQLogging\HiiP.Framework.Logging.Library.dll
+C:\HiiP\R6G\MSMQLogging\HiiP.Framework.Logging.Library.pdb

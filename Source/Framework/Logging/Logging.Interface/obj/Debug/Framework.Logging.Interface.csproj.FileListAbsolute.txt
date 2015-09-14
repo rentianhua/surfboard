@@ -1,0 +1,5 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.Interface.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.Interface.pdb
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Interface\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Interface\obj\Debug\HiiP.Framework.Logging.Interface.dll
+C:\HiiP\R6G\Source\Framework\Logging\Logging.Interface\obj\Debug\HiiP.Framework.Logging.Interface.pdb

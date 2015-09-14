@@ -1,0 +1,9 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.AccessControl.pdb
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\HiiP.Framework.Security.AccessControl.Authentication.LoginForm.resources
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\HiiP.Framework.Security.AccessControl.Properties.Resources.resources
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\Framework.Security.AccessControl.csproj.GenerateResource.Cache
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\HiiP.Framework.Security.AccessControl.dll.licenses
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\HiiP.Framework.Security.AccessControl.dll
+C:\HiiP\R6G\Source\Framework\Security\Security.AccessControl\obj\Debug\HiiP.Framework.Security.AccessControl.pdb

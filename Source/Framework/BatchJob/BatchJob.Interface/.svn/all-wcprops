@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/hiip/!svn/ver/227465/branch/R6g/Source/Framework/BatchJob/BatchJob.Interface
+END
+CustomSchedulingTime.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/BatchJob/BatchJob.Interface/CustomSchedulingTime.cs
+END
+Framework.BatchJob.Interface.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/227465/branch/R6g/Source/Framework/BatchJob/BatchJob.Interface/Framework.BatchJob.Interface.csproj
+END
+FailoverTimeComputer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/223908/branch/R6g/Source/Framework/BatchJob/BatchJob.Interface/FailoverTimeComputer.cs
+END

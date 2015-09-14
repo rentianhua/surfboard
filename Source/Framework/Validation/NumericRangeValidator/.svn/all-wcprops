@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/hiip/!svn/ver/180108/branch/R6g/Source/Framework/Validation/NumericRangeValidator
+END
+NumericRangeValidator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/NumericRangeValidator/NumericRangeValidator.cs
+END
+NumericRangeValidatorAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/180108/branch/R6g/Source/Framework/Validation/NumericRangeValidator/NumericRangeValidatorAttribute.cs
+END

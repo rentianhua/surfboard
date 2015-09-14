@@ -1,0 +1,266 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Smartac.SR.Framework.Common.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandler">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandler.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="errorMessage"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandler.HandleException(System.Exception,System.Guid)">
+            <summary>
+            </summary>
+            <param name="exception"></param>
+            <param name="handlingInstanceId"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandler.ErrorMessage">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandlerData">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ErrorMessageHandlerData.ErrorMessage">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.#ctor(System.Exception,System.String)">
+            <summary>
+            </summary>
+            <param name="exception"></param>
+            <param name="errorMessage"></param>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.HelpLink">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.InnerException">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.Message">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.StackTrace">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionDetail.Type">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionPolicyAttribute">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionPolicyAttribute.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="exceptionPolicyName"></param>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExceptionPolicyAttribute.ExceptionPolicyName">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="applicationName"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.OnException(System.Web.Mvc.ExceptionContext)">
+            <summary>
+            </summary>
+            <param name="filterContext"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.GetExceptionPolicyName">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.GetHandleErrorActionName">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.Descriptor">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.MVCExtention.ExtendedController.HandleErrorActionInvoker">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExtendedHandleErrorInfo">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExtendedHandleErrorInfo.#ctor(System.Exception,System.String,System.String,System.String)">
+            <summary>
+            </summary>
+            <param name="exception"></param>
+            <param name="controllerName"></param>
+            <param name="actionName"></param>
+            <param name="errorMessage"></param>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.ExtendedHandleErrorInfo.ErrorMessage">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ExceptionHandlers.HandleErrorActionAttribute">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ExceptionHandlers.HandleErrorActionAttribute.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="handleErrorAction"></param>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ExceptionHandlers.HandleErrorActionAttribute.HandleErrorAction">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.MVCExtention.HandleErrorActionInvoker">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.MVCExtention.HandleErrorActionInvoker.InvokeActionMethod(System.Web.Mvc.ControllerContext,System.Web.Mvc.ActionDescriptor)">
+            <summary>
+            </summary>
+            <param name="controllerContext"></param>
+            <param name="actionDescriptor"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.HttpContextExtensions">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Smartac.SR.Framework.Common.Client.HttpContextExtensions.keyOfErrorMessage">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.HttpContextExtensions.SetErrorMessage(System.Web.HttpContext,System.String)">
+            <summary>
+            </summary>
+            <param name="context"></param>
+            <param name="errorMessage"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.HttpContextExtensions.GetErrorMessage(System.Web.HttpContext)">
+            <summary>
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.HttpContextExtensions.ClearErrorMessage(System.Web.HttpContext)">
+            <summary>
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerActivator">
+            <summary>
+                A custom controller activator, which uses specified service locator for controller activation.
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerActivator.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="serviceLocatorName"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerActivator.Create(System.Web.Routing.RequestContext,System.Type)">
+            <summary>
+                Creates the specified request context.
+            </summary>
+            <param name="requestContext">The request context.</param>
+            <param name="controllerType">Type of the controller.</param>
+            <returns>The activated controller instance.</returns>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerActivator.ServiceLocator">
+            <summary>
+                Gets the service locator.
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerFactory">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerFactory.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="serviceLocatorName"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerFactory.GetControllerInstance(System.Web.Routing.RequestContext,System.Type)">
+            <summary>
+                Retrieves the controller instance for the specified request context and controller type.
+            </summary>
+            <param name="requestContext">The context of the HTTP request, which includes the HTTP context and route data.</param>
+            <param name="controllerType">The type of the controller.</param>
+            <returns>
+                The controller instance.
+            </returns>
+            <exception cref="T:System.Web.HttpException">
+                <paramref name="controllerType" /> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="controllerType" /> cannot be assigned.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                An instance of <paramref name="controllerType" /> cannot be
+                created.
+            </exception>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ServiceLocatableControllerFactory.ServiceLocator">
+            <summary>
+                Gets the service locator.
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.Framework.Common.Client.ServiceLocatableDependencyResolver">
+            <summary>
+                A custom DependencyResolver which uses ServiceLocator to acticvate service.
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableDependencyResolver.#ctor(System.String)">
+            <summary>
+            </summary>
+            <param name="serviceLocatorName"></param>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableDependencyResolver.GetService(System.Type)">
+            <summary>
+                Gets the service.
+            </summary>
+            <param name="serviceType">Type of the service.</param>
+            <returns>The activated service instance.</returns>
+        </member>
+        <member name="M:Smartac.SR.Framework.Common.Client.ServiceLocatableDependencyResolver.GetServices(System.Type)">
+            <summary>
+                Gets the services.
+            </summary>
+            <param name="serviceType">Type of the service.</param>
+            <returns>The activated service instances.</returns>
+        </member>
+        <member name="P:Smartac.SR.Framework.Common.Client.ServiceLocatableDependencyResolver.ServiceLocator">
+            <summary>
+                Gets the service locator.
+            </summary>
+        </member>
+    </members>
+</doc>

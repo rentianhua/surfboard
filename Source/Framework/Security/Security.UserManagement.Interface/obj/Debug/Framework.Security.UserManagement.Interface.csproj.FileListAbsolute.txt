@@ -1,0 +1,6 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.UserManagement.Interface.dll.config
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.UserManagement.Interface.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.UserManagement.Interface.pdb
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.Interface\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.Interface\obj\Debug\HiiP.Framework.Security.UserManagement.Interface.dll
+C:\HiiP\R6G\Source\Framework\Security\Security.UserManagement.Interface\obj\Debug\HiiP.Framework.Security.UserManagement.Interface.pdb

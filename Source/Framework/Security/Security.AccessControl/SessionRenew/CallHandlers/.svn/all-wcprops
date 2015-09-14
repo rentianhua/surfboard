@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/CallHandlers
+END
+SessionRenewCallHandlerAssembler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/CallHandlers/SessionRenewCallHandlerAssembler.cs
+END
+SessionRenewCallHandler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/CallHandlers/SessionRenewCallHandler.cs
+END
+SessionRenewCallHandlerAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/CallHandlers/SessionRenewCallHandlerAttribute.cs
+END
+SessionRenewCallHandlerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/SessionRenew/CallHandlers/SessionRenewCallHandlerData.cs
+END

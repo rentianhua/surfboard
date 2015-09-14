@@ -1,0 +1,17 @@
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Lib\Smartac.SR.Modules.Customer.BusinessService.XML
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Lib\Smartac.SR.Modules.Customer.BusinessService.dll
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Lib\Smartac.SR.Modules.Customer.BusinessService.pdb
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Customer.BusinessService.csprojResolveAssemblyReference.cache
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Lib\Smartac.SR.Modules.Customer.BusinessService.XML
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Lib\Smartac.SR.Modules.Customer.BusinessService.dll
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Lib\Smartac.SR.Modules.Customer.BusinessService.pdb
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Smartac.SR.Modules.Customer.BusinessService.dll
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Smartac.SR.Modules.Customer.BusinessService.pdb
+C:\Work\SR\NewSR\SRV2X\SRV2_SRNew\Lib\Smartac.SR.Modules.Customer.BusinessService.dll.config
+Y:\GitHub\AgileMVC\Lib\Smartac.SR.Modules.Customer.BusinessService.dll.config
+Y:\GitHub\AgileMVC\Lib\Smartac.SR.Modules.Customer.BusinessService.XML
+Y:\GitHub\AgileMVC\Lib\Smartac.SR.Modules.Customer.BusinessService.dll
+Y:\GitHub\AgileMVC\Lib\Smartac.SR.Modules.Customer.BusinessService.pdb
+Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Customer.BusinessService.csprojResolveAssemblyReference.cache
+Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Smartac.SR.Modules.Customer.BusinessService.dll
+Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Smartac.SR.Modules.Customer.BusinessService.pdb

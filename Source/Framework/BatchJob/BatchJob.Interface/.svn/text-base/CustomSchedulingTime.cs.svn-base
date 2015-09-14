@@ -1,0 +1,650 @@
+// ==============================================================================
+// Copyright(C) 2008 NCS Pte Ltd
+//
+// SYSTEM NAME			: NCS HiiP System
+// COMPONENT ID			: HiiP.Modules.Framework.BatchJob
+// COMPONENT DESC		: 
+//
+// CREATED DATE/BY	    : 9 Sep 2008 /Tang Jian
+//
+// REVISION HISTORY:
+// DATE/BY              ISSUE#/SR#/CS/PM#/OTHERS DESCRIPTION OF CHANGE
+// ==============================================================================
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using NCS.IConnect.BatchJob;
+
+namespace HiiP.Framework.BatchJob.Interface
+{
+    [Serializable]
+    public class CustomSchedulingTime : SchedulingTime
+    {
+        #region Constant and Field
+        private const char Separator = ';';
+        //private const string DateFormat = "yyyyMMdd";
+        //private const string FakeYear = "0004"; // consider the 29 Feb
+
+        public readonly static SchedulerFrequency MonthlyOfDay = new SchedulerFrequency("MonthlyOfDay");
+
+        private int _inputInterval;
+
+        private List<int> _months;
+        private int? _inputIndexOfMonthly;
+        private string _inputMonths;
+        private bool _isRunInNextDay;
+
+        public int? InputInterval
+        {
+            get { return _inputInterval; }
+        }
+        public int? InputIndexOfMonthly
+        {
+            get { return _inputIndexOfMonthly; }
+
+        }
+        public string InputMonths
+        {
+            get { return _inputMonths; }
+
+        }
+
+        public List<int> Months
+        {
+            get { return _months; }
+        }
+
+        public bool IsRunInNextDay
+        {
+            get { return _isRunInNextDay; }
+        }
+
+        #endregion
+
+        public CustomSchedulingTime(string frequency,
+                              string daysOfWeek,
+                              string daysOfMonth,
+                              string datesOfYear,
+                              DateTime? datetimeOfRunOnce,
+                              string times,
+                              int? interval,
+                              int? indexOfMonthly,
+                              string months,
+            bool isRunInNextDay)
+            : base(CorrectSpellingOfFrequency(frequency), daysOfWeek, daysOfMonth, datesOfYear, datetimeOfRunOnce, times)
+        {
+            _inputInterval = interval ?? 0;
+            _inputInterval = (_inputInterval == 0) ? 1 : _inputInterval;
+            _inputIndexOfMonthly = indexOfMonthly;
+            _inputMonths = months;
+
+            _months = new List<int>();
+
+            if (Frequency == MonthlyOfDay)
+            {
+                GetDaysOfWeek(daysOfWeek);
+                _months = GetMonths(months);
+                if (indexOfMonthly>5)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DaysInvalid"));
+                }
+            }
+            else if (Frequency == SchedulerFrequency.Monthly)
+            {
+                _months = GetMonths(months);
+            }
+
+            _isRunInNextDay = isRunInNextDay;
+
+            CheckValidateDaysInMonth();
+
+        }
+
+        //Overwrite the value for MonthlyOfDay
+        private static string CorrectSpellingOfFrequency(string frequency)
+        {
+            if (frequency.Equals(MonthlyOfDay.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            {
+                return MonthlyOfDay.ToString();
+            }
+            return frequency;
+        }
+        /// <summary>
+        /// Gets the days of month.
+        /// </summary>
+        /// <param name="daysOfWeek">The days of week.</param>
+        /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        private void GetDaysOfWeek(string daysOfWeek)
+        {
+            if (string.IsNullOrEmpty(daysOfWeek))
+            {
+                throw new ArgumentNullException("daysOfWeek");
+            }
+
+            List<DayOfWeek> result = this.DaysOfWeek;
+            result.Clear();
+
+            string[] days = daysOfWeek.Split(new [] { Separator }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < days.Length; i++)
+            {
+                int parseResult;
+                bool flag = int.TryParse(days[i], out parseResult);
+                if (!flag)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DayInvalid"));
+                }
+
+                switch (parseResult)
+                {
+                    case 0:
+                        result.Add(DayOfWeek.Sunday);
+                        break;
+                    case 1:
+                        result.Add(DayOfWeek.Monday);
+                        break;
+                    case 2:
+                        result.Add(DayOfWeek.Tuesday);
+                        break;
+                    case 3:
+                        result.Add(DayOfWeek.Wednesday);
+                        break;
+                    case 4:
+                        result.Add(DayOfWeek.Thursday);
+                        break;
+                    case 5:
+                        result.Add(DayOfWeek.Friday);
+                        break;
+                    case 6:
+                        result.Add(DayOfWeek.Saturday);
+                        break;
+                    default:
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DayOfWeekInvalid"));
+                }
+
+            }
+
+        }
+        /// <summary>
+        /// Gets the days of month.
+        /// </summary>
+        /// <param name="months">months.</param>
+        /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        private List<int> GetMonths(string months)
+        {
+            if (string.IsNullOrEmpty(months))
+            {
+                throw new ArgumentNullException("months");
+            }
+
+            List<int> result = new List<int>();
+
+            string[] days = months.Split(Separator);
+
+            for (int i = 0; i < days.Length; i++)
+            {
+                int parseResult;
+                bool flag = int.TryParse(days[i], out parseResult);
+                if (!flag)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "MonthInvalid"));
+                }
+                if (parseResult > 12 || parseResult < 1)
+                {
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "MonthInvalid"));
+                }
+                result.Add(parseResult);
+
+            }
+
+            result.Sort();
+
+            return result;
+        }
+
+        private void CheckValidateDaysInMonth()
+        {
+            if (!(Frequency == SchedulerFrequency.Monthly))
+            {
+                return;
+            }
+            List<int> result = this._months;
+            if (this.DaysOfMonth.Count == 0)
+            {
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DaysInvalid"));
+            }
+            int max = this.DaysOfMonth[this.DaysOfMonth.Count - 1];
+            switch (max)
+            {
+                case 31:
+                    if (!(result.Contains(1)
+                          || result.Contains(3)
+                          || result.Contains(5)
+                          || result.Contains(7)
+                          || result.Contains(8)
+                          || result.Contains(10)
+                          || result.Contains(12)))
+                    {
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DaysInvalid"));
+                    }
+                    break;
+                case 30:
+                    if (result.Contains(2))
+                    {
+                        throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, "DaysInvalid"));
+                    }
+                    break;
+            }
+        }
+
+        private DateTime? GetNextStartTime(DateTime fromDateTime, int interval)
+        {
+            TimeSpan? nextStartTime = null;
+            int days = interval;
+            foreach (TimeSpan time in Times)
+            {
+                if (time >= fromDateTime.TimeOfDay)
+                {
+                    nextStartTime = time;
+                    break;
+                }
+            }
+            if (nextStartTime == null)
+            {
+                return null;
+            }
+            return fromDateTime.Date.Add(nextStartTime.Value).AddDays(days);
+        }
+
+        public override DateTime? GetNextStartDateTime(DateTime? lastDateTime)
+        {
+            DateTime? result ;
+            if (_isRunInNextDay
+                && Frequency != SchedulerFrequency.RunOnce
+                && lastDateTime.HasValue
+                && Times!=null
+                && Times.Count>0
+                && Times[0]<=lastDateTime.Value.TimeOfDay)
+            {
+                lastDateTime = lastDateTime.Value.Date.Add(this.Times[this.Times.Count-1]);
+            }
+            if (Frequency == SchedulerFrequency.Daily)
+            {
+                result = ComputeDaily(lastDateTime);
+            }
+            else if (Frequency == SchedulerFrequency.Weekly)
+            {
+                result = ComputeWeekly(lastDateTime);
+            }
+            else if (Frequency == SchedulerFrequency.Monthly)
+            {
+                result = ComputeMonthly(lastDateTime);
+
+            }
+            else if (Frequency == MonthlyOfDay)
+            {
+                result = ComputeMonthlyOfDay(lastDateTime);
+            }
+            else if (Frequency == SchedulerFrequency.Yearly)
+            {
+                result = ComputeYearly(lastDateTime);
+            }
+            else if (Frequency == SchedulerFrequency.RunOnce)
+            {
+
+                //For failover, it will input "(_lastFailoverTime)" as fromDateTime, then it will always return null.
+                //so that it can not be run by failover.
+                result = this.DateTimeOfRunOnce;
+            }
+            else
+            {
+                throw new BatchJobException(string.Format("Unable to handle {0}.", Frequency.ToString()));
+            }
+
+            if (_isRunInNextDay 
+                && Frequency != SchedulerFrequency.Daily
+                && Frequency != SchedulerFrequency.RunOnce
+                && result.HasValue)
+            {
+                result = result.Value.AddDays(1);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Computes the next start time for daily jobs
+        /// </summary>
+        /// <param name="lastDateTime">lastDateTime will be Today-N days or Last plan start time+1 seconds. 
+        /// please refer to the code of CustomBatchJobDataAccess</param>
+        /// <returns></returns>
+        private DateTime? ComputeDaily(DateTime? lastDateTime)
+        {
+            DateTime? nextStart ;
+
+            bool alreadyRun = (lastDateTime != null);
+            int offset = 0;
+
+            if (lastDateTime == null)
+            {
+                //The first time run.
+                lastDateTime = DateTime.Now;
+            }
+
+            DateTime? configTime = this.GetNextStartTime(alreadyRun ? lastDateTime.Value.AddSeconds(1) : lastDateTime.Value);
+            if (configTime == null)
+            {
+                offset += _inputInterval;
+            }
+            //Get the configurable date time. For example, run on Dec 15 10:00:00 every 2 days
+            nextStart = lastDateTime.Value.Date.AddDays(offset).Add(configTime == null ? Times[0] : configTime.Value.TimeOfDay);
+
+            //If the next start is overdue, the caller should call it again, until it think it is ok.
+            //For example, run on Dec 1 10:00:00 every 2 days
+            //Dec 1 has run
+            //But Dec 3, 5,7 did not run, so someone manually run it at Dec 5 23:00:00
+            //And for same reason, at Dec 7 still did not run
+            //At Dec 8 said, its next start date is Dec 3 10:00:00, then the call should this api twice
+            //So that the last value of next start date is set to Dec 7 10:00:00
+            return nextStart;
+        }
+
+        private DateTime? ComputeYearly(DateTime? lastDateTime)
+        {
+            DateTime? nextStart =null ;
+            bool alreadyRun = (lastDateTime != null);
+
+            if (lastDateTime == null)
+            {
+                lastDateTime = DateTime.Now;
+            }
+
+            do
+            {
+                foreach (DateOfYear date in DatesOfYear)
+                {
+                    // if the date euqnal to from date and timespan great than or equal to from time,
+                    // add the time span
+
+                    if (!(date.Month == 2
+                            && date.Day == 29)
+                        )
+                    {
+                        //Not 29 Feb whatever it is non leap year
+                        nextStart = new DateTime(lastDateTime.Value.Year, date.Month, date.Day);
+                    }
+                    else
+                    {
+                        if (!DateTime.IsLeapYear(lastDateTime.Value.Year))
+                        {
+                            //If it is not leap year, will go to Feb 28 of this year
+                            nextStart = new DateTime(lastDateTime.Value.Year, 2, 28);
+                        }
+                        else
+                        {
+                            nextStart = new DateTime(lastDateTime.Value.Year, 2, 29);
+                        }
+                    }
+
+                    if (nextStart.Value > lastDateTime.Value.Date)
+                    {
+                        nextStart = nextStart.Value.Add(Times[0]);
+                    }
+                    else if (nextStart.Value == lastDateTime.Value.Date)
+                    {
+                        DateTime? temp = this.GetNextStartTime(alreadyRun ? lastDateTime.Value.AddSeconds(1) : lastDateTime.Value);
+
+                        if (temp == null)
+                        {
+                            //move to next
+                            nextStart = null;
+                        }
+                        else
+                        {
+                            //Get the configurable date time. For example, run on Dec 15 10:00:00 every 2 year
+                            nextStart = nextStart.Value.Add(temp.Value.TimeOfDay);
+                        }
+                    }
+                    else
+                    {
+                        //move to next
+                        nextStart = null;
+                    }
+
+                    if (nextStart!=null)
+                    {
+                        return nextStart;
+                    }
+
+                }
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
+                if (nextStart == null)
+// ReSharper restore ConditionIsAlwaysTrueOrFalse
+                {
+                    //Move to next 'interval' year
+                    lastDateTime = new DateTime(lastDateTime.Value.Year + _inputInterval, 1, 1).Date;
+                    alreadyRun = false; //avoid to add 1 sec
+                }
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
+            } while (nextStart == null);
+// ReSharper restore ConditionIsAlwaysTrueOrFalse
+
+// ReSharper disable HeuristicUnreachableCode
+            return nextStart;
+// ReSharper restore HeuristicUnreachableCode
+        }
+
+        private DateTime? ComputeMonthlyOfDay(DateTime? lastDateTime)
+        {
+            DateTime? nextStart = null;
+            DateTime fromDateTime;
+
+            if (lastDateTime == null)
+            {
+                fromDateTime = DateTime.Now;
+            }
+            else
+            {
+                fromDateTime = lastDateTime.Value.AddSeconds(1);
+            }
+            int indexofmonthly = _inputIndexOfMonthly ?? 0;//4
+            foreach (int month in _months)
+            {
+                int distance = 0;
+                DateTime fromDayWeekTime = new DateTime(fromDateTime.Year, month, 1);//2008/11/1
+                int fromDayWeek = Convert.ToInt16(fromDayWeekTime.DayOfWeek);//Sat
+                int dayOfMonth = DateTime.DaysInMonth(fromDateTime.Year, month);//30
+                if (fromDateTime.Month <= month)
+                {
+                    foreach (DayOfWeek day in DaysOfWeek)
+                    {
+                        int days = Convert.ToInt16(day); //Wed
+                        // for example, the 4th Wed of Nov, it is Nov 26
+                        // 25 = (7-6+3)%7+(4-1)*7<-Get the days compared with the first day of the month
+                        distance = (((7 - fromDayWeek) + days)%7) + (indexofmonthly - 1)*7;
+                        if (distance >= dayOfMonth)
+                            distance -= 7;
+                    }
+
+                    //->Nov 1+25=Nov 26
+                    DateTime from = fromDayWeekTime.AddDays(distance).Date;
+                    DateTime now = fromDateTime;
+                    nextStart = this.GetNextStartTime(fromDateTime, 0);
+                    if (nextStart == null)
+                    {
+                        //
+                        from = from.Add(Times[0]);
+                    }
+                    else
+                    {
+                        from = from.Add(nextStart.Value.TimeOfDay);
+                    }
+
+                    if (from < now)
+                    {
+                        //Time is gone, not next time
+                        nextStart = null;
+                        continue;
+                    }
+                    nextStart = from;
+                    break;
+
+                }
+            }
+            if (nextStart == null)
+            {
+                fromDateTime = new DateTime(fromDateTime.Year + 1, 1, 1);
+                return ComputeMonthlyOfDay(fromDateTime);
+            }
+            return nextStart;
+        }
+
+        private DateTime? ComputeMonthly(DateTime? lastDateTime)
+        {
+            bool alreadyRun = (lastDateTime != null);
+
+            return ComputeMonthly(lastDateTime,alreadyRun);
+        }
+        private DateTime? ComputeMonthly(DateTime? lastDateTime, bool alreadyRun)
+        {
+            DateTime? nextStart =null ;
+            if (lastDateTime == null)
+            {
+                lastDateTime = DateTime.Now;
+            }
+
+            foreach (int month in _months)
+            {
+                //It have been checked whether month was within 1 and 12
+                if (lastDateTime.Value.Month <= month)
+                {
+                    int daysInMonth = DateTime.DaysInMonth(lastDateTime.Value.Year, month);
+
+                    //Get the first day that contain the selected days
+                    foreach (int day in DaysOfMonth)
+                    {
+                        if (day > daysInMonth) //in the month
+                        {
+                            // For example, 29 will  come here when the Month is Feb =>DaysOfMonth="29;30;31", but lastDateTime="2008-02-28", then day=29> 28(daysInMonth)
+                            continue;
+                        }
+                        DateTime schedule = new DateTime(lastDateTime.Value.Year, month, day);
+                        if (lastDateTime.Value.Date < schedule)
+                        {
+                            // if the day greater than the from day, add the duration days and the first timespan
+                            nextStart = schedule.Add(Times[0]);
+                            break;
+                        }
+                        if (lastDateTime.Value.Date == schedule)
+                        {
+                            //Get the timespan
+                            nextStart =
+                                this.GetNextStartTime(
+                                    alreadyRun ? lastDateTime.Value.AddSeconds(1) : lastDateTime.Value, 0);
+
+                            // if the timespan is null, means the time is expired although the Date is correct. 
+                            // so move to next month.
+                            if (nextStart == null)
+                            {
+                                continue;
+                            }
+                            nextStart = schedule.Add(nextStart.Value.TimeOfDay);
+
+                            break;
+                        }
+
+                    }
+
+                    if (null != nextStart)
+                    {
+                        break;
+                    }
+                }
+
+            }
+        
+
+            if (nextStart == null)
+            {
+                Console.WriteLine("** Next year....");
+                //Move to the next year. For example, if now is Dec.25 8:00AM, but the scheduling time is every May 1 00:00AM to run, 
+                //so the next time should be next year May 1 00:00AM, then move to next year Jan 1 00:00 AM
+                //And to avoid to add 1 second, pass false
+                lastDateTime = new DateTime(lastDateTime.Value.Year+1, 1,1);
+                return ComputeMonthly(lastDateTime, false);
+            }
+            return nextStart;
+        }
+
+        private DateTime? ComputeWeekly(DateTime? lastDateTime)
+        {
+            DateTime? nextStart = null;
+            bool alreadyRun = (lastDateTime != null);
+            int intervalWeeks = (this._inputInterval<=1)?0:(this._inputInterval - 1) * 7;
+
+            if (lastDateTime == null)
+            {
+                lastDateTime = DateTime.Now;
+            }
+
+
+            do
+            {
+                foreach (DayOfWeek day in DaysOfWeek)
+                {
+                    // if the day equal to the from day and the timespan greater than or euqal to from time,
+                    //add the timespan; else, loop the next value
+
+                    int weekDay = (int)day;
+
+                    if (weekDay >= (int)(lastDateTime.Value.DayOfWeek))
+                    {
+                        nextStart = lastDateTime.Value.Date.AddDays( weekDay - (int)(lastDateTime.Value.DayOfWeek));//<=It means nextStart>=fromDateTime.Date
+
+                        //Get the configurable date time. For example, run on Dec 15 10:00:00 every 2 year
+                        if (nextStart > lastDateTime.Value.Date)
+                        {
+                            // if the day greater than the from day, add the duration days and the first timespan
+                            nextStart = nextStart.Value.Add(Times[0]);
+                        }
+                        else 
+                        {
+                            //Here just will be nextStart==fromDateTime.Date
+                            DateTime? temp = this.GetNextStartTime(alreadyRun?lastDateTime.Value.AddSeconds(1):lastDateTime.Value);
+                            //If temp is null, means the time is expired, 
+                            if (temp == null)
+                            {
+                                //move to next
+                                nextStart = null;
+                            }
+                            else
+                            {
+                                nextStart = nextStart.Value.Add(temp.Value.TimeOfDay);
+                            }
+                        }
+                        
+
+                    }
+
+                    if (nextStart !=null)
+                    {
+                        break;
+                    }
+
+                }
+                // if the day less than the from day,
+                // or day equal to the from day and time less than from time.
+                // move to the first day and the first timespan of the next 'every' week.
+                if (nextStart == null)
+                {
+                    //Move to next sunday
+                    lastDateTime = lastDateTime.Value.AddDays(intervalWeeks + (7 - (int)(lastDateTime.Value.DayOfWeek))).Date;
+                    alreadyRun = false;//to avoid to add 1 sec
+                }
+            } while (nextStart == null);
+            return nextStart;
+        }
+
+    }
+}

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers
+END
+CredentialCookieAttachingCallHandlerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers/CredentialCookieAttachingCallHandlerData.cs
+END
+CredentialCookieAttachingCallHandlerAssembler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers/CredentialCookieAttachingCallHandlerAssembler.cs
+END
+CredentialCookieAttachingCallHandler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers/CredentialCookieAttachingCallHandler.cs
+END
+CredentialCookieAttachingCallHandlerAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers/CredentialCookieAttachingCallHandlerAttribute.cs
+END
+CredentialCookieAttachingException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/CallHandlers/CredentialCookieAttachingException.cs
+END

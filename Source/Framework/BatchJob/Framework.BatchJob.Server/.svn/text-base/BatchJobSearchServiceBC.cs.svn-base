@@ -1,0 +1,137 @@
+﻿using System;
+using System.Data;
+using HiiP.Framework.BatchJob.Interface;
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.BatchJob.Interface.Services;
+using HiiP.Framework.Common.InstanceBuilders;
+using HiiP.Framework.Common.Server;
+using HiiP.Framework.Logging.Library;
+using NCS.IConnect.BatchJob;
+using System.Collections.Generic;
+using System.Linq;
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    public class BatchJobSearchServiceBC : HiiPBusinessComponentBase
+    {
+        [MonitoringCallHandler(ComponentType.BusinessComponent, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public DataTable SearchHistoryList(BatchJobSearchCriteria criteria)
+        {
+            BatchJobSearchServiceDA da = InstanceBuilder.Wrap<BatchJobSearchServiceDA>(new BatchJobSearchServiceDA());
+            return da.SearchHistoryList(criteria);
+        }
+
+        [MonitoringCallHandler(ComponentType.BusinessComponent, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public BatchJobParamDataSet.BatchJobTypeParamDataTable GetParametersByTypeID(string typeID)
+        {
+            BatchJobSearchServiceDA da = InstanceBuilder.Wrap<BatchJobSearchServiceDA>(new BatchJobSearchServiceDA());
+            return da.GetParameters(typeID);
+        }
+
+        [MonitoringCallHandler(ComponentType.BusinessComponent, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public List<CustomBatchJobInfo> GetEnabledJobs()
+        {
+
+            var db = new CustomBatchJobDataAccess();
+
+            IList<BatchJobInfo> batchJobs = db.GetAllJobsWithComputedNextTime("HiiP", true,true);
+
+            var list = new List<CustomBatchJobInfo>();
+
+            foreach (var item in batchJobs)
+            {
+                list.Add(item as CustomBatchJobInfo);
+            }
+            return list;
+        }
+        [MonitoringCallHandler(ComponentType.BusinessComponent, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public DataTable GetLatestJobHistory(int? nextId)
+        {
+            var da = InstanceBuilder.Wrap<BatchJobSearchServiceDA>(new BatchJobSearchServiceDA());
+            var dt = da.GetLatestJobHistory(nextId);
+            var result = GetResult(dt);
+
+            return result;
+        }
+
+        private DataTable GetResult(DataTable dt)
+        {
+            var result = CreateResult();
+            foreach (var row in dt.AsEnumerable())
+            {
+                var frequency = row["FREQUENCY"].ToString();
+                var daysOfWeek = row["RUN_DAY_OF_WEEK"].ToString();
+                var daysOfMonth = row["RUN_DAY_OF_MONTH"].ToString();
+                var datesOfYear = row["RUN_DATE_OF_YEAR"].ToString();
+                var datetimeOfRunOnce = row.IsNull("RUNONCE_DATETIME") ? new DateTime?() : row["RUNONCE_DATETIME"] as DateTime?;
+                var times = row["RUN_TIME"].ToString();
+                var interval = row.IsNull("Interval") ? new int?() : row["Interval"] as int?;
+                var indexOfMonthly = row.IsNull("IndexOfMonthly")? new int?() : row["IndexOfMonthly"] as int?;
+                var months = row["Months"].ToString();
+                DateTime? nextStartDateTime = null;
+
+                var schedulingTime = new CustomSchedulingTime(frequency, daysOfWeek, daysOfMonth, 
+                    datesOfYear, datetimeOfRunOnce, times, interval,
+                    indexOfMonthly, months, (bool)(row["IS_RUN_IN_NEXT_DAY"]));
+
+                if ((int)row["Enabled"] == 0)
+                {
+                    var lastStartTime = row.IsNull("Last Start Time") ? row["Created Time"] as DateTime? : row["Last Start Time"] as DateTime?;
+                    if (row["Source"].ToString()=="Failover")
+                    {
+                        lastStartTime = row["Last Start Time"] as DateTime?;
+                    }
+                    nextStartDateTime = schedulingTime.GetNextStartDateTime(lastStartTime);
+                }
+
+
+                result.Rows.Add(
+                    row["Program"],
+                    row["Batch Job Name"],
+                    row["Enabled"],
+                    row["Last Start Time"],
+                    nextStartDateTime,
+                    row["EstimatedDuration"],
+                    row["Successful"],
+                    row["Status"],
+                    row["Start"],
+                    row["End"],
+                    row["Elapse"],
+                    row["Remaining"],
+                    "History",
+                    row["BatchJobID"],
+                    row["Exception"],
+                    row["Notes"],
+                    "Cancel",
+                    row["RunningID"]
+                    );
+            }
+            return result;
+        }
+
+        private DataTable CreateResult()
+        {
+            var result = new DataTable("T_IC_BATCH_JOB_RUN_HISTORY") { Namespace = string.Empty };
+            result.Columns.Add("Program");
+            result.Columns.Add("Batch Job Name");
+            result.Columns.Add("Enabled", typeof(bool));
+            result.Columns.Add("Last Start Time", typeof(DateTime));
+            result.Columns.Add("Next Start Time", typeof(DateTime));
+            result.Columns.Add("EstimatedDuration");
+            result.Columns.Add("Successful", typeof(bool));
+            result.Columns.Add("Status");
+            result.Columns.Add("Start", typeof(DateTime));
+            result.Columns.Add("End", typeof(DateTime));
+            result.Columns.Add("Elapse");
+            result.Columns.Add("Remaining");
+            result.Columns.Add("History");
+            result.Columns.Add("BatchJobID");
+            result.Columns.Add("Exception");
+            result.Columns.Add("Notes");
+            result.Columns.Add("Cancel");
+            result.Columns.Add("RunningID");
+            return result;
+        }
+    }
+}

@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance
+END
+RoleDetailPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/199253/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleDetailPresenter.cs
+END
+IRoleMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/IRoleMaintenance.cs
+END
+RoleMaintenance.resx
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenance.resx
+END
+IListOfUserInRole.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/IListOfUserInRole.cs
+END
+RoleDetail.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleDetail.Designer.cs
+END
+RoleUpdatePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleUpdatePresenter.GeneratedCode.cs
+END
+ListOfUserInRole.resx
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/ListOfUserInRole.resx
+END
+RoleDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/199253/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleDetail.cs
+END
+RoleMaintenancePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenancePresenter.GeneratedCode.cs
+END
+RoleUpdate.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleUpdate.GeneratedCode.cs
+END
+RoleMaintenancePresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/197843/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenancePresenter.cs
+END
+RoleMaintenance.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenance.GeneratedCode.cs
+END
+IRoleDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/IRoleDetail.cs
+END
+ListOfUserInRolePresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/199253/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/ListOfUserInRolePresenter.cs
+END
+RoleDetail.resx
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleDetail.resx
+END
+RoleMaintenance.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenance.Designer.cs
+END
+RoleMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/RoleMaintenance.cs
+END
+ListOfUserInRole.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/211628/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/ListOfUserInRole.Designer.cs
+END
+ListOfUserInRole.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/211628/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/RoleMaintenance/ListOfUserInRole.cs
+END

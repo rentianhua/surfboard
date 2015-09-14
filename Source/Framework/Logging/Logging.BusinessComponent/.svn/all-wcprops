@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/hiip/!svn/ver/206615/branch/R6g/Source/Framework/Logging/Logging.BusinessComponent
+END
+MonitoringLogFilterServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/203001/branch/R6g/Source/Framework/Logging/Logging.BusinessComponent/MonitoringLogFilterServiceBC.cs
+END
+LoggingViewBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/206615/branch/R6g/Source/Framework/Logging/Logging.BusinessComponent/LoggingViewBC.cs
+END
+AuditLogViewBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.BusinessComponent/AuditLogViewBC.cs
+END
+Framework.Logging.BusinessComponent.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/196342/branch/R6g/Source/Framework/Logging/Logging.BusinessComponent/Framework.Logging.BusinessComponent.csproj
+END

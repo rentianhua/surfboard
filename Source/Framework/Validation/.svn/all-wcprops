@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/hiip/!svn/ver/209808/branch/R6g/Source/Framework/Validation
+END
+DataSetValidator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/DataSetValidator.cs
+END
+CompareTodayValidator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/CompareTodayValidator.cs
+END
+DataSetValidatorAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/DataSetValidatorAttribute.cs
+END
+CompareTodayValidatorAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/hiip/!svn/ver/180108/branch/R6g/Source/Framework/Validation/CompareTodayValidatorAttribute.cs
+END
+Framework.Validation.Validators.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/196346/branch/R6g/Source/Framework/Validation/Framework.Validation.Validators.csproj
+END

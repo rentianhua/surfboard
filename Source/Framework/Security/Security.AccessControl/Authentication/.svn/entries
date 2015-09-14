@@ -1,0 +1,37 @@
+10
+
+dir
+235190
+https://192.168.0.156:8443/svn/hiip/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication
+https://192.168.0.156:8443/svn/hiip
+
+
+
+2011-09-27T02:54:25.159019Z
+221199
+jiangyan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c8768039-c8ac-d848-bd62-85a48e97434a
+
+Authentication
+dir
+
+LoginAuthentication
+dir
+
+CallHandlers
+dir
+

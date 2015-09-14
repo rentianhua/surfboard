@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF
+END
+ValidationBindingElementExtension.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationBindingElementExtension.cs
+END
+ValidationDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationDetail.cs
+END
+ValidationBehaviorAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationBehaviorAttribute.cs
+END
+ValidationBindingElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationBindingElement.cs
+END
+Framework.Validation.Integration.WCF.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/Framework.Validation.Integration.WCF.csproj
+END
+ValidationParameterInspector.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationParameterInspector.cs
+END
+ValidationElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationElement.cs
+END
+ValidationFault.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationFault.cs
+END
+ValidationConstants.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationConstants.cs
+END
+ValidationFaultExceptionFormatter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationFaultExceptionFormatter.cs
+END
+ValidationBehavior.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WCF/ValidationBehavior.cs
+END

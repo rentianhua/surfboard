@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="AuditLogViewDataSet" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/AuditLogViewDataSet.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/AuditLogViewDataSet.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/AuditLogViewDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="AuditLogViewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="AuditLogViewDataSet" msprop:Generator_DataSetName="AuditLogViewDataSet" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="T_IC_AUDIT_LOG_QUERY" msprop:Generator_UserTableName="T_IC_AUDIT_LOG_QUERY" msprop:Generator_RowDeletedName="T_IC_AUDIT_LOG_QUERYRowDeleted" msprop:Generator_RowChangedName="T_IC_AUDIT_LOG_QUERYRowChanged" msprop:Generator_RowClassName="T_IC_AUDIT_LOG_QUERYRow" msprop:Generator_RowChangingName="T_IC_AUDIT_LOG_QUERYRowChanging" msprop:Generator_RowEvArgName="T_IC_AUDIT_LOG_QUERYRowChangeEvent" msprop:Generator_RowEvHandlerName="T_IC_AUDIT_LOG_QUERYRowChangeEventHandler" msprop:Generator_TableClassName="T_IC_AUDIT_LOG_QUERYDataTable" msprop:Generator_TableVarName="tableT_IC_AUDIT_LOG_QUERY" msprop:Generator_RowDeletingName="T_IC_AUDIT_LOG_QUERYRowDeleting" msprop:Generator_TablePropName="T_IC_AUDIT_LOG_QUERY">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="TRANSACTION_ID" msprop:Generator_UserColumnName="TRANSACTION_ID" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnTRANSACTION_ID" msprop:Generator_ColumnPropNameInTable="TRANSACTION_IDColumn" msprop:Generator_ColumnPropNameInRow="TRANSACTION_ID" type="xs:string" minOccurs="0" />
+              <xs:element name="USER_NAME" msprop:Generator_UserColumnName="USER_NAME" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnUSER_NAME" msprop:Generator_ColumnPropNameInTable="USER_NAMEColumn" msprop:Generator_ColumnPropNameInRow="USER_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="LOG_FUNCTION" msprop:Generator_UserColumnName="LOG_FUNCTION" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnLOG_FUNCTION" msprop:Generator_ColumnPropNameInTable="LOG_FUNCTIONColumn" msprop:Generator_ColumnPropNameInRow="LOG_FUNCTION" type="xs:string" minOccurs="0" />
+              <xs:element name="LOG_TIME" msprop:Generator_UserColumnName="LOG_TIME" msprop:Generator_ColumnPropNameInRow="LOG_TIME" msprop:Generator_ColumnVarNameInTable="columnLOG_TIME" msprop:Generator_ColumnPropNameInTable="LOG_TIMEColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="APP_VERSION" msprop:Generator_UserColumnName="APP_VERSION" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnAPP_VERSION" msprop:Generator_ColumnPropNameInTable="APP_VERSIONColumn" msprop:Generator_ColumnPropNameInRow="APP_VERSION" type="xs:string" minOccurs="0" />
+              <xs:element name="LOG_ID" msprop:Generator_UserColumnName="LOG_ID" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnLOG_ID" msprop:Generator_ColumnPropNameInTable="LOG_IDColumn" msprop:Generator_ColumnPropNameInRow="LOG_ID" type="xs:string" minOccurs="0" />
+              <xs:element name="LOG_SUB_ID" msprop:Generator_UserColumnName="LOG_SUB_ID" msprop:Generator_ColumnPropNameInRow="LOG_SUB_ID" msprop:Generator_ColumnVarNameInTable="columnLOG_SUB_ID" msprop:Generator_ColumnPropNameInTable="LOG_SUB_IDColumn" type="xs:long" minOccurs="0" />
+              <xs:element name="OPERATION" msprop:Generator_UserColumnName="OPERATION" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnOPERATION" msprop:Generator_ColumnPropNameInTable="OPERATIONColumn" msprop:Generator_ColumnPropNameInRow="OPERATION" type="xs:string" minOccurs="0" />
+              <xs:element name="OPERATION_TIME" msprop:Generator_UserColumnName="OPERATION_TIME" msprop:Generator_ColumnPropNameInRow="OPERATION_TIME" msprop:Generator_ColumnVarNameInTable="columnOPERATION_TIME" msprop:Generator_ColumnPropNameInTable="OPERATION_TIMEColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="TABLE_NAME" msprop:Generator_UserColumnName="TABLE_NAME" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnTABLE_NAME" msprop:Generator_ColumnPropNameInTable="TABLE_NAMEColumn" msprop:Generator_ColumnPropNameInRow="TABLE_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="HOST_NAME" msprop:Generator_UserColumnName="HOST_NAME" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnHOST_NAME" msprop:Generator_ColumnPropNameInTable="HOST_NAMEColumn" msprop:Generator_ColumnPropNameInRow="HOST_NAME" type="xs:string" minOccurs="0" />
+              <xs:element name="IP_ADDRESS" msprop:Generator_UserColumnName="IP_ADDRESS" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnIP_ADDRESS" msprop:Generator_ColumnPropNameInTable="IP_ADDRESSColumn" msprop:Generator_ColumnPropNameInRow="IP_ADDRESS" type="xs:string" minOccurs="0" />
+              <xs:element name="DEVICE" msprop:Generator_UserColumnName="DEVICE" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnDEVICE" msprop:Generator_ColumnPropNameInTable="DEVICEColumn" msprop:Generator_ColumnPropNameInRow="DEVICE" type="xs:string" minOccurs="0" />
+              <xs:element name="INDEX" msprop:Generator_UserColumnName="INDEX" msprop:Generator_ColumnPropNameInRow="INDEX" msprop:Generator_ColumnVarNameInTable="columnINDEX" msprop:Generator_ColumnPropNameInTable="INDEXColumn" type="xs:long" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

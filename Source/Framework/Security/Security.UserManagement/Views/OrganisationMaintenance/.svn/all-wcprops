@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance
+END
+IMaintainOrganisationNameDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/IMaintainOrganisationNameDetail.cs
+END
+OrganisationMaintenance.resx
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenance.resx
+END
+MaintainOrganisationName.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/206627/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationName.Designer.cs
+END
+MaintainOrganisationNameDetail.resx
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetail.resx
+END
+OrganisationDetail.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/hiip/!svn/ver/152204/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationDetail.Designer.cs
+END
+MaintainOrganisationName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationName.cs
+END
+OrganisationUpdatePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 161
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationUpdatePresenter.GeneratedCode.cs
+END
+OrganisationMaintenancePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 166
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenancePresenter.GeneratedCode.cs
+END
+OrganisationDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationDetail.cs
+END
+MaintainOrganisationNameDetailPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetailPresenter.GeneratedCode.cs
+END
+OrganisationUpdate.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationUpdate.GeneratedCode.cs
+END
+OrganisationMaintenancePresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenancePresenter.cs
+END
+OrganisationMaintenance.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenance.GeneratedCode.cs
+END
+IMaintainOrganisationName.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/IMaintainOrganisationName.cs
+END
+IOrganisationDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/IOrganisationDetail.cs
+END
+MaintainOrganisationNameDetailPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svn/hiip/!svn/ver/175395/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetailPresenter.cs
+END
+MaintainOrganisationNameDetail.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 164
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetail.GeneratedCode.cs
+END
+MaintainOrganisationName.resx
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationName.resx
+END
+OrganisationDetail.resx
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationDetail.resx
+END
+MaintainOrganisationNamePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 167
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNamePresenter.GeneratedCode.cs
+END
+OrganisationMaintenance.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenance.Designer.cs
+END
+OrganisationMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationMaintenance.cs
+END
+MaintainOrganisationNameDetail.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetail.Designer.cs
+END
+MaintainOrganisationNameDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/hiip/!svn/ver/209677/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNameDetail.cs
+END
+MaintainOrganisationNamePresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationNamePresenter.cs
+END
+MaintainOrganisationName.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/MaintainOrganisationName.GeneratedCode.cs
+END
+OrganisationDetailPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/OrganisationDetailPresenter.cs
+END
+IOrganisationMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/OrganisationMaintenance/IOrganisationMaintenance.cs
+END

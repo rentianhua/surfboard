@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/hiip/!svn/ver/221853/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views
+END
+SessionManagement.resx
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagement.resx
+END
+SessionManagement.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagement.Designer.cs
+END
+SessionManagement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/221853/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagement.cs
+END
+SessionManagementPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagementPresenter.GeneratedCode.cs
+END
+FilterSession.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSession.GeneratedCode.cs
+END
+FilterSessionPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSessionPresenter.cs
+END
+IFilterSession.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/IFilterSession.cs
+END
+FilterSession.resx
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSession.resx
+END
+FilterSession.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSession.Designer.cs
+END
+SessionManagement.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagement.GeneratedCode.cs
+END
+SessionManagementPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/221853/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/SessionManagementPresenter.cs
+END
+FilterSession.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/178963/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSession.cs
+END
+FilterSessionPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/FilterSessionPresenter.GeneratedCode.cs
+END
+ISessionManagement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/221853/branch/R6g/Source/Framework/Security/Security.SessionManagement/Views/ISessionManagement.cs
+END

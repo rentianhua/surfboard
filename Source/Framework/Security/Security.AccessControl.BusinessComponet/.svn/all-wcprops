@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet
+END
+Framework.Security.AccessControl.BusinessComponent.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 160
+/svn/hiip/!svn/ver/196344/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet/Framework.Security.AccessControl.BusinessComponent.csproj
+END
+ViewAuthorizationBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet/ViewAuthorizationBC.cs
+END
+ProfileCatalogServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/174241/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet/ProfileCatalogServiceBC.cs
+END
+DataFilterServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet/DataFilterServiceBC.cs
+END
+SessionRenewBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/219628/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessComponet/SessionRenewBC.cs
+END

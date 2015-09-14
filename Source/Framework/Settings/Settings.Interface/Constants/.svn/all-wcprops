@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants
+END
+ViewStatus.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/ViewStatus.cs
+END
+CommandNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/CommandNames.cs
+END
+WorkspaceNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/WorkspaceNames.cs
+END
+UIExtensionSiteNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/UIExtensionSiteNames.cs
+END
+EndpointNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/EndpointNames.cs
+END
+EventTopicNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/EventTopicNames.cs
+END
+FunctionNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/180098/branch/R6g/Source/Framework/Settings/Settings.Interface/Constants/FunctionNames.cs
+END

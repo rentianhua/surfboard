@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/hiip/!svn/ver/219634/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess
+END
+UserCommonServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/219634/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/UserCommonServiceDA.cs
+END
+CustomizationServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/219633/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/CustomizationServiceDA.cs
+END
+DelegationServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/201837/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/DelegationServiceDA.cs
+END
+Framework.Security.UserManagement.DataAccess.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/Framework.Security.UserManagement.DataAccess.csproj
+END
+UserProfileServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/UserProfileServiceDA.cs
+END
+OrganisationMaintenanceServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/206740/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/OrganisationMaintenanceServiceDA.cs
+END
+UserMaintenanceServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/218251/branch/R6g/Source/Framework/Security/Security.UserManagement.DataAccess/UserMaintenanceServiceDA.cs
+END

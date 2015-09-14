@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/hiip/!svn/ver/209808/branch/R6g/Source/Framework/Validation/DateDiffCompareValidator
+END
+DateDiffCompareValidatorData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/DateDiffCompareValidator/DateDiffCompareValidatorData.cs
+END
+DateDiffCompareValidator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/209808/branch/R6g/Source/Framework/Validation/DateDiffCompareValidator/DateDiffCompareValidator.cs
+END
+DateDiffCompareValidatorAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/180108/branch/R6g/Source/Framework/Validation/DateDiffCompareValidator/DateDiffCompareValidatorAttribute.cs
+END

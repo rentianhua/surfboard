@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance
+END
+MaintainDelegation.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/187674/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegation.Designer.cs
+END
+MaintainDelegation.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegation.cs
+END
+MaintainDelegationPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegationPresenter.GeneratedCode.cs
+END
+DelegationDetail.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetail.Designer.cs
+END
+DelegationDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/208620/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetail.cs
+END
+DelegationDetailPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 157
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetailPresenter.GeneratedCode.cs
+END
+MaintainDelegation.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegation.GeneratedCode.cs
+END
+MaintainDelegationPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegationPresenter.cs
+END
+IMaintainDelegation.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/IMaintainDelegation.cs
+END
+DelegationDetail.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetail.GeneratedCode.cs
+END
+DelegationDetailPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/hiip/!svn/ver/208620/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetailPresenter.cs
+END
+IDelegationDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/158156/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/IDelegationDetail.cs
+END
+MaintainDelegation.resx
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/124575/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/MaintainDelegation.resx
+END
+DelegationDetail.resx
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/175394/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/DelegationMaintenance/DelegationDetail.resx
+END

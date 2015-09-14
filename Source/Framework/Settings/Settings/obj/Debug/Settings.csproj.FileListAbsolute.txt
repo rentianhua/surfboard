@@ -1,0 +1,14 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Settings.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Settings.pdb
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.CodeTableDetailView.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.CodeTableMaintain.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.HomePageRefreshConfiguration.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.InstrumentationFilterView.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.LoggingFilterMaintain.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.MessageDetailView.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.MessageMaintain.resources
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\Settings.csproj.GenerateResource.Cache
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.dll.licenses
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.dll
+C:\HiiP\R6G\Source\Framework\Settings\Settings\obj\Debug\HiiP.Framework.Settings.pdb

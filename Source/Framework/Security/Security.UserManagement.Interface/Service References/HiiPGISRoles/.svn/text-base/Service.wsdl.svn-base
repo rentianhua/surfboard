@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:tns="http://hiip.ooh.dhs.vic.gov.au/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://hiip.ooh.dhs.vic.gov.au/Imports">
+      <xsd:import schemaLocation="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd0" namespace="http://hiip.ooh.dhs.vic.gov.au/" />
+      <xsd:import schemaLocation="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://ncsi416.melbourne.au.ncs-i.com/HiiPGISRoles/Service.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IHiiPRoleService_GetRoleNames_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleNames" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleNames_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleNamesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleNames_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetFriendlyRoleNames_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendlyRoleNames" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetFriendlyRoleNames_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendlyRoleNamesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetFriendlyRoleNames_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleNamesForScreenID_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleNamesForScreenID" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleNamesForScreenID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleNamesForScreenIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleNamesForScreenID_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleAsString_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleAsString" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleAsString_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRoleAsStringResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetRoleAsString_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSConnection_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWFSConnection" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSConnection_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWFSConnectionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSConnection_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetStartOptions_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStartOptions" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetStartOptions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStartOptionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetStartOptions_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSProxyHost_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWFSProxyHost" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSProxyHost_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWFSProxyHostResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWFSProxyHost_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWMSProxyHost_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWMSProxyHost" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWMSProxyHost_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWMSProxyHostResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHiiPRoleService_GetWMSProxyHost_HiiPGISRolesFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="tns:HiiPGISRolesFault" />
+  </wsdl:message>
+  <wsdl:portType name="IHiiPRoleService">
+    <wsdl:operation name="GetRoleNames">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNames" message="tns:IHiiPRoleService_GetRoleNames_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNamesResponse" message="tns:IHiiPRoleService_GetRoleNames_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNamesHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetRoleNames_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFriendlyRoleNames">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetFriendlyRoleNames" message="tns:IHiiPRoleService_GetFriendlyRoleNames_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetFriendlyRoleNamesResponse" message="tns:IHiiPRoleService_GetFriendlyRoleNames_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetFriendlyRoleNamesHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetFriendlyRoleNames_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoleNamesForScreenID">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNamesForScreenID" message="tns:IHiiPRoleService_GetRoleNamesForScreenID_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNamesForScreenIDResponse" message="tns:IHiiPRoleService_GetRoleNamesForScreenID_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleNamesForScreenIDHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetRoleNamesForScreenID_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRoleAsString">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleAsString" message="tns:IHiiPRoleService_GetRoleAsString_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleAsStringResponse" message="tns:IHiiPRoleService_GetRoleAsString_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetRoleAsStringHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetRoleAsString_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWFSConnection">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSConnection" message="tns:IHiiPRoleService_GetWFSConnection_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSConnectionResponse" message="tns:IHiiPRoleService_GetWFSConnection_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSConnectionHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetWFSConnection_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStartOptions">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetStartOptions" message="tns:IHiiPRoleService_GetStartOptions_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetStartOptionsResponse" message="tns:IHiiPRoleService_GetStartOptions_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetStartOptionsHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetStartOptions_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWFSProxyHost">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSProxyHost" message="tns:IHiiPRoleService_GetWFSProxyHost_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSProxyHostResponse" message="tns:IHiiPRoleService_GetWFSProxyHost_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWFSProxyHostHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetWFSProxyHost_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetWMSProxyHost">
+      <wsdl:input wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWMSProxyHost" message="tns:IHiiPRoleService_GetWMSProxyHost_InputMessage" />
+      <wsdl:output wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWMSProxyHostResponse" message="tns:IHiiPRoleService_GetWMSProxyHost_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://hiip.ooh.dhs.vic.gov.au/IHiiPRoleService/GetWMSProxyHostHiiPGISRolesFaultFault" name="HiiPGISRolesFaultFault" message="tns:IHiiPRoleService_GetWMSProxyHost_HiiPGISRolesFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,123 @@
+#region Copyright(C) 2008 NCS Pte. Ltd. All rights reserved.
+// ==============================================================================
+// Copyright(C) 2008 NCS Pte Ltd
+//
+// SYSTEM NAME			: NCS HiiP System
+// COMPONENT ID			: HiiP.Modules.Framework.BatchJob
+// COMPONENT DESC		: Constants
+//
+// CREATED DATE/BY	    : 3 March 2008 /Lu Ya Ming
+//
+// REVISION HISTORY:
+// DATE/BY              ISSUE#/SR#/CS/PM#/OTHERS DESCRIPTION OF CHANGE
+// ==============================================================================
+#endregion
+
+
+using System;
+
+using HiiP.Framework.BatchJob.Constants;
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Infrastructure.Interface;
+using HiiP.Infrastructure.Interface.BusinessEntities;
+
+using Infragistics.Practices.CompositeUI.WinForms;
+
+using Microsoft.Practices.CompositeUI.Commands;
+
+namespace HiiP.Framework.BatchJob
+{
+    public class ModuleController : WorkItemController
+    {
+        public override void Run()
+        {
+            AddServices();
+            ExtendMenu();
+        }
+
+        private void AddServices()
+        {
+        }
+
+        private void ExtendMenu()
+        {
+            this.LoadAdministrationMenu();
+
+
+            // add a root menu item: Administration
+            ActionCatalogService.Execute(FunctionNames.BatchJobModuleID, WorkItem, this, null);
+            ActionCatalogService.Execute(FunctionNames.ScheduleABatchJobFunctionID, WorkItem, this, null);
+            ActionCatalogService.Execute(FunctionNames.MaintainDependencyBatchJobListFunctionID,WorkItem, this,null);
+            ActionCatalogService.Execute(FunctionNames.MonitorBatchJobsFunctionID, WorkItem, this, null);
+            ActionCatalogService.Execute(FunctionNames.BatchJobHistoryFunctionID, WorkItem, this, null);
+        }
+
+        [Action(FunctionNames.BatchJobModuleID)]
+        public void ShowBatchJobMenu(object caller, object target)
+        {
+            UIElementBuilder.BuildMenuItem(WorkItem, "BatchJob");
+        }
+
+        [Action(FunctionNames.ScheduleABatchJobFunctionID)]
+        public void ShowScheduleABatchJobMenu(object caller, object target)
+        {
+            UIElementBuilder.BuildMenuItem(WorkItem, "Schedule a Batch Job");
+        }
+
+        [Action(FunctionNames.MaintainDependencyBatchJobListFunctionID)]
+        public void ShowMaintainBatchJobDependencyMenu(object caller, object target)
+        {
+            UIElementBuilder.BuildMenuItem(WorkItem, "SystemAdmin.BatchJob.MaintainBatchJobDependency");
+        }
+
+        [Action(FunctionNames.MonitorBatchJobsFunctionID)]
+        public void ShowMonitorBatchJobsMenu(object caller, object target)
+        {
+            UIElementBuilder.BuildMenuItem(WorkItem, "Monitor Batch Jobs");
+        }
+
+        [Action(FunctionNames.BatchJobHistoryFunctionID)]
+        public void ShowBatchJobHistoryMenu(object caller, object target)
+        {
+            UIElementBuilder.BuildMenuItem(WorkItem, "Batch Job History");
+        }
+
+        [CommandHandler(HiiP.Framework.BatchJob.Constants.CommandNames.ScheduleBatchJob)]
+        public void ShowScheduleBatchJobView(object sender, EventArgs e)
+        {
+            ViewParameter parameter = new ViewParameter();
+            parameter.ViewId = FunctionNames.ScheduleABatchJobFunctionID;
+            parameter.WorkItem = WorkItem;
+            parameter.CurrentViewStatus = ViewStatus.Add;
+            ShowViewInWorkspace<AUDBatchJob>(parameter);
+        }
+
+        [CommandHandler(HiiP.Framework.BatchJob.Constants.CommandNames.MaintainBatchDependency)]
+        public void ShowMaintainBatchJobDependencyView(object sender, EventArgs e)
+        {
+            ViewParameter parameter = new ViewParameter();
+            parameter.ViewId = FunctionNames.MaintainDependencyBatchJobListFunctionID;
+            parameter.WorkItem = WorkItem;
+            ShowViewInWorkspace<MaintainJobDependencyView>(parameter);
+        }
+
+        [CommandHandler(HiiP.Framework.BatchJob.Constants.CommandNames.MonitorBatchJob)]
+        public void ShowMonitorBatchJobView(object sender, EventArgs e)
+        {
+            ViewParameter parameter = new ViewParameter();
+            parameter.ViewId = FunctionNames.MonitorBatchJobsFunctionID;
+            parameter.WorkItem = WorkItem;
+            ShowViewInWorkspace<SearchBatchJob>(parameter);
+        }
+
+        [CommandHandler(HiiP.Framework.BatchJob.Constants.CommandNames.BatchJobHistory)]
+        public void ShowBatchJobHistoryView(object sender, EventArgs e)
+        {
+            ViewParameter parameter = new ViewParameter();
+            parameter.ViewId = FunctionNames.BatchJobHistoryFunctionID;
+            parameter.CurrentViewStatus = ViewStatus.ViewAllHistory;
+            ShowViewInWorkspace<MonitorBatchJobs>(parameter);
+        }
+
+    }
+}

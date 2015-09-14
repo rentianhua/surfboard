@@ -1,0 +1,40 @@
+10
+
+dir
+235190
+https://192.168.0.156:8443/svn/hiip/branch/R6g/Source/Framework/BatchJob
+https://192.168.0.156:8443/svn/hiip
+
+
+
+2012-02-06T09:22:03.281143Z
+231220
+sunyao
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+c8768039-c8ac-d848-bd62-85a48e97434a
+
+BatchJob.Interface
+dir
+
+BatchJob
+dir
+
+BatchJob.Component
+dir
+
+Framework.BatchJob.Server
+dir
+

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Instrumentation
+END
+ValidationExceptionEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationExceptionEvent.cs
+END
+ValidationInstrumentationInstaller.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationInstrumentationInstaller.Designer.cs
+END
+ValidationConfigurationFailureEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationConfigurationFailureEvent.cs
+END
+ValidationEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationEvent.cs
+END
+ValidationInstrumentationInstaller.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationInstrumentationInstaller.cs
+END
+ValidationPerformanceCounter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationPerformanceCounter.cs
+END
+ValidationCalledEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationCalledEvent.cs
+END
+ValidationFailedEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationFailedEvent.cs
+END
+ValidationSucceededEvent.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationSucceededEvent.cs
+END
+ValidationInstrumentationListener.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationInstrumentationListener.cs
+END
+ValidationInstrumentationListenerCustomFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationInstrumentationListenerCustomFactory.cs
+END
+ValidationInstrumentationProvider.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Instrumentation/ValidationInstrumentationProvider.cs
+END

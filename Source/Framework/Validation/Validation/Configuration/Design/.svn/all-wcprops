@@ -1,0 +1,197 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design
+END
+AddApplicationBlockSettingsNodeCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/AddApplicationBlockSettingsNodeCommand.cs
+END
+RuleNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/RuleNode.cs
+END
+ValidationSettingsNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationSettingsNode.cs
+END
+AddMemberNodeCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/AddMemberNodeCommand.cs
+END
+TypeNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeNode.cs
+END
+RuleSetNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/RuleSetNode.cs
+END
+SelfNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/SelfNode.cs
+END
+AddRuleSetNodeCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/AddRuleSetNodeCommand.cs
+END
+FieldNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/FieldNode.bmp
+END
+TypeMemberChooserUI.resx
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeMemberChooserUI.resx
+END
+ValidationCommandRegistrar.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationCommandRegistrar.cs
+END
+ValidationNodeMapRegistrar.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationNodeMapRegistrar.cs
+END
+ValidationSettingsBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationSettingsBuilder.cs
+END
+AddRuleNodeCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/AddRuleNodeCommand.cs
+END
+MethodNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/MethodNode.cs
+END
+ValidationTypeNodeNameFormatter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationTypeNodeNameFormatter.cs
+END
+ValidationSettingsNodeBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationSettingsNodeBuilder.cs
+END
+FieldNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/FieldNode.cs
+END
+TypeMemberChooserUI.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeMemberChooserUI.Designer.cs
+END
+PropertyNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/PropertyNode.cs
+END
+TypeMemberChooserUI.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeMemberChooserUI.cs
+END
+ValidationSettingsNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationSettingsNode.bmp
+END
+TypeMemberChooser.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeMemberChooser.cs
+END
+MethodNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/MethodNode.bmp
+END
+Framework.Validation.Configuration.Design.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/Framework.Validation.Configuration.Design.csproj
+END
+AddTypeNodeCommand.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/AddTypeNodeCommand.cs
+END
+TypeNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/TypeNode.bmp
+END
+ValidationNode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationNode.cs
+END
+RuleSetNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/RuleSetNode.bmp
+END
+PropertyNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/PropertyNode.bmp
+END
+ValidationConfigurationDesignManager.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/ValidationConfigurationDesignManager.cs
+END
+SelfNode.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Configuration/Design/SelfNode.bmp
+END

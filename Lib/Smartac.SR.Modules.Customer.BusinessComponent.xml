@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Smartac.SR.Modules.Customer.BusinessComponent</name>
+    </assembly>
+    <members>
+        <member name="T:Smartac.SR.Modules.Customer.BusinessComponent.CustomerBC">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.Modules.Customer.BusinessComponent.CustomerBC.#ctor(Smartac.SR.Modules.Customer.DataAccess.CustomerDA)">
+            <summary>
+            </summary>
+            <param name="da"></param>
+        </member>
+        <member name="M:Smartac.SR.Modules.Customer.BusinessComponent.CustomerBC.GetALlCustomers">
+            <summary>
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

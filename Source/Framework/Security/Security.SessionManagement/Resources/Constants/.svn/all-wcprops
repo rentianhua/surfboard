@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Resources/Constants
+END
+CommandNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Resources/Constants/CommandNames.cs
+END
+WorkspaceNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Resources/Constants/WorkspaceNames.cs
+END
+UIExtensionSiteNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Resources/Constants/UIExtensionSiteNames.cs
+END
+EventTopicNames.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.SessionManagement/Resources/Constants/EventTopicNames.cs
+END

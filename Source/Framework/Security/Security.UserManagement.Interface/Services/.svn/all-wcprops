@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/209753/branch/R6g/Source/Framework/Security/Security.UserManagement.Interface/Services
+END
+IUserMaintenanceService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/199252/branch/R6g/Source/Framework/Security/Security.UserManagement.Interface/Services/IUserMaintenanceService.cs
+END
+IDelegationService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/201837/branch/R6g/Source/Framework/Security/Security.UserManagement.Interface/Services/IDelegationService.cs
+END
+IOrganisationMaintenanceService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/209753/branch/R6g/Source/Framework/Security/Security.UserManagement.Interface/Services/IOrganisationMaintenanceService.cs
+END

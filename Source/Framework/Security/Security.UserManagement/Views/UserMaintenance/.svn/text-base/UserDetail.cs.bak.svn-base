@@ -1,0 +1,903 @@
+#region Copyright(C) 2008 NCS Pte. Ltd. All rights reserved.
+
+// ==================================================================================================
+// Copyright(C) 2008 NCS Pte. Ltd. All rights reserved.
+//
+// SYSTEM NAME         :  Housing Integrated Information Program
+// COMPONENT ID      :  User management/User maintenance
+// COMPONENT DESC :   
+//
+// CREATED DATE/BY  : 22/09/2008/Lu Ya Ming
+//
+// REVISION HISTORY: DATE/BY                    SR#/CS/PM#/OTHERS          DESCRIPTION OF CHANGE
+// ==================================================================================================
+
+#endregion
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
+using HiiP.Foundation.DMS.Interface;
+using HiiP.Foundation.DMS.BusinessEntity;
+using HiiP.Foundation.Workflow.Interface;
+using HiiP.Foundation.Workflow.Interface.ExceptionHandlers;
+
+using HiiP.Framework.Common;
+using HiiP.Framework.Common.Client;
+using HiiP.Framework.Messaging;
+using HiiP.Framework.Security.UserManagement.BusinessEntity;
+using HiiP.Framework.Security.UserManagement.Constants;
+using HiiP.Framework.Security.UserManagement.Interface;
+using HiiP.Infrastructure.Interface;
+using HiiP.Infrastructure.Interface.BusinessEntities;
+using HiiP.Infrastructure.Interface.Constants;
+using HiiP.Infrastructure.Interface.Miscellaneous;
+using Infragistics.Practices.CompositeUI.WinForms;
+using UserManagementConstants = HiiP.Framework.Security.UserManagement.Interface.Constants;
+
+using Infragistics.Win;
+using Infragistics.Win.Misc;
+using Infragistics.Win.UltraWinEditors;
+using Infragistics.Win.UltraWinGrid;
+using Infragistics.Win.UltraWinListView;
+using Infragistics.Win.UltraWinToolTip;
+using Infragistics.Win.UltraWinTree;
+
+using Microsoft.Practices.CompositeUI;
+using Microsoft.Practices.CompositeUI.SmartParts;
+using Microsoft.Practices.CompositeUI.WinForms;
+using Microsoft.Practices.EnterpriseLibrary.ExceptionHandling;
+using Microsoft.Practices.ObjectBuilder;
+
+using NCS.IConnect.CodeTable;
+using NCS.IConnect.Common;
+
+
+namespace HiiP.Framework.Security.UserManagement
+{
+    public partial class UserDetail : BaseView, IUserDetail
+    {
+
+        private string _changedDefaultOfficeKey = string.Empty;
+        private string ReportsTo = string.Empty;
+
+        public UserDetail()
+        {
+            InitializeComponent();
+        }
+        protected override void OnLoad(EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _presenter.OnViewReady();
+                _presenter.SetHelpUrlForSubTab(this.ultraTabPageControlGeneral.Tab.Key, this.ultraTabPageControlGeneral.TabControl);
+                base.OnLoad(e);
+                // Fix for  Defect # 2762 
+                this.CheckDirtyRequired = HiiP.Framework.Common.ApplicationContexts.AppContext.Current.UserName.ToLower().Equals(txt_username.Text.ToLower()) ? false : true;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Equals(Messaging.Messages.Workflow.WFI001.Value.ToString()))
+                {
+                    ExceptionManager.HandleWithLogOnly(ex);
+                    Utility.ShowMessageBox(Messages.Workflow.WFI001);
+                }
+                else if (ex.Message.ToLower().Contains("workflow") || ex.Message.ToLower().Contains("iprocess"))
+                {
+                    ExceptionManager.Handle(ex);
+                    ultraTabControl1.Tabs[3].Enabled = false;
+                }
+                else if (ex.Message.ToLower().Contains("trim") || ex.Message.ToLower().Contains("dms"))
+                {
+                    ExceptionManager.Handle(ex);
+                    ultraTabControl1.Tabs[4].Enabled = false;
+                }
+                else
+                {
+                    this.Enabled = false;
+                    if (ExceptionManager.Handle(ex)) throw;
+                }
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        /// <summary>
+        /// Process Show View Event Parameters
+        /// </summary>
+        /// <param name="parameters">The parameters.</param>
+        /// <remarks>
+        /// This method mostly used to show a add view or deal with event call.
+        /// </remarks>
+        public override void ProcessParameter(ViewParameter parameter)
+        {
+            _presenter.Key = parameter.Key;
+            _presenter.Data = parameter.Data;
+            _presenter.CurrentViewStatus = parameter.CurrentViewStatus;
+
+            AppTitle = _presenter.GetAppTitle();
+
+            base.ProcessParameter(parameter);
+        }
+
+        #region Business
+        private void btn_viewDF_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _presenter.ViewFunctionDF();
+
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void btn_ok_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Dictionary<string, string> ErrorMessages = null;
+                this.Cursor = Cursors.WaitCursor;
+                if (this.ValidateChildren())
+                {
+                    GISUserRoleAssignment.SelectedUser = txt_username.Text.ToString();
+
+
+                    ErrorMessages = _presenter.SaveUser();
+
+                    this.SetDirtyStatus(false);
+                    _presenter.OnCloseView();
+
+                    foreach (KeyValuePair<string, string> kvp in ErrorMessages)
+                    {
+                        if (kvp.Key.Equals(HiiP.Framework.Security.UserManagement.Interface.Constants.Exceptions.HiiPUserCreationException))
+                        {
+                            ExceptionManager.HandleWithLogOnly(new Exception(kvp.Value.ToString()));
+                        }
+                        else if (kvp.Key.Equals(HiiP.Framework.Security.UserManagement.Interface.Constants.Exceptions.DMSUserCreationException))
+                        {
+                            DMSExceptionManager.Handle(new Exception(kvp.Value.ToString()));
+                        }
+                        else if (kvp.Key.Equals(HiiP.Framework.Security.UserManagement.Interface.Constants.Exceptions.WorkflowUserCreationException))
+                        {
+                            ExceptionManager.HandleWithLogOnly(new WorkflowException(kvp.Value.ToString()));
+                        }
+
+                    }
+                }
+                else
+                {
+                    //Because just the first tab page has validation, 
+                    //it will always navigate to the page when validation failed
+                    this.ultraTabControl1.SelectedTab = this.ultraTabPageControlGeneral.Tab;
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                if (ex.Message.Equals(Messages.Workflow.WFE005.Value))
+                {
+                    MessageBox.Show(Messages.Workflow.WFE005.Value);
+                }
+
+                else if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private string BuildStatusString(string[] Message)
+        {
+            string ReturnMessage = string.Empty;
+
+            for (int i = 0; i < Message.Length; i++)
+            {
+                ReturnMessage += Message[i].ToString() + "\n";
+            }
+            return ReturnMessage;
+        }
+
+        public void SetWorkflowTab(bool Enabled)
+        {
+            ultraTabControl1.Tabs[3].Enabled = Enabled;
+        }
+
+        public void SetDMSTab(bool Enabled)
+        {
+            ultraTabControl1.Tabs[4].Enabled = Enabled;
+        }
+
+
+        private void btn_disable_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                string value = string.Empty;
+                _presenter.OnUpdateStatusBarMessage(value);
+
+                if (_presenter.DeletionCriteriaCheck(this.txt_username.Text, out value))
+                {
+                    this.Cursor = Cursors.WaitCursor;
+                    switch (this.StatusTextEditor.Text)
+                    {
+                        case UserStatus.Active:
+                            if (MessageBox.Show(Messages.Framework.FWC201.Format(_presenter.Key), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                == DialogResult.Yes)
+                            {
+                                _presenter.DisableOrActivateUser();
+                                _presenter.DisableDMSUser(txt_username.Text.Trim());
+
+                                this.StatusTextEditor.Text = UserStatus.Inactive;
+                                this.btn_disable.Text = "Activate";
+                            }
+                            break;
+                        case UserStatus.Inactive:
+                            if (MessageBox.Show(Messages.Framework.FWC202.Format(_presenter.Key), "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                                == DialogResult.Yes)
+                            {
+                                _presenter.DisableOrActivateUser();
+                                _presenter.EnableDMSUser(txt_username.Text.Trim());
+                                this.StatusTextEditor.Text = UserStatus.Active;
+                                this.btn_disable.Text = "Disable";
+                            }
+                            break;
+                    }
+                    this.SetDirtyStatus(false);
+                    _presenter.OnCloseView();
+                }
+                else
+                {
+                    _presenter.OnUpdateStatusBarMessage(value);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _presenter.CopyUser();
+
+
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void btn_cancel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _presenter.OnCloseView();
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        #endregion
+
+        #region IUserAdd Members
+
+        public UserInfoEntity GetUserInfo()
+        {
+            UserInfoEntity userInfoEntity = new UserInfoEntity(
+                this.txt_username.Text,
+                this.txt_firstname.Text,
+                this.txt_initials.Text,
+                this.txt_lastname.Text,
+                this.txt_display.Text,
+                this.txt_alias.Text,
+                this.cb_gender.Value.ToString(),
+                this.cb_title.Value.ToString(),
+                this.dt_dateofbirth.DateTime,
+                this.txt_email.Text,
+                this.txt_telephoneno.Text,
+                this.txt_faxno.Text,
+                this.txt_mobileno.Text,
+                this.txt_pagerno.Text,
+                // this.cb_organisation.Value.ToString(),
+                String.Empty,
+                // this.txt_staffID.Text,
+                //String.Empty,
+                // this.cb_designation.Value.ToString(),
+                //String.Empty,
+                this.txt_remarks.Text,
+                this.StatusTextEditor.Text,
+                DateTime.Now,
+                String.Empty,
+                _changedDefaultOfficeKey,
+                this.Txt_JobTitle.Text, // Extend "job title" property
+                ReportsTo   // Extend "Reports To" property, TO-DO: set "Reports To" value here.
+                );
+            //userInfoEntity.ConfigurationInfo = UserHelper.CreateUserBasicConfigurationSection();
+
+            return userInfoEntity;
+        }
+
+        public UserInfoEntity GetUpdatedUserInfo(UserInfoEntity userInfo)
+        {
+            if (userInfo == null) return GetUserInfo();
+
+            userInfo.FirstName = this.txt_firstname.Text;
+            userInfo.Initials = this.txt_initials.Text;
+            userInfo.LastName = this.txt_lastname.Text;
+            userInfo.Display = this.txt_display.Text;
+            userInfo.Alias = this.txt_alias.Text;
+            userInfo.Gender = this.cb_gender.Value.ToString();
+            userInfo.Title = this.cb_title.Value.ToString();
+            userInfo.DateOfBirth = this.dt_dateofbirth.DateTime;
+            userInfo.Email = this.txt_email.Text;
+            userInfo.TelephoneNo = this.txt_telephoneno.Text;
+            userInfo.FaxNo = this.txt_faxno.Text;
+            userInfo.MobileNo = this.txt_mobileno.Text;
+            userInfo.PageNo = this.txt_pagerno.Text;
+            userInfo.Organisation = String.Empty;
+            //userinfo.StaffID = String.Empty;
+            //userinfo.Designation = String.Empty;
+            userInfo.Remarks = this.txt_remarks.Text;
+
+            //User office
+            userInfo.Office = this._changedDefaultOfficeKey;
+
+            // Extend "job title" property
+            userInfo.JobTitle = this.Txt_JobTitle.Text;
+
+            // Extend "Reports To" property, TO-DO: set "Reports To" value here.
+            userInfo.ReportsTo = ReportsTo; // 
+
+            return userInfo;
+        }
+
+        private DeckWorkspace _userRoleAssignmentDeckWorkspace;
+
+        private DeckWorkspace _dmsuserRoleAssignmentDeckWorkspace;
+
+        private DeckWorkspace _wfuserRoleAssignmentDeckWorkspace;
+
+        private DeckWorkspace _gisuserRoleAssignmentDeckWorkspace;
+
+        public void LoadViewWorkspace()
+        {
+            _userRoleAssignmentDeckWorkspace = new DeckWorkspace();
+            this.ultraTabPageControl2.Controls.Add(_userRoleAssignmentDeckWorkspace);
+            _userRoleAssignmentDeckWorkspace.Name = String.Format("{0} - {1}", HiiP.Framework.Security.UserManagement.Constants.WorkspaceNames.UserRoleAssignmentDeckWorkspace, _presenter.Key);
+            _userRoleAssignmentDeckWorkspace.Dock = DockStyle.Fill;
+        }
+
+        public void LoadViewDMSWorkspace()
+        {
+            _dmsuserRoleAssignmentDeckWorkspace = new DeckWorkspace();
+            _dmsuserRoleAssignmentDeckWorkspace.Name = String.Format("{0} - {1}", HiiP.Framework.Security.UserManagement.Constants.WorkspaceNames.DMSUserRoleAssignmentDeckWorkspace, _presenter.Key);
+            _dmsuserRoleAssignmentDeckWorkspace.Dock = DockStyle.Fill;
+            this.ultraTabPageControl9.Controls.Add(_dmsuserRoleAssignmentDeckWorkspace);
+        }
+
+        public void LoadViewWFWorkspace()
+        {
+            _wfuserRoleAssignmentDeckWorkspace = new DeckWorkspace();
+            _wfuserRoleAssignmentDeckWorkspace.Name = String.Format("{0} - {1}", HiiP.Framework.Security.UserManagement.Constants.WorkspaceNames.WFUserRoleAssignmentDeckWorkspace, _presenter.Key);
+            _wfuserRoleAssignmentDeckWorkspace.Dock = DockStyle.Fill;
+            this.ultraTabPageControl3.Controls.Add(_wfuserRoleAssignmentDeckWorkspace);
+        }
+
+
+        public void LoadViewGISWorkspace()
+        {
+            _gisuserRoleAssignmentDeckWorkspace = new DeckWorkspace();
+            _gisuserRoleAssignmentDeckWorkspace.Name = String.Format("{0} - {1}", HiiP.Framework.Security.UserManagement.Constants.WorkspaceNames.GISUserRoleAssignmentDeckWorkspace, _presenter.Key);
+            _gisuserRoleAssignmentDeckWorkspace.Dock = DockStyle.Fill;
+            this.ultraTabPageControl10.Controls.Add(_gisuserRoleAssignmentDeckWorkspace);
+        }
+
+        public void LoadViewDropDownList()
+        {
+            CodeTableAdapter.BindComboByCodeTable(
+                this.cb_gender,
+                CodeTableCategoryNames.Gender);
+
+            CodeTableAdapter.BindComboByCodeTable(
+                this.cb_title,
+                CodeTableCategoryNames.Title);
+        }
+
+        public void LoadUserData(string userName)
+        {
+            UserInfoEntity entity = _presenter.GetUserInfoByUserName(userName);
+            this.txt_username.Text = entity.UserName;
+            if (entity.UserStatus == UserStatus.Active)
+            {
+                this.StatusTextEditor.Text = UserStatus.Active;
+                this.btn_disable.Text = "Disable";
+            }
+            else if (entity.UserStatus == UserStatus.Inactive)
+            {
+                this.StatusTextEditor.Text = UserStatus.Inactive;
+                this.btn_disable.Text = "Activate";
+            }
+            else
+            {
+                this.StatusTextEditor.Text = "-";
+                this.btn_disable.Text = "Activate";
+            }
+            this.txt_firstname.Text = entity.FirstName;
+            this.txt_initials.Text = entity.Initials;
+            this.txt_lastname.Text = entity.LastName;
+            this.txt_display.Text = entity.Display;
+            this.txt_alias.Text = entity.Alias;
+
+            CodeTableAdapter.SetUltraComboEditor(this.cb_gender, entity.Gender);
+
+            CodeTableAdapter.SetUltraComboEditor(this.cb_title, entity.Title);
+
+            if (entity.DateOfBirth > this.dt_dateofbirth.MinDate &&
+                entity.DateOfBirth < this.dt_dateofbirth.MaxDate)
+            {
+                this.dt_dateofbirth.Value = entity.DateOfBirth;
+            }
+            this.txt_email.Text = entity.Email;
+            this.txt_telephoneno.Text = entity.TelephoneNo;
+            this.txt_faxno.Text = entity.FaxNo;
+            this.txt_mobileno.Text = entity.MobileNo;
+            this.txt_pagerno.Text = entity.PageNo;
+
+            // Extend "job title" property
+            this.Txt_JobTitle.Text = entity.JobTitle;
+
+            this.txt_remarks.Text = entity.Remarks;
+            ReportsTo = entity.ReportsTo;
+            if (!string.IsNullOrEmpty(ReportsTo))
+            {
+                UserBasicInfoEntity UBE = UserHelper.GetUsersBasicInformation(new string[] { ReportsTo })[0];
+                txt_ReportsTo.Text = string.IsNullOrEmpty(UBE.Title.Trim()) ? UBE.Display : UBE.Display + "(" + UBE.Title + ")";
+            }
+            _versionNo = entity.VersionNo;
+
+            //User default office
+            _changedDefaultOfficeKey = entity.Office;
+        }
+
+        public void ControlViewStatus()
+        {
+            switch (_presenter.CurrentViewStatus)
+            {
+                case HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.Add:
+                    this.txt_username.ReadOnly = false;
+                    this.statusLabel.Visible = false;
+                    this.StatusTextEditor.Visible = false;
+                    this.StatusTextEditor.Text = UserStatus.Active;
+
+                    this.btn_ok.Visible = _presenter.HasRight(HiiP.Framework.Security.UserManagement.Interface.Constants.FunctionNames.NewUserFunctionID);
+                    this.btn_disable.Visible = false;
+                    this.btn_copy.Visible = false;
+                    break;
+                case HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.Update:
+                    this.txt_username.ReadOnly = true;
+                    this.statusLabel.Visible = true;
+                    this.StatusTextEditor.Visible = true;
+
+                    this.btn_ok.Visible = _presenter.IsUserEditable() & _presenter.HasRight(HiiP.Framework.Security.UserManagement.Interface.Constants.FunctionNames.UpdateUserFunctionID);
+                    this.btn_disable.Visible = _presenter.IsUserEditable() & _presenter.HasRight(HiiP.Framework.Security.UserManagement.Interface.Constants.FunctionNames.ActivateOrDisableUsersFunctionID);
+                    this.btn_copy.Visible = _presenter.HasRight(HiiP.Framework.Security.UserManagement.Interface.Constants.FunctionNames.NewUserFunctionID);
+                    break;
+                case HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.CopyNewUser:
+                    this.txt_username.ReadOnly = false;
+                    this.statusLabel.Visible = false;
+                    this.StatusTextEditor.Visible = false;
+                    this.StatusTextEditor.Text = UserStatus.Active;
+
+                    this.btn_ok.Visible = _presenter.HasRight(HiiP.Framework.Security.UserManagement.Interface.Constants.FunctionNames.NewUserFunctionID);
+                    this.btn_disable.Visible = false;
+                    this.btn_copy.Visible = false;
+                    break;
+                default:
+                    Utility.SetToViewState(this);
+                    break;
+            }
+        }
+
+
+        public IWorkspace UserRoleAssignmentWorkspace
+        {
+            get { return _userRoleAssignmentDeckWorkspace; }
+        }
+
+        public IWorkspace DMSUserRoleAssignmentWorkspace
+        {
+            get { return _dmsuserRoleAssignmentDeckWorkspace; }
+        }
+        public IWorkspace WFUserRoleAssignmentWorkspace
+        {
+            get { return _wfuserRoleAssignmentDeckWorkspace; }
+        }
+
+        public IWorkspace GISUserRoleAssignmentWorkspace
+        {
+            get { return _gisuserRoleAssignmentDeckWorkspace; }
+        }
+        private int _versionNo;
+        public int VersionNo
+        {
+            get { return _versionNo; }
+        }
+
+        public List<OfficeEntity> OfficeEntities
+        {
+            get;
+            set;
+        }
+
+        public string GetUserStatus()
+        {
+            string userstatus = String.Empty;
+            if (this.StatusTextEditor.Text == UserStatus.Active)
+            {
+                userstatus = UserStatus.Inactive;
+            }
+            else if (this.StatusTextEditor.Text == UserStatus.Inactive)
+            {
+                userstatus = UserStatus.Active;
+            }
+
+            return userstatus;
+        }
+
+        #endregion
+
+        private void validationProvider_ValueConvert(object sender, Microsoft.Practices.EnterpriseLibrary.Validation.Integration.ValueConvertEventArgs e)
+        {
+            try
+            {
+                switch (e.SourcePropertyName)
+                {
+                    case "UserName":
+                        if (_presenter.CurrentViewStatus == HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.Add ||
+                            _presenter.CurrentViewStatus == HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.CopyNewUser)
+                        {
+                            e.ConvertedValue = this.txt_username.Text.Trim();
+                            if (string.IsNullOrEmpty(this.txt_username.Text.Trim()))
+                            {
+                                //e.ConversionErrorMessage = Messages.Framework.FWC221.Format();
+                            }
+                            else if (_presenter.UserExists(this.txt_username.Text.Trim()))
+                            {
+                                e.ConversionErrorMessage = Messages.Framework.FWC222.Format();
+                            }
+                        }
+                        break;
+                    //Delete the Capital check for first name and last name.
+                    //case "FirstName":
+                    //    if (this.txt_firstname.Text.Trim() != String.Empty && !Regex.IsMatch(this.txt_firstname.Text.Trim(), @"^[A-Z]+[A-Z- ']*$"))
+                    //    {
+                    //        e.ConversionErrorMessage = "The firstname is permitted characters: A to Z, space, apostrophe, hyphen.";
+                    //    }
+                    //    break;
+                    //case "LastName":
+                    //    if (this.txt_lastname.Text.Trim() != String.Empty && !Regex.IsMatch(this.txt_lastname.Text.Trim(), @"^[A-Z]+[A-Z- ']*$"))
+                    //    {
+                    //        e.ConversionErrorMessage = "The lastname is permitted characters: A to Z, space, apostrophe, hyphen.";
+                    //    }
+                    //    break;
+                    //case "Gender":
+                    //    if (this.cb_gender.Value.ToString() == String.Empty)
+                    //    {
+                    //        e.ConversionErrorMessage = Messages.Framework.FWC228.Format("gender");
+                    //    }
+                    //    break;
+                    //case "Title":
+                    //    if (this.cb_title.Value.ToString() == String.Empty)
+                    //    {
+                    //        e.ConversionErrorMessage = Messages.Framework.FWC228.Format("title");
+                    //    }
+                    //    break;
+                    //case "Organisation":
+                    //    if (this.cb_organisation.Value == null || this.cb_organisation.Value.ToString() == String.Empty)
+                    //    {
+                    //        e.ConversionErrorMessage = Messages.Framework.FWC228.Format("organisation");
+                    //    }
+                    //    break;
+                    //case "Designation" :
+                    //    if (this.cb_designation.Value.ToString() == String.Empty)
+                    //    {
+                    //        e.ConversionErrorMessage = Messages.Framework.FWC228.Format("designation");
+                    //    }
+                    //    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+        }
+
+        #region IUserDetail Members
+
+
+        public void SetDirty()
+        {
+            base.SetDirtyStatus(true);
+        }
+
+        public void ActivateFunctionalRoleTab()
+        {
+            this.ultraTabControl1.Tabs[2].Selected = true;
+            this.ultraTabControl1.Tabs[4].Selected = true;
+            this.ultraTabControl1.Tabs[3].Selected = true;
+            this.ultraTabControl1.Tabs[5].Selected = true;
+            this.ultraTabControl1.Tabs[0].Selected = true;
+        }
+
+        #endregion
+
+        #region IUserDetail for maintain organisation Members
+        private MaintainOrganisationForUser _maintainOrganisationForUser = null;
+        public void LoadOrganisationData()
+        {
+            _maintainOrganisationForUser = new MaintainOrganisationForUser();
+            string userName = null;
+            switch (_presenter.CurrentViewStatus)
+            {
+                case HiiP.Framework.Security.UserManagement.Interface.Constants.ViewStatus.CopyNewUser:
+                    userName = _presenter.Data as string;
+                    break;
+                default:
+                    userName = this.txt_username.Text;
+                    break;
+            }
+
+            //Set the status of the following buttons before loading data to tree.
+            //They will be turned on when some one node is activated.
+            this.UnselectButton.Enabled = false;
+            this.DefaultButton.Enabled = false;
+
+            OfficesHierarchyDataSet hierarchy = _presenter.GetOfficesHierarchy(userName);
+            this._maintainOrganisationForUser.InitOrganisationTree(this.OfficeTree, hierarchy.LookupOrganisationalUnitHierarchy);
+            //if previous method has set it to false, will remain here
+            this.SelectButton.Enabled = (this.SelectButton.Enabled && this.OfficeTree.Nodes.Count > 0);
+
+            if (string.IsNullOrEmpty(userName)) return;
+
+            UserInfoEntity entity = _presenter.GetUserInfoByUserName(userName);
+
+            this._changedDefaultOfficeKey = entity.Office;
+
+            //_changedDefaultOfficeKey was set with the value of profile, refer to LoadUserData(string)
+            this._maintainOrganisationForUser.InitUserOrganisationTree(this.SelectOfficeListView,
+                this._changedDefaultOfficeKey, userName, _presenter.CurrentViewStatus,
+                hierarchy.T_IC_ORG_USERS, hierarchy.LookupOrganisationalUnitHierarchy);
+
+        }
+
+        public void CollectOrganisationData(out OfficesHierarchyDataSet.T_IC_ORG_USERSDataTable removedOfficeList, out OfficesHierarchyDataSet.T_IC_ORG_USERSDataTable newOfficeList)
+        {
+            this._maintainOrganisationForUser.SaveSelectedOffices(this.SelectOfficeListView, this.txt_username.Text.Trim(), out removedOfficeList, out newOfficeList);
+        }
+
+        #endregion  IUserDetail for maintain organisation Members
+
+        #region Maintain organisation
+        private void SelectButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DevTreeNode node = this.OfficeTree.ActiveNode as DevTreeNode;
+                if (node == null) return;
+                UltraListViewItem item = CreateOfficeOfUser(node);
+                if (item == null || IsAppendItemToList(item.Key)) this.SelectOfficeListView.Items.Add(item);
+
+                this.OfficeTree.ExpandAll();
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+        }
+
+        private bool IsAppendItemToList(string key)
+        {
+            return (!(this.SelectOfficeListView.Items.IndexOf(key) > -1));
+
+        }
+
+        private UltraListViewItem CreateOfficeOfUser(DevTreeNode node)
+        {
+            OfficesHierarchyDataSet.LookupOrganisationalUnitHierarchyRow hierarchy = node.Tag as OfficesHierarchyDataSet.LookupOrganisationalUnitHierarchyRow;
+            if (hierarchy == null)
+            {
+                return null;
+            }
+
+            return MaintainOrganisationForUser.CreateOfficeOfUser(hierarchy.OrganisationalUnitTypeID.ToString(), node.Text, node.PrimaryKey);
+        }
+
+        private void UnselectButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int i = 0;
+                while (this.SelectOfficeListView.SelectedItems.Count > 0)
+                {
+                    UltraListViewItem item = this.SelectOfficeListView.SelectedItems[0];
+                    if (item == null) break;
+                    DevTreeNode currentNode = this.OfficeTree.GetNodeByKey(item.Tag as string) as DevTreeNode;
+                    if (currentNode != null)
+                    {
+                        currentNode.Visible = true;
+                    }
+                    this.SelectOfficeListView.Items.Remove(item);
+                    ++i;
+                }
+
+                if (this.SelectOfficeListView.Items.Count > 0)
+                {
+                    this.SelectOfficeListView.SelectedItems.Add(this.SelectOfficeListView.Items[0]);
+                    this.SelectOfficeListView.ActiveItem = this.SelectOfficeListView.Items[0];
+                }
+
+                //When no item was selected, disable the following buttons
+                this.DefaultButton.Enabled = this.SelectOfficeListView.Items.Count != 0;
+                this.UnselectButton.Enabled = this.SelectOfficeListView.Items.Count != 0;
+
+                this.OfficeTree.ExpandAll();
+
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+        }
+
+        private void OpenTreeNodeVisiable(UltraTreeNode currentNode)
+        {
+            UltraTreeNode parent = currentNode.Parent;
+            if (parent != null)
+            {
+                parent.Visible = true;
+                this.OpenTreeNodeVisiable(parent);
+            }
+        }
+
+        private void DefaultButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.SelectOfficeListView.ActiveItem == null) return;
+
+                _changedDefaultOfficeKey = this.SelectOfficeListView.ActiveItem.Key;
+
+                this._maintainOrganisationForUser.SetDefaultOffice(this.SelectOfficeListView);
+            }
+            catch (Exception ex)
+            {
+
+                if (ExceptionManager.Handle(ex)) throw;
+
+            }
+        }
+
+        #endregion
+
+
+        private void ultraTextEditorReportsTo_EditorButtonClick(object sender, EditorButtonEventArgs e)
+        {
+            try
+            {
+                UltraTextEditor editor = e.Context as UltraTextEditor;
+                ReportsTo = _presenter.ShowReportsTo((editor == null) ? "" : editor.Text);
+                if (!string.IsNullOrEmpty(ReportsTo))
+                {
+                    UserBasicInfoEntity UBE = UserHelper.GetUsersBasicInformation(new string[] { ReportsTo })[0];
+                    txt_ReportsTo.Text = string.IsNullOrEmpty(UBE.Title.Trim()) ? UBE.Display : UBE.Display + "(" + UBE.Title + ")";
+                }
+                else
+                {
+                    txt_ReportsTo.Text = ReportsTo;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+        }
+
+        private void ultraTabControl1_SelectedTabChanged(object sender, Infragistics.Win.UltraWinTabControl.SelectedTabChangedEventArgs e)
+        {
+
+
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                _presenter.SetHelpUrlForSubTab(e.Tab.Key, e.Tab.TabControl);
+                if (ultraTabControl1.Tabs[2].Active)
+                {
+                    btn_viewDF.Visible = true;
+                }
+                else
+                {
+                    btn_viewDF.Visible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void SelectOfficeListView_ItemActivated(object sender, ItemActivatedEventArgs e)
+        {
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                this.UnselectButton.Enabled = true;
+                this.DefaultButton.Enabled = true;
+
+            }
+            catch (Exception ex)
+            {
+                if (ExceptionManager.Handle(ex)) throw;
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+
+        [EventSubscription(HiiP.Framework.Security.UserManagement.Constants.EventTopicNames.EnableDisableViewDF, ThreadOption.UserInterface)]
+
+        public void EnableDisableViewDF(object sender, EventArgs<bool> eventArgs)
+        {
+            btn_viewDF.Visible = eventArgs.Data;
+        }
+    }
+
+   
+}
+
+     

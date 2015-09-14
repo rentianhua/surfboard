@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="OfficesDataSet" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/OfficesDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Settings" AppSettingsPropertyName="HiiP_SZ_R4ConnectionString" IsAppSettingsProperty="true" Modifier="Assembly" Name="HiiP_SZ_R4ConnectionString (Settings)" ParameterPrefix="@" PropertyReference="ApplicationSettings.HiiP.Framework.Common.Interface.Properties.Settings.GlobalReference.Default.HiiP_SZ_R4ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="OfficesDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="OfficesDataSet" msprop:Generator_DataSetName="OfficesDataSet" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CM_LookupOrganisationalUnit" msprop:Generator_UserTableName="CM_LookupOrganisationalUnit" msprop:Generator_RowDeletedName="CM_LookupOrganisationalUnitRowDeleted" msprop:Generator_RowChangedName="CM_LookupOrganisationalUnitRowChanged" msprop:Generator_RowClassName="CM_LookupOrganisationalUnitRow" msprop:Generator_RowChangingName="CM_LookupOrganisationalUnitRowChanging" msprop:Generator_RowEvArgName="CM_LookupOrganisationalUnitRowChangeEvent" msprop:Generator_RowEvHandlerName="CM_LookupOrganisationalUnitRowChangeEventHandler" msprop:Generator_TableClassName="CM_LookupOrganisationalUnitDataTable" msprop:Generator_TableVarName="tableCM_LookupOrganisationalUnit" msprop:Generator_RowDeletingName="CM_LookupOrganisationalUnitRowDeleting" msprop:Generator_TablePropName="CM_LookupOrganisationalUnit">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="OrganisationalUnitID" msprop:Generator_UserColumnName="OrganisationalUnitID" msprop:Generator_ColumnPropNameInRow="OrganisationalUnitID" msprop:Generator_ColumnVarNameInTable="columnOrganisationalUnitID" msprop:Generator_ColumnPropNameInTable="OrganisationalUnitIDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="OrganisationalUnitName" msprop:Generator_UserColumnName="OrganisationalUnitName" msprop:Generator_ColumnPropNameInRow="OrganisationalUnitName" msprop:Generator_ColumnVarNameInTable="columnOrganisationalUnitName" msprop:Generator_ColumnPropNameInTable="OrganisationalUnitNameColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="EffectiveStartDate" msprop:Generator_UserColumnName="EffectiveStartDate" msprop:Generator_ColumnPropNameInRow="EffectiveStartDate" msprop:Generator_ColumnVarNameInTable="columnEffectiveStartDate" msprop:Generator_ColumnPropNameInTable="EffectiveStartDateColumn" type="xs:dateTime" />
+              <xs:element name="EffectiveEndDate" msprop:Generator_UserColumnName="EffectiveEndDate" msprop:Generator_ColumnPropNameInRow="EffectiveEndDate" msprop:Generator_ColumnVarNameInTable="columnEffectiveEndDate" msprop:Generator_ColumnPropNameInTable="EffectiveEndDateColumn" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="CM_LookupOrganisationalUnitByType" msprop:Generator_UserTableName="CM_LookupOrganisationalUnitByType" msprop:Generator_RowDeletedName="CM_LookupOrganisationalUnitByTypeRowDeleted" msprop:Generator_RowChangedName="CM_LookupOrganisationalUnitByTypeRowChanged" msprop:Generator_RowClassName="CM_LookupOrganisationalUnitByTypeRow" msprop:Generator_RowChangingName="CM_LookupOrganisationalUnitByTypeRowChanging" msprop:Generator_RowEvArgName="CM_LookupOrganisationalUnitByTypeRowChangeEvent" msprop:Generator_RowEvHandlerName="CM_LookupOrganisationalUnitByTypeRowChangeEventHandler" msprop:Generator_TableClassName="CM_LookupOrganisationalUnitByTypeDataTable" msprop:Generator_TableVarName="tableCM_LookupOrganisationalUnitByType" msprop:Generator_RowDeletingName="CM_LookupOrganisationalUnitByTypeRowDeleting" msprop:Generator_TablePropName="CM_LookupOrganisationalUnitByType">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="OrganisationalUnitTypeID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_UserColumnName="OrganisationalUnitTypeID" msprop:Generator_ColumnPropNameInRow="OrganisationalUnitTypeID" msprop:Generator_ColumnVarNameInTable="columnOrganisationalUnitTypeID" msprop:Generator_ColumnPropNameInTable="OrganisationalUnitTypeIDColumn" type="xs:int" />
+              <xs:element name="OrganisationalUnitID" msprop:Generator_UserColumnName="OrganisationalUnitID" msprop:Generator_ColumnPropNameInRow="OrganisationalUnitID" msprop:Generator_ColumnVarNameInTable="columnOrganisationalUnitID" msprop:Generator_ColumnPropNameInTable="OrganisationalUnitIDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CodeID" msprop:Generator_UserColumnName="CodeID" msprop:Generator_ColumnPropNameInRow="CodeID" msprop:Generator_ColumnVarNameInTable="columnCodeID" msprop:Generator_ColumnPropNameInTable="CodeIDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="EffectiveStartDate" msprop:Generator_UserColumnName="EffectiveStartDate" msprop:Generator_ColumnPropNameInRow="EffectiveStartDate" msprop:Generator_ColumnVarNameInTable="columnEffectiveStartDate" msprop:Generator_ColumnPropNameInTable="EffectiveStartDateColumn" type="xs:dateTime" />
+              <xs:element name="EffectiveEndDate" msprop:Generator_UserColumnName="EffectiveEndDate" msprop:Generator_ColumnPropNameInRow="EffectiveEndDate" msprop:Generator_ColumnVarNameInTable="columnEffectiveEndDate" msprop:Generator_ColumnPropNameInTable="EffectiveEndDateColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="OrganisationalUnitName" msprop:Generator_UserColumnName="OrganisationalUnitName" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnOrganisationalUnitName" msprop:Generator_ColumnPropNameInTable="OrganisationalUnitNameColumn" msprop:Generator_ColumnPropNameInRow="OrganisationalUnitName" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:CM_LookupOrganisationalUnit" />
+      <xs:field xpath="mstns:OrganisationalUnitID" />
+    </xs:unique>
+    <xs:unique name="CM_LookupOrganisationalUnitByType_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:CM_LookupOrganisationalUnitByType" />
+      <xs:field xpath="mstns:OrganisationalUnitTypeID" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="FK_LookupOrganisationalUnitByType_OrganisationalUnitID" msdata:parent="CM_LookupOrganisationalUnit" msdata:child="CM_LookupOrganisationalUnitByType" msdata:parentkey="OrganisationalUnitID" msdata:childkey="OrganisationalUnitID" msprop:Generator_UserRelationName="FK_LookupOrganisationalUnitByType_OrganisationalUnitID" msprop:Generator_RelationVarName="relationFK_LookupOrganisationalUnitByType_OrganisationalUnitID" msprop:Generator_UserChildTable="CM_LookupOrganisationalUnitByType" msprop:Generator_UserParentTable="CM_LookupOrganisationalUnit" msprop:Generator_ParentPropName="LookupOrganisationalUnitRow" msprop:Generator_ChildPropName="GetCM_LookupOrganisationalUnitByTypeRows" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

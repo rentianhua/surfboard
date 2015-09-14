@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/203046/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingException
+END
+HiiPLoggingExceptionHandler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingException/HiiPLoggingExceptionHandler.cs
+END
+HiiPLoggingExceptionFormatter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingException/HiiPLoggingExceptionFormatter.cs
+END
+HiiPLoggingExceptionHandlerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/203046/branch/R6g/Source/Framework/Logging/Logging.Library/LoggingException/HiiPLoggingExceptionHandlerData.cs
+END

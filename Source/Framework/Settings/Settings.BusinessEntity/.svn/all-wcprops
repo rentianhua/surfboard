@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/hiip/!svn/ver/196346/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity
+END
+LoggingFilterDS.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/LoggingFilterDS.xsc
+END
+LoggingFilterDS.xss
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/LoggingFilterDS.xss
+END
+LoggingFilterDS.xsd
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/LoggingFilterDS.xsd
+END
+MsMqTraceListenerEntity.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/MsMqTraceListenerEntity.cs
+END
+CodeTableDS.xsc
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/CodeTableDS.xsc
+END
+CodeTableDS.xss
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/CodeTableDS.xss
+END
+HomePageRefreshEntity.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/HomePageRefreshEntity.cs
+END
+LoggingFilterDS.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/LoggingFilterDS.Designer.cs
+END
+Settings.BusinessEntity.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/196346/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/Settings.BusinessEntity.csproj
+END
+KeyValueEventArgs.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/KeyValueEventArgs.cs
+END
+ExceptionHandlerLoggerEntity.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings.BusinessEntity/ExceptionHandlerLoggerEntity.cs
+END

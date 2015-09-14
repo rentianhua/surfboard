@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="LoggingFilterDS" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/LoggingFilterDS.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/LoggingFilterDS.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/LoggingFilterDS.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="LoggingFilterDS" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="LoggingFilterDS" msprop:Generator_DataSetName="LoggingFilterDS" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="T_IC_LOGGING_FILTER" msprop:Generator_UserTableName="T_IC_LOGGING_FILTER" msprop:Generator_RowDeletedName="T_IC_LOGGING_FILTERRowDeleted" msprop:Generator_RowChangedName="T_IC_LOGGING_FILTERRowChanged" msprop:Generator_RowClassName="T_IC_LOGGING_FILTERRow" msprop:Generator_RowChangingName="T_IC_LOGGING_FILTERRowChanging" msprop:Generator_RowEvArgName="T_IC_LOGGING_FILTERRowChangeEvent" msprop:Generator_RowEvHandlerName="T_IC_LOGGING_FILTERRowChangeEventHandler" msprop:Generator_TableClassName="T_IC_LOGGING_FILTERDataTable" msprop:Generator_TableVarName="tableT_IC_LOGGING_FILTER" msprop:Generator_RowDeletingName="T_IC_LOGGING_FILTERRowDeleting" msprop:Generator_TablePropName="T_IC_LOGGING_FILTER">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="CATEGORY" msprop:Generator_UserColumnName="CATEGORY" msprop:Generator_ColumnPropNameInRow="CATEGORY" msprop:Generator_ColumnVarNameInTable="columnCATEGORY" msprop:Generator_ColumnPropNameInTable="CATEGORYColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="USER_ID" msprop:Generator_UserColumnName="USER_ID" msprop:Generator_ColumnPropNameInRow="USER_ID" msprop:Generator_ColumnVarNameInTable="columnUSER_ID" msprop:Generator_ColumnPropNameInTable="USER_IDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="FLAG" msprop:Generator_UserColumnName="FLAG" msprop:Generator_ColumnPropNameInRow="FLAG" msprop:Generator_ColumnVarNameInTable="columnFLAG" msprop:Generator_ColumnPropNameInTable="FLAGColumn" type="xs:int" minOccurs="0" />
+              <xs:element name="VERSION_NO" msprop:Generator_UserColumnName="VERSION_NO" msprop:Generator_ColumnPropNameInRow="VERSION_NO" msprop:Generator_ColumnVarNameInTable="columnVERSION_NO" msprop:Generator_ColumnPropNameInTable="VERSION_NOColumn" type="xs:int" />
+              <xs:element name="TRANSACTION_ID" msprop:Generator_UserColumnName="TRANSACTION_ID" msprop:Generator_ColumnPropNameInRow="TRANSACTION_ID" msprop:Generator_ColumnVarNameInTable="columnTRANSACTION_ID" msprop:Generator_ColumnPropNameInTable="TRANSACTION_IDColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CREATED_BY" msprop:Generator_UserColumnName="CREATED_BY" msprop:Generator_ColumnPropNameInRow="CREATED_BY" msprop:Generator_ColumnVarNameInTable="columnCREATED_BY" msprop:Generator_ColumnPropNameInTable="CREATED_BYColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="256" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CREATED_TIME" msprop:Generator_UserColumnName="CREATED_TIME" msprop:Generator_ColumnPropNameInRow="CREATED_TIME" msprop:Generator_ColumnVarNameInTable="columnCREATED_TIME" msprop:Generator_ColumnPropNameInTable="CREATED_TIMEColumn" type="xs:dateTime" />
+              <xs:element name="LAST_UPDATED_BY" msprop:Generator_UserColumnName="LAST_UPDATED_BY" msprop:Generator_ColumnPropNameInRow="LAST_UPDATED_BY" msprop:Generator_ColumnVarNameInTable="columnLAST_UPDATED_BY" msprop:Generator_ColumnPropNameInTable="LAST_UPDATED_BYColumn">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="256" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="LAST_UPDATED_TIME" msprop:Generator_UserColumnName="LAST_UPDATED_TIME" msprop:Generator_ColumnPropNameInRow="LAST_UPDATED_TIME" msprop:Generator_ColumnVarNameInTable="columnLAST_UPDATED_TIME" msprop:Generator_ColumnPropNameInTable="LAST_UPDATED_TIMEColumn" type="xs:dateTime" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:T_IC_LOGGING_FILTER" />
+      <xs:field xpath="mstns:CATEGORY" />
+      <xs:field xpath="mstns:USER_ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

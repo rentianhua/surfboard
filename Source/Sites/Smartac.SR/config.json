@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "Smartac.SR"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-Smartac.SR-8a8709f7-35e2-46b1-9bbb-1074a12205ca;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}

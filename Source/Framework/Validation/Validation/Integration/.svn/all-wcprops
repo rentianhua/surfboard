@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration
+END
+ValueConvertEventArgs.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/ValueConvertEventArgs.cs
+END
+ValidationIntegrationHelper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/ValidationIntegrationHelper.cs
+END
+IValidationIntegrationProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/IValidationIntegrationProxy.cs
+END

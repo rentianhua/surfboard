@@ -1,0 +1,419 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/230845/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance
+END
+StaffMovement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovement.cs
+END
+UserRoleAssignment.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignment.GeneratedCode.cs
+END
+UserMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMaintenance.cs
+END
+RoleAssignment.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/RoleAssignment.GeneratedCode.cs
+END
+MaintainOrganisationForUser.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/199254/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/MaintainOrganisationForUser.cs
+END
+WFUserRoleAssignment.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/WFUserRoleAssignment.Designer.cs
+END
+ListOfFunctionAndDatafilter.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilter.Designer.cs
+END
+IUserMaintenance.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IUserMaintenance.cs
+END
+ETDataTest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ETDataTest.xml
+END
+ForwardDestination.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestination.GeneratedCode.cs
+END
+UserDetail.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetail.Designer.cs
+END
+UserMaintenancePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMaintenancePresenter.GeneratedCode.cs
+END
+UserUpdatePresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserUpdatePresenter.GeneratedCode.cs
+END
+IUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IUserRoleAssignment.cs
+END
+IGISUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IGISUserRoleAssignment.cs
+END
+UserRoleAssignment.resx
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignment.resx
+END
+StaffMovement.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovement.GeneratedCode.cs
+END
+UserMainTenancePresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMainTenancePresenter.cs
+END
+WFUserRoleAssignmentPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/123544/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/WFUserRoleAssignmentPresenter.cs
+END
+UserMaintenance.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMaintenance.Designer.cs
+END
+ListOfFunctionAndDatafilterPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/199254/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilterPresenter.cs
+END
+ForwardDestination.resx
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestination.resx
+END
+UserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/199255/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignment.cs
+END
+UserDetailPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/213276/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetailPresenter.cs
+END
+StaffMovement.resx
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovement.resx
+END
+UserDetail.cs.bak
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetail.cs.bak
+END
+ForwardDestination.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/221876/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestination.Designer.cs
+END
+UserRoleAssignmentPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignmentPresenter.GeneratedCode.cs
+END
+UserMainTenance.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMainTenance.GeneratedCode.cs
+END
+DMS UserRoleAssignment.resx
+K 25
+svn:wc:ra_dav:version-url
+V 138
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/DMS%20UserRoleAssignment.resx
+END
+StaffMovement.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovement.Designer.cs
+END
+ListOfFunctionAndDatafilter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilter.GeneratedCode.cs
+END
+WFUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/WFUserRoleAssignment.cs
+END
+IStaffMovement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IStaffMovement.cs
+END
+UserRoleAssignment.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignment.Designer.cs
+END
+GISUserRoleAssignment.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/221866/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/GISUserRoleAssignment.Designer.cs
+END
+BatchRoleAssignment.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/166178/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/BatchRoleAssignment.Designer.cs
+END
+UserDetail.Designer.cs.bak
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetail.Designer.cs.bak
+END
+BatchRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/178595/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/BatchRoleAssignment.cs
+END
+GISUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/GISUserRoleAssignment.cs
+END
+DMS UserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/199253/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/DMS%20UserRoleAssignment.cs
+END
+ForwardDestinationPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/199254/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestinationPresenter.cs
+END
+IntergratedETHelper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/208258/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IntergratedETHelper.cs
+END
+ListOfFunctionAndDatafilter.resx
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilter.resx
+END
+IBatchRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IBatchRoleAssignment.cs
+END
+StaffMovementPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovementPresenter.cs
+END
+UserUpdate.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserUpdate.GeneratedCode.cs
+END
+RoleAssignmentPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/RoleAssignmentPresenter.GeneratedCode.cs
+END
+IUserDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IUserDetail.cs
+END
+UserDetail.resx
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/181371/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetail.resx
+END
+IForwardDestination.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/174241/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IForwardDestination.cs
+END
+UserRoleAssignmentPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/230845/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserRoleAssignmentPresenter.cs
+END
+BatchRoleAssignmentPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/199253/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/BatchRoleAssignmentPresenter.cs
+END
+GISUserRoleAssignmentPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/123544/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/GISUserRoleAssignmentPresenter.cs
+END
+DMSUserRoleAssignmentPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/123545/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/DMSUserRoleAssignmentPresenter.cs
+END
+ForwardDestinationPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestinationPresenter.GeneratedCode.cs
+END
+ListOfFunctionAndDatafilter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilter.cs
+END
+DMS UserRoleAssignment.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/DMS%20UserRoleAssignment.Designer.cs
+END
+UserMaintenance.resx
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserMaintenance.resx
+END
+StaffMovementPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/StaffMovementPresenter.GeneratedCode.cs
+END
+IWFUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IWFUserRoleAssignment.cs
+END
+UserDetail.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/UserDetail.cs
+END
+WFUserRoleAssignment.resx
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/WFUserRoleAssignment.resx
+END
+IListOfFunctionAndDatafilter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IListOfFunctionAndDatafilter.cs
+END
+ForwardDestination.cs
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/hiip/!svn/ver/211639/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ForwardDestination.cs
+END
+IDMSUserRoleAssignment.cs
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/IDMSUserRoleAssignment.cs
+END
+BatchRoleAssignment.resx
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/BatchRoleAssignment.resx
+END
+GISUserRoleAssignment.resx
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/GISUserRoleAssignment.resx
+END
+ListOfFunctionAndDatafilterPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svn/hiip/!svn/ver/180107/branch/R6g/Source/Framework/Security/Security.UserManagement/Views/UserMaintenance/ListOfFunctionAndDatafilterPresenter.GeneratedCode.cs
+END

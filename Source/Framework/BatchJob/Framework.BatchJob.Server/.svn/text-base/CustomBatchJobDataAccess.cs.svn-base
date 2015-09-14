@@ -1,0 +1,767 @@
+// ==============================================================================
+// Copyright(C) 2008 NCS Pte Ltd
+//
+// SYSTEM NAME			: NCS HiiP System
+// COMPONENT ID			: HiiP.Modules.Framework.BatchJob.Server.CustomBatchJoblDA
+// COMPONENT DESC		: The class is used to maintain BatchJob
+//
+// CREATED DATE/BY	    : 9 Sep 2008 /Tang Jian
+//
+// REVISION HISTORY:
+// DATE/BY              ISSUE#/SR#/CS/PM#/OTHERS	DESCRIPTION OF CHANGE
+// ==============================================================================
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using Microsoft.Practices.EnterpriseLibrary.Data;
+using Microsoft.Practices.EnterpriseLibrary.Data.Configuration;
+
+using NCS.IConnect.BatchJob;
+
+using HiiP.Framework.BatchJob.Interface;
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+using HiiP.Framework.Logging.Library;
+using HiiP.Framework.Common.ApplicationContexts;
+using NCS.IConnect.BatchJob.Configuration;
+using System.Diagnostics;
+using Microsoft.Practices.EnterpriseLibrary.Logging;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    public class CustomBatchJobDataAccess : BatchJobDataAccess
+    {
+        private const string GetEnabledJobsSP = "P_IC_BATCH_JOB_SVR_GET";
+        
+        public CustomBatchJobDataAccess()
+            : this("")
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BatchJobDataAccess"/> class.
+        /// </summary>
+        /// <param name="databaseName">Name of the database.</param>
+        public CustomBatchJobDataAccess(string databaseName)
+            : base(databaseName)
+        {
+        }
+
+        internal void SetTransactionId(string transactionId)
+        {
+            this.ApplicationContext.TransactionId = transactionId;
+        }
+
+        public override BatchJobRunningInfo UpdateBatchJobHistory(BatchJobRunningInfo runningInfo)
+        {
+            if (runningInfo == null)
+            {
+                throw new ArgumentNullException("runningInfo");
+            }
+
+            if ((runningInfo.BatchJobInfo == null))
+            {
+                throw new ArgumentException("BatchJobInfo cannot be nullable instance.");
+            }
+
+            var info = base.UpdateBatchJobHistory(runningInfo);
+
+            //Got a requirement at 2011 July 21:
+            //if the job status is Completed/Cancelled, no email to send. But if the job status is Error/CompletedWithError, there is email to send. 
+            switch (runningInfo.Status)
+            {
+                case BatchJobStatus.CompletedWithErrors:
+                case BatchJobStatus.Error:
+                    var jobName = runningInfo.BatchJobInfo.Name;
+                    if (string.IsNullOrEmpty(jobName))
+                    {
+                        //when the caller got the runningInfo by GetBatchJobHistoryById() which will retrieve job name
+                        var jobInfo = this.GetBatchJobInfo("HiiP", runningInfo.BatchJobInfo.BatchJobID);
+                        if (jobInfo!=null)
+                        {
+                            jobName = jobInfo.Name;
+                        }
+                    }
+
+                    var message = string.Format("{0} {1} on server - '{2}' at {3}. ", 
+                        jobName,
+                        (runningInfo.Status==BatchJobStatus.Error)?"encountered error":"completed with error",
+                        runningInfo.Server, DateTime.Now.ToString());
+                    WriteHiiPLog(message, false, BatchJobSettings.GetBatchJobSettings().LogCategory);
+                    break;
+                //case BatchJobStatus.Completed:
+                //case BatchJobStatus.CancelFailed:
+                //case BatchJobStatus.Cancelled:
+                //case BatchJobStatus.Cancelling:
+                //case BatchJobStatus.ForcedCancelling:
+                //case BatchJobStatus.Running:
+                //case BatchJobStatus.Unstarted:
+                default:
+                    break;
+            }
+
+            return info;
+        }
+
+        protected override SchedulingTime CreateSchedulingTime(System.Data.IDataRecord dataReader)
+        {
+            return CustomBatchJobDataAccess.CreateSchedulingTimeFromDataReader(dataReader);
+        }
+        internal static SchedulingTime CreateSchedulingTimeFromDataReader(System.Data.IDataRecord dataReader)
+        {
+            DateTime? runOnceDateTime = null;
+            if (!string.IsNullOrEmpty(dataReader.GetValue(14).ToString()))
+            {
+                runOnceDateTime = dataReader.GetDateTime(14);
+            }
+            int? interval = null;
+            if (dataReader.GetValue(27) != DBNull.Value)
+            {
+                interval = dataReader.GetInt32(27);
+            }
+            int? indexOfMonthly = null;
+            if (dataReader.GetValue(28) != DBNull.Value)
+            {
+                indexOfMonthly = dataReader.GetInt32(28);
+            }
+            //int everyInterval = 1;
+
+            SchedulingTime temp ;
+            try
+            {
+                temp =
+             new CustomSchedulingTime(dataReader.GetString(10),
+                 dataReader.GetValue(11).ToString(),
+                 dataReader.GetValue(12).ToString(),
+                 dataReader.GetValue(13).ToString(),
+                 runOnceDateTime,
+                 dataReader.GetValue(15).ToString(),
+                 interval,
+                 indexOfMonthly,
+                 dataReader.GetValue(29).ToString(), dataReader.GetBoolean(31));
+            }
+            catch (Exception ex)
+            {
+
+                throw new BatchJobException(string.Format("Unable to compute the scheduling time of '{0}'", dataReader["BATCH_JOB_NAME"]), ex);
+            }
+
+            return temp;
+
+        }
+
+        protected override void OnAfterFillJobInfo(IDataRecord dataReader, BatchJobInfo info, ref int latestColumnIndex)
+        {
+            latestColumnIndex = 31;
+        }
+
+        protected override void PrepareSchedulingTimeParas(SchedulingTime schedulingTime, System.Data.Common.DbCommand dbCommand)
+        {
+            base.PrepareSchedulingTimeParas(schedulingTime, dbCommand);
+
+            int? interval = null;
+            int? indexofmonthly = null;
+            string months = null;
+            bool isRunInNextDay = false;
+            CustomSchedulingTime customSchedulingTime = schedulingTime as CustomSchedulingTime;
+            if (null != customSchedulingTime)
+            {
+                interval = customSchedulingTime.InputInterval;
+                indexofmonthly = customSchedulingTime.InputIndexOfMonthly;
+                months = customSchedulingTime.InputMonths;
+                isRunInNextDay = customSchedulingTime.IsRunInNextDay;
+            }
+            Database.AddInParameter(dbCommand, "p_interval", DbType.Int16, interval);
+            Database.AddInParameter(dbCommand, "p_indexofmonthly", DbType.Int16, indexofmonthly);
+            Database.AddInParameter(dbCommand, "p_months ", DbType.String, string.IsNullOrEmpty(months) ? null : months);
+            Database.AddInParameter(dbCommand, "p_run_in_next_day ", DbType.Boolean, isRunInNextDay);
+
+        }
+
+        #region Get all enabled jobs which contains the alogthrim of computing the next start time of the dependency jobs
+        private LatestJobsDataSet GetAllJobsFromDb(string applicationName, bool shouldGetRunOnce, bool includeDisabledJobs)
+        {
+            var data = new LatestJobsDataSet();
+
+            DbCommand dbCommand = this.Database.GetStoredProcCommand(GetEnabledJobsSP);
+
+            this.Database.AddInParameter(dbCommand, "p_app_name", DbType.String, applicationName);
+            this.Database.AddInParameter(dbCommand, "p_server_name", DbType.String, Environment.MachineName);
+            this.Database.AddInParameter(dbCommand, "p_should_get_runonce", DbType.Boolean, shouldGetRunOnce);
+
+            data.EnforceConstraints = false;
+            this.Database.LoadDataSet(dbCommand, data, new[] { data.T_IC_BATCH_JOB.TableName, data.T_IC_BATCH_JOB_LIST.TableName });
+            data.EnforceConstraints = true;
+
+            return data;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="applicationName"></param>
+        /// <param name="shouldGetRunOnce"></param>
+        /// <param name="includeDisabledJobs"></param>
+        /// <returns></returns>
+        public IList<BatchJobInfo> GetAllJobsWithComputedNextTime(string applicationName, bool shouldGetRunOnce,bool includeDisabledJobs)
+        {
+            var data = GetAllJobsFromDb(applicationName, shouldGetRunOnce, includeDisabledJobs);
+
+            var result = from job in data.T_IC_BATCH_JOB
+                         select ConvertToInstance(job);
+
+            List<CustomBatchJobInfo> allJobs = result.ToList<CustomBatchJobInfo>();
+
+            var parentsWithMaxTime = new Dictionary<string, CustomBatchJobInfo>();
+            var jobs = new List<BatchJobInfo>();
+            foreach (var jobInfo in allJobs)
+            {
+                if (includeDisabledJobs || jobInfo.Enabled)
+                {
+                    jobs.Add(jobInfo);
+                }
+
+                LoadJobsWithSameType(allJobs, jobInfo);
+
+                PrepareJobsTree(allJobs, jobInfo, data, parentsWithMaxTime);
+
+            }
+
+
+            var sortedJobs = CreateMapPathForDependency(allJobs,parentsWithMaxTime);
+
+            foreach (var sameDepthJobs in sortedJobs)
+            {
+                foreach (var jobInfo in sameDepthJobs.Value)
+                {
+                    var referencePath = string.Empty;
+                    jobInfo.NextStartDateTime = GetNextDateTime(jobInfo, parentsWithMaxTime, data.T_IC_BATCH_JOB_LIST, ref referencePath);
+                }
+            }
+
+            if (jobs.Count==0)
+            {
+                //To avoid linq exception
+                return new List<BatchJobInfo>();
+            }
+            return jobs.OrderBy(x => x.NextStartDateTime).ThenBy(x=>x.Priority).ThenBy(x=>x.Name).ToList<BatchJobInfo>(); 
+        }
+
+        private static void LoadJobsWithSameType(List<CustomBatchJobInfo> allJobs, CustomBatchJobInfo jobInfo) 
+        {
+            var job = jobInfo;
+
+            var allJobsWithSameType = from jobWithSameType in allJobs
+                                      where jobWithSameType.BatchJobID != job.BatchJobID
+                                      && jobWithSameType.BatchJobTypeInfo.TypeId == job.BatchJobTypeInfo.TypeId
+                                      && (jobWithSameType.Enabled || (!jobWithSameType.Enabled && jobWithSameType.Status.Equals(BatchJobStatus.Running)))
+                                      select jobWithSameType;
+
+            foreach (var item in allJobsWithSameType)
+            {
+                jobInfo.AllJobsWithSameType.Add(item);
+            }
+        }
+
+        private static void PrepareJobsTree(List<CustomBatchJobInfo> allJobs, 
+            CustomBatchJobInfo jobInfo,
+            LatestJobsDataSet data,
+            Dictionary<string, CustomBatchJobInfo> parentsWithMaxTime)
+        {
+            if (string.IsNullOrEmpty(jobInfo.ParentListID))
+            {
+                return;
+            }
+
+            var info = jobInfo;
+            //Get all parents of the job
+            var listRecords = from list in data.T_IC_BATCH_JOB_LIST
+                              where list.BATCH_JOB_LIST_ID == info.ParentListID
+                              select list;
+
+            if (listRecords.Count() == 0)
+            {
+                return;
+            }
+
+            foreach (var parent in listRecords)
+            {
+                //Prepare parent list
+                var parentItem = parent;
+                var parentInfo =
+                    allJobs.Where<CustomBatchJobInfo>(x => x.BatchJobID == parentItem.PARENT_JOB_ID).FirstOrDefault
+                        <CustomBatchJobInfo>();
+
+                if (parentInfo == null)
+                {
+                    continue;
+                }
+                jobInfo.Parents.Add(parentInfo);
+                jobInfo.Dependencies.Add(parentInfo.BatchJobID, parent.DEPENDENCY);
+
+                //Get the max time of parents so that it can directly use the max value to compute child's ne next time
+                //Key is child's job id, value is the parent which next time is the max time
+                if (!parentsWithMaxTime.ContainsKey(jobInfo.BatchJobID))
+                {
+                    parentsWithMaxTime.Add(jobInfo.BatchJobID, parentInfo);
+                }
+
+                var currentMaxTime = parentsWithMaxTime[jobInfo.BatchJobID].SchedulingTime as CustomSchedulingTime;
+                var compareTime = parentInfo.SchedulingTime as CustomSchedulingTime;
+
+                if (currentMaxTime != null && compareTime != null)
+                {
+                    if (currentMaxTime.IsRunInNextDay == compareTime.IsRunInNextDay
+                        && currentMaxTime.Times[0] < compareTime.Times[0])
+                    {
+                        parentsWithMaxTime[jobInfo.BatchJobID] = parentInfo;
+                    }
+                    else if (!currentMaxTime.IsRunInNextDay && compareTime.IsRunInNextDay)
+                    {
+                        parentsWithMaxTime[jobInfo.BatchJobID] = parentInfo;
+                    }
+                }
+            }
+        }
+        private static SortedList<int,List<CustomBatchJobInfo>> CreateMapPathForDependency(List<CustomBatchJobInfo> allJobs, Dictionary<string, CustomBatchJobInfo> parentsWithMaxTime)
+        {
+            var sortedJobs = new SortedList<int, List<CustomBatchJobInfo>>();
+
+            foreach (var batchJobID in parentsWithMaxTime.Keys)
+            {
+                var id = batchJobID;
+                var jobInfo =
+                    allJobs.Where<CustomBatchJobInfo>(x => x.BatchJobID == id).FirstOrDefault<CustomBatchJobInfo>();
+
+                if (jobInfo == null)
+                {
+                    continue;
+                }
+
+                var referencePath = string.Empty;
+                var rootParent = FindRootParent(jobInfo, parentsWithMaxTime, ref referencePath);
+                if (rootParent == null)
+                {
+                    continue;
+                }
+
+                var depth = referencePath.Count<char>(x => x == ';');
+
+                jobInfo.ExtendedProperties.Add("rootParent", rootParent);
+                jobInfo.ExtendedProperties.Add("depth", depth);
+
+                if (sortedJobs.ContainsKey(depth))
+                {
+                    var jobs = sortedJobs[depth];
+                    jobs.Add(jobInfo);
+                }
+                else
+                {
+                    var jobs = new List<CustomBatchJobInfo>();
+                    jobs.Add(jobInfo);
+                    sortedJobs.Add(depth, jobs);
+                }
+            }
+
+            return sortedJobs;
+        }
+
+        private DateTime? GetNextDateTime(CustomBatchJobInfo current,
+            Dictionary<string, CustomBatchJobInfo> parentsWithMaxTime,
+            LatestJobsDataSet.T_IC_BATCH_JOB_LISTDataTable listDataTable,ref string referencePath)
+        {
+            var parentInfo = GetParent(current.BatchJobID, parentsWithMaxTime, ref referencePath);
+            if (parentInfo == null)
+            {
+                if (!current.NextStartDateTime.HasValue)
+                {
+                    //When the job's PARENT_LIST_ID has value, but no record in T_IC_BATCH_JOB_LIST, it will come here
+                    current.NextStartDateTime = current.SchedulingTime.GetNextStartDateTime((current.LastPlanTime == null) ? current.CreatedTime : current.LastPlanTime);
+                }
+                return current.NextStartDateTime;
+            }
+
+            if (current.NextStartDateTime.HasValue)
+            {
+                //Already computed. It just will occured when to recusive call for sub-parent
+                return current.NextStartDateTime;
+            }
+            
+            var rootParent = current.ExtendedProperties.ContainsKey("rootParent")
+                                 ? current.ExtendedProperties["rootParent"] as CustomBatchJobInfo
+                                 : null;
+
+            var schedulingTime = current.SchedulingTime as CustomSchedulingTime;
+            var list = listDataTable.Where(x => x.BATCH_JOB_LIST_ID == current.ParentListID && x.PARENT_JOB_ID == parentInfo.BatchJobID).FirstOrDefault();
+            var currentJobLastPlanTime = current.LastPlanTime;
+
+            if (rootParent == null 
+                || string.IsNullOrEmpty(rootParent.Source)
+                || rootParent.Source==BatchJobSource.Timer.ToString()
+                 || rootParent.Source==BatchJobSource.Manually.ToString())
+            {
+                return GetNextTimeForTimerExecution(parentInfo, schedulingTime,list.CREATED_TIME,currentJobLastPlanTime,current.LastStartDateTime);
+            }
+
+            //if (rootParent.Source==BatchJobSource.Dependency.ToString() )
+            //{
+            //    //It is impossible to come here
+            //    throw new BatchJobException(string.Format("'{0}' is not the root parent of '{1}'.", rootParent.Name,current.Name));
+            //}
+
+            return GetNextTimeForFailoverExecution(parentInfo,current, list.CREATED_TIME);
+
+
+        }
+
+        private static DateTime? GetNextTimeForTimerExecution(CustomBatchJobInfo parentInfo,
+            CustomSchedulingTime currentScheduling, DateTime listCreatedTime, DateTime? currentJobLastPlanTime, DateTime? currentJobLastStartTime)
+        {
+            var parentJobLastPlanTime = parentInfo.LastPlanTime;
+
+            // to get the parent's next time, even the parent which also has parent, because CreateMapPathForDependency() already sorted the jobs,
+            //so that all sub-parent will be computed before their children.
+            var parentJobNextTime = parentInfo.NextStartDateTime;
+            return GetNextTime(parentJobNextTime, parentJobLastPlanTime, currentJobLastPlanTime,currentJobLastStartTime, currentScheduling, parentInfo.SchedulingTime as CustomSchedulingTime, listCreatedTime);
+
+        }
+
+        private static DateTime? GetNextTime(DateTime? parentJobNextTime, DateTime? parentJobLastPlanTime,
+            DateTime? currentJobLastPlanTime,DateTime? currentJobLastStartTime,
+            CustomSchedulingTime currentScheduling,CustomSchedulingTime parentScheduling,DateTime listCreatedTime)
+        {
+
+            var currentNextTimeBasedOnParentNextTime = GetNextStartTime(currentScheduling, parentJobNextTime, parentScheduling);
+
+            if (parentJobLastPlanTime == null )
+            {
+                //parent never start, using the parent's next time to compute current's next time
+                return currentNextTimeBasedOnParentNextTime;
+            }
+
+            var currentNextTimeBasedOnParentLastPlanTime = GetNextStartTime(currentScheduling, parentJobLastPlanTime, parentScheduling);
+
+            /*
+             * if curret never start, need to check when the dependency is created
+             *   if dependency is created before the computed next time of the current job which is based on the parent's last plan time, then use the value
+             *   otherwise use the computed next time of the current job which is based on the parent's next time
+                
+             * For example, parent already schedule, but because of one error, like the service is stopped at the time, the child is unable to execute at the time
+             * Then, after to solve the issue, child has to start based on the last time of the parent
+
+             * Or for example, one parent will start at 00:00, and its child will start at 01:00
+             * but because of performance, the parent just completes at 04:00. then, the parent's next time will be next day 00:00
+             * but now, the child unable use the parent's next time to compute its next time (otherwise it will become to next day 01:00), 
+             * it has to use last start time to compute
+             * 
+             * if current executed at before, but the depedency is created after the last execution time, then
+         */
+
+            if (currentJobLastPlanTime == null)
+            {
+                //currentJob never start start
+                if (listCreatedTime < currentNextTimeBasedOnParentLastPlanTime)
+                {
+                    return currentNextTimeBasedOnParentLastPlanTime;
+                }
+                return currentNextTimeBasedOnParentNextTime;
+
+            }
+
+            if (listCreatedTime < currentJobLastPlanTime)
+            {
+                if (currentJobLastPlanTime < currentNextTimeBasedOnParentLastPlanTime)
+                {
+                    if (currentJobLastStartTime >= currentNextTimeBasedOnParentLastPlanTime)
+                    {
+                        //This scenario will occurr at when the child job is suspended until the parent completes.
+                        //For example, the child should start at Jun 20 02:00(currentJobLastPlanTime="Jun 20 02:00"), but until Jul 7 14:00, the parent just complets. Then, the current child job
+                        //would be executed at Jul 7 14:05. Means currentJobLastStartTime="Jul 7 14:05".Note, before 8.1.10711.0 , the Parent's LastPlanTime will be the execution time, not plan time.
+                        //Means Parent's last plan time='Jul 7 14:00', not 'Jun 20 00:00'
+                        //So, at this time,currentNextTimeBasedOnParentLastPlanTime= Jul 7 02:00
+                        //currentNextTimeBasedOnParentNextTime='Jul 8 02:00'
+                        //At last, we will see current job's last start time(Jul 7 14:00)>'currentNextTimeBasedOnParentLastPlanTime= Jul 7 02:00'
+                        return currentNextTimeBasedOnParentNextTime;
+                    }
+                    //This time, currentJob still not start
+                    return currentNextTimeBasedOnParentLastPlanTime;
+                }
+                //currentJob already executed 
+                return currentNextTimeBasedOnParentNextTime;
+            }
+
+            if (listCreatedTime >= currentJobLastPlanTime)
+            {
+                //currentJob still not executed after dependency created
+                //But because parent maybe also already has hisotry before depenedency created.
+                if (listCreatedTime < currentNextTimeBasedOnParentLastPlanTime)
+                {
+                    //This time, currentJob still not start
+                    return currentNextTimeBasedOnParentLastPlanTime;
+                }
+                return currentNextTimeBasedOnParentNextTime;
+            }
+            return currentNextTimeBasedOnParentNextTime;
+        }
+
+        private DateTime? GetNextTimeForFailoverExecution(CustomBatchJobInfo parentInfo, CustomBatchJobInfo currentInfo
+            , DateTime listCreatedTime)
+        {
+
+            // to get the parent's next time, even the parent which also has parent, because CreateMapPathForDependency() already sorted the jobs,
+            //so that all sub-parent will be computed before their children.
+            var parentJobNextTime = parentInfo.NextStartDateTime;
+            var parentJobLastPlanTime = parentInfo.LastPlanTime;
+
+            if (parentJobLastPlanTime == null)
+            {
+                //Although it is failover, maybe the parent is sub-parent. So it also still not started.
+                return GetNextTime(parentJobNextTime, parentJobLastPlanTime, currentInfo.LastPlanTime, currentInfo.LastStartDateTime,currentInfo.SchedulingTime as CustomSchedulingTime, parentInfo.SchedulingTime as CustomSchedulingTime, listCreatedTime);
+            }
+
+            if (currentInfo.LastStartDateTime>= parentJobLastPlanTime)
+            {
+                //The child also has executed at the same period with parent
+                return GetNextTime(parentJobNextTime, parentJobLastPlanTime, currentInfo.LastPlanTime,currentInfo.LastStartDateTime, currentInfo.SchedulingTime as CustomSchedulingTime, parentInfo.SchedulingTime as CustomSchedulingTime, listCreatedTime);
+            }
+
+            parentJobLastPlanTime = this.GetLastPlanStartTime(parentInfo.BatchJobID, listCreatedTime, parentJobLastPlanTime.Value);
+            if (parentJobLastPlanTime == null)
+            {
+                //The parent not started at the time -> between listCreatedTime and current parentJobLastPlanTime (when it is failover, it is equal to)
+                parentJobLastPlanTime = parentInfo.SchedulingTime.GetNextStartDateTime(listCreatedTime);
+            }
+            else
+            {
+                parentJobNextTime = parentInfo.SchedulingTime.GetNextStartDateTime(parentJobLastPlanTime);
+            }
+
+
+            return GetNextTime(parentJobNextTime, parentJobLastPlanTime, currentInfo.LastPlanTime, currentInfo.LastStartDateTime,currentInfo.SchedulingTime as CustomSchedulingTime, parentInfo.SchedulingTime as CustomSchedulingTime, listCreatedTime);
+        }
+
+        private static CustomBatchJobInfo GetParent(string jobID, Dictionary<string, CustomBatchJobInfo> parentsWithMaxTime, ref string referencePath)
+        {
+            if (referencePath.Contains(jobID))
+            {
+                throw new BatchJobException(string.Format("There is circle dependency for job - {0}.",jobID));
+            }
+            referencePath = referencePath + ";" + jobID;
+            if (!parentsWithMaxTime.ContainsKey(jobID))
+            {
+                return null;
+            }
+            return parentsWithMaxTime[jobID];
+
+        }
+
+        private static CustomBatchJobInfo FindRootParent(CustomBatchJobInfo current, Dictionary<string, CustomBatchJobInfo> parentsWithMaxTime, ref string referencePath)
+        {
+            var parent = GetParent(current.BatchJobID, parentsWithMaxTime, ref referencePath);
+            if (parent == null)
+            {
+                return current;
+            }
+
+            return FindRootParent(parent, parentsWithMaxTime, ref referencePath);
+        }
+
+        ///<summary>
+        /// </summary>
+        /// <param name="schedulingTime"></param>
+        /// <param name="startTime">The start time maybe is the current planned start time of parent or the last planned start time of the parent</param>
+        /// <param name="parentSchedulingTime"></param>
+        /// <returns></returns>
+        private static DateTime? GetNextStartTime(CustomSchedulingTime schedulingTime, DateTime? startTime, CustomSchedulingTime parentSchedulingTime)
+        {
+            DateTime? nextResult;
+
+            if (startTime == null)
+            {
+                return null;
+            }
+            if (schedulingTime.IsRunInNextDay
+                && !parentSchedulingTime.IsRunInNextDay)
+            {
+                nextResult = startTime.Value.AddDays(1).Date;
+            }
+            else
+            {
+                //Parent and child both are not run in next day, or both are run in next day. Then, no need to add one day.
+                //For example, A (start at today 22:00) -> B (start at tomorrow 00:00) ->C (start at tomorrow 02:00)
+                //When to compute B's next time, it need to add one day based A's start time
+                //But for C, it no need to do it.
+
+                nextResult = startTime.Value.Date;
+            }
+
+            if (schedulingTime.Times.Count > 0)
+            {
+                nextResult = nextResult.Value.Add(schedulingTime.Times[0]);
+            }
+            return nextResult;
+        }
+
+        private CustomBatchJobInfo ConvertToInstance(LatestJobsDataSet.T_IC_BATCH_JOBRow row)
+        {
+            if (row == null)
+            {
+                throw new ArgumentNullException("row");
+            }
+
+            try
+            {
+
+                var info = new CustomBatchJobInfo();
+
+                //Convert to BatchJobInfo
+                info.BatchJobDescription = row.IsBATCH_JOB_DESCRIPTIONNull() ? "" : row.BATCH_JOB_DESCRIPTION;
+                info.BatchJobID = row.BATCH_JOB_ID;
+                info.BatchJobTypeInfo = new BatchJobTypeInfo(row.TYPE_ID,"","","");
+                info.CreatedBy = row.CREATED_BY;
+                info.CreatedTime = row.CREATED_TIME;
+                info.Enabled = row.IS_ENABLE == 1;
+
+                TimeSpan time;
+
+                if (TimeSpan.TryParse(row.IsESTIMATION_TIMENull() ? "" : row.ESTIMATION_TIME, out time))
+                {
+                    info.EstimationTime = row.IsESTIMATION_TIMENull() ? null : (TimeSpan?)time;
+                }
+                info.LastPlanTime = row.IsLAST_PLAN_START_TIMENull() ? null : (DateTime?)row.LAST_PLAN_START_TIME;
+                info.LastStartDateTime = row.IsLAST_START_TIMENull() ? null : (DateTime?)row.LAST_START_TIME;
+                info.LastUpdatedBy = row.LAST_UPDATED_BY;
+                info.LastUpdatedTime = row.LAST_UPDATED_TIME;
+                info.LoweredName = row.LOWERED_BATCH_JOB_NAME;
+                info.Name = row.BATCH_JOB_NAME;
+
+                info.PostActionStatus = row.IsPOST_ACTION_STATUSNull() ? null : (BatchJobStatus?)Enum.Parse(typeof(BatchJobStatus), row.POST_ACTION_STATUS);
+                info.Priority = row.PRIORITY;
+                info.Servers = row.IsSERVERSNull() ? "" : row.SERVERS;
+                info.TransactionID = row.TRANSACTION_ID;
+                info.VersionNo = row.VERSION_NO;
+
+                CustomSchedulingTime schedulingTime = new CustomSchedulingTime(row.FREQUENCY,
+                    row.IsRUN_DAY_OF_WEEKNull() ? "" : row.RUN_DAY_OF_WEEK,
+                    row.IsRUN_DAY_OF_MONTHNull() ? "" : row.RUN_DAY_OF_MONTH,
+                    row.IsRUN_DATE_OF_YEARNull() ? "" : row.RUN_DATE_OF_YEAR,
+                    (row.IsRUNONCE_DATETIMENull() ? null : (DateTime?)row.RUNONCE_DATETIME),
+                    row.RUN_TIME,
+                    (row.IsIntervalNull() ? null : (int?)row.Interval),
+                    (row.IsIndexOfMonthlyNull() ? null : (int?)row.IndexOfMonthly),
+                    row.IsMonthsNull() ? "" : row.Months,
+                    row.IS_RUN_IN_NEXT_DAY);
+
+                info.Source = (row.IsSOURCENull() ? string.Empty : row.SOURCE);
+                if (row.IsPARENT_LIST_IDNull()
+                    || string.IsNullOrEmpty(row.PARENT_LIST_ID))
+                {
+                    if (!row.IsNull("ENABLED_TIME"))
+                    {
+                        info.NextStartDateTime = schedulingTime.GetNextStartDateTime((DateTime)row["ENABLED_TIME"]);
+                    }
+                    else
+                    {
+                        if (info.Source.Equals(BatchJobSource.FailOver.ToString(), StringComparison.InvariantCultureIgnoreCase)
+                            || info.Source.Equals(BatchJobSource.OtherJob.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            var computer = new FailoverTimeComputer(schedulingTime as CustomSchedulingTime);
+
+                            info.NextStartDateTime = computer.GetNextTime(info.LastPlanTime.Value,info.LastStartDateTime.Value);
+                        }
+                        else
+                        {
+                            info.NextStartDateTime = schedulingTime.GetNextStartDateTime((info.LastPlanTime == null) ? info.CreatedTime : info.LastPlanTime);
+                        }
+                    }
+                }
+                else
+                {
+                    info.ParentListID = row.PARENT_LIST_ID;
+                }
+                info.SchedulingTime = schedulingTime;
+                info.Status = (row.IsStatusNull() ? BatchJobStatus.Unstarted : (BatchJobStatus)Enum.Parse(typeof(BatchJobStatus), row.Status));
+                return info;
+            }
+            catch (Exception ex)
+            {
+                throw new BatchJobException(string.Format("Unable to convert the data of '{0}' to job instance. Please refer to the inner exception detail.", row.BATCH_JOB_NAME), ex);
+            }
+
+        }
+
+        #endregion
+
+        protected static void WriteHiiPLog(string message, bool isError, string category)
+        {
+            MonitoringLogEntry entry = new MonitoringLogEntry();
+
+            entry.Title = string.Format("Batch Job {0}", isError ? "Error" : "Information");
+            entry.ModuleId = AppContext.Current.ModuleID;
+            entry.FunctionId = AppContext.Current.FunctionID;
+            entry.MethodName = "";
+            entry.Component = ComponentType.BatchJob;
+            entry.ParameterValues = "void";
+
+            entry.Message = message;
+
+            entry.Severity = isError ? TraceEventType.Error : TraceEventType.Information;
+            entry.Categories.Add(category);
+            Logger.Write(entry);
+        }
+
+        public void ArchiveJobsHistories()
+        {
+            Console.WriteLine("Archiving data...");
+            this.Database.ExecuteNonQuery("P_IC_BATCH_JOB_RUN_HISTORY_ARCHIVE");
+        }
+
+        public void CancelDeathBatchJob(string batchJobRunHistoryIDs, string serverName)
+        {
+            this.Database.ExecuteNonQuery("P_IC_Batch_Job_CancelDeathBatchJob", new object[] { batchJobRunHistoryIDs, serverName });
+        }
+
+        public IList<CurrentRunningBatchJobEntiy> GetCurrentRunningBatchJobProcessID(string serverName)
+        {
+            DbCommand dbCommand = this.Database.GetStoredProcCommand("P_IC_Batch_Job_Process_ID_Get");
+
+            this.Database.AddInParameter(dbCommand, "ServerName", DbType.String, serverName);
+
+            IList<CurrentRunningBatchJobEntiy> batchJobList = new List<CurrentRunningBatchJobEntiy>();
+
+            using (IDataReader dataReader = this.Database.ExecuteReader(dbCommand))
+            {
+                while (dataReader.Read())
+                {
+                    var entiy = new CurrentRunningBatchJobEntiy(dataReader.GetInt32(0).ToString(), dataReader.GetString(1));
+                    batchJobList.Add(entiy);
+                }
+            }
+
+            return batchJobList;
+        }
+
+        public bool CheckIsCancelledBatchJob(string batchJobID, DateTime planStartTime)
+        {
+            DbCommand dbCommand = this.Database.GetStoredProcCommand("P_IC_BATCH_JOB_CheckIsCancelled");
+
+            this.Database.AddInParameter(dbCommand, "BatchJobID", DbType.String, batchJobID);
+            this.Database.AddInParameter(dbCommand, "PlanStartTime", DbType.DateTime, planStartTime);
+
+            var batchJobCount = 0;
+
+            using (IDataReader dataReader = this.Database.ExecuteReader(dbCommand))
+            {
+                while (dataReader.Read())
+                {
+                    batchJobCount = dataReader.GetInt32(0);
+                }
+            }
+
+            return batchJobCount > 0;
+        }
+    }
+}

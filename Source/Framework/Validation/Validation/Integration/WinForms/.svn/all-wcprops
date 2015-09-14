@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms
+END
+PropertyMappedControlValueAccess.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/PropertyMappedControlValueAccess.cs
+END
+SRDescriptionAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/SRDescriptionAttribute.cs
+END
+RequiredIdentifierTypeConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/RequiredIdentifierTypeConverter.cs
+END
+ValidatedControlItem.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/ValidatedControlItem.cs
+END
+ValidationPerformedEventArgs.cs
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/ValidationPerformedEventArgs.cs
+END
+ValidationProvider.bmp
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/ValidationProvider.bmp
+END
+PropertyMappedControlValueAccessBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/PropertyMappedControlValueAccessBuilder.cs
+END
+ValidationProvider.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/ValidationProvider.cs
+END
+Framework.Validation.Integration.WinForms.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/Framework.Validation.Integration.WinForms.csproj
+END
+SRCategoryAttribute.cs
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/WinForms/SRCategoryAttribute.cs
+END

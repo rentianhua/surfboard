@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet
+END
+Framework.Validation.Integration.AspNet.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet/Framework.Validation.Integration.AspNet.csproj
+END
+PropertyProxyValidator.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet/PropertyProxyValidator.cs
+END
+PropertyMappedValidatorValueAccess.cs
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet/PropertyMappedValidatorValueAccess.cs
+END
+ValueConverter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet/ValueConverter.cs
+END
+PropertyMappedValidatorValueAccessBuilder.cs
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Validation/Validation/Integration/AspNet/PropertyMappedValidatorValueAccessBuilder.cs
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication
+END
+LoginForm.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 142
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication/LoginForm.Designer.cs
+END
+LoginForm.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/151801/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication/LoginForm.cs
+END
+SelectUserService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/hiip/!svn/ver/183976/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication/SelectUserService.cs
+END
+AuthenticationService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication/AuthenticationService.cs
+END
+LoginForm.resx
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl/Authentication/LoginAuthentication/LoginForm.resx
+END

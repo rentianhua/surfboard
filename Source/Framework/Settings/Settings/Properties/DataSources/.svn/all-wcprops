@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings/Properties/DataSources
+END
+NCS.IConnect.CodeTable.CodeTableDataSet+T_IC_CODERow.datasource
+K 25
+svn:wc:ra_dav:version-url
+V 158
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings/Properties/DataSources/NCS.IConnect.CodeTable.CodeTableDataSet+T_IC_CODERow.datasource
+END
+NCS.IConnect.Messaging.InternalMessageEntryCollection.datasource
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings/Properties/DataSources/NCS.IConnect.Messaging.InternalMessageEntryCollection.datasource
+END
+NCS.IConnect.Messaging.InternalMessageEntry.datasource
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Settings/Settings/Properties/DataSources/NCS.IConnect.Messaging.InternalMessageEntry.datasource
+END

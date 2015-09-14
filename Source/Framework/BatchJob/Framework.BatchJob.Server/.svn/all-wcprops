@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/hiip/!svn/ver/231220/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server
+END
+CustomDbScheduleControllerData.cs
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/CustomDbScheduleControllerData.cs
+END
+ScheduleJobBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/ScheduleJobBC.cs
+END
+ScheduleJobDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/217950/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/ScheduleJobDA.cs
+END
+BatchJobExternalService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/212334/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/BatchJobExternalService.cs
+END
+CustomDbScheduleController.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/CustomDbScheduleController.cs
+END
+BatchJobSearchService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/217032/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/BatchJobSearchService.cs
+END
+CustomBatchJobDataAccess.cs
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/hiip/!svn/ver/231220/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/CustomBatchJobDataAccess.cs
+END
+BatchJobSearchServiceBC.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/217032/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/BatchJobSearchServiceBC.cs
+END
+BatchJobSearchServiceDA.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/207518/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/BatchJobSearchServiceDA.cs
+END
+Framework.BatchJob.Server.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/221169/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/Framework.BatchJob.Server.csproj
+END
+ScheduleJobService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/ScheduleJobService.cs
+END
+CustomServiceScheduler.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/231220/branch/R6g/Source/Framework/BatchJob/Framework.BatchJob.Server/CustomServiceScheduler.cs
+END

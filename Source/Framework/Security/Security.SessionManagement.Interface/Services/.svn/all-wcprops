@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/hiip/!svn/ver/199250/branch/R6g/Source/Framework/Security/Security.SessionManagement.Interface/Services
+END
+ISessionService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/199250/branch/R6g/Source/Framework/Security/Security.SessionManagement.Interface/Services/ISessionService.cs
+END
+ISessionManagementService.cs
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.SessionManagement.Interface/Services/ISessionManagementService.cs
+END

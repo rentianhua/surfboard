@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/hiip/!svn/ver/201837/branch/R6g/Source/Framework/Security/Security.UserManagement/Proxies
+END
+DelegationServiceProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/201837/branch/R6g/Source/Framework/Security/Security.UserManagement/Proxies/DelegationServiceProxy.cs
+END
+OrganisationMaintenanceServiceProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/hiip/!svn/ver/199252/branch/R6g/Source/Framework/Security/Security.UserManagement/Proxies/OrganisationMaintenanceServiceProxy.cs
+END
+UserMaintenanceServiceProxy.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/199252/branch/R6g/Source/Framework/Security/Security.UserManagement/Proxies/UserMaintenanceServiceProxy.cs
+END

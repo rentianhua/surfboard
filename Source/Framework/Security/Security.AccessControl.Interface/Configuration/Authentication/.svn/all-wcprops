@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication
+END
+ExceptionKeysSection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/ExceptionKeysSection.cs
+END
+FormsFieldSection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/FormsFieldSection.cs
+END
+WebSealGroup.cs
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/WebSealGroup.cs
+END
+WebSealSettings.cs
+K 25
+svn:wc:ra_dav:version-url
+V 143
+/svn/hiip/!svn/ver/220555/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/WebSealSettings.cs
+END
+FormsFieldElement.cs
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svn/hiip/!svn/ver/136083/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/FormsFieldElement.cs
+END
+FormsFieldCollection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/FormsFieldCollection.cs
+END
+WebSealAuthenticationSection.cs
+K 25
+svn:wc:ra_dav:version-url
+V 156
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.Interface/Configuration/Authentication/WebSealAuthenticationSection.cs
+END

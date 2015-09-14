@@ -1,0 +1,347 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/hiip/!svn/ver/221855/branch/R6g/Source/Framework/Logging/Logging/Views
+END
+ExceptionLogViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogViewPresenter.GeneratedCode.cs
+END
+ExceptionLogDetailView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/221848/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailView.Designer.cs
+END
+ExceptionLogDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailView.cs
+END
+PerformanceMonitoringView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/162727/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringView.resx
+END
+InstrumentationDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailView.cs
+END
+UsageLogViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogViewPresenter.GeneratedCode.cs
+END
+PerformanceMonitoringViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringViewPresenter.GeneratedCode.cs
+END
+ExceptionLogView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogView.GeneratedCode.cs
+END
+AuditLogViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogViewPresenter.GeneratedCode.cs
+END
+AuditLogDetailView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailView.Designer.cs
+END
+AuditLogDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailView.cs
+END
+InstrumentationView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationView.GeneratedCode.cs
+END
+InstrumentationViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/206615/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationViewPresenter.cs
+END
+UsageLogView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogView.GeneratedCode.cs
+END
+IInstrumentationDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IInstrumentationDetailView.cs
+END
+ExceptionLogView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogView.Designer.cs
+END
+AuditLogView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogView.GeneratedCode.cs
+END
+UsageLogView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/221848/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogView.Designer.cs
+END
+PerformanceMonitoringView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/162727/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringView.Designer.cs
+END
+InstrumentationDetailViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailViewPresenter.GeneratedCode.cs
+END
+PerformanceMonitoringView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringView.cs
+END
+AuditLogView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/221848/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogView.Designer.cs
+END
+IExceptionLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/IExceptionLogView.cs
+END
+ExceptionLogDetailView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailView.GeneratedCode.cs
+END
+ExceptionLogDetailViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailViewPresenter.cs
+END
+ExceptionLogView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogView.resx
+END
+IUsageView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IUsageView.cs
+END
+InstrumentationDetailView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailView.GeneratedCode.cs
+END
+InstrumentationView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationView.resx
+END
+IUsageLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IUsageLogView.cs
+END
+IPerformanceMonitoringView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IPerformanceMonitoringView.cs
+END
+IAuditLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IAuditLogView.cs
+END
+UsageLogView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/hiip/!svn/ver/148295/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogView.resx
+END
+AuditLogDetailView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailView.GeneratedCode.cs
+END
+AuditLogDetailViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailViewPresenter.cs
+END
+InstrumentationViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationViewPresenter.GeneratedCode.cs
+END
+AuditLogView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogView.resx
+END
+InstrumentationDetailView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/221855/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailView.Designer.cs
+END
+ExceptionLogViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/hiip/!svn/ver/204646/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogViewPresenter.cs
+END
+IExceptionLogDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IExceptionLogDetailView.cs
+END
+UsageLogViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogViewPresenter.cs
+END
+ExceptionLogDetailView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailView.resx
+END
+PerformanceMonitoringView.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringView.GeneratedCode.cs
+END
+PerformanceMonitoringViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/PerformanceMonitoringViewPresenter.cs
+END
+ExceptionLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/hiip/!svn/ver/203001/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogView.cs
+END
+AuditLogViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/200081/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogViewPresenter.cs
+END
+InstrumentationDetailView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailView.resx
+END
+InstrumentationView.Designer.cs
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/hiip/!svn/ver/162094/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationView.Designer.cs
+END
+ExceptionLogDetailViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/ExceptionLogDetailViewPresenter.GeneratedCode.cs
+END
+InstrumentationView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/hiip/!svn/ver/206615/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationView.cs
+END
+IAuditLogDetailView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/IAuditLogDetailView.cs
+END
+UsageLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/220297/branch/R6g/Source/Framework/Logging/Logging/Views/UsageLogView.cs
+END
+AuditLogDetailView.resx
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailView.resx
+END
+AuditLogView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogView.cs
+END
+AuditLogDetailViewPresenter.GeneratedCode.cs
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Logging/Logging/Views/AuditLogDetailViewPresenter.GeneratedCode.cs
+END
+IInstrumentationView.cs
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/IInstrumentationView.cs
+END
+InstrumentationDetailViewPresenter.cs
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/hiip/!svn/ver/199089/branch/R6g/Source/Framework/Logging/Logging/Views/InstrumentationDetailViewPresenter.cs
+END

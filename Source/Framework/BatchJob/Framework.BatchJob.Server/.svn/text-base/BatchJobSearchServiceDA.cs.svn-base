@@ -1,0 +1,66 @@
+﻿using System.Data;
+using System.Data.Common;
+
+using HiiP.Framework.BatchJob.Interface.Constants;
+using HiiP.Framework.BatchJob.Interface.Services;
+using HiiP.Framework.Common.Server;
+using HiiP.Framework.Logging.Library;
+
+using Microsoft.Practices.EnterpriseLibrary.Data;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    public class BatchJobSearchServiceDA : HiiPDataAccessBase
+    {
+        private const string SearchBatchJobHistory = "P_IC_BATCH_JOB_HISTORY_SEARCH_STEP";
+        private const string SearchBatchJobParam = "P_IC_BATCH_JOB_PARAM_SEARCH";
+        private const string LatestJobHistory = "P_IC_BATCH_JOB_MONITORING_S_STEP";
+
+        private Database _db;
+        public BatchJobSearchServiceDA()
+        {
+            _db = DatabaseFactory.CreateDatabase();
+        }
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public DataTable SearchHistoryList(BatchJobSearchCriteria criteria)
+        {
+            if(criteria == null)
+            {
+                criteria = new BatchJobSearchCriteria();
+            }
+            DbCommand storedProcCommand = this._db.GetStoredProcCommand(SearchBatchJobHistory);
+            this._db.AddInParameter(storedProcCommand, "p_isCompleted", DbType.Int32,
+                (criteria.IsComplete == null) ? null : (object)((criteria.IsComplete.Value) ? 1 : 0));
+            this._db.AddInParameter(storedProcCommand, "p_issuccessful", DbType.Int32, 
+                (criteria.IsSuccessful==null)?null: (object)((criteria.IsSuccessful.Value) ? 1 : 0));
+            this._db.AddInParameter(storedProcCommand, "p_start_time", DbType.DateTime, criteria.StartTime);
+            this._db.AddInParameter(storedProcCommand, "p_end_time", DbType.DateTime, criteria.EndTime);
+            this._db.AddInParameter(storedProcCommand, "p_batch_job_type", DbType.String, criteria.BatchJobType);
+            this._db.AddInParameter(storedProcCommand, "p_batch_job_name", DbType.String, criteria.BatchJobName);
+            this._db.AddInParameter(storedProcCommand, "p_next_log_id", DbType.Int32, criteria.NextId);
+            this._db.AddInParameter(storedProcCommand, "appName", DbType.String, ScheduleJobDA.GetApplicationName());
+
+            DataTable table = new DataTable("T_IC_BATCH_JOB_RUN_HISTORY");
+            Helper.Fill(table,storedProcCommand);
+            return table;
+        }
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public BatchJobParamDataSet.BatchJobTypeParamDataTable GetParameters(string batchJobID)
+        {
+            BatchJobParamDataSet.BatchJobTypeParamDataTable da = new BatchJobParamDataSet.BatchJobTypeParamDataTable();
+            Helper.Fill(da, SearchBatchJobParam, batchJobID);
+            return da;
+        }
+
+        [MonitoringCallHandler(ComponentType.DataAccess, ModuleID = FunctionNames.BatchJobModuleID, FunctionID = FunctionNames.ViewBatchJobFunctionID)]
+        public DataTable GetLatestJobHistory(int? nextId)
+        {
+            var storedProcCommand = this._db.GetStoredProcCommand(LatestJobHistory);
+            _db.AddInParameter(storedProcCommand, "p_next_log_id", DbType.Int32, nextId);
+            var table = new DataTable("T_IC_BATCH_JOB_RUN_HISTORY");
+            Helper.Fill(table, storedProcCommand);
+            return table;
+        }
+    }
+}

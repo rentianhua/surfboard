@@ -1,0 +1,321 @@
+#region Copyright(C) 2007 NCS Pte. Ltd. All rights reserved.
+// ==============================================================================
+// Copyright(C) 2008 NCS Pte Ltd
+//
+// SYSTEM NAME			: NCS HiiP System
+// COMPONENT ID			: HiiP.Modules.Framework.BatchJob
+// COMPONENT DESC		:
+//
+// CREATED DATE/BY	    : 9 Sep 2008 /Tang Jian
+//
+// REVISION HISTORY:
+// DATE/BY              ISSUE#/SR#/CS/PM#/OTHERS DESCRIPTION OF CHANGE
+// ==============================================================================
+#endregion
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
+using NCS.IConnect.BatchJob;
+using NCS.IConnect.BatchJob.Configuration;
+using NCS.IConnect.AuditTrail;
+using HiiP.Framework.Common.ApplicationContexts;
+using HiiP.Framework.Common.Server.CallHandlers;
+using HiiP.Framework.Common.Server;
+using System.Transactions;
+using System.Reflection;
+using HiiP.Framework.Common.InstanceBuilders;
+using HiiP.Framework.BatchJob.Interface.BusinessEntities;
+using HiiP.Framework.BatchJob.Interface.Validators;
+using Microsoft.Practices.EnterpriseLibrary.Validation;
+using Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WCF;
+using System.ServiceModel;
+
+namespace HiiP.Framework.BatchJob.Server
+{
+    [ConfigurationElementType(typeof(CustomDbScheduleControllerData))]
+    public class CustomDbScheduleController : DbScheduleController
+    {
+        CustomBatchJobDataAccess _da;
+        public CustomDbScheduleController(string applicationName):base(applicationName)
+        {
+            if (AppDomain.CurrentDomain.FriendlyName.Contains("NCS.IConnect.BatchJob.Service.exe"))
+            {
+                AppContext.Current.UserName = BatchJobSettings.GetBatchJobSettings().DefaultSystemUser.ToLower();
+            }
+            string connStringName = BatchJobSettings.GetBatchJobSettings().DefaultDatabase;
+            _da = new CustomBatchJobDataAccess(connStringName);
+        }
+
+        protected override BatchJobDataAccess DAInstance
+        {
+            get
+            {
+                return _da;
+            }
+        }
+
+        public override void DisableBatchJob(string batchJobID, int versionNo)
+        {
+            //ApplyAudit(x => base.DisableBatchJob(x[0].ToString(), (int)x[1]), new object[]{batchJobID,versionNo});
+            //todo: BJ change - check whether the job has dependency 
+            ApplyAudit();
+            this.DAInstance.UpdateBatchJobState(batchJobID, versionNo, false, null);
+        }
+
+        public override void EnableBatchJob(string batchJobID, int versionNo)
+        {
+            ApplyAudit();
+            base.EnableBatchJob(batchJobID,versionNo);
+        }
+
+        public override void CancelBatchJob(string batchJobID)
+        {
+            ApplyAudit();
+            base.CancelBatchJob(batchJobID);
+        }
+
+        private void StronglyReSetLogonAccount()
+        {
+            FieldInfo field = typeof(BatchJobDataAccess).GetField("_userName", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            if (null != field)
+            {
+                field.SetValue(this.DAInstance, AppContext.Current.UserName);
+            }
+        }
+        /// <summary>
+        /// Adds the batch job.
+        /// </summary>
+        /// <param name="batchJobInfo">The batch job info.</param>
+        /// <param name="schedulingTime">The scheduling time.</param>
+        public override BatchJobInfo AddBatchJob(BatchJobInfo batchJobInfo, SchedulingTime schedulingTime)
+        {
+            StronglyReSetLogonAccount();
+
+            ScheduleJobDA da = InstanceBuilder.Wrap<ScheduleJobDA>(new ScheduleJobDA());
+            BatchJobDetailInfoDataSet jobData = new BatchJobDetailInfoDataSet();
+
+            const string separator = ";";
+            jobData.T_IC_BATCH_JOB.AddT_IC_BATCH_JOBRow(batchJobInfo.BatchJobID,
+                            batchJobInfo.BatchJobTypeInfo.TypeId,//TYPE_ID
+                        "",// APP_ID, 
+                        batchJobInfo.Name,// BATCH_JOB_NAME, 
+                        batchJobInfo.Name.ToLower(),// LOWERED_BATCH_JOB_NAME, 
+                        string.IsNullOrEmpty(batchJobInfo.Servers)?null:batchJobInfo.Servers,// SERVERS, 
+                        batchJobInfo.Enabled ? 1 : 0,// IS_ENABLED, 
+                        (batchJobInfo.EstimationTime.HasValue) ? batchJobInfo.EstimationTime.Value.ToString():null,// ESTIMATION_TIME, 
+                        string.IsNullOrEmpty(batchJobInfo.BatchJobDescription) ? null : batchJobInfo.BatchJobDescription,// BATCH_JOB_DESCRIPTION, 
+                        "0",// IS_DELETED, 
+                        schedulingTime.Frequency.Definition,// FREQUENCY, 
+                        null,// PARENT_LIST_ID, 
+                        batchJobInfo.PostActionStatus.HasValue?batchJobInfo.PostActionStatus.Value.ToString():null,// POST_ACTION_STATUS, 
+                        (schedulingTime.DaysOfWeek.Count==0)?
+                            null:string.Join(separator, 
+                                schedulingTime.DaysOfWeek.ConvertAll<string>(ConverterForDaysOfWeek).ToArray()),// RUN_DAY_OF_WEEK, 
+                        (schedulingTime.DaysOfMonth.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.DaysOfMonth.ConvertAll<string>(ConverterForDaysOfMonth).ToArray()),// RUN_DAY_OF_MONTH, 
+                        (schedulingTime.DatesOfYear.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.DatesOfYear.ConvertAll<string>(ConverterForDatesOfYear).ToArray()),// RUN_DATE_OF_YEAR, 
+                        DateTime.Now,// RUNONCE_DATETIME, 
+                        (schedulingTime.Times.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.Times.ConvertAll<string>(ConverterForTimes).ToArray()),// RUN_TIME, 
+                        batchJobInfo.Priority,// PRIORITY, 
+                        1,// VERSION_NO, 
+                        AppContext.Current.TransactionID,// TRANSACTION_ID, 
+                        AppContext.Current.UserName,// CREATED_BY, 
+                        DateTime.Now,// CREATED_TIME, 
+                        AppContext.Current.UserName,// LAST_UPDATED_BY, 
+                        DateTime.Now,// LAST_UPDATED_TIME, 
+                        0,// Interval, 
+                        0, //IndexOfMonthly, 
+                        null,// Months
+                        false,
+                        0,
+                        "",false,
+                        "",false
+                        );
+            if (schedulingTime.DateTimeOfRunOnce.HasValue)
+            {
+                jobData.T_IC_BATCH_JOB[0].RUNONCE_DATETIME = schedulingTime.DateTimeOfRunOnce.Value;
+            }
+            else
+            {
+                jobData.T_IC_BATCH_JOB[0].SetRUNONCE_DATETIMENull();
+            }
+
+            //Validation
+            var validator = new BatchJobDetailInfoValidator("", "Batch Job Info Rule Set");
+            var validationResults = validator.Validate(jobData);
+            if (!validationResults.IsValid)
+            {
+                ValidationFault fault = new ValidationFault();
+                this.AddFaultDetails(fault, "batchJobInfo", validationResults);
+
+                throw new FaultException<ValidationFault>(fault);
+            }
+            da.AddBatchJob(jobData);
+            return batchJobInfo;
+        }
+
+        private string ConverterForDaysOfWeek(DayOfWeek day)
+        {
+            return ((int)day).ToString();
+        }
+
+        private string ConverterForDaysOfMonth(int day)
+        {
+            return day.ToString();
+        }
+
+        private string ConverterForDatesOfYear(DateOfYear day)
+        {
+            return day.Month.ToString() + day.Day.ToString();
+        }
+
+        private string ConverterForTimes(TimeSpan time)
+        {
+            return time.ToString();
+        }
+        /// <summary>
+        /// Updates the batch job.
+        /// </summary>
+        /// <param name="batchJobInfo">The batch job info.</param>
+        /// <param name="schedulingTime">The scheduling time.</param>
+        public override BatchJobInfo UpdateBatchJob(BatchJobInfo batchJobInfo, SchedulingTime schedulingTime)
+        {
+            StronglyReSetLogonAccount();
+
+            BatchJobDetailInfoDataSet jobData = new BatchJobDetailInfoDataSet();
+
+            const string separator = ";";
+            jobData.T_IC_BATCH_JOB.AddT_IC_BATCH_JOBRow(batchJobInfo.BatchJobID,
+                            batchJobInfo.BatchJobTypeInfo.TypeId,//TYPE_ID
+                        "",// APP_ID, 
+                        batchJobInfo.Name,// BATCH_JOB_NAME, 
+                        batchJobInfo.Name.ToLower(),// LOWERED_BATCH_JOB_NAME, 
+                        string.IsNullOrEmpty(batchJobInfo.Servers) ? null : batchJobInfo.Servers,// SERVERS, 
+                        batchJobInfo.Enabled ? 1 : 0,// IS_ENABLED, 
+                        (batchJobInfo.EstimationTime.HasValue) ? batchJobInfo.EstimationTime.Value.ToString() : null,// ESTIMATION_TIME, 
+                        string.IsNullOrEmpty(batchJobInfo.BatchJobDescription) ? null : batchJobInfo.BatchJobDescription,// BATCH_JOB_DESCRIPTION, 
+                        "0",// IS_DELETED, 
+                        schedulingTime.Frequency.Definition,// FREQUENCY, 
+                        null,// PARENT_LIST_ID, 
+                        batchJobInfo.PostActionStatus.HasValue ? batchJobInfo.PostActionStatus.Value.ToString() : null,// POST_ACTION_STATUS, 
+                        (schedulingTime.DaysOfWeek.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.DaysOfWeek.ConvertAll<string>(ConverterForDaysOfWeek).ToArray()),// RUN_DAY_OF_WEEK, 
+                        (schedulingTime.DaysOfMonth.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.DaysOfMonth.ConvertAll<string>(ConverterForDaysOfMonth).ToArray()),// RUN_DAY_OF_MONTH, 
+                        (schedulingTime.DatesOfYear.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.DatesOfYear.ConvertAll<string>(ConverterForDatesOfYear).ToArray()),// RUN_DATE_OF_YEAR, 
+                        DateTime.Now,// RUNONCE_DATETIME, 
+                        (schedulingTime.Times.Count == 0) ?
+                            null : string.Join(separator,
+                                schedulingTime.Times.ConvertAll<string>(ConverterForTimes).ToArray()),// RUN_TIME, 
+                        batchJobInfo.Priority,// PRIORITY, 
+                        batchJobInfo.VersionNo,// VERSION_NO, 
+                        AppContext.Current.TransactionID,// TRANSACTION_ID, 
+                        batchJobInfo.CreatedBy,// CREATED_BY, 
+                        batchJobInfo.CreatedTime,// CREATED_TIME, 
+                        AppContext.Current.UserName,// LAST_UPDATED_BY, 
+                        DateTime.Now,// LAST_UPDATED_TIME, 
+                        0,// Interval, 
+                        0, //IndexOfMonthly, 
+                        null,// Months
+                        false,
+                        0,
+                        "",false,
+                        "",false
+                        );
+            if (schedulingTime.DateTimeOfRunOnce.HasValue)
+            {
+                jobData.T_IC_BATCH_JOB[0].RUNONCE_DATETIME = schedulingTime.DateTimeOfRunOnce.Value;
+            }
+            else
+            {
+                jobData.T_IC_BATCH_JOB[0].SetRUNONCE_DATETIMENull();
+            }
+            jobData.T_IC_BATCH_JOB[0].AcceptChanges();
+            jobData.T_IC_BATCH_JOB[0].SetModified();
+
+            //Validation
+            var validator = new BatchJobDetailInfoValidator("", "Batch Job Info Rule Set") ;
+            var validationResults = validator.Validate(jobData);
+            if (!validationResults.IsValid)
+            {
+                ValidationFault fault = new ValidationFault();
+                this.AddFaultDetails(fault, "batchJobInfo", validationResults);
+
+                throw new FaultException<ValidationFault>(fault);
+            }
+
+            ScheduleJobDA da = InstanceBuilder.Wrap<ScheduleJobDA>(new ScheduleJobDA());
+
+            da.UpdateBatchJob(jobData);
+            batchJobInfo.VersionNo++;
+            return batchJobInfo;
+        }
+
+        private void AddFaultDetails(ValidationFault fault, string parameterName, ValidationResults results)
+        {
+            if (!results.IsValid)
+            {
+                foreach (ValidationResult result in results)
+                {
+                    fault.Add(this.CreateValidationDetail(result, parameterName));
+                }
+            }
+        }
+
+        private ValidationDetail CreateValidationDetail(ValidationResult result, string parameterName)
+        {
+            return new ValidationDetail(result.Message, result.Key, parameterName);
+        }
+
+        /// <summary>
+        /// Deletes the batch job.
+        /// </summary>
+        /// <param name="batchJobID">The batch job ID.</param>
+        /// <param name="versionNo">The version no.</param>
+        public override void DeleteBatchJob(string batchJobID, int versionNo)
+        {
+            StronglyReSetLogonAccount();
+            //todo: BJ change - check whether the job has dependency 
+            this.DAInstance.UpdateBatchJobState(batchJobID, versionNo, null, true);
+        }
+        
+        public override IList<BatchJobRunningInfo> GetBatchJobHistory(string batchJobID)
+        {
+            IList<BatchJobRunningInfo> runningInfoList = _da.GetBatchJobHistory(ApplicationName, batchJobID);
+            foreach (BatchJobRunningInfo runningInfo in runningInfoList)
+            {
+                BatchJobInfo jobInfo = _da.GetBatchJobInfo(ApplicationName, runningInfo.BatchJobInfo.BatchJobID);
+                runningInfo.BatchJobInfo = jobInfo;
+            }
+            return runningInfoList;
+        }
+
+        private void ApplyAudit()
+        {
+            bool isService = AppDomain.CurrentDomain.FriendlyName.Contains("NCS.IConnect.BatchJob.Service.exe");
+
+            string id = Guid.NewGuid().ToString();
+            AppContext.Current.TransactionID = isService ? "*" + id : id;
+
+            //When it is batch job service, the method will be called in one thread. so have to reset the transaction id value.
+            this._da.SetTransactionId(AppContext.Current.TransactionID);
+
+
+
+        }
+
+
+    }
+}

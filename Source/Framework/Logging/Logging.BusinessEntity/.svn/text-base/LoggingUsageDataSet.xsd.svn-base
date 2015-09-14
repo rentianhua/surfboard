@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="LoggingUsageDataSet" targetNamespace="http://hiip.ooh.dhs.vic.gov.au/LoggingUsageDataSet.xsd" xmlns:mstns="http://hiip.ooh.dhs.vic.gov.au/LoggingUsageDataSet.xsd" xmlns="http://hiip.ooh.dhs.vic.gov.au/LoggingUsageDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="LoggingUsageDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_UserDSName="LoggingUsageDataSet" msprop:Generator_DataSetName="LoggingUsageDataSet" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="T_IC_LOGGING_USAGE" msprop:Generator_UserTableName="T_IC_LOGGING_USAGE" msprop:Generator_RowDeletedName="T_IC_LOGGING_USAGERowDeleted" msprop:Generator_RowChangedName="T_IC_LOGGING_USAGERowChanged" msprop:Generator_RowClassName="T_IC_LOGGING_USAGERow" msprop:Generator_RowChangingName="T_IC_LOGGING_USAGERowChanging" msprop:Generator_RowEvArgName="T_IC_LOGGING_USAGERowChangeEvent" msprop:Generator_RowEvHandlerName="T_IC_LOGGING_USAGERowChangeEventHandler" msprop:Generator_TableClassName="T_IC_LOGGING_USAGEDataTable" msprop:Generator_TableVarName="tableT_IC_LOGGING_USAGE" msprop:Generator_RowDeletingName="T_IC_LOGGING_USAGERowDeleting" msprop:Generator_TablePropName="T_IC_LOGGING_USAGE">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="START_TIME" msprop:Generator_UserColumnName="START_TIME" msprop:Generator_ColumnVarNameInTable="columnSTART_TIME" msprop:Generator_ColumnPropNameInRow="START_TIME" msprop:Generator_ColumnPropNameInTable="START_TIMEColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="END_TIME" msprop:Generator_UserColumnName="END_TIME" msprop:Generator_ColumnVarNameInTable="columnEND_TIME" msprop:Generator_ColumnPropNameInRow="END_TIME" msprop:Generator_ColumnPropNameInTable="END_TIMEColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="USER_NAME" msprop:Generator_UserColumnName="USER_NAME" msprop:Generator_ColumnVarNameInTable="columnUSER_NAME" msprop:Generator_ColumnPropNameInRow="USER_NAME" msprop:Generator_ColumnPropNameInTable="USER_NAMEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="USER_ROLES" msprop:Generator_UserColumnName="USER_ROLES" msprop:Generator_ColumnVarNameInTable="columnUSER_ROLES" msprop:Generator_ColumnPropNameInRow="USER_ROLES" msprop:Generator_ColumnPropNameInTable="USER_ROLESColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="ORGANIZATION_NAME" msprop:Generator_UserColumnName="ORGANIZATION_NAME" msprop:Generator_ColumnVarNameInTable="columnORGANIZATION_NAME" msprop:Generator_ColumnPropNameInRow="ORGANIZATION_NAME" msprop:Generator_ColumnPropNameInTable="ORGANIZATION_NAMEColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="GEOGRAPHIC_AREA" msprop:Generator_UserColumnName="GEOGRAPHIC_AREA" msprop:Generator_ColumnVarNameInTable="columnGEOGRAPHIC_AREA" msprop:Generator_ColumnPropNameInRow="GEOGRAPHIC_AREA" msprop:Generator_ColumnPropNameInTable="GEOGRAPHIC_AREAColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="MODULE_ID" msprop:Generator_UserColumnName="MODULE_ID" msprop:Generator_ColumnVarNameInTable="columnMODULE_ID" msprop:Generator_ColumnPropNameInRow="MODULE_ID" msprop:Generator_ColumnPropNameInTable="MODULE_IDColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="FUNCTION_ID" msprop:Generator_UserColumnName="FUNCTION_ID" msprop:Generator_ColumnVarNameInTable="columnFUNCTION_ID" msprop:Generator_ColumnPropNameInRow="FUNCTION_ID" msprop:Generator_ColumnPropNameInTable="FUNCTION_IDColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="USER_COUNT" msprop:Generator_UserColumnName="USER_COUNT" msprop:Generator_ColumnVarNameInTable="columnUSER_COUNT" msprop:Generator_ColumnPropNameInRow="USER_COUNT" msprop:Generator_ColumnPropNameInTable="USER_COUNTColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="FREQUENCY" msprop:Generator_UserColumnName="FREQUENCY" msprop:Generator_ColumnPropNameInRow="FREQUENCY" msprop:Generator_ColumnVarNameInTable="columnFREQUENCY" msprop:Generator_ColumnPropNameInTable="FREQUENCYColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="OFFICE_NAME" msprop:Generator_UserColumnName="OFFICE_NAME" msprop:Generator_ColumnVarNameInTable="columnOFFICE_NAME" msprop:Generator_ColumnPropNameInRow="OFFICE_NAME" msprop:Generator_ColumnPropNameInTable="OFFICE_NAMEColumn" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

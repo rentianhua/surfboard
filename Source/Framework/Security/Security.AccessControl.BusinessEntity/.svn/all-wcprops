@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/hiip/!svn/ver/196344/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity
+END
+SessionClientInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity/SessionClientInfo.cs
+END
+SessionInfo.cs
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/hiip/!svn/ver/105477/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity/SessionInfo.cs
+END
+SessionRenewException.cs
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity/SessionRenewException.cs
+END
+Framework.Security.AccessControl.BusinessEntity.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/svn/hiip/!svn/ver/196344/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity/Framework.Security.AccessControl.BusinessEntity.csproj
+END
+SessionStatus.cs
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/hiip/!svn/ver/180023/branch/R6g/Source/Framework/Security/Security.AccessControl.BusinessEntity/SessionStatus.cs
+END

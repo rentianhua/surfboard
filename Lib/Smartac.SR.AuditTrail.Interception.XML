@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Smartac.SR.AuditTrail.Interception</name>
+    </assembly>
+    <members>
+        <member name="M:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandler.#ctor(System.String,System.Int32)">
+            <summary>
+            Create a new AuditTrailCallHandler
+            </summary>
+            <param name="functionName">The name of the function to audit.</param>
+            <param name="order">The order in which the handler will be executed.</param>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandler.#ctor(System.String)">
+            <summary>
+            Create a new AuditTrailCallHandler
+            </summary>
+            <param name="functionName">The name of the function to audit.</param>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandler.Invoke(Microsoft.Practices.Unity.InterceptionExtension.IMethodInvocation,Microsoft.Practices.Unity.InterceptionExtension.GetNextHandlerDelegate)">
+            <summary>
+            Invoking the Audit Trail related operation.
+            </summary>
+            <param name="input">Method Invocation Message.</param>
+            <param name="getNext">A GetNextHandlerDelegate object delegating the invocation to the next CallHandler or Target instance.</param>
+            <returns>The return message of the method invocation.</returns>
+        </member>
+        <member name="P:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandler.FunctionName">
+            <summary>
+            Gets or sets the name of the function.
+            </summary>
+            <value>The name of the function.</value>
+        </member>
+        <member name="P:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandler.Order">
+            <summary>
+            Order in which the handler will be executed.
+            </summary>
+        </member>
+        <member name="T:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandlerAttribute">
+            <summary>
+            AuditTrail HanlderAttribute.
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandlerAttribute.#ctor(System.String)">
+            <summary>
+            Create a new AuditTrailCallHandlerAttribute object.
+            </summary>
+            <param name="functionName">Logged function name.</param>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandlerAttribute.CreateHandler(Microsoft.Practices.Unity.IUnityContainer)">
+            <summary>
+            creates a new AuditTrailCallHandler as specified in the attribute configuration.
+            </summary>
+            <param name="container">The <see cref="T:Microsoft.Practices.Unity.IUnityContainer" /> to use when creating handlers, if necessary.</param>
+            <returns>A new AuditTrailCallHandler object.</returns>
+        </member>
+        <member name="P:Smartac.SR.AuditTrail.Interception.AuditTrailCallHandlerAttribute.FunctionName">
+            <summary>
+            Gets or sets the name of the function.
+            </summary>
+            <value>The name of the function.</value>
+        </member>
+        <member name="T:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData">
+            <summary>
+            AuditTrail CallhandlerData containing the configuration definition for CallHandler.
+            </summary>
+        </member>
+        <member name="F:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.FunctionNamePropertyName">
+            <summary>
+            The name of Function Name configuration property name.
+            </summary>
+        </member>
+        <member name="F:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.ApplicationVersionPropertyName">
+            <summary>
+            The name of Application Version configuration property name.
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.#ctor">
+            <summary>
+            Create a new AuditTrailCallHandlerData object.
+            </summary>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.#ctor(System.String,System.Type,System.Int32)">
+            <summary>
+            Create a new AuditTrailCallHandlerData object.
+            </summary>
+            <param name="name">Name of handler entry.</param>
+            <param name="type">Type of handler to create.</param>
+            <param name="order">The order of the handler.</param>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.#ctor(System.String,System.Type,System.Int32,System.String)">
+            <summary>
+            Create a new AuditTrailCallHandlerData object.
+            </summary>
+            <param name="name">Name of handler entry.</param>
+            <param name="type">Type of handler to create.</param>
+            <param name="order">The order of the handler.</param>
+            <param name="functionName">The name of function to audit.</param>
+        </member>
+        <member name="M:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.DoConfigureContainer(Microsoft.Practices.Unity.IUnityContainer,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="container"></param>
+            <param name="registrationName"></param>
+        </member>
+        <member name="P:Smartac.SR.AuditTrail.Interception.Configuration.AuditTrailCallHandlerData.FunctionName">
+            <summary>
+            The name the fucntion representing the current operation.
+            </summary>
+        </member>
+    </members>
+</doc>

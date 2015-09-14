@@ -1,0 +1,5 @@
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.SessionManagement.Interface.dll
+C:\HiiP\R6G\bin\Debug\HiiP.Framework.Security.SessionManagement.Interface.pdb
+C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.Interface\obj\Debug\ResolveAssemblyReference.cache
+C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.Interface\obj\Debug\HiiP.Framework.Security.SessionManagement.Interface.dll
+C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.Interface\obj\Debug\HiiP.Framework.Security.SessionManagement.Interface.pdb

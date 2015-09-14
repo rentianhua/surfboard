@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D45ED800-9841-4DE5-A57F-F8C621BE1A78}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HiiP.Framework.Logging</RootNamespace>
+    <AssemblyName>HiiP.Framework.Logging</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>http://localhost/Logging/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(SolutionDir)bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(SolutionDir)bin\Release\</OutputPath>
+    <DefineConstants>TRACE;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Infragistics2.Shared.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.AppStylistSupport.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.Misc.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinChart.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinDataSource.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\WINDOWS\assembly\GAC_MSIL\Infragistics2.Win.UltraWinDataSource.v8.1\8.1.20081.1000__7dd5c3163f2cd0cb\Infragistics2.Win.UltraWinDataSource.v8.1.dll</HintPath>
+    </Reference>
+    <Reference Include="Infragistics2.Win.UltraWinEditors.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinExplorerBar.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinGrid.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinListView.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.UltraWinTabControl.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinToolbars.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Infragistics2.Win.UltraWinTree.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb" />
+    <Reference Include="Infragistics2.Win.v8.1, Version=8.1.20081.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\Lib\Microsoft.Practices.CompositeUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.CompositeUI.WinForms, Version=1.0.51205.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\Lib\Microsoft.Practices.CompositeUI.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Caching, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection.CallHandlers, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.CallHandlers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Validation.Integration.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ObjectBuilder, Version=1.0.51206.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(SolutionDir)\Lib\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="NCS.IConnect.ApplicationContexts, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.ApplicationContexts.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.AuditTrail, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.AuditTrail.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.CodeTable, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.CodeTable.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Common, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.ExceptionHandling, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.ExceptionHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.Messaging, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NCS.IConnect.PolicyInjection.CallHandlers, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\NCS.IConnect.PolicyInjection.CallHandlers.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\GlobalAssemblyInfo\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Constants\CommandNames.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constants\UIExtensionSiteNames.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModuleController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="ServiceProxy\AuditLogViewProxy.cs" />
+    <Compile Include="ServiceProxy\LoggingViewProxy.cs" />
+    <Compile Include="ServiceProxy\MonitoringLogFilterClient.cs" />
+    <Compile Include="ServiceProxy\MonitoringLogFilterServiceProxy.cs" />
+    <Compile Include="Views\AuditLogDetailView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AuditLogDetailView.Designer.cs">
+      <DependentUpon>AuditLogDetailView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AuditLogDetailView.GeneratedCode.cs">
+      <DependentUpon>AuditLogDetailView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AuditLogDetailViewPresenter.cs" />
+    <Compile Include="Views\AuditLogDetailViewPresenter.GeneratedCode.cs">
+      <DependentUpon>AuditLogDetailViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AuditLogView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AuditLogView.Designer.cs">
+      <DependentUpon>AuditLogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AuditLogView.GeneratedCode.cs">
+      <DependentUpon>AuditLogView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\AuditLogViewPresenter.cs" />
+    <Compile Include="Views\AuditLogViewPresenter.GeneratedCode.cs">
+      <DependentUpon>AuditLogViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExceptionLogDetailView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ExceptionLogDetailView.Designer.cs">
+      <DependentUpon>ExceptionLogDetailView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExceptionLogDetailView.GeneratedCode.cs">
+      <DependentUpon>ExceptionLogDetailView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ExceptionLogDetailViewPresenter.cs" />
+    <Compile Include="Views\ExceptionLogDetailViewPresenter.GeneratedCode.cs">
+      <DependentUpon>ExceptionLogDetailViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExceptionLogView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ExceptionLogView.Designer.cs">
+      <DependentUpon>ExceptionLogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExceptionLogView.GeneratedCode.cs">
+      <DependentUpon>ExceptionLogView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ExceptionLogViewPresenter.cs" />
+    <Compile Include="Views\ExceptionLogViewPresenter.GeneratedCode.cs">
+      <DependentUpon>ExceptionLogViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IAuditLogDetailView.cs" />
+    <Compile Include="Views\IAuditLogView.cs" />
+    <Compile Include="Views\IExceptionLogDetailView.cs" />
+    <Compile Include="Views\IExceptionLogView.cs" />
+    <Compile Include="Views\IInstrumentationDetailView.cs" />
+    <Compile Include="Views\IInstrumentationView.cs" />
+    <Compile Include="Views\InstrumentationDetailView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\InstrumentationDetailView.Designer.cs">
+      <DependentUpon>InstrumentationDetailView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstrumentationDetailView.GeneratedCode.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\InstrumentationDetailViewPresenter.cs" />
+    <Compile Include="Views\InstrumentationDetailViewPresenter.GeneratedCode.cs" />
+    <Compile Include="Views\InstrumentationView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\InstrumentationView.Designer.cs">
+      <DependentUpon>InstrumentationView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\InstrumentationView.GeneratedCode.cs">
+      <DependentUpon>InstrumentationView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\InstrumentationViewPresenter.cs" />
+    <Compile Include="Views\InstrumentationViewPresenter.GeneratedCode.cs">
+      <DependentUpon>InstrumentationViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IPerformanceMonitoringView.cs" />
+    <Compile Include="Views\IUsageLogView.cs" />
+    <Compile Include="Views\IUsageView.cs" />
+    <Compile Include="Views\PerformanceMonitoringView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\PerformanceMonitoringView.Designer.cs">
+      <DependentUpon>PerformanceMonitoringView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PerformanceMonitoringView.GeneratedCode.cs">
+      <DependentUpon>PerformanceMonitoringView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\PerformanceMonitoringViewPresenter.cs" />
+    <Compile Include="Views\PerformanceMonitoringViewPresenter.GeneratedCode.cs">
+      <DependentUpon>PerformanceMonitoringViewPresenter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UsageLogView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UsageLogView.Designer.cs">
+      <DependentUpon>UsageLogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UsageLogView.GeneratedCode.cs">
+      <DependentUpon>UsageLogView.cs</DependentUpon>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\UsageLogViewPresenter.cs" />
+    <Compile Include="Views\UsageLogViewPresenter.GeneratedCode.cs">
+      <DependentUpon>UsageLogViewPresenter.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)\Source\Infrastructure\Infrastructure.Interface\Infrastructure.Interface.csproj">
+      <Project>{a4bc0376-0d65-43ff-8646-568050eace56}</Project>
+      <Name>Infrastructure.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Infragistics.CompositeUI.WinForms\Infragistics.CompositeUI.WinForms.csproj">
+      <Project>{E9F028B3-3817-46FB-9324-EAAEF0DF5225}</Project>
+      <Name>Infragistics.CompositeUI.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common.Client\Framework.Common.Client.csproj">
+      <Project>{3DCC9752-E88E-435B-A433-F2B32800CEE4}</Project>
+      <Name>Framework.Common.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\Common\Framework.Common.csproj">
+      <Project>{8F6377CB-9102-4B04-9EC2-408EDEAB159C}</Project>
+      <Name>Framework.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Message\Framework.Message\Framework.Messaging.csproj">
+      <Project>{8F15741B-96CC-4C7D-86F7-B8BB7588F370}</Project>
+      <Name>Framework.Messaging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging.BusinessEntity\Framework.Logging.BusinessEntity.csproj">
+      <Project>{D899FD2B-F296-47AC-A4C4-6D376F31BE75}</Project>
+      <Name>Framework.Logging.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging.Interface\Framework.Logging.Interface.csproj">
+      <Project>{07B05224-68D1-472D-AB50-FEF314795D01}</Project>
+      <Name>Framework.Logging.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging.Library\Framework.Logging.Library.csproj">
+      <Project>{139AA242-95E9-4E4C-B9FF-339C513F8D42}</Project>
+      <Name>Framework.Logging.Library</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Views\AuditLogDetailView.resx">
+      <DependentUpon>AuditLogDetailView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\AuditLogView.resx">
+      <DependentUpon>AuditLogView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ExceptionLogDetailView.resx">
+      <DependentUpon>ExceptionLogDetailView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ExceptionLogView.resx">
+      <DependentUpon>ExceptionLogView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InstrumentationDetailView.resx">
+      <DependentUpon>InstrumentationDetailView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\InstrumentationView.resx">
+      <DependentUpon>InstrumentationView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PerformanceMonitoringView.resx">
+      <DependentUpon>PerformanceMonitoringView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\UsageLogView.resx">
+      <DependentUpon>UsageLogView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)Lib\" 
+copy /Y "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)Lib\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

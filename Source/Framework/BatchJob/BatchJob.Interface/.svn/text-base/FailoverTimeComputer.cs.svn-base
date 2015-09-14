@@ -1,0 +1,176 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NCS.IConnect.BatchJob;
+
+namespace HiiP.Framework.BatchJob.Interface
+{
+    public class FailoverTimeComputer
+    {
+        private readonly CustomSchedulingTime _schedulingTime;
+
+        public FailoverTimeComputer(CustomSchedulingTime schedulingTime)
+        {
+            _schedulingTime = schedulingTime;
+        }
+
+        /// <summary>
+        /// Gets the latest plan time before failover time. For example, one job runs at every 2 days 22:00
+        /// But it run at Oct 01 22:00, then was stopped, until Oct 08 09:00 re-run. 
+        /// Then, the API will return Oct 07 22:00 so that its next time should be Oct 9 22:00.
+        /// </summary>
+        /// <param name="lastPlanTime"></param>
+        /// <param name="failoverTime"></param>
+        /// <returns></returns>
+        public DateTime GetNextTime(DateTime lastPlanTime, DateTime failoverTime)
+        {
+            var basedOnTime = GetBasedOnTime(lastPlanTime,failoverTime);
+            DateTime? result = _schedulingTime.GetNextStartDateTime(basedOnTime);
+
+            return (result.HasValue) ? result.Value : failoverTime;
+        }
+        private DateTime GetBasedOnTime(DateTime lastPlanTime, DateTime failoverTime)
+        {
+            if (failoverTime <= lastPlanTime)
+            {
+                return lastPlanTime;
+            }
+
+            bool isSameDate = (lastPlanTime.Date == failoverTime.Date);
+
+            if (isSameDate)
+            {
+                return failoverTime;
+            }
+
+            if (!this._schedulingTime.InputInterval.HasValue
+                || (this._schedulingTime.InputInterval.HasValue
+                    && (this._schedulingTime.InputInterval.Value == 0
+                        || this._schedulingTime.InputInterval.Value == 1)
+                    )
+                || (_schedulingTime.Frequency == SchedulerFrequency.Monthly
+                    || _schedulingTime.Frequency == CustomSchedulingTime.MonthlyOfDay) //when it is monthly, interval means nothing
+                )
+            {
+                return failoverTime;
+            }
+
+            DateTime basedOnTime;
+
+            if (_schedulingTime.Frequency == SchedulerFrequency.Daily)
+            {
+                basedOnTime = ComputeDaily(lastPlanTime, failoverTime);
+            }
+            else if (_schedulingTime.Frequency == SchedulerFrequency.Weekly)
+            {
+                basedOnTime = ComputeWeekly(lastPlanTime, failoverTime);
+            }
+            else if (_schedulingTime.Frequency == SchedulerFrequency.Yearly)
+            {
+                basedOnTime = ComputeYearly(lastPlanTime, failoverTime);
+            }
+            else if (_schedulingTime.Frequency == SchedulerFrequency.RunOnce)
+            {
+                basedOnTime = (this._schedulingTime.DateTimeOfRunOnce.HasValue) ?
+                    this._schedulingTime.DateTimeOfRunOnce.Value : failoverTime;
+            }
+            else
+            {
+                throw new BatchJobException(string.Format("Unable to handle {0}.", _schedulingTime.Frequency.ToString()));
+            }
+
+            return basedOnTime;
+        }
+
+        private DateTime ComputeDaily(DateTime lastPlanTime, DateTime failoverTime)
+        {
+            int intervalDays = (failoverTime.Date - lastPlanTime.Date).Days;
+            int interval = intervalDays / this._schedulingTime.InputInterval.Value;
+
+            var result = lastPlanTime.AddDays(interval
+               * this._schedulingTime.InputInterval.Value);
+
+            if (result.Date==failoverTime && failoverTime<result)
+            {
+                return failoverTime;
+            }
+
+            return result;
+        }
+
+        private DateTime ComputeWeekly(DateTime lastPlanTime, DateTime failoverTime)
+        {
+            bool isSameWeek = ((failoverTime.Date - lastPlanTime.Date).Days
+                < (7 - (int)lastPlanTime.DayOfWeek));
+
+            if (isSameWeek)
+            {
+                return failoverTime;
+            }
+
+            int intervalDays = (failoverTime.Date - lastPlanTime.Date).Days;
+            int internval = intervalDays / (this._schedulingTime.InputInterval.Value * 7);
+
+            int weekIndexes = intervalDays % (this._schedulingTime.InputInterval.Value * 7);
+            bool isInIntervalWeeks = (weekIndexes == 0);
+
+            this._schedulingTime.DaysOfWeek.Sort();
+            int lastDayInWeek = (int)lastPlanTime.DayOfWeek;
+            if (isInIntervalWeeks)
+            {
+                var failoverDay = (failoverTime.DayOfWeek == DayOfWeek.Sunday) ? 7 : (int)failoverTime.DayOfWeek;
+                foreach (var item in this._schedulingTime.DaysOfWeek)
+                {
+                    var day = (int)item;
+                    if (day > lastDayInWeek
+                        && day >= failoverDay)
+                    {
+                        break;
+                    }
+                    lastDayInWeek = day;
+
+                }
+            }
+            else
+            {
+                lastDayInWeek = (int)this._schedulingTime.DaysOfWeek[this._schedulingTime.DaysOfWeek.Count() - 1];
+            }
+
+
+            var result = lastPlanTime.AddDays(
+                (internval * this._schedulingTime.InputInterval.Value
+                ) * 7 
+               + lastDayInWeek - (int)lastPlanTime.DayOfWeek);
+
+            if (result.Date == failoverTime && failoverTime < result)
+            {
+                return failoverTime;
+            }
+
+            return result;
+        }
+
+        private DateTime ComputeYearly(DateTime lastPlanTime, DateTime failoverTime)
+        {
+            bool isSameYear = (failoverTime.Year == lastPlanTime.Year);
+
+            if (isSameYear)
+            {
+                return failoverTime;
+            }
+            int intervalYears = failoverTime.Year - lastPlanTime.Year;
+            int internval = intervalYears / this._schedulingTime.InputInterval.Value;
+
+            var result = lastPlanTime.AddYears(internval * this._schedulingTime.InputInterval.Value);
+
+            if (result.Year == failoverTime.Year && failoverTime < result)
+            {
+                return failoverTime;
+            }
+
+            return result;
+
+        }
+    }
+}
