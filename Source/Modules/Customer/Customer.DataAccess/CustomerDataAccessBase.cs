@@ -4,7 +4,7 @@ using Cedar.Framework.Common.Server.BaseClasses;
 
 #endregion
 
-namespace Smartac.SR.Modules.Customer.DataAccess
+namespace CCN.Modules.Customer.DataAccess
 {
     /// <summary>
     ///     The data access of Data asscss base class.

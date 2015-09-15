@@ -83,3 +83,4 @@ Y:\GitHub\AgileMVC\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.Enterpri
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.Unity.RegistrationByConvention.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.dll
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.pdb
+\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.csprojResolveAssemblyReference.cache

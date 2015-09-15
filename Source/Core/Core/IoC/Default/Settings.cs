@@ -15,7 +15,7 @@ namespace Cedar.Core.IoC
         {
             SectionNames = new[]
             {
-                "sr.applicationContexts"           
+                "cedar.applicationContexts"
             };
         }
 

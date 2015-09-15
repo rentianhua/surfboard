@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 
 #endregion
 
-namespace Smartac.SR.Modules.Customer.DataAccess
+namespace CCN.Modules.Customer.DataAccess
 {
     /// <summary>
     /// </summary>

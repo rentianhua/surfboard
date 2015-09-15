@@ -1,12 +1,12 @@
 ﻿#region
 
 using System.Collections.Generic;
-using Smartac.SR.Modules.Customer.DataAccess;
+using CCN.Modules.Customer.DataAccess;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 #endregion
 
-namespace Smartac.SR.Modules.Customer.BusinessComponent
+namespace CCN.Modules.Customer.BusinessComponent
 {
     /// <summary>
     /// </summary>

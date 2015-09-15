@@ -116,3 +116,8 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\Customer.BusinessComponent.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Configuration.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.Configuration.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll

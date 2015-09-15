@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace Smartac.SR.Modules.Customer.Interface
+namespace CCN.Modules.Customer.Interface
 {
     /// <summary>
     /// </summary>

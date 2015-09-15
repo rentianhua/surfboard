@@ -1,14 +1,14 @@
 ﻿#region
 
 using System.Collections.Generic;
-using Smartac.SR.Modules.Customer.BusinessComponent;
-using Smartac.SR.Modules.Customer.Interface;
+using CCN.Modules.Customer.BusinessComponent;
+using CCN.Modules.Customer.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.AuditTrail.Interception;
 
 #endregion
 
-namespace Smartac.SR.Modules.Customer.BusinessService
+namespace CCN.Modules.Customer.BusinessService
 {
     /// <summary>
     /// </summary>

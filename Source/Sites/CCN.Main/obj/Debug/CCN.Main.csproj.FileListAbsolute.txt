@@ -1,0 +1,5 @@
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.Main\obj\Debug\CCN.Main.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.Main\obj\Debug\Smartac.SR.Main.Properties.Resources.resources
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.Main\obj\Debug\CCN.Main.csproj.GenerateResource.Cache
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.Main\obj\Debug\Smartac.SR.Main.dll
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.Main\obj\Debug\Smartac.SR.Main.pdb

@@ -22,6 +22,6 @@ Y:\GitHub\AgileMVC\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.XML
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\AuditTrail.Interception.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb
+\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\AuditTrail.Interception.csprojResolveAssemblyReference.cache

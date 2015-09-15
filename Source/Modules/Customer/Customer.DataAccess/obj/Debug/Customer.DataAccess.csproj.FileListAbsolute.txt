@@ -94,6 +94,11 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Core.xm
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Core.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Dapper.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Dapper.xml
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\obj\Debug\Customer.DataAccess.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\obj\Debug\CCN.Modules.Customer.DataAccess.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\obj\Debug\CCN.Modules.Customer.DataAccess.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Configuration.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Interception.Configuration.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Interception.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\obj\Debug\Customer.DataAccess.csprojResolveAssemblyReference.cache

@@ -1,4 +1,4 @@
-﻿namespace Smartac.SR.Modules.Customer.BusinessEntity
+﻿namespace CCN.Modules.Customer.BusinessEntity
 {
     internal class Class1
     {
