@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
+using Cedar.Core.EntLib.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Smartac.SR.Core.EntLib.IoC;
-using Smartac.SR.Core.IoC;
 
 namespace FrameworkTest
 {
@@ -11,9 +11,9 @@ namespace FrameworkTest
         [TestMethod]
         public void TestMethod()
         {
-            var a = new UnityContainerServiceLocator();
-            var service = ServiceLocatorFactory.GetServiceLocator("DemoInstanceService");
-            Assert.IsNotNull(service);
+            var factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
+            var d = factoy.Query("select * from base_carbrand").ToList();
+            Assert.IsNotNull(factoy);
         }
     }
 }

@@ -26,4 +26,3 @@ Y:\GitHub\AgileMVC\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
-\\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache

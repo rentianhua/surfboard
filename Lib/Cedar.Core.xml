@@ -1063,232 +1063,41 @@
             The name of the database.
             </value>
         </member>
-        <member name="P:Cedar.Core.Data.Database.DbProviderFactory">
-            <summary>
-            Gets the database provider factory.
-            </summary>
-            <value>
-            The database provider factory.
-            </value>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.String,System.Object[])">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.CommandType,System.String)">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="commandType">Type of the command.</param>
-            <param name="commandText">The command text.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.Common.DbTransaction,System.String,System.Object[])">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="transaction">The transaction.</param>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteReader(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
-            <summary>
-            Executes the reader.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteReader(System.String,System.Object[])">
-            <summary>
-            Executes the reader.
-            </summary>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteReader(System.Data.CommandType,System.String)">
-            <summary>
-            Executes the reader.
-            </summary>
-            <param name="commandType">Type of the command.</param>
-            <param name="commandText">The command text.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.CommandType,System.String)">
-            <summary>
-            Executes the scalar.
-            </summary>
-            <param name="commandType">Type of the command.</param>
-            <param name="commandText">The command text.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.Common.DbCommand)">
-            <summary>
-            Executes the scalar.
-            </summary>
-            <param name="command">The command.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
-            <summary>
-            Executes the scalar.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteDataSet(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
-            <summary>
-            Executes the data set.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
-            <returns>The <see cref="T:System.Data.DataSet" />.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.GetStoredProcCommand(System.String)">
-            <summary>
-            Gets the stored proc command.
-            </summary>
-            <param name="procedureName">Name of the procedure.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.GetStoredProcCommand(System.String,System.Object[])">
-            <summary>
-            Gets the stored proc command.
-            </summary>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.DiscoverParameters(System.Data.Common.DbCommand)">
-            <summary>
-            Discovers the parameters.
-            </summary>
-            <param name="cmd">The command.</param>
-        </member>
         <member name="M:Cedar.Core.Data.Database.CreateConnection">
             <summary>
             Creates the connection.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.AddParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Data.ParameterDirection,System.String,System.Data.DataRowVersion,System.Object)">
+        <member name="M:Cedar.Core.Data.Database.Execute(System.String,System.Object,System.Data.Common.DbTransaction,System.Data.CommandType)">
             <summary>
-            <para>Adds a new instance of a <see cref="T:System.Data.Common.DbParameter" /> object to the command.</para>
+            
             </summary>
-            <param name="command">The command to add the parameter.</param>
-            <param name="name"><para>The name of the parameter.</para></param>
-            <param name="dbType"><para>One of the <see cref="T:System.Data.DbType" /> values.</para></param>        
-            <param name="direction"><para>One of the <see cref="T:System.Data.ParameterDirection" /> values.</para></param>                
-            <param name="sourceColumn"><para>The name of the source column mapped to the DataSet and used for loading or returning the <paramref name="value" />.</para></param>
-            <param name="sourceVersion"><para>One of the <see cref="T:System.Data.DataRowVersion" /> values.</para></param>
-            <param name="value"><para>The value of the parameter.</para></param>  
-        </member>
-        <member name="M:Cedar.Core.Data.Database.AddInParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType)">
-            <summary>
-            Adds a new In <see cref="T:System.Data.Common.DbParameter" /> object to the given <paramref name="command" />.
-            </summary>
-            <param name="command">The command to add the in parameter.</param>
-            <param name="name"><para>The name of the parameter.</para></param>
-            <param name="dbType"><para>One of the <see cref="T:System.Data.DbType" /> values.</para></param>                
-            <remarks>
-            <para>This version of the method is used when you can have the same parameter object multiple times with different values.</para>
-            </remarks>  
-        </member>
-        <member name="M:Cedar.Core.Data.Database.AddInParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Object)">
-            <summary>
-            Adds a new In <see cref="T:System.Data.Common.DbParameter" /> object to the given <paramref name="command" />.
-            </summary>
-            <param name="command">The commmand to add the parameter.</param>
-            <param name="name"><para>The name of the parameter.</para></param>
-            <param name="dbType"><para>One of the <see cref="T:System.Data.DbType" /> values.</para></param>                
-            <param name="value"><para>The value of the parameter.</para></param>    
-        </member>
-        <member name="M:Cedar.Core.Data.Database.AddInParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.String,System.Data.DataRowVersion)">
-            <summary>
-            Adds a new In <see cref="T:System.Data.Common.DbParameter" /> object to the given <paramref name="command" />.
-            </summary>
-            <param name="command">The command to add the parameter.</param>
-            <param name="name"><para>The name of the parameter.</para></param>
-            <param name="dbType"><para>One of the <see cref="T:System.Data.DbType" /> values.</para></param>                
-            <param name="sourceColumn"><para>The name of the source column mapped to the DataSet and used for loading or returning the value.</para></param>
-            <param name="sourceVersion"><para>One of the <see cref="T:System.Data.DataRowVersion" /> values.</para></param>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.AddOutParameter(System.Data.Common.DbCommand,System.String,System.Data.DbType,System.Int32)">
-            <summary>
-            Adds the out parameter.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="name">The name.</param>
-            <param name="dbType">Type of the db.</param>
-            <param name="size">The size.</param>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.GetParameterValue(System.Data.Common.DbCommand,System.String)">
-            <summary>
-            Gets the parameter value.
-            </summary>
-            <param name="command">The command.</param>
-            <param name="name">The name.</param>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="transaction"></param>
+            <param name="commandType"></param>
             <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.SetParameterValue(System.Data.Common.DbCommand,System.String,System.Object)">
+        <member name="M:Cedar.Core.Data.Database.Query(System.String,System.Object,System.Data.CommandType)">
             <summary>
-            Sets the parameter value.
+            
             </summary>
-            <param name="command">The command.</param>
-            <param name="name">The name.</param>
-            <param name="value">The value.</param>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="commandType"></param>
+            <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.GetDataAdapter">
+        <member name="M:Cedar.Core.Data.Database.Query``1(System.String,System.Object,System.Data.Common.DbTransaction,System.Data.CommandType)">
             <summary>
-            Gets a DbDataAdapter with Standard update behavior.
+            
             </summary>
-            <returns>A <see cref="T:System.Data.Common.DbDataAdapter" />.</returns>
-            <seealso cref="T:System.Data.Common.DbDataAdapter" />
-            <devdoc>
-            Created this new, public method instead of modifying the protected, abstract one so that there will be no
-            breaking changes for any currently derived Database class.
-            </devdoc>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.GetStoredProcCommandWithSourceColumns(System.String,System.String[])">
-            <summary>
-            Wraps around a derived class's implementation of the GetStoredProcCommandWrapper method and adds functionality for
-            using this method with UpdateDataSet.  The GetStoredProcCommandWrapper method (above) that takes a params array 
-            expects the array to be filled with VALUES for the parameters. This method differs from the GetStoredProcCommandWrapper 
-            method in that it allows a user to pass in a string array. It will also dynamically discover the parameters for the 
-            stored procedure and set the parameter's SourceColumns to the strings that are passed in. It does this by mapping 
-            the parameters to the strings IN ORDER. Thus, order is very important.
-            </summary>
-            <param name="storedProcedureName"><para>The name of the stored procedure.</para></param>
-            <param name="sourceColumns"><para>The list of DataFields for the procedure.</para></param>
-            <returns><para>The <see cref="T:System.Data.Common.DbCommand" /> for the stored procedure.</para></returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.BuildParameterName(System.String)">
-            <summary>
-            Builds DBMS specific parameter name.
-            </summary>
-            <param name="parameterName">The parameter name without any prefix symbol.</param>
-            <returns>The DBMS specific parameter name.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.GetSqlStringCommand(System.String)">
-            <summary>
-            Build a <see cref="T:System.Data.Common.DbCommand" /> based on the SQL text.
-            </summary>
-            <param name="query">The SQL text.</param>
-            <returns>The <see cref="T:System.Data.Common.DbCommand" />.</returns>
+            <typeparam name="T"></typeparam>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="transaction"></param>
+            <param name="commandType"></param>
+            <returns></returns>
         </member>
         <member name="T:Cedar.Core.Data.DatabaseFactories">
             <summary>

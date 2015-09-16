@@ -2,11 +2,12 @@
 using System;
 using System.Data;
 using System.Data.Common;
+using Cedar.Core.Data;
 using Microsoft.Practices.Unity.Utility;
 
 namespace Cedar.Core.EntLib.Data
 {
-    internal class DatabaseWrapper : Core.Data.Database
+    internal class DatabaseWrapper : Database
     {
         private string databaseName;
 
@@ -26,7 +27,7 @@ namespace Cedar.Core.EntLib.Data
         {
             get
             {
-                return this.Database.DbProviderFactory;
+                return Database.DbProviderFactory;
             }
         }
 
@@ -40,7 +41,7 @@ namespace Cedar.Core.EntLib.Data
         {
             get
             {
-                return this.databaseName;
+                return databaseName;
             }
         }
 
@@ -48,7 +49,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNull(dataAccessor, "dataAccessor");
             Guard.ArgumentNotNullOrEmpty(databaseName, "databaseName");
-            this.Database = dataAccessor();
+            Database = dataAccessor();
             this.databaseName = databaseName;
         }
 
@@ -57,9 +58,9 @@ namespace Cedar.Core.EntLib.Data
             Guard.ArgumentNotNull(command, "command");
             if (transaction == null)
             {
-                return this.Database.ExecuteNonQuery(command);
+                return Database.ExecuteNonQuery(command);
             }
-            return this.Database.ExecuteNonQuery(command, transaction);
+            return Database.ExecuteNonQuery(command, transaction);
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace Cedar.Core.EntLib.Data
         /// </returns>
         public override int ExecuteNonQuery(string storedProcedureName, params object[] parameterValues)
         {
-            return this.Database.ExecuteNonQuery(storedProcedureName, parameterValues);
+            return Database.ExecuteNonQuery(storedProcedureName, parameterValues);
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Cedar.Core.EntLib.Data
         /// <returns>The number of rows affected.</returns>
         public override int ExecuteNonQuery(CommandType commandType, string commandText)
         {
-            return this.Database.ExecuteNonQuery(commandType, commandText);
+            return Database.ExecuteNonQuery(commandType, commandText);
         }
 
         /// <summary>
@@ -97,7 +98,7 @@ namespace Cedar.Core.EntLib.Data
         /// </returns>
         public override int ExecuteNonQuery(DbTransaction transaction, string storedProcedureName, params object[] parameterValues)
         {
-            return this.Database.ExecuteNonQuery(transaction, storedProcedureName, parameterValues);
+            return Database.ExecuteNonQuery(transaction, storedProcedureName, parameterValues);
         }
 
         /// <summary>
@@ -111,9 +112,9 @@ namespace Cedar.Core.EntLib.Data
             Guard.ArgumentNotNull(command, "command");
             if (transaction == null)
             {
-                return this.Database.ExecuteReader(command);
+                return Database.ExecuteReader(command);
             }
-            return this.Database.ExecuteReader(command, transaction);
+            return Database.ExecuteReader(command, transaction);
         }
 
         /// <summary>
@@ -128,9 +129,9 @@ namespace Cedar.Core.EntLib.Data
         {
             if (transaction == null)
             {
-                return this.Database.ExecuteDataSet(command);
+                return Database.ExecuteDataSet(command);
             }
-            return this.Database.ExecuteDataSet(command, transaction);
+            return Database.ExecuteDataSet(command, transaction);
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace Cedar.Core.EntLib.Data
         public override DbCommand GetStoredProcCommand(string procedureName)
         {
             Guard.ArgumentNotNullOrEmpty(procedureName, "procedureName");
-            return this.Database.GetStoredProcCommand(procedureName);
+            return Database.GetStoredProcCommand(procedureName);
         }
 
         /// <summary>
@@ -150,7 +151,7 @@ namespace Cedar.Core.EntLib.Data
         /// <returns></returns>
         public override DbConnection CreateConnection()
         {
-            return this.Database.CreateConnection();
+            return Database.CreateConnection();
         }
 
         /// <summary>
@@ -166,7 +167,7 @@ namespace Cedar.Core.EntLib.Data
         public override void AddParameter(DbCommand command, string name, DbType dbType, ParameterDirection direction, string sourceColumn, DataRowVersion sourceVersion, object value)
         {
             Guard.ArgumentNotNull(command, "command");
-            this.Database.AddParameter(command, name, dbType, direction, sourceColumn, sourceVersion, value);
+            Database.AddParameter(command, name, dbType, direction, sourceColumn, sourceVersion, value);
         }
 
         /// <summary>
@@ -181,7 +182,7 @@ namespace Cedar.Core.EntLib.Data
         public override void AddInParameter(DbCommand command, string name, DbType dbType)
         {
             Guard.ArgumentNotNull(command, "command");
-            this.Database.AddInParameter(command, name, dbType);
+            Database.AddInParameter(command, name, dbType);
         }
 
         /// <summary>
@@ -194,7 +195,7 @@ namespace Cedar.Core.EntLib.Data
         public override void AddInParameter(DbCommand command, string name, DbType dbType, object value)
         {
             Guard.ArgumentNotNull(command, "command");
-            this.Database.AddInParameter(command, name, dbType, value);
+            Database.AddInParameter(command, name, dbType, value);
         }
 
         /// <summary>
@@ -208,7 +209,7 @@ namespace Cedar.Core.EntLib.Data
         public override void AddInParameter(DbCommand command, string name, DbType dbType, string sourceColumn, DataRowVersion sourceVersion)
         {
             Guard.ArgumentNotNull(command, "command");
-            this.Database.AddInParameter(command, name, dbType, sourceColumn, sourceVersion);
+            Database.AddInParameter(command, name, dbType, sourceColumn, sourceVersion);
         }
 
         /// <summary>
@@ -221,7 +222,7 @@ namespace Cedar.Core.EntLib.Data
         public override void AddOutParameter(DbCommand command, string name, DbType dbType, int size)
         {
             Guard.ArgumentNotNull(command, "command");
-            this.Database.AddOutParameter(command, name, dbType, size);
+            Database.AddOutParameter(command, name, dbType, size);
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace Cedar.Core.EntLib.Data
         public override object GetParameterValue(DbCommand command, string name)
         {
             Guard.ArgumentNotNull(command, "command");
-            return this.Database.GetParameterValue(command, name);
+            return Database.GetParameterValue(command, name);
         }
 
         /// <summary>
@@ -245,7 +246,7 @@ namespace Cedar.Core.EntLib.Data
         public override IDataReader ExecuteReader(string storedProcedureName, params object[] parameterValues)
         {
             Guard.ArgumentNotNull(storedProcedureName, "storedProcedureName");
-            return this.Database.ExecuteReader(storedProcedureName, parameterValues);
+            return Database.ExecuteReader(storedProcedureName, parameterValues);
         }
 
         /// <summary>
@@ -258,7 +259,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNull(commandType, "commandType");
             Guard.ArgumentNotNullOrEmpty(commandText, "commandText");
-            return this.Database.ExecuteReader(commandType, commandText);
+            return Database.ExecuteReader(commandType, commandText);
         }
 
         /// <summary>
@@ -271,7 +272,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNull(commandType, "commandType");
             Guard.ArgumentNotNullOrEmpty(commandText, "commandText");
-            return this.Database.ExecuteScalar(commandType, commandText);
+            return Database.ExecuteScalar(commandType, commandText);
         }
 
         /// <summary>
@@ -282,7 +283,7 @@ namespace Cedar.Core.EntLib.Data
         public override object ExecuteScalar(DbCommand command)
         {
             Guard.ArgumentNotNull(command, "command");
-            return this.Database.ExecuteScalar(command);
+            return Database.ExecuteScalar(command);
         }
 
         /// <summary>
@@ -295,7 +296,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNull(command, "command");
             Guard.ArgumentNotNull(transaction, "transaction");
-            return this.Database.ExecuteScalar(command, transaction);
+            return Database.ExecuteScalar(command, transaction);
         }
 
         /// <summary>
@@ -305,7 +306,7 @@ namespace Cedar.Core.EntLib.Data
         public override void DiscoverParameters(DbCommand cmd)
         {
             Guard.ArgumentNotNull(cmd, "command");
-            this.Database.DiscoverParameters(cmd);
+            Database.DiscoverParameters(cmd);
         }
 
         /// <summary>
@@ -318,7 +319,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNull(command, "command");
             Guard.ArgumentNotNullOrEmpty(name, "name");
-            this.Database.SetParameterValue(command, name, value);
+            Database.SetParameterValue(command, name, value);
         }
        
         /// <summary>
@@ -330,7 +331,7 @@ namespace Cedar.Core.EntLib.Data
         public override DbCommand GetStoredProcCommand(string storedProcedureName, params object[] parameterValues)
         {
             Guard.ArgumentNotNullOrEmpty(storedProcedureName, "storedProcedureName");
-            return this.Database.GetStoredProcCommand(storedProcedureName, parameterValues);
+            return Database.GetStoredProcCommand(storedProcedureName, parameterValues);
         }
         
         /// <summary>
@@ -344,7 +345,7 @@ namespace Cedar.Core.EntLib.Data
         /// </devdoc>
         public override DbDataAdapter GetDataAdapter()
         {
-            return this.Database.GetDataAdapter();
+            return Database.GetDataAdapter();
         }
 
         /// <summary>
@@ -362,7 +363,7 @@ namespace Cedar.Core.EntLib.Data
         {
             Guard.ArgumentNotNullOrEmpty(storedProcedureName, "storedProcedureName");
             Guard.ArgumentNotNull(sourceColumns, "sourceColumns");
-            return this.Database.GetStoredProcCommandWithSourceColumns(storedProcedureName, sourceColumns);
+            return Database.GetStoredProcCommandWithSourceColumns(storedProcedureName, sourceColumns);
         }
 
         /// <summary>
@@ -374,7 +375,7 @@ namespace Cedar.Core.EntLib.Data
         /// </returns>
         public override string BuildParameterName(string parameterName)
         {
-            return this.Database.BuildParameterName(parameterName);
+            return Database.BuildParameterName(parameterName);
         }
 
         /// <summary>
@@ -384,7 +385,7 @@ namespace Cedar.Core.EntLib.Data
         /// <returns>The <see cref="T:System.Data.Common.DbCommand" />.</returns>
         public override DbCommand GetSqlStringCommand(string query)
         {
-            return this.Database.GetSqlStringCommand(query);
+            return Database.GetSqlStringCommand(query);
         }
     }
 }

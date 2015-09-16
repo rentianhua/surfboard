@@ -23,10 +23,11 @@ Y:\GitHub\AgileMVC\Source\Core\EntLib\obj\Debug\EntLib.csproj.GenerateResource.C
 Y:\GitHub\AgileMVC\Source\Core\EntLib\obj\Debug\Cedar.Core.EntLib.dll
 Y:\GitHub\AgileMVC\Source\Core\EntLib\obj\Debug\Cedar.Core.EntLib.pdb
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.xml
-\\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll
-\\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.pdb
 \\Mac\Home\GitHub\surfboard\Source\Core\EntLib\obj\Debug\EntLib.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Core\EntLib\obj\Debug\Cedar.Core.EntLib.Properties.Resources.resources
 \\Mac\Home\GitHub\surfboard\Source\Core\EntLib\obj\Debug\EntLib.csproj.GenerateResource.Cache
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.EntLib.pdb
 \\Mac\Home\GitHub\surfboard\Source\Core\EntLib\obj\Debug\Cedar.Core.EntLib.dll
 \\Mac\Home\GitHub\surfboard\Source\Core\EntLib\obj\Debug\Cedar.Core.EntLib.pdb

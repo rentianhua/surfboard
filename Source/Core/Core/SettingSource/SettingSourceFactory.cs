@@ -38,7 +38,7 @@ namespace Cedar.Core.SettingSource
                     return SettingSourceFactory.settingSource;
                 }
                 //获取webconfig中的配置节
-                var settingSourceSettings = ConfigurationManager.GetSection("sr.settingSource") as SettingSourceSettings;
+                var settingSourceSettings = ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
                 if (settingSourceSettings != null)
                 {
                     return SettingSourceFactory.settingSource = settingSourceSettings.GetSettingSource(null);
@@ -75,13 +75,13 @@ namespace Cedar.Core.SettingSource
                     }
                     else
                     {
-                        var settingSourceSettings = ConfigurationManager.GetSection("sr.settingSource") as SettingSourceSettings;
+                        var settingSourceSettings = ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
                         if (settingSourceSettings == null)
                         {
                             throw new ConfigurationErrorsException(
                                 Resources.ExceptionSettingSourceNotExists.Format(new object[]
                                 {
-                                    "sr.settingSource"
+                                    "cedar.settingSource"
                                 }));
                         }
                         getSettingSource = settingSourceSettings.GetSettingSource(name);
@@ -115,12 +115,12 @@ namespace Cedar.Core.SettingSource
         public static void ChangeSettingSource(string name)
         {
             Guard.ArgumentNotNullOrEmpty(name, "name");
-            var settingSourceSettings = ConfigurationManager.GetSection("sr.settingSource") as SettingSourceSettings;
+            var settingSourceSettings = ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
             if (settingSourceSettings == null)
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionSettingSourceNotExists.Format(new object[]
                 {
-                    "sr.settingSource"
+                    "cedar.settingSource"
                 }));
             }
             ChangeSettingSource(settingSourceSettings.GetSettingSource(name));

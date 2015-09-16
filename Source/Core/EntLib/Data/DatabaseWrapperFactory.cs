@@ -3,18 +3,13 @@ using System.Configuration;
 using System.Data.Common;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
-using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
-using Microsoft.Practices.EnterpriseLibrary.Data;
-using Microsoft.Practices.EnterpriseLibrary.Data.Configuration;
-using Microsoft.Practices.EnterpriseLibrary.Data.Oracle;
-using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
-using Microsoft.Practices.Unity.Utility;
-using MySql.Data.MySqlClient;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Properties;
 using Cedar.Core.IoC;
 using Cedar.Core.SettingSource;
-
+using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
+using Microsoft.Practices.Unity.Utility;
+using MySql.Data.MySqlClient;
 
 namespace Cedar.Core.EntLib.Data
 {
@@ -28,10 +23,9 @@ namespace Cedar.Core.EntLib.Data
 
         static DatabaseWrapperFactory()
         {
-            DatabaseWrapperFactory.defaultSqlMapping = new DbProviderMapping("System.Data.SqlClient", typeof(SqlDatabase));
-            DatabaseWrapperFactory.defaultOracleMapping = new DbProviderMapping("System.Data.OracleClient", typeof(OracleDatabase));
-            DatabaseWrapperFactory.defaultMySqlMapping = new DbProviderMapping("MySql.Data.MySqlClient", typeof(MySql.Data.MySqlClient.MySqlClientFactory));
-            DatabaseWrapperFactory.defaultGenericMapping = new DbProviderMapping("generic", typeof(GenericDatabase));
+            defaultSqlMapping = new DbProviderMapping("System.Data.SqlClient", typeof(SqlDatabase));
+            defaultMySqlMapping = new DbProviderMapping("MySql.Data.MySqlClient", typeof(MySqlClientFactory));
+            defaultGenericMapping = new DbProviderMapping("generic", typeof(GenericDatabase));
         }
 
         /// <summary>
@@ -39,18 +33,18 @@ namespace Cedar.Core.EntLib.Data
         /// </summary>
         /// <param name="databaseName">Name of the connection string.</param>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
-        public Core.Data.Database GetDatabase(string databaseName)
+        public Database GetDatabase(string databaseName)
         {
             Guard.ArgumentNotNullOrEmpty(databaseName, "databaseName");
             ConnectionStringsSection connectionStringsSection;
-            if (!ConfigManager.TryGetConfigurationSection<ConnectionStringsSection>("connectionStrings", out connectionStringsSection))
+            if (!ConfigManager.TryGetConfigurationSection("connectionStrings", out connectionStringsSection))
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionNoConnectionStringSection);
             }
             ConnectionStringSettings connectionStringSettings = connectionStringsSection.ConnectionStrings[databaseName];
-            DatabaseWrapperFactory.ValidateConnectionStringSettings(databaseName, connectionStringSettings);
+            ValidateConnectionStringSettings(databaseName, connectionStringSettings);
             DatabaseSettings databaseSettings;
-            if (!ConfigManager.TryGetConfigurationSection<DatabaseSettings>("dataConfiguration", out databaseSettings))
+            if (!ConfigManager.TryGetConfigurationSection("dataConfiguration", out databaseSettings))
             {
                 databaseSettings = new DatabaseSettings();
             }
@@ -63,7 +57,7 @@ namespace Cedar.Core.EntLib.Data
 				}), connectionStringSettings.ElementInformation.Source, connectionStringSettings.ElementInformation.LineNumber);
             }
 
-            DatabaseData databaseData = this.GetDatabaseData(connectionStringSettings, databaseSettings);
+            DatabaseData databaseData = GetDatabaseData(connectionStringSettings, databaseSettings);
             Microsoft.Practices.EnterpriseLibrary.Data.Database database = databaseData.BuildDatabase();
             return new DatabaseWrapper(() => database, databaseName);
         }
@@ -72,7 +66,7 @@ namespace Cedar.Core.EntLib.Data
         /// Gets the database.
         /// </summary>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
-        public Core.Data.Database GetDatabase()
+        public Database GetDatabase()
         {
             var configurationSection = ConfigManager.GetConfigurationSection<DatabaseSettings>("dataConfiguration");
             string defaultDatabase = configurationSection.DefaultDatabase;
@@ -80,7 +74,7 @@ namespace Cedar.Core.EntLib.Data
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionDefaultDatabaseNotExists);
             }
-            return this.GetDatabase(configurationSection.DefaultDatabase);
+            return GetDatabase(configurationSection.DefaultDatabase);
         }
 
         private static void ValidateConnectionStringSettings(string name, ConnectionStringSettings connectionStringSettings)
@@ -105,31 +99,26 @@ namespace Cedar.Core.EntLib.Data
         {
             if ("System.Data.SqlClient".Equals(dbProviderName))
             {
-                return DatabaseWrapperFactory.defaultSqlMapping;
+                return defaultSqlMapping;
             }
-
-            if ("System.Data.OracleClient".Equals(dbProviderName))
-            {
-                return DatabaseWrapperFactory.defaultOracleMapping;
-            }
-
+           
             if ("MySql.Data.MySqlClient".Equals(dbProviderName))
             {
-                return DatabaseWrapperFactory.defaultMySqlMapping;
+                return defaultMySqlMapping;
             }
 
             DbProviderFactory factory = DbProviderFactories.GetFactory(dbProviderName);
             if (SqlClientFactory.Instance == factory)
             {
-                return DatabaseWrapperFactory.defaultSqlMapping;
+                return defaultSqlMapping;
             }
             if (OracleClientFactory.Instance == factory)
             {
-                return DatabaseWrapperFactory.defaultOracleMapping;
+                return defaultOracleMapping;
             }
             if (MySqlClientFactory.Instance == factory)
             {
-                return DatabaseWrapperFactory.defaultMySqlMapping;
+                return defaultMySqlMapping;
             }
 
             return null;
@@ -137,12 +126,12 @@ namespace Cedar.Core.EntLib.Data
 
         private static DbProviderMapping GetGenericMapping()
         {
-            return DatabaseWrapperFactory.defaultGenericMapping;
+            return defaultGenericMapping;
         }
 
         private DatabaseData GetDatabaseData(ConnectionStringSettings connectionString, DatabaseSettings databaseSettings)
         {
-            return DatabaseWrapperFactory.CreateDatabaseData(DatabaseWrapperFactory.GetAttribute(DatabaseWrapperFactory.GetProviderMapping(connectionString.ProviderName, databaseSettings).DatabaseType).ConfigurationType, connectionString);
+            return CreateDatabaseData(GetAttribute(GetProviderMapping(connectionString.ProviderName, databaseSettings).DatabaseType).ConfigurationType, connectionString);
         }
 
         private static DatabaseData CreateDatabaseData(Type configurationElementType, ConnectionStringSettings settings)
@@ -151,18 +140,11 @@ namespace Cedar.Core.EntLib.Data
             try
             {
                 Func<string, ConfigurationSection> func = (string sectionName) => SettingSourceFactory.GetSettingSource(null).GetConfigurationSection(sectionName);
-                obj = Activator.CreateInstance(configurationElementType, new object[]
-				{
-					settings,
-					func
-				});
+                obj = Activator.CreateInstance(configurationElementType, settings, func);
             }
             catch (MissingMethodException innerException)
             {
-                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotHaveRequiredConstructor.Format(new object[]
-				{
-					configurationElementType
-				}), innerException);
+                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotHaveRequiredConstructor.Format(configurationElementType), innerException);
             }
             DatabaseData result;
             try
@@ -171,10 +153,7 @@ namespace Cedar.Core.EntLib.Data
             }
             catch (InvalidCastException innerException2)
             {
-                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotInheritFromDatabaseData.Format(new object[]
-				{
-					configurationElementType
-				}), innerException2);
+                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotInheritFromDatabaseData.Format(configurationElementType), innerException2);
             }
             return result;
         }
@@ -189,7 +168,7 @@ namespace Cedar.Core.EntLib.Data
                     return dbProviderMapping;
                 }
             }
-            return DatabaseWrapperFactory.GetDefaultMapping(dbProviderName) ?? DatabaseWrapperFactory.GetGenericMapping();
+            return GetDefaultMapping(dbProviderName) ?? GetGenericMapping();
         }
 
         private static ConfigurationElementTypeAttribute GetAttribute(Type databaseType)
