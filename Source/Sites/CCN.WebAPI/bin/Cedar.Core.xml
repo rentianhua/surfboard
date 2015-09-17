@@ -1063,74 +1063,40 @@
             The name of the database.
             </value>
         </member>
-        <member name="P:Cedar.Core.Data.Database.DbProviderFactory">
-            <summary>
-            Gets the database provider factory.
-            </summary>
-            <value>
-            The database provider factory.
-            </value>
-        </member>
         <member name="M:Cedar.Core.Data.Database.CreateConnection">
             <summary>
             Creates the connection.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
+        <member name="M:Cedar.Core.Data.Database.Execute(System.String,System.Object,System.Data.Common.DbTransaction,System.Data.CommandType)">
             <summary>
-            Executes the non query.
+            
             </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.String,System.Object[])">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.CommandType,System.String)">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="commandType">Type of the command.</param>
-            <param name="commandText">The command text.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteNonQuery(System.Data.Common.DbTransaction,System.String,System.Object[])">
-            <summary>
-            Executes the non query.
-            </summary>
-            <param name="transaction">The transaction.</param>
-            <param name="storedProcedureName">Name of the stored procedure.</param>
-            <param name="parameterValues">The parameter values.</param>
-            <returns>The number of rows affected.</returns>
-        </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.CommandType,System.String)">
-            <summary>
-            Executes the scalar.
-            </summary>
-            <param name="commandType">Type of the command.</param>
-            <param name="commandText">The command text.</param>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="transaction"></param>
+            <param name="commandType"></param>
             <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.Common.DbCommand)">
+        <member name="M:Cedar.Core.Data.Database.Query(System.String,System.Object,System.Data.CommandType)">
             <summary>
-            Executes the scalar.
+            
             </summary>
-            <param name="command">The command.</param>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="commandType"></param>
             <returns></returns>
         </member>
-        <member name="M:Cedar.Core.Data.Database.ExecuteScalar(System.Data.Common.DbCommand,System.Data.Common.DbTransaction)">
+        <member name="M:Cedar.Core.Data.Database.Query``1(System.String,System.Object,System.Data.Common.DbTransaction,System.Data.CommandType)">
             <summary>
-            Executes the scalar.
+            
             </summary>
-            <param name="command">The command.</param>
-            <param name="transaction">The transaction.</param>
+            <typeparam name="T"></typeparam>
+            <param name="sql"></param>
+            <param name="param"></param>
+            <param name="transaction"></param>
+            <param name="commandType"></param>
             <returns></returns>
         </member>
         <member name="T:Cedar.Core.Data.DatabaseFactories">

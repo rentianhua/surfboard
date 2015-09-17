@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using CCN.Modules.Customer.DataAccess;
+using Cedar.Core.IoC;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 #endregion
@@ -18,6 +19,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public CustomerBC(CustomerDA da)
             : base(da)
         {
+            
         }
 
         /// <summary>

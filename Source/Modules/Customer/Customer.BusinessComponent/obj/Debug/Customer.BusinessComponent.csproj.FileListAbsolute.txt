@@ -93,7 +93,6 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.ServiceLocation.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.dll
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.BusinessEntity.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.BusinessEntity.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.DataAccess.pdb
@@ -111,8 +110,6 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.xml
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\Customer.BusinessComponent.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.pdb
@@ -121,3 +118,12 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.Configuration.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.EntLib.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\MySql.Data.Entity.EF6.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\EntityFramework.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\MySql.Data.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.EntLib.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.EntLib.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\EntityFramework.xml

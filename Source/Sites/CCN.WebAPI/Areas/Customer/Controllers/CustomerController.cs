@@ -20,8 +20,8 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
         // GET: Customer/Customer
         public ActionResult Index()
         {
-            _service.GetALlCustomers();
-            return View();
+            var d = _service.GetALlCustomers();
+            return View(d);
         }
     }
 }

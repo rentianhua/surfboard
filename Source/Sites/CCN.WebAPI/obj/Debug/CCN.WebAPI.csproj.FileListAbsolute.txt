@@ -82,7 +82,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framework.Common.Server.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.dll
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
@@ -94,9 +93,10 @@
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.pdb
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.xml
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Logging.xml
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\MySql.Data.Entity.EF6.dll
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.xml

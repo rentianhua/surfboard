@@ -4,14 +4,14 @@
         <name>Cedar.Core.EntLib</name>
     </assembly>
     <members>
-        <member name="M:Cedar.Core.EntLib.Data.MysqlDatabaseWrapperFactory.GetDatabase(System.String)">
+        <member name="M:Cedar.Core.EntLib.Data.DatabaseWrapperFactory.GetDatabase(System.String)">
             <summary>
             Gets the database.
             </summary>
             <param name="databaseName">Name of the connection string.</param>
             <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
         </member>
-        <member name="M:Cedar.Core.EntLib.Data.MysqlDatabaseWrapperFactory.GetDatabase">
+        <member name="M:Cedar.Core.EntLib.Data.DatabaseWrapperFactory.GetDatabase">
             <summary>
             Gets the database.
             </summary>
