@@ -26,6 +26,7 @@ namespace Cedar.Core.EntLib.SettingSource
         public SimpleFileSettingSource()
             : this(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile)
         {
+
         }
 
         /// <summary>
