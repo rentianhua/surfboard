@@ -163,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Base\Models\" />
+    <Folder Include="Areas\Base\Views\Base\" />
+    <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Models\" />
@@ -172,6 +175,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
+    <Compile Include="Areas\Base\Controllers\BaseController.cs" />
     <Compile Include="Areas\Customer\Controllers\CustomerController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -250,6 +255,7 @@
     <Content Include="ConfigFiles\serviceLocation.config" />
     <Content Include="ConfigFiles\sessionManagement.config" />
     <Content Include="ConfigFiles\settingSource.config" />
+    <Content Include="Areas\Base\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -285,6 +291,20 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
+      <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
+      <Name>Base.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Base\Base.BusinessService\Base.BusinessService.csproj">
+      <Project>{c93baa75-0747-4889-a50b-eb475477b85c}</Project>
+      <Name>Base.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Base\Base.Interface\Base.Interface.csproj">
+      <Project>{a96560b5-831e-489d-a4cc-737f6c35c57a}</Project>
+      <Name>Base.Interface</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

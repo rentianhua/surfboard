@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CCN.Modules.Base.BusinessEntity</name>
+    </assembly>
+    <members>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.CityName">
+            <summary>
+            城市名称
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.Initial">
+            <summary>
+            首字母
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.ProvName">
+            <summary>
+            省份名称
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.Initial">
+            <summary>
+            首字母
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+    </members>
+</doc>

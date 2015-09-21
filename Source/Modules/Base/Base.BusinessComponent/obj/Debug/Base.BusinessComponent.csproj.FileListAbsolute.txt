@@ -1,0 +1,12 @@
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.XML
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.pdb
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\Base.BusinessComponent.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.pdb
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.BusinessComponent.XML
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.BusinessComponent.pdb
+E:\tim\code\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\Base.BusinessComponent.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\code\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.pdb

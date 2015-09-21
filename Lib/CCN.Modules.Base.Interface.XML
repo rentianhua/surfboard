@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CCN.Modules.Base.Interface</name>
+    </assembly>
+    <members>
+        <member name="T:CCN.Modules.Base.Interface.IBaseManagementService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:CCN.Modules.Base.Interface.IBaseManagementService.GetProvList(System.String)">
+            <summary>
+            获取省份
+            </summary>
+            <param name="initial">首字母</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.Interface.IBaseManagementService.GetCityList(System.Int32,System.String)">
+            <summary>
+            根据省份获取城市
+            </summary>
+            <param name="provId">省份ID</param>
+            <param name="initial">首字母</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

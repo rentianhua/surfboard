@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CCN.Modules.Base.BusinessComponent</name>
+    </assembly>
+    <members>
+        <member name="T:CCN.Modules.Base.BusinessComponent.BaseBC">
+            <summary>
+            基础模块
+            </summary>
+        </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.#ctor(CCN.Modules.Base.DataAccess.BaseDA)">
+            <summary>
+            
+            </summary>
+            <param name="da"></param>
+        </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.GetProvList(System.String)">
+            <summary>
+            获取省份
+            </summary>
+            <param name="initial">首字母</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.GetCityList(System.Int32,System.String)">
+            <summary>
+            获取省份
+            </summary>
+            <param name="provId">省份id</param>
+            <param name="initial">首字母</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,12 @@
+E:\tim\surfboard\Lib\CCN.Modules.Base.Interface.XML
+E:\tim\surfboard\Lib\CCN.Modules.Base.Interface.dll
+E:\tim\surfboard\Lib\CCN.Modules.Base.Interface.pdb
+E:\tim\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\Base.Interface.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\CCN.Modules.Base.Interface.dll
+E:\tim\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\CCN.Modules.Base.Interface.pdb
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.Interface.XML
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.Interface.dll
+E:\tim\code\surfboard\Lib\CCN.Modules.Base.Interface.pdb
+E:\tim\code\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\Base.Interface.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\CCN.Modules.Base.Interface.dll
+E:\tim\code\surfboard\Source\Modules\Base\Base.Interface\obj\Debug\CCN.Modules.Base.Interface.pdb
