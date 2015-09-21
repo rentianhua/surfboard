@@ -257,6 +257,7 @@
     <Content Include="ConfigFiles\sessionManagement.config" />
     <Content Include="ConfigFiles\settingSource.config" />
     <Content Include="Areas\Base\Views\web.config" />
+    <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
