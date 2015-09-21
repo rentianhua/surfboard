@@ -22,10 +22,3 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Sm
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Customer.BusinessService.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.pdb
-E:\tim\code\surfboard\Lib\CCN.Modules.Customer.BusinessService.dll.config
-E:\tim\code\surfboard\Lib\CCN.Modules.Customer.BusinessService.xml
-E:\tim\code\surfboard\Lib\CCN.Modules.Customer.BusinessService.dll
-E:\tim\code\surfboard\Lib\CCN.Modules.Customer.BusinessService.pdb
-E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Customer.BusinessService.csprojResolveAssemblyReference.cache
-E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.dll
-E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.pdb
