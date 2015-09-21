@@ -25,6 +25,34 @@ namespace CCN.WebAPI.Areas.Base.Controllers
             return View(provList);
         }
 
+        public ActionResult GetProvList()
+        {
+            var list = _baseservice.GetProvList("");
+            return View(list);
+        }
 
+        public ActionResult GetCityList(int provid)
+        {
+            var list = _baseservice.GetCityList(provid, "");
+            return View(list);
+        }
+
+        public ActionResult GetBeandList()
+        {
+            var list = _baseservice.GetCarBrand("");
+            return View(list);
+        }
+
+        public ActionResult GetSeriesList(int brandid)
+        {
+            var list = _baseservice.GetCarSeries(brandid);
+            return View(list);
+        }
+
+        public ActionResult GetModelList(int seriesid)
+        {
+            var list = _baseservice.GetCarModel(seriesid);
+            return View(list);
+        }
     }
 }

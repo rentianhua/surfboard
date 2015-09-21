@@ -1,10 +1,15 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace CCN.Modules.Base.BusinessEntity
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BaseProvince
+    public class BaseCarBrandModel
     {
         /// <summary>
         /// id
@@ -12,9 +17,9 @@ namespace CCN.Modules.Base.BusinessEntity
         public int Innerid { get; set; }
 
         /// <summary>
-        /// 省份名称
+        /// 品牌名称
         /// </summary>
-        public string ProvName { get; set; }
+        public string BrandName { get; set; }
 
         /// <summary>
         /// 首字母
@@ -30,5 +35,10 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 品牌图标
+        /// </summary>
+        public string Logurl { get; set; }
     }
 }

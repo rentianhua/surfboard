@@ -42,8 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseCarBrandModel.cs" />
+    <Compile Include="BaseCarModelModel.cs" />
     <Compile Include="BaseCity.cs" />
     <Compile Include="BaseProvince.cs" />
+    <Compile Include="BaseCarSeriesModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

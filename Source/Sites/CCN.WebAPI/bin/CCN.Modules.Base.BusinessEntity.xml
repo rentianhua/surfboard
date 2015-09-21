@@ -4,6 +4,106 @@
         <name>CCN.Modules.Base.BusinessEntity</name>
     </assembly>
     <members>
+        <member name="T:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.BrandName">
+            <summary>
+            品牌名称
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.Initial">
+            <summary>
+            首字母
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarBrandModel.Logurl">
+            <summary>
+            品牌图标
+            </summary>
+        </member>
+        <member name="T:CCN.Modules.Base.BusinessEntity.BaseCarModelModel">
+            <summary>
+            车型
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Modelname">
+            <summary>
+            车型名称
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Modelprice">
+            <summary>
+            指导价
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Modelyear">
+            <summary>
+            年款
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Minregyear">
+            <summary>
+            最早注册年份
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Maxregyear">
+            <summary>
+            最晚注册年份
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Liter">
+            <summary>
+            排量
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Geartype">
+            <summary>
+            变速箱类型
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Dischargestandard">
+            <summary>
+            排放标准
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Seriesid">
+            <summary>
+            车系ID
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarModelModel.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
         <member name="P:CCN.Modules.Base.BusinessEntity.BaseCity.Innerid">
             <summary>
             id
@@ -29,6 +129,11 @@
             备注
             </summary>
         </member>
+        <member name="T:CCN.Modules.Base.BusinessEntity.BaseProvince">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.Innerid">
             <summary>
             id
@@ -50,6 +155,41 @@
             </summary>
         </member>
         <member name="P:CCN.Modules.Base.BusinessEntity.BaseProvince.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="T:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel">
+            <summary>
+            车系
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.SeriesName">
+            <summary>
+            车系名称
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.SeriesGroupName">
+            <summary>
+            车系组 进口/国产
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.Brandid">
+            <summary>
+            品牌id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseCarSeriesModel.Remark">
             <summary>
             备注
             </summary>

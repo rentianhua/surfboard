@@ -30,5 +30,26 @@
             <param name="initial">首字母</param>
             <returns></returns>
         </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.GetCarBrand(System.String)">
+            <summary>
+            获取品牌
+            </summary>
+            <param name="initial">首字母</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.GetCarSeries(System.Int32)">
+            <summary>
+            根据品牌id获取车系
+            </summary>
+            <param name="brandId">品牌id</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.BusinessComponent.BaseBC.GetCarModel(System.Int32)">
+            <summary>
+            根据车系ID获取车型
+            </summary>
+            <param name="seriesId">车系id</param>
+            <returns></returns>
+        </member>
     </members>
 </doc>
