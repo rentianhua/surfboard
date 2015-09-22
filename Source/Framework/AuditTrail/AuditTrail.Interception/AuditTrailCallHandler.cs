@@ -2,12 +2,17 @@
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Cedar.AuditTrail.Interception.Configuration;
+using Cedar.Core.IoC;
+using Cedar.Framwork.AuditTrail.BusinessEntity;
+using Cedar.Framwork.AuditTrail.Interface;
 
 namespace Cedar.AuditTrail.Interception
 {
     [ConfigurationElementType(typeof(AuditTrailCallHandlerData))]
     public class AuditTrailCallHandler : ICallHandler
     {
+        private IAuditTrailManagementService auditservice;
+
         /// <summary>
         /// Gets or sets the name of the function.
         /// </summary>
@@ -37,6 +42,7 @@ namespace Cedar.AuditTrail.Interception
         public AuditTrailCallHandler(string functionName)
             : this(functionName, 0)
         {
+            auditservice = ServiceLocatorFactory.GetServiceLocator().GetService<IAuditTrailManagementService>();
         }
 
         /// <summary>
@@ -53,7 +59,25 @@ namespace Cedar.AuditTrail.Interception
                 IMethodReturn methodReturn = getNext()(input, getNext);
                 if (methodReturn != null)
                 {
-                    //todo audit
+                    var data = new AuditLogModel()
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        AuditName = FunctionName,
+                        AuditType = input.MethodBase.Name,
+                        Arguments = input.Arguments,
+                        LogDateTime = DateTime.Now,
+                        Result = methodReturn.ReturnValue,
+                        Target = input.Target,
+                        TransactionID = "TransactionID"
+                    };
+                    try
+                    {
+                        auditservice.InsertAuditLog(data);
+                    }
+                    catch (Exception e)
+                    {
+                        //todo add log
+                    }
                 }
                 result = methodReturn;
             }

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cedar.Framwork.AuditTrail.BusinessEntity</name>
+    </assembly>
+    <members>
+        <member name="T:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.ID">
+            <summary>
+            Get or set ID
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.AuditName">
+            <summary>
+            Get or set AuditName
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.AuditType">
+            <summary>
+            Get or set AuditType
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.TransactionID">
+            <summary>
+            Get or set TransactionID
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.LogDateTime">
+            <summary>
+            Get or set LogDateTime
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.Arguments">
+            <summary>
+            Get or set Arguments
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.Target">
+            <summary>
+            Get or set Target
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel.Result">
+            <summary>
+            Get or set Result
+            </summary>
+        </member>
+    </members>
+</doc>

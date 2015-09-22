@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cedar.Framwork.AuditTrail.DataAccess</name>
+    </assembly>
+    <members>
+        <member name="M:Cedar.Framwork.AuditTrail.DataAccess.AuditTrailDA.InsertAuditLog(Cedar.Framwork.AuditTrail.BusinessEntity.AuditLogModel)">
+            <summary>
+            
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Framwork.AuditTrail.DataAccess.AuditTrailDA.GetAllAuditLogs">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
