@@ -127,3 +127,6 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.EntLib.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\EntityFramework.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\StackExchange.Redis.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\StackExchange.Redis.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\StackExchange.Redis.xml

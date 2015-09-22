@@ -8,3 +8,23 @@
 .vs/CCN/v14/.suo
 
 .vs/Cedar/v14/.suo
+
+*.dll
+
+*.exe
+
+*.targets
+
+*.dll
+
+*.pdb
+
+*.xml
+
+*.dll
+
+*.pdb
+
+*.XML
+
+*.dll

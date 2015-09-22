@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.Server.BaseClasses;
@@ -30,5 +31,66 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             return DataAccess.GetALlCustomers();
         }
+
+        #region 用户模块
+
+        /// <summary>
+        /// 会员注册检查用户名是否被注册
+        /// </summary>
+        /// <param name="username">用户名</param>
+        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        public int CheckUserName(string username)
+        {
+            return DataAccess.CheckUserName(username);
+        }
+
+        /// <summary>
+        /// 会员注册检查手机号是否被注册
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        public int CheckMobile(string mobile)
+        {
+            return DataAccess.CheckMobile(mobile);
+        }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        public int CustRegister(CustModel userInfo)
+        {
+            return DataAccess.CustRegister(userInfo);
+        }
+
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        public CustResult CustLogin(CustLoginInfo loginInfo)
+        {
+            var result = new CustResult();
+            var userInfo = DataAccess.CustLogin(loginInfo);
+            if (userInfo == null)
+            {
+                result.errcode = 401;
+                result.errmsg = "帐户名或登录密码不正确";
+            }
+            else if (userInfo.Status == 2)
+            {
+                result.errcode = 402;
+                result.errmsg = "帐户被冻结";
+            }
+            else
+            {
+                result.errcode = 0;
+                result.errmsg = userInfo;
+            }
+            return result;
+        }
+
+        #endregion
     }
 }

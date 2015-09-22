@@ -176,22 +176,22 @@
             </summary>
             <param name="context"></param>
         </member>
-        <member name="T:Cedar.Framework.Common.Client.ServiceLocatableControllerActivator">
+        <member name="T:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerActivator">
             <summary>
                 A custom controller activator, which uses specified service locator for controller activation.
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableControllerActivator.#ctor(System.String)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerActivator.#ctor(System.String)">
             <summary>
             </summary>
             <param name="serviceLocatorName"></param>
         </member>
-        <member name="P:Cedar.Framework.Common.Client.ServiceLocatableControllerActivator.ServiceLocator">
+        <member name="P:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerActivator.ServiceLocator">
             <summary>
                 Gets the service locator.
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableControllerActivator.Create(System.Web.Routing.RequestContext,System.Type)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerActivator.Create(System.Web.Routing.RequestContext,System.Type)">
             <summary>
                 Creates the specified request context.
             </summary>
@@ -199,21 +199,21 @@
             <param name="controllerType">Type of the controller.</param>
             <returns>The activated controller instance.</returns>
         </member>
-        <member name="T:Cedar.Framework.Common.Client.ServiceLocatableControllerFactory">
+        <member name="T:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerFactory">
             <summary>
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableControllerFactory.#ctor(System.String)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerFactory.#ctor(System.String)">
             <summary>
             </summary>
             <param name="serviceLocatorName"></param>
         </member>
-        <member name="P:Cedar.Framework.Common.Client.ServiceLocatableControllerFactory.ServiceLocator">
+        <member name="P:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerFactory.ServiceLocator">
             <summary>
                 Gets the service locator.
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableControllerFactory.GetControllerInstance(System.Web.Routing.RequestContext,System.Type)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableControllerFactory.GetControllerInstance(System.Web.Routing.RequestContext,System.Type)">
             <summary>
                 Retrieves the controller instance for the specified request context and controller type.
             </summary>
@@ -233,34 +233,118 @@
                 created.
             </exception>
         </member>
-        <member name="T:Cedar.Framework.Common.Client.ServiceLocatableDependencyResolver">
+        <member name="T:Cedar.Framework.Common.Client.MVC.ServiceLocatableDependencyResolver">
             <summary>
                 A custom DependencyResolver which uses ServiceLocator to acticvate service.
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableDependencyResolver.#ctor(System.String)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableDependencyResolver.#ctor(System.String)">
             <summary>
             </summary>
             <param name="serviceLocatorName"></param>
         </member>
-        <member name="P:Cedar.Framework.Common.Client.ServiceLocatableDependencyResolver.ServiceLocator">
+        <member name="P:Cedar.Framework.Common.Client.MVC.ServiceLocatableDependencyResolver.ServiceLocator">
             <summary>
                 Gets the service locator.
             </summary>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableDependencyResolver.GetService(System.Type)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableDependencyResolver.GetService(System.Type)">
             <summary>
                 Gets the service.
             </summary>
             <param name="serviceType">Type of the service.</param>
             <returns>The activated service instance.</returns>
         </member>
-        <member name="M:Cedar.Framework.Common.Client.ServiceLocatableDependencyResolver.GetServices(System.Type)">
+        <member name="M:Cedar.Framework.Common.Client.MVC.ServiceLocatableDependencyResolver.GetServices(System.Type)">
             <summary>
                 Gets the services.
             </summary>
             <param name="serviceType">Type of the service.</param>
             <returns>The activated service instances.</returns>
+        </member>
+        <member name="T:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableHttpControllerActivator">
+            <summary>
+            A custom HttpControllerActivator which uses ServiceLocator to activate HttpController.
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableHttpControllerActivator.ServiceLocator">
+            <summary>
+            Gets the service locator.
+            </summary>
+            <value>
+            The service locator.
+            </value>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableHttpControllerActivator.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ServiceLocatableHttpControllerActivator /> class.
+            </summary>
+            <param name="serviceLocatorName">Name of the service locator.</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableHttpControllerActivator.#ctor(Cedar.Core.IoC.IServiceLocator)">
+            <summary>
+            Initializes a new instance of the ServiceLocatableHttpControllerActivator /> class.
+            </summary>
+            <param name="serviceLocator">The service locator.</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableHttpControllerActivator.Create(System.Net.Http.HttpRequestMessage,System.Web.Http.Controllers.HttpControllerDescriptor,System.Type)">
+            <summary>
+            Creates the specified request.
+            </summary>
+            <param name="request">The request.</param>
+            <param name="controllerDescriptor">The controller descriptor.</param>
+            <param name="controllerType">Type of the controller.</param>
+            <returns>The activated HttpController.</returns>
+        </member>
+        <member name="T:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver">
+            <summary>
+            A custom DependencyResolver which uses ServiceLocator to acticvate service.
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.ServiceLocator">
+            <summary>
+            Gets the service locator.
+            </summary>
+            <value>
+            The service locator.
+            </value>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ServiceLocatableDependencyResolver class.
+            </summary>
+            <param name="serviceLocatorName">Name of the service locator.</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.#ctor(Cedar.Core.IoC.IServiceLocator)">
+            <summary>
+            Initializes a new instance of the ServiceLocatableDependencyResolver class.
+            </summary>
+            <param name="serviceLocator">The service locator.</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.BeginScope">
+            <summary>
+            Begins the scope.
+            </summary>
+            <returns>The created DependencyScope.</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.GetService(System.Type)">
+            <summary>
+            Gets the service.
+            </summary>
+            <param name="serviceType">Type of the service.</param>
+            <returns>The activated service instance.</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.GetServices(System.Type)">
+            <summary>
+            Gets the services.
+            </summary>
+            <param name="serviceType">Type of the service.</param>
+            <returns>The activated service instances.</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.Client.WebAPI.ServiceLocatableDependencyResolver.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
         </member>
     </members>
 </doc>

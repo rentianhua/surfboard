@@ -38,20 +38,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.AuditTrail.Interception">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
-    </Reference>
-    <Reference Include="Cedar.Core">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Cedar.Core.EntLib">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Framework.Common">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common.Client">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common.Server">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.BusinessComponent">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessComponent.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.DataAccess">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
@@ -84,19 +84,66 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AuditTrail\AuditTrailUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
+    <Compile Include="TestService\ITestService.cs" />
+    <Compile Include="TestService\TestService.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="OrderedTest1.orderedtest">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\Core\Core\Core.csproj">
+      <Project>{61b5e817-c283-43d7-ae07-73b9e6110eac}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Core\EntLib\EntLib.csproj">
+      <Project>{54fabf0c-cbed-450c-9cba-2b1846571e10}</Project>
+      <Name>EntLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\AuditTrail.BusinessEntity.csproj">
+      <Project>{9EFED8E4-3134-4079-BFA0-193BFEAA20B1}</Project>
+      <Name>AuditTrail.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.BusinessService\AuditTrail.BusinessService.csproj">
+      <Project>{72f1d17b-a3ee-48e6-982e-401aeeb85c09}</Project>
+      <Name>AuditTrail.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.Interception\AuditTrail.Interception.csproj">
+      <Project>{7d7edb88-c49d-417e-bce2-8a7b5c8e0093}</Project>
+      <Name>AuditTrail.Interception</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.Interface\AuditTrail.Interface.csproj">
+      <Project>{d82fb661-0d74-4149-a255-586f27a60503}</Project>
+      <Name>AuditTrail.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\Common\Framework.Common.Client\Framework.Common.Client.csproj">
+      <Project>{bac63da1-441e-40e9-90b0-8ab7992009f7}</Project>
+      <Name>Framework.Common.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\Common\Framework.Common.Server\Framework.Common.Server.csproj">
+      <Project>{6eaac468-51bf-4624-9ee3-6e46062efd71}</Project>
+      <Name>Framework.Common.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\Common\Framework.Common\Framework.Common.csproj">
+      <Project>{85d76861-9950-44bd-8d4e-78b74245ca88}</Project>
+      <Name>Framework.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

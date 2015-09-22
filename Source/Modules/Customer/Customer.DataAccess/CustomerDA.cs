@@ -21,7 +21,7 @@ namespace CCN.Modules.Customer.DataAccess
         public List<dynamic> GetALlCustomers()
         {
             var factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
-            var d = factoy.Query("select * from base_carbrand where id=@id",new {id=""}).ToList();
+            var d = factoy.Query("select * from base_carbrand").ToList();
             return d;
         }
     }

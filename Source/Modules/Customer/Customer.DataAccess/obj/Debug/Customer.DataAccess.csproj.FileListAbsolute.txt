@@ -107,3 +107,6 @@ Y:\GitHub\AgileMVC\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Core.xm
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Core.EntLib.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\EntityFramework.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\StackExchange.Redis.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\StackExchange.Redis.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\StackExchange.Redis.xml
