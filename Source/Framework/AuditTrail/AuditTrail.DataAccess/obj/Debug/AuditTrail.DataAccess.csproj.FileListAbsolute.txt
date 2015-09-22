@@ -29,7 +29,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\EntityFramework.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\MySql.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Core.EntLib.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Core.EntLib.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Newtonsoft.Json.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Common.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Microsoft.Practices.Unity.Interception.xml

@@ -32,7 +32,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\EntityFramework.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\MySql.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Cedar.Core.EntLib.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Cedar.Core.EntLib.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Newtonsoft.Json.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Common.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.xml
@@ -41,6 +40,3 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\StackExchange.Redis.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\StackExchange.Redis.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\EntityFramework.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Dapper.dll
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessComponent\bin\Dapper.xml

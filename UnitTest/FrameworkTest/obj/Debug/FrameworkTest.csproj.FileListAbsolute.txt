@@ -116,8 +116,6 @@ Y:\GitHub\AgileMVC\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.Enterpri
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.Mvc.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.xml
-\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
-\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.Razor.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.WebPages.Razor.xml
@@ -126,8 +124,6 @@ Y:\GitHub\AgileMVC\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.Enterpri
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\MySql.Data.Entity.EF6.dll
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Dapper.dll
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\EntityFramework.dll
-\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Dapper.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\EntityFramework.xml
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Cedar.Framework.Common.Server.dll
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\Cedar.Framwork.AuditTrail.BusinessService.dll
@@ -156,3 +152,4 @@ Y:\GitHub\AgileMVC\UnitTest\FrameworkTest\bin\Debug\Microsoft.Practices.Enterpri
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\StackExchange.Redis.dll
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\StackExchange.Redis.pdb
 \\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\StackExchange.Redis.xml
+\\Mac\Home\GitHub\surfboard\UnitTest\FrameworkTest\bin\Debug\OrderedTest1.orderedtest

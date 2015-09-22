@@ -38,14 +38,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.Core">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Framework.Common">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common.Client">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common.Server">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.BusinessComponent">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessComponent.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.DataAccess">
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.DataAccess.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
