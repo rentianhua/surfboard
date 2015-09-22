@@ -22,11 +22,11 @@ namespace Cedar.Core.EntLib.Data
             {
                 EndPoints =
                 {
-                    new DnsEndPoint("172.16.0.91",6379)
+                    new DnsEndPoint("172.16.0.204",6379)
                 },
                 KeepAlive = 180,
                 //Password = password,
-                DefaultVersion = new Version("2.8.5"),
+                //DefaultVersion = new Version("2.8.5"),
                 // Needed for cache clear
                 AllowAdmin = true
             };
