@@ -1,0 +1,934 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cedar.Core.EntLib</name>
+    </assembly>
+    <members>
+        <member name="M:Cedar.Core.EntLib.Data.DatabaseWrapperFactory.GetDatabase(System.String)">
+            <summary>
+            Gets the database.
+            </summary>
+            <param name="databaseName">Name of the connection string.</param>
+            <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.Data.DatabaseWrapperFactory.GetDatabase">
+            <summary>
+            Gets the database.
+            </summary>
+            <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.AutoInterception">
+            <summary>
+            A <see cref="T:Microsoft.Practices.Unity.UnityContainerExtension" /> for automatic interception.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.AutoInterception.RegisterDefaultInterceptor(Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor)">
+            <summary>
+            Registers the default interceptor.
+            </summary>
+            <param name="interceptor">The interceptor.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.AutoInterception.Initialize">
+            <summary>
+            Initializes this instance.
+            </summary>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.AutoInterceptionStrategy">
+            <summary>
+            This <see cref="T:Microsoft.Practices.ObjectBuilder2.BuilderStrategy" /> is used to automatically register interceptor.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.AutoInterceptionStrategy.PreBuildUp(Microsoft.Practices.ObjectBuilder2.IBuilderContext)">
+            <summary>
+            Pres the build up.
+            </summary>
+            <param name="context">The <see cref="T:Microsoft.Practices.ObjectBuilder2.IBuilderContext" />.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.AutoInterceptionStrategy.CanIntercept(Microsoft.Practices.ObjectBuilder2.IBuilderContext)">
+            <summary>
+            Determines whether this instance can intercept the specified context.
+            </summary>
+            <param name="context">The context.</param>
+            <returns>
+              <c>true</c> if this instance can intercept the specified context; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.AutoInterceptionStrategy.FindInterceptionPolicy``1(Microsoft.Practices.ObjectBuilder2.IBuilderContext,System.Boolean)">
+            <summary>
+            Get current instance's InterceptionPolicy
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="context"></param>
+            <param name="probeOriginalKey"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.AutoInterceptorPolicy.Interceptor">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" />.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.FixedAutoInterceptorPolicy.Interceptor">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" />.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.FixedAutoInterceptorPolicy.#ctor(Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor)">
+            <summary>
+            
+            </summary>
+            <param name="interceptor"></param>
+        </member>
+        <member name="F:Cedar.Core.EntLib.IoC.ResolvedAutoInterceptorPolicy.InterceptorResolver">
+            <summary>
+            A delegate to resove the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" /> based on the given <see cref="T:Microsoft.Practices.ObjectBuilder2.NamedTypeBuildKey" />.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.ResolvedAutoInterceptorPolicy.BuildKey">
+            <summary>
+            Gets the build key.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.ResolvedAutoInterceptorPolicy.Interceptor">
+            <summary>
+            Gets the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" />.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ResolvedAutoInterceptorPolicy.#ctor(System.Func{Microsoft.Practices.ObjectBuilder2.NamedTypeBuildKey,Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor},Microsoft.Practices.ObjectBuilder2.NamedTypeBuildKey)">
+            <summary>
+            
+            </summary>
+            <param name="interceptorResolver"></param>
+            <param name="buildKey"></param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptionConfigurationExtension.AddExtensions(Microsoft.Practices.Unity.Configuration.SectionExtensionContext)">
+            <summary>
+            Adds the extensions.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptionElement">
+            <summary>
+            The <see cref="T:Microsoft.Practices.Unity.Configuration.ContainerConfiguringElement" /> for automatic interception extension.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptionElement.Interceptor">
+            <summary>
+            Gets or sets the interceptor.
+            </summary>
+            <value>
+            The interceptor.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptionElement.ConfigureContainer(Microsoft.Practices.Unity.IUnityContainer)">
+            <summary>
+            Configures the container.
+            </summary>
+            <param name="container">The container.</param>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptorElement">
+            <summary>
+            The interceptor based configuration element.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptorElement.Injection">
+            <summary>
+            Gets the injection.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.Configuration.AutoInterceptorElement.TypeName">
+            <summary>
+            Gets or sets the name of the type.
+            </summary>
+            <value>
+            The name of the type.
+            </value>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.Configuration.UnityContainerServiceLocatorData">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.Configuration.UnityContainerServiceLocatorData.ContainerName">
+            <summary>
+                Gets or sets the name of the container.
+            </summary>
+            <value>
+                The name of the container.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.Configuration.UnityContainerServiceLocatorData.CreateServiceLocator">
+            <summary>
+                Creates the service locator.
+            </summary>
+            <returns>
+                The created service locator.
+            </returns>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.ServiceLocatorBase">
+            <summary>
+                All of concrete service locator classes should be derived from this abstract class.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetService(System.Type,System.String)">
+            <summary>
+                Gets the service based on the specified registered type and optional registration name.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="name">The service type registration name.</param>
+            <returns>
+                The service instance activated.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetAllServices(System.Type)">
+            <summary>
+                Gets all services based on the specified registered type.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                The list of acticated service instances.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetAllKeys(System.Type)">
+            <summary>
+                Gets all keys (service type registrtion name) for the specified registered type.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                The key list.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.IsRegistered(System.Type)">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.IsRegistered(System.Type,System.Type)">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="mappedToType">The concrete type to which the registered type is mapped.</param>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.IsRegistered``1">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <typeparam name="T">The service type registered.</typeparam>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.Register(System.Type,System.Type,System.String,System.Boolean,Cedar.Core.IoC.Lifetime)">
+            <summary>
+                Perform service type registration.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="mappedToType">The concrete type to which the registered type is mapped.</param>
+            <param name="name">The service type registration name.</param>
+            <param name="isDefault">if set to <c>true</c> [is default].</param>
+            <param name="lifetime">The lifetime.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.Register``1(System.Func{``0},System.String,System.Boolean,Cedar.Core.IoC.Lifetime)">
+            <summary>
+                Perform service type registration.
+            </summary>
+            <typeparam name="T">The service type registered.</typeparam>
+            <param name="creator">The delegate to create the service instance.</param>
+            <param name="name">The service type registration name.</param>
+            <param name="isDefault">A bool value indicating whether it is a default service registration.</param>
+            <param name="lifetime">The lifetime.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetService``1(System.String)">
+            <summary>
+                Gets the service based on the specified registered type and optional registration name.
+            </summary>
+            <typeparam name="T">The service type registered.</typeparam>
+            <param name="name">The service type registration name.</param>
+            <returns>
+                The service instance activated.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetAllServices``1">
+            <summary>
+                Gets all services based on the specified registered type.
+            </summary>
+            <typeparam name="T">The service type registered.</typeparam>
+            <returns>
+                The list of activated service instance.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.Register``2(System.String,System.Boolean,Cedar.Core.IoC.Lifetime)">
+            <summary>
+                Perform service type registration.
+            </summary>
+            <typeparam name="TFrom">The service type registered.</typeparam>
+            <typeparam name="TTo">The concrete type to which the registered type is mapped.</typeparam>
+            <param name="name">The service type registration name.</param>
+            <param name="isDefault">if set to <c>true</c> [is default].</param>
+            <param name="lifetime">The lifetime.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.GetAllKeys``1">
+            <summary>
+                Gets all keys.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns>
+                The key list.
+            </returns>
+            Gets all keys (service type registrtion name) for the specified registered type.
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.ServiceLocatorBase.IsRegistered``2">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <typeparam name="TFrom">The service type registered.</typeparam>
+            <typeparam name="TTo">The concrete type to which the registered type is mapped.</typeparam>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator">
+            <summary>
+                The unity based service locator.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.#ctor(Microsoft.Practices.Unity.IUnityContainer)">
+            <summary>
+            </summary>
+            <param name="unityContainer"></param>
+        </member>
+        <member name="P:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.UnityContainer">
+            <summary>
+                Gets the unity container.
+            </summary>
+            <value>
+                The unity container.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.GetService(System.Type,System.String)">
+            <summary>
+                Gets the service based on the specified registered type and optional registration name.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="name">The service type registration name.</param>
+            <returns>
+                The service instance activated.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.GetAllServices(System.Type)">
+            <summary>
+                Gets all services based on the specified registered type.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                The list of acticated service instances.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.GetAllKeys(System.Type)">
+            <summary>
+                Gets all keys (service type registrtion name) for the specified registered type.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                The key list.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.IsRegistered(System.Type)">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.IsRegistered(System.Type,System.Type)">
+            <summary>
+                Determines whether the specified registered type is registered.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="mappedToType">The concrete type to which the registered type is mapped.</param>
+            <returns>
+                <c>true</c> if the specified registered type is registered; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.Register(System.Type,System.Type,System.String,System.Boolean,Cedar.Core.IoC.Lifetime)">
+            <summary>
+                Perform service type registration.
+            </summary>
+            <param name="registeredType">The service type registered.</param>
+            <param name="mappedToType">The concrete type to which the registered type is mapped.</param>
+            <param name="name">The service type registration name.</param>
+            <param name="isDefault">if set to <c>true</c> [is default].</param>
+            <param name="lifetime">The lifetime.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.IoC.UnityContainerServiceLocator.Register``1(System.Func{``0},System.String,System.Boolean,Cedar.Core.IoC.Lifetime)">
+            <summary>
+                Registers the specified new expression.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="creator">The new expression.</param>
+            <param name="name">The name.</param>
+            <param name="isDefault">if set to <c>true</c> [is default].</param>
+            <param name="lifetime">The lifetime.</param>
+        </member>
+        <member name="T:Cedar.Core.EntLib.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ApplicationNameNotExists">
+            <summary>
+              Looks up a localized string similar to  The application did not exist..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.CompressedMessageSizeCounterHelpResource">
+            <summary>
+              Looks up a localized string similar to  The total size of compressed message..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.CompressionElapsedTimeCounterHelpResource">
+            <summary>
+              Looks up a localized string similar to  The compression duration..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ConcurrentUpdated">
+            <summary>
+              Looks up a localized string similar to  The record has been updated by others..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ConfiguraitonElementNotExists">
+            <summary>
+              Looks up a localized string similar to  The configuration element whose name is &quot;{0}&quot; does not exist..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.CounterCategoryHelpResourceName">
+            <summary>
+              Looks up a localized string similar to  The performance counters for iConnect.Core..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionAppContextSettingsNotExists">
+            <summary>
+              Looks up a localized string similar to  Cannot locate the &quot;{0}&quot; configuration section..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionArgumentMustNotBeEmpty">
+            <summary>
+              Looks up a localized string similar to  The provided string argument must not be empty..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotChangeReadonlyContextItem">
+            <summary>
+              Looks up a localized string similar to  Cannot change or override the readonly ContextItem..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotLocateReadableProperty">
+            <summary>
+              Looks up a localized string similar to  Cannot not find a readable &quot;{0}&quot; property for the type &quot;{1}&quot;.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotLocateWriterableProperty">
+            <summary>
+              Looks up a localized string similar to  Cannot not find a writable &quot;{0}&quot; property for the type &quot;{1}&quot;.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotModifyReadonlyProperties">
+            <summary>
+              Looks up a localized string similar to  Cannot modify the extended properties of the readonly ContextItem..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotModifyReadonlyValue">
+            <summary>
+              Looks up a localized string similar to  Cannot modify the value of the readonly ContextItem..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCannotResolveTypeName">
+            <summary>
+              Looks up a localized string similar to  Cannot resolve the assembly qualified type name &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionConfigurationLoadFileNotFound">
+            <summary>
+              Looks up a localized string similar to The configuration file {0} is not found..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionConfigurationLoadFileNotFound1">
+            <summary>
+              Looks up a localized string similar to  ExceptionConfigurationLoadFileNotFound=The configuration file {0} could not be found..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionConfigurationSectionNameAttributeNotExists">
+            <summary>
+              Looks up a localized string similar to  The configuraiton section name is not specified by decorating the type &quot;{0}&quot; with a ConfigurationSectionNameAttribute..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionContextCannotBeSerialized">
+            <summary>
+              Looks up a localized string similar to  One or more current ContextItem cannot be serialized..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCultureNotExists">
+            <summary>
+              Looks up a localized string similar to  The entry with the culture &quot;{0}&quot; does not exist..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionCustomMessageCompressorNotExists">
+            <summary>
+              Looks up a localized string similar to  You must specify the configuraton name of custom MessageCompressor when you select Custom MessageCompressor..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDatabaseDataTypeDoesNotHaveRequiredConstructor">
+            <summary>
+              Looks up a localized string similar to The database {0}&apos;s data type does not have required constructor..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDatabaseDataTypeDoesNotInheritFromDatabaseData">
+            <summary>
+              Looks up a localized string similar to The database {0}&apos;s data type does not inherit from database data..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDataPropertyDuplicateName">
+            <summary>
+              Looks up a localized string similar to  The same property name &quot;{0}&quot; is configurated in the entity..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDefaultDatabaseNotExists">
+            <summary>
+              Looks up a localized string similar to There is no default database..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDefaultServiceLocatorNotExists">
+            <summary>
+              Looks up a localized string similar to  The default service locator cannot be activated..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDepedentFileNameNotInitialized">
+            <summary>
+              Looks up a localized string similar to  The DefaultCacheStore&apos;s expiration mode is specified &quot;FileDepedency&quot;, but the &quot;DependentFileName&quot; is not specified..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDuplicateCulture">
+            <summary>
+              Looks up a localized string similar to  The entry with the culture &quot;{0}&quot; exists..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionDuplicateNeutralEntry">
+            <summary>
+              Looks up a localized string similar to  There must be only one culture neutral entry..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionEmptyArrayOrList">
+            <summary>
+              Looks up a localized string similar to  The given list or array cannot be null or empty..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionEntryAddedIntoAnotherSet">
+            <summary>
+              Looks up a localized string similar to  The given entry has been added into another set..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionEntryAddedIntoSet">
+            <summary>
+              Looks up a localized string similar to  The given entry has been added into the set..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionEntryNotAddedIntoSet">
+            <summary>
+              Looks up a localized string similar to  The given entry is not added into the set..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionExpiredTimeNotValidTimeSpan">
+            <summary>
+              Looks up a localized string similar to  The specified expired time can not be parsed as a valid TimeSpan..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidBackupLocator">
+            <summary>
+              Looks up a localized string similar to  The backup ContextLocator must not be &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidCast">
+            <summary>
+              Looks up a localized string similar to  Invalid cast from type &quot;{0}&quot; to type &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidCultureName">
+            <summary>
+              Looks up a localized string similar to  Culture name &quot;{0}&quot; is invalid..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidDatabaseName">
+            <summary>
+              Looks up a localized string similar to  Cannot locate the database of &quot;{0}&quot; for the configuration..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidExtendedFormatArguments">
+            <summary>
+              Looks up a localized string similar to  The format length is invalid..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidPageIndex">
+            <summary>
+              Looks up a localized string similar to  The valid page index must be a positive integer..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidPageSize">
+            <summary>
+              Looks up a localized string similar to  The valid page size must be a positive integer..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidThreadToCreateContextScope">
+            <summary>
+              Looks up a localized string similar to  The ApplicationContextScope cannot be created in the same thread in which the context items are cloned..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionInvalidTypeAssemblyQualifiedName">
+            <summary>
+              Looks up a localized string similar to  Cannot load the type &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionLocalizationFailed">
+            <summary>
+              Looks up a localized string similar to  Cannot retrieve property &apos;{0}&apos; because localization failed.  Type &apos;{1}&apos; is not public or does not contain a public static string property with the name &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionMessageEntryNotExists">
+            <summary>
+              Looks up a localized string similar to  The message entry &quot;{0}&quot; cannot be found from the category &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionMethodMustBeImplementedBySubclasses">
+            <summary>
+              Looks up a localized string similar to  The method just be only implemented in sub classes..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionMissingConfigSection">
+            <summary>
+              Looks up a localized string similar to  Cannot locate the configuration section of &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionMissingConfigurationElementTypeAttribute">
+            <summary>
+              Looks up a localized string similar to  The configuration element type is not mapped to the type &quot;{0}&quot; by applying ConfigurationElementTypeAttribute..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionMustContainInterceptionExtension">
+            <summary>
+              Looks up a localized string similar to  Container does not have the interception extension..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNeutralEntryNotExists">
+            <summary>
+              Looks up a localized string similar to  There is no culture neutral entry..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNoConfigurationElementTypeAttribute">
+            <summary>
+              Looks up a localized string similar to There is no {0} configuration ElementTypeAttribute found..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNoConnectionStringSection">
+            <summary>
+              Looks up a localized string similar to There is no connection string section..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNoDatabaseDefined">
+            <summary>
+              Looks up a localized string similar to There is no database named {0} found..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNoProviderDefinedForConnectionString">
+            <summary>
+              Looks up a localized string similar to There is no provider defined for connection {0}..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotApplyConfigurationElementAttribute">
+            <summary>
+              Looks up a localized string similar to  The configuration element type is not specified by the ConfigurationElementAttribute applied to the type &quot;{0}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotAssignableFrom">
+            <summary>
+              Looks up a localized string similar to  The PropertyAccessor&apos;s type cannot be assignable fromThe given object&apos;s type..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotDeployComponent">
+            <summary>
+              Looks up a localized string similar to  No &quot;{0}&quot; can be resolved from deployed assemblies..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotEventHandler">
+            <summary>
+              Looks up a localized string similar to  The delegate {0} is not a valid event handler..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotSoapMessage">
+            <summary>
+              Looks up a localized string similar to  The CompressionEndpointBehavice can only be applied SOAP based endpoint ..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionNotSpeciifedConfigSection">
+            <summary>
+              Looks up a localized string similar to  The  type of the configuration section of &quot;{0}&quot; is not &quot;1&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionOnlyInstanceInterceptorBeSupported">
+            <summary>
+              Looks up a localized string similar to OnlyInstanceInterceptorBeSupported.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionPropertyNotExists">
+            <summary>
+              Looks up a localized string similar to  The property &quot;{0}&quot; is not defined in the type &quot;{1}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionPropertyNotReadable">
+            <summary>
+              Looks up a localized string similar to  The property &quot;{0}&quot; of the type &quot;{1}&quot; is not readable..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionPropertyNotWritable">
+            <summary>
+              Looks up a localized string similar to  The property &quot;{0}&quot; of the type &quot;{1}&quot; is not writable..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionRangeDay">
+            <summary>
+              Looks up a localized string similar to  Day of Week in Extended Format out of range..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionRangeHour">
+            <summary>
+              Looks up a localized string similar to  Hour in Extended Format out of range..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionRangeMinute">
+            <summary>
+              Looks up a localized string similar to  Minutes in Extended Format out of range..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionRangeMonth">
+            <summary>
+              Looks up a localized string similar to  Month of Year in Extended Format out of range..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionSequenceNoElement">
+            <summary>
+              Looks up a localized string similar to  There is no element in the sequence..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionServiceLocatorNotExists">
+            <summary>
+              Looks up a localized string similar to  The service locator &quot;{0}&quot; is not configured..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionSettingsNotExists">
+            <summary>
+              Looks up a localized string similar to  The configuration section &quot;{0}&quot; does not exist..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionSettingSourceNotExists">
+            <summary>
+              Looks up a localized string similar to  The setting source &quot;{0}&quot; is not configured..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTransformContextNotInitialized">
+            <summary>
+              Looks up a localized string similar to  TransformContext is not initialized..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTransientCallInterceptOnlyForNonGenericInterface">
+            <summary>
+              Looks up a localized string similar to  Transient call interception can only be used for non-generic interface..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTranslationEntryNotExists">
+            <summary>
+              Looks up a localized string similar to  The message entry &quot;{0}&quot; (culture=&quot;{1}&quot;) cannot be found from the category &quot;{2}&quot;..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTypeForCustomServiceLocatorMustDeriveFrom">
+            <summary>
+              Looks up a localized string similar to  The Custom Service Locator &apos;{0}&apos; with Type &apos;{1}&apos; must derive from IServiceLocator..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTypeHasNoContructor">
+            <summary>
+              Looks up a localized string similar to  The type &quot;{0}&quot; does not have default construtor..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTypeofContextCannotBeNull">
+            <summary>
+              Looks up a localized string similar to  The Type of the service location context cannot be be..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionTypesAreNotAssignable">
+            <summary>
+              Looks up a localized string similar to  The type {1} cannot be assigned to variables of type {0}..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionUnityConainerNotExists">
+            <summary>
+              Looks up a localized string similar to ExceptionUnityConainer {0} NotExists.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionUnityConfigSectionNotExists">
+            <summary>
+              Looks up a localized string similar to  Cannot locate the unity configuration section for the current configuration source..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionUnityContainerNotExists">
+            <summary>
+              Looks up a localized string similar to  The unity container &quot;{0}&quot; specified does not exist..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.ExceptionUnknownType">
+            <summary>
+              Looks up a localized string similar to  &lt;unknown&gt;.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Properties.Resources.InterceptionNotSupportedForTransientCall">
+            <summary>
+              Looks up a localized string similar to  The type {0} is not interceptable for Transient Call..
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.SettingSource.ConfigurationFileSettingSource.ConfigurationSource">
+            <summary>
+            Gets the configuration source.
+            </summary>
+            <value>
+            The configuration source.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.ConfigurationFileSettingSource.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cedar.Core.SettingSource.ConfigurationFileSettingSource" /> class.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.ConfigurationFileSettingSource.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cedar.Core.SettingSource.ConfigurationFileSettingSource" /> class.
+            </summary>
+            <param name="filePath">The file path.</param>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.ConfigurationFileSettingSource.GetConfigurationSection(System.String)">
+            <summary>
+            Gets the configuration section based on specified section name.
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <returns>
+            The target configuration section.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.ConfigurationFileSettingSource.SetAsCurrentSettingsSource">
+            <summary>
+            Sets as current settings source.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.SettingSource.Configuration.ConfigurationFileSettingSourceData.FilePath">
+            <summary>
+            Gets or sets the file path.
+            </summary>
+            <value>
+            The file path.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.Configuration.ConfigurationFileSettingSourceData.CreateSettingSource">
+            <summary>
+            Creates the setting source.
+            </summary>
+            <returns>
+            The created setting source.
+            </returns>
+        </member>
+        <member name="T:Cedar.Core.EntLib.SettingSource.Configuration.SimpleFileSettingSourceData">
+            <summary>
+                The simple configuration file based setting source.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.SettingSource.Configuration.SimpleFileSettingSourceData.FilePath">
+            <summary>
+                Gets or sets the file path.
+            </summary>
+            <value>
+                The file path.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.Configuration.SimpleFileSettingSourceData.CreateSettingSource">
+            <summary>
+                Creates the setting source.
+            </summary>
+            <returns>
+                The created setting source.
+            </returns>
+        </member>
+        <member name="T:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource">
+            <summary>
+                A simple file based Setting Source.
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="configurationFilePath"></param>
+        </member>
+        <member name="P:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.Configuration">
+            <summary>
+                Gets the configuration.
+            </summary>
+            <value>
+                The configuration.
+            </value>
+        </member>
+        <member name="P:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.ConfigurationFilePath">
+            <summary>
+                Gets the configuration file path.
+            </summary>
+            <value>
+                The configuration file path.
+            </value>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.GetConfigurationSection(System.String)">
+            <summary>
+                Gets the configuration section based on specified section name.
+            </summary>
+            <param name="sectionName">Name of the section.</param>
+            <returns>
+                The target configuration section.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.EntLib.SettingSource.SimpleFileSettingSource.SetAsCurrentSettingsSource">
+            <summary>
+                Sets as current settings source.
+            </summary>
+        </member>
+    </members>
+</doc>

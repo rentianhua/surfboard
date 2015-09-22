@@ -1,0 +1,6 @@
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.XML
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.dll
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.pdb
+\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\AuditTrail.Interface.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.dll
+\\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.pdb

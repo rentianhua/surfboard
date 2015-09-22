@@ -25,7 +25,7 @@ namespace CCN.Modules.Customer.BusinessService
         /// <summary>
         /// </summary>
         /// <returns></returns>
-        [AuditTrailCallHandler("GetALlCustomers")]
+        [AuditTrailCallHandler("CustomerManagementService.GetALlCustomers")]
         public List<dynamic> GetALlCustomers()
         {
             return BusinessComponent.GetALlCustomers();

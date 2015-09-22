@@ -34,6 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cedar.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -81,7 +89,16 @@
     <Compile Include="Configuration\AuditTrailCallHandlerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AuditTrail.BusinessEntity\AuditTrail.BusinessEntity.csproj">
+      <Project>{9efed8e4-3134-4079-bfa0-193bfeaa20b1}</Project>
+      <Name>AuditTrail.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AuditTrail.Interface\AuditTrail.Interface.csproj">
+      <Project>{d82fb661-0d74-4149-a255-586f27a60503}</Project>
+      <Name>AuditTrail.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
