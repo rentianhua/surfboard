@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\BaseController.cs" />
+    <Compile Include="ApiControllers\CustomerController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -306,6 +307,10 @@
     <ProjectReference Include="..\..\Modules\Base\Base.Interface\Base.Interface.csproj">
       <Project>{a96560b5-831e-489d-a4cc-737f6c35c57a}</Project>
       <Name>Base.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Customer\Customer.BusinessEntity\Customer.BusinessEntity.csproj">
+      <Project>{1ebb63b5-19b8-44d6-94b2-04ceaf8754aa}</Project>
+      <Name>Customer.BusinessEntity</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

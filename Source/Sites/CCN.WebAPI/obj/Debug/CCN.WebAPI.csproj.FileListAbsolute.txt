@@ -119,6 +119,7 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Antlr3.Runtime.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessEntity.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessService.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.Interface.dll
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessEntity.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.Unity.Configuration.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.Unity.dll
@@ -147,6 +148,7 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.Enterprise
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\MySql.Data.Entity.EF6.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.dll
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
@@ -159,6 +161,10 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessServi
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessService.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.Interface.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.Interface.xml
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessEntity.xml
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessService.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.Interface.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Core.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Core.EntLib.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framework.Common.pdb
@@ -189,6 +195,8 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.xml

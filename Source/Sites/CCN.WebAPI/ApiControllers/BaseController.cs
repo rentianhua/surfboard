@@ -30,9 +30,9 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="initial"></param>
         /// <returns></returns>
-        [Route("GetProvList/{initial}")]
+        [Route("GetProvList")]
         [HttpGet]
-        public IEnumerable<BaseProvince> GetProvList(string initial)
+        public IEnumerable<BaseProvince> GetProvList(string initial = null)
         {
             return _baseservice.GetProvList(initial);
         }
@@ -43,9 +43,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="provid">省份id</param>
         /// <param name="initial">首字母</param>
         /// <returns></returns>
-        [Route("GetCityList/{provid}/{initial}")]
+        [Route("GetCityList/{provid}")]
         [HttpGet]
-        public IEnumerable<BaseCity> GetCityList(int provid, string initial)
+        public IEnumerable<BaseCity> GetCityList(int provid, string initial = null)
         {
             return _baseservice.GetCityList(provid, initial);
         }
@@ -59,9 +59,9 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="initial">首字母</param>
         /// <returns></returns>
-        [Route("GetCarBrand/{initial}")]
+        [Route("GetCarBrand")]
         [HttpGet]
-        public IEnumerable<BaseCarBrandModel> GetCarBrand(string initial)
+        public IEnumerable<BaseCarBrandModel> GetCarBrand(string initial = null)
         {
             return _baseservice.GetCarBrand(initial);
         }
