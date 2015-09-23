@@ -26,6 +26,7 @@ Y:\GitHub\AgileMVC\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
+<<<<<<< Updated upstream
 E:\tim\code\surfboard\Lib\Cedar.Core.xml
 E:\tim\code\surfboard\Lib\Cedar.Core.dll
 E:\tim\code\surfboard\Lib\Cedar.Core.pdb
@@ -34,3 +35,6 @@ E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.Properties.Resources
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
+=======
+\\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache
+>>>>>>> Stashed changes
