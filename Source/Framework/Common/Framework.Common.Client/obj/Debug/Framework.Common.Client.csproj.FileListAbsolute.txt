@@ -26,3 +26,10 @@ Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Client.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Framework.Common.Client.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.pdb
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Client.dll.config
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Client.XML
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Client.dll
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Client.pdb
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Framework.Common.Client.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.dll
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.pdb
