@@ -8,3 +8,4 @@ E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\bin\
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\bin\Cedar.Framwork.AuditTrail.BusinessEntity.pdb
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\obj\Debug\Cedar.Framwork.AuditTrail.BusinessEntity.dll
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\obj\Debug\Cedar.Framwork.AuditTrail.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessEntity\obj\Debug\AuditTrail.BusinessEntity.csprojResolveAssemblyReference.cache

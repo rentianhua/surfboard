@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
-using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Car.DataAccess
@@ -22,8 +18,7 @@ namespace CCN.Modules.Car.DataAccess
         {
             _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
-
-
+        
         #region 车辆
 
         /// <summary>
@@ -95,27 +90,197 @@ namespace CCN.Modules.Car.DataAccess
                                 `tlci_date` = @tlci_date,
                                 `audit_date` = @audit_date,
                                 WHERE `innerid` = @innerid;";
-
-            //`post_time` = @post_time,
-            //`audit_time` = @audit_time,
-            //`sold_time` = @sold_time,
-            //`keep_time` = @keep_time,
             
             var result = _factoy.Execute(sql, model);
             return result;
         }
 
         /// <summary>
+        /// 删除车辆(物理删除，暂不用)
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.删除成功</returns>
+        public int DeleteCar(string id)
+        {
+            const string sql = @"delete from car_info where innerid`=@innerid;";
+            try
+            {
+                _factoy.Execute(sql, new { innerid = id });
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 车辆状态更新
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="status"></param>
+        /// <returns>1.操作成功</returns>
+        public int UpdateCarStatus(string carid, int status)
+        {
+            try
+            {
+                const string sql = "update car_info set status=@status where innerid`=@innerid;";
+                _factoy.Execute(sql, new { innerid = carid });
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
         /// 车辆分享
         /// </summary>
         /// <param name="id">车辆id</param>
-        /// <returns></returns>
+        /// <returns>1.操作成功</returns>
         public int ShareCar(string id)
         {
-            const string sql = @"UPDATE `car_info` SET `post_time`=@post_time WHERE `innerid` = @innerid;";
             try
             {
-                var result = _factoy.Execute(sql, new { post_time = DateTime.Now, innerid = id });
+                //累计分享次数
+                var sql = "update car_share set sharecount=sharecount+1 where carid=@carid;";
+                var resCount = _factoy.Execute(sql, new {carid = id});
+                if (resCount == 0)
+                {
+                    //表示没有子表数据
+                    sql = "INSERT INTO `car_share`(`innerid`,`carid`,`sharecount`,`seecount`,`praisecount`,`commentcount`) VALUES(uuid(), @carid, 1, 0, 0, 0);";
+                    _factoy.Execute(sql, new { carid = id });
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+        
+        /// <summary>
+        /// 累计车辆查看次数
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.累计成功</returns>
+        public int UpSeeCount(string id)
+        {
+            const string sql = @"update car_share set seecount=seecount+1 where carid=@carid;";
+            try
+            {
+                _factoy.Execute(sql, new { carid = id });
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 累计点赞次数
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.累计成功</returns>
+        public int UpPraiseCount(string id)
+        {
+            const string sql = @"update car_share set praisecount=praisecount+1 where carid=@carid;";
+            try
+            {
+                _factoy.Execute(sql, new { carid = id });
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 累计点赞次数
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <param name="content">评论内容</param>
+        /// <returns>1.累计成功</returns>
+        public int CommentCar(string id,string content)
+        {
+            const string sql = @"update car_share set commentcount=commentcount+1 where carid=@carid;";
+            try
+            {
+                _factoy.Execute(sql, new { carid = id });
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+        
+        /// <summary>
+        /// 审核车辆
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <param name="status">审核状态</param>
+        /// <returns>1.操作成功</returns>
+        public int AuditCar(string id, int status)
+        {
+            const string sql = @"UPDATE `car_info` SET status=@status,`audit_time`=@audit_time WHERE `innerid`=@innerid;";
+            try
+            {
+                var result = _factoy.Execute(sql, new
+                {
+                    status,
+                    audit_time = DateTime.Now,
+                    innerid = id
+                });
+                if (result == 0)
+                {
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 核销车辆
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int CancelCar(string id)
+        {
+            const string sql = @"UPDATE `car_info` SET `sold_time`=@sold_time WHERE `innerid`=@innerid;";
+            try
+            {
+                var result = _factoy.Execute(sql, new { sold_time = DateTime.Now, innerid = id });
+                if (result == 0)
+                {
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 车辆归档
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int KeepCar(string id)
+        {
+            const string sql = @"UPDATE `car_info` SET `keep_time`=@keep_time WHERE `innerid`=@innerid;";
+            try
+            {
+                var result = _factoy.Execute(sql, new { keep_time = DateTime.Now, innerid = id });
                 if (result == 0)
                 {
                     return 0;

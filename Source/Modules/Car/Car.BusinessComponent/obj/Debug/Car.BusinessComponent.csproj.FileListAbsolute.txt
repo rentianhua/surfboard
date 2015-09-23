@@ -1,7 +1,7 @@
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.BusinessComponent.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.BusinessComponent.pdb
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.BusinessEntity.dll
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.DataAccess.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.BusinessEntity.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.DataAccess.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Core.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Core.EntLib.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Framework.Common.Server.dll
@@ -16,14 +16,14 @@ E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microso
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\MySql.Data.Entity.EF6.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\StackExchange.Redis.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Dapper.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\EntityFramework.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\MySql.Data.dll
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.BusinessEntity.pdb
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.BusinessEntity.xml
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.DataAccess.pdb
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Base.DataAccess.xml
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.BusinessEntity.xml
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\CCN.Modules.Car.DataAccess.pdb
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Core.pdb
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Core.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Cedar.Core.EntLib.pdb
@@ -42,6 +42,8 @@ E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microso
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\StackExchange.Redis.pdb
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\StackExchange.Redis.xml
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Dapper.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Dapper.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Debug\EntityFramework.xml

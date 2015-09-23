@@ -148,6 +148,7 @@ E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Mic
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Cedar.Core.EntLib.dll
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.BusinessEntity.pdb
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.BusinessEntity.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.DataAccess.pdb
@@ -167,6 +168,8 @@ E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Mic
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.Interception.Configuration.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.pdb
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\Customer.BusinessComponent.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.pdb

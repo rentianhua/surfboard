@@ -8,7 +8,7 @@
             <summary>
             For 加密解密的常用算法,DES,MD5,SHA1,RSA,Rijndael,...此类不能被代码格式化;
             </summary>
-            {Design BY:Tim, Use:Tim, At:[ 2009-4-30 17:03 ], For 加密解密算法,DES,MD5,SHA1,RSA,Rijndael,... }
+            {Design BY:Tim, Use:Tim, For 加密解密算法,DES,MD5,SHA1,RSA,Rijndael,... }
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptSha1(System.String)">
             <summary>
@@ -31,17 +31,17 @@
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptDes(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 使用默认密钥【DES加密】（重载） }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【DES加密】（重载） }
             </summary>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptDes(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 使用默认密钥【DES解密】（重载） }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【DES解密】（重载） }
             </summary>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptDes(System.String,System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 【DES加密字符串】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES加密字符串】 }
             </summary>
             <param name="encryptString">待加密的字符串</param>
             <param name="encryptKey">加密密钥,要求为8位</param>
@@ -49,7 +49,7 @@
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptDes(System.String,System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 【DES解密字符串】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES解密字符串】 }
             </summary>
             <param name="decryptString">待解密的字符串</param>
             <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
@@ -57,38 +57,38 @@
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptMd5(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 默认的MD5加密（返回16位） }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 默认的MD5加密（返回16位） }
             </summary>
             <param name="inStr">inStr,要加密的字符串</param>
             <returns>16位，MD5加密后字符串，失败以后返回源字符串</returns>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.Encrypt16Md5(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ],For 【MD5加密返回16位】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ],For 【MD5加密返回16位】 }
             </summary>
             <param name="inStr">inStr,要加密的字符串</param>
             <returns>16位，MD5加密后字符串，失败以后返回源字符串</returns>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.Encrypt32Md5(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ],For 【MD5加密返回32位】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ],For 【MD5加密返回32位】 }
             </summary>
             <param name="inStr">inStr,要加密的字符串</param>
             <returns>32位，MD5加密后字符串，失败以后返回源字符串</returns>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptId(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 使用默认密钥【对url或id加密】（重载） }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【对url或id加密】（重载） }
             </summary>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptId(System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 使用默认密钥【对url或id解密】（重载） }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【对url或id解密】（重载） }
             </summary>
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptId(System.String,System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 【DES加密url或id】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES加密url或id】 }
             </summary>
             <param name="encryptString">待加密的字符串</param>
             <param name="encryptKey">加密密钥,要求为8位</param>
@@ -96,11 +96,77 @@
         </member>
         <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptId(System.String,System.String)">
             <summary>
-                { Coder:FANXIAO,At:[ 2010-8-17 17:27 ], For 【DES解密url或id】 }
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES解密url或id】 }
             </summary>
             <param name="decryptString">待解密的字符串</param>
             <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
             <returns>解密成功返回解密后的字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PageIndex">
+            <summary>
+            页索引
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PageSize">
+            <summary>
+            页容量
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Paging">
+            <summary>
+            是否分页
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Top">
+            <summary>
+            前多少条记录
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Group">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Echo">
+            <summary>
+            DataTables请求服务器端次数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PagingQueryType">
+            <summary>
+            1:获取列表,2:获取count
+            </summary>
+        </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.BasePageList`1">
+            <summary>
+            分页公共返回类型列表
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.sEcho">
+            <summary>
+            DataTables请求服务器端次数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.iTotalRecords">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.iTotalDisplayRecords">
+            <summary>
+            显示的记录数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.aaData">
+            <summary>
+            数据实体列表
+            </summary>
         </member>
         <member name="T:Cedar.Framework.Common.Properties.Resources">
             <summary>

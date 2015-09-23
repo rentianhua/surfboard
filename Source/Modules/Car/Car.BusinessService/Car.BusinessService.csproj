@@ -89,6 +89,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Car.BusinessComponent\Car.BusinessComponent.csproj">
+      <Project>{f0ed08fd-b0d0-49c5-834a-82f9a69b1cab}</Project>
+      <Name>Car.BusinessComponent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Car.BusinessEntity\Car.BusinessEntity.csproj">
       <Project>{9beb54f2-b400-4bfc-bbff-ba0434a4a18c}</Project>
       <Name>Car.BusinessEntity</Name>

@@ -77,13 +77,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
-      <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
-      <Name>Base.BusinessEntity</Name>
+    <ProjectReference Include="..\Car.BusinessEntity\Car.BusinessEntity.csproj">
+      <Project>{9beb54f2-b400-4bfc-bbff-ba0434a4a18c}</Project>
+      <Name>Car.BusinessEntity</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Base\Base.DataAccess\Base.DataAccess.csproj">
-      <Project>{6de16c24-8037-4781-863f-84a41283e1f5}</Project>
-      <Name>Base.DataAccess</Name>
+    <ProjectReference Include="..\Car.DataAccess\Car.DataAccess.csproj">
+      <Project>{93b0dce0-839f-492b-8d5b-fe5da619f46b}</Project>
+      <Name>Car.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,6 +15,7 @@ E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Prac
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\MySql.Data.Entity.EF6.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\StackExchange.Redis.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Dapper.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.ServiceLocation.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
@@ -40,6 +41,8 @@ E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Prac
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\StackExchange.Redis.pdb
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\StackExchange.Redis.xml
+E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Dapper.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Dapper.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\code\surfboard\Source\Modules\Car\Car.DataAccess\bin\Debug\Microsoft.Practices.ServiceLocation.xml

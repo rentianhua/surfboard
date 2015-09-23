@@ -127,7 +127,7 @@ namespace CCN.Modules.Car.BusinessEntity
         public int seller_type { get; set; }
 
         /// <summary>
-        /// 状态[1.待发布，2.待审核，3.saling，4.已售，5.已存档]
+        /// 状态状态[1.在售，2.已售，0.已删除]
         /// </summary>
         public int status { get; set; }
 
