@@ -1,6 +1,7 @@
 ﻿#region
 
 using System.Collections.Generic;
+using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
