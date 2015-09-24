@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Car.BusinessComponent
@@ -25,11 +26,11 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <summary>
         /// 获取车辆列表
         /// </summary>
-        /// <param name="initial">首字母</param>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public IEnumerable<CarInfoModel> GetProvList(string initial)
+        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
         {
-            return DataAccess.GetProvList(initial);
+            return DataAccess.GetCarPageList(query);
         }
 
         /// <summary>

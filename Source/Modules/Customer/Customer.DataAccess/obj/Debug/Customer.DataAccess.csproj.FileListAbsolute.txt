@@ -126,6 +126,7 @@ E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Interception.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\MySql.Data.dll
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Framework.Common.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Dapper.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\CCN.Modules.Customer.BusinessEntity.pdb
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\CCN.Modules.Customer.BusinessEntity.xml
@@ -142,6 +143,8 @@ E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Interception.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.Interception.Configuration.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Framework.Common.pdb
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Cedar.Framework.Common.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Dapper.pdb
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\bin\Dapper.xml
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.DataAccess\obj\Debug\Customer.DataAccess.csprojResolveAssemblyReference.cache

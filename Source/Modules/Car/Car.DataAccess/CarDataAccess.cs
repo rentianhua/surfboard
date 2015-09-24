@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CCN.Modules.Car.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Car.DataAccess
@@ -18,24 +19,35 @@ namespace CCN.Modules.Car.DataAccess
         {
             _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
-        
+
         #region 车辆
 
         /// <summary>
         /// 获取车辆列表
         /// </summary>
-        /// <param name="initial">首字母</param>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public IEnumerable<CarInfoModel> GetProvList(string initial)
+        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
         {
-            string where = " 1=1";
-            if (!string.IsNullOrWhiteSpace(initial))
-            {
-                where += $" and initial='{initial.ToUpper()}'";
-            }
-            var sql = $"select * from car_info where {where}";
-            var provList = _factoy.Query<CarInfoModel>(sql);
-            return provList;
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info_bak";
+            const string fields = " * ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = "1=1";
+            PagingModel model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
+            //var list2 = Helper.ExecutePaging<dynamic>(model, query.Echo);
+            BasePageList<CarInfoModel> list = Helper.ExecutePaging<CarInfoModel>(model, query.Echo);
+            return list;
+
+            //string where = " 1=1";
+            //if (!string.IsNullOrWhiteSpace(initial))
+            //{
+            //    where += $" and initial='{initial.ToUpper()}'";
+            //}
+            //var sql = $"select * from car_info where {where}";
+            //var provList = _factoy.Query<CarInfoModel>(sql);
+            //return provList;
         }
 
         /// <summary>

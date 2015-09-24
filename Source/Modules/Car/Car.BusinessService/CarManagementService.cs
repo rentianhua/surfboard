@@ -2,6 +2,7 @@
 using CCN.Modules.Car.BusinessComponent;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Car.BusinessService
@@ -23,11 +24,11 @@ namespace CCN.Modules.Car.BusinessService
         /// <summary>
         /// 获取车辆列表
         /// </summary>
-        /// <param name="initial">首字母</param>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public IEnumerable<CarInfoModel> GetProvList(string initial)
+        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
         {
-            return BusinessComponent.GetProvList(initial);
+            return BusinessComponent.GetCarPageList(query);
         }
 
         /// <summary>

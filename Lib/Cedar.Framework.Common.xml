@@ -102,6 +102,124 @@
             <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
             <returns>解密成功返回解密后的字符串，失败以后返回源字符串</returns>
         </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.PagingModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SpName">
+            <summary>
+            存储过程名称
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.TableName">
+            <summary>
+            表名称
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.MainTable">
+            <summary>
+            主表
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Pk">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Alias">
+            <summary>
+            主表别名
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SubTable">
+            <summary>
+            辅表
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Fields">
+            <summary>
+            查询字段
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.OrderField">
+            <summary>
+            排序字段
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SqlWhere">
+            <summary>
+            查询条件
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SqlWhereNoPaging">
+            <summary>
+            不分页的查询条件
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PageSize">
+            <summary>
+            页容量
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PageIndex">
+            <summary>
+            页索引
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.GroupBy">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Paging">
+            <summary>
+            是否分页
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PagingQueryType">
+            <summary>
+            查询类型 1.查询总页数 2.查询数据
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.PagingModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean})">
+            <summary>
+            构造函数
+            </summary>
+            <param name="spname">存储过程名称</param>
+            <param name="tablename">表名</param>
+            <param name="fields">字段</param>
+            <param name="orderfield">排序字段</param>
+            <param name="sqlwhere">查询条件</param>
+            <param name="pagesize">页容量</param>
+            <param name="pageindex">页索引</param>
+            <param name="groupby">分组</param>
+            <param name="paging">是否分页</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.PagingModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+            <param name="spname"></param>
+            <param name="maintable"></param>
+            <param name="pk"></param>
+            <param name="alias"></param>
+            <param name="subtable"></param>
+            <param name="fields"></param>
+            <param name="orderfield"></param>
+            <param name="sqlwhere"></param>
+            <param name="sqlwherenopaging"></param>
+            <param name="pagesize"></param>
+            <param name="pageindex"></param>
+            <param name="groupby"></param>
+            <param name="paging"></param>
+            <param name="pagingquerytype"></param>
+        </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.QueryModel">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PageIndex">
             <summary>
             页索引
@@ -140,6 +258,11 @@
         <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PagingQueryType">
             <summary>
             1:获取列表,2:获取count
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.QueryModel.#ctor">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:Cedar.Framework.Common.BaseClasses.BasePageList`1">

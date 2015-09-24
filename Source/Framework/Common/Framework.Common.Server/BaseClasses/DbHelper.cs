@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
+using Cedar.Framework.Common.BaseClasses;
 using Dapper;
 using Microsoft.Practices.Unity.Utility;
 
@@ -13,6 +14,9 @@ using Microsoft.Practices.Unity.Utility;
 
 namespace Cedar.Framework.Common.Server.BaseClasses
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MySqlDbHelper : MarshalByRefObject
     {
         //private Dictionary<CacheKey, DbParameterCollection> cachedParameters = new Dictionary<CacheKey, DbParameterCollection>();
@@ -87,6 +91,8 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.ExecuteScalar<T>(sql, parameters, null, null, commandType);
             }
         }
@@ -103,6 +109,8 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.QueryAsync<T>(sql, parameters, null, null, commandType);
             }
         }
@@ -119,6 +127,8 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.Query<T>(sql, parameters, null, true, null, commandType);
             }
         }
@@ -134,6 +144,8 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.Query(sql, parameters, null, true, null, commandType);
             }
         }
@@ -149,6 +161,8 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.ExecuteAsync(sql, parameters, null, null, commandType);
             }
         }
@@ -163,8 +177,65 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             using (var connection = Factory.CreateConnection())
             {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
                 return connection.Execute(sql, parameters, null, null, commandType);
             }
+        }
+
+        /// <summary>
+        /// 执行分页存储过程
+        /// </summary>
+        /// <typeparam name="T">返回实体类型</typeparam>
+        /// <param name="model">分页实体</param>
+        /// <param name="echo">服务器请求次数</param>
+        /// <param name="connStr"></param>
+        /// <returns>实体集合</returns>
+        public BasePageList<T> ExecutePaging<T>(PagingModel model, int? echo, string connStr = "")
+        {
+            var baseList = new BasePageList<T>();
+            try
+            {
+                using (var connection = Factory.CreateConnection())
+                {
+                    connection.ConnectionString = ConnectionString;
+                    connection.Open();
+                    //参数
+                    var obj = new
+                    {
+                        model.TableName, model.Fields, model.OrderField,
+                        GroupField = model.GroupBy,
+                        sqlWhere = model.SqlWhere,
+                        pageSize = model.PageSize,
+                        pageIndex = model.PageIndex,
+                        sqlCountTable = "",
+                        Paging = model.Paging != null && model.Paging.Value
+                    };
+
+                    var args = new DynamicParameters(obj);
+                    args.Add("totalpage", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                    //执行存储过程
+                    IEnumerable<T> data;
+                    using (var result = connection.QueryMultiple(model.SpName, args, commandType: CommandType.StoredProcedure))
+                    {
+                        //获取结果集
+                        data = result.Read<T>();
+                    }
+
+                    //获取输出参数
+                    baseList.sEcho = echo;
+                    baseList.iTotalDisplayRecords = args.Get<int>("totalpage");
+                    baseList.iTotalRecords = args.Get<int>("totalpage");
+                    baseList.aaData = data;
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+            }
+
+            return baseList;
         }
     }
 

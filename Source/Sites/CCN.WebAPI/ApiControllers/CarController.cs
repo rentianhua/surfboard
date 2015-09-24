@@ -8,6 +8,7 @@ using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
 using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -25,6 +26,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #region 车辆基本信息
+
+        /// <summary>
+        /// 分页查询车辆
+        /// </summary>
+        /// <param name="query">车辆信息</param>
+        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        [Route("GetCarPageList")]
+        [HttpPost]
+        public BasePageList<CarInfoModel> GetCarPageList([FromBody] CarQueryModel query)
+        {
+            return _baseservice.GetCarPageList(query);
+        }
 
         /// <summary>
         /// 添加车辆

@@ -1,5 +1,9 @@
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Debug\CCN.Modules.Car.BusinessEntity.XML
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Debug\CCN.Modules.Car.BusinessEntity.dll
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Debug\CCN.Modules.Car.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.XML
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.dll
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.pdb
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.xml
+E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb

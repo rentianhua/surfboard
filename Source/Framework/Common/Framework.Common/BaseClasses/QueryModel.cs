@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Cedar.Framework.Common.BaseClasses
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract class QueryModel
     {
         /// <summary>
         /// 页索引
         /// </summary>
-        public int? PageIndex { get; set; }
+        public int PageIndex { get; set; }
 
         /// <summary>
         /// 页容量
         /// </summary>
-        public int? PageSize { get; set; }
+        public int PageSize { get; set; }
 
         /// <summary>
         /// 是否分页
@@ -47,6 +46,15 @@ namespace Cedar.Framework.Common.BaseClasses
         /// 1:获取列表,2:获取count
         /// </summary>
         public int? PagingQueryType { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        protected QueryModel()
+        {
+            PageIndex = 1;
+            PageSize = 10;
+        }
     }
 
     /// <summary>

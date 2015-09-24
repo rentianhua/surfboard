@@ -16,10 +16,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\CCN.Modules.Car.BusinessComponent.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,6 +36,9 @@
     </Reference>
     <Reference Include="Cedar.Core.EntLib">
       <HintPath>..\..\..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common">
+      <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common.Server">
       <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>

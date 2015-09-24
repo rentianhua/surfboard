@@ -1,6 +1,5 @@
 E:\tim\code\surfboard\Lib\CCN.Modules.Car.Interface.XML
 E:\tim\code\surfboard\Lib\CCN.Modules.Car.Interface.dll
 E:\tim\code\surfboard\Lib\CCN.Modules.Car.Interface.pdb
-E:\tim\code\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\Car.Interface.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.dll
 E:\tim\code\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.pdb

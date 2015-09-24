@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CCN.Modules.Car.BusinessEntity;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Car.Interface
 {
@@ -13,9 +14,9 @@ namespace CCN.Modules.Car.Interface
         /// <summary>
         /// 获取车辆列表
         /// </summary>
-        /// <param name="initial">首字母</param>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        IEnumerable<CarInfoModel> GetProvList(string initial);
+        BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query);
 
         /// <summary>
         /// 添加车辆
