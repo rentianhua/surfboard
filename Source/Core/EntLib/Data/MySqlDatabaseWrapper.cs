@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Linq;
 using Dapper;
 using Microsoft.Practices.Unity.Utility;
 using MySql.Data.Entity;
@@ -45,6 +46,27 @@ namespace Cedar.Core.EntLib.Data
             }
         }
 
+        public int Execute(List<SqlObject> sql)
+        {
+            using (IDbConnection conn = Database.CreateConnection(connectionStringSettings.ConnectionString))
+            {
+                var transaction = conn.BeginTransaction();
+                int row = 0;
+                try
+                {
+                    row +=
+                        sql.Sum(sqlObject => conn.Execute(sqlObject.Sql, sqlObject.Paramters, transaction, null, null));
+                    transaction.Commit();
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                }
+
+                return row;
+            }
+        }
+
         public override int Execute(string sql, dynamic param = null, DbTransaction transaction = null, CommandType commandType = CommandType.Text)
         {
             using (var con = Database.CreateConnection(connectionStringSettings.ConnectionString))
@@ -71,5 +93,31 @@ namespace Cedar.Core.EntLib.Data
                 return con.Query(sql, (object)param, null, true, null, commandType);
             }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SqlObject
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Sql { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public object Paramters { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsStrictResult { get; set; }
     }
 }
