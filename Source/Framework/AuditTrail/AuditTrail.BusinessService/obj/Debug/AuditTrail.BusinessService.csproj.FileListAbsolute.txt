@@ -4,3 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\AuditTrail.BusinessService.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\Cedar.Framwork.AuditTrail.BusinessService.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\Cedar.Framwork.AuditTrail.BusinessService.pdb
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessService.XML
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessService.dll
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessService.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\AuditTrail.BusinessService.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\Cedar.Framwork.AuditTrail.BusinessService.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.BusinessService\obj\Debug\Cedar.Framwork.AuditTrail.BusinessService.pdb

@@ -40,3 +40,14 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Dapper.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Dapper.xml
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.DataAccess.XML
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.DataAccess.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.DataAccess.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.BusinessEntity.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Newtonsoft.Json.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framwork.AuditTrail.BusinessEntity.xml
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Newtonsoft.Json.xml
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\AuditTrail.DataAccess.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\Cedar.Framwork.AuditTrail.DataAccess.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\Cedar.Framwork.AuditTrail.DataAccess.pdb

@@ -75,8 +75,7 @@ namespace CCN.Modules.Customer.DataAccess
             //插入账户基本信息
             const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
                         VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
-
-            userInfo.Type = 1;
+            
             try
             {
                 _factoy.Execute(sql, userInfo);
@@ -91,10 +90,7 @@ namespace CCN.Modules.Customer.DataAccess
             }
             catch (Exception)
             {
-                var s = @"INSERT INTO `car_info`
-                        (`innerid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`price`,`mileageid`,`register_date`,`reg_year`,`gearid`,`carageid`,`literid`,`colorid`,`carshructid`,`dischargeid`,`tel`,`contactor`,`dealer_id`,`seller_type`,`status`,`remark`,`createdtime`,`modifiedtime`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`tlci_date`,`audit_date`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
-                        VALUES
-                        (@innerid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@price,@mileageid,@register_date,@reg_year,@gearid,@carageid,@literid,@colorid,@carshructid,@dischargeid,@tel,@contactor,@dealer_id,@seller_type,@status,@remark,@createdtime,@modifiedtime,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@tlci_date,@audit_date,@mile_age,@gear_type,@color,@liter,@url);";
+                
                 result = 0;
             }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Cedar.Core.EntLib.Data;
+using Cedar.Framework.Common.BaseClasses;
+using Cedar.Framework.Common.Server.BaseClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FrameworkTest
@@ -15,5 +17,36 @@ namespace FrameworkTest
             var d = factoy.Query("select * from base_carbrand").ToList();
             Assert.IsNotNull(factoy);
         }
+
+        [TestMethod]
+        public void TestXxMethod()
+        {
+            MySqlDbHelper helper = new MySqlDbHelper("mysqldb");
+
+            AAQueryModel query = new AAQueryModel();
+            query.PageIndex = 1;
+            query.PageSize = 5;
+            query.Group = "";
+
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info";
+            const string fields = " * ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = "1=1";
+            PagingModel model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
+            var list2 = helper.ExecutePaging<dynamic>(model, query.Echo);
+
+
+            //var factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
+            //var d = factoy.Query("select * from base_carbrand").ToList();
+
+            Assert.IsNotNull(list2);
+        }
+    }
+
+    public class AAQueryModel:QueryModel
+    {
+        
     }
 }

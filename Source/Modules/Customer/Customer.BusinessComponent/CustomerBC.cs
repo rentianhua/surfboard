@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
 using Cedar.Core.IoC;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 #endregion
@@ -61,6 +62,11 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public int CustRegister(CustModel userInfo)
         {
+            //密码加密
+            var en = new Encryptor();
+            userInfo.Password = en.EncryptMd5(userInfo.Password);
+
+            userInfo.Type = 1; //这版只有车商
             return DataAccess.CustRegister(userInfo);
         }
 
@@ -71,6 +77,9 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public CustResult CustLogin(CustLoginInfo loginInfo)
         {
+            var en = new Encryptor();
+            loginInfo.Password = en.EncryptMd5(loginInfo.Password);
+
             var result = new CustResult();
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)

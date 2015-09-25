@@ -93,6 +93,12 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework.Common\Framework.Common.csproj">
+      <Project>{85d76861-9950-44bd-8d4e-78b74245ca88}</Project>
+      <Name>Framework.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!--<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

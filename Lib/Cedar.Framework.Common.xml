@@ -4,6 +4,293 @@
         <name>Cedar.Framework.Common</name>
     </assembly>
     <members>
+        <member name="T:Cedar.Framework.Common.BaseClasses.Encryptor">
+            <summary>
+            For 加密解密的常用算法,DES,MD5,SHA1,RSA,Rijndael,...此类不能被代码格式化;
+            </summary>
+            {Design BY:Tim, Use:Tim, For 加密解密算法,DES,MD5,SHA1,RSA,Rijndael,... }
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptSha1(System.String)">
+            <summary>
+                { For【安全哈希算法】SHA1有如下特性：不可以从消息摘要中复原信息；两个不同的消息不会产生同样的消息摘要 }
+            </summary>
+            <param name="encryptString">待加密字符</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.GetSecurity">
+            <summary>
+                安全码认证
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.MD5Encrypt(System.String)">
+            <summary>
+            MD5加密
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptDes(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【DES加密】（重载） }
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptDes(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【DES解密】（重载） }
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptDes(System.String,System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES加密字符串】 }
+            </summary>
+            <param name="encryptString">待加密的字符串</param>
+            <param name="encryptKey">加密密钥,要求为8位</param>
+            <returns>加密成功返回加密后的字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptDes(System.String,System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES解密字符串】 }
+            </summary>
+            <param name="decryptString">待解密的字符串</param>
+            <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
+            <returns>解密成功返回解密后的字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptMd5(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 默认的MD5加密（返回16位） }
+            </summary>
+            <param name="inStr">inStr,要加密的字符串</param>
+            <returns>16位，MD5加密后字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.Encrypt16Md5(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ],For 【MD5加密返回16位】 }
+            </summary>
+            <param name="inStr">inStr,要加密的字符串</param>
+            <returns>16位，MD5加密后字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.Encrypt32Md5(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ],For 【MD5加密返回32位】 }
+            </summary>
+            <param name="inStr">inStr,要加密的字符串</param>
+            <returns>32位，MD5加密后字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptId(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【对url或id加密】（重载） }
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptId(System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 使用默认密钥【对url或id解密】（重载） }
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.EncryptId(System.String,System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES加密url或id】 }
+            </summary>
+            <param name="encryptString">待加密的字符串</param>
+            <param name="encryptKey">加密密钥,要求为8位</param>
+            <returns>加密成功返回加密后的字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.Encryptor.DecryptId(System.String,System.String)">
+            <summary>
+                { Coder:Tim,At:[ 2015-09-23 17:27 ], For 【DES解密url或id】 }
+            </summary>
+            <param name="decryptString">待解密的字符串</param>
+            <param name="decryptKey">解密密钥,要求为8位,和加密密钥相同</param>
+            <returns>解密成功返回解密后的字符串，失败以后返回源字符串</returns>
+        </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.PagingModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SpName">
+            <summary>
+            存储过程名称
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.TableName">
+            <summary>
+            表名称
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.MainTable">
+            <summary>
+            主表
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Pk">
+            <summary>
+            主键
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Alias">
+            <summary>
+            主表别名
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SubTable">
+            <summary>
+            辅表
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Fields">
+            <summary>
+            查询字段
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.OrderField">
+            <summary>
+            排序字段
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SqlWhere">
+            <summary>
+            查询条件
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.SqlWhereNoPaging">
+            <summary>
+            不分页的查询条件
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PageSize">
+            <summary>
+            页容量
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PageIndex">
+            <summary>
+            页索引
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.GroupBy">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.Paging">
+            <summary>
+            是否分页
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.PagingModel.PagingQueryType">
+            <summary>
+            查询类型 1.查询总页数 2.查询数据
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.PagingModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean})">
+            <summary>
+            构造函数
+            </summary>
+            <param name="spname">存储过程名称</param>
+            <param name="tablename">表名</param>
+            <param name="fields">字段</param>
+            <param name="orderfield">排序字段</param>
+            <param name="sqlwhere">查询条件</param>
+            <param name="pagesize">页容量</param>
+            <param name="pageindex">页索引</param>
+            <param name="groupby">分组</param>
+            <param name="paging">是否分页</param>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.PagingModel.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32})">
+            <summary>
+            
+            </summary>
+            <param name="spname"></param>
+            <param name="maintable"></param>
+            <param name="pk"></param>
+            <param name="alias"></param>
+            <param name="subtable"></param>
+            <param name="fields"></param>
+            <param name="orderfield"></param>
+            <param name="sqlwhere"></param>
+            <param name="sqlwherenopaging"></param>
+            <param name="pagesize"></param>
+            <param name="pageindex"></param>
+            <param name="groupby"></param>
+            <param name="paging"></param>
+            <param name="pagingquerytype"></param>
+        </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.QueryModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PageIndex">
+            <summary>
+            页索引
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PageSize">
+            <summary>
+            页容量
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Paging">
+            <summary>
+            是否分页
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Top">
+            <summary>
+            前多少条记录
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Order">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Group">
+            <summary>
+            分组
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.Echo">
+            <summary>
+            DataTables请求服务器端次数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.QueryModel.PagingQueryType">
+            <summary>
+            1:获取列表,2:获取count
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.QueryModel.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.BasePageList`1">
+            <summary>
+            分页公共返回类型列表
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.sEcho">
+            <summary>
+            DataTables请求服务器端次数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.iTotalRecords">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.iTotalDisplayRecords">
+            <summary>
+            显示的记录数
+            </summary>
+        </member>
+        <member name="P:Cedar.Framework.Common.BaseClasses.BasePageList`1.aaData">
+            <summary>
+            数据实体列表
+            </summary>
+        </member>
         <member name="T:Cedar.Framework.Common.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.

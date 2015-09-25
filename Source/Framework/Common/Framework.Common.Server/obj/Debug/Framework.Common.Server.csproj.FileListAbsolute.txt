@@ -24,10 +24,10 @@ Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.Server.dll.config
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Framework.Common.Server.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.pdb
-Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll.config
-Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.xml
-Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.dll
-Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Server.pdb
-Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Framework.Common.Server.csprojResolveAssemblyReference.cache
-Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.dll
-Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.pdb
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Server.dll.config
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Server.xml
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Server.dll
+E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Server.pdb
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Framework.Common.Server.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.dll
+E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Server\obj\Debug\Cedar.Framework.Common.Server.pdb

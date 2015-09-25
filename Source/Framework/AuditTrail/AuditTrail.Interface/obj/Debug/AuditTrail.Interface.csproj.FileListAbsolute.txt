@@ -4,9 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\AuditTrail.Interface.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.pdb
-Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.XML
-Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.dll
-Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.pdb
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\AuditTrail.Interface.csprojResolveAssemblyReference.cache
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.dll
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.pdb
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.XML
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.dll
+E:\tim\code\surfboard\Lib\Cedar.Framwork.AuditTrail.Interface.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\AuditTrail.Interface.csprojResolveAssemblyReference.cache
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.dll
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interface\obj\Debug\Cedar.Framwork.AuditTrail.Interface.pdb

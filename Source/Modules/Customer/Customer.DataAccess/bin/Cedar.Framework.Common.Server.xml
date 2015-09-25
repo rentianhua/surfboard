@@ -45,6 +45,11 @@
             </summary>
             <value>The service locator.</value>
         </member>
+        <member name="T:Cedar.Framework.Common.Server.BaseClasses.MySqlDbHelper">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Cedar.Framework.Common.Server.BaseClasses.MySqlDbHelper.#ctor(System.String)">
             <summary>
             </summary>
@@ -112,6 +117,16 @@
             <param name="parameters"></param>
             <param name="commandType"></param>
             <returns></returns>
+        </member>
+        <member name="M:Cedar.Framework.Common.Server.BaseClasses.MySqlDbHelper.ExecutePaging``1(Cedar.Framework.Common.BaseClasses.PagingModel,System.Nullable{System.Int32},System.String)">
+            <summary>
+            执行分页存储过程
+            </summary>
+            <typeparam name="T">返回实体类型</typeparam>
+            <param name="model">分页实体</param>
+            <param name="echo">服务器请求次数</param>
+            <param name="connStr"></param>
+            <returns>实体集合</returns>
         </member>
         <member name="T:Cedar.Framework.Common.Server.BaseClasses.ServiceBase`1">
             <summary>
