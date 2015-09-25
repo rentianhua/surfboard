@@ -291,6 +291,18 @@
             数据实体列表
             </summary>
         </member>
+        <member name="T:Cedar.Framework.Common.BaseClasses.RandomUtility">
+            <summary>
+            生成随机数
+            </summary>
+        </member>
+        <member name="M:Cedar.Framework.Common.BaseClasses.RandomUtility.GetRandom(System.Int32)">
+            <summary>
+            生成纯数字的随机码
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
         <member name="T:Cedar.Framework.Common.Properties.Resources">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.

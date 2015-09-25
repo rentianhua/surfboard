@@ -194,5 +194,55 @@
             备注
             </summary>
         </member>
+        <member name="T:CCN.Modules.Base.BusinessEntity.BaseVerification">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Innerid">
+            <summary>
+            id
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Target">
+            <summary>
+            手机号/emial
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.TType">
+            <summary>
+            接受类型 1.手机，2.邮件
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Vcode">
+            <summary>
+            验证码值
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Valid">
+            <summary>
+            效期[单位：分] ,默认20分钟
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Createdtime">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Length">
+            <summary>
+            验证码长度，默认4位
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.VType">
+            <summary>
+            验证码类型 [1.纯数字，2.数据+字母，...]，默认纯数字
+            </summary>
+        </member>
+        <member name="P:CCN.Modules.Base.BusinessEntity.BaseVerification.Result">
+            <summary>
+            发送结果 1.成功，0.失败
+            </summary>
+        </member>
     </members>
 </doc>

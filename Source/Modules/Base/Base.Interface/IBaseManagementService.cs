@@ -12,6 +12,25 @@ namespace CCN.Modules.Base.Interface
     /// </summary>
     public interface IBaseManagementService
     {
+        #region 验证码
+
+        /// <summary>
+        /// 会员注册获取验证码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        int SendVerification(BaseVerification model);
+
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="vcode">验证码</param>
+        /// <returns>返回结果。1.正确，0不正确</returns>
+        int CheckVerification(string target, string vcode);
+
+        #endregion
+
         #region 区域
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using CCN.Modules.Base.Interface;
 using Cedar.Core.IoC;
 
 namespace CCN.WebAPI.ApiControllers
@@ -16,11 +17,11 @@ namespace CCN.WebAPI.ApiControllers
     [RoutePrefix("api/Customer")]
     public class CustomerController : ApiController
     {
-        private readonly ICustomerManagementService _baseservice;
+        private readonly ICustomerManagementService _custservice;
 
         public CustomerController()
         {
-            _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+            _custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
         }
 
         #region 用户模块
@@ -34,7 +35,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpGet]
         public int CheckUserName(string username)
         {
-            return _baseservice.CheckUserName(username);
+            return _custservice.CheckUserName(username);
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpGet]
         public int CheckMobile(string mobile)
         {
-            return _baseservice.CheckMobile(mobile);
+            return _custservice.CheckMobile(mobile);
         }
 
         /// <summary>
@@ -58,7 +59,17 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public int CustRegister([FromBody] CustModel userInfo)
         {
-            return _baseservice.CustRegister(userInfo);
+            var _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            
+            //检查验证码
+            var cresult = _baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
+            if (cresult != 1)
+            {
+                //验证码错误
+                return -1;
+            }
+
+            return _custservice.CustRegister(userInfo);
         }
 
         /// <summary>
@@ -70,7 +81,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public CustResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
-            return _baseservice.CustLogin(loginInfo);
+            return _custservice.CustLogin(loginInfo);
         }
 
         #endregion

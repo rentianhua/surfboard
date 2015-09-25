@@ -9,6 +9,21 @@
             
             </summary>
         </member>
+        <member name="M:CCN.Modules.Base.Interface.IBaseManagementService.SendVerification(CCN.Modules.Base.BusinessEntity.BaseVerification)">
+            <summary>
+            会员注册获取验证码
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.Interface.IBaseManagementService.CheckVerification(System.String,System.String)">
+            <summary>
+            获取验证码
+            </summary>
+            <param name="target"></param>
+            <param name="vcode">验证码</param>
+            <returns>返回结果。1.正确，0不正确</returns>
+        </member>
         <member name="M:CCN.Modules.Base.Interface.IBaseManagementService.GetProvList(System.String)">
             <summary>
             获取省份

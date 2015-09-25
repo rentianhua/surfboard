@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessEntity;
@@ -24,6 +25,34 @@ namespace CCN.Modules.Base.DataAccess
         {
             _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
+
+        #region 验证码
+
+        /// <summary>
+        /// 验证码保存
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveVerification(BaseVerification model)
+        {
+            const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @result);";
+            var res = _factoy.Execute(sql, model);
+            return res;
+        }
+
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public BaseVerification GetVerification(string target)
+        {
+            const string sql = "select innerid, target, vcode, valid, createdtime, ttype, result from base_verification where target=@target order by createdtime desc limit 1;";
+            var m = _factoy.Query<BaseVerification>(sql, new {target}).FirstOrDefault();
+            return m;
+        }
+
+        #endregion
 
         #region 区域
 

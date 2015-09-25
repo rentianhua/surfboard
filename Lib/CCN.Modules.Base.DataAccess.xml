@@ -14,6 +14,20 @@
             
             </summary>
         </member>
+        <member name="M:CCN.Modules.Base.DataAccess.BaseDA.SaveVerification(CCN.Modules.Base.BusinessEntity.BaseVerification)">
+            <summary>
+            验证码保存
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Base.DataAccess.BaseDA.GetVerification(System.String)">
+            <summary>
+            获取验证码
+            </summary>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
         <member name="M:CCN.Modules.Base.DataAccess.BaseDA.GetProvList(System.String)">
             <summary>
             获取省份

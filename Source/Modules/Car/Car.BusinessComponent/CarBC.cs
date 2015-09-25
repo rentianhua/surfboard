@@ -7,9 +7,12 @@ using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Cedar.Core.IoC;
 
 namespace CCN.Modules.Car.BusinessComponent
 {
+    /// <summary>
+    /// </summary>
     public class CarBC : BusinessComponentBase<CarDataAccess>
     {
         /// <summary>
@@ -18,7 +21,7 @@ namespace CCN.Modules.Car.BusinessComponent
         public CarBC(CarDataAccess da)
             : base(da)
         {
-
+            
         }
 
         #region 车辆

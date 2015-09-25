@@ -47,6 +47,7 @@
     <Compile Include="BaseCity.cs" />
     <Compile Include="BaseProvince.cs" />
     <Compile Include="BaseCarSeriesModel.cs" />
+    <Compile Include="BaseVerification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

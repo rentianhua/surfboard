@@ -28,6 +28,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Mobile { get; set; }
 
         /// <summary>
+        /// 手机验证码
+        /// </summary>
+        public string VCode { get; set; }
+
+        /// <summary>
         /// 固话
         /// </summary>
         public string Telephone { get; set; }

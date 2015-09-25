@@ -177,7 +177,6 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\MySql.Data.Entity.EF6.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.dll
-E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.Interface.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.BusinessEntity.dll
@@ -230,8 +229,6 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.pdb
-E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
-E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.pdb
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.xml
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.Interface.pdb
@@ -246,3 +243,7 @@ E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.Properties.Re
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csproj.GenerateResource.Cache
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.dll
 E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessService.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.dll
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.pdb
+E:\tim\code\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.xml

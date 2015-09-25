@@ -17,7 +17,7 @@ namespace CCN.Modules.Customer.Interface
         List<dynamic> GetALlCustomers();
 
         #region 用户模块
-
+        
         /// <summary>
         /// 会员注册检查用户名是否被注册
         /// </summary>
