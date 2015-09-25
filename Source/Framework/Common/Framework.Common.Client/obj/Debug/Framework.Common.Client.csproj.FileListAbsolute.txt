@@ -33,3 +33,10 @@ E:\tim\code\surfboard\Lib\Cedar.Framework.Common.Client.pdb
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Framework.Common.Client.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.dll
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.pdb
+Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll.config
+Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.XML
+Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.dll
+Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.Client.pdb
+Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Framework.Common.Client.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.dll
+Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common.Client\obj\Debug\Cedar.Framework.Common.Client.pdb

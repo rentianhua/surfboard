@@ -1167,6 +1167,52 @@
             The transactional
             </summary>
         </member>
+        <member name="T:Cedar.Core.IoC.ServiceLocatableDictionary`1">
+            <summary>
+            A dictionary of object can be activated by service locator.
+            </summary>
+            <typeparam name="T">The type of element's value.</typeparam>
+        </member>
+        <member name="P:Cedar.Core.IoC.ServiceLocatableDictionary`1.ServiceLocator">
+            <summary>
+            Gets the service locator.
+            </summary>
+            <value>
+            The service locator.
+            </value>
+        </member>
+        <member name="P:Cedar.Core.IoC.ServiceLocatableDictionary`1.Keys">
+            <summary>
+            Gets the keys.
+            </summary>
+            <value>
+            The keys.
+            </value>
+        </member>
+        <member name="P:Cedar.Core.IoC.ServiceLocatableDictionary`1.Values">
+            <summary>
+            Gets the values.
+            </summary>
+            <value>
+            The values.
+            </value>
+        </member>
+        <member name="P:Cedar.Core.IoC.ServiceLocatableDictionary`1.Item(System.String)">
+            <summary>
+            Gets the object with the specified key.
+            </summary>
+            <value>
+            The value.
+            </value>
+            <param name="key">The key.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:Cedar.Core.IoC.ServiceLocatableDictionary`1.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Cedar.Core.IoC.ServiceLocatableDictionary`1" /> class.
+            </summary>
+            <param name="serviceLocatorName">Name of the service locator.</param>
+        </member>
         <member name="T:Cedar.Core.IoC.Assemblies">
             <summary>
             </summary>
@@ -2054,6 +2100,46 @@
             <summary>
                 Resets this default setting source to null.
             </summary>
+        </member>
+        <member name="T:Cedar.Core.TimeConverter">
+            <summary>
+            A helper class to perform UTC time and local time transformation.
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.TimeConverter.NeedConvertUtc">
+            <summary>
+            Gets a value indicating whether [need convert UTC].
+            </summary>
+            <value><c>true</c> if [need convert UTC]; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:Cedar.Core.TimeConverter.CurrentDateTime">
+            <summary>
+            Gets the current date time.
+            </summary>
+            <value>The current date time.</value>
+        </member>
+        <member name="M:Cedar.Core.TimeConverter.IsIngoredDate(System.DateTime)">
+            <summary>
+            Determines whether date is ingored date.
+            </summary>
+            <param name="dateTime">The date time.</param>
+            <returns>
+            	<c>true</c> if ingored date; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Cedar.Core.TimeConverter.ConvertBeforeSaving(System.DateTime)">
+            <summary>
+            Transforms the before saving.
+            </summary>
+            <param name="dateTime">The time to convert.</param>
+            <returns>The tranformed time.</returns>
+        </member>
+        <member name="M:Cedar.Core.TimeConverter.ConvertAfterQuery(System.DateTime)">
+            <summary>
+            Transforms the after retrieval from database.
+            </summary>
+            <param name="time">The time.</param>
+            <returns>The tranformed time.</returns>
         </member>
         <member name="T:System.StringExtensions">
             <summary>

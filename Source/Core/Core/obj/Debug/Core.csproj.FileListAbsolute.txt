@@ -33,4 +33,18 @@ E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.Properties.Resources
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
+<<<<<<< HEAD
+<<<<<<< HEAD
+Y:\GitHub\surfboard\Lib\Cedar.Core.xml
+Y:\GitHub\surfboard\Lib\Cedar.Core.dll
+Y:\GitHub\surfboard\Lib\Cedar.Core.pdb
+Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.Properties.Resources.resources
+Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
+Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
+Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
+=======
 E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache
+>>>>>>> master
+=======
+E:\tim\code\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache
+>>>>>>> master

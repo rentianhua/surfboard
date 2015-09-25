@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cedar.AuditTrail.Interception;
+using Cedar.Framwork.Caching.Interception;
 
 namespace FrameworkTest.TestService
 {
@@ -12,7 +13,13 @@ namespace FrameworkTest.TestService
         [AuditTrailCallHandler("SayHello")]
         public string SayHello(dynamic words)
         {
-            return "SayHello";
+            return "SayHelloResults";
+        }
+
+        [CachingCallHandler()]
+        public string SayHelloCaching(dynamic words)
+        {
+            return "SayHelloResults";
         }
     }
 }

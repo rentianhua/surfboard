@@ -11,7 +11,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
     /// </summary>
     public class DataAccessBase : MarshalByRefObject, IServiceLocatableObject
     {
-        public MySqlDbHelper dbHelper;
+        private MySqlDbHelper dbHelper;
 
         /// <summary>
         /// </summary>
