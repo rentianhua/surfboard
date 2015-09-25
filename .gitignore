@@ -57,3 +57,5 @@
 /Source/Modules/Customer/Customer.BusinessComponent/bin
 /Source/Modules/Customer/Customer.BusinessComponent/obj
 /Source/Modules/Customer/Customer.BusinessComponent/obj
+/Source/Modules/Base/Base.BusinessComponent/obj
+/Source/Sites/CCN.WebAPI/bin
