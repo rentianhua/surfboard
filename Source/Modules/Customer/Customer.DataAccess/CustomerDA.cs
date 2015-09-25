@@ -18,14 +18,12 @@ namespace CCN.Modules.Customer.DataAccess
     /// </summary>
     public class CustomerDA : CustomerDataAccessBase
     {
-        private readonly Database _factoy;
-
         /// <summary>
         /// 
         /// </summary>
         public CustomerDA()
         {
-            _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
+
         }
 
         /// <summary>
@@ -33,7 +31,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public List<dynamic> GetALlCustomers()
         {
-            var d = _factoy.Query("select * from base_carbrand where id=@id", new { id = "" }).ToList();
+            var d = Helper.Query("select * from base_carbrand where id=@id", new { id = "" }).ToList();
             return d;
         }
 
@@ -48,7 +46,7 @@ namespace CCN.Modules.Customer.DataAccess
         public int CheckUserName(string username)
         {
             const string sql = @"select count(1) as count from `cust_info` where username=@username;";
-            var result = _factoy.Query<int>(sql, new { username }).FirstOrDefault();
+            var result = Helper.Execute<int>(sql, new { username });
             return result;
         }
 
@@ -60,7 +58,7 @@ namespace CCN.Modules.Customer.DataAccess
         public int CheckMobile(string mobile)
         {
             const string sql = @"select count(1) as count from `cust_info` where mobile=@mobile;";
-            var result = _factoy.Query<int>(sql, new { mobile }).FirstOrDefault();
+            var result = Helper.Execute<int>(sql, new { mobile });
             return result;
         }
 
@@ -74,21 +72,21 @@ namespace CCN.Modules.Customer.DataAccess
             var result = 1;
             //插入账户基本信息
             const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+                        VALUES (uuid(),@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
             
             try
             {
-                _factoy.Execute(sql, userInfo);
+                Helper.Execute(sql, userInfo);
 
                 //插入微信信息
                 if (userInfo.Wechat != null)
                 {
                     const string sqlwechat = @"INSERT INTO cust_wechat(`innerid`,`custid`,`accountid`,`openid`,`nickname`,`headportrait`,`sex`,`country`,`province`,`city`,`createdtime`,`modifiedtime`)
-                        VALUES(@innerid,@custid,@accountid,@openid,@nickname,@headportrait,@sex,@country,@province,@city,@createdtime,@modifiedtime);";
-                    _factoy.Execute(sqlwechat, userInfo.Wechat);
+                        VALUES(uuid(),@custid,@accountid,@openid,@nickname,@headportrait,@sex,@country,@province,@city,@createdtime,@modifiedtime);";
+                    Helper.Execute(sqlwechat, userInfo.Wechat);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 
                 result = 0;
@@ -105,7 +103,7 @@ namespace CCN.Modules.Customer.DataAccess
         public CustModel CustLogin(CustLoginInfo loginInfo)
         {
             const string sql = "select * from `cust_info` where (username=@username or mobile=@mobile) and password=@password;";
-            return _factoy.Query<CustModel>(sql, new
+            return Helper.Query<CustModel>(sql, new
             {
                 username = loginInfo.Username,
                 mobile = loginInfo.Mobile,

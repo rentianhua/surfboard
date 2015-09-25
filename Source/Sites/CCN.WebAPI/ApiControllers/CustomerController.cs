@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
+using CCN.Modules.Base.Interface;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
-using CCN.Modules.Base.Interface;
 using Cedar.Core.IoC;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -33,9 +29,14 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>0：未被注册，非0：用户名被注册</returns>
         [Route("CheckUserName")]
         [HttpGet]
-        public int CheckUserName(string username)
+        public JResult CheckUserName(string username)
         {
-            return _custservice.CheckUserName(username);
+            var result = _custservice.CheckUserName(username);
+            return new JResult
+            {
+                errcode = result,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -45,9 +46,14 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>0：未被注册，非0：用户名被注册</returns>
         [Route("CheckMobile")]
         [HttpGet]
-        public int CheckMobile(string mobile)
+        public JResult CheckMobile(string mobile)
         {
-            return _custservice.CheckMobile(mobile);
+            var result = _custservice.CheckMobile(mobile);
+            return new JResult
+            {
+                errcode = result,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -57,19 +63,25 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("CustRegister")]
         [HttpPost]
-        public int CustRegister([FromBody] CustModel userInfo)
+        public JResult CustRegister([FromBody] CustModel userInfo)
         {
-            var _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
             
             //检查验证码
-            var cresult = _baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
+            var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
             if (cresult != 1)
             {
                 //验证码错误
-                return -1;
+                //return -1;
             }
 
-            return _custservice.CustRegister(userInfo);
+            var result = _custservice.CustRegister(userInfo);
+
+            return new JResult
+            {
+                errcode = result,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -79,8 +91,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>用户信息</returns>
         [Route("CustLogin")]
         [HttpPost]
-        public CustResult CustLogin([FromBody] CustLoginInfo loginInfo)
+        public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
+
             return _custservice.CustLogin(loginInfo);
         }
 

@@ -7,6 +7,7 @@ using System.Web.Http;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
 using Cedar.Core.IoC;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -32,9 +33,14 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("SendVerification")]
         [HttpPost]
-        public int SendVerification([FromBody] BaseVerification model)
-        {            
-            return _baseservice.SendVerification(model);
+        public JResult SendVerification([FromBody] BaseVerification model)
+        {
+            var result = _baseservice.SendVerification(model);
+            return new JResult
+            {
+                errcode = result,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -44,10 +50,14 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("CheckVerification")]
         [HttpPost]
-        public int CheckVerification([FromBody] BaseVerification model)
+        public JResult CheckVerification([FromBody] BaseVerification model)
         {
-
-            return _baseservice.CheckVerification(model.Target, model.Vcode);
+            var result = _baseservice.CheckVerification(model.Target, model.Vcode);
+            return new JResult
+            {
+                errcode = result,
+                errmsg = ""
+            };
         }
 
         #endregion
@@ -61,9 +71,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetProvList")]
         [HttpGet]
-        public IEnumerable<BaseProvince> GetProvList(string initial = null)
+        public JResult GetProvList(string initial = null)
         {
-            return _baseservice.GetProvList(initial);
+            var list = _baseservice.GetProvList(initial);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
         }
 
         /// <summary>
@@ -74,9 +97,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCityList/{provid}")]
         [HttpGet]
-        public IEnumerable<BaseCity> GetCityList(int provid, string initial = null)
+        public JResult GetCityList(int provid, string initial = null)
         {
-            return _baseservice.GetCityList(provid, initial);
+            var list = _baseservice.GetCityList(provid, initial);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
         }
 
         #endregion
@@ -90,9 +126,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarBrand")]
         [HttpGet]
-        public IEnumerable<BaseCarBrandModel> GetCarBrand(string initial = null)
+        public JResult GetCarBrand(string initial = null)
         {
-            return _baseservice.GetCarBrand(initial);
+            var list = _baseservice.GetCarBrand(initial);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
         }
 
         /// <summary>
@@ -102,9 +151,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarSeries/{brandId}")]
         [HttpGet]
-        public IEnumerable<BaseCarSeriesModel> GetCarSeries(int brandId)
+        public JResult GetCarSeries(int brandId)
         {
-            return _baseservice.GetCarSeries(brandId);
+            var list = _baseservice.GetCarSeries(brandId);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
         }
 
         /// <summary>
@@ -114,9 +176,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarModel/{seriesId}")]
         [HttpGet]
-        public IEnumerable<BaseCarModelModel> GetCarModel(int seriesId)
+        public JResult GetCarModel(int seriesId)
         {
-            return _baseservice.GetCarModel(seriesId);
+            var list = _baseservice.GetCarModel(seriesId);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
         }
 
         #endregion

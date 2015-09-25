@@ -16,14 +16,14 @@ namespace CCN.Modules.Base.DataAccess
     /// </summary>
     public class BaseDA  : DataAccessBase
     {
-        private readonly Database _factoy;
+        //private readonly Database Helper;
 
         /// <summary>
         /// 
         /// </summary>
         public BaseDA() 
         {
-            _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
+            //Helper = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
 
         #region 验证码
@@ -36,7 +36,7 @@ namespace CCN.Modules.Base.DataAccess
         public int SaveVerification(BaseVerification model)
         {
             const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @result);";
-            var res = _factoy.Execute(sql, model);
+            var res = Helper.Execute(sql, model);
             return res;
         }
 
@@ -48,7 +48,7 @@ namespace CCN.Modules.Base.DataAccess
         public BaseVerification GetVerification(string target)
         {
             const string sql = "select innerid, target, vcode, valid, createdtime, ttype, result from base_verification where target=@target order by createdtime desc limit 1;";
-            var m = _factoy.Query<BaseVerification>(sql, new {target}).FirstOrDefault();
+            var m = Helper.Query<BaseVerification>(sql, new {target}).FirstOrDefault();
             return m;
         }
 
@@ -69,7 +69,7 @@ namespace CCN.Modules.Base.DataAccess
                 where += $" and initial='{initial.ToUpper()}'";
             }
             var sql = $"select innerid, provname, initial, isenabled, remark from base_province where {where}";
-            var provList = _factoy.Query<BaseProvince>(sql);
+            var provList = Helper.Query<BaseProvince>(sql);
             return provList;
         }
 
@@ -87,7 +87,7 @@ namespace CCN.Modules.Base.DataAccess
                 where += $" and initial='{initial.ToUpper()}'";
             }
             var sql = $"select innerid, cityname, initial, provid, isenabled, remark from base_city where {where}";
-            var cityList = _factoy.Query<BaseCity>(sql);
+            var cityList = Helper.Query<BaseCity>(sql);
             return cityList;
         }
 
@@ -108,7 +108,7 @@ namespace CCN.Modules.Base.DataAccess
                 where += $" and initial='{initial.ToUpper()}'";
             }
             var sql = $"select innerid, brandname, initial, isenabled, remark, logurl from base_carbrand where {where}";
-            var brandList = _factoy.Query<BaseCarBrandModel>(sql);
+            var brandList = Helper.Query<BaseCarBrandModel>(sql);
             return brandList;
         }
 
@@ -120,7 +120,7 @@ namespace CCN.Modules.Base.DataAccess
         public IEnumerable<BaseCarSeriesModel> GetCarSeries(int brandId)
         {
             var sql = $"select innerid, seriesname, seriesgroupname, brandid, isenabled, remark from base_carseries where isenabled=1 and brandid={brandId}";
-            var seriesList = _factoy.Query<BaseCarSeriesModel>(sql);
+            var seriesList = Helper.Query<BaseCarSeriesModel>(sql);
             return seriesList;
         }
 
@@ -132,7 +132,7 @@ namespace CCN.Modules.Base.DataAccess
         public IEnumerable<BaseCarModelModel> GetCarModel(int seriesId)
         {
             var sql = $"select innerid, modelname, modelprice, modelyear, minregyear, maxregyear, liter, geartype, dischargestandard, seriesid, isenabled, remark from base_carmodel where isenabled=1 and seriesid={seriesId}";
-            var modelList = _factoy.Query<BaseCarModelModel>(sql);
+            var modelList = Helper.Query<BaseCarModelModel>(sql);
             return modelList;
         }
 

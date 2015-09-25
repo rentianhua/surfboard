@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using CCN.Modules.Customer.BusinessEntity;
+using Cedar.Framework.Common.BaseClasses;
 
 #endregion
 
@@ -44,7 +45,7 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="loginInfo">登录账户</param>
         /// <returns>用户信息</returns>
-        CustResult CustLogin(CustLoginInfo loginInfo);
+        JResult CustLogin(CustLoginInfo loginInfo);
 
         #endregion
     }

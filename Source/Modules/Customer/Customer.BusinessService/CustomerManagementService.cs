@@ -6,6 +6,7 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.AuditTrail.Interception;
+using Cedar.Framework.Common.BaseClasses;
 
 #endregion
 
@@ -72,7 +73,7 @@ namespace CCN.Modules.Customer.BusinessService
         /// <param name="loginInfo">登录账户</param>
         /// <returns>用户信息</returns>
         [AuditTrailCallHandler("CustLogin")]
-        public CustResult CustLogin(CustLoginInfo loginInfo)
+        public JResult CustLogin(CustLoginInfo loginInfo)
         {
             return BusinessComponent.CustLogin(loginInfo);
         }

@@ -10,14 +10,11 @@ namespace CCN.Modules.Car.DataAccess
 {
     public class CarDataAccess : DataAccessBase
     {
-        private readonly Database _factoy;
-
         /// <summary>
         /// 初始化
         /// </summary>
         public CarDataAccess()
         {
-            _factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
 
         #region 车辆
@@ -46,7 +43,7 @@ namespace CCN.Modules.Car.DataAccess
             //    where += $" and initial='{initial.ToUpper()}'";
             //}
             //var sql = $"select * from car_info where {where}";
-            //var provList = _factoy.Query<CarInfoModel>(sql);
+            //var provList = Helper.Query<CarInfoModel>(sql);
             //return provList;
         }
 
@@ -61,7 +58,7 @@ namespace CCN.Modules.Car.DataAccess
                         (`innerid`,custid,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`price`,`mileageid`,`register_date`,`reg_year`,`gearid`,`carageid`,`literid`,`colorid`,`carshructid`,`dischargeid`,`tel`,`contactor`,`dealer_id`,`seller_type`,`status`,`remark`,`createdtime`,`modifiedtime`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`tlci_date`,`audit_date`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
                         VALUES
                         (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@price,@mileageid,@register_date,@reg_year,@gearid,@carageid,@literid,@colorid,@carshructid,@dischargeid,@tel,@contactor,@dealer_id,@seller_type,@status,@remark,@createdtime,@modifiedtime,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@tlci_date,@audit_date,@mile_age,@gear_type,@color,@liter,@url);";
-            var result = _factoy.Execute(sql, model);
+            var result = Helper.Execute(sql, model);
             return result;
         }
 
@@ -103,7 +100,7 @@ namespace CCN.Modules.Car.DataAccess
                                 `audit_date` = @audit_date,
                                 WHERE `innerid` = @innerid;";
             
-            var result = _factoy.Execute(sql, model);
+            var result = Helper.Execute(sql, model);
             return result;
         }
 
@@ -117,7 +114,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"delete from car_info where innerid`=@innerid;";
             try
             {
-                _factoy.Execute(sql, new { innerid = id });
+                Helper.Execute(sql, new { innerid = id });
             }
             catch (Exception)
             {
@@ -137,7 +134,7 @@ namespace CCN.Modules.Car.DataAccess
             try
             {
                 const string sql = "update car_info set status=@status where innerid`=@innerid;";
-                _factoy.Execute(sql, new { innerid = carid });
+                Helper.Execute(sql, new { innerid = carid });
             }
             catch (Exception)
             {
@@ -157,12 +154,12 @@ namespace CCN.Modules.Car.DataAccess
             {
                 //累计分享次数
                 var sql = "update car_share set sharecount=sharecount+1 where carid=@carid;";
-                var resCount = _factoy.Execute(sql, new {carid = id});
+                var resCount = Helper.Execute(sql, new {carid = id});
                 if (resCount == 0)
                 {
                     //表示没有子表数据
                     sql = "INSERT INTO `car_share`(`innerid`,`carid`,`sharecount`,`seecount`,`praisecount`,`commentcount`) VALUES(uuid(), @carid, 1, 0, 0, 0);";
-                    _factoy.Execute(sql, new { carid = id });
+                    Helper.Execute(sql, new { carid = id });
                 }
             }
             catch (Exception)
@@ -182,7 +179,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"update car_share set seecount=seecount+1 where carid=@carid;";
             try
             {
-                _factoy.Execute(sql, new { carid = id });
+                Helper.Execute(sql, new { carid = id });
             }
             catch (Exception)
             {
@@ -201,7 +198,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"update car_share set praisecount=praisecount+1 where carid=@carid;";
             try
             {
-                _factoy.Execute(sql, new { carid = id });
+                Helper.Execute(sql, new { carid = id });
             }
             catch (Exception)
             {
@@ -221,7 +218,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"update car_share set commentcount=commentcount+1 where carid=@carid;";
             try
             {
-                _factoy.Execute(sql, new { carid = id });
+                Helper.Execute(sql, new { carid = id });
             }
             catch (Exception)
             {
@@ -241,7 +238,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"UPDATE `car_info` SET status=@status,`audit_time`=@audit_time WHERE `innerid`=@innerid;";
             try
             {
-                var result = _factoy.Execute(sql, new
+                var result = Helper.Execute(sql, new
                 {
                     status,
                     audit_time = DateTime.Now,
@@ -269,7 +266,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"UPDATE `car_info` SET `sold_time`=@sold_time WHERE `innerid`=@innerid;";
             try
             {
-                var result = _factoy.Execute(sql, new { sold_time = DateTime.Now, innerid = id });
+                var result = Helper.Execute(sql, new { sold_time = DateTime.Now, innerid = id });
                 if (result == 0)
                 {
                     return 0;
@@ -292,7 +289,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"UPDATE `car_info` SET `keep_time`=@keep_time WHERE `innerid`=@innerid;";
             try
             {
-                var result = _factoy.Execute(sql, new { keep_time = DateTime.Now, innerid = id });
+                var result = Helper.Execute(sql, new { keep_time = DateTime.Now, innerid = id });
                 if (result == 0)
                 {
                     return 0;

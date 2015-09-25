@@ -136,44 +136,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _baseservice.CommentCar(id, content);
         }
-
-        /// <summary>
-        /// 审核车辆
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <param name="status">审核状态</param>
-        /// <returns>1.操作成功</returns>
-        [Route("AuditCar")]
-        [HttpGet]
-        public int AuditCar(string id, int status)
-        {
-            return _baseservice.AuditCar(id, status);
-        }
-
-        /// <summary>
-        /// 核销车辆
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        [Route("CancelCar")]
-        [HttpGet]
-        public int CancelCar(string id)
-        {
-            return _baseservice.CancelCar(id);
-        }
-
-        /// <summary>
-        /// 车辆归档
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        [Route("KeepCar")]
-        [HttpGet]
-        public int KeepCar(string id)
-        {
-            return _baseservice.KeepCar(id);
-        }
-
+        
         #endregion
     }
 }

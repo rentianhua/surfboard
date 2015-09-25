@@ -75,12 +75,12 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="loginInfo">登录账户</param>
         /// <returns>用户信息</returns>
-        public CustResult CustLogin(CustLoginInfo loginInfo)
+        public JResult CustLogin(CustLoginInfo loginInfo)
         {
             var en = new Encryptor();
             loginInfo.Password = en.EncryptMd5(loginInfo.Password);
 
-            var result = new CustResult();
+            var result = new JResult();
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
             {
