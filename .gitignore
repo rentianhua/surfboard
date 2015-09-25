@@ -53,3 +53,7 @@
 /Source/Framework/AuditTrail/AuditTrail/bin
 /Source/Framework/AuditTrail/AuditTrail.Interception/obj
 /Source/Foundation/SMS/Foundation.SMS.Common/obj
+/UnitTest/FrameworkTest/obj
+/Source/Modules/Customer/Customer.BusinessComponent/bin
+/Source/Modules/Customer/Customer.BusinessComponent/obj
+/Source/Modules/Customer/Customer.BusinessComponent/obj
