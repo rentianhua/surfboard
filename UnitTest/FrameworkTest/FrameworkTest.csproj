@@ -38,6 +38,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cedar.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Cedar.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Foundation.SMS.Common">
       <HintPath>..\..\Lib\Cedar.Foundation.SMS.Common.dll</HintPath>
     </Reference>
@@ -118,14 +126,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Source\Core\Core\Core.csproj">
-      <Project>{61b5e817-c283-43d7-ae07-73b9e6110eac}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Source\Core\EntLib\EntLib.csproj">
-      <Project>{54fabf0c-cbed-450c-9cba-2b1846571e10}</Project>
-      <Name>EntLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.Interception\AuditTrail.Interception.csproj">
       <Project>{7d7edb88-c49d-417e-bce2-8a7b5c8e0093}</Project>
       <Name>AuditTrail.Interception</Name>

@@ -184,6 +184,24 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <param name="commandType"></param>
+        /// <returns></returns>
+        public virtual T Execute<T>(string sql, object parameters = null, CommandType commandType = CommandType.Text)
+        {
+            using (var connection = Factory.CreateConnection())
+            {
+                connection.ConnectionString = ConnectionString;
+                connection.Open();
+                return connection.ExecuteScalar<T>(sql, parameters, null, null, commandType);
+            }
+        }
+
+        /// <summary>
         /// 执行分页存储过程
         /// </summary>
         /// <typeparam name="T">返回实体类型</typeparam>
@@ -203,7 +221,9 @@ namespace Cedar.Framework.Common.Server.BaseClasses
                     //参数
                     var obj = new
                     {
-                        model.TableName, model.Fields, model.OrderField,
+                        model.TableName,
+                        model.Fields,
+                        model.OrderField,
                         GroupField = model.GroupBy,
                         sqlWhere = model.SqlWhere,
                         pageSize = model.PageSize,
