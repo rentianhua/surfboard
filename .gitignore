@@ -38,3 +38,6 @@
 *.xml
 
 *.xml
+/UnitTest/FrameworkTest/bin
+/Lib
+/Source/Core/Core/obj
