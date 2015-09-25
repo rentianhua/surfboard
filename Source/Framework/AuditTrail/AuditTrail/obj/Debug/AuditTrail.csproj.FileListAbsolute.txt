@@ -31,7 +31,6 @@ Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Microsoft.Practic
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\MySql.Data.Entity.EF6.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\StackExchange.Redis.dll
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Dapper.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\EntityFramework.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\MySql.Data.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Cedar.Core.EntLib.pdb
@@ -43,6 +42,4 @@ Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Microsoft.Practic
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\StackExchange.Redis.pdb
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\StackExchange.Redis.xml
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Dapper.pdb
-Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\Dapper.xml
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail\bin\EntityFramework.xml

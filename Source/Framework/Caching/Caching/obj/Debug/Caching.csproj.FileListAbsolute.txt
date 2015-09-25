@@ -31,3 +31,7 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\EntityFramework.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Caching.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.dll
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.xml
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.pdb
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
