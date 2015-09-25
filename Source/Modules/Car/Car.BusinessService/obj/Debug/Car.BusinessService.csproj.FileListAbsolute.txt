@@ -1,6 +1,0 @@
-E:\tim\code\surfboard\Lib\CCN.Modules.Car.BusinessService.XML
-E:\tim\code\surfboard\Lib\CCN.Modules.Car.BusinessService.dll
-E:\tim\code\surfboard\Lib\CCN.Modules.Car.BusinessService.pdb
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\Car.BusinessService.csprojResolveAssemblyReference.cache
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\CCN.Modules.Car.BusinessService.dll
-E:\tim\code\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\CCN.Modules.Car.BusinessService.pdb

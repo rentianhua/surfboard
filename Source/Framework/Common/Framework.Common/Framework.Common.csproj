@@ -79,10 +79,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationContextAwareObject .cs" />
     <Compile Include="BaseClasses\Encryptor.cs" />
     <Compile Include="BaseClasses\PagingModel.cs" />
     <Compile Include="BaseClasses\QueryModel.cs" />
     <Compile Include="BaseClasses\RandomUtility.cs" />
+    <Compile Include="IApplicationContextAwareObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
