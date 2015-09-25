@@ -44,6 +44,11 @@
             手机
             </summary>
         </member>
+        <member name="P:CCN.Modules.Customer.BusinessEntity.CustModel.VCode">
+            <summary>
+            手机验证码
+            </summary>
+        </member>
         <member name="P:CCN.Modules.Customer.BusinessEntity.CustModel.Telephone">
             <summary>
             固话

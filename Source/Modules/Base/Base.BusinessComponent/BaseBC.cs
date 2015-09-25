@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.DataAccess;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Cedar.Core.IoC;
+using Cedar.Foundation.SMS.Common;
 
 namespace CCN.Modules.Base.BusinessComponent
 {
@@ -22,6 +25,64 @@ namespace CCN.Modules.Base.BusinessComponent
         {
 
         }
+
+        #region 验证码
+
+        /// <summary>
+        /// 会员注册获取验证码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SendVerification(BaseVerification model)
+        {
+            model.Createdtime = DateTime.Now;
+            model.Vcode = RandomUtility.GetRandom(model.Length);
+
+            #region 发送验证码
+
+            if (model.TType == 1)
+            {
+                //发送手机
+                SMSMSG sms = new SMSMSG();
+                var result = sms.SendSms(model.Target, model.Vcode);
+                if (result.errcode != "0")
+                {
+                    model.Result = 0;
+                }
+            }
+            else if (model.TType == 2)
+            {
+                //发送邮件
+            }
+            
+            #endregion
+
+            return DataAccess.SaveVerification(model);
+        }
+
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="vcode">验证码</param>
+        /// <returns>返回结果。1.正确，0不正确,-1.验证码过期</returns>
+        public int CheckVerification(string target,string vcode)
+        {
+            var m = DataAccess.GetVerification(target);
+            //验证码不正确
+            if (m == null || !m.Vcode.Equals(vcode))
+            {
+                return 0;
+            }
+            //
+            if (m.Createdtime.AddMinutes(m.Valid) < DateTime.Now)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
+        #endregion
 
         #region 区域
 

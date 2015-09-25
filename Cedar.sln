@@ -88,11 +88,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.Interface", "Sou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail.BusinessEntity", "Source\Framework\AuditTrail\AuditTrail.BusinessEntity\AuditTrail.BusinessEntity.csproj", "{9EFED8E4-3134-4079-BFA0-193BFEAA20B1}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail", "Source\Framework\AuditTrail\AuditTrail\AuditTrail.csproj", "{7CA048FA-FA26-46E9-9919-EC0C22F3097E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Interception", "Source\Framework\Caching\Caching.Interception\Caching.Interception.csproj", "{CFC68F4D-2269-4FAF-8B9C-1D7B6EBC1B51}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching", "Source\Framework\Caching\Caching\Caching.csproj", "{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA}"
+=======
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SMS", "SMS", "{A8CA0E8F-80FB-42F0-A57E-2571922F4F9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.SMS.Common", "Source\Foundation\SMS\Foundation.SMS.Common\Foundation.SMS.Common.csproj", "{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC}"
+>>>>>>> master
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -148,6 +154,7 @@ Global
 		{9EFED8E4-3134-4079-BFA0-193BFEAA20B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EFED8E4-3134-4079-BFA0-193BFEAA20B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EFED8E4-3134-4079-BFA0-193BFEAA20B1}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{7CA048FA-FA26-46E9-9919-EC0C22F3097E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7CA048FA-FA26-46E9-9919-EC0C22F3097E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CA048FA-FA26-46E9-9919-EC0C22F3097E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -160,6 +167,12 @@ Global
 		{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> master
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,9 +203,14 @@ Global
 		{72F1D17B-A3EE-48E6-982E-401AEEB85C09} = {6300A9C9-238B-4341-A640-A8E43C2B62E1}
 		{D82FB661-0D74-4149-A255-586F27A60503} = {6300A9C9-238B-4341-A640-A8E43C2B62E1}
 		{9EFED8E4-3134-4079-BFA0-193BFEAA20B1} = {6300A9C9-238B-4341-A640-A8E43C2B62E1}
+<<<<<<< HEAD
 		{7CA048FA-FA26-46E9-9919-EC0C22F3097E} = {6300A9C9-238B-4341-A640-A8E43C2B62E1}
 		{CFC68F4D-2269-4FAF-8B9C-1D7B6EBC1B51} = {A4A31D15-E767-44DB-93F4-3C84C6970219}
 		{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA} = {A4A31D15-E767-44DB-93F4-3C84C6970219}
+=======
+		{A8CA0E8F-80FB-42F0-A57E-2571922F4F9F} = {A5961381-E364-4A31-8DFA-6739B6E3CAD3}
+		{094749B8-4E2B-4A25-BFBC-8EBED8E3A2BC} = {A8CA0E8F-80FB-42F0-A57E-2571922F4F9F}
+>>>>>>> master
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.PolicyInjection.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45

@@ -17,6 +17,31 @@
             </summary>
             <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
         </member>
+        <member name="T:Cedar.Core.EntLib.Data.SqlObject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Data.SqlObject.Sql">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Data.SqlObject.Paramters">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Data.SqlObject.Order">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Core.EntLib.Data.SqlObject.IsStrictResult">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Cedar.Core.EntLib.IoC.AutoInterception">
             <summary>
             A <see cref="T:Microsoft.Practices.Unity.UnityContainerExtension" /> for automatic interception.

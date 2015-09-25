@@ -38,12 +38,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Cedar.Foundation.SMS.Common">
+      <HintPath>..\..\Lib\Cedar.Foundation.SMS.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common">
       <HintPath>..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.Framework.Common.Server, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Cedar.Framework.Common.Server">
       <HintPath>..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framwork.AuditTrail.BusinessComponent">

@@ -30,3 +30,4 @@ E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Mo
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
 E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
+E:\tim\code\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache

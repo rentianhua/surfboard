@@ -23,6 +23,35 @@ namespace CCN.WebAPI.ApiControllers
             _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
         }
 
+        #region 验证码
+
+        /// <summary>
+        /// 会员注册获取验证码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("SendVerification")]
+        [HttpPost]
+        public int SendVerification([FromBody] BaseVerification model)
+        {            
+            return _baseservice.SendVerification(model);
+        }
+
+        /// <summary>
+        /// 检查验证码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("CheckVerification")]
+        [HttpPost]
+        public int CheckVerification([FromBody] BaseVerification model)
+        {
+
+            return _baseservice.CheckVerification(model.Target, model.Vcode);
+        }
+
+        #endregion
+
         #region 区域
 
         /// <summary>

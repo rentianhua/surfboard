@@ -25,8 +25,33 @@ namespace CCN.Modules.Base.BusinessService
 
         }
 
+        #region 验证码
+
+        /// <summary>
+        /// 会员注册获取验证码
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SendVerification(BaseVerification model)
+        {
+            return BusinessComponent.SendVerification(model);
+        }
+
+        /// <summary>
+        /// 获取验证码
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="vcode">验证码</param>
+        /// <returns>返回结果。1.正确，0不正确</returns>
+        public int CheckVerification(string target, string vcode)
+        {
+            return BusinessComponent.CheckVerification(target, vcode);
+        }
+
+        #endregion
+
         #region 区域
-        
+
         /// <summary>
         /// 获取省份
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cedar.Core.EntLib.Data;
+using Cedar.Foundation.SMS.Common;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,13 +37,18 @@ namespace FrameworkTest
             var sqlWhere = "1=1";
             PagingModel model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
             var list2 = helper.ExecutePaging<dynamic>(model, query.Echo);
-
-
-            //var factoy = new DatabaseWrapperFactory().GetDatabase("mysqldb");
-            //var d = factoy.Query("select * from base_carbrand").ToList();
-
+            
             Assert.IsNotNull(list2);
         }
+
+        [TestMethod]
+        public void TestMethod_SMS()
+        {
+            SMSMSG sms = new SMSMSG();
+            var result = sms.SendSms("15862409166", "测试发送");
+            Assert.IsNotNull(null);
+        }
+
     }
 
     public class AAQueryModel:QueryModel
