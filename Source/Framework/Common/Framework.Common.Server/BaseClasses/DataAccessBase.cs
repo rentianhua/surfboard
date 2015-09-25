@@ -21,7 +21,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
             {
                 if (dbHelper == null)
                 {
-                    //dbHelper = new MySqlDbHelper("");
+                    dbHelper = new MySqlDbHelper("mysqldb");
                 }
                 return dbHelper;
             }

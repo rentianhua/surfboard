@@ -74,6 +74,10 @@
       <HintPath>..\..\..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -86,17 +90,14 @@
   <ItemGroup>
     <Compile Include="AuditTrailCallHandler.cs" />
     <Compile Include="AuditTrailCallHandlerAttribute.cs" />
+    <Compile Include="CacheManager.cs" />
     <Compile Include="Configuration\AuditTrailCallHandlerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AuditTrail.BusinessEntity\AuditTrail.BusinessEntity.csproj">
-      <Project>{9efed8e4-3134-4079-bfa0-193bfeaa20b1}</Project>
-      <Name>AuditTrail.BusinessEntity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AuditTrail.Interface\AuditTrail.Interface.csproj">
-      <Project>{d82fb661-0d74-4149-a255-586f27a60503}</Project>
-      <Name>AuditTrail.Interface</Name>
+    <ProjectReference Include="..\AuditTrail\AuditTrail.csproj">
+      <Project>{7ca048fa-fa26-46e9-9919-ec0c22f3097e}</Project>
+      <Name>AuditTrail</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

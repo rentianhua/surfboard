@@ -35,8 +35,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\..\..\packages\Unity.3.5.1405-prerelease\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
@@ -116,6 +116,7 @@
     <Compile Include="Data\IDatabaseFactory.cs" />
     <Compile Include="Data\IParameterCache.cs" />
     <Compile Include="Data\UpdateBehavior.cs" />
+    <Compile Include="IoC\ServiceLocatableDictionary.cs" />
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="IoC\Default\Assemblies.cs" />
     <Compile Include="IoC\Configuration\AssemblyConfigurationElement.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="SettingSource\Configuration\SettingSourceSettings.cs" />
     <Compile Include="SettingSource\ISettingSource.cs" />
     <Compile Include="SettingSource\SettingSourceFactory.cs" />
+    <Compile Include="TimeConverter.cs" />
     <Compile Include="Utilities\StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -28,3 +28,9 @@
 *.XML
 
 *.dll
+
+*.xml
+
+.vs/Cedar/v14/.suo
+
+*.dll

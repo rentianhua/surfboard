@@ -3,15 +3,18 @@ using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Cedar.AuditTrail.Interception.Configuration;
 using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.BusinessEntity;
-using Cedar.Framwork.AuditTrail.Interface;
+using Cedar.Framwork.AuditTrail;
+using Newtonsoft.Json;
+
+//using Cedar.Framwork.AuditTrail.BusinessEntity;
+//using Cedar.Framwork.AuditTrail.Interface;
 
 namespace Cedar.AuditTrail.Interception
 {
     [ConfigurationElementType(typeof(AuditTrailCallHandlerData))]
     public class AuditTrailCallHandler : ICallHandler
     {
-        private IAuditTrailManagementService auditservice;
+        //private IAuditTrailManagementService auditservice;
 
         /// <summary>
         /// Gets or sets the name of the function.
@@ -42,7 +45,7 @@ namespace Cedar.AuditTrail.Interception
         public AuditTrailCallHandler(string functionName)
             : this(functionName, 0)
         {
-            auditservice = ServiceLocatorFactory.GetServiceLocator().GetService<IAuditTrailManagementService>();
+            //auditservice = ServiceLocatorFactory.GetServiceLocator().GetService<IAuditTrailManagementService>();
         }
 
         /// <summary>
@@ -56,27 +59,33 @@ namespace Cedar.AuditTrail.Interception
             IMethodReturn result;
             try
             {
+                AuditLogger auditLogger = AuditLogger.CreateAuditLogger(this.FunctionName);
                 IMethodReturn methodReturn = getNext()(input, getNext);
                 if (methodReturn != null)
                 {
-                    var data = new AuditLogModel()
+                    //var data = new AuditLogModel()
+                    //{
+                    //    ID = Guid.NewGuid().ToString(),
+                    //    AuditName = FunctionName,
+                    //    AuditType = input.MethodBase.Name,
+                    //    Arguments = input.Arguments,
+                    //    LogDateTime = DateTime.Now,
+                    //    Result = methodReturn.ReturnValue,
+                    //    Target = input.Target,
+                    //    TransactionID = "TransactionID"
+                    //};
+                    //try
+                    //{
+                    //    auditservice.InsertAuditLog(data);
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    //todo add log
+                    //}
+                    if (methodReturn.Exception == null)
                     {
-                        ID = Guid.NewGuid().ToString(),
-                        AuditName = FunctionName,
-                        AuditType = input.MethodBase.Name,
-                        Arguments = input.Arguments,
-                        LogDateTime = DateTime.Now,
-                        Result = methodReturn.ReturnValue,
-                        Target = input.Target,
-                        TransactionID = "TransactionID"
-                    };
-                    try
-                    {
-                        auditservice.InsertAuditLog(data);
-                    }
-                    catch (Exception e)
-                    {
-                        //todo add log
+                        auditLogger.Write(input.MethodBase.Name, string.Empty, JsonConvert.SerializeObject(input.Arguments), JsonConvert.SerializeObject(methodReturn.ReturnValue));
+                        auditLogger.Flush();
                     }
                 }
                 result = methodReturn;
