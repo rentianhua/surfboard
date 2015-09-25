@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Cedar.Core.EntLib.Data;
 using Cedar.Foundation.SMS.Common;
 using Cedar.Framework.Common.BaseClasses;

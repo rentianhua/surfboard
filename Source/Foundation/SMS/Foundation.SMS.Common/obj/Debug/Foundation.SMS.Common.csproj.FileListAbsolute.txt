@@ -1,7 +1,0 @@
-E:\tim\code\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\bin\Debug\Foundation.SMS.Common.dll
-E:\tim\code\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\bin\Debug\Foundation.SMS.Common.pdb
-E:\tim\code\surfboard\Lib\Cedar.Foundation.SMS.Common.XML
-E:\tim\code\surfboard\Lib\Cedar.Foundation.SMS.Common.dll
-E:\tim\code\surfboard\Lib\Cedar.Foundation.SMS.Common.pdb
-E:\tim\code\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.dll
-E:\tim\code\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.pdb

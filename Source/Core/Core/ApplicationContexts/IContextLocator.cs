@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Cedar.Core.ApplicationContexts
+﻿namespace Cedar.Core.ApplicationContexts
 {
     /// <summary>
     /// 

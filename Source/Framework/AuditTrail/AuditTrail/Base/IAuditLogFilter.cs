@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
     /// All of audit log filters used by audit log listeners to determine whether to write the given log entry.

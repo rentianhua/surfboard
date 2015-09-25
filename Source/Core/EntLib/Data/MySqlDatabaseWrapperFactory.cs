@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.Common;
-using System.Data.OracleClient;
-using System.Data.SqlClient;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Properties;
 using Cedar.Core.IoC;
 using Cedar.Core.SettingSource;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.Utility;
-using MySql.Data.MySqlClient;
 using Microsoft.Practices.EnterpriseLibrary.Data.Configuration;
-using Microsoft.Practices.EnterpriseLibrary.Data;
 using MySql.Data.Entity;
 
 namespace Cedar.Core.EntLib.Data

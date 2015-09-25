@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
 	/// All of the audit log formatters used to forma the log data object as a literal text must implement this interface.
