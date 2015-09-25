@@ -17,7 +17,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\MySql.Data.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.pdb
-Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Microsoft.Practices.EnterpriseLibrary.Common.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Newtonsoft.Json.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Microsoft.Practices.Unity.xml
@@ -31,6 +30,4 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Microsoft.Practices.Ser
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\EntityFramework.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.pdb
-Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.dll
-Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.pdb
-Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Caching.csprojResolveAssemblyReference.cache

@@ -237,3 +237,6 @@ E:\tim\code\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.Razor.xml
 E:\tim\code\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.WebPages.Razor.xml
 E:\tim\code\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.WebPages.xml
 E:\tim\code\surfboard\UnitTest\FrameworkTest\bin\Debug\System.Web.WebPages.Deployment.xml
+Y:\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.dll
+Y:\GitHub\surfboard\UnitTest\FrameworkTest\obj\Debug\FrameworkTest.pdb
