@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
-using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framwork.Caching;
-using Cedar.Framwork.Caching.Redis;
-using Microsoft.Practices.EnterpriseLibrary.Common.Properties;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 
 namespace Cedar.AuditTrail.Interception

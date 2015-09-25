@@ -2,7 +2,6 @@
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Cedar.AuditTrail.Interception.Configuration;
-using Cedar.Core.IoC;
 using Cedar.Framwork.AuditTrail;
 using Newtonsoft.Json;
 

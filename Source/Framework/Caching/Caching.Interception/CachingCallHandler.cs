@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Cedar.AuditTrail.Interception;
 using Cedar.Framwork.Caching.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.Collections.Generic;
 using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.Configuration;
 using Cedar.Framwork.Caching.Configuration;
 using FrameworkTest.TestService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cedar.Core.Configuration;
-using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
 using Microsoft.Practices.Unity.Utility;
 

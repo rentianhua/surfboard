@@ -41,3 +41,15 @@
 /UnitTest/FrameworkTest/bin
 /Lib
 /Source/Core/Core/obj
+/Source/Core/EntLib/obj
+/Source/Framework/Common/Framework.Common/obj
+/Source/Framework/Common/Framework.Common.Client/obj
+/Source/Framework/Common/Framework.Common.Server/obj
+/Source/Framework/Caching/Caching/obj
+/Source/Framework/Caching/Caching/bin
+/Source/Framework/Caching/Caching.Interception/bin
+/Source/Framework/Caching/Caching.Interception/obj
+/Source/Framework/AuditTrail/AuditTrail/obj
+/Source/Framework/AuditTrail/AuditTrail/bin
+/Source/Framework/AuditTrail/AuditTrail.Interception/obj
+/Source/Foundation/SMS/Foundation.SMS.Common/obj

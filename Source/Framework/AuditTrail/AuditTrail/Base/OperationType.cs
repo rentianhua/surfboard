@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
 	/// The type of operation to be audited.
