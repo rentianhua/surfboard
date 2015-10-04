@@ -1,0 +1,7 @@
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.xml
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CustRelations.BusinessService.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.pdb

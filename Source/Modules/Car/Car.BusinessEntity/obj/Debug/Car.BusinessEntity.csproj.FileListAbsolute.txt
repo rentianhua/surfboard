@@ -1,0 +1,17 @@
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.XML
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Core.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.Unity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Framework.Common.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Core.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Cedar.Core.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.Unity.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
