@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using CCN.Modules.Car.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
@@ -8,6 +9,9 @@ using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Car.DataAccess
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CarDataAccess : DataAccessBase
     {
         /// <summary>
@@ -55,9 +59,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                        (`innerid`,custid,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`price`,`mileageid`,`register_date`,`reg_year`,`gearid`,`carageid`,`literid`,`colorid`,`carshructid`,`dischargeid`,`tel`,`contactor`,`dealer_id`,`seller_type`,`status`,`remark`,`createdtime`,`modifiedtime`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`tlci_date`,`audit_date`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
+                        (`innerid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
                         VALUES
-                        (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@price,@mileageid,@register_date,@reg_year,@gearid,@carageid,@literid,@colorid,@carshructid,@dischargeid,@tel,@contactor,@dealer_id,@seller_type,@status,@remark,@createdtime,@modifiedtime,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@tlci_date,@audit_date,@mile_age,@gear_type,@color,@liter,@url);";
+                        (@innerid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@literid,@dischargeid,@carshructid,@gearid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
             var result = Helper.Execute(sql, model);
             return result;
         }
@@ -69,38 +73,10 @@ namespace CCN.Modules.Car.DataAccess
         /// <returns></returns>
         public int UpdateCar(CarInfoModel model)
         {
-            const string sql = @"UPDATE `car_info` SET
-                                `title` = @title,
-                                `pic_url` = @pic_url,
-                                `provid` = @provid,
-                                `cityid` = @cityid,
-                                `brand_id` = @brand_id,
-                                `series_id` = @series_id,
-                                `model_id` = @model_id,
-                                `price` = @price,
-                                `mileageid` = @mileageid,
-                                `register_date` = @register_date,
-                                `reg_year` = @reg_year,
-                                `gearid` = @gearid,
-                                `carageid` = @carageid,
-                                `literid` = @literid,
-                                `colorid` = @colorid,
-                                `carshructid` = @carshructid,
-                                `dischargeid` = @dischargeid,
-                                `tel` = @tel,
-                                `contactor` = @contactor,
-                                `dealer_id` = @dealer_id,
-                                `seller_type` = @seller_type,
-                                `remark` = @remark,
-                                `modifiedtime` = @modifiedtime,
-                                `eval_price` = @eval_price,
-                                `next_year_eval_price` = @next_year_eval_price,
-                                `vpr` = @vpr,
-                                `tlci_date` = @tlci_date,
-                                `audit_date` = @audit_date,
-                                WHERE `innerid` = @innerid;";
-            
-            var result = Helper.Execute(sql, model);
+            var sql = new StringBuilder("update `car_info` set ");
+            sql.Append(Helper.CreateField(model));
+            sql.Append(" where innerid = @innerid");
+            var result = Helper.Execute(sql.ToString(), model);
             return result;
         }
 

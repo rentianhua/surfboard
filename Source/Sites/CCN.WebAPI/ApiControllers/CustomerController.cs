@@ -60,7 +60,9 @@ namespace CCN.WebAPI.ApiControllers
         /// 用户注册
         /// </summary>
         /// <param name="userInfo">用户信息</param>
-        /// <returns></returns>
+        /// <returns>
+        /// errcode,0.成功，400.验证码错误，401.异常
+        /// </returns>
         [Route("CustRegister")]
         [HttpPost]
         public JResult CustRegister([FromBody] CustModel userInfo)
@@ -72,7 +74,7 @@ namespace CCN.WebAPI.ApiControllers
             if (cresult != 1)
             {
                 //验证码错误
-                //return -1;
+                //return 400;
             }
 
             var result = _custservice.CustRegister(userInfo);

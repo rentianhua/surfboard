@@ -51,3 +51,5 @@ E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Newt
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\AuditTrail.DataAccess.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\Cedar.Framwork.AuditTrail.DataAccess.dll
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\obj\Debug\Cedar.Framwork.AuditTrail.DataAccess.pdb
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Core.xml
+E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.DataAccess\bin\Cedar.Framework.Common.Server.xml

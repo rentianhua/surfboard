@@ -95,11 +95,11 @@ namespace Cedar.Framwork.AuditTrail
             Guard.ArgumentNotNullOrEmpty(functionName, "functionName");
             if (string.IsNullOrEmpty(ApplicationContext.Current.UserName))
             {
-                throw new InvalidOperationException(Resources.ExceptionCurrentUserNameNotExists);
+                //throw new InvalidOperationException(Resources.ExceptionCurrentUserNameNotExists);
             }
             if (string.IsNullOrEmpty(ApplicationContext.Current.TransactionId))
             {
-                throw new InvalidOperationException(Resources.ExceptionCurrentTransactionIdNotExists);
+                //throw new InvalidOperationException(Resources.ExceptionCurrentTransactionIdNotExists);
             }
             AuditLogEntry auditLogEntry = new AuditLogEntry(functionName, null, null, null, null);
             return new AuditLogger(auditLogEntry);

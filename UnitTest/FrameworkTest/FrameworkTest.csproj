@@ -52,9 +52,6 @@
     <Reference Include="Cedar.Framework.Common">
       <HintPath>..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.Framework.Common.Server">
-      <HintPath>..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Framwork.AuditTrail.BusinessComponent">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.BusinessComponent.dll</HintPath>
     </Reference>
