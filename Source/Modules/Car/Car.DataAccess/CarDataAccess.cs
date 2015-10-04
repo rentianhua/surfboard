@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using CCN.Modules.Car.BusinessEntity;
 using Cedar.Core.Data;
@@ -35,20 +36,68 @@ namespace CCN.Modules.Car.DataAccess
             const string fields = " * ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
-            var sqlWhere = "1=1";
-            PagingModel model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
-            //var list2 = Helper.ExecutePaging<dynamic>(model, query.Echo);
-            BasePageList<CarInfoModel> list = Helper.ExecutePaging<CarInfoModel>(model, query.Echo);
-            return list;
+            var sqlWhere = new StringBuilder("1=1");
 
-            //string where = " 1=1";
-            //if (!string.IsNullOrWhiteSpace(initial))
-            //{
-            //    where += $" and initial='{initial.ToUpper()}'";
-            //}
-            //var sql = $"select * from car_info where {where}";
-            //var provList = Helper.Query<CarInfoModel>(sql);
-            //return provList;
+            sqlWhere.Append(query.status != null 
+                ? $" and status={query.status}" 
+                : " and status<>0");
+
+            if (!string.IsNullOrWhiteSpace(query.custid))
+            {
+                sqlWhere.Append($" and custid='{query.custid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.title))
+            {
+                sqlWhere.Append($" and title like '%{query.title}%'");
+            }
+
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null)
+            {
+                sqlWhere.Append($" and brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null)
+            {
+                sqlWhere.Append($" and series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null)
+            {
+                sqlWhere.Append($" and model_id={query.model_id}");
+            }
+            
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取车辆详情
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public CarInfoModel GetCarInfoById(string id)
+        {
+            const string sql =
+                @"select `innerid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url` from `car_info` where innerid=@innerid";
+            var result = Helper.Query<CarInfoModel>(sql, new {innerid = id}).FirstOrDefault();
+            return result;
         }
 
         /// <summary>
