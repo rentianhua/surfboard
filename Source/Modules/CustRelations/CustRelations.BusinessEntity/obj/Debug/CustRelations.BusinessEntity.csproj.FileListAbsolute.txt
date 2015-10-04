@@ -1,0 +1,5 @@
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.XML
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CCN.Modules.CustRelations.BusinessEntity.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CCN.Modules.CustRelations.BusinessEntity.pdb

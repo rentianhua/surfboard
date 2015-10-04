@@ -1,0 +1,6 @@
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Base.DataAccess.xml
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Base.DataAccess.dll
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Base.DataAccess.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.DataAccess\obj\Debug\Base.DataAccess.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.DataAccess\obj\Debug\CCN.Modules.Base.DataAccess.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.DataAccess\obj\Debug\CCN.Modules.Base.DataAccess.pdb
