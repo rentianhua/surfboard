@@ -1,0 +1,6 @@
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\Car.BusinessService.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Car.BusinessService.XML
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Car.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Car.BusinessService.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\CCN.Modules.Car.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessService\obj\Debug\CCN.Modules.Car.BusinessService.pdb

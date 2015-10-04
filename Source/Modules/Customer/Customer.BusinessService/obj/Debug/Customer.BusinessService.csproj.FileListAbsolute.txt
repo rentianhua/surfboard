@@ -1,0 +1,7 @@
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.BusinessService.dll.config
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.BusinessService.xml
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.Customer.BusinessService.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\Customer.BusinessService.csprojResolveAssemblyReference.cache
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessService\obj\Debug\CCN.Modules.Customer.BusinessService.pdb

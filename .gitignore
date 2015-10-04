@@ -9,8 +9,6 @@
 
 .vs/Cedar/v14/.suo
 
-*.dll
-
 *.exe
 
 *.targets
@@ -21,63 +19,12 @@
 
 *.xml
 
-*.dll
-
-*.pdb
-
-*.XML
-
-*.dll
-
-*.xml
-
-*.xml
-
-*.xml
-
-*.xml
-
-*.xml
-
-
 *.cache
 
-/UnitTest/FrameworkTest/bin
+*/bin
 /Lib
-/Source/Core/Core/obj
-/Source/Core/EntLib/obj
-/Source/Framework/Common/Framework.Common/obj
-/Source/Framework/Common/Framework.Common.Client/obj
-/Source/Framework/Common/Framework.Common.Server/obj
-/Source/Framework/Caching/Caching/obj
-/Source/Framework/Caching/Caching/bin
-/Source/Framework/Caching/Caching.Interception/bin
-/Source/Framework/Caching/Caching.Interception/obj
-/Source/Framework/AuditTrail/AuditTrail/obj
-/Source/Framework/AuditTrail/AuditTrail/bin
-/Source/Framework/AuditTrail/AuditTrail.Interception/obj
-/Source/Foundation/SMS/Foundation.SMS.Common/obj
-/UnitTest/FrameworkTest/obj
-/Source/Modules/Customer/Customer.BusinessComponent/bin
-/Source/Modules/Customer/Customer.BusinessComponent/obj
-/Source/Modules/Customer/Customer.BusinessComponent/obj
-/Source/Modules/Customer/Customer.BusinessEntity/bin
-/Source/Modules/Customer/Customer.BusinessEntity/obj
-/Source/Modules/Customer/Customer.BusinessService/obj
-/Source/Modules/Customer/Customer.DataAccess/bin
-/Source/Modules/Customer/Customer.DataAccess/obj
-/Source/Modules/Customer/Customer.Interface/obj
-/Source/Modules/Base/Base.BusinessComponent/obj
-/Source/Modules/Base/Base.BusinessEntity/obj
-/Source/Modules/Base/Base.BusinessService/obj
-/Source/Modules/Base/Base.DataAccess/obj
-/Source/Modules/Base/Base.Interface/obj
-/Source/Modules/Car/Car.BusinessComponent/obj
-/Source/Modules/Car/Car.BusinessEntity/obj
-/Source/Modules/Car/Car.BusinessService/obj
-/Source/Modules/Car/Car.DataAccess/obj
-/Source/Modules/Car/Car.Interface/obj
-/Source/Sites/CCN.WebAPI/bin
-/Source/Sites/CCN.WebAPI/obj
-/UnitTest/FrameworkTest/obj
+*/obj
+
 .vs/config/applicationhost.config
+
+*.user
