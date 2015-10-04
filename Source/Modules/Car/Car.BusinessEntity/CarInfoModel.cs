@@ -310,7 +310,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 聚合数据车辆id
         /// </summary>
-        public int Carid { get; set; }
+        public int? Carid { get; set; }
 
         /// <summary>
         /// 车型名称
@@ -318,39 +318,39 @@ namespace CCN.Modules.Car.BusinessEntity
         public string title { get; set; }
 
         /// <summary>
-        /// 指导价
+        /// 封面图片
         /// </summary>
         public string pic_url { get; set; }
 
         /// <summary>
         /// 省份id
         /// </summary>
-        public int provid { get; set; }
+        public int? provid { get; set; }
 
         /// <summary>
         /// 城市id
         /// </summary>
-        public int cityid { get; set; }
+        public int? cityid { get; set; }
 
         /// <summary>
         /// 品牌id
         /// </summary>
-        public int brand_id { get; set; }
+        public int? brand_id { get; set; }
 
         /// <summary>
         /// 车系id
         /// </summary>
-        public int series_id { get; set; }
+        public int? series_id { get; set; }
 
         /// <summary>
         /// 车型id
         /// </summary>
-        public int model_id { get; set; }
+        public int? model_id { get; set; }
 
         /// <summary>
         /// 颜色
         /// </summary>
-        public int colorid { get; set; }
+        public int? colorid { get; set; }
 
         /// <summary>
         /// 收购时间
@@ -360,17 +360,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 收购价格(万元)
         /// </summary>
-        public decimal buyprice { get; set; }
+        public decimal? buyprice { get; set; }
 
         /// <summary>
         /// 成交价格（万元）
         /// </summary>
-        public decimal dealprice { get; set; }
+        public decimal? dealprice { get; set; }
 
         /// <summary>
         /// 重大事故/水浸/火烧
         /// </summary>
-        public short isproblem { get; set; }
+        public short? isproblem { get; set; }
 
         /// <summary>
         /// 转让原因
@@ -395,17 +395,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 是否定期保养
         /// </summary>
-        public short istain { get; set; }
+        public short? istain { get; set; }
 
         /// <summary>
         /// 待售价格（万元）
         /// </summary>
-        public decimal price { get; set; }
+        public decimal? price { get; set; }
 
         /// <summary>
         /// 行驶里程
         /// </summary>
-        public decimal mileage { get; set; }
+        public decimal? mileage { get; set; }
 
         /// <summary>
         /// 车辆上牌日期
@@ -415,32 +415,32 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 注册年份
         /// </summary>
-        public int reg_year { get; set; }
+        public int? reg_year { get; set; }
 
         /// <summary>
         /// 变速箱id
         /// </summary>
-        public int gearid { get; set; }
+        public int? gearid { get; set; }
 
         /// <summary>
         /// 车龄[和上牌时间冲突，备用]
         /// </summary>
-        public int carageid { get; set; }
+        public int? carageid { get; set; }
 
         /// <summary>
         /// 排量[车型基础数据中有，备用]
         /// </summary>
-        public int literid { get; set; }
+        public int? literid { get; set; }
 
         /// <summary>
         /// 车身结构
         /// </summary>
-        public int carshructid { get; set; }
+        public int? carshructid { get; set; }
 
         /// <summary>
         /// 排放标准
         /// </summary>
-        public int dischargeid { get; set; }
+        public int? dischargeid { get; set; }
 
         /// <summary>
         /// 联系电话
@@ -455,12 +455,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 卖家类型，1表示个人，2表示商家
         /// </summary>
-        public int seller_type { get; set; }
+        public int? seller_type { get; set; }
 
         /// <summary>
         /// 状态状态[1.在售，2.已售，0.已删除]
         /// </summary>
-        public int status { get; set; }
+        public int? status { get; set; }
         
         /// <summary>
         /// createdtime
