@@ -38,6 +38,10 @@
 *.xml
 
 *.xml
+
+
+*.cache
+
 /UnitTest/FrameworkTest/bin
 /Lib
 /Source/Core/Core/obj
@@ -74,16 +78,6 @@
 /Source/Modules/Car/Car.DataAccess/obj
 /Source/Modules/Car/Car.Interface/obj
 /Source/Sites/CCN.WebAPI/bin
-<<<<<<< Updated upstream
 /Source/Sites/CCN.WebAPI/obj
-=======
 /UnitTest/FrameworkTest/obj
-
-.vs/Cedar/v14/.suo
->>>>>>> Stashed changes
-
-*.cache
-
-.vs/Cedar/v14/.suo
-
-.vs/Cedar/v14/.suo
+.vs/config/applicationhost.config
