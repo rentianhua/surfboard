@@ -58,6 +58,7 @@
     <Reference Include="Cedar.Framwork.AuditTrail.DataAccess">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framwork.AuditTrail.DataAccess.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
       <Private>True</Private>
@@ -109,6 +110,7 @@
     <Compile Include="Caching\CachingUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
     <Compile Include="TestService\ITestService.cs" />
+    <Compile Include="TestService\Models.cs" />
     <Compile Include="TestService\TestService.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using System.Web;
+using System.Web.Caching;
 using Cedar.AuditTrail.Interception;
 using Cedar.Framwork.Caching.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
+using Newtonsoft.Json;
 
 namespace Cedar.Framwork.Caching.Interception
 {
@@ -86,6 +89,26 @@ namespace Cedar.Framwork.Caching.Interception
                 return getNext()(input, getNext);
             }
 
+            //object[] array = new object[input.Inputs.Count];
+            //for (int i = 0; i < array.Length; i++)
+            //{
+            //    array[i] = input.Inputs[i];
+            //}
+            //string key = this.KeyGenerator.CreateCacheKey(input.MethodBase, array);
+            //object[] array2 = (object[])HttpRuntime.Cache.Get(key);
+            //if (array2 == null)
+            //{
+            //    IMethodReturn methodReturn = getNext()(input, getNext);
+            //    if (methodReturn.Exception == null)
+            //    {
+            //        this.AddToCache(key, methodReturn.ReturnValue);
+            //    }
+            //    return methodReturn;
+            //}
+            //return input.CreateMethodReturn(array2[0], new object[]
+            //{
+            //    input.Arguments
+            //});
             object[] array = new object[input.Inputs.Count];
             for (int i = 0; i < array.Length; i++)
             {
@@ -97,14 +120,16 @@ namespace Cedar.Framwork.Caching.Interception
             if (array2 == null)
             {
                 IMethodReturn methodReturn = getNext()(input, getNext);
+
                 if (methodReturn.Exception == null)
                 {
-                    CacheManager.Provider.Add(key, methodReturn.ReturnValue, ExpirationTime);
+                    this.AddToCache(key, methodReturn.ReturnValue, ExpirationTime);
+                    //CacheManager.Provider.Add(key, methodReturn.ReturnValue, ExpirationTime);
                 }
                 return methodReturn;
             }
 
-            return input.CreateMethodReturn(array2[0], new object[]
+            return input.CreateMethodReturn(array2, new object[]
             {
                 input.Arguments
             });
@@ -116,13 +141,14 @@ namespace Cedar.Framwork.Caching.Interception
             return methodInfo != null && methodInfo.ReturnType == typeof(void);
         }
 
-        //private void AddToCache(string key, object value)
-        //{
-        //    object[] value2 = new object[]
-        //    {
-        //        value
-        //    };
-        //    HttpRuntime.Cache.Insert(key, value2, null, Cache.NoAbsoluteExpiration, this.ExpirationTime, CacheItemPriority.Normal, null);
-        //}
+        private void AddToCache(string key, object value, TimeSpan expirationTime)
+        {
+            object[] value2 = new object[]
+            {
+                value
+            };
+            CacheManager.Provider.Add(key, value2, expirationTime);
+            //HttpRuntime.Cache.Insert(key, value2, null, Cache.NoAbsoluteExpiration, this.ExpirationTime, CacheItemPriority.Normal, null);
+        }
     }
 }

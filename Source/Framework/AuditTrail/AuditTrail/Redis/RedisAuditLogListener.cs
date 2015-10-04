@@ -53,7 +53,7 @@ namespace Cedar.Framwork.AuditTrail.Redis
         protected override void WriteCore(AuditLogEntry logEntry)
         {
             Guard.ArgumentNotNull(logEntry, "logEntry");
-            RedisDatabaseWrapper.StringSet($"{logEntry.FunctionName}_{logEntry.TransactionId}", JsonConvert.SerializeObject(logEntry));
+            RedisDatabaseWrapper.StringSet($"{logEntry.FunctionName}:{logEntry.TransactionId}", JsonConvert.SerializeObject(logEntry));
         }
     }
 }

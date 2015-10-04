@@ -90,7 +90,6 @@
   <ItemGroup>
     <Compile Include="AuditTrailCallHandler.cs" />
     <Compile Include="AuditTrailCallHandlerAttribute.cs" />
-    <Compile Include="CacheManager.cs" />
     <Compile Include="Configuration\AuditTrailCallHandlerData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
