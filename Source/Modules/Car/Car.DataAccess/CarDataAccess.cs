@@ -108,10 +108,19 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                        (`innerid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
+                        (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
                         VALUES
-                        (@innerid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@literid,@dischargeid,@carshructid,@gearid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
-            var result = Helper.Execute(sql, model);
+                        (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@literid,@dischargeid,@carshructid,@gearid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
+            int result;
+            try
+            {
+                result = Helper.Execute(sql, model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            
             return result;
         }
 
@@ -123,9 +132,17 @@ namespace CCN.Modules.Car.DataAccess
         public int UpdateCar(CarInfoModel model)
         {
             var sql = new StringBuilder("update `car_info` set ");
-            sql.Append(Helper.CreateField(model));
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
             sql.Append(" where innerid = @innerid");
-            var result = Helper.Execute(sql.ToString(), model);
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
             return result;
         }
 
@@ -158,10 +175,10 @@ namespace CCN.Modules.Car.DataAccess
         {
             try
             {
-                const string sql = "update car_info set status=@status where innerid`=@innerid;";
-                Helper.Execute(sql, new { innerid = carid });
+                const string sql = "update car_info set status=@status where `innerid`=@innerid;";
+                Helper.Execute(sql, new { innerid = carid, status });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -187,7 +204,7 @@ namespace CCN.Modules.Car.DataAccess
                     Helper.Execute(sql, new { carid = id });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -206,7 +223,7 @@ namespace CCN.Modules.Car.DataAccess
             {
                 Helper.Execute(sql, new { carid = id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -225,7 +242,7 @@ namespace CCN.Modules.Car.DataAccess
             {
                 Helper.Execute(sql, new { carid = id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
@@ -245,13 +262,15 @@ namespace CCN.Modules.Car.DataAccess
             {
                 Helper.Execute(sql, new { carid = id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return 0;
             }
             return 1;
         }
-        
+
+        #region 赞不用
+
         /// <summary>
         /// 审核车辆
         /// </summary>
@@ -326,6 +345,8 @@ namespace CCN.Modules.Car.DataAccess
             }
             return 1;
         }
+
+        #endregion
 
         #endregion
     }
