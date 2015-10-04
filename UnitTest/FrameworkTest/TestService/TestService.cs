@@ -12,9 +12,9 @@ namespace FrameworkTest.TestService
         }
 
         [CachingCallHandler()]
-        public string SayHelloCaching(dynamic words)
+        public ReturnModel SayHelloCaching(int id, dynamic words)
         {
-            return "SayHelloResults";
+            return new ReturnModel() { code = 7001, content = "SayHelloResults" };
         }
     }
 }

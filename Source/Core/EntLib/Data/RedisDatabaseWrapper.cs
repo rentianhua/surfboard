@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using StackExchange.Redis;
+using Redis.Cache;
 
 namespace Cedar.Core.EntLib.Data
 {
@@ -37,12 +38,6 @@ namespace Cedar.Core.EntLib.Data
             return db.StringSet(key, value);
         }
 
-        public bool StringSet(string key, object value)
-        {
-            var db = _connectionMultiplexer.GetDatabase(database);
-            return db.StringSet(key, Serialize(value));
-        }
-
         public bool KeyExpire(string key, TimeSpan value)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
@@ -55,13 +50,7 @@ namespace Cedar.Core.EntLib.Data
             return db.KeyExists(key);
         }
 
-        public T StringGet<T>(string key)
-        {
-            var db = _connectionMultiplexer.GetDatabase(database);
-            return Deserialize<T>(db.StringGet(key));
-        }
-
-        public object StringGet(string key)
+        public string StringGet(string key)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             return db.StringGet(key);
@@ -70,37 +59,6 @@ namespace Cedar.Core.EntLib.Data
         public void Dispose()
         {
             throw new NotImplementedException();
-        }
-
-        static byte[] Serialize(object o)
-        {
-            if (o == null)
-            {
-                return null;
-            }
-
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                binaryFormatter.Serialize(memoryStream, o);
-                byte[] objectDataAsStream = memoryStream.ToArray();
-                return objectDataAsStream;
-            }
-        }
-
-        static T Deserialize<T>(byte[] stream)
-        {
-            if (stream == null)
-            {
-                return default(T);
-            }
-
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            using (MemoryStream memoryStream = new MemoryStream(stream))
-            {
-                T result = (T)binaryFormatter.Deserialize(memoryStream);
-                return result;
-            }
         }
     }
 }

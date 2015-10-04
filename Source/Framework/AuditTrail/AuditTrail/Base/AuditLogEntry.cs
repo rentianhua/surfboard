@@ -94,13 +94,13 @@ namespace Cedar.Framwork.AuditTrail
         public ICollection<AuditLogEntryItem> Items { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="T:Cedar.Framwork.AuditTrail.AuditLogEntry" /> class.
+        /// 
         /// </summary>
-        /// <param name="functionName">Name of the function.</param>
-        /// <param name="transactionId">The transaction id.</param>
-        /// <param name="userName">Name of the user.</param>
-        /// <param name="appVersion">The app version.</param>
-        /// <param name="logTime">The log time.</param>
+        /// <param name="functionName"></param>
+        /// <param name="transactionId"></param>
+        /// <param name="userid"></param>
+        /// <param name="appVersion"></param>
+        /// <param name="logTime"></param>
         public AuditLogEntry(string functionName, string transactionId = null, string userid = null,
             string appVersion = null, DateTime? logTime = null)
         {

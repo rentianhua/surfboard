@@ -71,9 +71,11 @@ namespace FrameworkTest.Caching
             ApplicationContext.Current.UserName = Guid.NewGuid().ToString();
             CachingSettings at = ConfigManager.GetConfigurationSection<CachingSettings>();
             at.Configure(iServiceLocate);
-            var result = iTestService.SayHelloCaching(new { id = "1", name = "name" });
-            Assert.IsFalse(string.IsNullOrEmpty(result));
-            Assert.AreEqual(result, "SayHelloResults");
+            var result = iTestService.SayHelloCaching(1, new { id = "1", name = "name" });
+            Assert.IsNotNull(result);
+            var result2 = iTestService.SayHelloCaching(1, new { id = "1", name = "name" });
+            Assert.AreEqual(result, result2);
+            //Assert.AreEqual(result, "SayHelloResults");
         }
     }
 }

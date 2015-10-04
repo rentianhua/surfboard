@@ -53,7 +53,11 @@ namespace Cedar.AuditTrail.Interception
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public object Get(string key)
         {
             return Provider.Get(key);

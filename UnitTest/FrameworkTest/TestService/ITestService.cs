@@ -4,6 +4,6 @@
     {
         string SayHello(dynamic words);
 
-        string SayHelloCaching(dynamic words);
+        ReturnModel SayHelloCaching(int id, dynamic words);
     }
 }

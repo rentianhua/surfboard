@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
+using Newtonsoft.Json.Serialization;
 
 namespace Cedar.Framwork.Caching
 {
