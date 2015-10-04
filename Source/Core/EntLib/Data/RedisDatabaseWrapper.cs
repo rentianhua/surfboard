@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using StackExchange.Redis;
-using Redis.Cache;
 
 namespace Cedar.Core.EntLib.Data
 {

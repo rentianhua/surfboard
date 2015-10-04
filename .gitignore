@@ -81,3 +81,7 @@
 
 .vs/Cedar/v14/.suo
 >>>>>>> Stashed changes
+
+*.cache
+
+.vs/Cedar/v14/.suo
