@@ -32,11 +32,21 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 获取车辆详情
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarInfoById(string id)
+        {
+            return BusinessComponent.GetCarInfoById(id);
+        }
+
+        /// <summary>
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
-        public int AddCar(CarInfoModel model)
+        public JResult AddCar(CarInfoModel model)
         {
             return BusinessComponent.AddCar(model);
         }
@@ -46,7 +56,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
-        public int UpdateCar(CarInfoModel model)
+        public JResult UpdateCar(CarInfoModel model)
         {
             return BusinessComponent.UpdateCar(model);
         }
@@ -56,7 +66,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.删除成功</returns>
-        public int DeleteCar(string id)
+        public JResult DeleteCar(string id)
         {
             return BusinessComponent.DeleteCar(id);
         }
@@ -67,7 +77,7 @@ namespace CCN.Modules.Car.BusinessService
         /// <param name="carid">车辆id</param>
         /// <param name="status"></param>
         /// <returns>1.操作成功</returns>
-        public int UpdateCarStatus(string carid, int status)
+        public JResult UpdateCarStatus(string carid, int status)
         {
             return BusinessComponent.UpdateCarStatus(carid, status);
         }
@@ -77,7 +87,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.操作成功</returns>
-        public int ShareCar(string id)
+        public JResult ShareCar(string id)
         {
             return BusinessComponent.ShareCar(id);
         }
@@ -87,7 +97,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        public int UpSeeCount(string id)
+        public JResult UpSeeCount(string id)
         {
 
             return BusinessComponent.UpSeeCount(id);
@@ -98,7 +108,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        public int UpPraiseCount(string id)
+        public JResult UpPraiseCount(string id)
         {
             return BusinessComponent.UpPraiseCount(id);
         }
@@ -109,7 +119,7 @@ namespace CCN.Modules.Car.BusinessService
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
         /// <returns>1.累计成功</returns>
-        public int CommentCar(string id, string content)
+        public JResult CommentCar(string id, string content)
         {
             return BusinessComponent.CommentCar(id, content);
         }

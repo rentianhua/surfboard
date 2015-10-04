@@ -4,3 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\Car.Interface.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.pdb
+E:\tim\surfboard\Lib\CCN.Modules.Car.Interface.XML
+E:\tim\surfboard\Lib\CCN.Modules.Car.Interface.dll
+E:\tim\surfboard\Lib\CCN.Modules.Car.Interface.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\Car.Interface.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.dll
+E:\tim\surfboard\Source\Modules\Car\Car.Interface\obj\Debug\CCN.Modules.Car.Interface.pdb

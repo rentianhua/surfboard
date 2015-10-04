@@ -4,3 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CustRelations.Interface.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.pdb
+E:\tim\surfboard\Lib\CCN.Modules.CustRelations.Interface.XML
+E:\tim\surfboard\Lib\CCN.Modules.CustRelations.Interface.dll
+E:\tim\surfboard\Lib\CCN.Modules.CustRelations.Interface.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CustRelations.Interface.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.pdb

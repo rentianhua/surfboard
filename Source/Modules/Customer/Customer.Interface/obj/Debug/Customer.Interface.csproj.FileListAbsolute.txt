@@ -4,3 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\Customer.Interface.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.pdb
+E:\tim\surfboard\Lib\CCN.Modules.Customer.Interface.xml
+E:\tim\surfboard\Lib\CCN.Modules.Customer.Interface.dll
+E:\tim\surfboard\Lib\CCN.Modules.Customer.Interface.pdb
+E:\tim\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\Customer.Interface.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.Interface\obj\Debug\CCN.Modules.Customer.Interface.pdb

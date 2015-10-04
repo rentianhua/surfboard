@@ -40,13 +40,25 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 获取车辆详情
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        [Route("GetCarInfoById")]
+        [HttpGet]
+        public JResult GetCarInfoById(string id)
+        {
+            return _baseservice.GetCarInfoById(id);
+        }
+
+        /// <summary>
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns>0：未被注册，非0：用户名被注册</returns>
         [Route("AddCar")]
         [HttpPost]
-        public int AddCar([FromBody] CarInfoModel model)
+        public JResult AddCar([FromBody] CarInfoModel model)
         {
             return _baseservice.AddCar(model);
         }
@@ -58,7 +70,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateCar")]
         [HttpPost]
-        public int UpdateCar([FromBody] CarInfoModel model)
+        public JResult UpdateCar([FromBody] CarInfoModel model)
         {
             return _baseservice.UpdateCar(model);
         }
@@ -70,7 +82,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>1.删除成功</returns>
         [Route("DeleteCar")]
         [HttpDelete]
-        public int DeleteCar(string id)
+        public JResult DeleteCar(string id)
         {
             return _baseservice.DeleteCar(id);
         }
@@ -83,7 +95,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>1.操作成功</returns>
         [Route("UpdateCarStatus")]
         [HttpGet]
-        public int UpdateCarStatus(string carid, int status)
+        public JResult UpdateCarStatus(string carid, int status)
         {
             return _baseservice.UpdateCarStatus(carid, status);
         }
@@ -95,7 +107,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>1.操作成功</returns>
         [Route("ShareCar")]
         [HttpGet]
-        public int ShareCar(string id)
+        public JResult ShareCar(string id)
         {
             return _baseservice.ShareCar(id);
         }
@@ -106,8 +118,8 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
         [Route("UpSeeCount")]
-        [HttpPost]
-        public int UpSeeCount(string id)
+        [HttpGet]
+        public JResult UpSeeCount(string id)
         {
             return _baseservice.UpSeeCount(id);
         }
@@ -119,20 +131,20 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>1.累计成功</returns>
         [Route("UpPraiseCount")]
         [HttpGet]
-        public int UpPraiseCount(string id)
+        public JResult UpPraiseCount(string id)
         {
             return _baseservice.UpPraiseCount(id);
         }
 
         /// <summary>
-        /// 累计点赞次数
+        /// 累计评论次数
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
         /// <returns>1.累计成功</returns>
         [Route("CommentCar")]
         [HttpGet]
-        public int CommentCar(string id, string content)
+        public JResult CommentCar(string id, string content = "")
         {
             return _baseservice.CommentCar(id, content);
         }
