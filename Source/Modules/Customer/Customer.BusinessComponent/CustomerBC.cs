@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
@@ -65,8 +66,19 @@ namespace CCN.Modules.Customer.BusinessComponent
             //密码加密
             var en = new Encryptor();
             userInfo.Password = en.EncryptMd5(userInfo.Password);
-
             userInfo.Type = 1; //这版只有车商
+            userInfo.Status = 1; //初始化状态[1.正常]
+            userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
+            userInfo.Createdtime = DateTime.Now;
+
+            userInfo.Innerid = Guid.NewGuid().ToString();
+
+            if (userInfo.Wechat != null)
+            {
+                userInfo.Wechat.Custid = userInfo.Innerid;
+                userInfo.Wechat.Createdtime = DateTime.Now;
+            }
+            
             return DataAccess.CustRegister(userInfo);
         }
 

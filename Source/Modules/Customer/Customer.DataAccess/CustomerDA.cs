@@ -69,10 +69,10 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int CustRegister(CustModel userInfo)
         {
-            var result = 1;
+            var result = 0;
             //插入账户基本信息
             const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (uuid(),@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
             
             try
             {
@@ -88,8 +88,7 @@ namespace CCN.Modules.Customer.DataAccess
             }
             catch (Exception ex)
             {
-                
-                result = 0;
+                result = 401;
             }
 
             return result;
@@ -103,12 +102,23 @@ namespace CCN.Modules.Customer.DataAccess
         public CustModel CustLogin(CustLoginInfo loginInfo)
         {
             const string sql = "select * from `cust_info` where (username=@username or mobile=@mobile) and password=@password;";
-            return Helper.Query<CustModel>(sql, new
+            var custModel = Helper.Query<CustModel>(sql, new
             {
                 username = loginInfo.Username,
                 mobile = loginInfo.Mobile,
                 password = loginInfo.Password
             }).FirstOrDefault();
+
+            //获取微信信息
+            if (custModel != null)
+            {
+                custModel.Wechat = Helper.Query<CustWechat>("select * from cust_wechat where custid=@custid;", new
+                {
+                    custid = custModel.Innerid
+                }).FirstOrDefault();
+            }
+
+            return custModel;
         }
 
         #endregion

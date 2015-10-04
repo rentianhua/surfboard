@@ -53,6 +53,8 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public int UpdateCar(CarInfoModel model)
         {
+            model.createdtime = null;
+            model.modifiedtime = DateTime.Now;
             return DataAccess.UpdateCar(model);
         }
 

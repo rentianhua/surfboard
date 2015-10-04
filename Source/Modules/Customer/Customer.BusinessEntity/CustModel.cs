@@ -126,7 +126,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 性别
         /// </summary>
-        public string Cex { get; set; }
+        public string Sex { get; set; }
 
         /// <summary>
         /// 微信头像
@@ -151,12 +151,12 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 
         /// </summary>
-        public string Createdtime { get; set; }
+        public DateTime? Createdtime { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public string Modifiedtime { get; set; }
+        public DateTime? Modifiedtime { get; set; }
     }
 
     /// <summary>

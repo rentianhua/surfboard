@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
@@ -256,6 +258,34 @@ namespace Cedar.Framework.Common.Server.BaseClasses
             }
 
             return baseList;
+        }
+
+        /// <summary>
+        /// 根据实体属性值转换成sql语句
+        /// </summary>
+        /// <param name="entity">实体</param>
+        /// <param name="symbol">分隔符</param>
+        /// <returns>sql语句</returns>
+        public string CreateField(dynamic entity, string symbol = ",")
+        {
+            var sql = new StringBuilder();
+            if (entity == null)
+                return sql.ToString();
+            var type = entity.GetType();
+            if (type == null)
+                return sql.ToString();
+            //属性
+            PropertyInfo[] propers = type.GetProperties();
+            foreach (var proper in propers)
+            {
+                //属性值
+                var value = proper.GetValue(entity);
+                if (value != null)
+                {
+                    sql.Append(proper.Name.ToLower()).Append(" = @").Append(proper.Name).Append(" " + symbol + " ");
+                }
+            }
+            return sql.ToString();
         }
     }
 
