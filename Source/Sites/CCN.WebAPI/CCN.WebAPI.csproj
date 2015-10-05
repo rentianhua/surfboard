@@ -176,6 +176,7 @@
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
+    <Compile Include="ApiControllers\CustRelationsController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -322,6 +323,14 @@
     <ProjectReference Include="..\..\Modules\Customer\Customer.BusinessEntity\Customer.BusinessEntity.csproj">
       <Project>{1ebb63b5-19b8-44d6-94b2-04ceaf8754aa}</Project>
       <Name>Customer.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\CustRelations\CustRelations.BusinessEntity\CustRelations.BusinessEntity.csproj">
+      <Project>{e5222921-e8d5-4477-bcb6-a6c6523a8ba6}</Project>
+      <Name>CustRelations.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\CustRelations\CustRelations.Interface\CustRelations.Interface.csproj">
+      <Project>{527134b6-d0ff-4453-82a4-de61ffe7bf26}</Project>
+      <Name>CustRelations.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

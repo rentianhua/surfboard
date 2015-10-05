@@ -50,3 +50,12 @@ Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Fra
 Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Framework.Common.csproj.GenerateResource.Cache
 Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.dll
 Y:\GitHub\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.pdb
+E:\tim\surfboard\Lib\Cedar.Framework.Common.dll.config
+E:\tim\surfboard\Lib\Cedar.Framework.Common.xml
+E:\tim\surfboard\Lib\Cedar.Framework.Common.dll
+E:\tim\surfboard\Lib\Cedar.Framework.Common.pdb
+E:\tim\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Framework.Common.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.Properties.Resources.resources
+E:\tim\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Framework.Common.csproj.GenerateResource.Cache
+E:\tim\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.dll
+E:\tim\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.pdb

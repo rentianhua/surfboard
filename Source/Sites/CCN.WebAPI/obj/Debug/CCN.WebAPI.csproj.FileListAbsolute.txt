@@ -262,3 +262,9 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessEntity.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessEntity.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessEntity.xml
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.xml

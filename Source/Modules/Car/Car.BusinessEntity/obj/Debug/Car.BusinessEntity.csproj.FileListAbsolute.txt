@@ -31,3 +31,4 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.S
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache

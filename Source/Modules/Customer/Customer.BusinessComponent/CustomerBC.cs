@@ -89,10 +89,23 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
+            var result = new JResult();
+            if (string.IsNullOrWhiteSpace(loginInfo.Username) && string.IsNullOrWhiteSpace(loginInfo.Mobile))
+            {
+                result.errcode = 403;
+                result.errmsg = "帐户名不能为空";
+                return result;
+            }
+            if (string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                result.errcode = 404;
+                result.errmsg = "密码不能为空";
+                return result;
+            }
+
             var en = new Encryptor();
             loginInfo.Password = en.EncryptMd5(loginInfo.Password);
-
-            var result = new JResult();
+            
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
             {
