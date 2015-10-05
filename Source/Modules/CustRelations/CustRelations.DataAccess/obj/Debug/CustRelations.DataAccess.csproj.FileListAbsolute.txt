@@ -19,6 +19,7 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\MySql.Data.Entity.EF6.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\StackExchange.Redis.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Cedar.Framework.Common.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\EntityFramework.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\CCN.Modules.CustRelations.BusinessEntity.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\CCN.Modules.CustRelations.BusinessEntity.xml
@@ -42,6 +43,8 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\StackExchange.Redis.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Cedar.Framework.Common.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Cedar.Framework.Common.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Dapper.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\EntityFramework.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.pdb

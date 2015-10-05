@@ -13,7 +13,7 @@ namespace Cedar.Core.SettingSource.Configuration
     /// <summary>
     /// 
     /// </summary>
-    [ConfigurationSectionName("cedar.settingSource")]
+    [ConfigurationSectionName("sr.settingSource")]
     public class SettingSourceSettings : ConfigurationSection
     {
         private const string DefaultSettingSourcePropertyName = "defaultSettingSource";
@@ -25,8 +25,11 @@ namespace Cedar.Core.SettingSource.Configuration
         /// <value>
         ///     The default setting source.
         /// </value>
-        [ConfigurationProperty(DefaultSettingSourcePropertyName, IsRequired = true)]
-        public string DefaultSettingSource => (string)base[DefaultSettingSourcePropertyName];
+        [ConfigurationProperty("defaultSettingSource", IsRequired = true)]
+        public string DefaultSettingSource
+        {
+            get { return (string)base["defaultSettingSource"]; }
+        }
 
         /// <summary>
         ///     Gets the setting sources.
@@ -34,8 +37,11 @@ namespace Cedar.Core.SettingSource.Configuration
         /// <value>
         ///     The setting sources.
         /// </value>
-        [ConfigurationProperty(SettingSourcesPropertyName, IsRequired = true)]
-        public NameTypeConfigurationElementCollection<SettingSourceDataBase> SettingSources => (NameTypeConfigurationElementCollection<SettingSourceDataBase>)base[SettingSourcesPropertyName];
+        [ConfigurationProperty("settingSources", IsRequired = true)]
+        public NameTypeConfigurationElementCollection<SettingSourceDataBase> SettingSources
+        {
+            get { return (NameTypeConfigurationElementCollection<SettingSourceDataBase>)base["settingSources"]; }
+        }
 
         /// <summary>
         ///     Gets the setting source.

@@ -8,7 +8,7 @@ namespace Cedar.Core.ApplicationContexts.Configuration
     /// <summary>
     /// Define the application context setting.
     /// </summary>
-    [ConfigurationSectionName("cedar.applicationContexts")]
+    [ConfigurationSectionName("sr.applicationContexts")]
     public class ApplicationContextSettings : ServiceLocatableSettings
     {
         private const string ContextLocatorsProperty = "contextLocators";
@@ -19,16 +19,16 @@ namespace Cedar.Core.ApplicationContexts.Configuration
         /// Gets or sets the context attach behavior.
         /// </summary>
         /// <value>The context attach behavior.</value>
-        [ConfigurationProperty(ContextAttachBehaviorProperty, IsRequired = false, DefaultValue = ContextAttachBehavior.Clear)]
+        [ConfigurationProperty("contextAttachBehavior", IsRequired = false, DefaultValue = ContextAttachBehavior.Clear)]
         public ContextAttachBehavior ContextAttachBehavior
         {
             get
             {
-                return (ContextAttachBehavior)base[ContextAttachBehaviorProperty];
+                return (ContextAttachBehavior)base["contextAttachBehavior"];
             }
             set
             {
-                base[ContextAttachBehaviorProperty] = value;
+                base["contextAttachBehavior"] = value;
             }
         }
 
@@ -38,32 +38,32 @@ namespace Cedar.Core.ApplicationContexts.Configuration
         /// <value>
         /// The collection of defined ContextLocator objects.
         /// </value>
-        [ConfigurationProperty(ContextLocatorsProperty, IsRequired = true)]
+        [ConfigurationProperty("contextLocators", IsRequired = true)]
         public NameTypeConfigurationElementCollection<ContextLocatorDataBase> ContextLocators
         {
             get
             {
-                return (NameTypeConfigurationElementCollection<ContextLocatorDataBase>)base[ContextLocatorsProperty];
+                return (NameTypeConfigurationElementCollection<ContextLocatorDataBase>)base["contextLocators"];
             }
             set
             {
-                base[ContextLocatorsProperty] = value;
+                base["contextLocators"] = value;
             }
         }
         /// <summary>
         /// Gets or sets the default service locator.
         /// </summary>
         /// <value>The default service locator.</value>
-        [ConfigurationProperty(DefaultContextLocatorNameProperty, IsRequired = true)]
+        [ConfigurationProperty("defaultContextLocator", IsRequired = true)]
         public string DefaultContextLocator
         {
             get
             {
-                return base[DefaultContextLocatorNameProperty] as string;
+                return base["defaultContextLocator"] as string;
             }
             set
             {
-                base[DefaultContextLocatorNameProperty] = value;
+                base["defaultContextLocator"] = value;
             }
         }
         /// <summary>

@@ -4,7 +4,6 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
-using Cedar.Framework.Common.Client.DelegationHandler;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -12,7 +11,6 @@ namespace CCN.WebAPI.ApiControllers
     /// 会员模块
     /// </summary>
     [RoutePrefix("api/Customer")]
-    [ApplicationContextFilter()]
     public class CustomerController : ApiController
     {
         private readonly ICustomerManagementService _custservice;

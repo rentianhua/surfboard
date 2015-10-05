@@ -18,6 +18,7 @@ Y:\GitHub\AgileMVC\Lib\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\AgileMVC\Lib\Cedar.AuditTrail.Interception.pdb
 Y:\GitHub\AgileMVC\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\AgileMVC\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb
+\\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll.config
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.XML
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
@@ -31,6 +32,7 @@ E:\tim\code\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\AuditTrail.Interception.csprojResolveAssemblyReference.cache
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
 E:\tim\code\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb
+Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll.config
 Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.XML
 Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
