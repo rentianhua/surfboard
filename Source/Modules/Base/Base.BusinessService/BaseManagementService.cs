@@ -7,6 +7,7 @@ using CCN.Modules.Base.BusinessComponent;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
 using Cedar.AuditTrail.Interception;
+using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
 namespace CCN.Modules.Base.BusinessService
@@ -32,7 +33,7 @@ namespace CCN.Modules.Base.BusinessService
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int SendVerification(BaseVerification model)
+        public JResult SendVerification(BaseVerification model)
         {
             return BusinessComponent.SendVerification(model);
         }
@@ -43,7 +44,7 @@ namespace CCN.Modules.Base.BusinessService
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
         /// <returns>返回结果。1.正确，0不正确</returns>
-        public int CheckVerification(string target, string vcode)
+        public JResult CheckVerification(string target, string vcode)
         {
             return BusinessComponent.CheckVerification(target, vcode);
         }

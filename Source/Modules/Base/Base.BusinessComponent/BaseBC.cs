@@ -33,8 +33,9 @@ namespace CCN.Modules.Base.BusinessComponent
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int SendVerification(BaseVerification model)
+        public JResult SendVerification(BaseVerification model)
         {
+            var jResult = new JResult();
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
 
@@ -57,7 +58,25 @@ namespace CCN.Modules.Base.BusinessComponent
             
             #endregion
 
-            return DataAccess.SaveVerification(model);
+            if (model.Result == 0)
+            {
+                //发送失败
+                jResult.errcode = 400;
+                jResult.errmsg = "发送验证码失败";
+                //return jResult;  //uu
+            }
+
+            var saveRes = DataAccess.SaveVerification(model);
+            if (saveRes == 0)
+            {
+                //保存失败
+                jResult.errcode = 401;
+                jResult.errmsg = "保存验证码失败";
+                return jResult;
+            }
+            jResult.errcode = 0;
+            jResult.errmsg = "发送验证码成功";
+            return jResult;
         }
 
         /// <summary>
@@ -66,20 +85,27 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
         /// <returns>返回结果。1.正确，0不正确,-1.验证码过期</returns>
-        public int CheckVerification(string target,string vcode)
+        public JResult CheckVerification(string target,string vcode)
         {
+            var jResult = new JResult();
             var m = DataAccess.GetVerification(target);
             //验证码不正确
             if (m == null || !m.Vcode.Equals(vcode))
             {
-                return 0;
+                jResult.errcode = 400;
+                jResult.errmsg = "验证码错误";
+                return jResult;
             }
             //
-            if (m.Createdtime.AddMinutes(m.Valid) < DateTime.Now)
+            if (m.Createdtime.AddSeconds(m.Valid) < DateTime.Now)
             {
-                return -1;
+                jResult.errcode = 401;
+                jResult.errmsg = "验证码过期";
+                return jResult;
             }
-            return 1;
+            jResult.errcode = 0;
+            jResult.errmsg = "验证码正确";
+            return jResult;
         }
 
         #endregion
