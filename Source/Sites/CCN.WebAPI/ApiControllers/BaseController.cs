@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Client.DelegationHandler;
@@ -62,6 +63,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="initial"></param>
         /// <returns></returns>
         [Route("GetProvList")]
+        [AllowAnonymous]
         [HttpGet]
         public JResult GetProvList(string initial = null)
         {
@@ -117,7 +119,6 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="initial">首字母</param>
         /// <returns></returns>
         [Route("GetCarBrand")]
-        [AllowAnonymous]
         [HttpGet]
         public JResult GetCarBrand(string initial = null)
         {

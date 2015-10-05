@@ -79,6 +79,3 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newt
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.dll
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.xml

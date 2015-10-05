@@ -26,6 +26,7 @@ namespace Cedar.Framework.Common.Client.DelegationHandler
         {
             try
             {
+                ApplicationContext.Current.TransactionId = Guid.NewGuid().ToString();
                 if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)   // 允许匿名访问
                 {
                     base.OnActionExecuting(actionContext);
@@ -69,8 +70,6 @@ namespace Cedar.Framework.Common.Client.DelegationHandler
 
                 ApplicationContext.Current.UserId = userid;
                 ApplicationContext.Current.SessionId = sessionid;
-                ApplicationContext.Current.TransactionId = Guid.NewGuid().ToString();
-
                 base.OnActionExecuting(actionContext);
             }
             catch

@@ -133,7 +133,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DelegationHandler\ApplicationContextFilterAttribute.cs" />
-    <Compile Include="DelegationHandler\IgnoreFilterAttribute.cs" />
     <Compile Include="ExceptionHandlers\ErrorMessageHandler.cs" />
     <Compile Include="ExceptionHandlers\ExceptionDetail.cs" />
     <Compile Include="ExceptionHandlers\ExceptionPolicyAttribute.cs" />
