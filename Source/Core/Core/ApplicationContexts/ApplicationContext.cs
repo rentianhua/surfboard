@@ -17,7 +17,7 @@ namespace Cedar.Core.ApplicationContexts
         /// <summary>
         /// define the context header's namespace.
         /// </summary>
-        public const string ContextHeaderNamespace = "http://www.Cedar.co/";
+        public const string ContextHeaderNamespace = "http://www.Cedar.co";
 
         /// <summary>
         /// define the context header's local name.

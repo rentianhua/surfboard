@@ -41,7 +41,6 @@ E:\tim\code\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.F
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Framework.Common.csproj.GenerateResource.Cache
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.dll
 E:\tim\code\surfboard\Source\Framework\Common\Framework.Common\obj\Debug\Cedar.Framework.Common.pdb
-Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll.config
 Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.xml
 Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll
 Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.pdb

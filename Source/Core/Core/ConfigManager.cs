@@ -21,10 +21,7 @@ namespace Cedar.Core
         ///     Gets the connection strings settings.
         /// </summary>
         /// <value>The connection strings settings.</value>
-        public static ConnectionStringSettingsCollection ConnectionStrings
-        {
-            get { return GetConfigurationSection<ConnectionStringsSection>("connectionStrings").ConnectionStrings; }
-        }
+        public static ConnectionStringSettingsCollection ConnectionStrings => GetConfigurationSection<ConnectionStringsSection>("connectionStrings").ConnectionStrings;
 
         /// <summary>
         ///     Tries the get configuration section.
