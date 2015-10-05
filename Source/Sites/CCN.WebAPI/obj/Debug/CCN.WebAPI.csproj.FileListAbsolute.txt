@@ -55,7 +55,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.dll
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.dll
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.dll
@@ -120,8 +119,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.pdb
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.pdb
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.xml
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.pdb
@@ -262,3 +259,4 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.xml

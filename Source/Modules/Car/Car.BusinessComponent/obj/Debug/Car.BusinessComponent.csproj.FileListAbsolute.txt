@@ -18,7 +18,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\MySql.Data.Entity.EF6.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\StackExchange.Redis.dll
-\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\EntityFramework.dll
@@ -47,8 +46,6 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\StackExchange.Redis.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\StackExchange.Redis.xml
-\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\EntityFramework.xml
