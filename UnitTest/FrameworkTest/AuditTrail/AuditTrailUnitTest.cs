@@ -28,8 +28,8 @@ namespace FrameworkTest.AuditTrail
             ApplicationContext.Current.UserId = Guid.NewGuid().ToString();
             ApplicationContext.Current.TransactionId = Guid.NewGuid().ToString();
             ApplicationContext.Current.UserName = Guid.NewGuid().ToString();
-            AuditTrailSettings at = ConfigManager.GetConfigurationSection<AuditTrailSettings>();
-            at.Configure(iServiceLocate);
+            //AuditTrailSettings at = ConfigManager.GetConfigurationSection<AuditTrailSettings>();
+            //at.Configure(iServiceLocate);
             var result = iTestService.SayHello(new { id = "1", name = "name" });
             Assert.IsFalse(string.IsNullOrEmpty(result));
         }

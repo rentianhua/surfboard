@@ -18,7 +18,6 @@ Y:\GitHub\AgileMVC\Lib\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\AgileMVC\Lib\Cedar.AuditTrail.Interception.pdb
 Y:\GitHub\AgileMVC\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\AgileMVC\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb
-\\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll.config
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.XML
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.pdb

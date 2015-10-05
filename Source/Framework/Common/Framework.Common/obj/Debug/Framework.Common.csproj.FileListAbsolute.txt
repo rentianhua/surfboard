@@ -23,7 +23,6 @@ Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.dll
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.pdb
 Y:\GitHub\AgileMVC\Lib\Cedar.Framework.Common.dll.config
 Y:\GitHub\AgileMVC\Source\Framework\Common\Framework.Common\obj\Debug\Framework.Common.csprojResolveAssemblyReference.cache
-\\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.dll.config
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.xml
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.dll
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Framework.Common.pdb

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Cedar.Framework.Common.Client.DelegationHandler;
 using Cedar.Framework.Common.Client.WebAPI;
 
 namespace CCN.WebAPI
@@ -10,9 +11,11 @@ namespace CCN.WebAPI
     {
         public static void Register(HttpConfiguration config)
         {
-            
+
             // Web API configuration and services
-            config.DependencyResolver= new ServiceLocatableDependencyResolver();
+            config.DependencyResolver = new ServiceLocatableDependencyResolver();
+            config.Filters.Add(new ApplicationContextFilterAttribute());
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 

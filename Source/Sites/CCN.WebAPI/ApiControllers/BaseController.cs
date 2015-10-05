@@ -8,6 +8,7 @@ using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Cedar.Framework.Common.Client.DelegationHandler;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -15,6 +16,7 @@ namespace CCN.WebAPI.ApiControllers
     /// 基础模块
     /// </summary>
     [RoutePrefix("api/Base")]
+    [ApplicationContextFilter()]
     public class BaseController : ApiController
     {
         private readonly IBaseManagementService _baseservice;
@@ -115,6 +117,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="initial">首字母</param>
         /// <returns></returns>
         [Route("GetCarBrand")]
+        [AllowAnonymous]
         [HttpGet]
         public JResult GetCarBrand(string initial = null)
         {

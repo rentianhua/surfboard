@@ -35,7 +35,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.dll.config
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.XML
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.pdb

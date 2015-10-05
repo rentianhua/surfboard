@@ -260,3 +260,10 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
 \\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.xml
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\applicationContexts.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\connectionStrings.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\serviceLocation.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\settingSource.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\unity.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\auditTrail.config
+\\Mac\Home\GitHub\surfboard\Source\Sites\CCN.WebAPI\bin\ConfigFiles\caching.config
