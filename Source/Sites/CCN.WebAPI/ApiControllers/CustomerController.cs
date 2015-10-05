@@ -71,10 +71,10 @@ namespace CCN.WebAPI.ApiControllers
             
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
-            if (cresult != 1)
+            if (cresult.errcode != 0)
             {
                 //验证码错误
-                //return 400;
+                //return cresult;
             }
 
             var result = _custservice.CustRegister(userInfo);

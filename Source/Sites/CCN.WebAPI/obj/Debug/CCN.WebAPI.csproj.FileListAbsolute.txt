@@ -183,7 +183,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\WebGrease.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framework.Common.Server.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessComponent.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.dll
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Common.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\MySql.Data.Entity.EF6.dll
@@ -195,8 +194,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\MySql.Data.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessEntity.pdb
@@ -242,7 +239,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessComponent.
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessComponent.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.xml
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
@@ -254,10 +250,15 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.xml
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.Properties.Resources.resources
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csproj.GenerateResource.Cache
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.Common.xml
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\EntityFramework.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb

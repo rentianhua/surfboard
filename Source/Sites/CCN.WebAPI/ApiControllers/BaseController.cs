@@ -27,7 +27,7 @@ namespace CCN.WebAPI.ApiControllers
         #region 验证码
 
         /// <summary>
-        /// 会员注册获取验证码
+        /// 手机获取验证码
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -35,12 +35,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult SendVerification([FromBody] BaseVerification model)
         {
-            var result = _baseservice.SendVerification(model);
-            return new JResult
-            {
-                errcode = result,
-                errmsg = ""
-            };
+            return _baseservice.SendVerification(model);
         }
 
         /// <summary>
@@ -52,12 +47,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult CheckVerification([FromBody] BaseVerification model)
         {
-            var result = _baseservice.CheckVerification(model.Target, model.Vcode);
-            return new JResult
-            {
-                errcode = result,
-                errmsg = ""
-            };
+            return _baseservice.CheckVerification(model.Target, model.Vcode);
         }
 
         #endregion

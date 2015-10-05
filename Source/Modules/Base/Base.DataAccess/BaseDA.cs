@@ -35,9 +35,18 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public int SaveVerification(BaseVerification model)
         {
+            int result;
             const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @result);";
-            var res = Helper.Execute(sql, model);
-            return res;
+            try
+            {
+                result = Helper.Execute(sql, model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            
+            return result;
         }
 
         /// <summary>
