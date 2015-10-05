@@ -4,3 +4,9 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\Base.BusinessComponent.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.pdb
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.XML
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessComponent.pdb
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\Base.BusinessComponent.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.dll
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessComponent\obj\Debug\CCN.Modules.Base.BusinessComponent.pdb

@@ -37,13 +37,41 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         /// <summary>
+        /// 获取车辆详情
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarInfoById(string id)
+        {
+            var jResult = new JResult();
+            var carInfo = DataAccess.GetCarInfoById(id);
+            if (carInfo == null)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "";
+            }
+            else
+            {
+                jResult.errcode = 0;
+                jResult.errmsg = carInfo;
+            }
+            return jResult;
+        }
+
+        /// <summary>
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
-        public int AddCar(CarInfoModel model)
+        public JResult AddCar(CarInfoModel model)
         {
-            return DataAccess.AddCar(model);
+            model.Innerid = Guid.NewGuid().ToString();
+            var result = DataAccess.AddCar(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -51,11 +79,19 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
-        public int UpdateCar(CarInfoModel model)
+        public JResult UpdateCar(CarInfoModel model)
         {
             model.createdtime = null;
+            model.status = null;
+            model.custid = null;
+
             model.modifiedtime = DateTime.Now;
-            return DataAccess.UpdateCar(model);
+            var result = DataAccess.UpdateCar(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -63,9 +99,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.删除成功</returns>
-        public int DeleteCar(string id)
+        public JResult DeleteCar(string id)
         {
-            return DataAccess.DeleteCar(id);
+            var result = DataAccess.DeleteCar(id);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -74,9 +115,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <param name="carid">车辆id</param>
         /// <param name="status"></param>
         /// <returns>1.操作成功</returns>
-        public int UpdateCarStatus(string carid, int status)
+        public JResult UpdateCarStatus(string carid, int status)
         {
-            return DataAccess.UpdateCarStatus(carid, status);
+            var result = DataAccess.UpdateCarStatus(carid, status);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -84,9 +130,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.操作成功</returns>
-        public int ShareCar(string id)
+        public JResult ShareCar(string id)
         {
-            return DataAccess.ShareCar(id);
+            var result = DataAccess.ShareCar(id);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -94,9 +145,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        public int UpSeeCount(string id)
+        public JResult UpSeeCount(string id)
         {
-            return DataAccess.UpSeeCount(id);
+            var result = DataAccess.UpSeeCount(id);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -104,9 +160,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        public int UpPraiseCount(string id)
+        public JResult UpPraiseCount(string id)
         {
-            return DataAccess.UpPraiseCount(id);
+            var result = DataAccess.UpPraiseCount(id);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>
@@ -115,9 +176,14 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
         /// <returns>1.累计成功</returns>
-        public int CommentCar(string id, string content)
+        public JResult CommentCar(string id, string content)
         {
-            return DataAccess.CommentCar(id, content);
+            var result = DataAccess.CommentCar(id, content);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         /// <summary>

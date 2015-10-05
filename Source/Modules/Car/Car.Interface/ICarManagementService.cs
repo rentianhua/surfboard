@@ -19,25 +19,32 @@ namespace CCN.Modules.Car.Interface
         BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query);
 
         /// <summary>
-        /// 添加车辆
+        /// 获取车辆详情
         /// </summary>
-        /// <param name="model">车辆信息</param>
+        /// <param name="id">车辆id</param>
         /// <returns></returns>
-        int AddCar(CarInfoModel model);
+        JResult GetCarInfoById(string id);
 
         /// <summary>
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
-        int UpdateCar(CarInfoModel model);
+        JResult AddCar(CarInfoModel model);
+
+        /// <summary>
+        /// 添加车辆
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        /// <returns></returns>
+        JResult UpdateCar(CarInfoModel model);
 
         /// <summary>
         /// 删除车辆(物理删除，暂不用)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.删除成功</returns>
-        int DeleteCar(string id);
+        JResult DeleteCar(string id);
 
         /// <summary>
         /// 车辆状态更新
@@ -45,28 +52,28 @@ namespace CCN.Modules.Car.Interface
         /// <param name="carid">车辆id</param>
         /// <param name="status"></param>
         /// <returns>1.操作成功</returns>
-        int UpdateCarStatus(string carid, int status);
+        JResult UpdateCarStatus(string carid, int status);
 
         /// <summary>
         /// 车辆分享
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.操作成功</returns>
-        int ShareCar(string id);
+        JResult ShareCar(string id);
 
         /// <summary>
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        int UpSeeCount(string id);
+        JResult UpSeeCount(string id);
 
         /// <summary>
         /// 累计点赞次数
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.累计成功</returns>
-        int UpPraiseCount(string id);
+        JResult UpPraiseCount(string id);
 
         /// <summary>
         /// 累计点赞次数
@@ -74,7 +81,7 @@ namespace CCN.Modules.Car.Interface
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
         /// <returns>1.累计成功</returns>
-        int CommentCar(string id, string content);
+        JResult CommentCar(string id, string content);
 
         /// <summary>
         /// 审核车辆

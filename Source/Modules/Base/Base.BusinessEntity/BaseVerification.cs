@@ -28,7 +28,7 @@ namespace CCN.Modules.Base.BusinessEntity
         public string Vcode { get; set; }
 
         /// <summary>
-        /// 效期[单位：分] ,默认20分钟
+        /// 有效期[单位：秒] ,默认120秒
         /// </summary>
         public int Valid { get; set; }
 
@@ -52,9 +52,12 @@ namespace CCN.Modules.Base.BusinessEntity
         /// </summary>
         public int Result { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public BaseVerification(){
             Length = 4;
-            Valid = 20;
+            Valid = 120;
             VType = 1;
             TType = 1;
             Result = 1;
