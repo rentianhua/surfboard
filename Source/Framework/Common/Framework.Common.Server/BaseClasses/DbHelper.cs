@@ -83,6 +83,21 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         //}
 
         /// <summary>
+        /// 获取链接
+        /// </summary>
+        /// <returns></returns>
+        public virtual DbConnection GetConnection()
+        {
+            var connection = Factory.CreateConnection();
+            connection.ConnectionString = ConnectionString;
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+            return connection;
+        }
+
+        /// <summary>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>

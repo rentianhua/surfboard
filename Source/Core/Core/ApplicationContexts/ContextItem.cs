@@ -8,7 +8,7 @@ namespace Cedar.Core.ApplicationContexts
     /// <summary>
     /// 
     /// </summary>
-    [DataContract(Namespace = "http://www.Cedar.co")]
+    [DataContract(Namespace = "http://www.smartac.co/")]
     [Serializable]
     public class ContextItem
     {

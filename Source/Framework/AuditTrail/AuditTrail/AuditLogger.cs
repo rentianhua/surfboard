@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.Configuration;
 using Cedar.Framwork.AuditTrail.Properties;
 using Microsoft.Practices.Unity.Utility;
 
@@ -104,8 +102,6 @@ namespace Cedar.Framwork.AuditTrail
                 //throw new InvalidOperationException(Resources.ExceptionCurrentTransactionIdNotExists);
             }
             AuditLogEntry auditLogEntry = new AuditLogEntry(functionName, null, null, null, null);
-
-            ConfigManager.GetConfigurationSection<AuditTrailSettings>().Configure(ServiceLocatorFactory.GetServiceLocator());
             return new AuditLogger(auditLogEntry);
         }
 

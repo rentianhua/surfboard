@@ -7,7 +7,7 @@ namespace Cedar.Framwork.Caching.Interception.Configuration
 {
     public class CachingCallHandlerData : CallHandlerData
     {
-        private const string ExpirationTimePropertyName = "expiration";
+        private const string ExpirationTimePropertyName = "expirationTime";
 
         /// <summary>
         /// Expiration time

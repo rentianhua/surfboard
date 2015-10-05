@@ -31,10 +31,12 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\EntityFramework.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Caching.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.dll.config
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
+\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.dll.config
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.XML
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Framwork.Caching.pdb
@@ -52,6 +54,7 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\EntityFramework.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\MySql.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.pdb
+\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Microsoft.Practices.EnterpriseLibrary.Common.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Newtonsoft.Json.xml
@@ -67,8 +70,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Caching.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\obj\Debug\Cedar.Framwork.Caching.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.dll
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Cedar.Core.EntLib.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching\bin\Dapper.xml

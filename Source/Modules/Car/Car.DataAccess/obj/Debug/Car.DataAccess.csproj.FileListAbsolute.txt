@@ -17,6 +17,7 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\MySql.Data.Entity.EF6.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\StackExchange.Redis.dll
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.ServiceLocation.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
@@ -42,6 +43,8 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\StackExchange.Redis.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\StackExchange.Redis.xml
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Dapper.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Logging.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.ServiceLocation.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.ServiceLocation.xml

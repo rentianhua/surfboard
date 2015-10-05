@@ -2,10 +2,7 @@
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Cedar.AuditTrail.Interception.Configuration;
-using Cedar.Core;
-using Cedar.Core.IoC;
 using Cedar.Framwork.AuditTrail;
-using Cedar.Framwork.AuditTrail.Configuration;
 using Newtonsoft.Json;
 
 //using Cedar.Framwork.AuditTrail.BusinessEntity;
@@ -65,6 +62,25 @@ namespace Cedar.AuditTrail.Interception
                 IMethodReturn methodReturn = getNext()(input, getNext);
                 if (methodReturn != null)
                 {
+                    //var data = new AuditLogModel()
+                    //{
+                    //    ID = Guid.NewGuid().ToString(),
+                    //    AuditName = FunctionName,
+                    //    AuditType = input.MethodBase.Name,
+                    //    Arguments = input.Arguments,
+                    //    LogDateTime = DateTime.Now,
+                    //    Result = methodReturn.ReturnValue,
+                    //    Target = input.Target,
+                    //    TransactionID = "TransactionID"
+                    //};
+                    //try
+                    //{
+                    //    auditservice.InsertAuditLog(data);
+                    //}
+                    //catch (Exception e)
+                    //{
+                    //    //todo add log
+                    //}
                     if (methodReturn.Exception == null)
                     {
                         auditLogger.Write(input.MethodBase.Name, string.Empty, JsonConvert.SerializeObject(input.Arguments), JsonConvert.SerializeObject(methodReturn.ReturnValue));

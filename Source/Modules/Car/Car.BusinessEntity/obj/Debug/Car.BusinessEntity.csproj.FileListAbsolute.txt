@@ -14,6 +14,7 @@
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
+\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.XML
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.pdb
@@ -30,4 +31,4 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.S
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
-\\Mac\Home\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache

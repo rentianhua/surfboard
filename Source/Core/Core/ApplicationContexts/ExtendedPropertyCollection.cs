@@ -11,7 +11,7 @@ namespace Cedar.Core.ApplicationContexts
     /// <summary>
     /// Define the context item's extended property collection.
     /// </summary>   
-    [CollectionDataContract(Namespace = "http://www.Cedar.co/", ItemName = "Property", KeyName = "Key", ValueName = "Value", IsReference = true)]
+    [CollectionDataContract(Namespace = "http://www.smartac.co/", ItemName = "Property", KeyName = "Key", ValueName = "Value", IsReference = true)]
     [Serializable]
     public class ExtendedPropertyCollection : IDictionary<string, object>, ICollection<KeyValuePair<string, object>>, IEnumerable<KeyValuePair<string, object>>, IEnumerable
     {

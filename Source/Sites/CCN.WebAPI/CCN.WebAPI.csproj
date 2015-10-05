@@ -176,6 +176,7 @@
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
+    <Compile Include="ApiControllers\CustRelationsController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -255,28 +256,12 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\Index.cshtml" />
     <Content Include="Areas\Customer\Views\web.config" />
-    <Content Include="ConfigFiles\applicationContexts.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\connectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\serviceLocation.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\settingSource.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="ConfigFiles\applicationContexts.config" />
+    <Content Include="ConfigFiles\connectionStrings.config" />
+    <Content Include="ConfigFiles\serviceLocation.config" />
+    <Content Include="ConfigFiles\sessionManagement.config" />
+    <Content Include="ConfigFiles\settingSource.config" />
     <Content Include="Areas\Base\Views\web.config" />
-    <Content Include="ConfigFiles\unity.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\auditTrail.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ConfigFiles\caching.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -284,9 +269,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -340,6 +323,14 @@
     <ProjectReference Include="..\..\Modules\Customer\Customer.BusinessEntity\Customer.BusinessEntity.csproj">
       <Project>{1ebb63b5-19b8-44d6-94b2-04ceaf8754aa}</Project>
       <Name>Customer.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\CustRelations\CustRelations.BusinessEntity\CustRelations.BusinessEntity.csproj">
+      <Project>{e5222921-e8d5-4477-bcb6-a6c6523a8ba6}</Project>
+      <Name>CustRelations.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\CustRelations\CustRelations.Interface\CustRelations.Interface.csproj">
+      <Project>{527134b6-d0ff-4453-82a4-de61ffe7bf26}</Project>
+      <Name>CustRelations.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -24,11 +24,11 @@ namespace Cedar.Core.EntLib.IoC.Configuration
         /// <value>
         ///     The name of the container.
         /// </value>
-        [ConfigurationProperty(ContainerNamePropertyName, IsRequired = false, DefaultValue = "")]
+        [ConfigurationProperty("containerName", IsRequired = false, DefaultValue = "")]
         public string ContainerName
         {
-            get { return (string)base[ContainerNamePropertyName]; }
-            set { base[ContainerNamePropertyName] = value; }
+            get { return (string) base["containerName"]; }
+            set { base["containerName"] = value; }
         }
 
         /// <summary>
