@@ -123,6 +123,7 @@
     </None>
     <None Include="ConfigFiles\applicationContexts.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="ConfigFiles\auditTrail.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

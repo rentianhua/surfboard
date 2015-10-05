@@ -37,7 +37,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Ceda
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newtonsoft.Json.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newtonsoft.Json.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Framwork.Caching.Interception.dll.config
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Framwork.Caching.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Framwork.Caching.Interception.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.dll
@@ -77,9 +76,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newt
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.EntLib.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.dll
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.dll
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.xml
