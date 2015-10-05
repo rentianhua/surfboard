@@ -22,25 +22,6 @@ namespace FrameworkTest.AuditTrail
             iTestService = iServiceLocate.GetService<ITestService>();
         }
 
-
-        [TestMethod]
-        public void InsertAuditLogTestMethod()
-        {
-            //var data = new AuditLogModel()
-            //{
-            //    ID = Guid.NewGuid().ToString(),
-            //    AuditName = "AuditName",
-            //    AuditType = "AuditType",
-            //    Arguments = "Arguments",
-            //    LogDateTime = DateTime.Now,
-            //    Result = "Result",
-            //    Target = "Target",
-            //    TransactionID = "TransactionID"
-            //};
-            //var result = iAuditTrailManagementService.InsertAuditLog(data);
-            //Assert.IsTrue(result);
-        }
-
         [TestMethod]
         public void AuditTrailCallHandlerTestMethod()
         {

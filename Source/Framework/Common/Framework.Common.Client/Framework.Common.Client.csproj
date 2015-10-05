@@ -132,6 +132,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DelegationHandler\ApplicationContextDelegation.cs" />
     <Compile Include="ExceptionHandlers\ErrorMessageHandler.cs" />
     <Compile Include="ExceptionHandlers\ExceptionDetail.cs" />
     <Compile Include="ExceptionHandlers\ExceptionPolicyAttribute.cs" />

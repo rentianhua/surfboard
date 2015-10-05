@@ -5,7 +5,6 @@ Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.Properties.Resources.r
 Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
-Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.xml
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.dll
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Core.pdb
@@ -13,4 +12,3 @@ Y:\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReferen
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csproj.GenerateResource.Cache
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.dll
 \\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Cedar.Core.pdb
-\\Mac\Home\GitHub\surfboard\Source\Core\Core\obj\Debug\Core.csprojResolveAssemblyReference.cache

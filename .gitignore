@@ -28,3 +28,5 @@
 .vs/config/applicationhost.config
 
 *.user
+
+.vs/config/applicationhost.config

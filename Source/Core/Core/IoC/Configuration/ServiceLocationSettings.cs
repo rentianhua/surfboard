@@ -13,7 +13,7 @@ namespace Cedar.Core.IoC.Configuration
     /// <summary>
     ///     The configuration setting for "iConnect.serviceLocation".
     /// </summary>
-    [ConfigurationSectionName("sr.serviceLocation")]
+    [ConfigurationSectionName("cedar.serviceLocation")]
     public class ServiceLocationSettings : ConfigurationSection
     {
         private const string DefaultServiceLocatorProperty = "defaultServiceLocator";

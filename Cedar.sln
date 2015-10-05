@@ -81,8 +81,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuditTrail", "Source\Framework\AuditTrail\AuditTrail\AuditTrail.csproj", "{7CA048FA-FA26-46E9-9919-EC0C22F3097E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching.Interception", "Source\Framework\Caching\Caching.Interception\Caching.Interception.csproj", "{CFC68F4D-2269-4FAF-8B9C-1D7B6EBC1B51}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54FABF0C-CBED-450C-9CBA-2B1846571E10} = {54FABF0C-CBED-450C-9CBA-2B1846571E10}
+		{61B5E817-C283-43D7-AE07-73B9E6110EAC} = {61B5E817-C283-43D7-AE07-73B9E6110EAC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caching", "Source\Framework\Caching\Caching\Caching.csproj", "{D49DDB53-041B-4122-9CCE-AA9C0E6AB8DA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{54FABF0C-CBED-450C-9CBA-2B1846571E10} = {54FABF0C-CBED-450C-9CBA-2B1846571E10}
+		{61B5E817-C283-43D7-AE07-73B9E6110EAC} = {61B5E817-C283-43D7-AE07-73B9E6110EAC}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SMS", "SMS", "{A8CA0E8F-80FB-42F0-A57E-2571922F4F9F}"
 EndProject
