@@ -123,7 +123,7 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         /// <summary>
-        /// 获取省份
+        /// 获取城市
         /// </summary>
         /// <param name="provId">省份id</param>
         /// <param name="initial">首字母</param>
@@ -131,6 +131,47 @@ namespace CCN.Modules.Base.BusinessComponent
         public IEnumerable<BaseCity> GetCityList(int provId, string initial)
         {
             return DataAccess.GetCityList(provId,initial);
+        }
+
+        /// <summary>
+        /// 获取省份（扩展方法，根据首字母分类）
+        /// </summary>
+        /// <param name="initial">首字母</param>
+        /// <returns></returns>
+        public JResult GetProvListEx(string initial)
+        {
+            var list = DataAccess.GetProvList(initial).ToList();
+            if (!list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "没有数据"
+                };
+            }
+            
+            var listProv = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+            var listResult = new List<JsonGroupByModel>();
+            foreach (var item in listProv)
+            {
+                var il = list.Where(x => x.Initial == item).ToList();
+                if (!il.Any())
+                {
+                    continue;
+                }
+                var m = new JsonGroupByModel
+                {
+                    Initial = item,
+                    ProvList = il
+                };
+                listResult.Add(m);
+            }
+
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = listResult
+            };
         }
 
         #endregion

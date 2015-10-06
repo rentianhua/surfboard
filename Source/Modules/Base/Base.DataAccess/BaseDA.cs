@@ -77,7 +77,7 @@ namespace CCN.Modules.Base.DataAccess
             {
                 where += $" and initial='{initial.ToUpper()}'";
             }
-            var sql = $"select innerid, provname, initial, isenabled, remark from base_province where {where}";
+            var sql = $"select innerid, provname, initial, isenabled, remark from base_province where {where} order by initial asc,provname asc";
             var provList = Helper.Query<BaseProvince>(sql);
             return provList;
         }
@@ -95,7 +95,7 @@ namespace CCN.Modules.Base.DataAccess
             {
                 where += $" and initial='{initial.ToUpper()}'";
             }
-            var sql = $"select innerid, cityname, initial, provid, isenabled, remark from base_city where {where}";
+            var sql = $"select innerid, cityname, initial, provid, isenabled, remark from base_city where {where} order by initial asc,cityname asc";
             var cityList = Helper.Query<BaseCity>(sql);
             return cityList;
         }
@@ -116,7 +116,7 @@ namespace CCN.Modules.Base.DataAccess
             {
                 where += $" and initial='{initial.ToUpper()}'";
             }
-            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl from base_carbrand where {where}";
+            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl from base_carbrand where {where} order by initial asc,brandname asc";
             var brandList = Helper.Query<BaseCarBrandModel>(sql);
             return brandList;
         }

@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Dapper;
 using MySql.Data.MySqlClient;
 
 #endregion
@@ -71,8 +73,8 @@ namespace CCN.Modules.Customer.DataAccess
         {
             var result = 0;
             //插入账户基本信息
-            const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+            const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
+                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
             
             try
             {
@@ -119,6 +121,98 @@ namespace CCN.Modules.Customer.DataAccess
             }
 
             return custModel;
+        }
+
+        #endregion
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户添加认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public int AddAuthentication(CustAuthenticationModel model)
+        {
+            const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
+            const string sqlI = @"INSERT INTO `cust_authentication`
+                                (`innerid`,`custid`,`idcard`,`idname`,`idpicture`,`company`,`legalperson`,`organizationcode`,`organizationpicture`,`createdtime`,`modifiedtime`)
+                                VALUES
+                                (uuid(),@custid,@idcard,@idname,@idpicture,@company,@legalperson,@organizationcode,@organizationpicture,@createdtime,@modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlU, new {innerid = model.Custid}, tran);
+                    conn.Execute(sqlI, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            } 
+        }
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public int UpdateAuthentication(CustAuthenticationModel model)
+        {
+            var sqlStr = new StringBuilder("update `cust_authentication` set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlU, new { innerid = model.Custid }, tran);
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 审核认证信息
+        /// </summary>
+        /// <param name="info">会员相关信息</param>
+        /// <param name="operid">操作人id</param>
+        /// <returns></returns>
+        public int AuditAuthentication(CustModel info,string operid)
+        {
+            const string sql = "update cust_info set authstatus=@authstatus,autherid=@autherid,authdesc=@authdesc,authtime=@authtime where innerid=@innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new
+                {
+                    innerid = info.Innerid,
+                    authstatus = info.AuthStatus,
+                    autherid = operid,
+                    authtime = info.AuthTime,
+                    authdesc = info.AuthDesc
+                });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
 
         #endregion

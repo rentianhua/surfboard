@@ -79,5 +79,39 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         #endregion
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户添加认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public JResult AddAuthentication(CustAuthenticationModel model)
+        {
+            return BusinessComponent.AddAuthentication(model);
+        }
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public JResult UpdateAuthentication(CustAuthenticationModel model)
+        {
+            return BusinessComponent.UpdateAuthentication(model);
+        }
+
+        /// <summary>
+        /// 审核认证信息
+        /// </summary>
+        /// <param name="info">会员相关信息</param>
+        /// <returns></returns>
+        public JResult AuditAuthentication(CustModel info)
+        {
+            return BusinessComponent.AuditAuthentication(info);
+        }
+
+        #endregion
     }
 }

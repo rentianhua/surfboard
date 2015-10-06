@@ -49,6 +49,13 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         IEnumerable<BaseCity> GetCityList(int provId, string initial);
 
+        /// <summary>
+        /// 获取省份
+        /// </summary>
+        /// <param name="initial">首字母</param>
+        /// <returns></returns>
+        JResult GetProvListEx(string initial);
+
         #endregion
 
         #region 品牌/车系/车型
