@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
@@ -123,6 +124,83 @@ namespace CCN.Modules.Customer.BusinessComponent
                 result.errmsg = userInfo;
             }
             return result;
+        }
+
+        #endregion
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户添加认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public JResult AddAuthentication(CustAuthenticationModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Custid))
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "会员id不能空"
+                };
+            }
+            model.Createdtime = DateTime.Now;
+            model.Modifiedtime = null;
+            var result = DataAccess.AddAuthentication(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "申请认证成功" : "申请认证失败"
+            };
+        }
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public JResult UpdateAuthentication(CustAuthenticationModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Custid))
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "会员id不能空"
+                };
+            }
+            model.Modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateAuthentication(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改认证信息成功" : "修改认证信息失败"
+            };
+        }
+
+        /// <summary>
+        /// 审核认证信息
+        /// </summary>
+        /// <param name="info">会员相关信息</param>
+        /// <returns></returns>
+        public JResult AuditAuthentication(CustModel info)
+        {
+            var operid = ApplicationContext.Current.UserId;
+            if (string.IsNullOrWhiteSpace(operid))
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "操作人信息不存在"
+                };
+            }
+            var result = DataAccess.AuditAuthentication(info, operid);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "审核成功" : "审核失败"
+            };
         }
 
         #endregion

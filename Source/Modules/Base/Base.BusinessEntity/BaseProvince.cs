@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace CCN.Modules.Base.BusinessEntity
 {
     /// <summary>
@@ -30,5 +32,21 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class JsonGroupByModel
+    {
+        /// <summary>
+        /// 首字母
+        /// </summary>
+        public string Initial { get; set; }
+
+        /// <summary>
+        /// 列表
+        /// </summary>
+        public List<BaseProvince> ProvList { get; set; }
     }
 }

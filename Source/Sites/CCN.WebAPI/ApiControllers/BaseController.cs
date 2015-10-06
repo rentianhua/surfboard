@@ -105,6 +105,18 @@ namespace CCN.WebAPI.ApiControllers
             };
         }
 
+        /// <summary>
+        /// 获取省份
+        /// </summary>
+        /// <param name="initial"></param>
+        /// <returns></returns>
+        [Route("GetProvListEx")]
+        [HttpGet]
+        public JResult GetProvListEx(string initial = null)
+        {
+            return _baseservice.GetProvListEx(initial);
+        }
+
         #endregion
 
         #region 品牌/车系/车型

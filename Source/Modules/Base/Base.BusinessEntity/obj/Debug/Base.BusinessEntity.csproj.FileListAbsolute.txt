@@ -9,3 +9,4 @@ E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessEntity.dll
 E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessEntity.pdb
 E:\tim\surfboard\Source\Modules\Base\Base.BusinessEntity\obj\Debug\CCN.Modules.Base.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Base\Base.BusinessEntity\obj\Debug\CCN.Modules.Base.BusinessEntity.pdb
+E:\tim\surfboard\Source\Modules\Base\Base.BusinessEntity\obj\Debug\Base.BusinessEntity.csprojResolveAssemblyReference.cache

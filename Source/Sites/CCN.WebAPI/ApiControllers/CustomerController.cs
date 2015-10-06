@@ -100,5 +100,45 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户添加认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        [Route("AddAuthentication")]
+        [HttpPost]
+        public JResult AddAuthentication([FromBody] CustAuthenticationModel model)
+        {
+            return _custservice.AddAuthentication(model);
+        }
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        [Route("UpdateAuthentication")]
+        [HttpPost]
+        public JResult UpdateAuthentication([FromBody] CustAuthenticationModel model)
+        {
+            return _custservice.UpdateAuthentication(model);
+        }
+
+        /// <summary>
+        /// 审核认证信息
+        /// </summary>
+        /// <param name="info">会员相关信息</param>
+        /// <returns></returns>
+        [Route("AuditAuthentication")]
+        [HttpPost]
+        public JResult AuditAuthentication([FromBody] CustModel info)
+        {
+            return _custservice.AuditAuthentication(info);
+        }
+
+        #endregion
     }
 }

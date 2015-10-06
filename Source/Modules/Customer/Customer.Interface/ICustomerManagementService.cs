@@ -48,5 +48,30 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLogin(CustLoginInfo loginInfo);
 
         #endregion
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户添加认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        JResult AddAuthentication(CustAuthenticationModel model);
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        JResult UpdateAuthentication(CustAuthenticationModel model);
+
+        /// <summary>
+        /// 审核认证信息
+        /// </summary>
+        /// <param name="info">会员相关信息</param>
+        /// <returns></returns>
+        JResult AuditAuthentication(CustModel info);
+
+        #endregion
     }
 }

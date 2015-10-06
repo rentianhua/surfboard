@@ -58,6 +58,21 @@ namespace CCN.Modules.Customer.BusinessEntity
         public int AuthStatus { get; set; }
 
         /// <summary>
+        /// 审核人id
+        /// </summary>
+        public string Autherid { get; set; }
+
+        /// <summary>
+        /// 审核时间
+        /// </summary>
+        public string AuthTime { get; set; }
+
+        /// <summary>
+        /// 审核描述
+        /// </summary>
+        public string AuthDesc { get; set; }
+
+        /// <summary>
         /// 类型1.车商，2,个人
         /// </summary>
         public int Type { get; set; }
