@@ -81,3 +81,7 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newt
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.EntLib.xml
+Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
+Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
+Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
+Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
