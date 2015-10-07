@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
+using Cedar.Framwork.AuditTrail.Configuration;
 using Cedar.Framwork.AuditTrail.Properties;
 using Microsoft.Practices.Unity.Utility;
 
@@ -83,6 +85,7 @@ namespace Cedar.Framwork.AuditTrail
         {
             AuditLogger.Providers = new ServiceLocatableDictionary<AuditLogProviderBase>(null);
             this.logEntry = logEntry;
+            ConfigManager.GetConfigurationSection<AuditTrailSettings>().Configure(ServiceLocatorFactory.GetServiceLocator());
         }
 
         /// <summary>

@@ -10,3 +10,9 @@ E:\tim\surfboard\Lib\CCN.Modules.CustRelations.Interface.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CustRelations.Interface.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Lib\CCN.Modules.CustRelations.Interface.XML
+Y:\GitHub\surfboard\Lib\CCN.Modules.CustRelations.Interface.dll
+Y:\GitHub\surfboard\Lib\CCN.Modules.CustRelations.Interface.pdb
+Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CustRelations.Interface.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.dll
+Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.Interface\obj\Debug\CCN.Modules.CustRelations.Interface.pdb

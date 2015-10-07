@@ -21,7 +21,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Ceda
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.pdb
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.EntLib.pdb
-Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.EntLib.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Common.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.xml
 Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Microsoft.Practices.Unity.xml
@@ -58,7 +57,6 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newt
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\MySql.Data.Entity.EF6.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\StackExchange.Redis.dll
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\EntityFramework.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\MySql.Data.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Framwork.Caching.pdb
@@ -78,9 +76,8 @@ Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Newt
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Microsoft.Practices.EnterpriseLibrary.Data.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\StackExchange.Redis.pdb
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\StackExchange.Redis.xml
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.pdb
-\\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Dapper.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\EntityFramework.xml
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 \\Mac\Home\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
+Y:\GitHub\surfboard\Source\Framework\Caching\Caching.Interception\bin\Debug\Cedar.Core.EntLib.xml

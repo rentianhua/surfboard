@@ -265,5 +265,13 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessE
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessEntity.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.xml
+<<<<<<< HEAD
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.Properties.Resources.resources
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csproj.GenerateResource.Cache
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.dll
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.pdb
+=======
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\zxing.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Qiniu.4.0.dll
+>>>>>>> master

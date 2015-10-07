@@ -69,8 +69,8 @@ namespace FrameworkTest.Caching
             ApplicationContext.Current.UserId = Guid.NewGuid().ToString();
             ApplicationContext.Current.TransactionId = Guid.NewGuid().ToString();
             ApplicationContext.Current.UserName = Guid.NewGuid().ToString();
-            CachingSettings at = ConfigManager.GetConfigurationSection<CachingSettings>();
-            at.Configure(iServiceLocate);
+            //CachingSettings at = ConfigManager.GetConfigurationSection<CachingSettings>();
+            //at.Configure(iServiceLocate);
             var result = iTestService.SayHelloCaching(1, new { id = "1", name = "name" });
             Assert.IsNotNull(result);
             var result2 = iTestService.SayHelloCaching(1, new { id = "1", name = "name" });
