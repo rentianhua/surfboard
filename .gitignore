@@ -24,6 +24,7 @@
 */bin
 /Lib
 */obj
+*/obj/Debug
 
 .vs/config/applicationhost.config
 
