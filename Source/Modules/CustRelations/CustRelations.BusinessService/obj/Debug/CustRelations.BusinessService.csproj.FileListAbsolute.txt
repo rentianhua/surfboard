@@ -5,10 +5,10 @@
 \\Mac\Home\GitHub\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.pdb
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.dll
 \\Mac\Home\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.pdb
-E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CustRelations.BusinessService.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.dll.config
 E:\tim\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.XML
 E:\tim\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.dll
 E:\tim\surfboard\Lib\CCN.Modules.CustRelations.BusinessService.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CustRelations.BusinessService.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessService\obj\Debug\CCN.Modules.CustRelations.BusinessService.pdb

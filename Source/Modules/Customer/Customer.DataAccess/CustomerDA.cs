@@ -448,7 +448,7 @@ namespace CCN.Modules.Customer.DataAccess
         public int DoTag(CustTagRelation model)
         {
             const string sql = @"INSERT INTO cust_tag_relation(innerid,tagid,fromid,toid,createdtime) VALUES (@innerid,@tagid,@fromid,@toid,@createdtime);";
-            const string sqlH = @"UPDATE cust_tag SET hotcount=@hotcount WHERE innerid = @innerid;";
+            const string sqlH = @"UPDATE cust_tag SET hotcount=hotcount+1 WHERE innerid = @innerid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -456,9 +456,11 @@ namespace CCN.Modules.Customer.DataAccess
 
                 try
                 {
+                    //插入关系
                     conn.Execute(sql, model, tran);
-                    
-                    
+                    //更新热度
+                    conn.Execute(sqlH, new {innerid = model.Tagid}, tran);
+
                     tran.Commit();
                     return 1;
                 }

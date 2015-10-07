@@ -75,13 +75,14 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practice
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\MySql.Data.Entity.EF6.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\StackExchange.Redis.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Qiniu.4.0.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Dapper.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\MySql.Data.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\CCN.Modules.Car.BusinessEntity.pdb
-E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\CCN.Modules.Car.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\CCN.Modules.Car.DataAccess.pdb
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\CCN.Modules.Car.DataAccess.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Cedar.Core.pdb
@@ -112,5 +113,3 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\EntityFramework.xm
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\Car.BusinessComponent.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\CCN.Modules.Car.BusinessComponent.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\CCN.Modules.Car.BusinessComponent.pdb
-E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.dll
-E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Qiniu.4.0.dll
