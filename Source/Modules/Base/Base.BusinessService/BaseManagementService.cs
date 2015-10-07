@@ -49,6 +49,16 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.CheckVerification(target, vcode);
         }
 
+        /// <summary>
+        /// 获取省份
+        /// </summary>
+        /// <param name="initial">首字母</param>
+        /// <returns></returns>
+        public JResult GetProvListEx(string initial)
+        {
+            return BusinessComponent.GetProvListEx(initial);
+        }
+
         #endregion
 
         #region 区域
