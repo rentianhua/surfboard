@@ -267,3 +267,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\zxing.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Qiniu.4.0.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
