@@ -46,6 +46,20 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="loginInfo">登录账户</param>
         /// <returns>用户信息</returns>
         JResult CustLogin(CustLoginInfo loginInfo);
+        
+        /// <summary>
+        /// 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        JResult GetCustById(string innerid);
+
+        /// <summary>
+        /// 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CustModel> GetCustPageList(CustQueryModel query);
 
         #endregion
 
@@ -71,6 +85,22 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="info">会员相关信息</param>
         /// <returns></returns>
         JResult AuditAuthentication(CustModel info);
+
+
+        /// <summary>
+        /// 获取会员认证信息 by innerid
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        JResult GetCustAuthById(string innerid);
+
+        /// <summary>
+        /// 获取会员认证信息 by custid
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        JResult GetCustAuthByCustid(string custid);
+
 
         #endregion
     }

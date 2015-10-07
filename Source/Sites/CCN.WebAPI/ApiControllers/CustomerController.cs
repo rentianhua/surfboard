@@ -98,6 +98,30 @@ namespace CCN.WebAPI.ApiControllers
 
             return _custservice.CustLogin(loginInfo);
         }
+        
+        /// <summary>
+        /// 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        [Route("GetCustById")]
+        [HttpGet]
+        public JResult GetCustById(string innerid)
+        {
+            return _custservice.GetCustById(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCustPageList")]
+        [HttpPost]
+        public BasePageList<CustModel> GetCustPageList([FromBody]CustQueryModel query)
+        {
+            return _custservice.GetCustPageList(query);
+        }
 
         #endregion
 
@@ -139,6 +163,29 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.AuditAuthentication(info);
         }
 
+        /// <summary>
+        /// 获取会员认证信息 by innerid
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        [Route("GetCustAuthById")]
+        [HttpGet]
+        public JResult GetCustAuthById(string innerid)
+        {
+            return _custservice.GetCustAuthById(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员认证信息 by custid
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        [Route("GetCustAuthByCustid")]
+        [HttpGet]
+        public JResult GetCustAuthByCustid(string custid)
+        {
+            return _custservice.GetCustAuthByCustid(custid);
+        }
         #endregion
     }
 }

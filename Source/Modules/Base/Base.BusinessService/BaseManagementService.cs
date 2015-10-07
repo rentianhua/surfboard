@@ -26,6 +26,20 @@ namespace CCN.Modules.Base.BusinessService
 
         }
 
+        #region Code
+
+        /// <summary>
+        /// 获取代码值列表
+        /// </summary>
+        /// <param name="typekey">代码类型key</param>
+        /// <returns></returns>
+        public JResult GetCodeByTypeKey(string typekey)
+        {
+            return BusinessComponent.GetCodeByTypeKey(typekey);
+        }
+
+        #endregion
+
         #region 验证码
 
         /// <summary>

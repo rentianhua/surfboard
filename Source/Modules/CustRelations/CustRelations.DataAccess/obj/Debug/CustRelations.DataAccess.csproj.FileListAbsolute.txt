@@ -100,3 +100,5 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Entit
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CustRelations.DataAccess.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Qiniu.4.0.dll

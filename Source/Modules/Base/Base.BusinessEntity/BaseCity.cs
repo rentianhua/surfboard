@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CCN.Modules.Base.BusinessEntity
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BaseCity
     {
         /// <summary>

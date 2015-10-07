@@ -112,3 +112,5 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\EntityFramework.xm
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\Car.BusinessComponent.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\CCN.Modules.Car.BusinessComponent.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\obj\Debug\CCN.Modules.Car.BusinessComponent.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Qiniu.4.0.dll
