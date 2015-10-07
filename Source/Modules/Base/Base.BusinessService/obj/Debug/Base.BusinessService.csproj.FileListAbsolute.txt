@@ -10,3 +10,9 @@ E:\tim\surfboard\Lib\CCN.Modules.Base.BusinessService.pdb
 E:\tim\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\Base.BusinessService.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\CCN.Modules.Base.BusinessService.dll
 E:\tim\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\CCN.Modules.Base.BusinessService.pdb
+Y:\GitHub\surfboard\Lib\CCN.Modules.Base.BusinessService.XML
+Y:\GitHub\surfboard\Lib\CCN.Modules.Base.BusinessService.dll
+Y:\GitHub\surfboard\Lib\CCN.Modules.Base.BusinessService.pdb
+Y:\GitHub\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\Base.BusinessService.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\CCN.Modules.Base.BusinessService.dll
+Y:\GitHub\surfboard\Source\Modules\Base\Base.BusinessService\obj\Debug\CCN.Modules.Base.BusinessService.pdb

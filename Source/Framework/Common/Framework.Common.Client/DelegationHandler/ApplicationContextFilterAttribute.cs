@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using System.Web.Security;
 using Cedar.Core.ApplicationContexts;
 
 namespace Cedar.Framework.Common.Client.DelegationHandler
@@ -70,17 +65,12 @@ namespace Cedar.Framework.Common.Client.DelegationHandler
 
                 ApplicationContext.Current.UserId = userid;
                 ApplicationContext.Current.SessionId = sessionid;
-                base.OnActionExecuting(actionContext);
+                //base.OnActionExecuting(actionContext);
             }
             catch
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.Forbidden);
             }
-        }
-
-        public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
-        {
-            return base.OnActionExecutingAsync(actionContext, cancellationToken);
         }
     }
 }

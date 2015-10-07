@@ -11,9 +11,9 @@ using Cedar.Core.Properties;
 namespace Cedar.Core.IoC.Configuration
 {
     /// <summary>
-    ///     The configuration setting for "iConnect.serviceLocation".
+    ///     The configuration setting for "cedar.serviceLocation".
     /// </summary>
-    [ConfigurationSectionName("sr.serviceLocation")]
+    [ConfigurationSectionName("cedar.serviceLocation")]
     public class ServiceLocationSettings : ConfigurationSection
     {
         private const string DefaultServiceLocatorProperty = "defaultServiceLocator";
@@ -26,11 +26,11 @@ namespace Cedar.Core.IoC.Configuration
         /// <value>
         ///     The default service locator.
         /// </value>
-        [ConfigurationProperty("defaultServiceLocator", IsRequired = false, DefaultValue = "")]
+        [ConfigurationProperty(DefaultServiceLocatorProperty, IsRequired = false, DefaultValue = "")]
         public string DefaultServiceLocator
         {
-            get { return (string)base["defaultServiceLocator"]; }
-            set { base["defaultServiceLocator"] = value; }
+            get { return (string)base[DefaultServiceLocatorProperty]; }
+            set { base[DefaultServiceLocatorProperty] = value; }
         }
 
         /// <summary>
@@ -39,11 +39,11 @@ namespace Cedar.Core.IoC.Configuration
         /// <value>
         ///     The service locators.
         /// </value>
-        [ConfigurationProperty("serviceLocators", IsRequired = true)]
+        [ConfigurationProperty(ServiceLocatorsProperty, IsRequired = true)]
         public NameTypeConfigurationElementCollection<ServiceLocatorDataBase> ServiceLocators
         {
-            get { return (NameTypeConfigurationElementCollection<ServiceLocatorDataBase>)base["serviceLocators"]; }
-            set { base["serviceLocators"] = value; }
+            get { return (NameTypeConfigurationElementCollection<ServiceLocatorDataBase>)base[ServiceLocatorsProperty]; }
+            set { base[ServiceLocatorsProperty] = value; }
         }
 
         /// <summary>
@@ -52,11 +52,11 @@ namespace Cedar.Core.IoC.Configuration
         /// <value>
         ///     The resolved assemblies.
         /// </value>
-        [ConfigurationProperty("resolvedAssemblies", IsRequired = false)]
+        [ConfigurationProperty(ResolvedAssembliesProperty, IsRequired = false)]
         public ConfigurationElementCollection<AssemblyConfigurationElement> ResolvedAssemblies
         {
-            get { return (ConfigurationElementCollection<AssemblyConfigurationElement>)base["resolvedAssemblies"]; }
-            set { base["resolvedAssemblies"] = value; }
+            get { return (ConfigurationElementCollection<AssemblyConfigurationElement>)base[ResolvedAssembliesProperty]; }
+            set { base[ResolvedAssembliesProperty] = value; }
         }
 
         /// <summary>

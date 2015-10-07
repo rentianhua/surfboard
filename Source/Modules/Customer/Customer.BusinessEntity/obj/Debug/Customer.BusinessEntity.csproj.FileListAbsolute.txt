@@ -10,6 +10,13 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.xml
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.dll
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
+=======
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Framework.Common.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Core.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.dll
@@ -23,3 +30,4 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Core.
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.Unity.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
+>>>>>>> master
