@@ -24,6 +24,22 @@ namespace CCN.WebAPI.ApiControllers
             _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
         }
 
+        #region Code
+
+        /// <summary>
+        /// 获取代码值列表
+        /// </summary>
+        /// <param name="typekey">代码类型key</param>
+        /// <returns></returns>
+        [Route("GetCodeByTypeKey")]
+        [HttpGet]
+        public JResult GetCodeByTypeKey(string typekey)
+        {
+            return _baseservice.GetCodeByTypeKey(typekey);
+        }
+
+        #endregion
+
         #region 验证码
 
         /// <summary>
@@ -85,7 +101,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="provid">省份id</param>
         /// <param name="initial">首字母</param>
         /// <returns></returns>
-        [Route("GetCityList/{provid}")]
+        [Route("GetCityList")]
         [HttpGet]
         public JResult GetCityList(int provid, string initial = null)
         {
@@ -151,7 +167,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="brandId">品牌id</param>
         /// <returns></returns>
-        [Route("GetCarSeries/{brandId}")]
+        [Route("GetCarSeries")]
         [HttpGet]
         public JResult GetCarSeries(int brandId)
         {
@@ -176,7 +192,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="seriesId">车系id</param>
         /// <returns></returns>
-        [Route("GetCarModel/{seriesId}")]
+        [Route("GetCarModel")]
         [HttpGet]
         public JResult GetCarModel(int seriesId)
         {

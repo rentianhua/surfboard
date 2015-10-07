@@ -82,3 +82,5 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Dapper.x
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\Customer.BusinessComponent.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\obj\Debug\CCN.Modules.Customer.BusinessComponent.pdb
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Qiniu.4.0.dll

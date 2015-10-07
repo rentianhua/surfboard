@@ -32,6 +32,7 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practices.S
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.XML
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.dll
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\CCN.Modules.Car.BusinessEntity.pdb
@@ -49,3 +50,7 @@ Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Microsoft.Practice
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\Car.BusinessEntity.csprojResolveAssemblyReference.cache
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.dll
 Y:\GitHub\surfboard\Source\Modules\Car\Car.BusinessEntity\obj\Debug\CCN.Modules.Car.BusinessEntity.pdb
+=======
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessEntity\bin\Qiniu.4.0.dll
+>>>>>>> master

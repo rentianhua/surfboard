@@ -78,6 +78,27 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.CustLogin(loginInfo);
         }
 
+
+        /// <summary>
+        /// 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public JResult GetCustById(string innerid)
+        {
+            return BusinessComponent.GetCustById(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
+        {
+            return BusinessComponent.GetCustPageList(query);
+        }
+
         #endregion
 
         #region 用户认证
@@ -111,6 +132,29 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.AuditAuthentication(info);
         }
+
+
+
+        /// <summary>
+        /// 获取会员认证信息 by innerid
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCustAuthById(string innerid)
+        {
+            return BusinessComponent.GetCustAuthById(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员认证信息 by custid
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult GetCustAuthByCustid(string custid)
+        {
+            return BusinessComponent.GetCustAuthByCustid(custid);
+        }
+
 
         #endregion
     }

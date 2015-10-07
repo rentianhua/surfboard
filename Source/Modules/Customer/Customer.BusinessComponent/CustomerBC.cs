@@ -2,6 +2,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Drawing;
+using System.IO;
+using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
 using Cedar.Core.ApplicationContexts;
@@ -72,15 +76,49 @@ namespace CCN.Modules.Customer.BusinessComponent
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
             userInfo.Createdtime = DateTime.Now;
 
-            userInfo.Innerid = Guid.NewGuid().ToString();
+            var innerid = Guid.NewGuid().ToString();
+            userInfo.Innerid = innerid;
 
             if (userInfo.Wechat != null)
             {
                 userInfo.Wechat.Custid = userInfo.Innerid;
                 userInfo.Wechat.Createdtime = DateTime.Now;
             }
+
+            var result = DataAccess.CustRegister(userInfo);
+
+            #region 生成二维码
             
-            return DataAccess.CustRegister(userInfo);
+            Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    var filename = "D:\\" + Guid.NewGuid() + ".jpg";
+                    var website = ConfigHelper.GetAppSettings("website");
+                    var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
+
+                    if (File.Exists(filename))
+                    {
+                        File.Delete(filename);
+                    }
+
+                    bitmap.Save(filename);
+
+                    var qinniu = new QiniuUtility();
+                    var qrcodeKey = qinniu.PutFile(filename);
+                    if (!string.IsNullOrWhiteSpace(qrcodeKey))
+                    {
+                        DataAccess.UpdateQrCode(innerid, qrcodeKey);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                }
+            });
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -125,6 +163,41 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             return result;
         }
+
+
+        /// <summary>
+        /// 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public JResult GetCustById(string innerid)
+        {
+            var list = DataAccess.GetCustById(innerid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "没有数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
+        {
+            return DataAccess.GetCustPageList(query);
+        }
+
 
         #endregion
 
@@ -203,6 +276,54 @@ namespace CCN.Modules.Customer.BusinessComponent
             };
         }
 
+
+        /// <summary>
+        /// 获取会员认证信息 by innerid
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCustAuthById(string innerid)
+        {
+            var list = DataAccess.GetCustAuthById(innerid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "没有数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 获取会员认证信息 by custid
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult GetCustAuthByCustid(string custid)
+        {
+            var list = DataAccess.GetCustAuthByCustid(custid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "没有数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
         #endregion
+
     }
 }

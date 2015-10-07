@@ -20,6 +20,7 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\M
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CustRelations.BusinessEntity.csprojResolveAssemblyReference.cache
+<<<<<<< HEAD
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.XML
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.dll
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\CCN.Modules.CustRelations.BusinessEntity.pdb
@@ -36,3 +37,7 @@ Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bi
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CCN.Modules.CustRelations.BusinessEntity.dll
 Y:\GitHub\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CCN.Modules.CustRelations.BusinessEntity.pdb
+=======
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Qiniu.4.0.dll
+>>>>>>> master
