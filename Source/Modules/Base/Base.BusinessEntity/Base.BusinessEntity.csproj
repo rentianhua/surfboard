@@ -45,6 +45,7 @@
     <Compile Include="BaseCarBrandModel.cs" />
     <Compile Include="BaseCarModelModel.cs" />
     <Compile Include="BaseCity.cs" />
+    <Compile Include="BaseCodeModel.cs" />
     <Compile Include="BaseProvince.cs" />
     <Compile Include="BaseCarSeriesModel.cs" />
     <Compile Include="BaseVerification.cs" />

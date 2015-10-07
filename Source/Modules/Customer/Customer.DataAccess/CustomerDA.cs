@@ -9,6 +9,7 @@ using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Framework.Common.BaseClasses;
 using Dapper;
 using MySql.Data.MySqlClient;
 
@@ -73,8 +74,8 @@ namespace CCN.Modules.Customer.DataAccess
         {
             var result = 0;
             //插入账户基本信息
-            const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+            const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,qrcode,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
+                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@qrcode,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
             
             try
             {
@@ -121,6 +122,76 @@ namespace CCN.Modules.Customer.DataAccess
             }
 
             return custModel;
+        }
+
+        /// <summary>
+        /// 用户登录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="qrcode"></param>
+        /// <returns>用户信息</returns>
+        public int UpdateQrCode(string innerid,string qrcode)
+        {
+            const string sql = "update cust_info set qrcode=@qrcode where innerid=@innerid;";
+            var custModel = Helper.Execute(sql, new {qrcode, innerid});
+            return custModel;
+        }
+
+        /// <summary>
+        /// 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public CustModel GetCustById(string innerid)
+        {
+            const string sql = "select * from cust_info where innerid=@innerid;";
+
+            try
+            {
+                var custModel = Helper.Query<CustModel>(sql, new {innerid}).FirstOrDefault();
+                //获取微信信息
+                if (custModel != null)
+                {
+                    custModel.Wechat = Helper.Query<CustWechat>("select * from cust_wechat where custid=@custid;", new
+                    {
+                        custid = innerid
+                    }).FirstOrDefault();
+                }
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"cust_info";
+            const string fields = "innerid, username, mobile, telephone, email, headportrait, status, authstatus, autherid, authtime, authdesc, type, realname, totalpoints, level, createdtime, modifiedtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Status != null
+                ? $" and status={query.Status}"
+                : "");
+
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
+            }
+            
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CustModel>(model, query.Echo);
+            return list;
         }
 
         #endregion
@@ -207,6 +278,133 @@ namespace CCN.Modules.Customer.DataAccess
                     authtime = info.AuthTime,
                     authdesc = info.AuthDesc
                 });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取会员认证信息 by innerid
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public CustAuthenticationModel GetCustAuthById(string innerid)
+        {
+            const string sql = "select * from cust_authentication where innerid=@innerid;";
+
+            try
+            {
+                var custModel = Helper.Query<CustAuthenticationModel>(sql, new { innerid }).FirstOrDefault();
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取会员认证信息 by custid
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public CustAuthenticationModel GetCustAuthByCustid(string custid)
+        {
+            const string sql = "select * from cust_authentication where custid=@custid;";
+
+            try
+            {
+                var custModel = Helper.Query<CustAuthenticationModel>(sql, new { custid }).FirstOrDefault();
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 会员标签
+
+
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public int AddTag(CustTagModel model)
+        {
+            const string sql = @"INSERT INTO cust_tag(innerid, tagname, hotcount, isenabled, createdtime, modifiedtime) VALUES (uuid(), @tagname, @hotcount, @isenabled, @createdtime, @modifiedtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public int UpdateTag(CustTagModel model)
+        {
+            const string sql = @"UPDATE cust_tag SET tagname = @tagname,isenabled = @isenabled,modifiedtime = @modifiedtime WHERE innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public int DeleteTag(string innerid)
+        {
+            const string sql = @"delete from cust_tag WHERE innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取标签详情
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public int GetTagById(string innerid)
+        {
+            const string sql = @"delete from cust_tag WHERE innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid });
                 return 1;
             }
             catch (Exception ex)

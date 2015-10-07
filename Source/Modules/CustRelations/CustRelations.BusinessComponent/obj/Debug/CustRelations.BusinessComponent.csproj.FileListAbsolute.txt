@@ -102,3 +102,5 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bi
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\StackExchange.Redis.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\StackExchange.Redis.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\EntityFramework.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Qiniu.4.0.dll

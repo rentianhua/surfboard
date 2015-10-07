@@ -20,3 +20,5 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\M
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CustRelations.BusinessEntity.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Qiniu.4.0.dll

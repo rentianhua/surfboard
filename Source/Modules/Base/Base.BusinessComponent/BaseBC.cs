@@ -26,6 +26,33 @@ namespace CCN.Modules.Base.BusinessComponent
 
         }
 
+        #region Code
+
+        /// <summary>
+        /// 获取代码值列表
+        /// </summary>
+        /// <param name="typekey">代码类型key</param>
+        /// <returns></returns>
+        public JResult GetCodeByTypeKey(string typekey)
+        {
+            var list = DataAccess.GetCodeByTypeKey(typekey);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 400,
+                errmsg = "没有数据"
+            };
+        }
+
+        #endregion
+
         #region 验证码
 
         /// <summary>
@@ -119,6 +146,10 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public IEnumerable<BaseProvince> GetProvList(string initial)
         {
+            //QiniuUtility qinniu = new QiniuUtility();
+            //var sss = qinniu.PutFile("D:\\favicon.ico");
+            //var sssw = qinniu.ResumablePutFile("D:\\favicon.ico");
+
             return DataAccess.GetProvList(initial);
         }
 

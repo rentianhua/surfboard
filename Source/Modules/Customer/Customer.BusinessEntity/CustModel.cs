@@ -1,4 +1,5 @@
 ﻿using System;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Customer.BusinessEntity
 {
@@ -46,6 +47,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 头像
         /// </summary>
         public string Headportrait { get; set; }
+
+        /// <summary>
+        /// 二维码
+        /// </summary>
+        public string QrCode { get; set; }
 
         /// <summary>
         /// 用户状态[1.正常，2.冻结]
@@ -106,6 +112,87 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 用户微信信息
         /// </summary>
         public CustWechat Wechat { get; set; }
+    }
+
+    /// <summary>
+    /// 用户基本信息
+    /// </summary>
+    public class CustQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public string Username { get; set; }
+
+        /// <summary>
+        /// 手机
+        /// </summary>
+        public string Mobile { get; set; }
+        
+        /// <summary>
+        /// 固话
+        /// </summary>
+        public string Telephone { get; set; }
+
+        /// <summary>
+        /// email
+        /// </summary>
+        public string Email { get; set; }
+        
+        /// <summary>
+        /// 用户状态[1.正常，2.冻结]
+        /// </summary>
+        public int? Status { get; set; }
+
+        /// <summary>
+        /// 认证状态[0.未提交认证，1.提交认证(待审核)，2.审核通过，3.审核不过，4.重新填写(重新提交认证)]
+        /// </summary>
+        public int? AuthStatus { get; set; }
+
+        /// <summary>
+        /// 审核人id
+        /// </summary>
+        public string Autherid { get; set; }
+
+        /// <summary>
+        /// 审核时间
+        /// </summary>
+        public string AuthTime { get; set; }
+
+        /// <summary>
+        /// 审核描述
+        /// </summary>
+        public string AuthDesc { get; set; }
+
+        /// <summary>
+        /// 类型1.车商，2,个人
+        /// </summary>
+        public int? Type { get; set; }
+
+        /// <summary>
+        /// 真实姓名
+        /// </summary>
+        public string Realname { get; set; }
+
+        /// <summary>
+        /// 总积分
+        /// </summary>
+        public int? Totalpoints { get; set; }
+
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public int? Level { get; set; }
+
+        /// <summary>
+        /// 注册时间-start
+        /// </summary>
+        public DateTime? CreatedtimeS { get; set; }
+
+        /// <summary>
+        /// 注册时间-end
+        /// </summary>
+        public DateTime? CreatedtimeE { get; set; }
     }
 
     /// <summary>

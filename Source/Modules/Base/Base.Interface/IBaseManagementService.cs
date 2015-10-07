@@ -13,6 +13,17 @@ namespace CCN.Modules.Base.Interface
     /// </summary>
     public interface IBaseManagementService
     {
+        #region Code
+
+        /// <summary>
+        /// 获取代码值列表
+        /// </summary>
+        /// <param name="typekey">代码类型key</param>
+        /// <returns></returns>
+        JResult GetCodeByTypeKey(string typekey);
+
+        #endregion
+
         #region 验证码
 
         /// <summary>

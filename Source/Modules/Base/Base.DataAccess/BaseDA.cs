@@ -26,6 +26,22 @@ namespace CCN.Modules.Base.DataAccess
             //Helper = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
 
+        #region Code
+
+        /// <summary>
+        /// 获取代码值列表
+        /// </summary>
+        /// <param name="typekey">代码类型key</param>
+        /// <returns></returns>
+        public IEnumerable<BaseCodeSelectModel> GetCodeByTypeKey(string typekey)
+        {
+            const string sql = "select codevalue, codename from base_code where isenabled=1 and typekey=@typekey order by sort asc;";
+            var list = Helper.Query<BaseCodeSelectModel>(sql, new { typekey });
+            return list;
+        }
+
+        #endregion
+
         #region 验证码
 
         /// <summary>
