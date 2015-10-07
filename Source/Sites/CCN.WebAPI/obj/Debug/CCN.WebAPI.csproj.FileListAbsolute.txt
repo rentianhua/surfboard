@@ -268,3 +268,8 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessE
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.BusinessEntity.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.CustRelations.Interface.xml
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.Properties.Resources.resources
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.csproj.GenerateResource.Cache
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.dll
+Y:\GitHub\surfboard\Source\Sites\CCN.WebAPI\obj\Debug\CCN.WebAPI.pdb

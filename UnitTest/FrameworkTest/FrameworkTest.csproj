@@ -106,8 +106,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ApplicationContext\ApplicationContextTest.cs" />
     <Compile Include="AuditTrail\AuditTrailUnitTest.cs" />
     <Compile Include="Caching\CachingUnitTest.cs" />
+    <Compile Include="Core\ConfigManagerUnitTest.cs" />
+    <Compile Include="Core\SettingSourceUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
     <Compile Include="TestService\ITestService.cs" />
     <Compile Include="TestService\Models.cs" />
@@ -118,6 +121,24 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="ConfigFiles\auditTrail.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\caching.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\connectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\serviceLocation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\settingSource.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\unity.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="OrderedTest1.orderedtest">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

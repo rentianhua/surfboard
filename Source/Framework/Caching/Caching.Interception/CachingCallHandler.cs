@@ -116,7 +116,8 @@ namespace Cedar.Framwork.Caching.Interception
             }
             string key = this.KeyGenerator.CreateCacheKey(input.MethodBase, array);
 
-            object[] array2 = (object[])CacheManager.Provider.Get(key);
+            //object[] array2 = (object[])CacheManager.Provider.Get(key);
+            object[] array2 = (object[])HttpRuntime.Cache.Get(key);
             if (array2 == null)
             {
                 IMethodReturn methodReturn = getNext()(input, getNext);
@@ -129,7 +130,7 @@ namespace Cedar.Framwork.Caching.Interception
                 return methodReturn;
             }
 
-            return input.CreateMethodReturn(array2, new object[]
+            return input.CreateMethodReturn(array2[0], new object[]
             {
                 input.Arguments
             });
@@ -147,8 +148,8 @@ namespace Cedar.Framwork.Caching.Interception
             {
                 value
             };
-            CacheManager.Provider.Add(key, value2, expirationTime);
-            //HttpRuntime.Cache.Insert(key, value2, null, Cache.NoAbsoluteExpiration, this.ExpirationTime, CacheItemPriority.Normal, null);
+            //CacheManager.Provider.Add(key, value2, expirationTime);
+            HttpRuntime.Cache.Insert(key, value2, null, Cache.NoAbsoluteExpiration, this.ExpirationTime, CacheItemPriority.Normal, null);
         }
     }
 }

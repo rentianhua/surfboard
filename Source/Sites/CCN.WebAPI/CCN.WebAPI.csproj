@@ -259,9 +259,11 @@
     <Content Include="ConfigFiles\applicationContexts.config" />
     <Content Include="ConfigFiles\connectionStrings.config" />
     <Content Include="ConfigFiles\serviceLocation.config" />
-    <Content Include="ConfigFiles\sessionManagement.config" />
     <Content Include="ConfigFiles\settingSource.config" />
     <Content Include="Areas\Base\Views\web.config" />
+    <Content Include="ConfigFiles\auditTrail.config" />
+    <Content Include="ConfigFiles\caching.config" />
+    <Content Include="ConfigFiles\unity.config" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

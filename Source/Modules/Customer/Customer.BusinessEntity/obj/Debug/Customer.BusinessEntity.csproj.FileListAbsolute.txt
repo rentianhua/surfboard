@@ -10,3 +10,8 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.xml
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.dll
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
+Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
