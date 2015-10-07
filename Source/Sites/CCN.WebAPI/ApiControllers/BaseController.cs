@@ -6,8 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Cedar.Framework.Common.Client.DelegationHandler;
 
 namespace CCN.WebAPI.ApiControllers
 {

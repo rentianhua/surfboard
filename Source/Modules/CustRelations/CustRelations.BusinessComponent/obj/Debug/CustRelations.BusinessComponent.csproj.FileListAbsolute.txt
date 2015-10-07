@@ -60,7 +60,6 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bi
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Microsoft.Practices.Unity.RegistrationByConvention.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Dapper.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Framwork.AuditTrail.dll
-E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Newtonsoft.Json.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Qiniu.4.0.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Core.EntLib.dll
@@ -93,7 +92,6 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bi
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Dapper.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Framwork.AuditTrail.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Framwork.AuditTrail.xml
-E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Newtonsoft.Json.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Core.EntLib.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Cedar.Core.EntLib.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Microsoft.Practices.EnterpriseLibrary.Data.xml
@@ -103,3 +101,6 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bi
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\obj\Debug\CustRelations.BusinessComponent.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\obj\Debug\CCN.Modules.CustRelations.BusinessComponent.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\obj\Debug\CCN.Modules.CustRelations.BusinessComponent.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\CCN.Modules.CustRelations.BusinessEntity.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.xml

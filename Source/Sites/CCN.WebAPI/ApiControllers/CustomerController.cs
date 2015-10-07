@@ -4,6 +4,7 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Cedar.Framework.Common.Client.DelegationHandler;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -158,6 +159,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("AuditAuthentication")]
         [HttpPost]
+        [ApplicationContextFilter]
         public JResult AuditAuthentication([FromBody] CustModel info)
         {
             return _custservice.AuditAuthentication(info);

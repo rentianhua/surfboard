@@ -107,3 +107,6 @@ E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\EntityFramework.xml
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\Car.DataAccess.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\CCN.Modules.Car.DataAccess.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\CCN.Modules.Car.DataAccess.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\CCN.Modules.Car.BusinessEntity.xml
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.xml

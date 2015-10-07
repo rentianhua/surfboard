@@ -32,7 +32,7 @@ namespace CCN.Modules.Car.DataAccess
         public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"car_info_bak";
+            const string tableName = @"car_info";
             const string fields = " * ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 

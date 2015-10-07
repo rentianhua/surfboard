@@ -101,3 +101,6 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Entit
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CustRelations.DataAccess.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.dll
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug\CCN.Modules.CustRelations.DataAccess.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\CCN.Modules.CustRelations.BusinessEntity.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\zxing.pdb
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\zxing.xml
