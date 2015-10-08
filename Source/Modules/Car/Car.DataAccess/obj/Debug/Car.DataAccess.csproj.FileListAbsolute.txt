@@ -70,6 +70,8 @@ E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.Unity
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Data.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\MySql.Data.Entity.EF6.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\StackExchange.Redis.dll
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.dll
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Qiniu.4.0.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Dapper.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.EnterpriseLibrary.Logging.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.ServiceLocation.dll
@@ -77,7 +79,6 @@ E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Microsoft.Practices.Enter
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\EntityFramework.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\MySql.Data.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\CCN.Modules.Car.BusinessEntity.pdb
-E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\CCN.Modules.Car.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Cedar.Core.pdb
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Cedar.Core.xml
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Cedar.Core.EntLib.pdb
@@ -106,5 +107,6 @@ E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\EntityFramework.xml
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\Car.DataAccess.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\CCN.Modules.Car.DataAccess.dll
 E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\obj\Debug\CCN.Modules.Car.DataAccess.pdb
-E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.dll
-E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\Qiniu.4.0.dll
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\CCN.Modules.Car.BusinessEntity.xml
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.pdb
+E:\tim\surfboard\Source\Modules\Car\Car.DataAccess\bin\zxing.xml

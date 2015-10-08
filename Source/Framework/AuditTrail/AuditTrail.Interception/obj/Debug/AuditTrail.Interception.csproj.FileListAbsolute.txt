@@ -39,3 +39,10 @@ Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\AuditTrail.Interception.csprojResolveAssemblyReference.cache
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
 Y:\GitHub\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb
+E:\tim\surfboard\Lib\Cedar.AuditTrail.Interception.dll.config
+E:\tim\surfboard\Lib\Cedar.AuditTrail.Interception.XML
+E:\tim\surfboard\Lib\Cedar.AuditTrail.Interception.dll
+E:\tim\surfboard\Lib\Cedar.AuditTrail.Interception.pdb
+E:\tim\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\AuditTrail.Interception.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.dll
+E:\tim\surfboard\Source\Framework\AuditTrail\AuditTrail.Interception\obj\Debug\Cedar.AuditTrail.Interception.pdb

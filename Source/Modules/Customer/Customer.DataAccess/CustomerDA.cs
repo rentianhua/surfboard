@@ -380,7 +380,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int DeleteTag(string innerid)
         {
-            const string sql = @"delete from cust_tag WHERE innerid = @innerid;";
+            const string sql = @"delete from cust_tag WHERE innerid=@innerid;";
 
             try
             {
@@ -398,18 +398,77 @@ namespace CCN.Modules.Customer.DataAccess
         /// </summary>
         /// <param name="innerid">标签id</param>
         /// <returns></returns>
-        public int GetTagById(string innerid)
+        public CustTagModel GetTagById(string innerid)
         {
-            const string sql = @"delete from cust_tag WHERE innerid = @innerid;";
+            const string sql = @"select innerid, tagname, hotcount, isenabled, createdtime, modifiedtime from cust_tag WHERE innerid=@innerid;";
 
             try
             {
-                Helper.Execute(sql, new { innerid });
-                return 1;
+                return Helper.Query<CustTagModel>(sql, new { innerid }).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                return 0;
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取标签列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustTagModel> GetTagPageList(CustTagQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"cust_tag";
+            const string fields = "innerid, tagname, hotcount, isenabled, createdtime, modifiedtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Isenabled != null
+                ? $" and status={query.Isenabled}"
+                : "");
+
+            if (!string.IsNullOrWhiteSpace(query.Tagname))
+            {
+                sqlWhere.Append($" and tagname like '%{query.Tagname}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CustTagModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 打标签
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int DoTag(CustTagRelation model)
+        {
+            const string sql = @"INSERT INTO cust_tag_relation(innerid,tagid,fromid,toid,createdtime) VALUES (@innerid,@tagid,@fromid,@toid,@createdtime);";
+            const string sqlH = @"UPDATE cust_tag SET hotcount=hotcount+1 WHERE innerid = @innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+
+                try
+                {
+                    //插入关系
+                    conn.Execute(sql, model, tran);
+                    //更新热度
+                    conn.Execute(sqlH, new {innerid = model.Tagid}, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
             }
         }
 

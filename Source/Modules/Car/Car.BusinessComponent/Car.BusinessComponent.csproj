@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cedar.AuditTrail.Interception">
+      <HintPath>..\..\..\..\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Core">
       <HintPath>..\..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>

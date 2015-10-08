@@ -15,3 +15,9 @@ Y:\GitHub\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.
 \\Mac\Home\GitHub\surfboard\Lib\Cedar.Foundation.SMS.Common.pdb
 \\Mac\Home\GitHub\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.dll
 \\Mac\Home\GitHub\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.pdb
+E:\tim\surfboard\Lib\Cedar.Foundation.SMS.Common.XML
+E:\tim\surfboard\Lib\Cedar.Foundation.SMS.Common.dll
+E:\tim\surfboard\Lib\Cedar.Foundation.SMS.Common.pdb
+E:\tim\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Foundation.SMS.Common.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.dll
+E:\tim\surfboard\Source\Foundation\SMS\Foundation.SMS.Common\obj\Debug\Cedar.Foundation.SMS.Common.pdb
