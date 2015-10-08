@@ -35,3 +35,7 @@
 Source/Sites/CCN.WebAPI/bin/*.*
 
 Source/Sites/CCN.WebAPI/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP/bin/*.*
