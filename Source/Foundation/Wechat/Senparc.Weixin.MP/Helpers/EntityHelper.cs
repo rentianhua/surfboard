@@ -129,7 +129,6 @@ namespace Senparc.Weixin.MP.Helpers
                                 prop.SetValue(entity, aroundBeacons, null);
                             }
                             break;
-                            break;
                         case "Music"://ResponseMessageMusic适用
                             Music music = new Music();
                             FillEntityWithXml(music, new XDocument(root.Element(propName)));
