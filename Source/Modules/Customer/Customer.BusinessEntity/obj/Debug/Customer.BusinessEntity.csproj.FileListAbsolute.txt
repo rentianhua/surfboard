@@ -1,22 +1,6 @@
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.xml
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.dll
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
-\\Mac\Home\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
-E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
-E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
-E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache
-<<<<<<< HEAD
-Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.xml
-Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.dll
-Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\CCN.Modules.Customer.BusinessEntity.pdb
-Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
-Y:\GitHub\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
-=======
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Framework.Common.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Core.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.dll
@@ -30,4 +14,8 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Cedar.Core.
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.Unity.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Microsoft.Practices.ServiceLocation.xml
->>>>>>> master
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.Modules.Customer.BusinessEntity.pdb
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.pdb
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache

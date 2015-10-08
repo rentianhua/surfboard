@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
+using Cedar.AuditTrail.Interception;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
@@ -257,6 +258,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="info">会员相关信息</param>
         /// <returns></returns>
+        [AuditTrailCallHandler("CustomerBC.AuditAuthentication")]
         public JResult AuditAuthentication(CustModel info)
         {
             var operid = ApplicationContext.Current.UserId;
