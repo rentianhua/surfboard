@@ -171,7 +171,7 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Models\" />
-    <Folder Include="Temp\" />
+    <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiControllers\BaseController.cs" />

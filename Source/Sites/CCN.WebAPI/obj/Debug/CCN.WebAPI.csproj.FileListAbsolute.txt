@@ -50,7 +50,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\zxing.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Qiniu.4.0.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.dll
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.dll
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framwork.AuditTrail.dll
@@ -96,8 +95,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.BusinessComponent.
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.AuditTrail.Interception.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Microsoft.Practices.ServiceLocation.pdb
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
-E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Base.DataAccess.xml
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Foundation.SMS.Common.pdb
@@ -141,3 +138,6 @@ E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Cedar.Framework.Common.Client.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.BusinessComponent.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\StackExchange.Redis.pdb
 E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\CCN.Modules.Customer.DataAccess.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.dll
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.pdb
+E:\tim\surfboard\Source\Sites\CCN.WebAPI\bin\Dapper.xml

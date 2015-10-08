@@ -24,15 +24,15 @@ namespace CCN.WebAPI.ApiControllers
         #region 用户模块
 
         /// <summary>
-        /// 会员注册检查用户名是否被注册
+        /// 会员注册检查email是否被注册
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
-        [Route("CheckUserName")]
+        /// <param name="email">Email</param>
+        /// <returns>0：未被注册，非0：Email被注册</returns>
+        [Route("CheckEmail")]
         [HttpGet]
-        public JResult CheckUserName(string username)
+        public JResult CheckEmail(string email)
         {
-            var result = _custservice.CheckUserName(username);
+            var result = _custservice.CheckEmail(email);
             return new JResult
             {
                 errcode = result,
@@ -44,7 +44,7 @@ namespace CCN.WebAPI.ApiControllers
         /// 会员注册检查手机号是否被注册
         /// </summary>
         /// <param name="mobile">手机号</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        /// <returns>0：未被注册，非0：被注册</returns>
         [Route("CheckMobile")]
         [HttpGet]
         public JResult CheckMobile(string mobile)
@@ -66,11 +66,19 @@ namespace CCN.WebAPI.ApiControllers
         /// </returns>
         [Route("CustRegister")]
         [HttpPost]
-        [AllowAnonymous]
         public JResult CustRegister([FromBody] CustModel userInfo)
         {
+            if (string.IsNullOrWhiteSpace(userInfo.Mobile))
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "手机号不能空"
+                };
+            }
+            
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
-
+            
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
             if (cresult.errcode != 0)
@@ -79,13 +87,7 @@ namespace CCN.WebAPI.ApiControllers
                 //return cresult;
             }
 
-            var result = _custservice.CustRegister(userInfo);
-
-            return new JResult
-            {
-                errcode = result,
-                errmsg = ""
-            };
+            return _custservice.CustRegister(userInfo);
         }
 
         /// <summary>
@@ -97,10 +99,9 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
-
             return _custservice.CustLogin(loginInfo);
         }
-
+        
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -125,6 +126,36 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.GetCustPageList(query);
         }
 
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        [Route("UpdatePassword")]
+        [HttpPost]
+        public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
+        {
+            if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "手机号不能空"
+                };
+            }
+            
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+
+            //检查验证码
+            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode);
+            if (cresult.errcode != 0)
+            {
+                //验证码错误
+                //return cresult;
+            }
+
+            return _custservice.UpdatePassword(mRetrievePassword);
+        }
         #endregion
 
         #region 用户认证
@@ -148,6 +179,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateAuthentication")]
         [HttpPost]
+        [ApplicationContextFilter]
         public JResult UpdateAuthentication([FromBody] CustAuthenticationModel model)
         {
             return _custservice.UpdateAuthentication(model);
@@ -189,6 +221,133 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.GetCustAuthByCustid(custid);
         }
+        #endregion
+
+        #region 会员标签
+
+
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        [Route("AddTag")]
+        [HttpPost]
+        public JResult AddTag([FromBody]CustTagModel model)
+        {
+            return _custservice.AddTag(model);
+        }
+
+        /// <summary>
+        /// 修改标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        [Route("UpdateTag")]
+        [HttpPut]
+        public JResult UpdateTag([FromBody]CustTagModel model)
+        {
+            return _custservice.UpdateTag(model);
+        }
+
+        /// <summary>
+        /// 修改标签状态
+        /// </summary>
+        /// <param name="innerid">标签ID</param>
+        /// <param name="status">0禁用，1启用</param>
+        /// <returns></returns>
+        [Route("UpdateTagStatus")]
+        [HttpGet]
+        public JResult UpdateTagStatus(string innerid, int status)
+        {
+            return _custservice.UpdateTagStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        [Route("DeleteTag")]
+        [HttpDelete]
+        public JResult DeleteTag(string innerid)
+        {
+            return _custservice.DeleteTag(innerid);
+        }
+
+        /// <summary>
+        /// 获取标签详情
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        [Route("GetTagById")]
+        [HttpGet]
+        public JResult GetTagById(string innerid)
+        {
+            return _custservice.GetTagById(innerid);
+        }
+
+        /// <summary>
+        /// 获取标签列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetTagPageList")]
+        [HttpPost]
+        public BasePageList<CustTagModel> GetTagPageList([FromBody]CustTagQueryModel query)
+        {
+            return _custservice.GetTagPageList(query);
+        }
+
+        /// <summary>
+        /// 打标签
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoTagRelation")]
+        [HttpPost]
+        public JResult DoTagRelation([FromBody]CustTagRelation model)
+        {
+            return _custservice.DoTagRelation(model);
+        }
+
+        /// <summary>
+        /// 删除标签关系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DelTagRelation")]
+        [HttpDelete]
+        public JResult DelTagRelation(string innerid)
+        {
+            return _custservice.DelTagRelation(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员拥有的标签
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        [Route("GetTagRelation")]
+        [HttpGet]
+        public JResult GetTagRelation(string custid)
+        {
+            return _custservice.GetTagRelation(custid);
+        }
+
+        /// <summary>
+        /// 获取会员该标签的操作者
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="tagid"></param>
+        /// <returns></returns>
+        [Route("GetTagRelationWithOper")]
+        [HttpGet]
+        public JResult GetTagRelationWithOper(string custid, string tagid)
+        {
+            return _custservice.GetTagRelationWithOper(custid, tagid);
+        }
+
         #endregion
     }
 }

@@ -35,21 +35,21 @@ namespace CCN.Modules.Customer.BusinessService
         #region 用户模块
 
         /// <summary>
-        /// 会员注册检查用户名是否被注册
+        /// 会员注册检查Email是否被注册
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
-        [AuditTrailCallHandler("CheckUserName")]
-        public int CheckUserName(string username)
+        /// <param name="email">Email</param>
+        /// <returns>0：未被注册，非0：Email被注册</returns>
+        [AuditTrailCallHandler("CustomerManagementService.CheckEmail")]
+        public int CheckEmail(string email)
         {
-            return BusinessComponent.CheckUserName(username);
+            return BusinessComponent.CheckEmail(email);
         }
 
         /// <summary>
         /// 会员注册检查手机号是否被注册
         /// </summary>
         /// <param name="mobile">手机号</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        /// <returns>0：未被注册，非0：被注册</returns>
         [AuditTrailCallHandler("CheckMobile")]
         public int CheckMobile(string mobile)
         {
@@ -62,7 +62,7 @@ namespace CCN.Modules.Customer.BusinessService
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
         [AuditTrailCallHandler("CustRegister")]
-        public int CustRegister(CustModel userInfo)
+        public JResult CustRegister(CustModel userInfo)
         {
             return BusinessComponent.CustRegister(userInfo);
         }
@@ -97,6 +97,16 @@ namespace CCN.Modules.Customer.BusinessService
         public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
         {
             return BusinessComponent.GetCustPageList(query);
+        }
+
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
+        {
+            return BusinessComponent.UpdatePassword(mRetrievePassword);
         }
 
         #endregion
@@ -155,6 +165,113 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.GetCustAuthByCustid(custid);
         }
 
+
+        #endregion
+
+        #region 会员标签
+
+
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public JResult AddTag(CustTagModel model)
+        {
+            return BusinessComponent.AddTag(model);
+        }
+
+        /// <summary>
+        /// 修改标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public JResult UpdateTag(CustTagModel model)
+        {
+            return BusinessComponent.UpdateTag(model);
+        }
+
+        /// <summary>
+        /// 修改标签状态
+        /// </summary>
+        /// <param name="innerid">标签ID</param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateTagStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateTagStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public JResult DeleteTag(string innerid)
+        {
+            return BusinessComponent.DeleteTag(innerid);
+        }
+
+        /// <summary>
+        /// 获取标签详情
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public JResult GetTagById(string innerid)
+        {
+            return BusinessComponent.GetTagById(innerid);
+        }
+
+        /// <summary>
+        /// 获取标签列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustTagModel> GetTagPageList(CustTagQueryModel query)
+        {
+            return BusinessComponent.GetTagPageList(query);
+        }
+
+        /// <summary>
+        /// 打标签
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoTagRelation(CustTagRelation model)
+        {
+            return BusinessComponent.DoTagRelation(model);
+        }
+
+        /// <summary>
+        /// 删除标签关系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelTagRelation(string innerid)
+        {
+            return BusinessComponent.DelTagRelation(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员拥有的标签
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public JResult GetTagRelation(string custid)
+        {
+            return BusinessComponent.GetTagRelation(custid);
+        }
+
+        /// <summary>
+        /// 获取会员该标签的操作者
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="tagid"></param>
+        /// <returns></returns>
+        public JResult GetTagRelationWithOper(string custid, string tagid)
+        {
+            return BusinessComponent.GetTagRelationWithOper(custid,tagid);
+        }
 
         #endregion
     }

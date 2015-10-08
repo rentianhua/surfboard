@@ -18,3 +18,4 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\D
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CCN.Modules.CustRelations.BusinessEntity.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CustRelations.BusinessEntity.csprojResolveAssemblyReference.cache

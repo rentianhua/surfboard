@@ -122,3 +122,5 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Cedar.Framwork.Aud
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\CCN.Modules.Car.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Newtonsoft.Json.xml

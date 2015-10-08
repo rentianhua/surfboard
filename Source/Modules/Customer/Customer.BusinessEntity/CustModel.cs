@@ -14,9 +14,9 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
-        /// 用户名
+        /// 会员名
         /// </summary>
-        public string Username { get; set; }
+        public string Custname { get; set; }
 
         /// <summary>
         /// 密码
@@ -120,9 +120,9 @@ namespace CCN.Modules.Customer.BusinessEntity
     public class CustQueryModel : QueryModel
     {
         /// <summary>
-        /// 用户名
+        /// 会员名
         /// </summary>
-        public string Username { get; set; }
+        public string Custname { get; set; }
 
         /// <summary>
         /// 手机
@@ -328,7 +328,7 @@ namespace CCN.Modules.Customer.BusinessEntity
     public class CustLoginInfo
     {
         /// <summary>
-        /// 用户名
+        /// 会员
         /// </summary>
         public string Username { get; set; }
 
@@ -347,5 +347,31 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public DateTime? CreateTime { get; set; }
 
+    }
+
+    /// <summary>
+    /// 修改密码model
+    /// </summary>
+    public class CustRetrievePassword
+    {
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 新密码
+        /// </summary>
+        public string NewPassword { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        public string VCode { get; set; }
     }
 }

@@ -18,19 +18,19 @@ namespace CCN.Modules.Customer.Interface
         List<dynamic> GetALlCustomers();
 
         #region 用户模块
-        
+
         /// <summary>
-        /// 会员注册检查用户名是否被注册
+        /// 会员注册检查Email是否被注册
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
-        int CheckUserName(string username);
+        /// <param name="email">Email</param>
+        /// <returns>0：未被注册，非0：Email被注册</returns>
+        int CheckEmail(string email);
 
         /// <summary>
         /// 会员注册检查手机号是否被注册
         /// </summary>
         /// <param name="mobile">手机号</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        /// <returns>0：未被注册，非0：被注册</returns>
         int CheckMobile(string mobile);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
-        int CustRegister(CustModel userInfo);
+        JResult CustRegister(CustModel userInfo);
 
         /// <summary>
         /// 用户登录
@@ -46,7 +46,7 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="loginInfo">登录账户</param>
         /// <returns>用户信息</returns>
         JResult CustLogin(CustLoginInfo loginInfo);
-        
+
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -60,6 +60,13 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="query">查询条件</param>
         /// <returns></returns>
         BasePageList<CustModel> GetCustPageList(CustQueryModel query);
+
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        JResult UpdatePassword(CustRetrievePassword mRetrievePassword);
 
         #endregion
 
@@ -101,6 +108,83 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult GetCustAuthByCustid(string custid);
 
+
+        #endregion
+
+        #region 会员标签
+
+
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        JResult AddTag(CustTagModel model);
+
+        /// <summary>
+        /// 修改标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        JResult UpdateTag(CustTagModel model);
+
+        /// <summary>
+        /// 修改标签状态
+        /// </summary>
+        /// <param name="innerid">标签ID</param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateTagStatus(string innerid, int status);
+
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        JResult DeleteTag(string innerid);
+
+        /// <summary>
+        /// 获取标签详情
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        JResult GetTagById(string innerid);
+
+        /// <summary>
+        /// 获取标签列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CustTagModel> GetTagPageList(CustTagQueryModel query);
+
+        /// <summary>
+        /// 打标签
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult DoTagRelation(CustTagRelation model);
+
+        /// <summary>
+        /// 删除标签关系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DelTagRelation(string innerid);
+
+        /// <summary>
+        /// 获取会员拥有的标签
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        JResult GetTagRelation(string custid);
+
+        /// <summary>
+        /// 获取会员该标签的操作者
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="tagid"></param>
+        /// <returns></returns>
+        JResult GetTagRelationWithOper(string custid, string tagid);
 
         #endregion
     }

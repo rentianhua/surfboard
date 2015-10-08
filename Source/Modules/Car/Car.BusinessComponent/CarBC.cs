@@ -66,6 +66,7 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult AddCar(CarInfoModel model)
         {
             model.Innerid = Guid.NewGuid().ToString();
+            model.status = 1;
             var result = DataAccess.AddCar(model);
             return new JResult
             {
