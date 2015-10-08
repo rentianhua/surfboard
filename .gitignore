@@ -19,6 +19,8 @@
 
 *.xml
 
+*.txt
+
 *.cache
 
 */bin
@@ -29,3 +31,27 @@
 .vs/config/applicationhost.config
 
 *.user
+
+Source/Sites/CCN.WebAPI/bin/*.*
+
+Source/Sites/CCN.WebAPI/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP/bin/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.QY/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.QY/bin/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP.MvcExtension/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.MP.MvcExtension/bin/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.Open/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin.Open/bin/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin/obj/*.*
+
+Source/Foundation/Wechat/Senparc.Weixin/bin/*.*

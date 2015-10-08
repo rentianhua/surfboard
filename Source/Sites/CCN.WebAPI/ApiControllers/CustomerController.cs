@@ -66,10 +66,11 @@ namespace CCN.WebAPI.ApiControllers
         /// </returns>
         [Route("CustRegister")]
         [HttpPost]
+        [AllowAnonymous]
         public JResult CustRegister([FromBody] CustModel userInfo)
         {
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
-            
+
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
             if (cresult.errcode != 0)
@@ -99,7 +100,7 @@ namespace CCN.WebAPI.ApiControllers
 
             return _custservice.CustLogin(loginInfo);
         }
-        
+
         /// <summary>
         /// 获取会员详情
         /// </summary>

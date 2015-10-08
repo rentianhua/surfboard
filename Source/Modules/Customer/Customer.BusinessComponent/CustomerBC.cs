@@ -94,7 +94,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = "D:\\" + Guid.NewGuid() + ".jpg";
+                    var filename = "c:\\" + Guid.NewGuid() + ".jpg";
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
