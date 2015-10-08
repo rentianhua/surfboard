@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.IO;
+using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
@@ -43,20 +44,20 @@ namespace CCN.Modules.Customer.BusinessComponent
         #region 用户模块
 
         /// <summary>
-        /// 会员注册检查用户名是否被注册
+        /// 会员注册检查Email是否被注册
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
-        public int CheckUserName(string username)
+        /// <param name="email">Email</param>
+        /// <returns>0：未被注册，非0：Email被注册</returns>
+        public int CheckEmail(string email)
         {
-            return DataAccess.CheckUserName(username);
+            return DataAccess.CheckEmail(email);
         }
 
         /// <summary>
         /// 会员注册检查手机号是否被注册
         /// </summary>
         /// <param name="mobile">手机号</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        /// <returns>0：未被注册，非0：被注册</returns>
         public int CheckMobile(string mobile)
         {
             return DataAccess.CheckMobile(mobile);
@@ -67,8 +68,22 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
-        public int CustRegister(CustModel userInfo)
+        public JResult CustRegister(CustModel userInfo)
         {
+            var mYan = DataAccess.CheckMobile(userInfo.Mobile);
+            if (mYan > 0)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "手机号被其他人注册"
+                };
+            }
+
+            //生成会员名称
+            userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
+                userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
+
             //密码加密
             var en = new Encryptor();
             userInfo.Password = en.EncryptMd5(userInfo.Password);
@@ -94,19 +109,24 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = "D:\\" + Guid.NewGuid() + ".jpg";
+                    var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
+                    //保存图片到临时文件夹
+                    bitmap.Save(filename);
+
+                    //上传图片到七牛云
+                    var qinniu = new QiniuUtility();
+                    var qrcodeKey = qinniu.PutFile(filename);
+                    
+                    //删除本地临时文件
                     if (File.Exists(filename))
                     {
                         File.Delete(filename);
                     }
-
-                    bitmap.Save(filename);
-
-                    var qinniu = new QiniuUtility();
-                    var qrcodeKey = qinniu.PutFile(filename);
+                    
+                    //上传成功更新会员二维码
                     if (!string.IsNullOrWhiteSpace(qrcodeKey))
                     {
                         DataAccess.UpdateQrCode(innerid, qrcodeKey);
@@ -119,7 +139,11 @@ namespace CCN.Modules.Customer.BusinessComponent
             });
             #endregion
 
-            return result;
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "注册成功" : "注册失败"
+            };
         }
 
         /// <summary>
@@ -130,7 +154,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
             var result = new JResult();
-            if (string.IsNullOrWhiteSpace(loginInfo.Username) && string.IsNullOrWhiteSpace(loginInfo.Mobile))
+            if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 result.errcode = 403;
                 result.errmsg = "帐户名不能为空";
@@ -164,8 +188,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             return result;
         }
-
-
+        
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -199,6 +222,23 @@ namespace CCN.Modules.Customer.BusinessComponent
             return DataAccess.GetCustPageList(query);
         }
 
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
+        {
+            //密码加密
+            var en = new Encryptor();
+            mRetrievePassword.NewPassword = en.EncryptMd5(mRetrievePassword.NewPassword);
+            var result = DataAccess.UpdatePassword(mRetrievePassword);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
 
         #endregion
 
@@ -316,6 +356,193 @@ namespace CCN.Modules.Customer.BusinessComponent
                 {
                     errcode = 400,
                     errmsg = "没有数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        #endregion
+
+        #region 会员标签
+
+
+        /// <summary>
+        /// 添加标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public JResult AddTag(CustTagModel model)
+        {
+            model.Isenabled = 1;
+            var result = DataAccess.AddTag(model);
+            return new JResult
+            {
+                errcode = result > 0 ?  0 : 400,
+                errmsg = result > 0 ? "添加成功" : "添加失败"
+            };
+        }
+
+        /// <summary>
+        /// 修改标签
+        /// </summary>
+        /// <param name="model">标签信息</param>
+        /// <returns></returns>
+        public JResult UpdateTag(CustTagModel model)
+        {
+            model.Modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateTag(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+        /// <summary>
+        /// 修改标签状态
+        /// </summary>
+        /// <param name="innerid">标签ID</param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateTagStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateTagStatus(innerid, status);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+        /// <summary>
+        /// 删除标签
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public JResult DeleteTag(string innerid)
+        {
+            var result = DataAccess.DeleteTag(innerid);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "删除成功" : "删除失败"
+            };
+        }
+
+        /// <summary>
+        /// 获取标签详情
+        /// </summary>
+        /// <param name="innerid">标签id</param>
+        /// <returns></returns>
+        public JResult GetTagById(string innerid)
+        {
+            var model = DataAccess.GetTagById(innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "暂无数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+
+        /// <summary>
+        /// 获取标签列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustTagModel> GetTagPageList(CustTagQueryModel query)
+        {
+            return DataAccess.GetTagPageList(query);
+        }
+
+        /// <summary>
+        /// 打标签
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoTagRelation(CustTagRelation model)
+        {
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不正确"
+                };
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.DoTagRelation(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "打标签成功" : "打标签失败"
+            };
+        }
+
+        /// <summary>
+        /// 删除标签关系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelTagRelation(string innerid)
+        {
+            var result = DataAccess.DelTagRelation(innerid);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "删除标签成功" : "删除标签失败"
+            };
+        }
+
+        /// <summary>
+        /// 获取会员拥有的标签
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public JResult GetTagRelation(string custid)
+        {
+            var list = DataAccess.GetTagRelation(custid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "暂无数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 获取会员该标签的操作者
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="tagid"></param>
+        /// <returns></returns>
+        public JResult GetTagRelationWithOper(string custid, string tagid)
+        {
+            var list = DataAccess.GetTagRelationWithOper(custid, tagid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "暂无数据"
                 };
             }
             return new JResult

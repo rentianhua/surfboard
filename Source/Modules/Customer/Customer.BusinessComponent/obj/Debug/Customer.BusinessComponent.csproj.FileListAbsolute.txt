@@ -104,3 +104,5 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\EntityFr
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\CCN.Modules.Customer.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Newtonsoft.Json.xml

@@ -31,7 +31,6 @@ namespace CCN.WebAPI.ApiControllers
         /// 分页查询车辆
         /// </summary>
         /// <param name="query">车辆信息</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
         [Route("GetCarPageList")]
         [HttpPost]
         public BasePageList<CarInfoModel> GetCarPageList([FromBody] CarQueryModel query)
@@ -55,7 +54,6 @@ namespace CCN.WebAPI.ApiControllers
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
         [Route("AddCar")]
         [HttpPost]
         public JResult AddCar([FromBody] CarInfoModel model)

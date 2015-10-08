@@ -53,9 +53,9 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         public string Frientsid { get; set; }
         
         /// <summary>
-        /// 用户名
+        /// 会员名
         /// </summary>
-        public string Username { get; set; }
+        public string Custname { get; set; }
 
         /// <summary>
         /// 手机
