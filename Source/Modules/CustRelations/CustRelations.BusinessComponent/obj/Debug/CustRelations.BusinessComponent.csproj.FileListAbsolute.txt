@@ -104,3 +104,5 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\ob
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\CCN.Modules.CustRelations.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessComponent\bin\Newtonsoft.Json.xml

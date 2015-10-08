@@ -42,14 +42,14 @@ namespace CCN.Modules.Customer.DataAccess
         #region 用户模块
 
         /// <summary>
-        /// 会员注册检查用户名是否被注册
+        /// 会员注册检查Email是否被注册
         /// </summary>
-        /// <param name="username">用户名</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
-        public int CheckUserName(string username)
+        /// <param name="email">Email</param>
+        /// <returns>0：未被注册，非0：Email被注册</returns>
+        public int CheckEmail(string email)
         {
-            const string sql = @"select count(1) as count from `cust_info` where username=@username;";
-            var result = Helper.Execute<int>(sql, new { username });
+            const string sql = @"select count(1) as count from cust_info where email=@email;";
+            var result = Helper.ExecuteScalar<int>(sql, new {email});
             return result;
         }
 
@@ -57,11 +57,11 @@ namespace CCN.Modules.Customer.DataAccess
         /// 会员注册检查手机号是否被注册
         /// </summary>
         /// <param name="mobile">手机号</param>
-        /// <returns>0：未被注册，非0：用户名被注册</returns>
+        /// <returns>0：未被注册，非0：被注册</returns>
         public int CheckMobile(string mobile)
         {
-            const string sql = @"select count(1) as count from `cust_info` where mobile=@mobile;";
-            var result = Helper.Execute<int>(sql, new { mobile });
+            const string sql = @"select count(1) from `cust_info` where mobile=@mobile;";
+            var result = Helper.ExecuteScalar<int>(sql, new { mobile });
             return result;
         }
 
@@ -72,29 +72,33 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int CustRegister(CustModel userInfo)
         {
-            var result = 0;
             //插入账户基本信息
-            const string sql = @"INSERT INTO `cust_info`(`innerid`,`username`,`password`,`mobile`,`telephone`,`email`,`headportrait`,qrcode,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (@innerid,@username,@password,@mobile,@telephone,@email,@headportrait,@qrcode,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
-            
-            try
+            const string sql = @"INSERT INTO `cust_info`(`innerid`,`custname`,`password`,`mobile`,`telephone`,`email`,`headportrait`,qrcode,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
+                        VALUES (@innerid,@custname,@password,@mobile,@telephone,@email,@headportrait,@qrcode,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+            using (var conn = Helper.GetConnection())
             {
-                Helper.Execute(sql, userInfo);
-
-                //插入微信信息
-                if (userInfo.Wechat != null)
+                var tran = conn.BeginTransaction();
+                try
                 {
-                    const string sqlwechat = @"INSERT INTO cust_wechat(`innerid`,`custid`,`accountid`,`openid`,`nickname`,`headportrait`,`sex`,`country`,`province`,`city`,`createdtime`,`modifiedtime`)
+                    conn.Execute(sql, userInfo ,tran);
+
+                    //插入微信信息
+                    if (userInfo.Wechat != null)
+                    {
+                        const string sqlwechat =
+                            @"INSERT INTO cust_wechat(`innerid`,`custid`,`accountid`,`openid`,`nickname`,`headportrait`,`sex`,`country`,`province`,`city`,`createdtime`,`modifiedtime`)
                         VALUES(uuid(),@custid,@accountid,@openid,@nickname,@headportrait,@sex,@country,@province,@city,@createdtime,@modifiedtime);";
-                    Helper.Execute(sqlwechat, userInfo.Wechat);
+                        conn.Execute(sqlwechat, userInfo.Wechat, tran);
+                    }
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
                 }
             }
-            catch (Exception ex)
-            {
-                result = 401;
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -104,10 +108,9 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns>用户信息</returns>
         public CustModel CustLogin(CustLoginInfo loginInfo)
         {
-            const string sql = "select * from `cust_info` where (username=@username or mobile=@mobile) and password=@password;";
+            const string sql = "select * from `cust_info` where mobile=@mobile and password=@password;";
             var custModel = Helper.Query<CustModel>(sql, new
             {
-                username = loginInfo.Username,
                 mobile = loginInfo.Mobile,
                 password = loginInfo.Password
             }).FirstOrDefault();
@@ -175,7 +178,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"cust_info";
-            const string fields = "innerid, username, mobile, telephone, email, headportrait, status, authstatus, autherid, authtime, authdesc, type, realname, totalpoints, level, createdtime, modifiedtime";
+            const string fields = "innerid, custname, mobile, telephone, email, headportrait, status, authstatus, autherid, authtime, authdesc, type, realname, totalpoints, level, createdtime, modifiedtime";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -192,6 +195,21 @@ namespace CCN.Modules.Customer.DataAccess
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CustModel>(model, query.Echo);
             return list;
+        }
+
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public int UpdatePassword(CustRetrievePassword mRetrievePassword)
+        {
+            const string sql = "update cust_info set password=@password where innerid=@innerid;";
+            var custModel = Helper.Execute(sql, new {
+                password = mRetrievePassword.NewPassword,
+                innerid = mRetrievePassword.Custid
+            });
+            return custModel;
         }
 
         #endregion
@@ -360,11 +378,32 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int UpdateTag(CustTagModel model)
         {
-            const string sql = @"UPDATE cust_tag SET tagname = @tagname,isenabled = @isenabled,modifiedtime = @modifiedtime WHERE innerid = @innerid;";
+            const string sql = @"UPDATE cust_tag SET tagname = @tagname,modifiedtime = @modifiedtime WHERE innerid=@innerid;";
 
             try
             {
                 Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改标签状态
+        /// </summary>
+        /// <param name="innerid">标签ID</param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateTagStatus(string innerid,int status)
+        {
+            const string sql = @"UPDATE cust_tag SET isenabled = @isenabled WHERE innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid, isenabled = status });
                 return 1;
             }
             catch (Exception ex)
@@ -445,7 +484,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int DoTag(CustTagRelation model)
+        public int DoTagRelation(CustTagRelation model)
         {
             const string sql = @"INSERT INTO cust_tag_relation(innerid,tagid,fromid,toid,createdtime) VALUES (@innerid,@tagid,@fromid,@toid,@createdtime);";
             const string sqlH = @"UPDATE cust_tag SET hotcount=hotcount+1 WHERE innerid = @innerid;";
@@ -470,6 +509,66 @@ namespace CCN.Modules.Customer.DataAccess
                     return 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// 删除标签关系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DelTagRelation(string innerid)
+        {
+            const string sql = @"delete from cust_tag_relation WHERE innerid=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+
+                try
+                {
+                    //删除关系
+                    conn.Execute(sql, new { innerid }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取会员拥有的标签
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetTagRelation(string custid)
+        {
+            const string sql = @"select tagid,tagname from cust_tag_relation as a
+                                left join cust_tag as b on a.tagid=b.innerid 
+                                WHERE toid=@custid group by tagid;";
+
+            var list = Helper.Query<dynamic>(sql, new {custid});
+            return list;
+        }
+
+        /// <summary>
+        /// 获取会员该标签的操作者
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="tagid"></param>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetTagRelationWithOper(string custid ,string tagid)
+        {
+            const string sql = @"select b.custname, a.createdtime from cust_tag_relation as a 
+                                left join cust_info as b on a.fromid=b.innerid 
+                                where tagid=@tagid and toid=@custid;";
+
+            var list = Helper.Query<dynamic>(sql, new {tagid, custid});
+            return list;
         }
 
         #endregion

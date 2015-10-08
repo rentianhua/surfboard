@@ -82,7 +82,7 @@ namespace CCN.Modules.CustRelations.DataAccess
             const string sql = "select count(1) as count from cust_relations_apply where fromid=@fromid and toid=@toid and `status`=0;";
             try
             {
-                return Helper.Execute<int>(sql, new {fromid, toid});
+                return Helper.ExecuteScalar<int>(sql, new {fromid, toid});
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace CCN.Modules.CustRelations.DataAccess
             const string sql = "select count(1) as count from cust_relations where userid=@userid and frientsid=@frientsid;";
             try
             {
-                return Helper.Execute<int>(sql, new { userid, frientsid });
+                return Helper.ExecuteScalar<int>(sql, new { userid, frientsid });
             }
             catch (Exception ex)
             {
@@ -259,7 +259,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select frientsid ,b.username, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.realname, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
+            const string sql = @"select frientsid ,b.custname, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.realname, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
                                 inner join cust_info as b on a.frientsid=b.innerid 
                                 where a.userid=@userid;";
             try
