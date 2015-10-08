@@ -19,6 +19,8 @@
 
 *.xml
 
+*.txt
+
 *.cache
 
 */bin
@@ -30,16 +32,6 @@
 
 *.user
 
-Source/Sites/CCN.WebAPI/bin/CCN.WebAPI.dll.config
+Source/Sites/CCN.WebAPI/bin/*.*
 
-Source/Sites/CCN.WebAPI/bin/ConfigFiles/applicationContexts.config
-
-Source/Sites/CCN.WebAPI/bin/ConfigFiles/connectionStrings.config
-
-Source/Sites/CCN.WebAPI/bin/ConfigFiles/serviceLocation.config
-
-Source/Sites/CCN.WebAPI/bin/ConfigFiles/settingSource.config
-
-Source/Sites/CCN.WebAPI/bin/roslyn/VBCSCompiler.exe.config
-
-Source/Sites/CCN.WebAPI/obj/Debug/CCN.WebAPI.csproj.FileListAbsolute.txt
+Source/Sites/CCN.WebAPI/obj/*.*
