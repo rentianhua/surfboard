@@ -48,6 +48,11 @@ namespace CCN.Modules.Base.BusinessEntity
         public int VType { get; set; }
 
         /// <summary>
+        /// 用处类型[1注册,2登录,3,其他]
+        /// </summary>
+        public int UType { get; set; }
+
+        /// <summary>
         /// 发送结果 1.成功，0.失败
         /// </summary>
         public int Result { get; set; }
@@ -62,5 +67,10 @@ namespace CCN.Modules.Base.BusinessEntity
             TType = 1;
             Result = 1;
         }
+    }
+
+    public class VerifiModel
+    {
+        
     }
 }

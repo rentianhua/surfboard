@@ -78,6 +78,16 @@ namespace CCN.Modules.Car.BusinessEntity
         public decimal? dealprice { get; set; }
 
         /// <summary>
+        /// 成交均价（万元）(聚合评估)
+        /// </summary>
+        public decimal? avgprice { get; set; }
+
+        /// <summary>
+        /// 当月成交量 (结算得出)
+        /// </summary>
+        public int? dealnumber { get; set; }
+
+        /// <summary>
         /// 重大事故/水浸/火烧
         /// </summary>
         public short? isproblem { get; set; }
@@ -91,6 +101,16 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 原车主信息
         /// </summary>
         public string masterdesc { get; set; }
+
+        /// <summary>
+        /// 成交备注
+        /// </summary>
+        public string dealdesc { get; set; }
+
+        /// <summary>
+        /// 删除备注
+        /// </summary>
+        public string deletedesc { get; set; }
 
         /// <summary>
         /// 年检到期时间
@@ -113,7 +133,7 @@ namespace CCN.Modules.Car.BusinessEntity
         public decimal? price { get; set; }
 
         /// <summary>
-        /// 行驶里程
+        /// 行驶里程（万元）
         /// </summary>
         public decimal? mileage { get; set; }
 
@@ -126,32 +146,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 注册年份
         /// </summary>
         public int? reg_year { get; set; }
-
-        /// <summary>
-        /// 变速箱id
-        /// </summary>
-        public int? gearid { get; set; }
-
-        /// <summary>
-        /// 车龄[和上牌时间冲突，备用]
-        /// </summary>
-        public int? carageid { get; set; }
-
-        /// <summary>
-        /// 排量[车型基础数据中有，备用]
-        /// </summary>
-        public int? literid { get; set; }
         
-        /// <summary>
-        /// 车身结构
-        /// </summary>
-        public int? carshructid { get; set; }
-
-        /// <summary>
-        /// 排放标准
-        /// </summary>
-        public int? dischargeid { get; set; }
-
         /// <summary>
         /// 联系电话
         /// </summary>
@@ -205,6 +200,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 存档时间
         /// </summary>
         public DateTime? keep_time { get; set; }
+
+        /// <summary>
+        /// 车源估值情况
+        /// </summary>
+        public string estimateprice { get; set; }
 
         /// <summary>
         /// 车源估值
@@ -381,6 +381,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 原车主信息
         /// </summary>
         public string masterdesc { get; set; }
+
+        /// <summary>
+        /// 删除备注
+        /// </summary>
+        public string deletedesc { get; set; }
 
         /// <summary>
         /// 年检到期时间

@@ -51,6 +51,30 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 车辆估值
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        [Route("GetCarEvaluateById")]
+        [HttpGet]
+        public JResult GetCarEvaluateById(string id)
+        {
+            return _baseservice.GetCarEvaluateById(id);
+        }
+
+        /// <summary>
+        /// 获取本月本车型成交数量
+        /// </summary>
+        /// <param name="modelid">车型id</param>
+        /// <returns></returns>
+        [Route("GetCarSales")]
+        [HttpGet]
+        public JResult GetCarSales(string modelid)
+        {
+            return _baseservice.GetCarSales(modelid);
+        }
+
+        /// <summary>
         /// 添加车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
@@ -74,25 +98,51 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 删除车辆
+        /// </summary>
+        /// <param name="model">删除成交model</param>
+        /// <returns>1.操作成功</returns>
+        [Route("DeleteCar")]
+        [HttpPost]
+        public JResult DeleteCar([FromBody] CarInfoModel model)
+        {
+            return _baseservice.DeleteCar(model);
+        }
+
+        /// <summary>
+        /// 车辆成交
+        /// </summary>
+        /// <param name="model">车辆成交model</param>
+        /// <returns>1.操作成功</returns>
+        [Route("DealCar")]
+        [HttpPost]
+        public JResult DealCar([FromBody] CarInfoModel model)
+        {
+            return _baseservice.DealCar(model);
+        }
+
+        /// <summary>
         /// 删除车辆(物理删除，暂不用)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns>1.删除成功</returns>
         [Route("DeleteCar")]
         [HttpDelete]
+        [NonAction]
         public JResult DeleteCar(string id)
         {
             return _baseservice.DeleteCar(id);
         }
 
         /// <summary>
-        /// 车辆状态更新
+        /// 车辆状态更新(废弃)
         /// </summary>
         /// <param name="carid">车辆id</param>
         /// <param name="status"></param>
         /// <returns>1.操作成功</returns>
         [Route("UpdateCarStatus")]
         [HttpGet]
+        [NonAction]
         public JResult UpdateCarStatus(string carid, int status)
         {
             return _baseservice.UpdateCarStatus(carid, status);

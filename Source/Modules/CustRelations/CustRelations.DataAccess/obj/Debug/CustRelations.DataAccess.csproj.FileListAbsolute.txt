@@ -104,3 +104,7 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\obj\Debug
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\CCN.Modules.CustRelations.BusinessEntity.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\zxing.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\System.Net.Http.Formatting.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\Newtonsoft.Json.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.DataAccess\bin\System.Net.Http.Formatting.xml

@@ -124,3 +124,5 @@ E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\zxing.xml
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Newtonsoft.Json.dll
 E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\Newtonsoft.Json.xml
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\System.Net.Http.Formatting.dll
+E:\tim\surfboard\Source\Modules\Car\Car.BusinessComponent\bin\System.Net.Http.Formatting.xml

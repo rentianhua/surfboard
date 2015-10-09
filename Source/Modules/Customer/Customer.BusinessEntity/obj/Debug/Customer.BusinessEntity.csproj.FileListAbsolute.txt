@@ -19,3 +19,7 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\CCN.M
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\zxing.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\obj\Debug\Customer.BusinessEntity.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\Newtonsoft.Json.xml
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\System.Net.Http.Formatting.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessEntity\bin\System.Net.Http.Formatting.xml
