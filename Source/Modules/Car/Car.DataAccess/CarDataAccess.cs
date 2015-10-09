@@ -95,7 +95,7 @@ namespace CCN.Modules.Car.DataAccess
         public CarInfoModel GetCarInfoById(string id)
         {
             const string sql =
-                @"select `innerid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url` from `car_info` where innerid=@innerid";
+                @"select innerid, custid, carid, title, pic_url, provid, cityid, brand_id, series_id, model_id, colorid, mileage, register_date, buytime, buyprice, price, dealprice, isproblem, remark, ckyear_date, tlci_date, audit_date, istain, sellreason, masterdesc, dealdesc, deletedesc, estimateprice, `status`, createdtime, modifiedtime, seller_type, tel, contactor, reg_year, post_time, audit_time, sold_time, keep_time, eval_price, next_year_eval_price, vpr, mile_age, gear_type, color, liter, url from `car_info` where innerid=@innerid";
             var result = Helper.Query<CarInfoModel>(sql, new {innerid = id}).FirstOrDefault();
             return result;
         }
@@ -108,9 +108,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                        (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`literid`,`dischargeid`,`carshructid`,`gearid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
+                        (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
                         VALUES
-                        (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@literid,@dischargeid,@carshructid,@gearid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
+                        (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
             int result;
             try
             {
@@ -163,6 +163,78 @@ namespace CCN.Modules.Car.DataAccess
                 return 0;
             }
             return 1;
+        }
+
+        /// <summary>
+        /// 删除车辆
+        /// </summary>
+        /// <param name="model">删除成交model</param>
+        /// <returns>1.操作成功</returns>
+        public int DeleteCar(CarInfoModel model)
+        {
+            try
+            {
+                const string sql = "update car_info set status=0,deletedesc=@deletedesc where `innerid`=@innerid;";
+                Helper.Execute(sql, new { innerid = model.Innerid, model.deletedesc });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 车辆成交
+        /// </summary>
+        /// <param name="model">车辆成交model</param>
+        /// <returns>1.操作成功</returns>
+        public int DealCar(CarInfoModel model)
+        {
+            try
+            {
+                const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc where `innerid`=@innerid;";
+                Helper.Execute(sql, new { innerid = model.Innerid,model.dealprice, model.dealdesc });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 保存评估信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="evaluate"></param>
+        /// <returns>1.操作成功</returns>
+        public int SaveCarEvaluateInfo(string carid, string evaluate)
+        {
+            try
+            {
+                const string sql = "update car_info set estimateprice=@estimateprice where `innerid`=@innerid;";
+                Helper.Execute(sql, new { innerid = carid, estimateprice= evaluate });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 获取本月本车型成交数量
+        /// </summary>
+        /// <param name="modelid">车型id</param>
+        /// <returns></returns>
+        public int GetCarSales(string modelid)
+        {
+            const string sql1 = "select count(1) from car_info where model_id=@modelid and `status`=2;";
+            const string sql2 = "select count(1) from car_info_bak where model_id=@modelid;";
+            var num1 = Helper.ExecuteScalar<int>(sql1, new {modelid});
+            var num2 = Helper.ExecuteScalar<int>(sql2, new {modelid});
+            return num1 + num2;
         }
 
         /// <summary>

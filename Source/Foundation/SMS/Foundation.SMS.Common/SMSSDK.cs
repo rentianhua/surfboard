@@ -18,22 +18,18 @@ namespace Cedar.Foundation.SMS.Common
         /// </summary>
         public static readonly Dictionary<string, string> DicSmsResultInfo = new Dictionary<string, string>()
         {
-            {"0", "操作成功"},
-            {"-1", "签权失败"},
-            {"-2", "未检索到被叫号码"},
-            {"-3", "被叫号码过多"},
-            {"-4", "内容未签名"},
-            {"-5", "内容过长"},
-            {"-6", "余额不足"},
-            {"-7", "暂停发送"},
-            {"-8", "保留"},
-            {"-9", "定时发送时间格式错误"},
-            {"-10", "下发内容为空"},
-            {"-11", "账户无效"},
-            {"-12", "Ip地址非法"},
-            {"-13", "操作频率快"},
-            {"-14", "操作失败"},
-            {"-15", "拓展码无效(1-99999)"}
+            {"0", "成功"},
+            {"-1", "账号无效"},
+            {"-2", "参数：无效"},
+            {"-3", "连接不上服务器"},
+            {"-5", "无效的短信数据，号码格式不对"},
+            {"-6", "用户名密码错误"},
+            {"-7", "旧密码不正确"},
+            {"-9", "资金账户不存在"},
+            {"-11", "包号码数量超过最大限制"},
+            {"-12", "余额不足"},
+            {"-99", "系统内部错误"},
+            {"-100", "其它错误"}
         };
 
         /// <summary>
@@ -61,6 +57,33 @@ namespace Cedar.Foundation.SMS.Common
                 return "-1";
             }
             return ret;
+        }
+
+        /// <summary>
+        /// 请求URL（以GET方式请求）
+        /// </summary>
+        /// <param name="postUrl">请求地址</param>
+        /// <returns>请求结果</returns>
+        public static string GetWebRequest2(string postUrl)
+        {
+            //创建请求
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(postUrl));
+
+            //GET请求
+            request.Method = "GET";
+            request.ReadWriteTimeout = 5000;
+            request.ContentType = "text/html;charset=UTF-8";
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            Stream myResponseStream = response.GetResponseStream();
+            if (myResponseStream != null)
+            {
+                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+
+                //返回内容
+                string retString = myStreamReader.ReadToEnd();
+                return retString;
+            }
+            return "-1";
         }
 
         /// <summary>

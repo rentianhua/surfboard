@@ -49,13 +49,81 @@ namespace CCN.Modules.Car.BusinessComponent
             {
                 jResult.errcode = 400;
                 jResult.errmsg = "";
+                return jResult;
             }
-            else
+            
+            jResult.errcode = 0;
+            jResult.errmsg = carInfo;
+            return jResult;
+        }
+
+        /// <summary>
+        /// 车辆估值
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateById(string id)
+        {
+            var jResult = new JResult();
+            var carInfo = DataAccess.GetCarInfoById(id);
+
+            if (carInfo == null)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "车辆信息不存在";
+                return jResult;
+            }
+            
+            //车辆评估信息已经存在
+            if(!string.IsNullOrWhiteSpace(carInfo.estimateprice))
             {
                 jResult.errcode = 0;
-                jResult.errmsg = carInfo;
+                jResult.errmsg = carInfo.estimateprice;
+                return jResult;
             }
+
+            var paramList = new Dictionary<string, string>
+            {
+                {"modelId", carInfo.model_id.ToString()},
+                {"regDate", Convert.ToDateTime(carInfo.register_date).ToString("yyyy-MM")},
+                {"mile", carInfo.mileage.ToString()},
+                {"zone", carInfo.cityid.ToString()}
+            };
+
+            var juhe = new JuheUtility();
+            var result = juhe.GetUsedCarPrice(paramList);
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+
+            //保存评估信息
+            Task.Factory.StartNew(() =>
+            {
+                DataAccess.SaveCarEvaluateInfo(id, result);
+            });
+
+            jResult.errcode = 0;
+            jResult.errmsg = result;
             return jResult;
+        }
+
+        /// <summary>
+        /// 获取本月本车型成交数量
+        /// </summary>
+        /// <param name="modelid">车型id</param>
+        /// <returns></returns>
+        public JResult GetCarSales(string modelid)
+        {
+            var num = DataAccess.GetCarSales(modelid);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = num
+            };
         }
 
         /// <summary>
@@ -94,6 +162,46 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = ""
             };
         }
+
+        /// <summary>
+        /// 删除车辆
+        /// </summary>
+        /// <param name="model">删除成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteCar(CarInfoModel model)
+        {
+            var result = DataAccess.DeleteCar(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "操作成功" : "操作失败"
+            };
+        }
+
+        /// <summary>
+        /// 车辆成交
+        /// </summary>
+        /// <param name="model">车辆成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DealCar(CarInfoModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不正确"
+                };
+            }
+            model.sold_time = DateTime.Now; //成交时间
+            var result = DataAccess.DealCar(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "操作成功" : "操作失败"
+            };
+        }
+
 
         /// <summary>
         /// 删除车辆(物理删除，暂不用)

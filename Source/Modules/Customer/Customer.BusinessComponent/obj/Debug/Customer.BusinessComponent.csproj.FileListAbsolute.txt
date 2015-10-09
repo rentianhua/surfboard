@@ -106,3 +106,5 @@ E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\zxing.pd
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\zxing.xml
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Newtonsoft.Json.dll
 E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\Newtonsoft.Json.xml
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\System.Net.Http.Formatting.dll
+E:\tim\surfboard\Source\Modules\Customer\Customer.BusinessComponent\bin\System.Net.Http.Formatting.xml

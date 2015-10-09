@@ -65,7 +65,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult CheckVerification([FromBody] BaseVerification model)
         {
-            return _baseservice.CheckVerification(model.Target, model.Vcode);
+            return _baseservice.CheckVerification(model.Target, model.Vcode, model.UType);
         }
 
         #endregion
@@ -212,6 +212,18 @@ namespace CCN.WebAPI.ApiControllers
                 errcode = 401,
                 errmsg = "No Data"
             };
+        }
+
+        /// <summary>
+        /// 根据ID获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        [Route("GetCarModelById")]
+        [HttpGet]
+        public JResult GetCarModelById(int innerid)
+        {
+            return _baseservice.GetCarModelById(innerid);
         }
 
         #endregion

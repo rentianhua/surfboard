@@ -38,8 +38,9 @@ namespace CCN.Modules.Base.Interface
         /// </summary>
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
+        /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns>返回结果。1.正确，0不正确</returns>
-        JResult CheckVerification(string target, string vcode);
+        JResult CheckVerification(string target, string vcode, int utype);
 
         #endregion
 
@@ -91,6 +92,13 @@ namespace CCN.Modules.Base.Interface
         /// <param name="seriesId">车系id</param>
         /// <returns></returns>
         IEnumerable<BaseCarModelModel> GetCarModel(int seriesId);
+
+        /// <summary>
+        /// 根据ID获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        JResult GetCarModelById(int innerid);
 
         #endregion
     }
