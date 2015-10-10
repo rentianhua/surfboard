@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cedar.Framwork.Caching</name>
+    </assembly>
+    <members>
+        <member name="P:Cedar.AuditTrail.Interception.CacheManager.Providers">
+            <summary>
+            Gets the providers.
+            </summary>
+            <value>
+            The providers.
+            </value>
+        </member>
+        <member name="P:Cedar.AuditTrail.Interception.CacheManager.Provider">
+            <summary>
+            Gets the provider.
+            </summary>
+            <value>
+            The provider.
+            </value>
+        </member>
+        <member name="M:Cedar.AuditTrail.Interception.CacheManager.Get(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.AuditTrail.Interception.CacheManager.CreateCacheManager(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="functionName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.AuditTrail.Interception.CacheManager.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:Cedar.Framwork.Caching.CachingProviderBase">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.CachingProviderBase.Enabled">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.CachingProviderBase.AddCore(System.String,System.Object,System.TimeSpan)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expirationTime"></param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.CachingProviderBase.GetCore(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.CachingProviderBase.ClearCore">
+            <summary>
+            Remove all cache items added by the cache store itself.
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.CachingProviderBase.Add(System.String,System.Object,System.TimeSpan)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expirationTime"></param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.CachingProviderBase.Clear">
+            <summary>
+            Remove all cache items added by the cache store itself.
+            </summary>
+            <remarks>Nothing will be done if not enabled.</remarks>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingData.Enabled">
+            <summary>
+            Gets or sets a value indicating whether this <see cref="T:Cedar.Framwork.Caching.Configuration.CachingData" /> is enabled.
+            </summary>
+            <value>
+              <c>true</c> if enabled; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingData.CacheManager">
+            <summary>
+            Gets or sets the name of cache manager.
+            </summary>
+            <value>
+            The name of cache manager.
+            </value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingData.Prefix">
+            <summary>
+            Gets or sets the prefix of cache item key.
+            </summary>
+            <value>
+            The prefix of cache item key.
+            </value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingData.ExpirationTime">
+            <summary>
+            Gets or sets the expired time for the two expiration modes: Absolute and Sliding.
+            </summary>
+            <value>
+            The expired time for the two expiration modes: Absolute and Sliding.
+            </value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingData.ExpirationTimeFormat">
+            <summary>
+            Gets or sets the expired time format for the expiration mode "TimeFormat".
+            </summary>
+            <value>
+            The expired time format for the expiration mode "TimeFormat".
+            </value>
+        </member>
+        <member name="T:Cedar.Framwork.Caching.Configuration.CachingSettings">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingSettings.DefaultProvider">
+            <summary>
+            Gets or sets the default provider name.
+            </summary>
+            <value>
+            The default provider name.
+            </value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Configuration.CachingSettings.CachingProviders">
+            <summary>
+            Gets or sets the audit log providers.
+            </summary>
+            <value>
+            The audit log providers.
+            </value>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Configuration.CachingSettings.Configure(Cedar.Core.IoC.IServiceLocator)">
+            <summary>
+            Configures the specified service locator.
+            </summary>
+            <param name="serviceLocator">The service locator.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.DefaultCacheKeyGenerator.CreateCacheKey(System.Reflection.MethodBase,System.Object[])">
+            <summary>
+            Create a cache key for the given method and set of input arguments.
+            </summary>
+            <param name="method">Method being called.</param>
+            <param name="inputs">Input arguments.</param>
+            <returns>A (hopefully) unique string to be used as a cache key.</returns>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.ICacheKeyGenerator.CreateCacheKey(System.Reflection.MethodBase,System.Object[])">
+            <summary>
+            Creates a cache key for the given method and set of input arguments.
+            </summary>
+            <param name="method">Method being called.</param>
+            <param name="inputs">Input arguments.</param>
+            <returns>A (hopefully) unique string to be used as a cache key.</returns>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Redis.RedisCachingData.Server">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Redis.RedisCachingData.Port">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Redis.RedisCachingData.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Redis.RedisCachingData.Database">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Redis.RedisCachingData.GetProviderCreator(Cedar.Core.Configuration.ServiceLocatableSettings)">
+            <summary>
+            Gets the provider creation expression.
+            </summary>
+            <param name="settings">The settings.</param>
+            <returns>The delegate to create <see cref="T:Cedar.Core.AuditTrail.RedisAuditLogListener" />.</returns>
+        </member>
+        <member name="T:Cedar.Framwork.Caching.Redis.RedisCachingProvider">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Redis.RedisCachingProvider.#ctor(System.Boolean,System.TimeSpan,Cedar.Core.EntLib.Data.RedisDatabaseWrapper)">
+            <summary>
+            
+            </summary>
+            <param name="isenable"></param>
+            <param name="expireSpan"></param>
+            <param name="redisDatabaseWrapper"></param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Redis.RedisCachingProvider.AddCore(System.String,System.Object,System.TimeSpan)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+            <param name="expirationTime"></param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Redis.RedisCachingProvider.GetCore(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Redis.RedisCachingProvider.ClearCore">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

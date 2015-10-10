@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CCN.Modules.Car.Interface</name>
+    </assembly>
+    <members>
+        <member name="T:CCN.Modules.Car.Interface.ICarManagementService">
+            <summary>
+            车辆接口
+            </summary>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.GetCarPageList(CCN.Modules.Car.BusinessEntity.CarQueryModel)">
+            <summary>
+            获取车辆列表
+            </summary>
+            <param name="query">查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.GetCarInfoById(System.String)">
+            <summary>
+            获取车辆详情
+            </summary>
+            <param name="id">车辆id</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.GetCarEvaluateById(System.String)">
+            <summary>
+            车辆估值
+            </summary>
+            <param name="id">车辆id</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.GetCarSales(System.String)">
+            <summary>
+            获取本月本车型成交数量
+            </summary>
+            <param name="modelid">车型id</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.AddCar(CCN.Modules.Car.BusinessEntity.CarInfoModel)">
+            <summary>
+            添加车辆
+            </summary>
+            <param name="model">车辆信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.UpdateCar(CCN.Modules.Car.BusinessEntity.CarInfoModel)">
+            <summary>
+            添加车辆
+            </summary>
+            <param name="model">车辆信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.DeleteCar(CCN.Modules.Car.BusinessEntity.CarInfoModel)">
+            <summary>
+            删除车辆
+            </summary>
+            <param name="model">删除成交model</param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.DealCar(CCN.Modules.Car.BusinessEntity.CarInfoModel)">
+            <summary>
+            车辆成交
+            </summary>
+            <param name="model">车辆成交model</param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.DeleteCar(System.String)">
+            <summary>
+            删除车辆(物理删除，暂不用)
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.删除成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.UpdateCarStatus(System.String,System.Int32)">
+            <summary>
+            车辆状态更新
+            </summary>
+            <param name="carid">车辆id</param>
+            <param name="status"></param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.ShareCar(System.String)">
+            <summary>
+            车辆分享
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.UpSeeCount(System.String)">
+            <summary>
+            累计车辆查看次数
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.累计成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.UpPraiseCount(System.String)">
+            <summary>
+            累计点赞次数
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.累计成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.CommentCar(System.String,System.String)">
+            <summary>
+            累计点赞次数
+            </summary>
+            <param name="id">车辆id</param>
+            <param name="content">评论内容</param>
+            <returns>1.累计成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.AuditCar(System.String,System.Int32)">
+            <summary>
+            审核车辆
+            </summary>
+            <param name="id">车辆id</param>
+            <param name="status">审核状态</param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.CancelCar(System.String)">
+            <summary>
+            核销车辆
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.操作成功</returns>
+        </member>
+        <member name="M:CCN.Modules.Car.Interface.ICarManagementService.KeepCar(System.String)">
+            <summary>
+            车辆归档
+            </summary>
+            <param name="id">车辆id</param>
+            <returns>1.操作成功</returns>
+        </member>
+    </members>
+</doc>

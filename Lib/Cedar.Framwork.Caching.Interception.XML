@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Cedar.Framwork.Caching.Interception</name>
+    </assembly>
+    <members>
+        <member name="F:Cedar.Framwork.Caching.Interception.CachingCallHandler.DefaultExpirationTime">
+            <summary>
+            The default expiration time for the cached entries: 5 minutes
+            </summary>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Interception.CachingCallHandler.KeyGenerator">
+            <summary>
+            Gets or sets the key generator.
+            </summary>
+            <value>The key generator.</value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Interception.CachingCallHandler.ExpirationTime">
+            <summary>
+            Gets or sets the expiration time.
+            </summary>
+            <value>The expiration time.</value>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Interception.CachingCallHandler.Order">
+            <summary>
+            Gets or sets the order in which the handler will be executed
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandler.#ctor">
+            <summary>
+            Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the default expiration time of 5 minutes.
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandler.#ctor(System.TimeSpan)">
+            <summary>
+            Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the given expiration time.
+            </summary>
+            <param name="expirationTime">Length of time the cached data goes unused before it is eligible for
+            reclamation.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandler.#ctor(System.TimeSpan,System.Int32)">
+            <summary>
+            Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the given expiration time.
+            </summary>
+            <param name="expirationTime">Length of time the cached data goes unused before it is eligible for
+                        reclamation.</param>
+            <param name="order">Order in which handler will be executed.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandler.Invoke(Microsoft.Practices.Unity.InterceptionExtension.IMethodInvocation,Microsoft.Practices.Unity.InterceptionExtension.GetNextHandlerDelegate)">
+            <summary>
+            Implements the caching behavior of this handler.
+            </summary>
+            <param name="input"><see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IMethodInvocation" /> object describing the current call.</param>
+            <param name="getNext">delegate used to get the next handler in the current pipeline.</param>
+            <returns>Return value from target method, or cached result if previous inputs have been seen.</returns>
+        </member>
+        <member name="T:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute.#ctor">
+            <summary>
+            Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute" /> using the default expiration time of 5 minutes.
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute" /> using the given expiration time.
+            </summary>
+            <param name="hours">Hours until expiration.</param>
+            <param name="minutes">Minutes until expiration.</param>
+            <param name="seconds">Seconds until expiration.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute.CreateHandler(Microsoft.Practices.Unity.IUnityContainer)">
+            <summary>
+            Derived classes implement this method. When called, it
+            creates a new call handler as specified in the attribute
+            configuration.
+            </summary>
+            <returns>A new call handler object.</returns>
+        </member>
+        <member name="P:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData.ExpirationTime">
+            <summary>
+            Expiration time
+            </summary>
+            <value>The "expirationTime" attribute</value>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData.#ctor">
+            <summary>
+            Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance.
+            </summary>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData.#ctor(System.String)">
+            <summary>
+            Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance with the given name.
+            </summary>
+            <param name="handlerName">Name of handler to store in config file.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData.#ctor(System.String,System.Int32)">
+            <summary>
+            Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance with the given name.
+            </summary>
+            <param name="handlerName">Name of handler to store in config file.</param>
+            <param name="handlerOrder">Order of handler to store in config file.</param>
+        </member>
+        <member name="M:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData.DoConfigureContainer(Microsoft.Practices.Unity.IUnityContainer,System.String)">
+            <summary>
+            Configures an <see cref="T:Microsoft.Practices.Unity.IUnityContainer" /> to resolve the represented call handler by using the specified name.
+            </summary>
+            <param name="container">The container to configure.</param>
+            <param name="registrationName">The name of the registration.</param>
+        </member>
+    </members>
+</doc>
