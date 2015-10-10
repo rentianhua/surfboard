@@ -226,6 +226,13 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.op
+<<<<<<< HEAD
 >>>>>>> master
 
 *.txt
+=======
+
+Lib/*.xml
+Lib/*.txt
+Lib/*.dll.config
+>>>>>>> master
