@@ -1,5 +1,0 @@
-C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.BusinessEntity.dll
-C:\HiiP\R6G\bin\Debug\HiiP.Framework.Logging.BusinessEntity.pdb
-C:\HiiP\R6G\Source\Framework\Logging\Logging.BusinessEntity\obj\Debug\ResolveAssemblyReference.cache
-C:\HiiP\R6G\Source\Framework\Logging\Logging.BusinessEntity\obj\Debug\HiiP.Framework.Logging.BusinessEntity.dll
-C:\HiiP\R6G\Source\Framework\Logging\Logging.BusinessEntity\obj\Debug\HiiP.Framework.Logging.BusinessEntity.pdb

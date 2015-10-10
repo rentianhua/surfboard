@@ -1,5 +1,0 @@
-C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Security.SessionManagement.DataAccess.dll
-C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Security.SessionManagement.DataAccess.pdb
-C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.DataAccess\obj\Debug\ResolveAssemblyReference.cache
-C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.DataAccess\obj\Debug\HiiP.Framework.Security.SessionManagement.DataAccess.dll
-C:\HiiP\R6G\Source\Framework\Security\Security.SessionManagement.DataAccess\obj\Debug\HiiP.Framework.Security.SessionManagement.DataAccess.pdb
