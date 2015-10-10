@@ -52,7 +52,7 @@ namespace CCN.Modules.Base.DataAccess
         public int SaveVerification(BaseVerification model)
         {
             int result;
-            const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @result);";
+            const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype,utype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @utype, @result);";
             try
             {
                 result = Helper.Execute(sql, model);
@@ -69,11 +69,12 @@ namespace CCN.Modules.Base.DataAccess
         /// 获取验证码
         /// </summary>
         /// <param name="target"></param>
+        /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns></returns>
-        public BaseVerification GetVerification(string target)
+        public BaseVerification GetVerification(string target,int utype)
         {
-            const string sql = "select innerid, target, vcode, valid, createdtime, ttype, result from base_verification where target=@target order by createdtime desc limit 1;";
-            var m = Helper.Query<BaseVerification>(sql, new {target}).FirstOrDefault();
+            const string sql = "select innerid, target, vcode, valid, createdtime, ttype, utype, result from base_verification where target=@target,utype=@utype order by createdtime desc limit 1;";
+            var m = Helper.Query<BaseVerification>(sql, new {target, utype }).FirstOrDefault();
             return m;
         }
 
@@ -159,6 +160,18 @@ namespace CCN.Modules.Base.DataAccess
             var sql = $"select innerid, modelname, modelprice, modelyear, minregyear, maxregyear, liter, geartype, dischargestandard, seriesid, isenabled, remark from base_carmodel where isenabled=1 and seriesid={seriesId}";
             var modelList = Helper.Query<BaseCarModelModel>(sql);
             return modelList;
+        }
+
+        /// <summary>
+        /// 根据ID获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public BaseCarModelModel GetCarModelById(int innerid)
+        {
+            var sql = $"select innerid, modelname, modelprice, modelyear, minregyear, maxregyear, liter, geartype, dischargestandard, seriesid, isenabled, remark from base_carmodel where innerid={innerid}";
+            var model = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
+            return model;
         }
 
         #endregion

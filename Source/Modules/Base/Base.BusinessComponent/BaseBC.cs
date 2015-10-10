@@ -56,6 +56,37 @@ namespace CCN.Modules.Base.BusinessComponent
         #region 验证码
 
         /// <summary>
+        /// 组织验证码内容
+        /// </summary>
+        /// <param name="utype"></param>
+        /// <param name="vcode"></param>
+        /// <param name="valid"></param>
+        /// <returns></returns>
+        private static string GetVerifiByType(int utype ,string vcode,int valid)
+        {
+            //有效期从秒转换成分
+            valid = valid / 60;
+            string content;
+            switch (utype)
+            {
+                case 1:
+                    content = $"{vcode}（平台注册验证码，{valid}分钟内有效）";
+                    break;
+                case 2:
+                    content = $"{vcode}（平台登录验证码，{valid}分钟内有效）";
+                    break;
+                case 3:
+                    content = $"{vcode}（平台验证码，{valid}分钟内有效）";
+                    break;
+                default:
+                    content = "";
+                    break;
+            }
+
+            return content;
+        }
+
+        /// <summary>
         /// 会员注册获取验证码
         /// </summary>
         /// <param name="model"></param>
@@ -65,42 +96,40 @@ namespace CCN.Modules.Base.BusinessComponent
             var jResult = new JResult();
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
-
-            #region 发送验证码
-
-            if (model.TType == 1)
-            {
-                //发送手机
-                SMSMSG sms = new SMSMSG();
-                var result = sms.SendSms(model.Target, model.Vcode);
-                if (result.errcode != "0")
-                {
-                    model.Result = 0;
-                }
-            }
-            else if (model.TType == 2)
-            {
-                //发送邮件
-            }
-            
-            #endregion
-
-            if (model.Result == 0)
-            {
-                //发送失败
-                jResult.errcode = 400;
-                jResult.errmsg = "发送验证码失败";
-                //return jResult;  //uu
-            }
+            model.Vcode = GetVerifiByType(1, model.Vcode, model.Valid);
 
             var saveRes = DataAccess.SaveVerification(model);
             if (saveRes == 0)
             {
                 //保存失败
                 jResult.errcode = 401;
-                jResult.errmsg = "保存验证码失败";
+                jResult.errmsg = "发送验证码失败";
                 return jResult;
             }
+
+            Task.Factory.StartNew(() =>
+            {
+                #region 发送验证码
+
+                if (model.TType == 1)
+                {
+
+                    //发送手机
+                    SMSMSG sms = new SMSMSG();
+                    var result = sms.SendSms(model.Target, model.Vcode);
+                    if (result.errcode != "0")
+                    {
+                        model.Result = 0;
+                    }
+                }
+                else if (model.TType == 2)
+                {
+                    //发送邮件
+                }
+
+                #endregion
+            });
+
             jResult.errcode = 0;
             jResult.errmsg = "发送验证码成功";
             return jResult;
@@ -111,11 +140,12 @@ namespace CCN.Modules.Base.BusinessComponent
         /// </summary>
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
+        /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns>返回结果。1.正确，0不正确,-1.验证码过期</returns>
-        public JResult CheckVerification(string target,string vcode)
+        public JResult CheckVerification(string target,string vcode, int utype)
         {
             var jResult = new JResult();
-            var m = DataAccess.GetVerification(target);
+            var m = DataAccess.GetVerification(target,utype);
             //验证码不正确
             if (m == null || !m.Vcode.Equals(vcode))
             {
@@ -146,10 +176,6 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public IEnumerable<BaseProvince> GetProvList(string initial)
         {
-            //QiniuUtility qinniu = new QiniuUtility();
-            //var sss = qinniu.PutFile("D:\\favicon.ico");
-            //var sssw = qinniu.ResumablePutFile("D:\\favicon.ico");
-
             return DataAccess.GetProvList(initial);
         }
 
@@ -237,6 +263,29 @@ namespace CCN.Modules.Base.BusinessComponent
         public IEnumerable<BaseCarModelModel> GetCarModel(int seriesId)
         {
             return DataAccess.GetCarModel(seriesId);
+        }
+
+        /// <summary>
+        /// 根据ID获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCarModelById(int innerid)
+        {
+            var model = DataAccess.GetCarModelById(innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "暂无数据"
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
         }
 
         #endregion

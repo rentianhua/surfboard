@@ -18,7 +18,7 @@ namespace Cedar.Foundation.SMS.Common
         public SendResult SendSms(string to, string content)
         {
             var newurl = string.Format(_smsapi, to, HttpUtility.UrlEncode(content, Encoding.GetEncoding("GBK")));
-            var sendResult = SMSSDK.GetWebRequest(newurl);
+            var sendResult = SMSSDK.GetWebRequest2(newurl);
             try
             {
                 return new SendResult

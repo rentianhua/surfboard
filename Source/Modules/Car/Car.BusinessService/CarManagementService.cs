@@ -40,6 +40,26 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetCarInfoById(id);
         }
+        
+        /// <summary>
+        /// 车辆估值
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateById(string id)
+        {
+            return BusinessComponent.GetCarEvaluateById(id);
+        }
+
+        /// <summary>
+        /// 获取本月本车型成交数量
+        /// </summary>
+        /// <param name="modelid">车型id</param>
+        /// <returns></returns>
+        public JResult GetCarSales(string modelid)
+        {
+            return BusinessComponent.GetCarSales(modelid);
+        }
 
         /// <summary>
         /// 添加车辆
@@ -59,6 +79,26 @@ namespace CCN.Modules.Car.BusinessService
         public JResult UpdateCar(CarInfoModel model)
         {
             return BusinessComponent.UpdateCar(model);
+        }
+        
+        /// <summary>
+        /// 删除车辆
+        /// </summary>
+        /// <param name="model">删除成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteCar(CarInfoModel model)
+        {
+            return BusinessComponent.DeleteCar(model);
+        }
+
+        /// <summary>
+        /// 车辆成交
+        /// </summary>
+        /// <param name="model">车辆成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DealCar(CarInfoModel model)
+        {
+            return BusinessComponent.DealCar(model);
         }
 
         /// <summary>

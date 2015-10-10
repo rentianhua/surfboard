@@ -80,11 +80,11 @@ namespace CCN.WebAPI.ApiControllers
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
             
             //检查验证码
-            var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode);
+            var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
             if (cresult.errcode != 0)
             {
                 //验证码错误
-                //return cresult;
+                return cresult;
             }
 
             return _custservice.CustRegister(userInfo);
@@ -147,11 +147,11 @@ namespace CCN.WebAPI.ApiControllers
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
 
             //检查验证码
-            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode);
+            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode, 1);
             if (cresult.errcode != 0)
             {
                 //验证码错误
-                //return cresult;
+                return cresult;
             }
 
             return _custservice.UpdatePassword(mRetrievePassword);

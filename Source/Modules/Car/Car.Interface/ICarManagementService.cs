@@ -25,6 +25,21 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult GetCarInfoById(string id);
 
+
+        /// <summary>
+        /// 车辆估值
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        JResult GetCarEvaluateById(string id);
+
+        /// <summary>
+        /// 获取本月本车型成交数量
+        /// </summary>
+        /// <param name="modelid">车型id</param>
+        /// <returns></returns>
+        JResult GetCarSales(string modelid);
+
         /// <summary>
         /// 添加车辆
         /// </summary>
@@ -38,6 +53,21 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
         JResult UpdateCar(CarInfoModel model);
+
+
+        /// <summary>
+        /// 删除车辆
+        /// </summary>
+        /// <param name="model">删除成交model</param>
+        /// <returns>1.操作成功</returns>
+        JResult DeleteCar(CarInfoModel model);
+
+        /// <summary>
+        /// 车辆成交
+        /// </summary>
+        /// <param name="model">车辆成交model</param>
+        /// <returns>1.操作成功</returns>
+        JResult DealCar(CarInfoModel model);
 
         /// <summary>
         /// 删除车辆(物理删除，暂不用)

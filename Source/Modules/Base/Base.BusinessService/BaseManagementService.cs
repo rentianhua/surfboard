@@ -57,10 +57,11 @@ namespace CCN.Modules.Base.BusinessService
         /// </summary>
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
+        /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns>返回结果。1.正确，0不正确</returns>
-        public JResult CheckVerification(string target, string vcode)
+        public JResult CheckVerification(string target, string vcode,int utype)
         {
-            return BusinessComponent.CheckVerification(target, vcode);
+            return BusinessComponent.CheckVerification(target, vcode,utype);
         }
 
         /// <summary>
@@ -132,6 +133,16 @@ namespace CCN.Modules.Base.BusinessService
         public IEnumerable<BaseCarModelModel> GetCarModel(int seriesId)
         {
             return BusinessComponent.GetCarModel(seriesId);
+        }
+
+        /// <summary>
+        /// 根据ID获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCarModelById(int innerid)
+        {
+            return BusinessComponent.GetCarModelById(innerid);
         }
 
         #endregion

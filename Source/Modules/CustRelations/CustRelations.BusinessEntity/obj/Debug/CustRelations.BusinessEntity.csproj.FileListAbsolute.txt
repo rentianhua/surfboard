@@ -19,3 +19,7 @@ E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\D
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.pdb
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\zxing.xml
 E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\obj\Debug\CustRelations.BusinessEntity.csprojResolveAssemblyReference.cache
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Newtonsoft.Json.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\Newtonsoft.Json.xml
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\System.Net.Http.Formatting.dll
+E:\tim\surfboard\Source\Modules\CustRelations\CustRelations.BusinessEntity\bin\System.Net.Http.Formatting.xml
