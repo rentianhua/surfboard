@@ -73,9 +73,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Qiniu.4.0, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Lib\Qiniu.4.0.dll</HintPath>
+    <Reference Include="Qiniu.4.0">
+      <HintPath>Y:\GitHub\surfboard\Lib\Qiniu.4.0.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

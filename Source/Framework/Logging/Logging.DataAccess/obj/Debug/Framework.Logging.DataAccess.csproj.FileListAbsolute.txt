@@ -1,5 +1,0 @@
-C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Logging.DataAccess.dll
-C:\HiiP\R6G\Hosting\HiiPService\bin\HiiP.Framework.Logging.DataAccess.pdb
-C:\HiiP\R6G\Source\Framework\Logging\Logging.DataAccess\obj\Debug\ResolveAssemblyReference.cache
-C:\HiiP\R6G\Source\Framework\Logging\Logging.DataAccess\obj\Debug\HiiP.Framework.Logging.DataAccess.dll
-C:\HiiP\R6G\Source\Framework\Logging\Logging.DataAccess\obj\Debug\HiiP.Framework.Logging.DataAccess.pdb
