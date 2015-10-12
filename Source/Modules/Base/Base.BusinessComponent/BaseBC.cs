@@ -96,7 +96,7 @@ namespace CCN.Modules.Base.BusinessComponent
             var jResult = new JResult();
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
-            model.Vcode = GetVerifiByType(1, model.Vcode, model.Valid);
+            model.Vcode = GetVerifiByType(model.UType, model.Vcode, model.Valid);
 
             var saveRes = DataAccess.SaveVerification(model);
             if (saveRes == 0)
@@ -107,28 +107,27 @@ namespace CCN.Modules.Base.BusinessComponent
                 return jResult;
             }
 
+            #region 发送验证码
             Task.Factory.StartNew(() =>
             {
-                #region 发送验证码
-
-                if (model.TType == 1)
+                switch (model.TType)
                 {
-
-                    //发送手机
-                    SMSMSG sms = new SMSMSG();
-                    var result = sms.SendSms(model.Target, model.Vcode);
-                    if (result.errcode != "0")
-                    {
-                        model.Result = 0;
-                    }
+                    case 1:
+                        //发送手机
+                        var sms = new SMSMSG();
+                        //var result = sms.SendSms(model.Target, model.Vcode);
+                        var result = sms.PostSms(model.Target, model.Vcode);
+                        if (result.errcode != "0")
+                        {
+                            model.Result = 0;
+                        }
+                        break;
+                    case 2:
+                        //发送邮件
+                        break;
                 }
-                else if (model.TType == 2)
-                {
-                    //发送邮件
-                }
-
-                #endregion
             });
+            #endregion
 
             jResult.errcode = 0;
             jResult.errmsg = "发送验证码成功";

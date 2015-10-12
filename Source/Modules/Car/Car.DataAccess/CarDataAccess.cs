@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Car.BusinessEntity;
+using Cedar.AuditTrail.Interception;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Dapper;
 
 namespace CCN.Modules.Car.DataAccess
 {
@@ -88,15 +90,52 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
-        /// 获取车辆详情
+        /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns></returns>
         public CarInfoModel GetCarInfoById(string id)
         {
             const string sql =
-                @"select innerid, custid, carid, title, pic_url, provid, cityid, brand_id, series_id, model_id, colorid, mileage, register_date, buytime, buyprice, price, dealprice, isproblem, remark, ckyear_date, tlci_date, audit_date, istain, sellreason, masterdesc, dealdesc, deletedesc, estimateprice, `status`, createdtime, modifiedtime, seller_type, tel, contactor, reg_year, post_time, audit_time, sold_time, keep_time, eval_price, next_year_eval_price, vpr, mile_age, gear_type, color, liter, url from `car_info` where innerid=@innerid";
+                @"select * from car_info where innerid=@innerid";
             var result = Helper.Query<CarInfoModel>(sql, new {innerid = id}).FirstOrDefault();
+            return result;
+        }
+
+        /// <summary>
+        /// 获取车辆详情(view)
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public CarInfoModel GetCarViewById(string id)
+        {
+            const string sql =
+                @"select a.innerid, a.custid, a.carid, a.title, pic_url, 
+                mileage, register_date, buytime, buyprice, price, dealprice, isproblem, 
+                a.remark, ckyear_date, tlci_date, audit_date, istain, 
+                sellreason, masterdesc, dealdesc, deletedesc, estimateprice, 
+                `status`, createdtime, modifiedtime, 
+                seller_type, tel, contactor, 
+                reg_year, post_time, audit_time, sold_time, keep_time, 
+                eval_price, next_year_eval_price, vpr, url ,
+                pr.provname,
+                ct.cityname,
+                cb.brandname as brand_name,
+                cs.seriesname as series_name,
+                cm.modelname as model_name,
+                cm.liter,
+                cm.geartype as gear_type,
+                cm.dischargestandard as dischargeName,
+                bc1.codename as color
+                from `car_info` as a 
+                left join base_province as pr on a.provid=pr.innerid
+                left join base_city as ct on a.cityid=ct.innerid
+                left join base_carbrand as cb on a.brand_id=cb.innerid
+                left join base_carseries as cs on a.series_id=cs.innerid
+                left join base_carmodel as cm on a.model_id=cm.innerid
+                left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color'
+                where a.innerid=@innerid";
+            var result = Helper.Query<CarInfoModel>(sql, new { innerid = id }).FirstOrDefault();
             return result;
         }
 
@@ -193,7 +232,7 @@ namespace CCN.Modules.Car.DataAccess
         {
             try
             {
-                const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc where `innerid`=@innerid;";
+                const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc,sold_time=@sold_time where `innerid`=@innerid;";
                 Helper.Execute(sql, new { innerid = model.Innerid,model.dealprice, model.dealdesc });
             }
             catch (Exception ex)
@@ -340,6 +379,126 @@ namespace CCN.Modules.Car.DataAccess
             }
             return 1;
         }
+
+        #region 车辆图片
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.AddCarPicture")]
+        public int AddCarPicture(CarPictureModel model)
+        {
+            const string sql = @"INSERT INTO car_picture
+                        (innerid, carid, typeid, path, sort, createdtime)
+                        VALUES
+                        (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
+            
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="innerid">车辆图片id</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.DeleteCarPicture")]
+        public int DeleteCarPicture(string innerid)
+        {
+            const string sql = @"delete from car_picture where innerid=@innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new {innerid});
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 图片调换位置
+        /// </summary>
+        /// <param name="listPicture">车辆图片列表</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.ExchangePictureSort")]
+        public int ExchangePictureSort(List<CarPictureModel> listPicture)
+        {
+            const string sql = @"update car_picture set sort=@sort where innerid=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new {innerid = listPicture[0].Innerid, sort = listPicture[0].Sort}, tran);
+                    conn.Execute(sql, new {innerid = listPicture[1].Innerid, sort = listPicture[1].Sort}, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取车辆已有图片的最大排序
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.GetCarPictureMaxSort")]
+        public int GetCarPictureMaxSort(string carid)
+        {
+            const string sql = @"select max(sort) from car_picture where carid=@carid;";
+
+            try
+            {
+                var maxsort = Helper.ExecuteScalar<int>(sql, new { carid });
+                return maxsort;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取车辆已有图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.GetCarPictureByCarid")]
+        public IEnumerable<CarPictureModel> GetCarPictureByCarid(string carid)
+        {
+            const string sql = @"select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort asc;";
+
+            try
+            {
+                var list = Helper.Query<CarPictureModel>(sql, new { carid });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
 
         #region 赞不用
 
