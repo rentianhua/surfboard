@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using CCN.Modules.Car.BusinessComponent;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
@@ -32,7 +34,7 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
-        /// 获取车辆详情
+        /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns></returns>
@@ -40,7 +42,17 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetCarInfoById(id);
         }
-        
+
+        /// <summary>
+        /// 获取车辆详情(view)
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarViewById(string id)
+        {
+            return BusinessComponent.GetCarViewById(id);
+        }
+
         /// <summary>
         /// 车辆估值
         /// </summary>
@@ -193,6 +205,50 @@ namespace CCN.Modules.Car.BusinessService
         public int KeepCar(string id)
         {
             return BusinessComponent.KeepCar(id);
+        }
+
+        #endregion
+
+        #region 车辆图片
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPicture(CarPictureModel model)
+        {
+            return BusinessComponent.AddCarPicture(model);
+        }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="innerid">车辆图片id</param>
+        /// <returns></returns>
+        public JResult DeleteCarPicture(string innerid)
+        {
+            return BusinessComponent.DeleteCarPicture(innerid);
+        }
+
+        /// <summary>
+        /// 获取车辆已有图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarPictureByCarid(string carid)
+        {
+            return BusinessComponent.GetCarPictureByCarid(carid);
+        }
+
+        /// <summary>
+        /// 图片调换位置
+        /// </summary>
+        /// <param name="listPicture">车辆图片列表</param>
+        /// <returns></returns>
+        public JResult ExchangePictureSort(List<CarPictureModel> listPicture)
+        {
+            return BusinessComponent.ExchangePictureSort(listPicture);
         }
 
         #endregion

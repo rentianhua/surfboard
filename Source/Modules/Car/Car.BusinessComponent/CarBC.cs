@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
+using Cedar.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
@@ -52,6 +53,27 @@ namespace CCN.Modules.Car.BusinessComponent
                 return jResult;
             }
             
+            jResult.errcode = 0;
+            jResult.errmsg = carInfo;
+            return jResult;
+        }
+
+        /// <summary>
+        /// 获取车辆详情
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarViewById(string id)
+        {
+            var jResult = new JResult();
+            var carInfo = DataAccess.GetCarViewById(id);
+            if (carInfo == null)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "";
+                return jResult;
+            }
+
             jResult.errcode = 0;
             jResult.errmsg = carInfo;
             return jResult;
@@ -193,7 +215,10 @@ namespace CCN.Modules.Car.BusinessComponent
                     errmsg = "参数不正确"
                 };
             }
-            model.sold_time = DateTime.Now; //成交时间
+            if (model.sold_time == null)
+            {
+                model.sold_time = DateTime.Now; //成交时间    
+            }            
             var result = DataAccess.DealCar(model);
             return new JResult
             {
@@ -324,6 +349,107 @@ namespace CCN.Modules.Car.BusinessComponent
         public int KeepCar(string id)
         {
             return DataAccess.KeepCar(id);
+        }
+
+        #endregion
+
+        #region 车辆图片
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.AddCarPicture")]
+        public JResult AddCarPicture(CarPictureModel model)
+        {
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+
+            //初始化排序
+            var max = DataAccess.GetCarPictureMaxSort(model.Carid);
+
+            model.Sort = max + 1;
+
+            var result = DataAccess.AddCarPicture(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+
+        /// <summary>
+        /// 删除车辆图片
+        /// </summary>
+        /// <param name="innerid">车辆图片id</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.DeleteCarPicture")]
+        public JResult DeleteCarPicture(string innerid)
+        {
+            var result = DataAccess.DeleteCarPicture(innerid);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+
+        /// <summary>
+        /// 获取车辆已有图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.GetCarPictureByCarid")]
+        public JResult GetCarPictureByCarid(string carid)
+        {
+            var model = DataAccess.GetCarPictureByCarid(carid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+
+        /// <summary>
+        /// 图片调换位置
+        /// </summary>
+        /// <param name="listPicture">车辆图片列表</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.ExchangePictureSort")]
+        public JResult ExchangePictureSort(List<CarPictureModel> listPicture)
+        {
+            //如果图片数量小与2个，或要交换的排序为0，或者两个要交换的排序相同 的话就不能调整排序
+            if (listPicture.Count() < 2 || listPicture[0].Sort == 0 || listPicture[1].Sort == 0 || listPicture[0].Sort == listPicture[1].Sort)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            var result = DataAccess.ExchangePictureSort(listPicture);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
         }
 
         #endregion
