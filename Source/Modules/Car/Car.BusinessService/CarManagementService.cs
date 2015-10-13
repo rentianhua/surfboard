@@ -28,7 +28,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
+        public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
             return BusinessComponent.GetCarPageList(query);
         }

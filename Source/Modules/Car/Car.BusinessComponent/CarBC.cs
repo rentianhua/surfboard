@@ -32,7 +32,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
+        public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
             return DataAccess.GetCarPageList(query);
         }

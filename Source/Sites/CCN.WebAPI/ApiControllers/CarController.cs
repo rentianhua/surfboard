@@ -33,7 +33,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="query">车辆信息</param>
         [Route("GetCarPageList")]
         [HttpPost]
-        public BasePageList<CarInfoModel> GetCarPageList([FromBody] CarQueryModel query)
+        public BasePageList<CarInfoListViewModel> GetCarPageList([FromBody] CarQueryModel query)
         {
             return _baseservice.GetCarPageList(query);
         }

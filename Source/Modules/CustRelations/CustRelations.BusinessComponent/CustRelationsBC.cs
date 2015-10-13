@@ -52,7 +52,7 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "no data"
+                    errmsg = ""
                 };
             }
             return new JResult
@@ -215,7 +215,7 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "No Data"
+                    errmsg = ""
                 };
             }
 

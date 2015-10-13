@@ -187,5 +187,23 @@ namespace CCN.Modules.Customer.Interface
         JResult GetTagRelationWithOper(string custid, string tagid);
 
         #endregion
+
+        #region 会员积分
+
+        /// <summary>
+        /// 会员积分变更
+        /// </summary>
+        /// <param name="model">变更信息</param>
+        /// <returns></returns>
+        JResult ChangePoint(CustPointModel model);
+
+        /// <summary>
+        /// 获取会员积分记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CustPointViewModel> GetCustPointLogPageList(CustPointQueryModel query);
+
+        #endregion
     }
 }
