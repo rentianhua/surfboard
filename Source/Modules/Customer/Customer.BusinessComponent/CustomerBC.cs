@@ -518,7 +518,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "暂无数据"
+                    errmsg = ""
                 };
             }
             return new JResult
@@ -542,7 +542,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "暂无数据"
+                    errmsg = ""
                 };
             }
             return new JResult
@@ -554,5 +554,114 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
+        #region 会员积分
+
+        /// <summary>
+        /// 会员积分变更
+        /// </summary>
+        /// <param name="model">变更信息</param>
+        /// <returns></returns>
+        public JResult ChangePoint(CustPointModel model)
+        {
+            if (model.Point == 0)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "变更的积分不能为0"
+                };
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+
+            if (model.Type == 0)
+            {
+                model.Type = 1;
+            }
+
+            var result = DataAccess.ChangePoint(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "添加成功" : "添加失败"
+            };
+        }
+
+        /// <summary>
+        /// 获取会员积分记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustPointViewModel> GetCustPointLogPageList(CustPointQueryModel query)
+        {
+            var list = DataAccess.GetCustPointLogPageList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 会员积分变更
+        /// </summary>
+        /// <param name="model">变更信息</param>
+        /// <returns></returns>
+        public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
+        {
+            if (model == null)
+            {
+                return _jResult(401, "参数不正确");
+            }
+            if (string.IsNullOrWhiteSpace(model.Custid))
+            {
+                return _jResult(402, "会员不存在");
+            }
+            if (model.Point == 0)
+            {
+                return _jResult(403, "积分不够");
+            }
+            if (string.IsNullOrWhiteSpace(model.Cardid))
+            {
+                return _jResult(404, "礼券不存在");
+            }
+
+            //生成随机数
+            model.Code = RandomUtility.GetRandom(12);
+            //生成二维码位图
+            var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
+
+            //保存二维码图片到临时文件夹
+            var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            bitmap.Save(filename);
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+            model.QrCode = qinniu.PutFile(filename);
+
+            //删除本地临时文件
+            if (File.Exists(filename))
+            {
+                File.Delete(filename);
+            }
+
+            //开始兑换
+            var result = DataAccess.PointExchangeCoupon(model);
+            return _jResult(
+                result > 0 ? 0 : 400, 
+                result > 0 ? "兑换成功" : "兑换失败");
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="errcode"></param>
+        /// <param name="errmsg"></param>
+        /// <returns></returns>
+        private static JResult _jResult(int errcode, object errmsg)
+        {
+            return new JResult
+            {
+                errcode = errcode,
+                errmsg = errmsg
+            };
+        }
     }
 }

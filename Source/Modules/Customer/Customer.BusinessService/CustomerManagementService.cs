@@ -274,5 +274,29 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         #endregion
+
+        #region 会员积分
+
+        /// <summary>
+        /// 会员积分变更
+        /// </summary>
+        /// <param name="model">变更信息</param>
+        /// <returns></returns>
+        public JResult ChangePoint(CustPointModel model)
+        {
+            return BusinessComponent.ChangePoint(model);
+        }
+
+        /// <summary>
+        /// 获取会员积分记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustPointViewModel> GetCustPointLogPageList(CustPointQueryModel query)
+        {
+            return BusinessComponent.GetCustPointLogPageList(query);
+        }
+
+        #endregion
     }
 }

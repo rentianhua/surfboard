@@ -16,7 +16,7 @@ namespace CCN.Modules.Car.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query);
+        BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query);
 
         /// <summary>
         /// 获取车辆详细信息(info)
