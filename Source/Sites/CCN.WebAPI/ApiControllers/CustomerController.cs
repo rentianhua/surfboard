@@ -376,6 +376,18 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.GetCustPointLogPageList(query);
         }
 
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        [Route("PointExchangeCoupon")]
+        [HttpPost]
+        public JResult PointExchangeCoupon([FromBody] CustPointExChangeCouponModel model)
+        {
+            return _custservice.PointExchangeCoupon(model);
+        }
+
         #endregion
     }
 }

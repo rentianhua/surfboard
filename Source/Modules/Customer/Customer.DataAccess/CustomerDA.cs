@@ -663,9 +663,9 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
-        /// 会员积分变更
+        /// 积分兑换礼券
         /// </summary>
-        /// <param name="model">变更信息</param>
+        /// <param name="model">兑换相关信息</param>
         /// <returns></returns>
         public int PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
@@ -675,7 +675,8 @@ namespace CCN.Modules.Customer.DataAccess
             const string sqlIExChange = @"insert into point_exchange (innerid, custid, recordid, `point`, `code`, createdtime) values (uuid(), @custid, @recordid, @point, @code, @createdtime);";
             const string sqlICode = @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
             const string sqlUCoupon = "update coupon_card set count=count+1 where innerid=@cardid;";
-            
+            const string sqlUPoint = "update cust_total_info set currpoint=currpoint-@point where custid=@custid;";
+
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -725,10 +726,10 @@ namespace CCN.Modules.Customer.DataAccess
                     }, tran);
 
                     //更新卡券库存
-                    conn.Execute(sqlUCoupon, new
-                    {
-                        cardid = model.Cardid
-                    }, tran);
+                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+
+                    //更新会员的积分
+                    conn.Execute(sqlUPoint, new {custid = model.Custid, point = model.Point}, tran);
 
                     tran.Commit();
                     return 1;
@@ -741,6 +742,11 @@ namespace CCN.Modules.Customer.DataAccess
             }
         }
 
+        #endregion
+
+        #region 会员礼券
+
+        //public 
 
         #endregion
     }
