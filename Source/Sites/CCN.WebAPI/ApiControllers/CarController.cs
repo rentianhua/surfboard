@@ -39,7 +39,7 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
-        /// 获取车辆详情
+        /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns></returns>
@@ -48,6 +48,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCarInfoById(string id)
         {
             return _baseservice.GetCarInfoById(id);
+        }
+
+        /// <summary>
+        /// 获取车辆详情(view)
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        [Route("GetCarViewById")]
+        [HttpGet]
+        public JResult GetCarViewById(string id)
+        {
+            return _baseservice.GetCarViewById(id);
         }
 
         /// <summary>
@@ -196,7 +208,59 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _baseservice.CommentCar(id, content);
         }
-        
+
+        #endregion
+
+        #region 车辆图片
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        [Route("AddCarPicture")]
+        [HttpPost]
+        public JResult AddCarPicture([FromBody] CarPictureModel model)
+        {
+            return _baseservice.AddCarPicture(model);
+        }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="innerid">车辆图片id</param>
+        /// <returns></returns>
+        [Route("DeleteCarPicture")]
+        [HttpDelete]
+        public JResult DeleteCarPicture(string innerid)
+        {
+            return _baseservice.DeleteCarPicture(innerid);
+        }
+
+        /// <summary>
+        /// 获取车辆已有图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        [Route("GetCarPictureByCarid")]
+        [HttpGet]
+        public JResult GetCarPictureByCarid(string carid)
+        {
+            return _baseservice.GetCarPictureByCarid(carid);
+        }
+
+        /// <summary>
+        /// 图片调换位置
+        /// </summary>
+        /// <param name="listPicture">车辆图片列表</param>
+        /// <returns></returns>
+        [Route("ExchangePictureSort")]
+        [HttpPost]
+        public JResult ExchangePictureSort([FromBody] List<CarPictureModel> listPicture)
+        {
+            return _baseservice.ExchangePictureSort(listPicture);
+        }
+
         #endregion
     }
 }

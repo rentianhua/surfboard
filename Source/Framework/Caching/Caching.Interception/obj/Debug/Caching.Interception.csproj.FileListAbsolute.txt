@@ -99,3 +99,10 @@ C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
 C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
 C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
+D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
+D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
+D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
+D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
+D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
+D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
+D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb

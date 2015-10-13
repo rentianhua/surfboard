@@ -19,12 +19,18 @@ namespace CCN.Modules.Car.Interface
         BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query);
 
         /// <summary>
-        /// 获取车辆详情
+        /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns></returns>
         JResult GetCarInfoById(string id);
 
+        /// <summary>
+        /// 获取车辆详情(view)
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns></returns>
+        JResult GetCarViewById(string id);
 
         /// <summary>
         /// 车辆估值
@@ -53,8 +59,7 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
         JResult UpdateCar(CarInfoModel model);
-
-
+        
         /// <summary>
         /// 删除车辆
         /// </summary>
@@ -134,6 +139,38 @@ namespace CCN.Modules.Car.Interface
         /// <param name="id">车辆id</param>
         /// <returns>1.操作成功</returns>
         int KeepCar(string id);
+
+        #endregion
+
+        #region 车辆图片
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPicture(CarPictureModel model);
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="innerid">车辆图片id</param>
+        /// <returns></returns>
+        JResult DeleteCarPicture(string innerid);
+
+        /// <summary>
+        /// 获取车辆已有图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        JResult GetCarPictureByCarid(string carid);
+
+        /// <summary>
+        /// 图片调换位置
+        /// </summary>
+        /// <param name="listPicture">车辆图片列表</param>
+        /// <returns></returns>
+        JResult ExchangePictureSort(List<CarPictureModel> listPicture);
 
         #endregion
     }
