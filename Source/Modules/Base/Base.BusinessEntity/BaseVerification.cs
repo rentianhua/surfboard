@@ -48,7 +48,7 @@ namespace CCN.Modules.Base.BusinessEntity
         public int VType { get; set; }
 
         /// <summary>
-        /// 用处类型[1注册,2登录,3,其他]
+        /// 用处类型[1注册，2登录，3找回密码，4其他]
         /// </summary>
         public int UType { get; set; }
 

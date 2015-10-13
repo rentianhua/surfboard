@@ -31,61 +31,68 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoModel> GetCarPageList(CarQueryModel query)
+        public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"car_info";
-            const string fields = " * ";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
-            //查询条件 
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            const string fields = "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
             var sqlWhere = new StringBuilder("1=1");
 
             sqlWhere.Append(query.status != null 
-                ? $" and status={query.status}" 
-                : " and status<>0");
+                ? $" and a.status={query.status}" 
+                : " and a.status<>0");
 
             if (!string.IsNullOrWhiteSpace(query.custid))
             {
-                sqlWhere.Append($" and custid='{query.custid}'");
+                sqlWhere.Append($" and a.custid='{query.custid}'");
             }
 
             if (!string.IsNullOrWhiteSpace(query.title))
             {
-                sqlWhere.Append($" and title like '%{query.title}%'");
+                sqlWhere.Append($" and a.title like '%{query.title}%'");
             }
 
             //省份
             if (query.provid != null)
             {
-                sqlWhere.Append($" and provid={query.provid}");
+                sqlWhere.Append($" and a.provid={query.provid}");
             }
 
             //城市
             if (query.cityid != null)
             {
-                sqlWhere.Append($" and cityid={query.cityid}");
+                sqlWhere.Append($" and a.cityid={query.cityid}");
             }
 
             //品牌
             if (query.brand_id != null)
             {
-                sqlWhere.Append($" and brand_id={query.brand_id}");
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
             }
 
             //车系
             if (query.series_id != null)
             {
-                sqlWhere.Append($" and series_id={query.series_id}");
+                sqlWhere.Append($" and a.series_id={query.series_id}");
             }
 
             //车型
             if (query.model_id != null)
             {
-                sqlWhere.Append($" and model_id={query.model_id}");
+                sqlWhere.Append($" and a.model_id={query.model_id}");
             }
-            
+
+            #endregion
+
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
-            var list = Helper.ExecutePaging<CarInfoModel>(model, query.Echo);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
             return list;
         }
 

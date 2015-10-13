@@ -47,7 +47,7 @@ namespace CCN.Modules.Base.BusinessComponent
             return new JResult
             {
                 errcode = 400,
-                errmsg = "没有数据"
+                errmsg = ""
             };
         }
 
@@ -76,6 +76,9 @@ namespace CCN.Modules.Base.BusinessComponent
                     content = $"{vcode}（平台登录验证码，{valid}分钟内有效）";
                     break;
                 case 3:
+                    content = $"{vcode}（平台找回密码的验证码，{valid}分钟内有效）";
+                    break;
+                case 4:
                     content = $"{vcode}（平台验证码，{valid}分钟内有效）";
                     break;
                 default:
@@ -202,7 +205,7 @@ namespace CCN.Modules.Base.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             
@@ -277,7 +280,7 @@ namespace CCN.Modules.Base.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "暂无数据"
+                    errmsg = ""
                 };
             }
             return new JResult

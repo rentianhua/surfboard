@@ -349,5 +349,33 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 会员积分
+
+        /// <summary>
+        /// 会员积分变更
+        /// </summary>
+        /// <param name="model">变更信息</param>
+        /// <returns></returns>
+        [Route("ChangePoint")]
+        [HttpPost]
+        public JResult ChangePoint([FromBody]CustPointModel model)
+        {
+            return _custservice.ChangePoint(model);
+        }
+
+        /// <summary>
+        /// 获取会员积分记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCustPointLogPageList")]
+        [HttpPost]
+        public BasePageList<CustPointViewModel> GetCustPointLogPageList([FromBody]CustPointQueryModel query)
+        {
+            return _custservice.GetCustPointLogPageList(query);
+        }
+
+        #endregion
     }
 }
