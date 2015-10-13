@@ -18,8 +18,8 @@ namespace CCN.Midware.Wechat.Controllers
         {
             _response = new HttpResponseMessage { Content = new StringContent("") };
             var appid = ConfigurationManager.AppSettings["APPID"];
-            if (!AccessTokenContainer.CheckRegistered(appid))
-                AccessTokenContainer.Register(appid, ConfigurationManager.AppSettings["AppSecret"]);
+            if (!AccessTokenRedisContainer.CheckRegistered(appid))
+                AccessTokenRedisContainer.Register(appid, ConfigurationManager.AppSettings["AppSecret"]);
         }
 
         [HttpGet]
@@ -52,14 +52,14 @@ namespace CCN.Midware.Wechat.Controllers
         [Route("GetTicket/{appid}")]
         public string GetTicket(string appid)
         {
-            return AccessTokenContainer.TryGetAccessToken(_appid, _appSecret);
+            return AccessTokenRedisContainer.TryGetAccessToken(_appid, _appSecret);
         }
 
         [HttpGet]
         [Route("GetToken/{appid}")]
         public string GetToken(string appid)
         {
-            return AccessTokenContainer.TryGetJsApiTicket(_appid, _appSecret);
+            return AccessTokenRedisContainer.TryGetJsApiTicket(_appid, _appSecret);
         }
     }
 }

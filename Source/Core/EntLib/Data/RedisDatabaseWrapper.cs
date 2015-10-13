@@ -110,7 +110,7 @@ namespace Cedar.Core.EntLib.Data
         /// <param name="key"></param>
         /// <param name="hashfield"></param>
         /// <returns></returns>
-        public string HashValues(string key, string hashfield)
+        public string HashGet(string key, string hashfield)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             var results = db.HashGet(key, hashfield);
@@ -152,6 +152,19 @@ namespace Cedar.Core.EntLib.Data
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             var results = db.HashExists(key, hashfield);
+            return results;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="hashfield"></param>
+        /// <returns></returns>
+        public bool HashDelete(string key, string hashfield)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashDelete(key, hashfield);
             return results;
         }
 

@@ -148,12 +148,14 @@
     <Compile Include="Caching\CachingUnitTest.cs" />
     <Compile Include="Core\ConfigManagerUnitTest.cs" />
     <Compile Include="Core\SettingSourceUnitTest.cs" />
+    <Compile Include="DataBase\RedisWrapperUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
     <Compile Include="TestService\ITestService.cs" />
     <Compile Include="TestService\Models.cs" />
     <Compile Include="TestService\TestService.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wechat\WechatUnitTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -185,9 +187,7 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataBase\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
@@ -222,4 +222,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-</Project>          
+</Project>
