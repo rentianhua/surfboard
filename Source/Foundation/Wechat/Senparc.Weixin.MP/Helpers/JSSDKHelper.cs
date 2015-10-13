@@ -122,7 +122,7 @@ namespace Senparc.Weixin.MP.Helpers
         /// <returns></returns>
         public static string GetAddrSign(string appId, string appSecret, string noncestr, string timestamp, string url)
         {
-            var accessToken = AccessTokenContainer.TryGetAccessToken(appId, appSecret);
+            var accessToken = AccessTokenRedisContainer.TryGetAccessToken(appId, appSecret);
             var parameters = new Hashtable();
             parameters.Add("appId", appId);
             parameters.Add("noncestr", noncestr);
