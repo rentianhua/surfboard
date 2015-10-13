@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Runtime.Serialization.Formatters.Binary;
 using StackExchange.Redis;
@@ -27,32 +29,130 @@ namespace Cedar.Core.EntLib.Data
                 AllowAdmin = true,
             };
             this.database = database;
-            this.database = database;
             _connectionMultiplexer = ConnectionMultiplexer.Connect(options);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool StringSet(string key, string value)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             return db.StringSet(key, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool KeyExpire(string key, TimeSpan value)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             return db.KeyExpire(key, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public bool KeyExists(string key)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             return db.KeyExists(key);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public string StringGet(string key)
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             return db.StringGet(key);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="hashfield"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public bool HashSet(string key, string hashfield, string value)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            return db.HashSet(key, hashfield, value);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public List<string> HashValues(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashValues(key);
+            var list = results.Select(item => (string)item).ToList();
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="hashfield"></param>
+        /// <returns></returns>
+        public string HashValues(string key, string hashfield)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashGet(key, hashfield);
+            return results;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Dictionary<string, string> HashGetAll(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashGetAll(key);
+            var dic = results.ToDictionary<HashEntry, string, string>(item => item.Name, item => item.Value);
+            return dic;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long HashLength(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashLength(key);
+            return results;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="hashfield"></param>
+        /// <returns></returns>
+        public bool HashExists(string key, string hashfield)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            var results = db.HashExists(key, hashfield);
+            return results;
         }
 
         public void Dispose()

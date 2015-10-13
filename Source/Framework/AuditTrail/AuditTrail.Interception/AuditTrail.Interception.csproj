@@ -40,7 +40,7 @@
     </Reference>
     <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll</HintPath>
+      <HintPath>..\..\..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
