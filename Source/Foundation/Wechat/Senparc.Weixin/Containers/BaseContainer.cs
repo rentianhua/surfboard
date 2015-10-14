@@ -11,7 +11,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using Cedar.Core.EntLib.Data;
 
 namespace Senparc.Weixin.Containers
 {

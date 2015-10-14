@@ -17,6 +17,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web.Security;
 using Senparc.Weixin.MP.Entities.Request;
 
 //using System.Web.Security;
@@ -79,14 +80,14 @@ namespace Senparc.Weixin.MP
             token = token ?? Token;
             var arr = new[] { token, timestamp, nonce }.OrderBy(z => z).ToArray();
             var arrString = string.Join("", arr);
-            //var enText = FormsAuthentication.HashPasswordForStoringInConfigFile(arrString, "SHA1");//使用System.Web.Security程序集
-            var sha1 = SHA1.Create();
-            var sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
-            StringBuilder enText = new StringBuilder();
-            foreach (var b in sha1Arr)
-            {
-                enText.AppendFormat("{0:x2}", b);
-            }
+            var enText = FormsAuthentication.HashPasswordForStoringInConfigFile(arrString, "SHA1").ToLower();//使用System.Web.Security程序集
+            //var sha1 = SHA1.Create();
+            //var sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
+            //StringBuilder enText = new StringBuilder();
+            //foreach (var b in sha1Arr)
+            //{
+            //    enText.AppendFormat("{0:x2}", b);
+            //}
 
             return enText.ToString();
         }
