@@ -15,10 +15,13 @@
 ----------------------------------------------------------------*/
 
 using System;
+using System.Configuration;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Linq;
 using Senparc.Weixin.Exceptions;
+using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.Helpers;
@@ -54,6 +57,9 @@ namespace Senparc.Weixin.MP
                 {
                     case RequestMsgType.Text:
                         requestMessage = new RequestMessageText();
+                        EntityHelper.FillEntityWithXml(requestMessage, doc);
+                        CustomApi.SendText(ConfigurationManager.AppSettings["APPID"], requestMessage.FromUserName,
+                            "欢欢喜喜");
                         break;
                     case RequestMsgType.Location:
                         requestMessage = new RequestMessageLocation();
@@ -175,7 +181,6 @@ namespace Senparc.Weixin.MP
                     default:
                         throw new UnknownRequestMsgTypeException(string.Format("MsgType：{0} 在RequestMessageFactory中没有对应的处理程序！", msgType), new ArgumentOutOfRangeException());//为了能够对类型变动最大程度容错（如微信目前还可以对公众账号suscribe等未知类型，但API没有开放），建议在使用的时候catch这个异常
                 }
-                EntityHelper.FillEntityWithXml(requestMessage, doc);
             }
             catch (ArgumentException ex)
             {
