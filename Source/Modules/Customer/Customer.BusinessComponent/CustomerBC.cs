@@ -598,9 +598,9 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         /// <summary>
-        /// 会员积分变更
+        /// 积分兑换礼券
         /// </summary>
-        /// <param name="model">变更信息</param>
+        /// <param name="model">兑换相关信息</param>
         /// <returns></returns>
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
@@ -641,6 +641,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
 
             //开始兑换
+            model.Createdtime = DateTime.Now;
             var result = DataAccess.PointExchangeCoupon(model);
             return _jResult(
                 result > 0 ? 0 : 400, 

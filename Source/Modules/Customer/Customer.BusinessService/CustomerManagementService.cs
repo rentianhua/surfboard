@@ -297,6 +297,17 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.GetCustPointLogPageList(query);
         }
 
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
+        {
+            return BusinessComponent.PointExchangeCoupon(model);
+        }
+
+
         #endregion
     }
 }
