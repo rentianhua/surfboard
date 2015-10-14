@@ -204,6 +204,13 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         BasePageList<CustPointViewModel> GetCustPointLogPageList(CustPointQueryModel query);
 
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        JResult PointExchangeCoupon(CustPointExChangeCouponModel model);
+
         #endregion
     }
 }

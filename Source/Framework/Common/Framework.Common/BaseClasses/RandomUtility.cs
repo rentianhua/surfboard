@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Practices.ObjectBuilder2;
 
 namespace Cedar.Framework.Common.BaseClasses
 {
@@ -14,17 +15,31 @@ namespace Cedar.Framework.Common.BaseClasses
         /// <returns></returns>
         public static string GetRandom(int length)
         {
-            var rad = new Random();//实例化随机数产生器rad；
+            var sequence = new int[length];
+            var output = new int[length];
 
-            var init = 1;
-            for (var i = 1; i < length; i++)
+            for (var i = 0; i < 10; i++)
             {
-                init = init * 10;
+                sequence[i] = i;
             }
 
-            var value = rad.Next(init, init * 10);
+            //用GUID的hashcode不会出现重复数
+            var ticks = Guid.NewGuid().GetHashCode();
+            //var ticks = DateTime.Now.Ticks;
 
-            return value.ToString();
+            var random = new Random(ticks);
+
+            var end = length - 1;
+
+            for (var i = 0; i < length; i++)
+            {
+                var num = random.Next(0, end + 1);
+                output[i] = sequence[num];
+                sequence[num] = sequence[end];
+                end--;
+            }
+
+            return output.JoinStrings("");
         }
     }
 }
