@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.CommonAPIs;
@@ -23,6 +24,7 @@ namespace CCN.Midware.Wechat.Controllers
         }
 
         [HttpGet]
+        [Route("DataDispatcher")]
         public HttpResponseMessage DataDispatcher(string signature, string timestamp, string nonce, string echostr)
         {
             Console.WriteLine($"----------------get Start {DateTime.Now}----------------");
@@ -39,11 +41,13 @@ namespace CCN.Midware.Wechat.Controllers
         /// 最简化的处理流程（不加密）
         /// </summary>
         [HttpPost]
+        [Route("DataDispatcher")]
         public HttpResponseMessage DataDispatcher()
         {
             var stream = Request.Content.ReadAsStringAsync().Result;
             Console.WriteLine($"----------------Start {DateTime.Now}----------------");
             Console.WriteLine(stream);
+            Task.Run(() => RequestMessageFactory.GetRequestEntity(stream));
             Console.WriteLine($"----------------End {DateTime.Now}----------------");
             return _response;
         }

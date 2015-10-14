@@ -48,10 +48,11 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Cedar.Core">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.dll</HintPath>
+      <HintPath>..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.Core.EntLib">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll</HintPath>
+    <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll</HintPath>
@@ -188,12 +189,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <Content Include="ConfigFiles\applicationContexts.config" />
-    <Content Include="ConfigFiles\auditTrail.config" />
-    <Content Include="ConfigFiles\caching.config" />
-    <Content Include="ConfigFiles\connectionStrings.config" />
-    <Content Include="ConfigFiles\serviceLocation.config" />
-    <Content Include="ConfigFiles\unity.config" />
+    <Content Include="ConfigFiles\applicationContexts.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\auditTrail.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\caching.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\connectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\serviceLocation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ConfigFiles\unity.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
