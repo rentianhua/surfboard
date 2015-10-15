@@ -39,7 +39,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
 
             #region 查询条件
@@ -118,20 +118,21 @@ namespace CCN.Modules.Car.DataAccess
         {
             const string sql =
                 @"select a.innerid, a.custid, a.carid, a.title, pic_url, 
-                mileage, register_date, buytime, buyprice, price, dealprice, isproblem, 
-                a.remark, ckyear_date, tlci_date, audit_date, istain, 
-                sellreason, masterdesc, dealdesc, deletedesc, estimateprice, 
-                `status`, createdtime, modifiedtime, 
-                seller_type, tel, contactor, 
-                reg_year, post_time, audit_time, sold_time, keep_time, 
-                eval_price, next_year_eval_price, vpr, url ,
+                a.mileage, a.register_date, a.buytime, a.buyprice, 
+                a.price, a.dealprice, a.isproblem, 
+                a.remark, a.ckyear_date, a.tlci_date, a.audit_date, a.istain, 
+                sellreason, a.masterdesc, a.dealdesc, a.deletedesc, a.estimateprice, 
+                a.`status`, a.createdtime, a.modifiedtime, 
+                a.seller_type,
+                a.post_time, a.audit_time, a.sold_time, a.keep_time, 
+                a.eval_price, a.next_year_eval_price, 
                 pr.provname,
                 ct.cityname,
                 cb.brandname as brand_name,
                 cs.seriesname as series_name,
                 cm.modelname as model_name,
                 cm.liter,
-                cm.geartype as gear_type,
+                cm.geartype,
                 cm.dischargestandard as dischargeName,
                 bc1.codename as color
                 from `car_info` as a 
@@ -154,9 +155,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                        (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`sellreason`,`masterdesc`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`tel`,`contactor`,`reg_year`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`,`vpr`,`mile_age`,`gear_type`,`color`,`liter`,`url`)
-                        VALUES
-                        (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@sellreason,@masterdesc,@ckyear_date,@tlci_date,@audit_date,@istain,@status,@createdtime,@modifiedtime,@seller_type,@tel,@contactor,@reg_year,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price,@vpr,@mile_age,@gear_type,@color,@liter,@url);";
+                                (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`)
+                                VALUES
+                                (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price);";
             int result;
             try
             {

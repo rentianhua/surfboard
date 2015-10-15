@@ -28,6 +28,11 @@ namespace CCN.Modules.Base.BusinessEntity
         public string Vcode { get; set; }
 
         /// <summary>
+        /// 短信内容
+        /// </summary>
+        public string Content { get; set; }
+
+        /// <summary>
         /// 有效期[单位：秒] ,默认120秒
         /// </summary>
         public int Valid { get; set; }
@@ -48,7 +53,7 @@ namespace CCN.Modules.Base.BusinessEntity
         public int VType { get; set; }
 
         /// <summary>
-        /// 用处类型[1注册，2登录，3找回密码，4其他]
+        /// 用处类型[0其他，1注册，2登录，3找回密码]
         /// </summary>
         public int UType { get; set; }
 

@@ -26,6 +26,16 @@ namespace CCN.Modules.CustRelations.BusinessService
         #region 好友关系管理
 
         /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustViewModel> GetCustPageList(CustQueryModel query)
+        {
+            return BusinessComponent.GetCustPageList(query);
+        }
+
+        /// <summary>
         /// 获取加好友申请
         /// </summary>
         /// <param name="query">查询条件</param>

@@ -29,6 +29,27 @@ namespace CCN.Modules.CustRelations.BusinessComponent
         #region 好友关系管理
 
         /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustViewModel> GetCustPageList(CustQueryModel query)
+        {
+            //如果没有输入条件 返回空
+            if (string.IsNullOrWhiteSpace(query.Custname) && string.IsNullOrWhiteSpace(query.Mobile) && string.IsNullOrWhiteSpace(query.Email))
+            {
+                return new BasePageList<CustViewModel>
+                {
+                    aaData = null,
+                    iTotalDisplayRecords = 0,
+                    iTotalRecords = 0
+                };
+            }
+
+            return DataAccess.GetCustPageList(query);
+        }
+
+        /// <summary>
         /// 获取加好友申请
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -226,6 +247,20 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="errcode"></param>
+        /// <param name="errmsg"></param>
+        /// <returns></returns>
+        private static JResult _jResult(int errcode, object errmsg)
+        {
+            return new JResult
+            {
+                errcode = errcode,
+                errmsg = errmsg
+            };
+        }
         #endregion
     }
 }
