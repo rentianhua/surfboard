@@ -15,6 +15,13 @@ namespace CCN.Modules.CustRelations.Interface
         #region 好友关系管理
 
         /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CustViewModel> GetCustPageList(CustQueryModel query);
+
+        /// <summary>
         /// 获取加好友申请
         /// </summary>
         /// <param name="query">查询条件</param>

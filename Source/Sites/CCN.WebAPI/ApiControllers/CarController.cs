@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
+using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 
@@ -169,7 +172,33 @@ namespace CCN.WebAPI.ApiControllers
         [HttpGet]
         public JResult ShareCar(string id)
         {
-            return _baseservice.ShareCar(id);
+            var result = _baseservice.ShareCar(id);
+
+            #region 注册送积分
+
+            Task.Factory.StartNew(() =>
+            {
+                var custService = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+
+                //获取会员id
+                var custid = ApplicationContext.Current.UserId;
+
+                custService.ChangePoint(new CustPointModel()
+                {
+                    Custid = custid,
+                    Createdtime = DateTime.Now,
+                    Type = 1,
+                    Innerid = Guid.NewGuid().ToString(),
+                    Point = 10,
+                    Remark = "",
+                    Sourceid = 1,
+                    Validtime = null
+                });
+            });
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>

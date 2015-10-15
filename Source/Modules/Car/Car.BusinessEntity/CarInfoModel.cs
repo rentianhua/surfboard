@@ -141,22 +141,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车辆上牌日期
         /// </summary>
         public DateTime? register_date { get; set; }
-
-        /// <summary>
-        /// 注册年份
-        /// </summary>
-        public int? reg_year { get; set; }
         
-        /// <summary>
-        /// 联系电话
-        /// </summary>
-        public string tel { get; set; }
-
-        /// <summary>
-        /// 联系人姓名
-        /// </summary>
-        public string contactor { get; set; }
-
         /// <summary>
         /// 卖家类型，1表示个人，2表示商家
         /// </summary>
@@ -171,6 +156,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车况备注/优势
         /// </summary>
         public string remark { get; set; }
+
         /// <summary>
         /// createdtime
         /// </summary>
@@ -215,22 +201,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 明年评估价格
         /// </summary>
         public float? next_year_eval_price { get; set; }
-
-        /// <summary>
-        /// 性价比
-        /// </summary>
-        public float? vpr { get; set; }
-
+        
         /// <summary>
         /// 商业险到期时间
         /// </summary>
         public DateTime? audit_date { get; set; }
         
-        /// <summary>
-        /// 车源详细信息链接(che300)
-        /// </summary>
-        public string url { get; set; }
-
         /// <summary>
         /// 会员ID
         /// </summary>
@@ -262,16 +238,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车型
         /// </summary>
         public string model_name { get; set; }
-
-        /// <summary>
-        /// 行驶里程
-        /// </summary>
-        public string mile_age { get; set; }
-
+        
         /// <summary>
         /// 变速箱类型
         /// </summary>
-        public string gear_type { get; set; }
+        public string geartype { get; set; }
 
         /// <summary>
         /// 颜色
@@ -282,17 +253,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 排量
         /// </summary>
         public string liter { get; set; }
-
-        /// <summary>
-        /// 车龄
-        /// </summary>
-        public string caragename { get; set; }
-
-        /// <summary>
-        /// 车身结构
-        /// </summary>
-        public string carshructName { get; set; }
-
+        
         /// <summary>
         /// 排放标准
         /// </summary>
@@ -337,6 +298,16 @@ namespace CCN.Modules.Car.BusinessEntity
         public decimal? price { get; set; }
 
         /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public string mileage { get; set; }
+        
+        /// <summary>
+        /// 车辆上牌日期
+        /// </summary>
+        public DateTime? register_date { get; set; }
+
+        /// <summary>
         /// 状态状态[1.在售，2.已售，0.已删除]
         /// </summary>
         public int? status { get; set; }
@@ -368,15 +339,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string model_name { get; set; }
 
-        /// <summary>
-        /// 行驶里程
-        /// </summary>
-        public string mile_age { get; set; }
 
         /// <summary>
         /// 变速箱类型
         /// </summary>
-        public string gear_type { get; set; }
+        public string geartype { get; set; }
 
         /// <summary>
         /// 颜色
@@ -387,17 +354,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 排量
         /// </summary>
         public string liter { get; set; }
-
-        /// <summary>
-        /// 车龄
-        /// </summary>
-        public string caragename { get; set; }
-
-        /// <summary>
-        /// 车身结构
-        /// </summary>
-        public string carshructName { get; set; }
-
+        
         /// <summary>
         /// 排放标准
         /// </summary>
