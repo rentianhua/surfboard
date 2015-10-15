@@ -157,6 +157,8 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
+            model.createdtime = DateTime.Now;
+            model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
             return new JResult
             {

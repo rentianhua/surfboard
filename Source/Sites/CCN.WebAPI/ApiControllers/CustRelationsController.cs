@@ -22,6 +22,18 @@ namespace CCN.WebAPI.ApiControllers
         #region 好友关系管理
 
         /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCustPageList")]
+        [HttpPost]
+        public BasePageList<CustViewModel> GetCustPageList([FromBody] CustQueryModel query)
+        {
+            return _service.GetCustPageList(query);
+        }
+
+        /// <summary>
         /// 获取加好友申请
         /// </summary>
         /// <param name="query">查询条件</param>

@@ -24,7 +24,44 @@ namespace CCN.Modules.CustRelations.DataAccess
     {
 
         #region 好友申请
-        
+
+        /// <summary>
+        /// 查询会员
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustViewModel> GetCustPageList(CustQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"cust_info as a";
+            var fields = $"innerid,custname,mobile,`level`,headportrait,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            //手机号查询
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                sqlWhere.Append($" and a.mobile like '%{query.Mobile}%'");
+            }
+
+            //会员名查询
+            if (!string.IsNullOrWhiteSpace(query.Custname))
+            {
+                sqlWhere.Append($" and a.custname like '%{query.Custname}%'");
+            }
+
+            //email查询
+            if (!string.IsNullOrWhiteSpace(query.Email))
+            {
+                sqlWhere.Append($" and a.email like '%{query.Email}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CustViewModel>(model, query.Echo);
+            return list;
+        }
+
         /// <summary>
         /// 获取加好友申请
         /// </summary>

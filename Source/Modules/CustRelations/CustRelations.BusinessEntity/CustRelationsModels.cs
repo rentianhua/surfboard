@@ -112,4 +112,66 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         /// </summary>
         public DateTime? Createdtime { get; set; }
     }
+
+    /// <summary>
+    /// 查找会员view model
+    /// </summary>
+    public class CustViewModel
+    {
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员名
+        /// </summary>
+        public string Custname { get; set; }
+
+        /// <summary>
+        /// 手机
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string Headportrait { get; set; }
+
+        /// <summary>
+        /// 会员等级
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
+        /// 是否好友关系 1是，2否
+        /// </summary>
+        public int IsFriends { get; set; }
+    }
+
+    /// <summary>
+    /// 查找会员view model
+    /// </summary>
+    public class CustQueryModel :QueryModel
+    {
+        /// <summary>
+        /// 自身id
+        /// </summary>
+        public string Oneselfid { get; set; }
+
+        /// <summary>
+        /// 会员名
+        /// </summary>
+        public string Custname { get; set; }
+
+        /// <summary>
+        /// 手机
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// Email
+        /// </summary>
+        public string Email { get; set; }
+    }
 }

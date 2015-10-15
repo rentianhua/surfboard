@@ -69,6 +69,7 @@ namespace CCN.Modules.Base.BusinessComponent
             string content;
             switch (utype)
             {
+                
                 case 1:
                     content = $"{vcode}（平台注册验证码，{valid}分钟内有效）";
                     break;
@@ -78,11 +79,11 @@ namespace CCN.Modules.Base.BusinessComponent
                 case 3:
                     content = $"{vcode}（平台找回密码的验证码，{valid}分钟内有效）";
                     break;
-                case 4:
+                case 0:
                     content = $"{vcode}（平台验证码，{valid}分钟内有效）";
                     break;
                 default:
-                    content = "";
+                    content = $"{vcode}（平台验证码，{valid}分钟内有效）";
                     break;
             }
 
@@ -99,7 +100,7 @@ namespace CCN.Modules.Base.BusinessComponent
             var jResult = new JResult();
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
-            model.Vcode = GetVerifiByType(model.UType, model.Vcode, model.Valid);
+            model.Content = GetVerifiByType(model.UType, model.Vcode, model.Valid);
 
             var saveRes = DataAccess.SaveVerification(model);
             if (saveRes == 0)
@@ -118,8 +119,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     case 1:
                         //发送手机
                         var sms = new SMSMSG();
-                        //var result = sms.SendSms(model.Target, model.Vcode);
-                        var result = sms.PostSms(model.Target, model.Vcode);
+                        var result = sms.PostSms(model.Target, model.Content);
                         if (result.errcode != "0")
                         {
                             model.Result = 0;

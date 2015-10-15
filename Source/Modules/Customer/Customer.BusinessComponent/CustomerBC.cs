@@ -139,6 +139,25 @@ namespace CCN.Modules.Customer.BusinessComponent
             });
             #endregion
 
+            #region 注册送积分
+
+            Task.Factory.StartNew(() =>
+            {
+                DataAccess.ChangePoint(new CustPointModel()
+                {
+                    Custid = innerid,
+                    Createdtime = userInfo.Createdtime,
+                    Type = 1,
+                    Innerid = Guid.NewGuid().ToString(),
+                    Point = 10,
+                    Remark = "",
+                    Sourceid = 1,
+                    Validtime = null
+                });
+            });
+
+            #endregion
+
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -622,7 +641,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
 
             //生成随机数
-            model.Code = RandomUtility.GetRandom(12);
+            model.Code = RandomUtility.GetRandomCode();
             //生成二维码位图
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 

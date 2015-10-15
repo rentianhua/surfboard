@@ -52,7 +52,7 @@ namespace CCN.Modules.Base.DataAccess
         public int SaveVerification(BaseVerification model)
         {
             int result;
-            const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype,utype, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @utype, @result);";
+            const string sql = "insert into base_verification (innerid, target, vcode, valid, createdtime, ttype,utype,content, result) values (uuid(), @target, @vcode, @valid, @createdtime, @ttype, @utype,@content, @result);";
             try
             {
                 result = Helper.Execute(sql, model);
@@ -73,7 +73,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public BaseVerification GetVerification(string target,int utype)
         {
-            const string sql = "select innerid, target, vcode, valid, createdtime, ttype, utype, result from base_verification where target=@target,utype=@utype order by createdtime desc limit 1;";
+            const string sql = "select innerid, target, vcode, valid, createdtime, ttype, utype,content, result from base_verification where target=@target and utype=@utype order by createdtime desc limit 1;";
             var m = Helper.Query<BaseVerification>(sql, new {target, utype }).FirstOrDefault();
             return m;
         }

@@ -147,7 +147,7 @@ namespace CCN.WebAPI.ApiControllers
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
 
             //检查验证码
-            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode, 1);
+            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode, 3);
             if (cresult.errcode != 0)
             {
                 //验证码错误

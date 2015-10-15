@@ -208,10 +208,10 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int UpdatePassword(CustRetrievePassword mRetrievePassword)
         {
-            const string sql = "update cust_info set password=@password where innerid=@innerid;";
+            const string sql = "update cust_info set password=@password where mobile=@mobile;";
             var custModel = Helper.Execute(sql, new {
                 password = mRetrievePassword.NewPassword,
-                innerid = mRetrievePassword.Custid
+                mobile = mRetrievePassword.Mobile
             });
             return custModel;
         }
