@@ -309,5 +309,50 @@ namespace CCN.Modules.Customer.BusinessService
 
 
         #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query)
+        {
+            return BusinessComponent.GetCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult AddCoupon(CouponInfoModel model)
+        {
+            return BusinessComponent.AddCoupon(model);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateCoupon(CouponInfoModel model)
+        {
+            return BusinessComponent.UpdateCoupon(model);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCouponById(string innerid)
+        {
+            return BusinessComponent.GetCouponById(innerid);
+        }
+
+
+        #endregion
     }
 }

@@ -212,5 +212,38 @@ namespace CCN.Modules.Customer.Interface
         JResult PointExchangeCoupon(CustPointExChangeCouponModel model);
 
         #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query);
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult AddCoupon(CouponInfoModel model);
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult UpdateCoupon(CouponInfoModel model);
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        JResult GetCouponById(string innerid);
+
+
+        #endregion
     }
 }
