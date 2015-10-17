@@ -215,19 +215,19 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult GetCustById(string innerid)
         {
-            var list = DataAccess.GetCustById(innerid);
-            if (list == null)
+            var model = DataAccess.GetCustById(innerid);
+            if (model == null)
             {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
             {
                 errcode = 0,
-                errmsg = list
+                errmsg = model
             };
         }
 
@@ -351,7 +351,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
@@ -368,19 +368,19 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult GetCustAuthByCustid(string custid)
         {
-            var list = DataAccess.GetCustAuthByCustid(custid);
-            if (list == null)
+            var model = DataAccess.GetCustAuthByCustid(custid);
+            if (model == null)
             {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
             {
                 errcode = 0,
-                errmsg = list
+                errmsg = model
             };
         }
 
@@ -669,6 +669,84 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query)
+        {
+            return DataAccess.GetCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult AddCoupon(CouponInfoModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Count = model.Maxcount;
+            model.Createdtime = DateTime.Now;
+            model.IsEnabled = 1;
+            var result = DataAccess.AddCoupon(model);
+            return _jResult(result);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateCoupon(CouponInfoModel model)
+        {
+            model.Count = null;
+            model.Maxcount = null;
+            model.Createdtime = null;
+            model.Vtype = null;
+            model.Vstart = null;
+            model.Vend = null;
+            model.Value1 = null;
+            model.Value2 = null;
+            model.IsEnabled = null;
+            model.Modifiedtime = DateTime.Now;            
+
+            var result = DataAccess.UpdateCoupon(model);
+            return _jResult(result);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCouponById(string innerid)
+        {
+            var model = DataAccess.GetCouponById(innerid);
+            return _jResult(model);
+        }
+
+        #endregion
+
+        #region 封装结果
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        private static JResult _jResult(int result)
+        {
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "操作成功" : "操作失败"
+            };
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -683,5 +761,21 @@ namespace CCN.Modules.Customer.BusinessComponent
                 errmsg = errmsg
             };
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        private static JResult _jResult(object model)
+        {
+            return new JResult
+            {
+                errcode = model == null ? 400 : 0,
+                errmsg = model ?? ""
+            };
+        }
+
+        #endregion
     }
 }

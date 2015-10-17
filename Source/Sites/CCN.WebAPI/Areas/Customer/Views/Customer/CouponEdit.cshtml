@@ -1,0 +1,154 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>礼券编辑</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/common.js"></script>
+    <style type="text/css">
+        table.gridtable {
+            font-family: verdana, arial, sans-serif;
+            font-size: 11px;
+            color: #333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+        }
+
+        table.gridtable th {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #dedede;
+        }
+
+        table.gridtable td {
+            border-width: 1px;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+        }
+
+        table.gridtable thead td {
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var id = "@ViewBag.innerid";
+
+        $(function () {
+            Init();
+        });
+
+        function Init() {
+
+            if (id === "") {
+                return;
+            }
+
+            $.ajax({
+                url: '/api/Customer/GetCouponById?innerid=' + id,
+                type: 'get',
+                datatype: 'application/json',
+                async: false,
+                success: function (data) {
+
+                    if (data.errcode !== 0) {
+                        alert("获取数据异常！");
+                    }
+
+                    var obj = data.errmsg;
+                    $("#title").val(obj.Title);
+                    $("#logo").val(obj.Logourl);
+                    $("#amount").val(obj.Amount);
+                    $("#vtype").val(obj.Vtype);
+                    $("#count").val(obj.Maxcount + "/" + obj.Count);
+                    $("#codetype").val(obj.Codetype);
+                    $("#createdtime").val(obj.Createdtime);
+                }
+            });
+        }
+
+        function Save() {
+            var json = {
+                Title:$("#title").val(),
+                Logourl: $("#logo").val(),
+                Amount: $("#amount").val(),
+                Vtype: $("#vtype").val(),
+                Maxcount: $("#count").val(),
+                Codetype: $("#codetype").val(),
+                Createdtime: $("#createdtime").val()
+            };
+
+            $.post();
+        }
+
+    </script>
+</head>
+<body>
+<div>
+    <table id="coupon" class="gridtable">
+        <tbody>
+            <tr>
+                <td>标题</td>
+                <td id="">
+                    <input type="text" id="title"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Logo</td>
+                <td id="">
+                    <input type="text" id="logo" />
+                </td>
+            </tr>
+            <tr>
+                <td>面值</td>
+                <td id="">
+                    <input type="text" id="amount" />
+                </td>
+            </tr>
+            <tr>
+                <td>有效期</td>
+                <td id="">
+                    <input type="text" id="vtype" />
+                </td>
+            </tr>
+            <tr>
+                <td>库存</td>
+                <td id="">
+                    <input type="text" id="count" />
+                </td>
+            </tr>
+            <tr>
+                <td>Code展示类</td>
+                <td id="">
+                    <input type="text" id="codetype" />
+                </td>
+            </tr>
+            <tr>
+                <td>创建时间</td>
+                <td id="">
+                    <input type="text" id="createdtime"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="保存" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -23,5 +23,22 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
             var d = _service.GetALlCustomers();
             return View(d);
         }
+
+        public ActionResult CouponList()
+        {
+            return View();
+        }
+
+        public ActionResult CouponEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+
+        public ActionResult CouponView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
     }
 }

@@ -89,6 +89,25 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and a.model_id={query.model_id}");
             }
 
+            //收购价大于..
+            if (query.minbuyprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice>={query.minbuyprice}");
+            }
+
+            //收购价小于..
+            if (query.maxbuyprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice<={query.maxbuyprice}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SearchField) && query.model_id == null)
+            {
+                //sqlWhere.Append($" and (c1.brandname like '%{query.SearchField}%' or c2.seriesname like '%{query.SearchField}%')");
+                //车辆添加时会将【品牌/车系】放到该字段
+                sqlWhere.Append($" and title like '%{query.SearchField}%'");
+            }
+
             #endregion
 
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -104,8 +123,63 @@ namespace CCN.Modules.Car.DataAccess
         public CarInfoModel GetCarInfoById(string id)
         {
             const string sql =
-                @"select * from car_info where innerid=@innerid";
-            var result = Helper.Query<CarInfoModel>(sql, new {innerid = id}).FirstOrDefault();
+                @"select 
+                a.innerid,
+                a.custid,
+                a.carid,
+                a.title,
+                a.pic_url,
+                a.provid,
+                a.cityid,
+                a.brand_id,
+                a.series_id,
+                a.model_id,
+                a.colorid,
+                a.mileage,
+                a.register_date,
+                a.buytime,
+                a.buyprice,
+                a.price,
+                a.dealprice,
+                a.isproblem,
+                a.remark,
+                a.ckyear_date,
+                a.tlci_date,
+                a.audit_date,
+                a.istain,
+                a.sellreason,
+                a.masterdesc,
+                a.dealdesc,
+                a.deletedesc,
+                a.estimateprice,
+                a.status,
+                a.createdtime,
+                a.modifiedtime,
+                a.seller_type,
+                a.post_time,
+                a.audit_time,
+                a.sold_time,
+                a.keep_time,
+                a.eval_price,
+                a.next_year_eval_price,
+                pr.provname,
+                ct.cityname,
+                cb.brandname as brand_name,
+                cs.seriesname as series_name,
+                cm.modelname as model_name,
+                cm.liter,
+                cm.geartype,
+                cm.dischargestandard as dischargeName,
+                bc1.codename as color
+                from `car_info` as a 
+                left join base_province as pr on a.provid=pr.innerid
+                left join base_city as ct on a.cityid=ct.innerid
+                left join base_carbrand as cb on a.brand_id=cb.innerid
+                left join base_carseries as cs on a.series_id=cs.innerid
+                left join base_carmodel as cm on a.model_id=cm.innerid
+                left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color'
+                where a.innerid=@innerid";
+            var result = Helper.Query<CarInfoModel>(sql, new { innerid = id }).FirstOrDefault();
             return result;
         }
 

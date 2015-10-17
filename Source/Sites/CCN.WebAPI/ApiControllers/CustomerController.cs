@@ -389,5 +389,62 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCouponPageList")]
+        [HttpPost]
+        [AllowAnonymous]
+        public BasePageList<CouponInfoModel> GetCouponPageList([FromBody] CouponQueryModel query)
+        {
+            return _custservice.GetCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("AddCoupon")]
+        [HttpPost]
+        [AllowAnonymous]
+        public JResult AddCoupon([FromBody] CouponInfoModel model)
+        {
+            return _custservice.AddCoupon(model);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("UpdateCoupon")]
+        [HttpPut]
+        [AllowAnonymous]
+        public JResult UpdateCoupon([FromBody] CouponInfoModel model)
+        {
+            return _custservice.UpdateCoupon(model);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        [Route("GetCouponById")]
+        [HttpGet]
+        [AllowAnonymous]
+        public JResult GetCouponById(string innerid)
+        {
+            return _custservice.GetCouponById(innerid);
+        }
+
+
+        #endregion
     }
 }
