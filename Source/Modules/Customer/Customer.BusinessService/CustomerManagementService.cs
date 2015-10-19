@@ -22,16 +22,7 @@ namespace CCN.Modules.Customer.BusinessService
             : base(bc)
         {
         }
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CustomerManagementService.GetALlCustomers")]
-        public List<dynamic> GetALlCustomers()
-        {
-            return BusinessComponent.GetALlCustomers();
-        }
-
+        
         #region 用户模块
 
         /// <summary>
@@ -78,6 +69,15 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.CustLogin(loginInfo);
         }
 
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult CustLoginByOpenid(string openid)
+        {
+            return BusinessComponent.CustLoginByOpenid(openid);
+        }
 
         /// <summary>
         /// 获取会员详情
@@ -107,6 +107,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
         {
             return BusinessComponent.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCustInfo(CustModel model)
+        {
+            return BusinessComponent.UpdateCustInfo(model);
         }
 
         #endregion

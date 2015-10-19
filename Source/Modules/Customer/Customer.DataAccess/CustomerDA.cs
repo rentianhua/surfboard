@@ -28,17 +28,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
 
         }
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        public List<dynamic> GetALlCustomers()
-        {
-            var d = Helper.Query("select * from base_carbrand where id=@id", new { id = "" }).ToList();
-            return d;
-        }
-
-
+        
         #region 用户模块
 
         /// <summary>
@@ -86,13 +76,16 @@ namespace CCN.Modules.Customer.DataAccess
                     const string sqlTotal = "insert into cust_total_info (innerid, custid) values (uuid(),@custid);";
                     conn.Execute(sqlTotal, new { custid  = userInfo.Innerid }, tran);
 
-                    //插入微信信息
+                    //插入关联
                     if (userInfo.Wechat != null)
                     {
                         const string sqlwechat =
-                            @"INSERT INTO cust_wechat(`innerid`,`custid`,`accountid`,`openid`,`nickname`,`headportrait`,`sex`,`country`,`province`,`city`,`createdtime`,`modifiedtime`)
-                        VALUES(uuid(),@custid,@accountid,@openid,@nickname,@headportrait,@sex,@country,@province,@city,@createdtime,@modifiedtime);";
-                        conn.Execute(sqlwechat, userInfo.Wechat, tran);
+                            @"INSERT INTO cust_wechat(`innerid`,`custid`,`openid`)
+                        VALUES(uuid(),@custid,@openid);";
+                        conn.Execute(sqlwechat, new {
+                            custid = userInfo.Innerid,
+                            openid = userInfo.Wechat.Openid
+                        }, tran);
                     }
                     tran.Commit();
                     return 1;
@@ -104,6 +97,19 @@ namespace CCN.Modules.Customer.DataAccess
                 }
             }
         }
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="custid"></param>
+        ///// <param name="openid"></param>
+        ///// <returns></returns>
+        //public int RelationFans(string custid,string openid) {
+
+        //    var sql = "select * from wechat_friend where openid=@openid;";
+
+        //    return 1;
+        //}
 
         /// <summary>
         /// 用户登录
@@ -122,7 +128,7 @@ namespace CCN.Modules.Customer.DataAccess
             //获取微信信息
             if (custModel != null)
             {
-                custModel.Wechat = Helper.Query<CustWechat>("select * from cust_wechat where custid=@custid;", new
+                custModel.Wechat = Helper.Query<CustWechat>("select a.* from wechat_friend as a inner join cust_wechat as b on a.openid=b.openid where b.custid=@custid;", new
                 {
                     custid = custModel.Innerid
                 }).FirstOrDefault();
@@ -131,6 +137,28 @@ namespace CCN.Modules.Customer.DataAccess
             return custModel;
         }
 
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public CustModel CustLoginByOpenid(string openid)
+        {
+            const string sql = "select b.* from cust_wechat as a left join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
+            var custModel = Helper.Query<CustModel>(sql, new {openid}).FirstOrDefault();
+
+            //获取微信信息
+            if (custModel != null)
+            {
+                custModel.Wechat = Helper.Query<CustWechat>("select * from wechat_friend where openid=@openid;", new
+                {
+                    openid
+                }).FirstOrDefault();
+            }
+
+            return custModel;
+        }
+        
         /// <summary>
         /// 用户登录
         /// </summary>
@@ -159,7 +187,7 @@ namespace CCN.Modules.Customer.DataAccess
                 //获取微信信息
                 if (custModel != null)
                 {
-                    custModel.Wechat = Helper.Query<CustWechat>("select * from cust_wechat where custid=@custid;", new
+                    custModel.Wechat = Helper.Query<CustWechat>("select a.* from wechat_friend as a inner join cust_wechat as b on a.openid=b.openid where b.custid=@custid;", new
                     {
                         custid = innerid
                     }).FirstOrDefault();
@@ -216,6 +244,34 @@ namespace CCN.Modules.Customer.DataAccess
             return custModel;
         }
 
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCustInfo(CustModel model)
+        {
+            var sqlStr = new StringBuilder("update cust_info set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+            
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        
         #endregion
 
         #region 用户认证

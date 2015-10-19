@@ -101,7 +101,19 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLogin(loginInfo);
         }
-        
+
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        [Route("CustLoginByOpenid")]
+        [HttpPost]
+        public JResult CustLoginByOpenid(string openid)
+        {
+            return _custservice.CustLoginByOpenid(openid);
+        }
+
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -155,6 +167,18 @@ namespace CCN.WebAPI.ApiControllers
             }
 
             return _custservice.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCustInfo")]
+        [HttpPost]
+        public JResult UpdateCustInfo([FromBody]CustModel model)
+        {
+            return _custservice.UpdateCustInfo(model);
         }
         #endregion
 

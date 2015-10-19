@@ -32,15 +32,6 @@ namespace CCN.Modules.Customer.BusinessComponent
             
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        //[AuditTrailCallHandler("GetALlCustomers")]
-        public List<dynamic> GetALlCustomers()
-        {
-            return DataAccess.GetALlCustomers();
-        }
-
         #region 用户模块
 
         /// <summary>
@@ -109,21 +100,22 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("cust_qrcode_yyyyMMddHHmmssfff"));
+                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
                     //保存图片到临时文件夹
-                    bitmap.Save(filename);
+                    bitmap.Save(filepath);
 
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
-                    var qrcodeKey = qinniu.PutFile(filename);
+                    var qrcodeKey = qinniu.PutFile(filepath, "", filename);
                     
                     //删除本地临时文件
-                    if (File.Exists(filename))
+                    if (File.Exists(filepath))
                     {
-                        File.Delete(filename);
+                        File.Delete(filepath);
                     }
                     
                     //上传成功更新会员二维码
@@ -175,15 +167,11 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = new JResult();
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
-                result.errcode = 403;
-                result.errmsg = "帐户名不能为空";
-                return result;
+                return _jResult(403, "帐户名不能为空");
             }
             if (string.IsNullOrWhiteSpace(loginInfo.Password))
             {
-                result.errcode = 404;
-                result.errmsg = "密码不能为空";
-                return result;
+                return _jResult(404, "密码不能为空");
             }
 
             var en = new Encryptor();
@@ -192,22 +180,36 @@ namespace CCN.Modules.Customer.BusinessComponent
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
             {
-                result.errcode = 401;
-                result.errmsg = "帐户名或登录密码不正确";
+                return _jResult(401, "帐户名或登录密码不正确");
             }
-            else if (userInfo.Status == 2)
+            if (userInfo.Status == 2)
             {
-                result.errcode = 402;
-                result.errmsg = "帐户被冻结";
+                return _jResult(402, "帐户被冻结");
             }
-            else
-            {
-                result.errcode = 0;
-                result.errmsg = userInfo;
-            }
-            return result;
+            return _jResult(0, userInfo);
         }
         
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult CustLoginByOpenid(string openid)
+        {
+            var result = new JResult();
+            var userInfo = DataAccess.CustLoginByOpenid(openid);
+            if (userInfo == null)
+            {
+                return _jResult(405, "会员不存在");
+            }
+            if (userInfo.Status == 2)
+            {
+                return _jResult(402, "帐户被冻结");
+            }
+
+            return _jResult(0, userInfo);
+        }
+
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -252,6 +254,30 @@ namespace CCN.Modules.Customer.BusinessComponent
             var en = new Encryptor();
             mRetrievePassword.NewPassword = en.EncryptMd5(mRetrievePassword.NewPassword);
             var result = DataAccess.UpdatePassword(mRetrievePassword);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCustInfo(CustModel model)
+        {
+            var newModel = new CustModel {
+                Innerid= model.Innerid,
+                Custname = model.Custname,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                Headportrait = model.Headportrait,
+                Realname = model.Realname
+            };
+
+            var result = DataAccess.UpdateCustInfo(newModel);
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -646,17 +672,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            bitmap.Save(filename);
+            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            bitmap.Save(filepath);
 
             //上传图片到七牛云
             var qinniu = new QiniuUtility();
-            model.QrCode = qinniu.PutFile(filename);
+            model.QrCode = qinniu.PutFile(filepath, "", filename);
 
             //删除本地临时文件
-            if (File.Exists(filename))
+            if (File.Exists(filepath))
             {
-                File.Delete(filename);
+                File.Delete(filepath);
             }
 
             //开始兑换

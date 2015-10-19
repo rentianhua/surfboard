@@ -238,21 +238,17 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <returns>图片主键</returns>
         [HttpPost]
-        [Route("api/FileUpload")]
-        public JResult FileUpload()
+        [Route("FileUpload")]
+        public string FileUpload()
         {
             var files = HttpContext.Current.Request.Files;
             if (files.Count == 0)
             {
-                return new JResult
-                {
-                    errcode = -1,
-                    errmsg = ""
-                };
+                return "0";
             }
 
-            var filename = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".jpg";
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            var filename = string.Concat("card_logo_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
 
             try
             {
@@ -260,7 +256,7 @@ namespace CCN.WebAPI.ApiControllers
 
                 //上传图片到七牛云
                 var qinniu = new QiniuUtility();
-                var qrcodeKey = qinniu.PutFile(filepath);
+                var qrcodeKey = qinniu.PutFile(filepath, "", filename);
 
                 //删除本地临时文件
                 if (File.Exists(filepath))
@@ -268,19 +264,11 @@ namespace CCN.WebAPI.ApiControllers
                     File.Delete(filepath);
                 }
 
-                return new JResult
-                {
-                    errcode = 1,
-                    errmsg = qrcodeKey
-                };
+                return qrcodeKey;
             }
             catch (Exception ex)
             {
-                return new JResult
-                {
-                    errcode = 0,
-                    errmsg = ex.Message
-                };
+                return "-2";
             }
         }
     }

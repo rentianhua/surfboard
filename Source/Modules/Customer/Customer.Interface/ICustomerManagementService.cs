@@ -12,11 +12,6 @@ namespace CCN.Modules.Customer.Interface
     /// </summary>
     public interface ICustomerManagementService
     {
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        List<dynamic> GetALlCustomers();
-
         #region 用户模块
 
         /// <summary>
@@ -48,6 +43,13 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLogin(CustLoginInfo loginInfo);
 
         /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        JResult CustLoginByOpenid(string openid);
+
+        /// <summary>
         /// 获取会员详情
         /// </summary>
         /// <param name="innerid">会员id</param>
@@ -67,6 +69,13 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="mRetrievePassword"></param>
         /// <returns></returns>
         JResult UpdatePassword(CustRetrievePassword mRetrievePassword);
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCustInfo(CustModel model);
 
         #endregion
 
