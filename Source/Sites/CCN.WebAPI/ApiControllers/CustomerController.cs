@@ -399,7 +399,6 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCouponPageList")]
         [HttpPost]
-        [AllowAnonymous]
         public BasePageList<CouponInfoModel> GetCouponPageList([FromBody] CouponQueryModel query)
         {
             return _custservice.GetCouponPageList(query);
@@ -412,7 +411,6 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("AddCoupon")]
         [HttpPost]
-        [AllowAnonymous]
         public JResult AddCoupon([FromBody] CouponInfoModel model)
         {
             return _custservice.AddCoupon(model);
@@ -425,7 +423,6 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateCoupon")]
         [HttpPut]
-        [AllowAnonymous]
         public JResult UpdateCoupon([FromBody] CouponInfoModel model)
         {
             return _custservice.UpdateCoupon(model);
@@ -438,7 +435,6 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCouponById")]
         [HttpGet]
-        [AllowAnonymous]
         public JResult GetCouponById(string innerid)
         {
             return _custservice.GetCouponById(innerid);

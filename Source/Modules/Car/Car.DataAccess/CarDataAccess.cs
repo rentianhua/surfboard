@@ -489,7 +489,29 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
-        /// 添加车辆图片
+        /// 设置车辆封面图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="imgKey">封面图片key</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarDataAccess.SetCarCover")]
+        public int SetCarCover(string carid, string imgKey)
+        {
+            const string sql = @"update car_info set pic_url=@pic_url where innerid=@innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new {innerid = carid, pic_url = imgKey});
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除车辆图片
         /// </summary>
         /// <param name="innerid">车辆图片id</param>
         /// <returns></returns>

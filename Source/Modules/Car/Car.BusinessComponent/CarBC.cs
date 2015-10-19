@@ -381,6 +381,12 @@ namespace CCN.Modules.Car.BusinessComponent
             model.Sort = max + 1;
 
             var result = DataAccess.AddCarPicture(model);
+
+            if (result > 0)
+            {
+                DataAccess.SetCarCover(model.Carid, model.Path);
+            }
+
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,

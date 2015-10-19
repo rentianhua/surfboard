@@ -9,45 +9,26 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>礼券编辑</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Plugins/My97DatePicker/WdatePicker.js"></script>
     <script src="~/Scripts/common.js"></script>
     <style type="text/css">
-        table.gridtable {
-            font-family: verdana, arial, sans-serif;
-            font-size: 11px;
-            color: #333333;
-            border-width: 1px;
-            border-color: #666666;
-            border-collapse: collapse;
-        }
+        
 
-        table.gridtable th {
-            border-width: 1px;
-            padding: 8px;
-            border-style: solid;
-            border-color: #666666;
-            background-color: #dedede;
-        }
-
-        table.gridtable td {
-            border-width: 1px;
-            padding: 8px;
-            border-style: solid;
-            border-color: #666666;
-            background-color: #ffffff;
-        }
-
-        table.gridtable thead td {
-            font-size: 14px;
-            font-weight: bold;
+        .margintop {
+            margin-top: 10px;
         }
     </style>
     <script type="text/javascript">
 
         var id = "@ViewBag.innerid";
 
-        $(function () {
+        $(function() {
+
+            setCookie(); //设置cookie
             Init();
+            RadioClick();
         });
 
         function Init() {
@@ -61,36 +42,107 @@
                 type: 'get',
                 datatype: 'application/json',
                 async: false,
-                success: function (data) {
+                success: function(data) {
 
                     if (data.errcode !== 0) {
                         alert("获取数据异常！");
                     }
 
+                    console.log(data);
+
                     var obj = data.errmsg;
                     $("#title").val(obj.Title);
                     $("#logo").val(obj.Logourl);
                     $("#amount").val(obj.Amount);
-                    $("#vtype").val(obj.Vtype);
-                    $("#count").val(obj.Maxcount + "/" + obj.Count);
+                    
+                    $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
                     $("#codetype").val(obj.Codetype);
-                    $("#createdtime").val(obj.Createdtime);
+
+                    $("#vtypeTd")
+                        .children().prop("disabled", true)
+                        .children().prop("disabled", true);
+                    $("input[name='radiotype'][value=" + obj.Vtype + "]").prop("checked", true);
+
+                    if (obj.Vtype === 1) {
+                        $("#radiotype1").removeClass("hide");
+                        $("#radiotype2").addClass("hide");
+                        $("#vstart").val(Dateformat(obj.Vstart, "yyyy-MM-dd"));
+                        $("#vend").val(Dateformat(obj.Vend, "yyyy-MM-dd"));
+                    } else {
+                        $("#radiotype1").addClass("hide");
+                        $("#radiotype2").removeClass("hide");
+                        $("#value1").val(obj.Value1);
+                        $("#value2").val(obj.Value2);
+                    }
+
                 }
             });
         }
 
-        function Save() {
+        function Submit() {
+
+            var vtype = $("input:radio[name='radiotype']:checked").val();
             var json = {
-                Title:$("#title").val(),
+                Title: $("#title").val(),
                 Logourl: $("#logo").val(),
                 Amount: $("#amount").val(),
-                Vtype: $("#vtype").val(),
+                Vtype: vtype,
                 Maxcount: $("#count").val(),
-                Codetype: $("#codetype").val(),
-                Createdtime: $("#createdtime").val()
+                Codetype: $("#codetype").val()
             };
 
-            $.post();
+            if (vtype === "1") { //有效时间范围
+                json.Vstart = $("#vstart").val();
+                json.Vend = $("#vend").val();
+            } else {//起效/有效天数
+                json.Value1 = $("#value1").val();
+                json.Value2 = $("#value2").val();
+            }
+
+            var result = uploadfile("logourl",1024 * 10,"",function(res) {
+                console.log(res);
+            });
+
+            if (id === "") {
+                $.post("/api/Customer/AddCoupon", json, function(result) {
+                    var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                    alert(str);
+                    location.href = "/customer/customer/couponlist";
+                });
+            } else {
+
+                json.Innerid = id;
+                $.ajax({
+                    url: '/api/Customer/UpdateCoupon',
+                    type: 'put',
+                    datatype: 'application/json',
+                    data: json,
+                    async: false,
+                    success: function(result) {
+                        var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                        alert(str);
+                        location.href = "/customer/customer/couponlist";
+                    }
+                });
+            }
+
+        }
+
+        var RadioClick = function () {
+
+            
+
+            $("input[name*='radiotype']").click(function () {
+
+                if ($(this).val() === "1") {
+                    $("#radiotype1").removeClass("hide");
+                    $("#radiotype2").addClass("hide");
+                } else {
+                    $("#radiotype1").addClass("hide");
+                    $("#radiotype2").removeClass("hide");
+                }
+
+            });
         }
 
     </script>
@@ -108,43 +160,59 @@
             <tr>
                 <td>Logo</td>
                 <td id="">
-                    <input type="text" id="logo" />
+                    @*<input type="text" id="logo"/>*@
+                    <input type="file" id="logourl" />
                 </td>
             </tr>
             <tr>
                 <td>面值</td>
                 <td id="">
-                    <input type="text" id="amount" />
+                    <input type="datetime" id="amount" />
                 </td>
             </tr>
             <tr>
                 <td>有效期</td>
-                <td id="">
-                    <input type="text" id="vtype" />
+                <td id="vtypeTd">
+                    <input type="radio" name="radiotype" id="t1" value="1"/>
+                    <label for="t1">有效日期</label>
+                    <input type="radio" name="radiotype" id="t2" value="2" />
+                    <label for="t2">有效天数</label>
+                    <br/>
+                    <div id="radiotype1" class="margintop hide">
+                        <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
+                        <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd',  isShowToday: false })">
+                    </div>
+                    <div id="radiotype2" class="margintop hide" style="margin-top: 10px">
+                        <input type="number" id="value1" placeholder="领取后多少天开始生效" maxlength="3" /> -
+                        <input type="number" id="value2" placeholder="有效天数" maxlength="5" />
+                    </div>
                 </td>
             </tr>
             <tr>
-                <td>库存</td>
+                <td>最大库存</td>
                 <td id="">
-                    <input type="text" id="count" />
+                    <input type="text" id="count" maxlength="8" />
                 </td>
             </tr>
             <tr>
                 <td>Code展示类</td>
                 <td id="">
-                    <input type="text" id="codetype" />
-                </td>
-            </tr>
-            <tr>
-                <td>创建时间</td>
-                <td id="">
-                    <input type="text" id="createdtime"/>
+                    <input type="text" id="codetype"/> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
+                    <div id="openDiv" class="margintop hide">
+                        Code展示类型，<br/>
+                        "CODE_TYPE_TEXT"：文本；<br />
+                        "CODE_TYPE_BARCODE"：一维码；<br />
+                        "CODE_TYPE_QRCODE"：二维码；<br />
+                        "CODE_TYPE_ONLY_BARCODE"：一维码无code显示；<br />
+                        "CODE_TYPE_ONLY_QRCODE"：二维码无code显示；
+                    </div>
                 </td>
             </tr>
             <tr>
                 <td></td>
                 <td>
-                    <input type="submit" value="保存" />
+                    <input type="submit" value="保存" onclick="Submit()"/>
+                    <input type="button" value="返回" onclick="self.location=document.referrer;" />
                 </td>
             </tr>
         </tbody>
