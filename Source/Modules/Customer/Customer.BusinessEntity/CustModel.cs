@@ -226,14 +226,38 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Nickname { get; set; }
 
         /// <summary>
-        /// 性别
+        /// 性别 1.男2女
         /// </summary>
-        public string Sex { get; set; }
+        public short Sex { get; set; }
+
+        /// <summary>
+        /// 是不删除(1:删除;0:未删除)
+        /// </summary>
+        public short Isdel { get; set; }
 
         /// <summary>
         /// 微信头像
         /// </summary>
-        public string Headportrait { get; set; }
+        public string Photo { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remarkname { get; set; }
+        /// <summary>
+        /// 地区
+        /// </summary>
+        public string Area { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Subscribe_time { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public short Subscribe { get; set; }
 
         /// <summary>
         /// 国家
@@ -255,10 +279,6 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public DateTime? Createdtime { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public DateTime? Modifiedtime { get; set; }
     }
 
     /// <summary>

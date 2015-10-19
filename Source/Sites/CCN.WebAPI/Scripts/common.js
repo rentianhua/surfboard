@@ -79,12 +79,15 @@ var setCookie = function() {
 }
 
 /*
--1:文件类型不匹配
--2：上传失败
--3：文件太大
-
+* 文件上传(返回文件标识，文件名为空时上传不成功)
+* @id              {string} 上传控件id
+* @callback        {obj} 回调方法
+* @exts            {Exts} 格式类型"gif,jpg,png"
+* @fileSize        {number} 文件大小(KB)
+* @async          -{bool} 是否异步执行
+* return           -1(FileTypeError):文件格式不正确；-2(UploadError):上传异常；-3(FileSizeError)：文件大小超出
 */
-var uploadfile = function (id, fileSize, exts, callback) {
+var uploadfile = function (id, fileSize, exts, callback, async) {
 
     var imgTypes = new Array("gif", "jpg", "jpeg", "png", "bmp");
     if (exts) {
@@ -93,8 +96,14 @@ var uploadfile = function (id, fileSize, exts, callback) {
 
     var files = $("#" + id).get(0).files;
     if (files.length <= 0) {
+        callback("0");
         return;
     }
+
+    //执行同步还是异步 默认值为false
+    async = async || false;
+    //文件大小 默认值为2*1024KB
+    fileSize = fileSize || 2 * 1024;
 
     var data = new FormData();
     for (var i = 0; i < files.length; i++) {
@@ -122,10 +131,10 @@ var uploadfile = function (id, fileSize, exts, callback) {
 
     $.ajax({
         type: "POST",
-        url: "/api/FileUpload",
+        url: "/api/Base/FileUpload",
         contentType: false,
         processData: false,
-        async: async,
+        async: false,
         data: data,
         success: function (results) {
             if (callback != undefined) {

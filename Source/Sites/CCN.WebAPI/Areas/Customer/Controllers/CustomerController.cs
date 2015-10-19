@@ -16,14 +16,7 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
         {
             _service = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
         }
-
-        // GET: Customer/Customer
-        public ActionResult Index()
-        {
-            var d = _service.GetALlCustomers();
-            return View(d);
-        }
-
+        
         public ActionResult CouponList()
         {
             return View();
@@ -40,5 +33,28 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
+
+        #region 用户认证
+
+        /// <summary>
+        /// 用户列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CustomerList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 用户详情
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CustomerView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+
+        #endregion
     }
 }

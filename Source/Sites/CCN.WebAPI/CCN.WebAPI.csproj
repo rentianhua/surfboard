@@ -297,11 +297,18 @@
     <Content Include="Areas\Customer\Views\Customer\CouponList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CouponEdit.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CouponView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CustomerList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CustomerView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
+    <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\common.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.fn.extend.js" />
+    <Content Include="Scripts\jquery.pagination\jquery.twbsPagination.js" />
+    <Content Include="Scripts\jquery.pagination\jquery.twbsPagination.min.js" />
+    <Content Include="Scripts\jquery.pagination\sr-paging.css" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\jquery.pager.js" />
     <Content Include="Scripts\respond.js" />
@@ -321,6 +328,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

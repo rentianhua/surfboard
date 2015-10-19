@@ -18,13 +18,12 @@
     <script type="text/javascript">
 
         $(function() {
-            document.cookie = "userid=aaa";
-            document.cookie = "sessionid=xxx";
+            setCookie(); //设置cookie
             PageClick(1);
         });
 
         PageClick = function(pageclickednumber) {
-            var pagesize = 10;
+            var pagesize = 20;
             var json = { isenabled: 1, PageSize: pagesize, PageIndex: pageclickednumber };
 
             $.ajax({
@@ -71,7 +70,7 @@
                 str = "";
                 str += "<tr>";
                 str += "<td>" + (index + key) + "</td>";
-                str += "<td>" + val.Title.sub(400) + "</td>";
+                str += "<td>" + (val.Title == null ? "" : val.Title.sub(400)) + "</td>";
                 str += "<td>" + val.Maxcount + "</td>";
                 str += "<td>" + val.Count + "</td>";
                 str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
@@ -91,6 +90,7 @@
 </head>
 <body>
 <div style="margin: 0 auto;">
+    <div style="font-size:18px;font-weight:bold;text-align:center">礼券列表</div>
     <table id="couponlist" class="gridtable">
 
         <thead>
