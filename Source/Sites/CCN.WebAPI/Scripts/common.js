@@ -69,3 +69,75 @@ var Dateformat = function (obj, fmt) {
         return '';
     }
 }
+
+var setCookie = function() {
+    var expireTime = new Date().getTime() + 1000 * 36000;
+    var da = new Date();
+    da.setTime(expireTime);
+    document.cookie = 'userid=tim;expires=' + da.toGMTString() + ';path=/';
+    document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
+}
+
+/*
+-1:文件类型不匹配
+-2：上传失败
+-3：文件太大
+
+*/
+var uploadfile = function (id, fileSize, exts, callback) {
+
+    var imgTypes = new Array("gif", "jpg", "jpeg", "png", "bmp");
+    if (exts) {
+        imgTypes = exts.split(",");
+    }
+
+    var files = $("#" + id).get(0).files;
+    if (files.length <= 0) {
+        return;
+    }
+
+    var data = new FormData();
+    for (var i = 0; i < files.length; i++) {
+        if (fileSize != undefined && fileSize !== "") {
+            var size = (files[i].size / 1024).toFixed(2);
+            if (size > fileSize) {
+                if (callback != undefined) {
+                    callback("-3");
+                }
+                return;
+            }
+        }
+
+        var fileName = files[i].name;
+        var ext = fileName.slice(fileName.lastIndexOf(".") + 1).toLowerCase();
+        if ($.inArray(ext, imgTypes) < 0) {
+            if (callback != undefined) {
+                callback("-1");
+            }
+            return;
+        }
+
+        data.append("file" + i, files[i]);
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/api/FileUpload",
+        contentType: false,
+        processData: false,
+        async: async,
+        data: data,
+        success: function (results) {
+            if (callback != undefined) {
+                callback(results);
+            }
+            return;
+        },
+        error: function (result) {
+            if (callback != undefined) {
+                callback("-2");
+            }
+            return;
+        }
+    });
+}

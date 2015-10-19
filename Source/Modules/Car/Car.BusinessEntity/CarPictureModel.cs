@@ -37,10 +37,15 @@ namespace CCN.Modules.Car.BusinessEntity
         public int Sort { get; set; }
 
         /// <summary>
+        /// 是否封面 1.是，0不是
+        /// </summary>
+        public int IsCover { get; set; }
+
+        /// <summary>
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
-        
+
         /// <summary>
         /// 初始化
         /// </summary>

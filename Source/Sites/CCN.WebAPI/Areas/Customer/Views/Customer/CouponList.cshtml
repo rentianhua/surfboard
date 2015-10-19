@@ -9,41 +9,12 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>礼券列表</title>
+    <link href="~/Content/Site.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <link href="~/Content/Pager.css" rel="stylesheet"/>
     <script src="~/Scripts/jquery.pager.js"></script>
     <script src="~/Scripts/common.js"></script>
-    <style type="text/css">
-        table.gridtable {
-            font-family: verdana,arial,sans-serif;
-            font-size: 11px;
-            color: #333333;
-            border-width: 1px;
-            border-color: #666666;
-            border-collapse: collapse;
-        }
-
-            table.gridtable th {
-                border-width: 1px;
-                padding: 8px;
-                border-style: solid;
-                border-color: #666666;
-                background-color: #dedede;
-            }
-
-            table.gridtable td {
-                border-width: 1px;
-                padding: 8px;
-                border-style: solid;
-                border-color: #666666;
-                background-color: #ffffff;
-            }
-
-            table.gridtable thead td {
-                font-size: 14px;
-                font-weight: bold;
-            }
-    </style>
+    
     <script type="text/javascript">
 
         $(function() {
@@ -99,13 +70,13 @@
             $.each(data, function(key, val) {
                 str = "";
                 str += "<tr>";
-                str += "<td>" + index + "</td>";
+                str += "<td>" + (index + key) + "</td>";
                 str += "<td>" + val.Title.sub(400) + "</td>";
                 str += "<td>" + val.Maxcount + "</td>";
                 str += "<td>" + val.Count + "</td>";
                 str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
                 str += "<td>" +
-                    "<a href=''>修改</a> " +
+                    "<a href='/customer/customer/couponedit?innerid=" + val.Innerid + "'>修改</a> " +
                     //"<a href='javascript:;' click=''>删除</a> " +
                     "<a href='/customer/customer/couponview?innerid=" + val.Innerid + "'>查询详情</a> " +
                     "</td>";
@@ -121,19 +92,32 @@
 <body>
 <div style="margin: 0 auto;">
     <table id="couponlist" class="gridtable">
+
         <thead>
-            <tr>
-                <td>序号</td>
-                <td>标题</td>
-                <td>总库存</td>
-                <td>剩余库存</td>
-                <td>创建时间</td>
-                <td>操作</td>
-            </tr>
+        <tr>
+            <td>序号</td>
+            <td>标题</td>
+            <td>总库存</td>
+            <td>剩余库存</td>
+            <td>创建时间</td>
+            <td>操作</td>
+        </tr>
         </thead>
         <tbody>
-        
+
         </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="6" style="text-align: right">
+                <a href="/customer/customer/couponedit">添加</a>
+            </td>
+        </tr>
+            <tr>
+                <td colspan="6" style="text-align: right">
+                    <div id="pager"></div>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 </body>
