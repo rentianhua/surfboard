@@ -2,11 +2,11 @@
 
 using System;
 using System.Configuration;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
 using Cedar.Core.EntLib.Properties;
 using Cedar.Core.IoC;
 using Cedar.Core.IoC.Configuration;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 
 #endregion
 

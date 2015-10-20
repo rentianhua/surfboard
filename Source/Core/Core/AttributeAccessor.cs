@@ -75,7 +75,7 @@ namespace Cedar.Core
             where TAttribute : Attribute
         {
             Guard.ArgumentNotNull(assembly, "assembly");
-            return GetAttributes(assembly, inherit).OfType<TAttribute>().ToArray<TAttribute>();
+            return GetAttributes(assembly, inherit).OfType<TAttribute>().ToArray();
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace Cedar.Core
             where TAttribute : Attribute
         {
             Guard.ArgumentNotNull(type, "type");
-            return GetAttributes(type, inherit).OfType<TAttribute>().ToArray<TAttribute>();
+            return GetAttributes(type, inherit).OfType<TAttribute>().ToArray();
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Cedar.Core
             where TAttribute : Attribute
         {
             Guard.ArgumentNotNull(member, "member");
-            return GetAttributes(member, inherit).OfType<TAttribute>().ToArray<TAttribute>();
+            return GetAttributes(member, inherit).OfType<TAttribute>().ToArray();
         }
 
         private static IEnumerable<Attribute> GetAttributes<T>(T target, Func<T, bool, object[]> attributeAccessor,
@@ -115,7 +115,7 @@ namespace Cedar.Core
         {
             if (!attributeCache.ContainsKey(target))
             {
-                Attribute[] value = attributeAccessor(target, inherit).OfType<Attribute>().ToArray<Attribute>();
+                var value = attributeAccessor(target, inherit).OfType<Attribute>().ToArray();
                 lock (syncHelper)
                 {
                     if (!attributeCache.ContainsKey(target))

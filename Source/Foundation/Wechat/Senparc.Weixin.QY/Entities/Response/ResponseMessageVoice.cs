@@ -14,20 +14,20 @@
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// 需要预先上传多媒体文件到微信服务器，只支持认证服务号。
+    ///     需要预先上传多媒体文件到微信服务器，只支持认证服务号。
     /// </summary>
     public class ResponseMessageVoice : ResponseMessageBase, IResponseMessageBase
     {
-        new public virtual ResponseMsgType MsgType
+        public ResponseMessageVoice()
         {
-            get { return ResponseMsgType.Voice; }
+            Voice = new Voice();
         }
 
         public Voice Voice { get; set; }
 
-        public ResponseMessageVoice()
+        public new virtual ResponseMsgType MsgType
         {
-            Voice = new Voice();
+            get { return ResponseMsgType.Voice; }
         }
     }
 }

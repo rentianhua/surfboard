@@ -11,7 +11,6 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text;
@@ -21,80 +20,84 @@ using Senparc.Weixin.MP.Helpers;
 namespace Senparc.Weixin.MP.TenPayLib
 {
     /// <summary>
-    /// ResponseHandler 的摘要说明。
+    ///     ResponseHandler 的摘要说明。
     /// </summary>
     public class RefundResponseHandler
     {
         /// <summary>
-        /// 密钥
-        /// </summary>
-        private string Key;
-
-        /// <summary>
-        /// 应答的参数
-        /// </summary>
-        protected Hashtable Parameters;
-
-        /// <summary>
-        /// debug信息
+        ///     debug信息
         /// </summary>
         private string DebugInfo;
 
         protected HttpContext HttpContext;
 
         /// <summary>
-        /// 获取服务器通知数据方式，进行参数获取
+        ///     密钥
+        /// </summary>
+        private string Key;
+
+        /// <summary>
+        ///     应答的参数
+        /// </summary>
+        protected Hashtable Parameters;
+
+        /// <summary>
+        ///     获取服务器通知数据方式，进行参数获取
         /// </summary>
         /// <param name="httpContext"></param>
         public RefundResponseHandler(HttpContext httpContext)
         {
             Parameters = new Hashtable();
 
-            this.HttpContext = httpContext ?? HttpContext.Current;
+            HttpContext = httpContext ?? HttpContext.Current;
             NameValueCollection collection;
-            if (this.HttpContext.Request.HttpMethod == "POST")
+            if (HttpContext.Request.HttpMethod == "POST")
             {
-                collection = this.HttpContext.Request.Form;
+                collection = HttpContext.Request.Form;
             }
             else
             {
-                collection = this.HttpContext.Request.QueryString;
+                collection = HttpContext.Request.QueryString;
             }
 
             foreach (string k in collection)
             {
-                string v = (string)collection[k];
-                this.SetParameter(k, v);
+                var v = collection[k];
+                SetParameter(k, v);
             }
         }
 
         /// <summary>
-        /// 获取密钥
+        ///     获取密钥
         /// </summary>
         /// <returns></returns>
         public string GetKey()
-        { return Key; }
+        {
+            return Key;
+        }
 
         /// <summary>
-        /// 设置密钥
+        ///     设置密钥
         /// </summary>
         /// <param name="key"></param>
         public void SetKey(string key)
-        { this.Key = key; }
+        {
+            Key = key;
+        }
 
         /// <summary>
-        /// 获取参数值
+        ///     获取参数值
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
         public string GetParameter(string parameter)
         {
-            string s = (string)Parameters[parameter];
+            var s = (string) Parameters[parameter];
             return (null == s) ? "" : s;
         }
 
         /// <summary>
-        /// 设置参数值
+        ///     设置参数值
         /// </summary>
         /// <param name="parameter"></param>
         /// <param name="parameterValue"></param>
@@ -112,19 +115,19 @@ namespace Senparc.Weixin.MP.TenPayLib
         }
 
         /// <summary>
-        /// 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean 
+        ///     是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean
         /// </summary>
         /// <returns></returns>
-        public virtual Boolean IsTenpaySign()
+        public virtual bool IsTenpaySign()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            ArrayList akeys = new ArrayList(Parameters.Keys);
+            var akeys = new ArrayList(Parameters.Keys);
             akeys.Sort();
 
             foreach (string k in akeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
                 if (null != v && "".CompareTo(v) != 0
                     && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
                 {
@@ -132,65 +135,69 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
 
             //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
+            SetDebugInfo(sb + " => sign:" + sign);
             return GetParameter("sign").ToLower().Equals(sign);
         }
 
         /// <summary>
-        /// 显示处理结果。
-        /// @param show_url 显示处</summary>
-        /// @throws IOException 
+        ///     显示处理结果。
+        ///     @param show_url 显示处
+        /// </summary>
+        /// @throws IOException
         /// <param name="show_url"></param>
         public void DoShow(string show_url)
         {
-            string strHtml = "<html><head>\r\n" +
-                "<meta name=\"TENCENT_ONLINE_PAYMENT\" content=\"China TENCENT\">\r\n" +
-                "<script language=\"javascript\">\r\n" +
-                "window.location.href='" + show_url + "';\r\n" +
-                "</script>\r\n" +
-                "</head><body></body></html>";
+            var strHtml = "<html><head>\r\n" +
+                          "<meta name=\"TENCENT_ONLINE_PAYMENT\" content=\"China TENCENT\">\r\n" +
+                          "<script language=\"javascript\">\r\n" +
+                          "window.location.href='" + show_url + "';\r\n" +
+                          "</script>\r\n" +
+                          "</head><body></body></html>";
 
-            this.HttpContext.Response.Write(strHtml);
+            HttpContext.Response.Write(strHtml);
 
-            this.HttpContext.Response.End();
+            HttpContext.Response.End();
         }
 
         /// <summary>
-        /// 获取debug信息
+        ///     获取debug信息
         /// </summary>
         /// <returns></returns>
         public string GetDebugInfo()
-        { return DebugInfo; }
-
-        /// <summary>
-        /// 设置debug信息
-        /// </summary>
-        /// <param name="debugInfo"></param>
-        protected void SetDebugInfo(string debugInfo)
-        { this.DebugInfo = debugInfo; }
-
-        protected virtual string getCharset()
         {
-            return this.HttpContext.Request.ContentEncoding.BodyName;
-
+            return DebugInfo;
         }
 
         /// <summary>
-        /// 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean
+        ///     设置debug信息
+        /// </summary>
+        /// <param name="debugInfo"></param>
+        protected void SetDebugInfo(string debugInfo)
+        {
+            DebugInfo = debugInfo;
+        }
+
+        protected virtual string getCharset()
+        {
+            return HttpContext.Request.ContentEncoding.BodyName;
+        }
+
+        /// <summary>
+        ///     是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean
         /// </summary>
         /// <param name="aKeys"></param>
         /// <returns></returns>
-        public virtual Boolean IsTenpaySign(ArrayList aKeys)
+        public virtual bool IsTenpaySign(ArrayList aKeys)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string k in aKeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
                 if (null != v && "".CompareTo(v) != 0
                     && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
                 {
@@ -198,11 +205,11 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
 
             //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
+            SetDebugInfo(sb + " => sign:" + sign);
             return GetParameter("sign").ToLower().Equals(sign);
         }
     }

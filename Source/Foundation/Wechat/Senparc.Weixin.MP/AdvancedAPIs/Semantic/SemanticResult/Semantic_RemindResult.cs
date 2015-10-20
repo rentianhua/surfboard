@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 提醒服务（remind）
+    ///     提醒服务（remind）
     /// </summary>
     public class Semantic_RemindResult : BaseSemanticResultJson
     {
@@ -29,15 +29,17 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Remind
     {
         /// <summary>
-        /// 时间
+        ///     时间
         /// </summary>
         public Semantic_DateTime datetime { get; set; }
+
         /// <summary>
-        /// 事件
+        ///     事件
         /// </summary>
         public string @event { get; set; }
+
         /// <summary>
-        /// 类别：0提醒；1闹钟  注：提醒有具体事件，闹钟没有具体事件
+        ///     类别：0提醒；1闹钟  注：提醒有具体事件，闹钟没有具体事件
         /// </summary>
         public int remind_type { get; set; }
     }

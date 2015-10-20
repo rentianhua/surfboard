@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 #endregion
@@ -19,7 +18,7 @@ namespace Cedar.Framework.Common.Client.MVCExtention
         public virtual ActionResult InvokeActionMethod(ControllerContext controllerContext,
             ActionDescriptor actionDescriptor)
         {
-            IDictionary<string, object> parameterValues = GetParameterValues(controllerContext, actionDescriptor);
+            var parameterValues = GetParameterValues(controllerContext, actionDescriptor);
             return base.InvokeActionMethod(controllerContext, actionDescriptor, parameterValues);
         }
     }

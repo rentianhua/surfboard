@@ -15,7 +15,7 @@
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// 微信企业号服务器Post过来的参数集合（不包括PostData）
+    ///     微信企业号服务器Post过来的参数集合（不包括PostData）
     /// </summary>
     public class PostModel : EncryptPostModel
     {

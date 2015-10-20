@@ -12,12 +12,12 @@ namespace Senparc.Weixin.QY.Entities
 {
     public class RequestMessageShortVideo : RequestMessageBase, IRequestMessageBase
     {
+        public string MediaId { get; set; }
+        public string ThumbMediaId { get; set; }
+
         public override RequestMsgType MsgType
         {
             get { return RequestMsgType.ShortVideo; }
         }
-
-        public string MediaId { get; set;}
-        public string ThumbMediaId { get; set; }
     }
 }

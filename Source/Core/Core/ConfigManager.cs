@@ -3,10 +3,10 @@
 using System;
 using System.Configuration;
 using System.Linq;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.Configuration;
 using Cedar.Core.Properties;
 using Cedar.Core.SettingSource;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -21,7 +21,8 @@ namespace Cedar.Core
         ///     Gets the connection strings settings.
         /// </summary>
         /// <value>The connection strings settings.</value>
-        public static ConnectionStringSettingsCollection ConnectionStrings => GetConfigurationSection<ConnectionStringsSection>("connectionStrings").ConnectionStrings;
+        public static ConnectionStringSettingsCollection ConnectionStrings
+            => GetConfigurationSection<ConnectionStringsSection>("connectionStrings").ConnectionStrings;
 
         /// <summary>
         ///     Tries the get configuration section.
@@ -55,8 +56,8 @@ namespace Cedar.Core
             where TConfigSection : ConfigurationSection
         {
             var configurationSectionNameAttribute =
-                AttributeAccessor.GetAttributes<ConfigurationSectionNameAttribute>(typeof(TConfigSection), false)
-                    .FirstOrDefault<ConfigurationSectionNameAttribute>();
+                AttributeAccessor.GetAttributes<ConfigurationSectionNameAttribute>(typeof (TConfigSection), false)
+                    .FirstOrDefault();
             if (configurationSectionNameAttribute == null)
             {
                 throw new InvalidOperationException(
@@ -78,7 +79,8 @@ namespace Cedar.Core
             where TConfigSection : ConfigurationSection
         {
             Guard.ArgumentNotNullOrEmpty(configSectionName, "configSectionName");
-            var tConfigSection = SettingSourceFactory.GetSettingSource().GetConfigurationSection(configSectionName) as TConfigSection;
+            var tConfigSection =
+                SettingSourceFactory.GetSettingSource().GetConfigurationSection(configSectionName) as TConfigSection;
             if (tConfigSection == null)
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionMissingConfigSection.Format(new object[]
@@ -110,8 +112,8 @@ namespace Cedar.Core
             where TConfigSection : ConfigurationSection
         {
             var configurationSectionNameAttribute =
-                AttributeAccessor.GetAttributes<ConfigurationSectionNameAttribute>(typeof(TConfigSection), false)
-                    .FirstOrDefault<ConfigurationSectionNameAttribute>();
+                AttributeAccessor.GetAttributes<ConfigurationSectionNameAttribute>(typeof (TConfigSection), false)
+                    .FirstOrDefault();
             if (configurationSectionNameAttribute == null)
             {
                 throw new InvalidOperationException(

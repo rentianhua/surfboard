@@ -5,11 +5,8 @@ namespace Cedar.Core.EntLib.IoC
     public abstract class AutoInterceptorPolicy
     {
         /// <summary>
-        /// Gets the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" />.
+        ///     Gets the <see cref="T:Microsoft.Practices.Unity.InterceptionExtension.IInstanceInterceptor" />.
         /// </summary>
-        public abstract IInstanceInterceptor Interceptor
-        {
-            get;
-        }
+        public abstract IInstanceInterceptor Interceptor { get; }
     }
 }

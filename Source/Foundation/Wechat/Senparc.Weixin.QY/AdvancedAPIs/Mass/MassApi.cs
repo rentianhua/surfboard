@@ -27,14 +27,14 @@ using Senparc.Weixin.QY.Entities;
 namespace Senparc.Weixin.QY.AdvancedAPIs
 {
     /// <summary>
-    /// 发送消息
+    ///     发送消息
     /// </summary>
     public static class MassApi
     {
         private const string URL_FORMAT = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={0}";
 
         /// <summary>
-        /// 发送文本信息
+        ///     发送文本信息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -45,7 +45,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendText(string accessToken, string toUser, string toParty, string toTag, string agentId, string content, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendText(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, string content, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -56,15 +57,15 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 agentid = agentId,
                 text = new
                 {
-                    content = content
+                    content
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送图片消息
+        ///     发送图片消息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -75,7 +76,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendImage(string accessToken, string toUser, string toParty, string toTag, string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendImage(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -88,13 +90,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 {
                     media_id = mediaId
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送语音消息
+        ///     发送语音消息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -105,7 +107,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendVoice(string accessToken, string toUser, string toParty, string toTag, string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendVoice(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -118,13 +121,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 {
                     media_id = mediaId
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送视频消息
+        ///     发送视频消息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -137,7 +140,9 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendVideo(string accessToken, string toUser, string toParty, string toTag, string agentId, string mediaId, string title, string description, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendVideo(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, string mediaId, string title, string description, int safe = 0,
+            int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -149,16 +154,16 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 video = new
                 {
                     media_id = mediaId,
-                    title = title,
-                    description = description,
+                    title,
+                    description
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送文件消息
+        ///     发送文件消息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -169,7 +174,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendFile(string accessToken, string toUser, string toParty, string toTag, string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendFile(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, string mediaId, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -182,13 +188,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 {
                     media_id = mediaId
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送图文消息
+        ///     发送图文消息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -199,7 +205,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendNews(string accessToken, string toUser, string toParty, string toTag, string agentId, List<Article> articles, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendNews(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, List<Article> articles, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -211,20 +218,20 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 news = new
                 {
                     articles = articles.Select(z => new
-                                {
-                                    title = z.Title,
-                                    description = z.Description,
-                                    url = z.Url,
-                                    picurl = z.PicUrl//图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图640*320，小图80*80
-                                }).ToList()
+                    {
+                        title = z.Title,
+                        description = z.Description,
+                        url = z.Url,
+                        picurl = z.PicUrl //图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图640*320，小图80*80
+                    }).ToList()
                 }
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 发送mpnews消息
-        /// 注：mpnews消息与news消息类似，不同的是图文消息内容存储在微信后台，并且支持保密选项。
+        ///     发送mpnews消息
+        ///     注：mpnews消息与news消息类似，不同的是图文消息内容存储在微信后台，并且支持保密选项。
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="toUser">UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送</param>
@@ -235,7 +242,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="safe">表示是否是保密消息，0表示否，1表示是，默认0</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static MassResult SendMpNews(string accessToken, string toUser, string toParty, string toTag, string agentId, List<MpNewsArticle> articles, int safe = 0, int timeOut = Config.TIME_OUT)
+        public static MassResult SendMpNews(string accessToken, string toUser, string toParty, string toTag,
+            string agentId, List<MpNewsArticle> articles, int safe = 0, int timeOut = Config.TIME_OUT)
         {
             var data = new
             {
@@ -248,16 +256,16 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 {
                     articles = articles.Select(z => new
                     {
-                        title = z.title,
-                        thumb_media_id = z.thumb_media_id,
-                        author = z.author,
-                        content_source_url = z.content_source_url,
-                        content = z.content,
-                        digest = z.digest,
-                        show_cover_pic = z.show_cover_pic
-                    }).ToList(),
+                        z.title,
+                        z.thumb_media_id,
+                        z.author,
+                        z.content_source_url,
+                        z.content,
+                        z.digest,
+                        z.show_cover_pic
+                    }).ToList()
                 },
-                safe = safe
+                safe
             };
             return CommonJsonSend.Send<MassResult>(accessToken, URL_FORMAT, data, CommonJsonSendType.POST, timeOut);
         }

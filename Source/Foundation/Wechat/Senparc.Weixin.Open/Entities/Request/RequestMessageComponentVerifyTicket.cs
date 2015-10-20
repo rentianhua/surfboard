@@ -16,6 +16,7 @@ namespace Senparc.Weixin.Open
         {
             get { return RequestInfoType.component_verify_ticket; }
         }
+
         public string ComponentVerifyTicket { get; set; }
     }
 }

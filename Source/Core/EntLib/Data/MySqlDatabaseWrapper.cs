@@ -4,24 +4,16 @@ using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
-using Dapper;
+using Cedar.Core.Data;
 using Microsoft.Practices.Unity.Utility;
 using MySql.Data.Entity;
 
 namespace Cedar.Core.EntLib.Data
 {
-    public class MySqlDatabaseWrapper : Core.Data.Database
+    public class MySqlDatabaseWrapper : Database
     {
-        private string databaseName;
-        private ConnectionStringSettings connectionStringSettings;
-
         protected static DbConnection connection;
-
-        public MySqlConnectionFactory Database
-        {
-            get;
-            private set;
-        }
+        private readonly ConnectionStringSettings connectionStringSettings;
 
         public MySqlDatabaseWrapper(Func<MySqlConnectionFactory> dataAccessor,
             string databaseName, ConnectionStringSettings connectionStringSettings)
@@ -29,21 +21,17 @@ namespace Cedar.Core.EntLib.Data
             Guard.ArgumentNotNull(dataAccessor, "dataAccessor");
             Guard.ArgumentNotNullOrEmpty(databaseName, "databaseName");
             Database = dataAccessor();
-            this.databaseName = databaseName;
+            DatabaseName = databaseName;
             this.connectionStringSettings = connectionStringSettings;
         }
+
+        public MySqlConnectionFactory Database { get; }
+
+        public override string DatabaseName { get; }
 
         public override DbConnection CreateConnection()
         {
             return Database.CreateConnection(connectionStringSettings.ConnectionString);
-        }
-
-        public override string DatabaseName
-        {
-            get
-            {
-                return databaseName;
-            }
         }
 
         public int Execute(List<SqlObject> sql)
@@ -51,7 +39,7 @@ namespace Cedar.Core.EntLib.Data
             using (IDbConnection conn = Database.CreateConnection(connectionStringSettings.ConnectionString))
             {
                 var transaction = conn.BeginTransaction();
-                int row = 0;
+                var row = 0;
                 try
                 {
                     row +=
@@ -67,56 +55,54 @@ namespace Cedar.Core.EntLib.Data
             }
         }
 
-        public override int Execute(string sql, dynamic param = null, DbTransaction transaction = null, CommandType commandType = CommandType.Text)
+        public override int Execute(string sql, dynamic param = null, DbTransaction transaction = null,
+            CommandType commandType = CommandType.Text)
         {
             using (var con = Database.CreateConnection(connectionStringSettings.ConnectionString))
             {
                 return param == null
                     ? con.Execute(sql, null, transaction, null, commandType)
-                    : con.Execute(sql, (object)param, transaction, null, commandType);
+                    : con.Execute(sql, (object) param, transaction, null, commandType);
             }
         }
 
-        public override IEnumerable<T> Query<T>(string sql, dynamic param = null, DbTransaction transaction = null, CommandType commandType = CommandType.Text)
+        public override IEnumerable<T> Query<T>(string sql, dynamic param = null, DbTransaction transaction = null,
+            CommandType commandType = CommandType.Text)
         {
             using (var con = Database.CreateConnection(connectionStringSettings.ConnectionString))
             {
-                return con.Query<T>(sql, (object)param, transaction, true, null, commandType);
+                return con.Query<T>(sql, (object) param, transaction, true, null, commandType);
             }
         }
 
-        public override IEnumerable<dynamic> Query(string sql, dynamic param = null, CommandType commandType = CommandType.Text)
+        public override IEnumerable<dynamic> Query(string sql, dynamic param = null,
+            CommandType commandType = CommandType.Text)
         {
             using (var con = Database.CreateConnection(connectionStringSettings.ConnectionString))
             {
                 con.Open();
-                return con.Query(sql, (object)param, null, true, null, commandType);
+                return con.Query(sql, (object) param, null, true, null, commandType);
             }
         }
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public class SqlObject
     {
         /// <summary>
-        /// 
         /// </summary>
         public string Sql { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public object Paramters { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public int Order { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         public bool IsStrictResult { get; set; }
     }

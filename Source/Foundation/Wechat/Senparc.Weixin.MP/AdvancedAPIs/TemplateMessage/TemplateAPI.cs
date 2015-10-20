@@ -24,12 +24,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 模板消息接口
+    ///     模板消息接口
     /// </summary>
     public static class TemplateApi
     {
         /// <summary>
-        /// 模板消息接口
+        ///     模板消息接口
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
@@ -39,12 +39,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="data"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static SendTemplateMessageResult SendTemplateMessage(string accessTokenOrAppId, string openId, string templateId, string topcolor, string url, object data, int timeOut = Config.TIME_OUT)
+        public static SendTemplateMessageResult SendTemplateMessage(string accessTokenOrAppId, string openId,
+            string templateId, string topcolor, string url, object data, int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
                 const string urlFormat = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token={0}";
-                var msgData = new TempleteModel()
+                var msgData = new TempleteModel
                 {
                     touser = openId,
                     template_id = templateId,
@@ -53,7 +54,6 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     data = data
                 };
                 return CommonJsonSend.Send<SendTemplateMessageResult>(accessToken, urlFormat, msgData, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
     }

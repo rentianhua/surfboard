@@ -25,7 +25,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
     public static class OAuthApi
     {
         /// <summary>
-        /// 获取验证地址
+        ///     获取验证地址
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="redirectUrl"></param>
@@ -33,11 +33,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="scope"></param>
         /// <param name="responseType"></param>
         /// <returns></returns>
-        public static string GetAuthorizeUrl(string appId, string redirectUrl, string state, OAuthScope scope, string responseType = "code")
+        public static string GetAuthorizeUrl(string appId, string redirectUrl, string state, OAuthScope scope,
+            string responseType = "code")
         {
             var url =
-                string.Format("https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type={2}&scope={3}&state={4}#wechat_redirect",
-                                appId, redirectUrl.UrlEncode(), responseType, scope, state);
+                string.Format(
+                    "https://open.weixin.qq.com/connect/oauth2/authorize?appid={0}&redirect_uri={1}&response_type={2}&scope={3}&state={4}#wechat_redirect",
+                    appId, redirectUrl.UrlEncode(), responseType, scope, state);
 
             /* 这一步发送之后，客户会得到授权页面，无论同意或拒绝，都会返回redirectUrl页面。
              * 如果用户同意授权，页面将跳转至 redirect_uri/?code=CODE&state=STATE。这里的code用于换取access_token（和通用接口的access_token不通用）
@@ -47,40 +49,44 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         }
 
         /// <summary>
-        /// 获取AccessToken
+        ///     获取AccessToken
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="secret"></param>
         /// <param name="code">code作为换取access_token的票据，每次用户授权带上的code将不一样，code只能使用一次，5分钟未被使用自动过期。</param>
         /// <param name="grantType"></param>
         /// <returns></returns>
-        public static OAuthAccessTokenResult GetAccessToken(string appId, string secret, string code, string grantType = "authorization_code")
+        public static OAuthAccessTokenResult GetAccessToken(string appId, string secret, string code,
+            string grantType = "authorization_code")
         {
             var url =
-                string.Format("https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type={3}",
-                                appId, secret, code, grantType);
+                string.Format(
+                    "https://api.weixin.qq.com/sns/oauth2/access_token?appid={0}&secret={1}&code={2}&grant_type={3}",
+                    appId, secret, code, grantType);
 
             return CommonJsonSend.Send<OAuthAccessTokenResult>(null, url, null, CommonJsonSendType.GET);
         }
 
         /// <summary>
-        /// 刷新access_token（如果需要）
+        ///     刷新access_token（如果需要）
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="refreshToken">填写通过access_token获取到的refresh_token参数</param>
         /// <param name="grantType"></param>
         /// <returns></returns>
-        public static OAuthAccessTokenResult RefreshToken(string appId, string refreshToken, string grantType = "refresh_token")
+        public static OAuthAccessTokenResult RefreshToken(string appId, string refreshToken,
+            string grantType = "refresh_token")
         {
             var url =
-                string.Format("https://api.weixin.qq.com/sns/oauth2/refresh_token?appid={0}&grant_type={1}&refresh_token={2}",
-                                appId, grantType, refreshToken);
+                string.Format(
+                    "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid={0}&grant_type={1}&refresh_token={2}",
+                    appId, grantType, refreshToken);
 
             return CommonJsonSend.Send<OAuthAccessTokenResult>(null, url, null, CommonJsonSendType.GET);
         }
 
         /// <summary>
-        /// 获取用户基本信息
+        ///     获取用户基本信息
         /// </summary>
         /// <param name="accessToken">调用接口凭证</param>
         /// <param name="openId">普通用户的标识，对当前公众号唯一</param>
@@ -88,20 +94,22 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <returns></returns>
         public static OAuthUserInfo GetUserInfo(string accessToken, string openId, Language lang = Language.zh_CN)
         {
-            var url = string.Format("https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}", accessToken, openId, lang);
+            var url = string.Format("https://api.weixin.qq.com/sns/userinfo?access_token={0}&openid={1}&lang={2}",
+                accessToken, openId, lang);
             return CommonJsonSend.Send<OAuthUserInfo>(null, url, null, CommonJsonSendType.GET);
         }
 
         /// <summary>
-		/// 检验授权凭证（access_token）是否有效
-		/// </summary>
-		/// <param name="accessToken"></param>
+        ///     检验授权凭证（access_token）是否有效
+        /// </summary>
+        /// <param name="accessToken"></param>
         /// <param name="openId">用户的唯一标识</param>
-		/// <returns></returns>
-		public static WxJsonResult Auth(string accessToken, string openId)
-		{
-			var url = string.Format("https://api.weixin.qq.com/sns/auth?access_token={0}&openid={1}", accessToken, openId);
-			return CommonJsonSend.Send<WxJsonResult>(null, url, null, CommonJsonSendType.GET);
-		}
+        /// <returns></returns>
+        public static WxJsonResult Auth(string accessToken, string openId)
+        {
+            var url = string.Format("https://api.weixin.qq.com/sns/auth?access_token={0}&openid={1}", accessToken,
+                openId);
+            return CommonJsonSend.Send<WxJsonResult>(null, url, null, CommonJsonSendType.GET);
+        }
     }
 }

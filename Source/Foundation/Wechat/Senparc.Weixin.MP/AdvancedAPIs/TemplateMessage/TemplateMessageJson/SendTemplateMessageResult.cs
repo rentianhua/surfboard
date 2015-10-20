@@ -16,12 +16,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage
 {
     /// <summary>
-    /// 发送模板消息结果
+    ///     发送模板消息结果
     /// </summary>
     public class SendTemplateMessageResult : WxJsonResult
     {
         /// <summary>
-        /// msgid
+        ///     msgid
         /// </summary>
         public int msgid { get; set; }
     }

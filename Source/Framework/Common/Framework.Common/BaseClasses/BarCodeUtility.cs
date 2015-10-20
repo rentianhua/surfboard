@@ -9,12 +9,12 @@ using ZXing.Rendering;
 namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// 条码类
+    ///     条码类
     /// </summary>
     public class BarCodeUtility
     {
         /// <summary>
-        /// 创建二维码(不带Logo)
+        ///     创建二维码(不带Logo)
         /// </summary>
         /// <param name="strBarcodeContent">要生成的二维码的内容(中文460，英文1003)</param>
         /// <param name="intBarCodeWidth">二维码图片的宽度</param>
@@ -22,11 +22,11 @@ namespace Cedar.Framework.Common.BaseClasses
         /// <returns>二维码Bitmap</returns>
         public static Bitmap CreateBarcode(string strBarcodeContent, int intBarCodeWidth, int intBarCodeHeight)
         {
-            return Encode(BarcodeFormat.QR_CODE, intBarCodeHeight, intBarCodeWidth, strBarcodeContent);            
+            return Encode(BarcodeFormat.QR_CODE, intBarCodeHeight, intBarCodeWidth, strBarcodeContent);
         }
 
         /// <summary>
-        /// 创建二维码(带Logo)
+        ///     创建二维码(带Logo)
         /// </summary>
         /// <param name="strBarcodeContent">要生成的二维码的内容(中文460，英文1003)</param>
         /// <param name="strLogoImgPath">二维码Logo图片的路径</param>
@@ -143,7 +143,7 @@ namespace Cedar.Framework.Common.BaseClasses
             //从指定的Image创建新的Graphics        
             var g = Graphics.FromImage(imgBarCode);
 
-            g.DrawImage(imgLogo, (intBarWidth - intLogoWidth) / 2, (intBarHeight - intLogoHeight) / 2, intLogoWidth,
+            g.DrawImage(imgLogo, (intBarWidth - intLogoWidth)/2, (intBarHeight - intLogoHeight)/2, intLogoWidth,
                 intLogoHeight);
             GC.Collect();
             return imgBarCode;
@@ -167,7 +167,7 @@ namespace Cedar.Framework.Common.BaseClasses
                     Height = height,
                     Width = width
                 },
-                Renderer = (IBarcodeRenderer<Bitmap>)Activator.CreateInstance(typeof(BitmapRenderer))
+                Renderer = (IBarcodeRenderer<Bitmap>) Activator.CreateInstance(typeof (BitmapRenderer))
             };
             return writer.Write(contents);
         }

@@ -8,7 +8,7 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Core.Configuration
 {
     /// <summary>
-    /// 配置元素Section属性
+    ///     配置元素Section属性
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ConfigurationSectionNameAttribute : Attribute

@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 常用电话服务（telephone）
+    ///     常用电话服务（telephone）
     /// </summary>
     public class Semantic_TelephoneResult : BaseSemanticResultJson
     {
@@ -29,11 +29,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Details_Telephone
     {
         /// <summary>
-        /// 名字
+        ///     名字
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 电话
+        ///     电话
         /// </summary>
         public string telephone { get; set; }
     }

@@ -7,7 +7,7 @@ using Cedar.Core.Configuration;
 namespace Cedar.Core.IoC.Configuration
 {
     /// <summary>
-    /// 提供创建ServiceLocator的配置基类
+    ///     提供创建ServiceLocator的配置基类
     /// </summary>
     public abstract class ServiceLocatorDataBase : NameTypeConfigurationElement
     {

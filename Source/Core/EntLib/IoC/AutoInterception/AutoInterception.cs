@@ -6,12 +6,12 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Core.EntLib.IoC
 {
     /// <summary>
-    /// A <see cref="T:Microsoft.Practices.Unity.UnityContainerExtension" /> for automatic interception.
+    ///     A <see cref="T:Microsoft.Practices.Unity.UnityContainerExtension" /> for automatic interception.
     /// </summary>
     public class AutoInterception : UnityContainerExtension
     {
         /// <summary>
-        /// Registers the default interceptor.
+        ///     Registers the default interceptor.
         /// </summary>
         /// <param name="interceptor">The interceptor.</param>
         /// <returns></returns>
@@ -19,19 +19,22 @@ namespace Cedar.Core.EntLib.IoC
         {
             Guard.ArgumentNotNull(interceptor, "interceptor");
             var instance = new FixedAutoInterceptorPolicy(interceptor);
-            base.Container.RegisterInstance(typeof(AutoInterceptorPolicy), typeof(AutoInterceptorPolicy).AssemblyQualifiedName, instance, new ContainerControlledLifetimeManager());
-            return base.Container;
+            Container.RegisterInstance(typeof (AutoInterceptorPolicy),
+                typeof (AutoInterceptorPolicy).AssemblyQualifiedName, instance, new ContainerControlledLifetimeManager());
+            return Container;
         }
 
         /// <summary>
-        /// Initializes this instance.
+        ///     Initializes this instance.
         /// </summary>
         protected override void Initialize()
         {
-            base.Context.Strategies.AddNew<AutoInterceptionStrategy>(UnityBuildStage.Setup);
+            Context.Strategies.AddNew<AutoInterceptionStrategy>(UnityBuildStage.Setup);
             var transparentProxyInterceptor = new TransparentProxyInterceptor();
-            base.Context.Container.RegisterInstance(typeof(IInstanceInterceptor).AssemblyQualifiedName, transparentProxyInterceptor);
-            base.Context.Container.RegisterInstance(typeof(AutoInterceptorPolicy).AssemblyQualifiedName, new FixedAutoInterceptorPolicy(transparentProxyInterceptor));
+            Context.Container.RegisterInstance(typeof (IInstanceInterceptor).AssemblyQualifiedName,
+                transparentProxyInterceptor);
+            Context.Container.RegisterInstance(typeof (AutoInterceptorPolicy).AssemblyQualifiedName,
+                new FixedAutoInterceptorPolicy(transparentProxyInterceptor));
         }
     }
 }

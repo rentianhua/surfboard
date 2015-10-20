@@ -2,32 +2,33 @@
 using System.Globalization;
 using System.Threading;
 using System.Web;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.ApplicationContexts.Configuration;
 using Cedar.Core.IoC;
 using Cedar.Core.Properties;
+using Microsoft.Practices.Unity.Utility;
 
 namespace Cedar.Core.ApplicationContexts
 {
     /// <summary>
-    /// supply the basic application context opertions
+    ///     supply the basic application context opertions
     /// </summary>
     public sealed class ApplicationContext
     {
         /// <summary>
-        /// define the context header's namespace.
+        ///     define the context header's namespace.
         /// </summary>
         public const string ContextHeaderNamespace = "http://www.Cedar.co";
 
         /// <summary>
-        /// define the context header's local name.
+        ///     define the context header's local name.
         /// </summary>
         public const string ContextHeaderLocalName = "Applicationcontext";
 
         /// <summary>
-        /// The context http header name.
+        ///     The context http header name.
         /// </summary>
         public const string ContextHttpHeaderName = "Cedar.Core.Applicationcontext";
+
         private const string KeyofUserId = "Cedar.ApplicationContexts.UserId";
         private const string KeyofUserName = "Cedar.ApplicationContexts.UserName";
         private const string KeyofTransactionId = "Cedar.ApplicationContexts.TransactionId";
@@ -37,147 +38,137 @@ namespace Cedar.Core.ApplicationContexts
         private const string KeyofSessionId = "Cedar.ApplicationContexts.SessionId";
         private static ApplicationContext current;
 
+        private ApplicationContext(IContextLocator contextLocator, ContextAttachBehavior contextAttachBehavior)
+        {
+            Guard.ArgumentNotNull(contextLocator, "contextLocator");
+            ContextLocator = contextLocator;
+            ContextAttachBehavior = contextAttachBehavior;
+        }
+
         /// <summary>
-        /// get the current application context
+        ///     get the current application context
         /// </summary>
         public static ApplicationContext Current
         {
             get
             {
-                if (ApplicationContext.current == null)
+                if (current == null)
                 {
-                    lock (typeof(ApplicationContext))
+                    lock (typeof (ApplicationContext))
                     {
-                        if (ApplicationContext.current == null)
+                        if (current == null)
                         {
-                            ApplicationContext.current = ApplicationContext.CreateApplicationContext();
+                            current = CreateApplicationContext();
                         }
                     }
                 }
-                return ApplicationContext.current;
+                return current;
             }
         }
 
         /// <summary>
-        /// get or private set the context locator interface.
+        ///     get or private set the context locator interface.
         /// </summary>
-        public IContextLocator ContextLocator
-        {
-            get;
-            private set;
-        }
+        public IContextLocator ContextLocator { get; }
 
         /// <summary>
-        /// get or private set the context attach behavior.
+        ///     get or private set the context attach behavior.
         /// </summary>
-        public ContextAttachBehavior ContextAttachBehavior
-        {
-            get;
-            private set;
-        }
+        public ContextAttachBehavior ContextAttachBehavior { get; private set; }
 
         /// <summary>
-        /// Gets the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> with the specified key.
+        ///     Gets the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> with the specified key.
         /// </summary>
         /// <value>The <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />.</value>
         public ContextItem this[string key]
         {
-            get
-            {
-                return this.ContextLocator.GetContextItem(key);
-            }
+            get { return ContextLocator.GetContextItem(key); }
         }
 
         /// <summary>
-        /// Get or set the Id of the current user.
+        ///     Get or set the Id of the current user.
         /// </summary>
         /// <value>The the Id of the current user.</value>
         public string UserId
         {
             get
             {
-                var value = this.GetValue<string>(KeyofUserId);
+                var value = GetValue<string>(KeyofUserId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofUserId, string.Empty);
+                    SetContext(KeyofUserId, string.Empty);
                     return string.Empty;
                 }
-                return this.GetValue<string>(KeyofUserId);
+                return GetValue<string>(KeyofUserId);
             }
-            set
-            {
-                this.SetContext(KeyofUserId, value);
-            }
+            set { SetContext(KeyofUserId, value); }
         }
 
         /// <summary>
-        /// Gets the user id context item.
+        ///     Gets the user id context item.
         /// </summary>
         /// <value>The user id context item.</value>
         public ContextItem UserIdContextItem
         {
             get
             {
-                string value = this.GetValue<string>(KeyofUserId);
+                var value = GetValue<string>(KeyofUserId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofUserId, string.Empty);
+                    SetContext(KeyofUserId, string.Empty);
                 }
                 return this[KeyofUserId];
             }
         }
 
         /// <summary>
-        /// Get or set the Id of the current session.
+        ///     Get or set the Id of the current session.
         /// </summary>
         /// <value>The the Id of the current session.</value>
         public string SessionId
         {
             get
             {
-                string value = this.GetValue<string>(KeyofSessionId);
+                var value = GetValue<string>(KeyofSessionId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofSessionId, string.Empty);
+                    SetContext(KeyofSessionId, string.Empty);
                     return string.Empty;
                 }
-                return this.GetValue<string>(KeyofSessionId);
+                return GetValue<string>(KeyofSessionId);
             }
-            set
-            {
-                this.SetContext(KeyofSessionId, value);
-            }
+            set { SetContext(KeyofSessionId, value); }
         }
 
         /// <summary>
-        /// Gets the session id context item.
+        ///     Gets the session id context item.
         /// </summary>
         /// <value>The session id context item.</value>
         public ContextItem SessionIdContextItem
         {
             get
             {
-                string value = this.GetValue<string>(KeyofSessionId);
+                var value = GetValue<string>(KeyofSessionId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofSessionId, string.Empty);
+                    SetContext(KeyofSessionId, string.Empty);
                 }
                 return this[KeyofSessionId];
             }
         }
 
         /// <summary>
-        /// Get or set the name of the current user.
+        ///     Get or set the name of the current user.
         /// </summary>
         /// <value>The name of the current user.</value>
         public string UserName
         {
             get
             {
-                string value = this.GetValue<string>(KeyofUserName);
+                var value = GetValue<string>(KeyofUserName);
                 if (string.IsNullOrEmpty(value))
                 {
-                    string value2 = string.Empty;
+                    var value2 = string.Empty;
                     if (HttpContext.Current != null && HttpContext.Current.User != null)
                     {
                         value2 = HttpContext.Current.User.Identity.Name;
@@ -186,84 +177,78 @@ namespace Cedar.Core.ApplicationContexts
                     {
                         value2 = Thread.CurrentPrincipal.Identity.Name;
                     }
-                    this.SetContext(KeyofUserName, value2);
+                    SetContext(KeyofUserName, value2);
                 }
-                return this.GetValue<string>(KeyofUserName);
+                return GetValue<string>(KeyofUserName);
             }
-            set
-            {
-                this.SetContext(KeyofUserName, value);
-            }
+            set { SetContext(KeyofUserName, value); }
         }
 
         /// <summary>
-        /// Gets the user name context item.
+        ///     Gets the user name context item.
         /// </summary>
         /// <value>The user name context item.</value>
         public ContextItem UserNameContextItem
         {
             get
             {
-                string value = this.GetValue<string>(KeyofUserName);
+                var value = GetValue<string>(KeyofUserName);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofUserName, string.Empty);
+                    SetContext(KeyofUserName, string.Empty);
                 }
                 return this[KeyofUserName];
             }
         }
 
         /// <summary>
-        /// Gets or sets the id of the current ambient transaction.
+        ///     Gets or sets the id of the current ambient transaction.
         /// </summary>
         /// <value>The transaction id.</value>
         public string TransactionId
         {
             get
             {
-                string value = this.GetValue<string>(KeyofTransactionId);
+                var value = GetValue<string>(KeyofTransactionId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofTransactionId, string.Empty);
+                    SetContext(KeyofTransactionId, string.Empty);
                     return string.Empty;
                 }
-                return this.GetValue<string>(KeyofTransactionId);
+                return GetValue<string>(KeyofTransactionId);
             }
-            set
-            {
-                this.SetContext(KeyofTransactionId, value);
-            }
+            set { SetContext(KeyofTransactionId, value); }
         }
 
         /// <summary>
-        /// Gets the transaction id context item.
+        ///     Gets the transaction id context item.
         /// </summary>
         /// <value>The transaction id context item.</value>
         public ContextItem TransactionIdContextItem
         {
             get
             {
-                string value = this.GetValue<string>(KeyofTransactionId);
+                var value = GetValue<string>(KeyofTransactionId);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofTransactionId, string.Empty);
+                    SetContext(KeyofTransactionId, string.Empty);
                 }
                 return this[KeyofTransactionId];
             }
         }
 
         /// <summary>
-        /// Gets or sets the time zone.
+        ///     Gets or sets the time zone.
         /// </summary>
         /// <value>The time zone.</value>
         public TimeZoneInfo TimeZone
         {
             get
             {
-                string value = this.GetValue<string>(KeyofTimeZone);
+                var value = GetValue<string>(KeyofTimeZone);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofTimeZone, TimeZoneInfo.Local.ToSerializedString());
+                    SetContext(KeyofTimeZone, TimeZoneInfo.Local.ToSerializedString());
                     return TimeZoneInfo.Local;
                 }
                 return TimeZoneInfo.FromSerializedString(value);
@@ -271,102 +256,102 @@ namespace Cedar.Core.ApplicationContexts
             set
             {
                 Guard.ArgumentNotNull(value, "value");
-                this.SetContext(KeyofTimeZone, value.ToSerializedString());
+                SetContext(KeyofTimeZone, value.ToSerializedString());
             }
         }
 
         /// <summary>
-        /// Gets the time zone context item.
+        ///     Gets the time zone context item.
         /// </summary>
         /// <value>The time zone context item.</value>
         public ContextItem TimeZoneContextItem
         {
             get
             {
-                this.GetValue<string>(KeyofTimeZone);
+                GetValue<string>(KeyofTimeZone);
                 if (string.IsNullOrEmpty(KeyofTimeZone))
                 {
-                    this.SetContext(KeyofTimeZone, TimeZoneInfo.Local);
+                    SetContext(KeyofTimeZone, TimeZoneInfo.Local);
                 }
                 return this[KeyofTimeZone];
             }
         }
 
         /// <summary>
-        /// Gets or sets the current culture.
+        ///     Gets or sets the current culture.
         /// </summary>
         /// <value>The current culture.</value>
         public CultureInfo Culture
         {
             get
             {
-                string value = this.GetValue<string>(KeyofCulture);
+                var value = GetValue<string>(KeyofCulture);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofCulture, CultureInfo.CurrentCulture.Name);
+                    SetContext(KeyofCulture, CultureInfo.CurrentCulture.Name);
                     return CultureInfo.CurrentCulture;
                 }
-                return new CultureInfo(this.GetValue<string>(KeyofCulture));
+                return new CultureInfo(GetValue<string>(KeyofCulture));
             }
             set
             {
                 Guard.ArgumentNotNull(value, "value");
-                this.SetContext(KeyofCulture, value.Name);
+                SetContext(KeyofCulture, value.Name);
             }
         }
 
         /// <summary>
-        /// Gets the culture context item.
+        ///     Gets the culture context item.
         /// </summary>
         /// <value>The culture context item.</value>
         public ContextItem CultureContextItem
         {
             get
             {
-                this.GetValue<string>(KeyofCulture);
+                GetValue<string>(KeyofCulture);
                 if (string.IsNullOrEmpty(KeyofCulture))
                 {
-                    this.SetContext(KeyofCulture, CultureInfo.CurrentCulture.Name);
+                    SetContext(KeyofCulture, CultureInfo.CurrentCulture.Name);
                 }
                 return this[KeyofCulture];
             }
         }
 
         /// <summary>
-        /// Gets or sets the current UI culture.
+        ///     Gets or sets the current UI culture.
         /// </summary>
         /// <value>The current UI culture.</value>
         public CultureInfo UICulture
         {
             get
             {
-                string value = this.GetValue<string>(KeyofUICulture);
+                var value = GetValue<string>(KeyofUICulture);
                 if (string.IsNullOrEmpty(value))
                 {
-                    this.SetContext(KeyofUICulture, CultureInfo.CurrentUICulture.Name);
+                    SetContext(KeyofUICulture, CultureInfo.CurrentUICulture.Name);
                     return CultureInfo.CurrentUICulture;
                 }
-                return new CultureInfo(this.GetValue<string>(KeyofUICulture));
+                return new CultureInfo(GetValue<string>(KeyofUICulture));
             }
             set
             {
                 Guard.ArgumentNotNull(value, "value");
-                this.SetContext(KeyofUICulture, value.Name);
+                SetContext(KeyofUICulture, value.Name);
             }
         }
 
         /// <summary>
-        /// Gets the UI culture context item.
+        ///     Gets the UI culture context item.
         /// </summary>
         /// <value>The UI culture context item.</value>
         public ContextItem UICultureContextItem
         {
             get
             {
-                this.GetValue<string>(KeyofUICulture);
+                GetValue<string>(KeyofUICulture);
                 if (string.IsNullOrEmpty(KeyofUICulture))
                 {
-                    this.SetContext(KeyofUICulture, CultureInfo.CurrentUICulture.Name);
+                    SetContext(KeyofUICulture, CultureInfo.CurrentUICulture.Name);
                 }
                 return this[KeyofUICulture];
             }
@@ -375,41 +360,38 @@ namespace Cedar.Core.ApplicationContexts
         private static ApplicationContext CreateApplicationContext()
         {
             ApplicationContextSettings applicationContextSettings;
-            if (!ConfigManager.TryGetConfigurationSection<ApplicationContextSettings>(out applicationContextSettings))
+            if (!ConfigManager.TryGetConfigurationSection(out applicationContextSettings))
             {
                 return new ApplicationContext(new CallContextLocator(), ContextAttachBehavior.Clear);
             }
-            IContextLocator service = ServiceLocatorFactory.GetServiceLocator(null).GetService<IContextLocator>(applicationContextSettings.DefaultContextLocator);
-            ContextAttachBehavior contextAttachBehavior = applicationContextSettings.ContextAttachBehavior;
+            var service =
+                ServiceLocatorFactory.GetServiceLocator(null)
+                    .GetService<IContextLocator>(applicationContextSettings.DefaultContextLocator);
+            var contextAttachBehavior = applicationContextSettings.ContextAttachBehavior;
             return new ApplicationContext(service, contextAttachBehavior);
         }
 
-        private ApplicationContext(IContextLocator contextLocator, ContextAttachBehavior contextAttachBehavior)
-        {
-            Guard.ArgumentNotNull(contextLocator, "contextLocator");
-            this.ContextLocator = contextLocator;
-            this.ContextAttachBehavior = contextAttachBehavior;
-        }
-
         /// <summary>
-        /// Gets the value of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> with the specified key.
+        ///     Gets the value of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> with the specified key.
         /// </summary>
-        /// <typeparam name="TValue">The type of the value of <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /></typeparam>
+        /// <typeparam name="TValue">
+        ///     The type of the value of <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />
+        /// </typeparam>
         /// <param name="key">The key of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> to get.</param>
         /// <returns>The value of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" /> to get. </returns>
         public TValue GetValue<TValue>(string key)
         {
             Guard.ArgumentNotNull(key, "key");
-            ContextItem contextItem = this.ContextLocator.GetContextItem(key);
+            var contextItem = ContextLocator.GetContextItem(key);
             if (contextItem != null)
             {
-                return (TValue)((object)contextItem.Value);
+                return (TValue) contextItem.Value;
             }
             return default(TValue);
         }
 
         /// <summary>
-        /// Sets the context.
+        ///     Sets the context.
         /// </summary>
         /// <param name="key">The key of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />.</param>
         /// <param name="value">The value of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />.</param>
@@ -417,10 +399,10 @@ namespace Cedar.Core.ApplicationContexts
         public void SetContext(string key, object value)
         {
             Guard.ArgumentNotNull(key, "key");
-            ContextItem contextItem = this.ContextLocator.GetContextItem(key);
+            var contextItem = ContextLocator.GetContextItem(key);
             if (contextItem != null && contextItem.ReadOnly)
             {
-                throw new InvalidOperationException(ResourceUtility.Format(Resources.ExceptionCannotModifyReadonlyValue, new object[0]));
+                throw new InvalidOperationException(ResourceUtility.Format(Resources.ExceptionCannotModifyReadonlyValue));
             }
             if (contextItem != null)
             {
@@ -428,11 +410,11 @@ namespace Cedar.Core.ApplicationContexts
                 return;
             }
             contextItem = new ContextItem(key, value, false);
-            this.ContextLocator.SetContextItem(contextItem);
+            ContextLocator.SetContextItem(contextItem);
         }
 
         /// <summary>
-        /// Sets the context.
+        ///     Sets the context.
         /// </summary>
         /// <param name="key">The key of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />.</param>
         /// <param name="value">The value of the <see cref="T:Cedar.Core.ApplicationContexts.ContextItem" />.</param>
@@ -441,10 +423,10 @@ namespace Cedar.Core.ApplicationContexts
         public void SetContext(string key, object value, bool isLocal)
         {
             Guard.ArgumentNotNull(key, "key");
-            ContextItem contextItem = this.ContextLocator.GetContextItem(key);
+            var contextItem = ContextLocator.GetContextItem(key);
             if (contextItem != null && contextItem.ReadOnly)
             {
-                throw new InvalidOperationException(ResourceUtility.Format(Resources.ExceptionCannotModifyReadonlyValue, new object[0]));
+                throw new InvalidOperationException(ResourceUtility.Format(Resources.ExceptionCannotModifyReadonlyValue));
             }
             if (contextItem != null && contextItem.IsLocal == isLocal)
             {
@@ -452,7 +434,7 @@ namespace Cedar.Core.ApplicationContexts
                 return;
             }
             contextItem = new ContextItem(key, value, isLocal);
-            this.ContextLocator.SetContextItem(contextItem);
+            ContextLocator.SetContextItem(contextItem);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Senparc.Weixin.MP.Entities
     }
 
     /// <summary>
-    /// 接收到请求的消息
+    ///     接收到请求的消息
     /// </summary>
     public class RequestMessageBase : Weixin.Entities.RequestMessageBase, IRequestMessageBase
     {
@@ -31,11 +31,6 @@ namespace Senparc.Weixin.MP.Entities
         }
 
         public string Encrypt { get; set; }
-
-        public RequestMessageBase()
-        {
-
-        }
 
         //public override RequestMsgType MsgType
         //{

@@ -11,7 +11,7 @@
 namespace Senparc.Weixin.MP.AppStore
 {
     /// <summary>
-    /// 微微嗨开发者信息。申请开发者：http://www.weiweihi.com/User/Developer/Apply
+    ///     微微嗨开发者信息。申请开发者：http://www.weiweihi.com/User/Developer/Apply
     /// </summary>
     public class DeveloperInfo
     {
@@ -26,7 +26,7 @@ namespace Senparc.Weixin.MP.AppStore
         //public string AppSecret { get; set; }
 
         /// <summary>
-        /// 在www.weiweihi.com对接微信公众号之后，自动生成的WeiweihiKey。
+        ///     在www.weiweihi.com对接微信公众号之后，自动生成的WeiweihiKey。
         /// </summary>
         public string WeiweihiKey { get; set; }
     }

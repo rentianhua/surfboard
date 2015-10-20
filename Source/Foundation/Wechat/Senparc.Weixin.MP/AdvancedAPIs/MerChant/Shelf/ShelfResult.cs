@@ -4,15 +4,15 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 添加货架返回结果
+    ///     添加货架返回结果
     /// </summary>
     public class AddShelfResult : WxJsonResult
     {
-        public int shelf_id { get; set; }//货架ID
+        public int shelf_id { get; set; } //货架ID
     }
 
     /// <summary>
-    /// 获取所有货架
+    ///     获取所有货架
     /// </summary>
     public class GetAllShelfResult : WxJsonResult
     {
@@ -22,16 +22,19 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class ShelfItem
     {
         public ShelfInfo shelf_info { get; set; }
+
         /// <summary>
-        /// 货架banner
+        ///     货架banner
         /// </summary>
         public string shelf_banner { get; set; }
+
         /// <summary>
-        /// 货架名称
+        ///     货架名称
         /// </summary>
         public string shelf_name { get; set; }
+
         /// <summary>
-        /// 货架ID
+        ///     货架ID
         /// </summary>
         public int shelf_id { get; set; }
     }
@@ -66,23 +69,25 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     }
 
     /// <summary>
-    /// 根据货架ID获取货架信息
+    ///     根据货架ID获取货架信息
     /// </summary>
     public class GetByIdShelfResult : WxJsonResult
     {
         public ShelfInfo shelf_info { get; set; }
+
         /// <summary>
-        /// 货架banner
+        ///     货架banner
         /// </summary>
         public string shelf_banner { get; set; }
+
         /// <summary>
-        /// 货架名称
+        ///     货架名称
         /// </summary>
         public string shelf_name { get; set; }
+
         /// <summary>
-        /// 货架ID
+        ///     货架ID
         /// </summary>
         public int shelf_id { get; set; }
     }
 }
-

@@ -16,6 +16,7 @@ namespace Senparc.Weixin.Open
         {
             get { return RequestInfoType.unauthorized; }
         }
+
         public string AuthorizerAppid { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.Serialization.Formatters.Binary;
 using StackExchange.Redis;
 
 namespace Cedar.Core.EntLib.Data
@@ -12,28 +10,32 @@ namespace Cedar.Core.EntLib.Data
     public class RedisDatabaseWrapper : IDisposable
     {
         private static IConnectionMultiplexer _connectionMultiplexer;
-        private int database = 0;
+        private readonly int database;
 
         public RedisDatabaseWrapper(string ip, int database, string password = null, int port = 6379)
         {
-            var options = new ConfigurationOptions()
+            var options = new ConfigurationOptions
             {
                 EndPoints =
                 {
-                    new DnsEndPoint(ip,port)
+                    new DnsEndPoint(ip, port)
                 },
                 KeepAlive = 180,
                 Password = password,
                 //DefaultVersion = new Version("2.8.5"),
                 // Needed for cache clear
-                AllowAdmin = true,
+                AllowAdmin = true
             };
             this.database = database;
             _connectionMultiplexer = ConnectionMultiplexer.Connect(options);
         }
 
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -45,7 +47,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -57,7 +58,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -68,7 +68,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -79,7 +78,16 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool KeyDelete(string key)
+        {
+            var db = _connectionMultiplexer.GetDatabase(database);
+            return db.KeyDelete(key);
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="key"></param>
         /// <param name="hashfield"></param>
@@ -92,7 +100,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -100,12 +107,11 @@ namespace Cedar.Core.EntLib.Data
         {
             var db = _connectionMultiplexer.GetDatabase(database);
             var results = db.HashValues(key);
-            var list = results.Select(item => (string)item).ToList();
+            var list = results.Select(item => (string) item).ToList();
             return list;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="hashfield"></param>
@@ -118,7 +124,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -131,7 +136,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -143,7 +147,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="hashfield"></param>
@@ -156,7 +159,6 @@ namespace Cedar.Core.EntLib.Data
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="hashfield"></param>
@@ -166,11 +168,6 @@ namespace Cedar.Core.EntLib.Data
             var db = _connectionMultiplexer.GetDatabase(database);
             var results = db.HashDelete(key, hashfield);
             return results;
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

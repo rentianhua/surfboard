@@ -1,28 +1,32 @@
 ﻿namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
-	/// The type of operation to be audited.
-	/// </summary>
-	public enum OperationType
+    ///     The type of operation to be audited.
+    /// </summary>
+    public enum OperationType
     {
         /// <summary>
-        /// Insert operation
+        ///     Insert operation
         /// </summary>
         Insert = 1,
+
         /// <summary>
-        /// Update operation
+        ///     Update operation
         /// </summary>
         Update,
+
         /// <summary>
-        /// Delete operation
+        ///     Delete operation
         /// </summary>
         Delete,
+
         /// <summary>
-        /// ExecuteNonQuery/ExecuteScalar operation
+        ///     ExecuteNonQuery/ExecuteScalar operation
         /// </summary>
         ExecuteCommand,
+
         /// <summary>
-        /// The custom
+        ///     The custom
         /// </summary>
         Custom
     }

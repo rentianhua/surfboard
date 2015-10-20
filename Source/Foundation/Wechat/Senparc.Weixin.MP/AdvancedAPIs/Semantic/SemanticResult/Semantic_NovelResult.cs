@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 小说服务（novel）
+    ///     小说服务（novel）
     /// </summary>
     public class Semantic_NovelResult : BaseSemanticResultJson
     {
@@ -29,23 +29,27 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Novel
     {
         /// <summary>
-        /// 小说名
+        ///     小说名
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 小说作者
+        ///     小说作者
         /// </summary>
         public string author { get; set; }
+
         /// <summary>
-        /// 小说类型
+        ///     小说类型
         /// </summary>
         public string category { get; set; }
+
         /// <summary>
-        /// 小说章节
+        ///     小说章节
         /// </summary>
         public Semantic_Number chapter { get; set; }
+
         /// <summary>
-        /// 排序类型：0排序无要求（默认），1热度高优先级，2时间升序，3时间降序
+        ///     排序类型：0排序无要求（默认），1热度高优先级，2时间升序，3时间降序
         /// </summary>
         public int sort { get; set; }
     }

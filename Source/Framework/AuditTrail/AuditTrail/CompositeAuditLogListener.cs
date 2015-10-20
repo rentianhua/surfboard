@@ -6,22 +6,19 @@ namespace Cedar.Framwork.AuditTrail
 {
     internal class CompositeAuditLogListener : AuditLogListenerBase
     {
-        public IEnumerable<AuditLogListenerBase> Listeners
-        {
-            get;
-            private set;
-        }
-
-        public CompositeAuditLogListener(IEnumerable<AuditLogListenerBase> listeners) : base(Guid.NewGuid().ToString(), null)
+        public CompositeAuditLogListener(IEnumerable<AuditLogListenerBase> listeners)
+            : base(Guid.NewGuid().ToString(), null)
         {
             Guard.ArgumentNotNull(listeners, "listeners");
-            this.Listeners = listeners;
+            Listeners = listeners;
         }
+
+        public IEnumerable<AuditLogListenerBase> Listeners { get; }
 
         protected override void WriteCore(AuditLogEntry logEntry)
         {
             Guard.ArgumentNotNull(logEntry, "logEntry");
-            foreach (AuditLogListenerBase current in this.Listeners)
+            foreach (var current in Listeners)
             {
                 current.Write(logEntry);
             }

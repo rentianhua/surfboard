@@ -16,13 +16,12 @@ namespace Cedar.Core.IoC
     public static class ServiceLocatorFactory
     {
         private static IServiceLocator serviceLocator;
-        private static Dictionary<string, IServiceLocator> serviceLocators;
-        private static object syncHelper;
+        private static readonly Dictionary<string, IServiceLocator> serviceLocators;
+        private static readonly object syncHelper;
         private static List<Assembly> assemblies;
         private static ReflectedServiceLocatorConfigurator reflectedServiceLocatorConfigurator;
 
         /// <summary>
-        /// 
         /// </summary>
         static ServiceLocatorFactory()
         {
@@ -40,7 +39,7 @@ namespace Cedar.Core.IoC
         /// <value>
         ///     The configurators.
         /// </value>
-        public static IList<IServiceLocatorConfigurator> Configurators { get; private set; }
+        public static IList<IServiceLocatorConfigurator> Configurators { get; }
 
         /// <summary>
         ///     Gets the service locator.
@@ -69,7 +68,7 @@ namespace Cedar.Core.IoC
                 }
 
                 //当没有默认配置项时,通过反射serviceLocator方式来获取实例
-                serviceLocator = reflectedServiceLocatorConfigurator.CreateInstance<IServiceLocator>(new object[0]);
+                serviceLocator = reflectedServiceLocatorConfigurator.CreateInstance<IServiceLocator>();
                 if (serviceLocator == null)
                 {
                     throw new InvalidOperationException("Resources.ExceptionDefaultServiceLocatorNotExists");
@@ -111,10 +110,10 @@ namespace Cedar.Core.IoC
         {
             Reset();
             assemblies = (assemblies ?? new Assembly[0]);
-            Assembly[] array = assemblies;
-            for (int i = 0; i < array.Length; i++)
+            var array = assemblies;
+            for (var i = 0; i < array.Length; i++)
             {
-                Assembly item = array[i];
+                var item = array[i];
                 if (!ServiceLocatorFactory.assemblies.Contains(item))
                 {
                     ServiceLocatorFactory.assemblies.Add(item);
@@ -140,11 +139,11 @@ namespace Cedar.Core.IoC
 
         internal static IServiceLocator ConfigureServiceLocator(IServiceLocator serviceLocator)
         {
-            foreach (IServiceLocatorConfigurator current in Configurators)
+            foreach (var current in Configurators)
             {
                 current.Configure(serviceLocator);
             }
-            foreach (string current2 in Settings.SectionNames)
+            foreach (var current2 in Settings.SectionNames)
             {
                 ServiceLocatableSettings serviceLocatableSettings;
                 if (ConfigManager.TryGetConfigurationSection(current2, out serviceLocatableSettings))
@@ -176,11 +175,11 @@ namespace Cedar.Core.IoC
         {
             var list = new List<Assembly>();
             //获取默认系统的Assembly
-            foreach (Assembly current in Assemblies.GetAssemblies())
+            foreach (var current in Assemblies.GetAssemblies())
             {
                 list.Add(current);
             }
-            
+
             ServiceLocationSettings serviceLocationSettings;
             if (ConfigManager.TryGetConfigurationSection(out serviceLocationSettings) &&
                 serviceLocationSettings.ResolvedAssemblies != null)
@@ -192,7 +191,7 @@ namespace Cedar.Core.IoC
                     AssemblyName assemblyRef;
                     if (TryParseAssemblyName(assemblyConfigurationElement.Assembly, out assemblyRef))
                     {
-                        Assembly assembly = Assembly.Load(assemblyRef);
+                        var assembly = Assembly.Load(assemblyRef);
                         if (null != assembly && !list.Contains(assembly))
                         {
                             list.Add(assembly);
@@ -200,7 +199,7 @@ namespace Cedar.Core.IoC
                     }
                     else
                     {
-                        Assembly assembly2 = Assembly.LoadFile(assemblyConfigurationElement.Assembly);
+                        var assembly2 = Assembly.LoadFile(assemblyConfigurationElement.Assembly);
                         if (null != assembly2 && !list.Contains(assembly2))
                         {
                             list.Add(assembly2);

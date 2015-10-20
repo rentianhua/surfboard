@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Cedar.Core.ApplicationContexts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,15 +21,15 @@ namespace FrameworkTest.ApplicationContextTest
             applicationContext1.UserId = "1";
 
             ApplicationContext applicationContext2 = null;
-            Thread tread = new Thread(() =>
-              {
-                  applicationContext2 = ApplicationContext.Current;
-                  applicationContext2.UserId = "2";
-                  Assert.AreEqual(applicationContext2.UserId, "2");
-              });
+            var tread = new Thread(() =>
+            {
+                applicationContext2 = ApplicationContext.Current;
+                applicationContext2.UserId = "2";
+                Assert.AreEqual(applicationContext2.UserId, "2");
+            });
             tread.Start();
 
-            Thread tread2 = new Thread(() =>
+            var tread2 = new Thread(() =>
             {
                 applicationContext1.UserId = "2";
                 Assert.AreEqual(applicationContext1.UserId, "2");

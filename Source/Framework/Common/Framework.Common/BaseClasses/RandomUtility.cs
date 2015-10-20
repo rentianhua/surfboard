@@ -4,12 +4,12 @@ using Microsoft.Practices.ObjectBuilder2;
 namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// 生成随机数
+    ///     生成随机数
     /// </summary>
     public class RandomUtility
     {
         /// <summary>
-        /// 生成纯数字的随机码（一般用于验证码）
+        ///     生成纯数字的随机码（一般用于验证码）
         /// </summary>
         /// <param name="length"></param>
         /// <returns></returns>
@@ -21,21 +21,21 @@ namespace Cedar.Framework.Common.BaseClasses
             }
             var ticks = Guid.NewGuid().GetHashCode();
 
-            var rad = new Random(ticks);//实例化随机数产生器rad；
+            var rad = new Random(ticks); //实例化随机数产生器rad；
 
             var init = 1;
             for (var i = 1; i < length; i++)
             {
-                init = init * 10;
+                init = init*10;
             }
 
-            var value = rad.Next(init, init * 10);
+            var value = rad.Next(init, init*10);
 
             return value.ToString();
         }
 
         /// <summary>
-        /// 生成12纯数字的随机码（礼券编号用）
+        ///     生成12纯数字的随机码（礼券编号用）
         /// </summary>
         /// <returns></returns>
         public static string GetRandomCode()
@@ -48,7 +48,7 @@ namespace Cedar.Framework.Common.BaseClasses
         }
 
         /// <summary>
-        /// 生成纯数字的随机码
+        ///     生成纯数字的随机码
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
@@ -81,7 +81,5 @@ namespace Cedar.Framework.Common.BaseClasses
 
             return output.JoinStrings("");
         }
-
-        
     }
 }

@@ -18,7 +18,7 @@ namespace Senparc.Weixin.Helpers
     public class FileHelper
     {
         /// <summary>
-        /// 根据完整文件路径获取FileStream
+        ///     根据完整文件路径获取FileStream
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -31,6 +31,5 @@ namespace Senparc.Weixin.Helpers
             }
             return fileStream;
         }
-
     }
 }

@@ -18,12 +18,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 微小店分组接口
+    ///     微小店分组接口
     /// </summary>
     public static class GroupApi
     {
         /// <summary>
-        /// 增加分组
+        ///     增加分组
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="addGroupData">增加分组需要Post的数据</param>
@@ -36,7 +36,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 删除分组
+        ///     删除分组
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="groupId">分组Id</param>
@@ -54,7 +54,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 修改分组属性
+        ///     修改分组属性
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="propertyModGroup">修改分组属性需要Post的数据</param>
@@ -67,7 +67,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 修改分组商品
+        ///     修改分组商品
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="productModGroup">修改分组商品需要Post的数据</param>
@@ -80,7 +80,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 获取所有分组
+        ///     获取所有分组
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 根据分组ID获取分组信息
+        ///     根据分组ID获取分组信息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="groupId">分组Id</param>

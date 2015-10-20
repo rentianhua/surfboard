@@ -1,22 +1,22 @@
 ﻿namespace Cedar.Core.Data
 {
     /// <summary>
-    /// Update Behavior
+    ///     Update Behavior
     /// </summary>
     public enum UpdateBehavior
     {
         /// <summary>
-        /// The standard
+        ///     The standard
         /// </summary>
         Standard,
 
         /// <summary>
-        /// The continue
+        ///     The continue
         /// </summary>
         Continue,
 
         /// <summary>
-        /// The transactional
+        ///     The transactional
         /// </summary>
         Transactional
     }

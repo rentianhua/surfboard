@@ -3,8 +3,8 @@
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.IoC;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -31,7 +31,7 @@ namespace Cedar.Framework.Common.Client.MVC
         /// <summary>
         ///     Gets the service locator.
         /// </summary>
-        public IServiceLocator ServiceLocator { get; private set; }
+        public IServiceLocator ServiceLocator { get; }
 
         /// <summary>
         ///     Creates the specified request context.

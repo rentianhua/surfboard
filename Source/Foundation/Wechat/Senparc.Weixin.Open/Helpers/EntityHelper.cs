@@ -53,6 +53,5 @@ namespace Senparc.Weixin.Open.Helpers
                 }
             }
         }
-
     }
 }

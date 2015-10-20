@@ -15,14 +15,9 @@ using System.Collections.Generic;
 
 namespace Senparc.Weixin.Context
 {
-    public class MessageContainer<T> : List<T> 
+    public class MessageContainer<T> : List<T>
         //where T : IMessageBase
     {
-        /// <summary>
-        /// 最大记录条数（保留尾部），如果小于等于0则不限制
-        /// </summary>
-        public int MaxRecordCount { get; set; }
-
         public MessageContainer()
         {
         }
@@ -32,7 +27,12 @@ namespace Senparc.Weixin.Context
             MaxRecordCount = maxRecordCount;
         }
 
-        new public void Add(T item)
+        /// <summary>
+        ///     最大记录条数（保留尾部），如果小于等于0则不限制
+        /// </summary>
+        public int MaxRecordCount { get; set; }
+
+        public new void Add(T item)
         {
             base.Add(item);
             RemoveExpressItems();
@@ -40,25 +40,25 @@ namespace Senparc.Weixin.Context
 
         private void RemoveExpressItems()
         {
-            if (MaxRecordCount > 0 && base.Count > MaxRecordCount)
+            if (MaxRecordCount > 0 && Count > MaxRecordCount)
             {
-                base.RemoveRange(0, base.Count - MaxRecordCount);
+                RemoveRange(0, Count - MaxRecordCount);
             }
         }
 
-        new public void AddRange(IEnumerable<T> collection)
+        public new void AddRange(IEnumerable<T> collection)
         {
             base.AddRange(collection);
             RemoveExpressItems();
         }
 
-        new public void Insert(int index, T item)
+        public new void Insert(int index, T item)
         {
             base.Insert(index, item);
             RemoveExpressItems();
         }
 
-        new public void InsertRange(int index, IEnumerable<T> collection)
+        public new void InsertRange(int index, IEnumerable<T> collection)
         {
             base.InsertRange(index, collection);
             RemoveExpressItems();

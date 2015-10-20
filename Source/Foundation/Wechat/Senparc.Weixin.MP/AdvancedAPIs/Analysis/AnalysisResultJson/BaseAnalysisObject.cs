@@ -19,8 +19,5 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Analysis
 
     public class BaseAnalysisObject : IBaseAnalysisObject
     {
-        public BaseAnalysisObject()
-        {
-        }
     }
 }

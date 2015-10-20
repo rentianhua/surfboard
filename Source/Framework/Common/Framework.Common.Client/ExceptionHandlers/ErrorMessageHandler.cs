@@ -26,7 +26,7 @@ namespace Cedar.Framework.Common.Client.ExceptionHandlers
 
         /// <summary>
         /// </summary>
-        public string ErrorMessage { get; private set; }
+        public string ErrorMessage { get; }
 
         /// <summary>
         /// </summary>

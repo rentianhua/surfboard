@@ -29,27 +29,29 @@ namespace Senparc.Weixin.QY.CommonAPIs
     public static class CommonJsonSend
     {
         /// <summary>
-        /// 向需要AccessToken的API发送消息的公共方法
+        ///     向需要AccessToken的API发送消息的公共方法
         /// </summary>
         /// <param name="accessToken">这里的AccessToken是通用接口的AccessToken，非OAuth的。如果不需要，可以为null，此时urlFormat不要提供{0}参数</param>
         /// <param name="urlFormat"></param>
         /// <param name="data">如果是Get方式，可以为null</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult Send(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult Send(string accessToken, string urlFormat, object data,
+            CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
         {
             return Send<QyJsonResult>(accessToken, urlFormat, data, sendType, timeOut);
         }
 
         /// <summary>
-        /// 向需要AccessToken的API发送消息的公共方法
+        ///     向需要AccessToken的API发送消息的公共方法
         /// </summary>
         /// <param name="accessToken">这里的AccessToken是通用接口的AccessToken，非OAuth的。如果不需要，可以为null，此时urlFormat不要提供{0}参数</param>
         /// <param name="urlFormat"></param>
         /// <param name="data">如果是Get方式，可以为null</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static T Send<T>(string accessToken, string urlFormat, object data, CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
+        public static T Send<T>(string accessToken, string urlFormat, object data,
+            CommonJsonSendType sendType = CommonJsonSendType.POST, int timeOut = Config.TIME_OUT)
         {
             var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken);
             switch (sendType)
@@ -57,9 +59,9 @@ namespace Senparc.Weixin.QY.CommonAPIs
                 case CommonJsonSendType.GET:
                     return Get.GetJson<T>(url);
                 case CommonJsonSendType.POST:
-                    SerializerHelper serializerHelper = new SerializerHelper();
+                    var serializerHelper = new SerializerHelper();
                     var jsonString = serializerHelper.GetJsonString(data);
-                    using (MemoryStream ms = new MemoryStream())
+                    using (var ms = new MemoryStream())
                     {
                         var bytes = Encoding.UTF8.GetBytes(jsonString);
                         ms.Write(bytes, 0, bytes.Length);
@@ -73,4 +75,3 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
     }
 }
-

@@ -10,7 +10,7 @@ using System.Xml;
 namespace Cedar.Core.Configuration
 {
     /// <summary>
-    /// 以Name和Type为键值对的配置元素
+    ///     以Name和Type为键值对的配置元素
     /// </summary>
     public class NameTypeConfigurationElement : ConfigurationElement
     {
@@ -26,7 +26,7 @@ namespace Cedar.Core.Configuration
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
         {
-            get { return (string)base["name"]; }
+            get { return (string) base["name"]; }
             set { base["name"] = value; }
         }
 
@@ -36,11 +36,11 @@ namespace Cedar.Core.Configuration
         /// <value>
         ///     The type.
         /// </value>
-        [TypeConverter(typeof(AssemblyQualifiedTypeNameConfigurationConverter)),
+        [TypeConverter(typeof (AssemblyQualifiedTypeNameConfigurationConverter)),
          ConfigurationProperty("type", IsRequired = true)]
         public Type Type
         {
-            get { return (Type)base["type"]; }
+            get { return (Type) base["type"]; }
             set { base["type"] = value; }
         }
 
@@ -50,7 +50,7 @@ namespace Cedar.Core.Configuration
         /// <param name="reader">The reader.</param>
         internal void Deserialize(XmlReader reader)
         {
-            base.DeserializeElement(reader, false);
+            DeserializeElement(reader, false);
         }
     }
 }

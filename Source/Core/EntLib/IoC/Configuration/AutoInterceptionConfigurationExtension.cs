@@ -5,7 +5,7 @@ namespace Cedar.Core.EntLib.IoC.Configuration
     public class AutoInterceptionConfigurationExtension : SectionExtension
     {
         /// <summary>
-        /// Adds the extensions.
+        ///     Adds the extensions.
         /// </summary>
         /// <param name="context">The context.</param>
         public override void AddExtensions(SectionExtensionContext context)

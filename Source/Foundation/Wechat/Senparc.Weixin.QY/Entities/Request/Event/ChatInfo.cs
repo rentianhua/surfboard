@@ -11,24 +11,27 @@
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// 会话信息
+    ///     会话信息
     /// </summary>
     public class ChatInfo
     {
         /// <summary>
-        /// 会话id
+        ///     会话id
         /// </summary>
         public string ChatId { get; set; }
+
         /// <summary>
-        /// 会话标题
+        ///     会话标题
         /// </summary>
         public string Name { get; set; }
+
         /// <summary>
-        /// 管理员userid
+        ///     管理员userid
         /// </summary>
         public string Owner { get; set; }
+
         /// <summary>
-        /// 会话成员列表，成员用userid标识，成员间以竖线“|”分隔
+        ///     会话成员列表，成员用userid标识，成员间以竖线“|”分隔
         /// </summary>
         public string UserList { get; set; }
     }

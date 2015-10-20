@@ -20,4 +20,3 @@ namespace Senparc.Weixin.QY.Entities
         public string Description { get; set; }
     }
 }
- 

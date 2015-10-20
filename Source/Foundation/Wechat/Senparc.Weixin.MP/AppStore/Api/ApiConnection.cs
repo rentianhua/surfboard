@@ -15,7 +15,8 @@ namespace Senparc.Weixin.MP.AppStore.Api
 {
     public class ApiConnection
     {
-        private Passport _passport;
+        private readonly Passport _passport;
+
         public ApiConnection(Passport passport)
         {
             if (passport == null)
@@ -26,7 +27,7 @@ namespace Senparc.Weixin.MP.AppStore.Api
         }
 
         /// <summary>
-        /// 自动更新Passport的链接方法
+        ///     自动更新Passport的链接方法
         /// </summary>
         /// <param name="apiFunc"></param>
         /// <returns></returns>

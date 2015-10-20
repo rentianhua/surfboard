@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Security.AccessControl;
 using System.Xml;
 
@@ -130,7 +128,7 @@ namespace Cedar.Framework.Common.BaseClasses
         public static DataSet ReadXml2Set(string filename)
         {
             var ds = new DataSet();
-            if (System.IO.File.Exists(filename))
+            if (File.Exists(filename))
             {
                 ds.ReadXml(filename);
             }

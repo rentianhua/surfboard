@@ -25,13 +25,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 用户组接口
+    ///     用户组接口
     /// </summary>
     public static class GroupsApi
     {
-
         /// <summary>
-        /// 创建分组
+        ///     创建分组
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="name">分组名字（30个字符以内）</param>
@@ -46,16 +45,15 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 {
                     group = new
                     {
-                        name = name
+                        name
                     }
                 };
                 return CommonJsonSend.Send<CreateGroupResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 发送文本信息
+        ///     发送文本信息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <returns></returns>
@@ -66,12 +64,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 var urlFormat = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token={0}";
                 var url = string.Format(urlFormat, accessToken);
                 return HttpUtility.Get.GetJson<GroupsJson>(url);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 获取用户分组
+        ///     获取用户分组
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
@@ -82,14 +79,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
                 var urlFormat = "https://api.weixin.qq.com/cgi-bin/groups/getid?access_token={0}";
-                var data = new { openid = openId };
+                var data = new {openid = openId};
                 return CommonJsonSend.Send<GetGroupIdResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 修改分组名
+        ///     修改分组名
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="id"></param>
@@ -105,24 +101,24 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 {
                     group = new
                     {
-                        id = id,
-                        name = name
+                        id,
+                        name
                     }
                 };
                 return CommonJsonSend.Send(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 移动用户分组
+        ///     移动用户分组
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
         /// <param name="toGroupId"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult MemberUpdate(string accessTokenOrAppId, string openId, int toGroupId, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult MemberUpdate(string accessTokenOrAppId, string openId, int toGroupId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -133,19 +129,19 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     to_groupid = toGroupId
                 };
                 return CommonJsonSend.Send(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 批量移动用户分组
+        ///     批量移动用户分组
         /// </summary>
         /// <param name="accessTokenOrAppId">调用接口凭证</param>
         /// <param name="toGroupId">分组id</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <param name="openIds">用户唯一标识符openid的列表（size不能超过50）</param>
         /// <returns></returns>
-        public static WxJsonResult BatchUpdate(string accessTokenOrAppId, int toGroupId, int timeOut = Config.TIME_OUT, params string[] openIds)
+        public static WxJsonResult BatchUpdate(string accessTokenOrAppId, int toGroupId, int timeOut = Config.TIME_OUT,
+            params string[] openIds)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -158,12 +154,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 };
 
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, CommonJsonSendType.POST, timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 删除分组
+        ///     删除分组
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="groupId">分组id</param>
@@ -184,7 +179,6 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 };
 
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, CommonJsonSendType.POST, timeOut);
-
             }, accessTokenOrAppId);
         }
     }

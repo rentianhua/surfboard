@@ -16,7 +16,7 @@ using System;
 namespace Senparc.Weixin.Exceptions
 {
     /// <summary>
-    /// 微信自定义异常基类
+    ///     微信自定义异常基类
     /// </summary>
     public class WeixinException : ApplicationException
     {

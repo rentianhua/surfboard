@@ -11,16 +11,17 @@
 namespace Senparc.Weixin.QY.AdvancedAPIs.Chat
 {
     /// <summary>
-    /// 成员新消息免打扰参数
+    ///     成员新消息免打扰参数
     /// </summary>
     public class UserMute
     {
         /// <summary>
-        /// 成员UserID
+        ///     成员UserID
         /// </summary>
         public string userid { get; set; }
+
         /// <summary>
-        /// 免打扰状态
+        ///     免打扰状态
         /// </summary>
         public Mute_Status status { get; set; }
     }

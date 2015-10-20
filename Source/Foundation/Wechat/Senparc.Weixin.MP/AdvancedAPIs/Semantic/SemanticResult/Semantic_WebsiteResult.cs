@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 网址服务（website）
+    ///     网址服务（website）
     /// </summary>
     public class Semantic_WebsiteResult : BaseSemanticResultJson
     {
@@ -29,11 +29,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Website
     {
         /// <summary>
-        /// 网址名
+        ///     网址名
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// url
+        ///     url
         /// </summary>
         public string url { get; set; }
     }

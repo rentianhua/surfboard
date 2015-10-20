@@ -1,87 +1,11 @@
 ﻿namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// 
     /// </summary>
     public class PagingModel
     {
         /// <summary>
-        /// 存储过程名称
-        /// </summary>
-        public string SpName { get; set; }
-
-        /// <summary>
-        /// 表名称
-        /// </summary>
-        public string TableName { get; set; }
-
-        /// <summary>
-        /// 主表
-        /// </summary>
-        public string MainTable { get; set; }
-
-        /// <summary>
-        /// 主键
-        /// </summary>
-        public string Pk { get; set; }
-
-        /// <summary>
-        /// 主表别名
-        /// </summary>
-        public string Alias { get; set; }
-
-        /// <summary>
-        /// 辅表
-        /// </summary>
-        public string SubTable { get; set; }
-
-        /// <summary>
-        /// 查询字段
-        /// </summary>
-        public string Fields { get; set; }
-
-        /// <summary>
-        /// 排序字段
-        /// </summary>
-        public string OrderField { get; set; }
-
-        /// <summary>
-        /// 查询条件
-        /// </summary>
-        public string SqlWhere { get; set; }
-
-        /// <summary>
-        /// 不分页的查询条件
-        /// </summary>
-        public string SqlWhereNoPaging { get; set; }
-
-        /// <summary>
-        /// 页容量
-        /// </summary>
-        public int? PageSize { get; set; }
-
-        /// <summary>
-        /// 页索引
-        /// </summary>
-        public int? PageIndex { get; set; }
-
-        /// <summary>
-        /// 分组
-        /// </summary>
-        public string GroupBy { get; set; }
-
-        /// <summary>
-        /// 是否分页
-        /// </summary>
-        public bool? Paging { get; set; }
-
-        /// <summary>
-        /// 查询类型 1.查询总页数 2.查询数据
-        /// </summary>
-        public int? PagingQueryType { get; set; }
-
-        /// <summary>
-        /// 构造函数
+        ///     构造函数
         /// </summary>
         /// <param name="spname">存储过程名称</param>
         /// <param name="tablename">表名</param>
@@ -93,7 +17,8 @@
         /// <param name="groupby">分组</param>
         /// <param name="paging">是否分页</param>
         public PagingModel(
-            string spname = null, string tablename = null, string fields = null, string orderfield = null, string sqlwhere = null,
+            string spname = null, string tablename = null, string fields = null, string orderfield = null,
+            string sqlwhere = null,
             int? pagesize = null, int? pageindex = null, string groupby = null, bool? paging = null)
         {
             SpName = spname;
@@ -108,7 +33,6 @@
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="spname"></param>
         /// <param name="maintable"></param>
@@ -126,7 +50,8 @@
         /// <param name="pagingquerytype"></param>
         public PagingModel(
             string spname = null, string maintable = null, string pk = null, string alias = null, string subtable = null,
-            string fields = null, string orderfield = null, string sqlwhere = null, string sqlwherenopaging = null, int? pagesize = null,
+            string fields = null, string orderfield = null, string sqlwhere = null, string sqlwherenopaging = null,
+            int? pagesize = null,
             int? pageindex = null, string groupby = null, bool? paging = null, int? pagingquerytype = 1)
         {
             SpName = spname;
@@ -144,5 +69,80 @@
             Paging = paging ?? (pagesize > 0);
             PagingQueryType = pagingquerytype ?? 1;
         }
+
+        /// <summary>
+        ///     存储过程名称
+        /// </summary>
+        public string SpName { get; set; }
+
+        /// <summary>
+        ///     表名称
+        /// </summary>
+        public string TableName { get; set; }
+
+        /// <summary>
+        ///     主表
+        /// </summary>
+        public string MainTable { get; set; }
+
+        /// <summary>
+        ///     主键
+        /// </summary>
+        public string Pk { get; set; }
+
+        /// <summary>
+        ///     主表别名
+        /// </summary>
+        public string Alias { get; set; }
+
+        /// <summary>
+        ///     辅表
+        /// </summary>
+        public string SubTable { get; set; }
+
+        /// <summary>
+        ///     查询字段
+        /// </summary>
+        public string Fields { get; set; }
+
+        /// <summary>
+        ///     排序字段
+        /// </summary>
+        public string OrderField { get; set; }
+
+        /// <summary>
+        ///     查询条件
+        /// </summary>
+        public string SqlWhere { get; set; }
+
+        /// <summary>
+        ///     不分页的查询条件
+        /// </summary>
+        public string SqlWhereNoPaging { get; set; }
+
+        /// <summary>
+        ///     页容量
+        /// </summary>
+        public int? PageSize { get; set; }
+
+        /// <summary>
+        ///     页索引
+        /// </summary>
+        public int? PageIndex { get; set; }
+
+        /// <summary>
+        ///     分组
+        /// </summary>
+        public string GroupBy { get; set; }
+
+        /// <summary>
+        ///     是否分页
+        /// </summary>
+        public bool? Paging { get; set; }
+
+        /// <summary>
+        ///     查询类型 1.查询总页数 2.查询数据
+        /// </summary>
+        public int? PagingQueryType { get; set; }
     }
 }

@@ -17,7 +17,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.CustomService
 {
     /// <summary>
-    /// 聊天记录结果
+    ///     聊天记录结果
     /// </summary>
     public class GetRecordResult : WxJsonResult
     {

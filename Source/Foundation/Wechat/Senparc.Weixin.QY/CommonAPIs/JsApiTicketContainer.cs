@@ -18,7 +18,7 @@ using Senparc.Weixin.QY.Entities;
 
 namespace Senparc.Weixin.QY.CommonAPIs
 {
-    class JsApiTicketBag
+    internal class JsApiTicketBag
     {
         public string AppId { get; set; }
         public string AppSecret { get; set; }
@@ -27,21 +27,21 @@ namespace Senparc.Weixin.QY.CommonAPIs
     }
 
     /// <summary>
-    /// 通用接口JsApiTicket容器，用于自动管理JsApiTicket，如果过期会重新获取
+    ///     通用接口JsApiTicket容器，用于自动管理JsApiTicket，如果过期会重新获取
     /// </summary>
     public class JsApiTicketContainer
     {
-        static Dictionary<string, JsApiTicketBag> JsApiTicketCollection =
-           new Dictionary<string, JsApiTicketBag>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, JsApiTicketBag> JsApiTicketCollection =
+            new Dictionary<string, JsApiTicketBag>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// 注册应用凭证信息，此操作只是注册，不会马上获取Ticket，并将清空之前的Ticket，
+        ///     注册应用凭证信息，此操作只是注册，不会马上获取Ticket，并将清空之前的Ticket，
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="appSecret"></param>
         public static void Register(string appId, string appSecret)
         {
-            JsApiTicketCollection[appId] = new JsApiTicketBag()
+            JsApiTicketCollection[appId] = new JsApiTicketBag
             {
                 AppId = appId,
                 AppSecret = appSecret,
@@ -51,7 +51,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 使用完整的应用凭证获取Ticket，如果不存在将自动注册
+        ///     使用完整的应用凭证获取Ticket，如果不存在将自动注册
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="appSecret"></param>
@@ -67,7 +67,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取可用Ticket
+        ///     获取可用Ticket
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="getNewTicket">是否强制重新获取新的Ticket</param>
@@ -78,7 +78,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取可用Ticket
+        ///     获取可用Ticket
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="getNewTicket">是否强制重新获取新的Ticket</param>
@@ -101,7 +101,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 检查是否已经注册
+        ///     检查是否已经注册
         /// </summary>
         /// <param name="appId"></param>
         /// <returns></returns>

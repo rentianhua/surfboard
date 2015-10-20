@@ -22,20 +22,22 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.QY.AdvancedAPIs.OAuth2
 {
     /// <summary>
-    /// 获取成员信息返回结果
+    ///     获取成员信息返回结果
     /// </summary>
     public class GetUserInfoResult : QyJsonResult
     {
         /// <summary>
-        /// 员工UserID
+        ///     员工UserID
         /// </summary>
         public string UserId { get; set; }
+
         /// <summary>
-        /// 非企业成员的OpenId
+        ///     非企业成员的OpenId
         /// </summary>
         public string OpenId { get; set; }
+
         /// <summary>
-        /// 手机设备号(由微信在安装时随机生成)
+        ///     手机设备号(由微信在安装时随机生成)
         /// </summary>
         public string DeviceId { get; set; }
     }

@@ -37,8 +37,8 @@ namespace Senparc.Weixin.Open
         //</xml>
 
         /// <summary>
-        /// 获取XDocument转换后的IRequestMessageBase实例。
-        /// 如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
+        ///     获取XDocument转换后的IRequestMessageBase实例。
+        ///     如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
         /// </summary>
         /// <returns></returns>
         public static IRequestMessageBase GetRequestEntity(XDocument doc, PostModel postModel = null)
@@ -58,21 +58,24 @@ namespace Senparc.Weixin.Open
                         requestMessage = new RequestMessageUnauthorized();
                         break;
                     default:
-                        throw new UnknownRequestMsgTypeException(string.Format("InfoType：{0} 在RequestMessageFactory中没有对应的处理程序！", infoType), new ArgumentOutOfRangeException());//为了能够对类型变动最大程度容错（如微信目前还可以对公众账号suscribe等未知类型，但API没有开放），建议在使用的时候catch这个异常
+                        throw new UnknownRequestMsgTypeException(
+                            string.Format("InfoType：{0} 在RequestMessageFactory中没有对应的处理程序！", infoType),
+                            new ArgumentOutOfRangeException());
+                            //为了能够对类型变动最大程度容错（如微信目前还可以对公众账号suscribe等未知类型，但API没有开放），建议在使用的时候catch这个异常
                 }
-                EntityHelper.FillEntityWithXml(requestMessage, doc);
+                requestMessage.FillEntityWithXml(doc);
             }
             catch (ArgumentException ex)
             {
-                throw new WeixinException(string.Format("RequestMessage转换出错！可能是InfoType不存在！，XML：{0}", doc.ToString()), ex);
+                throw new WeixinException(string.Format("RequestMessage转换出错！可能是InfoType不存在！，XML：{0}", doc), ex);
             }
             return requestMessage;
         }
 
 
         /// <summary>
-        /// 获取XDocument转换后的IRequestMessageBase实例。
-        /// 如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
+        ///     获取XDocument转换后的IRequestMessageBase实例。
+        ///     如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
         /// </summary>
         /// <returns></returns>
         public static IRequestMessageBase GetRequestEntity(string xml)
@@ -82,14 +85,14 @@ namespace Senparc.Weixin.Open
 
 
         /// <summary>
-        /// 获取XDocument转换后的IRequestMessageBase实例。
-        /// 如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
+        ///     获取XDocument转换后的IRequestMessageBase实例。
+        ///     如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
         /// </summary>
         /// <param name="stream">如Request.InputStream</param>
         /// <returns></returns>
         public static IRequestMessageBase GetRequestEntity(Stream stream)
         {
-            using (XmlReader xr = XmlReader.Create(stream))
+            using (var xr = XmlReader.Create(stream))
             {
                 var doc = XDocument.Load(xr);
 

@@ -31,13 +31,13 @@ using Senparc.Weixin.MP.Entities;
 namespace Senparc.Weixin.MP.CommonAPIs
 {
     /// <summary>
-    /// 通用接口
-    /// 通用接口用于和微信服务器通讯，一般不涉及自有网站服务器的通讯
+    ///     通用接口
+    ///     通用接口用于和微信服务器通讯，一般不涉及自有网站服务器的通讯
     /// </summary>
     public partial class CommonApi
     {
         /// <summary>
-        /// 获取凭证接口
+        ///     获取凭证接口
         /// </summary>
         /// <param name="grant_type">获取access_token填写client_credential</param>
         /// <param name="appid">第三方用户唯一凭证</param>
@@ -46,14 +46,14 @@ namespace Senparc.Weixin.MP.CommonAPIs
         public static AccessTokenResult GetToken(string appid, string secret, string grant_type = "client_credential")
         {
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/token?grant_type={0}&appid={1}&secret={2}",
-                                    grant_type, appid, secret);
+                grant_type, appid, secret);
 
-            AccessTokenResult result = Get.GetJson<AccessTokenResult>(url);
+            var result = Get.GetJson<AccessTokenResult>(url);
             return result;
         }
 
         /// <summary>
-        /// 用户信息接口
+        ///     用户信息接口
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
@@ -63,16 +63,15 @@ namespace Senparc.Weixin.MP.CommonAPIs
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
                 var url = string.Format("http://api.weixin.qq.com/cgi-bin/user/info?access_token={0}&openid={1}",
-                                        accessToken, openId);
-                WeixinUserInfoResult result = Get.GetJson<WeixinUserInfoResult>(url);
+                    accessToken, openId);
+                var result = Get.GetJson<WeixinUserInfoResult>(url);
                 return result;
-
             }, accessTokenOrAppId);
         }
 
 
         /// <summary>
-        /// 获取调用微信JS接口的临时票据
+        ///     获取调用微信JS接口的临时票据
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="secret"></param>
@@ -83,9 +82,9 @@ namespace Senparc.Weixin.MP.CommonAPIs
             var accessToken = AccessTokenRedisContainer.TryGetAccessToken(appId, secret);
 
             var url = string.Format("https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={0}&type={1}",
-                                    accessToken, type);
+                accessToken, type);
 
-            JsApiTicketResult result = Get.GetJson<JsApiTicketResult>(url);
+            var result = Get.GetJson<JsApiTicketResult>(url);
             return result;
         }
     }

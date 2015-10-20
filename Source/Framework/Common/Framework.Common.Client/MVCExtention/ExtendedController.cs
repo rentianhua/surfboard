@@ -139,20 +139,20 @@ namespace Cedar.Framework.Common.Client.MVCExtention
         /// <returns></returns>
         public string GetExceptionPolicyName()
         {
-            string actionName = ControllerContext.RouteData.GetRequiredString("action");
-            ActionDescriptor actionDescriptor = Descriptor.FindAction(ControllerContext, actionName);
+            var actionName = ControllerContext.RouteData.GetRequiredString("action");
+            var actionDescriptor = Descriptor.FindAction(ControllerContext, actionName);
             if (null == actionDescriptor)
             {
                 return string.Empty;
             }
-            ExceptionPolicyAttribute exceptionPolicyAttribute = actionDescriptor.GetCustomAttributes(true)
+            var exceptionPolicyAttribute = actionDescriptor.GetCustomAttributes(true)
                 .OfType<ExceptionPolicyAttribute>()
                 .FirstOrDefault()
-                                                                ??
-                                                                Descriptor.GetCustomAttributes(true)
-                                                                    .OfType<ExceptionPolicyAttribute>()
-                                                                    .FirstOrDefault()
-                                                                ?? new ExceptionPolicyAttribute("");
+                                           ??
+                                           Descriptor.GetCustomAttributes(true)
+                                               .OfType<ExceptionPolicyAttribute>()
+                                               .FirstOrDefault()
+                                           ?? new ExceptionPolicyAttribute("");
             return exceptionPolicyAttribute.ExceptionPolicyName;
         }
 
@@ -161,20 +161,20 @@ namespace Cedar.Framework.Common.Client.MVCExtention
         /// <returns></returns>
         public string GetHandleErrorActionName()
         {
-            string actionName = ControllerContext.RouteData.GetRequiredString("action");
-            ActionDescriptor actionDescriptor = Descriptor.FindAction(ControllerContext, actionName);
+            var actionName = ControllerContext.RouteData.GetRequiredString("action");
+            var actionDescriptor = Descriptor.FindAction(ControllerContext, actionName);
             if (null == actionDescriptor)
             {
                 return string.Empty;
             }
-            HandleErrorActionAttribute handleErrorActionAttribute = actionDescriptor.GetCustomAttributes(true)
+            var handleErrorActionAttribute = actionDescriptor.GetCustomAttributes(true)
                 .OfType<HandleErrorActionAttribute>()
                 .FirstOrDefault()
-                                                                    ??
-                                                                    Descriptor.GetCustomAttributes(true)
-                                                                        .OfType<HandleErrorActionAttribute>()
-                                                                        .FirstOrDefault()
-                                                                    ?? new HandleErrorActionAttribute("");
+                                             ??
+                                             Descriptor.GetCustomAttributes(true)
+                                                 .OfType<HandleErrorActionAttribute>()
+                                                 .FirstOrDefault()
+                                             ?? new HandleErrorActionAttribute("");
             return handleErrorActionAttribute.HandleErrorAction;
         }
 

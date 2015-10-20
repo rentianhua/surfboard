@@ -6,33 +6,27 @@ using Newtonsoft.Json;
 namespace Cedar.Framwork.Caching.Redis
 {
     /// <summary>
-    /// 
     /// </summary>
-    [ConfigurationElement(typeof(RedisCachingData))]
+    [ConfigurationElement(typeof (RedisCachingData))]
     public class RedisCachingProvider : CachingProviderBase
     {
-        public RedisDatabaseWrapper RedisDatabaseWrapper
-        {
-            get;
-            private set;
-        }
-
-        private TimeSpan ExpireSpan { get; set; }
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="isenable"></param>
         /// <param name="expireSpan"></param>
         /// <param name="redisDatabaseWrapper"></param>
-        public RedisCachingProvider(bool isenable, TimeSpan expireSpan, RedisDatabaseWrapper redisDatabaseWrapper) : base(isenable)
+        public RedisCachingProvider(bool isenable, TimeSpan expireSpan, RedisDatabaseWrapper redisDatabaseWrapper)
+            : base(isenable)
         {
-            this.RedisDatabaseWrapper = redisDatabaseWrapper;
+            RedisDatabaseWrapper = redisDatabaseWrapper;
             ExpireSpan = expireSpan;
         }
 
+        public RedisDatabaseWrapper RedisDatabaseWrapper { get; }
+
+        private TimeSpan ExpireSpan { get; }
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -47,7 +41,6 @@ namespace Cedar.Framwork.Caching.Redis
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -62,7 +55,6 @@ namespace Cedar.Framwork.Caching.Redis
         }
 
         /// <summary>
-        /// 
         /// </summary>
         protected override void ClearCore()
         {

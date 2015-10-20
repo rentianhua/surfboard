@@ -19,12 +19,12 @@ using Senparc.Weixin.QY.CommonAPIs;
 namespace Senparc.Weixin.QY.AdvancedAPIs
 {
     /// <summary>
-    /// 异步任务接口
+    ///     异步任务接口
     /// </summary>
     public static class AsynchronousApi
     {
         /// <summary>
-        /// 邀请成员关注
+        ///     邀请成员关注
         /// </summary>
         /// <param name="accessToken">企业的access_token</param>
         /// <param name="toUser">成员ID列表，多个接收者用‘|’分隔，最多支持1000个。</param>
@@ -35,30 +35,31 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="timeOut"></param>
         /// post数据格式：
         /// {
-        ///     "touser":"xxx|xxx",
-        ///     "toparty":"xxx|xxx",
-        ///     "totag":"xxx|xxx",
-        ///     "invite_tips":"xxx",
-        ///     "callback":
-        ///     {
-        ///         "url": "xxx",
-        ///         "token": "xxx",
-        ///         "encodingaeskey": "xxx"
-        ///     }
+        /// "touser":"xxx|xxx",
+        /// "toparty":"xxx|xxx",
+        /// "totag":"xxx|xxx",
+        /// "invite_tips":"xxx",
+        /// "callback":
+        /// {
+        /// "url": "xxx",
+        /// "token": "xxx",
+        /// "encodingaeskey": "xxx"
+        /// }
         /// }
         /// <returns></returns>
-        public static AsynchronousJobId BatchInviteUser(string accessToken, string toUser, string toParty, string toTag, string inviteTips, Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
+        public static AsynchronousJobId BatchInviteUser(string accessToken, string toUser, string toParty, string toTag,
+            string inviteTips, Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/batch/inviteuser?access_token={0}";
 
             var data = new
-                {
-                    touser = toUser,
-                    toparty = toParty,
-                    totag = toTag,
-                    invite_tips = inviteTips,
-                    callback = callBack
-                };
+            {
+                touser = toUser,
+                toparty = toParty,
+                totag = toTag,
+                invite_tips = inviteTips,
+                callback = callBack
+            };
 
             return CommonJsonSend.Send<AsynchronousJobId>(accessToken, url, data, CommonJsonSendType.POST, timeOut);
         }
@@ -81,13 +82,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         */
 
         /// <summary>
-        /// 增量更新成员
-        /// CSV模板下载地址：http://qydev.weixin.qq.com/batch_user_sample.csv
-        /// 注意事项：
-        /// 1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字
-        /// 2.文件中存在、通讯录中也存在的成员，更新成员在文件中指定的字段值
-        /// 3.文件中存在、通讯录中不存在的成员，执行添加操作
-        /// 4.通讯录中存在、文件中不存在的成员，保持不变
+        ///     增量更新成员
+        ///     CSV模板下载地址：http://qydev.weixin.qq.com/batch_user_sample.csv
+        ///     注意事项：
+        ///     1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字
+        ///     2.文件中存在、通讯录中也存在的成员，更新成员在文件中指定的字段值
+        ///     3.文件中存在、通讯录中不存在的成员，执行添加操作
+        ///     4.通讯录中存在、文件中不存在的成员，保持不变
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="mediaId">上传的csv文件的media_id</param>
@@ -95,36 +96,37 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="timeOut"></param>
         /// post数据格式：
         /// {
-        ///    "media_id":"xxxxxx",
-        ///    "callback":
-        ///    {
-        ///        "url": "xxx",
-        ///        "token": "xxx",
-        ///        "encodingaeskey": "xxx"
-        ///    }
+        /// "media_id":"xxxxxx",
+        /// "callback":
+        /// {
+        /// "url": "xxx",
+        /// "token": "xxx",
+        /// "encodingaeskey": "xxx"
+        /// }
         /// }
         /// <returns></returns>
-        public static AsynchronousJobId BatchSyncUser(string accessToken, string mediaId, Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
+        public static AsynchronousJobId BatchSyncUser(string accessToken, string mediaId, Asynchronous_CallBack callBack,
+            int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/batch/syncuser?access_token={0}";
 
             var data = new
-                {
-                    media_id = mediaId,
-                    callback = callBack
-                };
+            {
+                media_id = mediaId,
+                callback = callBack
+            };
 
             return CommonJsonSend.Send<AsynchronousJobId>(accessToken, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 全量覆盖成员
-        /// CSV模板下载地址：http://qydev.weixin.qq.com/batch_user_sample.csv
-        /// 注意事项：
-        /// 1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字
-        /// 2.文件中存在、通讯录中也存在的成员，完全以文件为准
-        /// 3.文件中存在、通讯录中不存在的成员，执行添加操作
-        /// 4.通讯录中存在、文件中不存在的成员，执行删除操作。出于安全考虑，如果需要删除的成员多于50人，且多于现有人数的20%以上，系统将中止导入并返回相应的错误码
+        ///     全量覆盖成员
+        ///     CSV模板下载地址：http://qydev.weixin.qq.com/batch_user_sample.csv
+        ///     注意事项：
+        ///     1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字
+        ///     2.文件中存在、通讯录中也存在的成员，完全以文件为准
+        ///     3.文件中存在、通讯录中不存在的成员，执行添加操作
+        ///     4.通讯录中存在、文件中不存在的成员，执行删除操作。出于安全考虑，如果需要删除的成员多于50人，且多于现有人数的20%以上，系统将中止导入并返回相应的错误码
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="mediaId">上传的csv文件的media_id</param>
@@ -132,16 +134,17 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="timeOut"></param>
         /// post数据格式：
         /// {
-        ///    "media_id":"xxxxxx",
-        ///    "callback":
-        ///    {
-        ///        "url": "xxx",
-        ///        "token": "xxx",
-        ///        "encodingaeskey": "xxx"
-        ///    }
+        /// "media_id":"xxxxxx",
+        /// "callback":
+        /// {
+        /// "url": "xxx",
+        /// "token": "xxx",
+        /// "encodingaeskey": "xxx"
+        /// }
         /// }
         /// <returns></returns>
-        public static AsynchronousJobId BatchReplaceUser(string accessToken, string mediaId, Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
+        public static AsynchronousJobId BatchReplaceUser(string accessToken, string mediaId,
+            Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/batch/replaceuser?access_token={0}";
 
@@ -155,13 +158,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 全量覆盖部门
-        /// CSV模板下载地址：http://qydev.weixin.qq.com/batch_party_sample.csv
-        /// 注意事项：
-        /// 1.文件中存在、通讯录中也存在的部门，执行修改操作
-        /// 2.文件中存在、通讯录中不存在的部门，执行添加操作
-        /// 3.文件中不存在、通讯录中存在的部门，当部门为空时，执行删除操作
-        /// 4.CSV文件中，部门名称、部门ID、父部门ID为必填字段，部门ID必须为数字；排序为可选字段，置空或填0不修改排序
+        ///     全量覆盖部门
+        ///     CSV模板下载地址：http://qydev.weixin.qq.com/batch_party_sample.csv
+        ///     注意事项：
+        ///     1.文件中存在、通讯录中也存在的部门，执行修改操作
+        ///     2.文件中存在、通讯录中不存在的部门，执行添加操作
+        ///     3.文件中不存在、通讯录中存在的部门，当部门为空时，执行删除操作
+        ///     4.CSV文件中，部门名称、部门ID、父部门ID为必填字段，部门ID必须为数字；排序为可选字段，置空或填0不修改排序
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="mediaId">上传的csv文件的media_id</param>
@@ -169,16 +172,17 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="timeOut"></param>
         /// post数据格式：
         /// {
-        ///    "media_id":"xxxxxx",
-        ///    "callback":
-        ///    {
-        ///        "url": "xxx",
-        ///        "token": "xxx",
-        ///        "encodingaeskey": "xxx"
-        ///    }
+        /// "media_id":"xxxxxx",
+        /// "callback":
+        /// {
+        /// "url": "xxx",
+        /// "token": "xxx",
+        /// "encodingaeskey": "xxx"
+        /// }
         /// }
         /// <returns></returns>
-        public static AsynchronousJobId BatchReplaceParty(string accessToken, string mediaId, Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
+        public static AsynchronousJobId BatchReplaceParty(string accessToken, string mediaId,
+            Asynchronous_CallBack callBack, int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/batch/replaceparty?access_token={0}";
 
@@ -192,7 +196,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 获取异步邀请成员关注结果
+        ///     获取异步邀请成员关注结果
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="jobId"></param>
@@ -200,13 +204,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousInviteUserResult GetInviteUserResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                accessToken, jobId);
 
             return Get.GetJson<AsynchronousInviteUserResult>(url);
         }
 
         /// <summary>
-        /// 获取异步更新或全面覆盖成员结果
+        ///     获取异步更新或全面覆盖成员结果
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="jobId"></param>
@@ -214,13 +218,13 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousReplaceUserResult GetReplaceUserResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                accessToken, jobId);
 
             return Get.GetJson<AsynchronousReplaceUserResult>(url);
         }
 
         /// <summary>
-        /// 获取异步全面覆盖部门结果
+        ///     获取异步全面覆盖部门结果
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="jobId"></param>
@@ -228,7 +232,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         public static AsynchronousReplacePartyResult GetReplacePartyResult(string accessToken, string jobId)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/batch/getresult?access_token={0}&jobid={1}",
-                                    accessToken, jobId);
+                accessToken, jobId);
 
             return Get.GetJson<AsynchronousReplacePartyResult>(url);
         }

@@ -21,15 +21,10 @@ namespace Senparc.Weixin.Entities
     }
 
     /// <summary>
-    /// 接收到请求的消息
+    ///     接收到请求的消息
     /// </summary>
     public abstract class RequestMessageBase : MessageBase, IRequestMessageBase
     {
-        public RequestMessageBase()
-        {
-
-        }
-
         //public virtual RequestMsgType MsgType
         //{
         //    get { return RequestMsgType.Text; }

@@ -16,7 +16,7 @@ namespace Cedar.Core.EntLib.IoC
             DefaultNames = new ConcurrentDictionary<Type, string>();
         }
 
-        public ConcurrentDictionary<Type, string> DefaultNames { get; private set; }
+        public ConcurrentDictionary<Type, string> DefaultNames { get; }
 
         public void Register(Type type, string name)
         {
@@ -26,7 +26,7 @@ namespace Cedar.Core.EntLib.IoC
 
         public void Register<T>(string name)
         {
-            Register(typeof(T), name);
+            Register(typeof (T), name);
         }
 
         public bool TryGetDefaultName(Type type, out string name)
@@ -37,7 +37,7 @@ namespace Cedar.Core.EntLib.IoC
 
         public bool TryGetDefaultName<T>(out string name)
         {
-            return DefaultNames.TryGetValue(typeof(T), out name);
+            return DefaultNames.TryGetValue(typeof (T), out name);
         }
 
         protected override void Initialize()

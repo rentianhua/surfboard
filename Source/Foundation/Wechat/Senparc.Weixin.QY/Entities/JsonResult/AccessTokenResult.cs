@@ -16,12 +16,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// GetToken请求后的JSON返回格式
+    ///     GetToken请求后的JSON返回格式
     /// </summary>
     public class AccessTokenResult : QyJsonResult
     {
         /// <summary>
-        /// 获取到的凭证
+        ///     获取到的凭证
         /// </summary>
         public string access_token { get; set; }
     }

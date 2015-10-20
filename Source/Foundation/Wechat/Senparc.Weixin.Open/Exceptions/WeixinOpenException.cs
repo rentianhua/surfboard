@@ -17,12 +17,12 @@ namespace Senparc.Weixin.Open.Exceptions
 {
     public class WeixinOpenException : WeixinException
     {
-        public ComponentBag ComponentBag { get; set; }
-
-        public WeixinOpenException(string message, ComponentBag componentBag = null, Exception inner=null)
+        public WeixinOpenException(string message, ComponentBag componentBag = null, Exception inner = null)
             : base(message, inner)
         {
             ComponentBag = ComponentBag;
         }
+
+        public ComponentBag ComponentBag { get; set; }
     }
 }
