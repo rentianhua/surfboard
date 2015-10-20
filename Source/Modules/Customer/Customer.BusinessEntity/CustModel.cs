@@ -57,11 +57,19 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 所在地：身份
         /// </summary>
         public int Provid { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ProvName { get; set; }
 
         /// <summary>
         /// 所在地：城市
         /// </summary>
         public int Cityid { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CityName { get; set; }
 
         /// <summary>
         /// 所在地：区/县
