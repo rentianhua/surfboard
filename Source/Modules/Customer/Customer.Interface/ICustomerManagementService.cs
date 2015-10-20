@@ -57,6 +57,13 @@ namespace CCN.Modules.Customer.Interface
         JResult GetCustById(string innerid);
 
         /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        JResult GetCustByMobile(string mobile);
+
+        /// <summary>
         /// 获取会员列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -76,6 +83,14 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="model"></param>
         /// <returns></returns>
         JResult UpdateCustInfo(CustModel model);
+
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateCustStatus(string innerid, int status);
 
         #endregion
 
@@ -98,9 +113,9 @@ namespace CCN.Modules.Customer.Interface
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
-        JResult AuditAuthentication(CustModel info);
+        JResult AuditAuthentication(CustAuthenticationModel model);
 
 
         /// <summary>
