@@ -6,16 +6,16 @@ using System.Text;
 namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
-	/// The audit log formatter which is by default used.
-	/// </summary>
-	public class DefaultAuditLogFormatter : IAuditLogFormatter
+    ///     The audit log formatter which is by default used.
+    /// </summary>
+    public class DefaultAuditLogFormatter : IAuditLogFormatter
     {
         /// <summary>
-        /// Formats the specified log dataas a literal text.
+        ///     Formats the specified log dataas a literal text.
         /// </summary>
         /// <param name="logData">The log data object.</param>
         /// <returns>
-        /// The formatted literal text.
+        ///     The formatted literal text.
         /// </returns>
         public string Format(object logData)
         {
@@ -27,23 +27,23 @@ namespace Cedar.Framwork.AuditTrail
             {
                 return logData.ToString();
             }
-            StringBuilder stringBuilder = new StringBuilder();
-            IEnumerable enumerable = logData as IEnumerable;
+            var stringBuilder = new StringBuilder();
+            var enumerable = logData as IEnumerable;
             if (enumerable != null)
             {
-                foreach (object current in enumerable)
+                foreach (var current in enumerable)
                 {
                     stringBuilder.AppendLine(AuditLogFormatters.GetFormatter(current).Format(current));
                 }
                 return stringBuilder.ToString().Trim();
             }
-            if (logData is string || typeof(ValueType).IsAssignableFrom(logData.GetType()))
+            if (logData is string || typeof (ValueType).IsAssignableFrom(logData.GetType()))
             {
                 return logData.ToString().Trim();
             }
             foreach (PropertyDescriptor propertyDescriptor in TypeDescriptor.GetProperties(logData))
             {
-                object value = propertyDescriptor.GetValue(logData);
+                var value = propertyDescriptor.GetValue(logData);
                 stringBuilder.AppendLine(string.Format("{0}: {1}", propertyDescriptor.Name, value));
             }
             return stringBuilder.ToString().Trim();

@@ -26,19 +26,20 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 语意理解接口
+    ///     语意理解接口
     /// </summary>
     public static class SemanticApi
     {
         /// <summary>
-        /// 发送语义理解请求
+        ///     发送语义理解请求
         /// </summary>
         /// <typeparam name="T">语意理解返回的结果类型，在 AdvancedAPIs/Semantic/SemanticResult </typeparam>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="semanticPostData">语义理解请求需要post的数据</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static T SemanticSend<T>(string accessTokenOrAppId, SemanticPostData semanticPostData, int timeOut = Config.TIME_OUT) where T : WxJsonResult
+        public static T SemanticSend<T>(string accessTokenOrAppId, SemanticPostData semanticPostData,
+            int timeOut = Config.TIME_OUT) where T : WxJsonResult
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -51,8 +52,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 //}
 
                 return CommonJsonSend.Send<T>(accessToken, urlFormat, semanticPostData, timeOut: timeOut);
-
-             }, accessTokenOrAppId);
+            }, accessTokenOrAppId);
         }
     }
 }

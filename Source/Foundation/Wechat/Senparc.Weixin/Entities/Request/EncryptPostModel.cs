@@ -14,7 +14,7 @@
 namespace Senparc.Weixin
 {
     /// <summary>
-    /// 接收解密信息统一接口
+    ///     接收解密信息统一接口
     /// </summary>
     public interface IEncryptPostModel
     {
@@ -29,7 +29,7 @@ namespace Senparc.Weixin
     }
 
     /// <summary>
-    /// 接收加密信息统一基类
+    ///     接收加密信息统一基类
     /// </summary>
     public class EncryptPostModel : IEncryptPostModel
     {
@@ -43,7 +43,7 @@ namespace Senparc.Weixin
         public string EncodingAESKey { get; set; }
 
         /// <summary>
-        /// 设置服务器内部保密信息
+        ///     设置服务器内部保密信息
         /// </summary>
         /// <param name="token"></param>
         /// <param name="encodingAESKey"></param>

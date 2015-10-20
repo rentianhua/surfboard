@@ -20,7 +20,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
     public static class AccessTokenHandlerWapper
     {
         /// <summary>
-        /// 使用AccessToken进行操作时，如果遇到AccessToken错误的情况，重新获取AccessToken一次，并重试
+        ///     使用AccessToken进行操作时，如果遇到AccessToken错误的情况，重新获取AccessToken一次，并重试
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="appId"></param>
@@ -28,7 +28,8 @@ namespace Senparc.Weixin.QY.CommonAPIs
         /// <param name="fun">第一个参数为accessToken</param>
         /// <param name="retryIfFaild"></param>
         /// <returns></returns>
-        public static T Do<T>(string appId, string appSecret, Func<string, T> fun, bool retryIfFaild = true) where T : QyJsonResult
+        public static T Do<T>(string appId, string appSecret, Func<string, T> fun, bool retryIfFaild = true)
+            where T : QyJsonResult
         {
             T result = null;
             try
@@ -42,7 +43,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
                 {
                     //尝试重新验证
                     var accessToken = AccessTokenContainer.TryGetToken(appId, appSecret, true);
-                    result = Do<T>(appId, appSecret, fun, false);
+                    result = Do(appId, appSecret, fun, false);
                 }
             }
             return result;

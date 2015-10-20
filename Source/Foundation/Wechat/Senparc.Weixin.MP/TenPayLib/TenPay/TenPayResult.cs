@@ -16,7 +16,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 订单查询
+    ///     订单查询
     /// </summary>
     public class OrderqueryResult : WxJsonResult
     {

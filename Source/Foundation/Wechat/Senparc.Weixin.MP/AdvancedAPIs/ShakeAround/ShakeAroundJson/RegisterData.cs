@@ -11,7 +11,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.ShakeAround
 {
     /// <summary>
-    /// 申请开通功能数据
+    ///     申请开通功能数据
     /// </summary>
     public class RegisterData
     {

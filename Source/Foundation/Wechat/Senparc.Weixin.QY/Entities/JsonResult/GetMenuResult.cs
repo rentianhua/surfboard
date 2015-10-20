@@ -16,15 +16,15 @@ using Senparc.Weixin.QY.Entities.Menu;
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// GetMenu返回的Json结果
+    ///     GetMenu返回的Json结果
     /// </summary>
     public class GetMenuResult
     {
-        public ButtonGroup menu { get; set; }
-
         public GetMenuResult()
         {
             menu = new ButtonGroup();
         }
+
+        public ButtonGroup menu { get; set; }
     }
 }

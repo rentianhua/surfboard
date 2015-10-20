@@ -13,9 +13,9 @@ using System;
 namespace Senparc.Weixin.Open
 {
     /// <summary>
-    /// 请求消息接口
+    ///     请求消息接口
     /// </summary>
-    public interface IRequestMessageBase// : Weixin.Entities.IRequestMessageBase
+    public interface IRequestMessageBase // : Weixin.Entities.IRequestMessageBase
     {
         string AppId { get; set; }
         DateTime CreateTime { get; set; }
@@ -23,12 +23,13 @@ namespace Senparc.Weixin.Open
     }
 
     /// <summary>
-    /// 请求消息
+    ///     请求消息
     /// </summary>
     public class RequestMessageBase : IRequestMessageBase
     {
         public string AppId { get; set; }
         public DateTime CreateTime { get; set; }
+
         public virtual RequestInfoType InfoType
         {
             get { return RequestInfoType.component_verify_ticket; }

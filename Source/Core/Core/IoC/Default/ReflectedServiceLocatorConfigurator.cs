@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Practices.Unity.Utility;
 
 #endregion
@@ -11,7 +10,7 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Core.IoC
 {
     /// <summary>
-    /// 反射serviceLocator配置者
+    ///     反射serviceLocator配置者
     /// </summary>
     internal class ReflectedServiceLocatorConfigurator : IServiceLocatorConfigurator
     {
@@ -19,7 +18,7 @@ namespace Cedar.Core.IoC
         private Dictionary<MapToAttribute, Type> mapToAttributes;
 
         /// <summary>
-        /// 构造函数，获取可Resolver的集合
+        ///     构造函数，获取可Resolver的集合
         /// </summary>
         /// <param name="assemblyResolver"></param>
         public ReflectedServiceLocatorConfigurator(IAssemblyResolver assemblyResolver)
@@ -30,21 +29,21 @@ namespace Cedar.Core.IoC
 
         /// <summary>
         /// </summary>
-        public IAssemblyResolver AssemblyResolver { get; private set; }
+        public IAssemblyResolver AssemblyResolver { get; }
 
         /// <summary>
-        /// 对serviceLocator进行配置服务
+        ///     对serviceLocator进行配置服务
         /// </summary>
         /// <param name="serviceLocator"></param>
         public void Configure(IServiceLocator serviceLocator)
         {
-            foreach (IGrouping<Type, MapToAttribute> current in
+            foreach (var current in
                 from attribute in GetMapToAttributes().Keys
                 group attribute by attribute.RegisteredType)
             {
                 if (!serviceLocator.IsRegistered(current.Key))
                 {
-                    MapToAttribute mapToAttribute = current.OrderByDescending((MapToAttribute a) => a.Quality).First();
+                    var mapToAttribute = current.OrderByDescending((MapToAttribute a) => a.Quality).First();
                     serviceLocator.Register(mapToAttribute.RegisteredType, mapToAttributes[mapToAttribute], null, true,
                         mapToAttribute.Lifetime);
                 }
@@ -52,7 +51,6 @@ namespace Cedar.Core.IoC
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Dictionary<MapToAttribute, Type> GetMapToAttributes()
@@ -68,13 +66,13 @@ namespace Cedar.Core.IoC
                     return mapToAttributes;
                 }
                 mapToAttributes = new Dictionary<MapToAttribute, Type>();
-                foreach (Assembly current in AssemblyResolver.GetAssemblies())
+                foreach (var current in AssemblyResolver.GetAssemblies())
                 {
-                    Type[] types = current.GetTypes();
-                    for (int i = 0; i < types.Length; i++)
+                    var types = current.GetTypes();
+                    for (var i = 0; i < types.Length; i++)
                     {
-                        Type type = types[i];
-                        foreach (MapToAttribute current2 in AttributeAccessor.GetAttributes<MapToAttribute>(type, false)
+                        var type = types[i];
+                        foreach (var current2 in AttributeAccessor.GetAttributes<MapToAttribute>(type, false)
                             )
                         {
                             mapToAttributes.Add(current2, type);
@@ -86,7 +84,7 @@ namespace Cedar.Core.IoC
         }
 
         /// <summary>
-        /// 通过属性映射创建实例
+        ///     通过属性映射创建实例
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="args"></param>
@@ -97,7 +95,7 @@ namespace Cedar.Core.IoC
                 from attribute in GetMapToAttributes().Keys
                 where attribute.RegisteredType == typeof (T)
                 orderby attribute.Quality descending
-                select attribute).FirstOrDefault<MapToAttribute>();
+                select attribute).FirstOrDefault();
             if (mapToAttribute != null)
             {
                 return (T) Activator.CreateInstance(mapToAttributes[mapToAttribute], args);

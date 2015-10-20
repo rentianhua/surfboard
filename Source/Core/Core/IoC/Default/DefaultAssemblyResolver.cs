@@ -19,12 +19,10 @@ namespace Cedar.Core.IoC
         }
 
         /// <summary>
-        /// 
         /// </summary>
-        public IEnumerable<Assembly> Assemblies { get; private set; }
+        public IEnumerable<Assembly> Assemblies { get; }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Assembly> GetAssemblies()

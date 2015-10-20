@@ -13,16 +13,16 @@
 
 namespace Senparc.Weixin.MP.Entities
 {
-    public class RequestMessageText : RequestMessageBase,IRequestMessageBase
+    public class RequestMessageText : RequestMessageBase, IRequestMessageBase
     {
+        /// <summary>
+        ///     文本消息内容
+        /// </summary>
+        public string Content { get; set; }
+
         public override RequestMsgType MsgType
         {
             get { return RequestMsgType.Text; }
         }
-
-        /// <summary>
-        /// 文本消息内容
-        /// </summary>
-        public string Content { get; set; }
     }
 }

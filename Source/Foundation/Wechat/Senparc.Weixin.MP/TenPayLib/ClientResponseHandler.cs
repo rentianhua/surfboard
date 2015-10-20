@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
 using System.Xml;
 using Senparc.Weixin.MP.Helpers;
@@ -23,31 +22,31 @@ namespace Senparc.Weixin.MP.TenPayLib
 {
     public class ClientResponseHandler
     {
-        /// <summary>
-        /// 密钥
-        /// </summary>
-        private string Key;
+        private string Charset = "gb2312";
 
         /// <summary>
-        /// 应答的参数
+        ///     原始内容
         /// </summary>
-        protected Hashtable Parameters;
+        protected string Content;
 
         /// <summary>
-        /// debug信息
+        ///     debug信息
         /// </summary>
         private string DebugInfo;
 
         /// <summary>
-        /// 原始内容
+        ///     密钥
         /// </summary>
-        protected string Content;
+        private string Key;
 
-        private string Charset = "gb2312";
+        /// <summary>
+        ///     应答的参数
+        /// </summary>
+        protected Hashtable Parameters;
 
 
         /// <summary>
-        /// 获取服务器通知数据方式，进行参数获取
+        ///     获取服务器通知数据方式，进行参数获取
         /// </summary>
         public ClientResponseHandler()
         {
@@ -56,50 +55,54 @@ namespace Senparc.Weixin.MP.TenPayLib
 
         public string GetContent()
         {
-            return this.Content;
+            return Content;
         }
 
         public virtual void SetContent(string content)
         {
-            this.Content = content;
-            XmlDocument xmlDoc = new XmlDocument();
+            Content = content;
+            var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(content);
-            XmlNode root = xmlDoc.SelectSingleNode("root");
-            XmlNodeList xnl = root.ChildNodes;
+            var root = xmlDoc.SelectSingleNode("root");
+            var xnl = root.ChildNodes;
 
             foreach (XmlNode xnf in xnl)
             {
-                this.SetParameter(xnf.Name, xnf.InnerXml);
+                SetParameter(xnf.Name, xnf.InnerXml);
             }
         }
 
         /// <summary>
-        /// 获取密钥
+        ///     获取密钥
         /// </summary>
         /// <returns></returns>
         public string GetKey()
-        { return Key; }
+        {
+            return Key;
+        }
 
         /// <summary>
-        /// 设置密钥
+        ///     设置密钥
         /// </summary>
         /// <param name="key"></param>
         public void SetKey(string key)
-        { this.Key = key; }
+        {
+            Key = key;
+        }
 
         /// <summary>
-        /// 获取参数值
+        ///     获取参数值
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
         public string GetParameter(string parameter)
         {
-            string s = (string)Parameters[parameter];
+            var s = (string) Parameters[parameter];
             return (null == s) ? "" : s;
         }
 
         /// <summary>
-        /// 设置参数值
+        ///     设置参数值
         /// </summary>
         /// <param name="parameter"></param>
         /// <param name="parameterValue"></param>
@@ -117,19 +120,19 @@ namespace Senparc.Weixin.MP.TenPayLib
         }
 
         /// <summary>
-        /// 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean
+        ///     是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名 @return boolean
         /// </summary>
         /// <returns></returns>
-        public virtual Boolean IsTenpaySign()
+        public virtual bool IsTenpaySign()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            ArrayList akeys = new ArrayList(Parameters.Keys);
+            var akeys = new ArrayList(Parameters.Keys);
             akeys.Sort();
 
             foreach (string k in akeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
                 if (null != v && "".CompareTo(v) != 0
                     && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
                 {
@@ -137,50 +140,54 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
 
             //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
+            SetDebugInfo(sb + " => sign:" + sign);
             return GetParameter("sign").ToLower().Equals(sign);
         }
 
         /// <summary>
-        /// 获取debug信息
+        ///     获取debug信息
         /// </summary>
         /// <returns></returns>
         public string GetDebugInfo()
-        { return DebugInfo; }
+        {
+            return DebugInfo;
+        }
 
         /// <summary>
-        /// 设置debug信息
+        ///     设置debug信息
         /// </summary>
         /// <param name="debugInfo"></param>
         protected void SetDebugInfo(string debugInfo)
-        { this.DebugInfo = debugInfo; }
+        {
+            DebugInfo = debugInfo;
+        }
 
         protected virtual string getCharset()
         {
-            return this.Charset;
+            return Charset;
         }
 
         public void SetCharset(string charset)
         {
-            this.Charset = charset;
+            Charset = charset;
         }
 
         /// <summary>
-        /// 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名  @return boolean
+        ///     是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名  @return boolean
         /// </summary>
         /// <param name="aKeys"></param>
         /// <returns></returns>
-        public virtual Boolean IsTenpaySign(ArrayList aKeys)
+        public virtual bool IsTenpaySign(ArrayList aKeys)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (string k in aKeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
                 if (null != v && "".CompareTo(v) != 0
                     && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
                 {
@@ -188,11 +195,11 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), getCharset()).ToLower();
 
             //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
+            SetDebugInfo(sb + " => sign:" + sign);
             return GetParameter("sign").ToLower().Equals(sign);
         }
     }

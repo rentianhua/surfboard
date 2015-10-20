@@ -43,7 +43,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.GroupMessage
 
     public class GroupMessageByOpenId_VoiceData : BaseGroupMessageDataByOpenId
     {
-        public GroupMessageByOpenId_MediaId voice { get; set; }  
+        public GroupMessageByOpenId_MediaId voice { get; set; }
     }
 
     public class GroupMessageByOpenId_ImageData : BaseGroupMessageDataByOpenId

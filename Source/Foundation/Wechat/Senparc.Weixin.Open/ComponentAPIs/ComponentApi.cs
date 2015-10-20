@@ -21,7 +21,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
     public static class ComponentApi
     {
         /// <summary>
-        /// 获取授权地址
+        ///     获取授权地址
         /// </summary>
         /// <param name="componentAppId">第三方平台方appid</param>
         /// <param name="preAuthCode">预授权码</param>
@@ -42,18 +42,20 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         }
 
         /// <summary>
-        /// 使用授权码换取公众号的授权信息
+        ///     使用授权码换取公众号的授权信息
         /// </summary>
         /// <param name="componentAppId">服务开发方的appid</param>
         /// <param name="componentAccessToken">服务开发方的access_token</param>
         /// <param name="authorizationCode">授权code,会在授权成功时返回给第三方平台，详见第三方平台授权流程说明</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static QueryAuthResult QueryAuth(string componentAccessToken, string componentAppId, string authorizationCode, int timeOut = Config.TIME_OUT)
+        public static QueryAuthResult QueryAuth(string componentAccessToken, string componentAppId,
+            string authorizationCode, int timeOut = Config.TIME_OUT)
         {
             var url =
                 string.Format(
-                    "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token={0}", componentAccessToken);
+                    "https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token={0}",
+                    componentAccessToken);
 
             var data = new
             {
@@ -65,8 +67,8 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         }
 
         /// <summary>
-        /// 获取（刷新）授权公众号的令牌
-        /// 由于access_token拥有较短的有效期，当access_token超时后，可以使用refresh_token进行刷新，refresh_token拥有较长的有效期（30天），当refresh_token失效的后，需要用户重新授权。
+        ///     获取（刷新）授权公众号的令牌
+        ///     由于access_token拥有较短的有效期，当access_token超时后，可以使用refresh_token进行刷新，refresh_token拥有较长的有效期（30天），当refresh_token失效的后，需要用户重新授权。
         /// </summary>
         /// <param name="componentAccessToken"></param>
         /// <param name="componentAppId"></param>
@@ -74,7 +76,8 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <param name="authorizerRefreshToken"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static RefreshAuthorizerTokenResult RefreshAuthorizerToken(string componentAccessToken, string componentAppId, string authorizerAppId, string authorizerRefreshToken, int timeOut = Config.TIME_OUT)
+        public static RefreshAuthorizerTokenResult RefreshAuthorizerToken(string componentAccessToken,
+            string componentAppId, string authorizerAppId, string authorizerRefreshToken, int timeOut = Config.TIME_OUT)
         {
             var url =
                 string.Format(
@@ -92,14 +95,15 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         }
 
         /// <summary>
-        /// 获取授权方信息
+        ///     获取授权方信息
         /// </summary>
         /// <param name="componentAccessToken"></param>
         /// <param name="componentAppId"></param>
         /// <param name="authorizerAppId"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static GetAuthorizerInfoResult GetAuthorizerInfo(string componentAccessToken, string componentAppId, string authorizerAppId, int timeOut = Config.TIME_OUT)
+        public static GetAuthorizerInfoResult GetAuthorizerInfo(string componentAccessToken, string componentAppId,
+            string authorizerAppId, int timeOut = Config.TIME_OUT)
         {
             var url =
                 string.Format(
@@ -109,14 +113,14 @@ namespace Senparc.Weixin.Open.ComponentAPIs
             var data = new
             {
                 component_appid = componentAppId,
-                authorizer_appid = authorizerAppId,
+                authorizer_appid = authorizerAppId
             };
 
             return CommonJsonSend.Send<GetAuthorizerInfoResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 获取授权方的选项设置信息
+        ///     获取授权方的选项设置信息
         /// </summary>
         /// <param name="componentAppId">服务开发商的appid</param>
         /// <param name="componentAccessToken">服务开发方的access_token</param>
@@ -124,7 +128,8 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <param name="optionName">选项名称</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static AuthorizerOptionResult GetAuthorizerOption(string componentAccessToken, string componentAppId, string authorizerAppId, OptionName optionName, int timeOut = Config.TIME_OUT)
+        public static AuthorizerOptionResult GetAuthorizerOption(string componentAccessToken, string componentAppId,
+            string authorizerAppId, OptionName optionName, int timeOut = Config.TIME_OUT)
         {
             var url =
                 string.Format(
@@ -142,7 +147,7 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         }
 
         /// <summary>
-        /// 设置授权方的选项信息
+        ///     设置授权方的选项信息
         /// </summary>
         /// <param name="componentAccessToken">服务开发方的access_token</param>
         /// <param name="componentAppId">服务开发商的appid</param>
@@ -151,7 +156,8 @@ namespace Senparc.Weixin.Open.ComponentAPIs
         /// <param name="optionValue">设置的选项值</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SetAuthorizerOption(string componentAccessToken, string componentAppId, string authorizerAppId, OptionName optionName, int optionValue, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SetAuthorizerOption(string componentAccessToken, string componentAppId,
+            string authorizerAppId, OptionName optionName, int optionValue, int timeOut = Config.TIME_OUT)
         {
             var url =
                 string.Format(

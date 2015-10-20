@@ -15,8 +15,6 @@
 ----------------------------------------------------------------*/
 
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Web.Security;
 using Senparc.Weixin.MP.Entities.Request;
 
@@ -25,17 +23,17 @@ using Senparc.Weixin.MP.Entities.Request;
 namespace Senparc.Weixin.MP
 {
     /// <summary>
-    /// 签名验证类
+    ///     签名验证类
     /// </summary>
     public class CheckSignature
     {
         /// <summary>
-        /// 在网站没有提供Token（或传入为null）的情况下的默认Token，建议在网站中进行配置。
+        ///     在网站没有提供Token（或传入为null）的情况下的默认Token，建议在网站中进行配置。
         /// </summary>
         public const string Token = "weixin";
 
         /// <summary>
-        /// 检查签名是否正确
+        ///     检查签名是否正确
         /// </summary>
         /// <param name="signature"></param>
         /// <param name="postModel">需要提供：Timestamp、Nonce、Token</param>
@@ -46,7 +44,7 @@ namespace Senparc.Weixin.MP
         }
 
         /// <summary>
-        /// 检查签名是否正确
+        ///     检查签名是否正确
         /// </summary>
         /// <param name="signature"></param>
         /// <param name="timestamp"></param>
@@ -59,7 +57,7 @@ namespace Senparc.Weixin.MP
         }
 
         /// <summary>
-        /// 返回正确的签名
+        ///     返回正确的签名
         /// </summary>
         /// <param name="postModel">需要提供：Timestamp、Nonce、Token</param>
         /// <returns></returns>
@@ -69,7 +67,7 @@ namespace Senparc.Weixin.MP
         }
 
         /// <summary>
-        /// 返回正确的签名
+        ///     返回正确的签名
         /// </summary>
         /// <param name="timestamp"></param>
         /// <param name="nonce"></param>
@@ -78,9 +76,10 @@ namespace Senparc.Weixin.MP
         public static string GetSignature(string timestamp, string nonce, string token = null)
         {
             token = token ?? Token;
-            var arr = new[] { token, timestamp, nonce }.OrderBy(z => z).ToArray();
+            var arr = new[] {token, timestamp, nonce}.OrderBy(z => z).ToArray();
             var arrString = string.Join("", arr);
-            var enText = FormsAuthentication.HashPasswordForStoringInConfigFile(arrString, "SHA1").ToLower();//使用System.Web.Security程序集
+            var enText = FormsAuthentication.HashPasswordForStoringInConfigFile(arrString, "SHA1").ToLower();
+                //使用System.Web.Security程序集
             //var sha1 = SHA1.Create();
             //var sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
             //StringBuilder enText = new StringBuilder();
@@ -89,7 +88,7 @@ namespace Senparc.Weixin.MP
             //    enText.AppendFormat("{0:x2}", b);
             //}
 
-            return enText.ToString();
+            return enText;
         }
     }
 }

@@ -21,9 +21,9 @@ namespace FrameworkTest
         [TestMethod]
         public void TestXxMethod()
         {
-            MySqlDbHelper helper = new MySqlDbHelper("mysqldb");
+            var helper = new MySqlDbHelper("mysqldb");
 
-            AAQueryModel query = new AAQueryModel();
+            var query = new AAQueryModel();
             query.PageIndex = 1;
             query.PageSize = 5;
             query.Group = "";
@@ -34,24 +34,22 @@ namespace FrameworkTest
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = "1=1";
-            PagingModel model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere, query.PageSize, query.PageIndex);
             var list2 = helper.ExecutePaging<dynamic>(model, query.Echo);
-            
+
             Assert.IsNotNull(list2);
         }
 
         [TestMethod]
         public void TestMethod_SMS()
         {
-            SMSMSG sms = new SMSMSG();
+            var sms = new SMSMSG();
             var result = sms.SendSms("15862409166", "测试发送");
             Assert.IsNotNull(null);
         }
-
     }
 
-    public class AAQueryModel:QueryModel
+    public class AAQueryModel : QueryModel
     {
-        
     }
 }

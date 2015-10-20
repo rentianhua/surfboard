@@ -4,60 +4,58 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.IoC;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
 namespace Cedar.Framework.Common.Client.WebAPI
 {
     /// <summary>
-	/// A custom DependencyResolver which uses ServiceLocator to acticvate service.
-	/// </summary>
-	public class ServiceLocatableDependencyResolver : IDependencyResolver, IDependencyScope, IDisposable
+    ///     A custom DependencyResolver which uses ServiceLocator to acticvate service.
+    /// </summary>
+    public class ServiceLocatableDependencyResolver : IDependencyResolver, IDependencyScope, IDisposable
     {
-        private List<IDisposable> disposableServices = new List<IDisposable>();
+        private readonly List<IDisposable> disposableServices = new List<IDisposable>();
+
         /// <summary>
-        /// Gets the service locator.
-        /// </summary>
-        /// <value>
-        /// The service locator.
-        /// </value>
-        public IServiceLocator ServiceLocator
-        {
-            get;
-            private set;
-        }
-        /// <summary>
-        /// Initializes a new instance of the ServiceLocatableDependencyResolver class.
+        ///     Initializes a new instance of the ServiceLocatableDependencyResolver class.
         /// </summary>
         /// <param name="serviceLocatorName">Name of the service locator.</param>
         public ServiceLocatableDependencyResolver(string serviceLocatorName = null)
         {
-            this.ServiceLocator = ServiceLocatorFactory.GetServiceLocator(serviceLocatorName);
+            ServiceLocator = ServiceLocatorFactory.GetServiceLocator(serviceLocatorName);
         }
 
         /// <summary>
-        /// Initializes a new instance of the ServiceLocatableDependencyResolver class.
+        ///     Initializes a new instance of the ServiceLocatableDependencyResolver class.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         public ServiceLocatableDependencyResolver(IServiceLocator serviceLocator)
         {
             Guard.ArgumentNotNull(serviceLocator, "serviceLocator");
-            this.ServiceLocator = serviceLocator;
+            ServiceLocator = serviceLocator;
         }
 
         /// <summary>
-        /// Begins the scope.
+        ///     Gets the service locator.
+        /// </summary>
+        /// <value>
+        ///     The service locator.
+        /// </value>
+        public IServiceLocator ServiceLocator { get; }
+
+        /// <summary>
+        ///     Begins the scope.
         /// </summary>
         /// <returns>The created DependencyScope.</returns>
         public IDependencyScope BeginScope()
         {
-            return new ServiceLocatableDependencyResolver(this.ServiceLocator);
+            return new ServiceLocatableDependencyResolver(ServiceLocator);
         }
 
         /// <summary>
-        /// Gets the service.
+        ///     Gets the service.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The activated service instance.</returns>
@@ -67,8 +65,8 @@ namespace Cedar.Framework.Common.Client.WebAPI
             object result;
             try
             {
-                object service = this.ServiceLocator.GetService(serviceType, null);
-                this.AddDisposableService(service);
+                var service = ServiceLocator.GetService(serviceType, null);
+                AddDisposableService(service);
                 result = service;
             }
             catch (ResolutionException)
@@ -79,7 +77,7 @@ namespace Cedar.Framework.Common.Client.WebAPI
         }
 
         /// <summary>
-        /// Gets the services.
+        ///     Gets the services.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
         /// <returns>The activated service instances.</returns>
@@ -89,10 +87,10 @@ namespace Cedar.Framework.Common.Client.WebAPI
             IEnumerable<object> result;
             try
             {
-                List<object> list = new List<object>();
-                foreach (object current in this.ServiceLocator.GetAllServices(serviceType))
+                var list = new List<object>();
+                foreach (var current in ServiceLocator.GetAllServices(serviceType))
                 {
-                    this.AddDisposableService(current);
+                    AddDisposableService(current);
                     list.Add(current);
                 }
                 result = list;
@@ -105,21 +103,22 @@ namespace Cedar.Framework.Common.Client.WebAPI
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
-            foreach (IDisposable current in this.disposableServices)
+            foreach (var current in disposableServices)
             {
                 current.Dispose();
             }
         }
+
         private void AddDisposableService(object servie)
         {
-            IDisposable disposable = servie as IDisposable;
-            if (disposable != null && !this.disposableServices.Contains(disposable))
+            var disposable = servie as IDisposable;
+            if (disposable != null && !disposableServices.Contains(disposable))
             {
-                this.disposableServices.Add(disposable);
+                disposableServices.Add(disposable);
             }
         }
     }

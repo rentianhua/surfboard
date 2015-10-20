@@ -3,12 +3,12 @@
 using System;
 using System.Configuration;
 using System.IO;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.Configuration;
 using Cedar.Core.EntLib.Properties;
 using Cedar.Core.EntLib.SettingSource.Configuration;
 using Cedar.Core.IoC;
 using Cedar.Core.SettingSource;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -17,20 +17,17 @@ namespace Cedar.Core.EntLib.SettingSource
     /// <summary>
     ///     A simple file based Setting Source.
     /// </summary>
-    [ConfigurationElement(typeof(SimpleFileSettingSourceData)), MapTo(typeof(ISettingSource), 0)]
+    [ConfigurationElement(typeof (SimpleFileSettingSourceData)), MapTo(typeof (ISettingSource), 0)]
     public class SimpleFileSettingSource : ISettingSource
     {
         /// <summary>
-        /// 
         /// </summary>
         public SimpleFileSettingSource()
             : this(AppDomain.CurrentDomain.SetupInformation.ConfigurationFile)
         {
-
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="configurationFilePath"></param>
         public SimpleFileSettingSource(string configurationFilePath)
@@ -60,7 +57,7 @@ namespace Cedar.Core.EntLib.SettingSource
         /// <value>
         ///     The configuration.
         /// </value>
-        public System.Configuration.Configuration Configuration { get; private set; }
+        public System.Configuration.Configuration Configuration { get; }
 
         /// <summary>
         ///     Gets the configuration file path.

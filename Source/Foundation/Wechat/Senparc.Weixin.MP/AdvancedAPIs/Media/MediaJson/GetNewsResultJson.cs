@@ -15,7 +15,7 @@ using Senparc.Weixin.MP.AdvancedAPIs.GroupMessage;
 namespace Senparc.Weixin.MP.AdvancedAPIs.Media
 {
     /// <summary>
-    /// 获取图文类型永久素材返回结果
+    ///     获取图文类型永久素材返回结果
     /// </summary>
     public class GetNewsResultJson : WxJsonResult
     {
@@ -25,7 +25,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Media
     public class ForeverNewsItem : NewsModel
     {
         /// <summary>
-        /// 图文页的URL
+        ///     图文页的URL
         /// </summary>
         public string url { get; set; }
     }

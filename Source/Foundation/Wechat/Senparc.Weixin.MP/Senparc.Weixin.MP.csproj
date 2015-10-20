@@ -249,12 +249,6 @@
     <Compile Include="Helpers\MsgTypeHelper.cs" />
     <Compile Include="Helpers\JSSDKHelper.cs" />
     <Compile Include="Helpers\SHA1UtilHelper.cs" />
-    <Compile Include="MessageHandlers\IMessageHandler.cs" />
-    <Compile Include="MessageHandlers\MessageHandler.cs" />
-    <Compile Include="MessageHandlers\MessageHandler.Event.cs" />
-    <Compile Include="MessageHandlers\MessageHandler.Message.cs" />
-    <Compile Include="RequestMessageFactory.cs" />
-    <Compile Include="ResponseMessageFactory.cs" />
     <Compile Include="Tencent\Cryptography.cs" />
     <Compile Include="Tencent\WXBizMsgCrypt.cs" />
     <Compile Include="TenPayLibV3\RequestHandler.cs" />
@@ -271,7 +265,6 @@
     <Compile Include="TenPayLib\TenPay\TenPay.cs" />
     <Compile Include="TenPayLib\TenPay\TenPayResult.cs" />
     <Compile Include="TenPayLib\TenPayRights\TenPayRights.cs" />
-    <Compile Include="Agents\MessageAgent.cs" />
     <Compile Include="CheckSignature.cs" />
     <Compile Include="CommonAPIs\ApiHandlerWapper.cs" />
     <Compile Include="CommonAPIs\CommonApi.cs" />

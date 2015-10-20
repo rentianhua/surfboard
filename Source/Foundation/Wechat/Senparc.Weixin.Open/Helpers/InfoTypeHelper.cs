@@ -6,7 +6,7 @@ namespace Senparc.Weixin.Open.Helpers
     public static class InfoTypeHelper
     {
         /// <summary>
-        /// 根据xml信息，返回InfoType
+        ///     根据xml信息，返回InfoType
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
@@ -16,12 +16,12 @@ namespace Senparc.Weixin.Open.Helpers
         }
 
         /// <summary>
-        /// 根据xml信息，返回InfoType
+        ///     根据xml信息，返回InfoType
         /// </summary>
         /// <returns></returns>
         public static RequestInfoType GetRequestInfoType(string str)
         {
-            return (RequestInfoType)Enum.Parse(typeof(RequestInfoType), str, true);
+            return (RequestInfoType) Enum.Parse(typeof (RequestInfoType), str, true);
         }
     }
 }

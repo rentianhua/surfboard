@@ -15,11 +15,11 @@ namespace Senparc.Weixin.QY.Entities
 {
     public class ResponseMessageText : ResponseMessageBase, IResponseMessageBase
     {
-        new public virtual ResponseMsgType MsgType
+        public string Content { get; set; }
+
+        public new virtual ResponseMsgType MsgType
         {
             get { return ResponseMsgType.Text; }
         }
-
-        public string Content { get; set; }
     }
 }

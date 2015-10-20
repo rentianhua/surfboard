@@ -11,7 +11,6 @@ using Cedar.Core.Properties;
 namespace Cedar.Core.SettingSource.Configuration
 {
     /// <summary>
-    /// 
     /// </summary>
     [ConfigurationSectionName("cedar.settingSource")]
     public class SettingSourceSettings : ConfigurationSection
@@ -28,7 +27,7 @@ namespace Cedar.Core.SettingSource.Configuration
         [ConfigurationProperty(DefaultSettingSourcePropertyName, IsRequired = true)]
         public string DefaultSettingSource
         {
-            get { return (string)base[DefaultSettingSourcePropertyName]; }
+            get { return (string) base[DefaultSettingSourcePropertyName]; }
         }
 
         /// <summary>
@@ -40,7 +39,10 @@ namespace Cedar.Core.SettingSource.Configuration
         [ConfigurationProperty(SettingSourcesPropertyName, IsRequired = true)]
         public NameTypeConfigurationElementCollection<SettingSourceDataBase> SettingSources
         {
-            get { return (NameTypeConfigurationElementCollection<SettingSourceDataBase>)base[SettingSourcesPropertyName]; }
+            get
+            {
+                return (NameTypeConfigurationElementCollection<SettingSourceDataBase>) base[SettingSourcesPropertyName];
+            }
         }
 
         /// <summary>

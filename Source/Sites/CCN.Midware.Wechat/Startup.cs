@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Microsoft.Owin;
 using Owin;
 

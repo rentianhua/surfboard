@@ -1,23 +1,20 @@
-﻿using PostMsg_Net;
-using PostMsg_Net.common;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Text;
 using System.Web;
+using PostMsg_Net;
+using PostMsg_Net.common;
 
 namespace Cedar.Foundation.SMS.Common
 {
     /// <summary>
-    /// 
     /// </summary>
     public class SMSMSG
     {
+        private readonly PostMsg _postMsg;
         private readonly string _smsapi = ConfigurationManager.AppSettings["smsapi"];
 
-        private readonly PostMsg _postMsg;
-
         /// <summary>
-        /// 
         /// </summary>
         public SMSMSG()
         {
@@ -42,7 +39,7 @@ namespace Cedar.Foundation.SMS.Common
             {
                 postDl = ConfigurationManager.AppSettings["sms_post_dl"];
             }
-            
+
             _postMsg = new PostMsg();
             //设置账号
             _postMsg.SetUser(username, password);
@@ -53,7 +50,7 @@ namespace Cedar.Foundation.SMS.Common
         }
 
         /// <summary>
-        /// http接口发送
+        ///     http接口发送
         /// </summary>
         /// <param name="to">发送对象</param>
         /// <param name="content">发送内容</param>
@@ -80,7 +77,7 @@ namespace Cedar.Foundation.SMS.Common
         }
 
         /// <summary>
-        /// 后台接口发送
+        ///     后台接口发送
         /// </summary>
         /// <param name="to">发送对象</param>
         /// <param name="content">发送内容</param>
@@ -109,16 +106,14 @@ namespace Cedar.Foundation.SMS.Common
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public class SendResult
     {
         /// <summary>
-        /// 
         /// </summary>
         public string errcode { get; set; }
+
         /// <summary>
-        /// 
         /// </summary>
         public string errmsg { get; set; }
     }

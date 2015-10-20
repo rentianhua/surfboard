@@ -2,7 +2,6 @@
 
 namespace FrameworkTest
 {
-
     public class DemoInstanceService
     {
         [AuditTrailCallHandler("test")]

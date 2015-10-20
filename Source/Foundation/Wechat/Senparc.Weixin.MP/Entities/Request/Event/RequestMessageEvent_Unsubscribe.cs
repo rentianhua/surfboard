@@ -14,12 +14,12 @@
 namespace Senparc.Weixin.MP.Entities
 {
     /// <summary>
-    /// 事件之取消订阅
+    ///     事件之取消订阅
     /// </summary>
     public class RequestMessageEvent_Unsubscribe : RequestMessageEventBase, IRequestMessageEventBase
     {
         /// <summary>
-        /// 事件类型
+        ///     事件类型
         /// </summary>
         public override Event Event
         {

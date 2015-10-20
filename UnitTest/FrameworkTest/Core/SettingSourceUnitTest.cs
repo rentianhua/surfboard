@@ -1,5 +1,4 @@
-﻿using System;
-using Cedar.Core.SettingSource;
+﻿using Cedar.Core.SettingSource;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FrameworkTest.Core

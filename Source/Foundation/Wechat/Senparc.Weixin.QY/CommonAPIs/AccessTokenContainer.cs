@@ -18,34 +18,35 @@ using Senparc.Weixin.QY.Entities;
 
 namespace Senparc.Weixin.QY.CommonAPIs
 {
-    class AccessTokenBag
+    internal class AccessTokenBag
     {
+        /// <summary>
+        ///     只针对这个CorpId的锁
+        /// </summary>
+        public object Lock = new object();
+
         public string CorpId { get; set; }
         public string CorpSecret { get; set; }
         public DateTime ExpireTime { get; set; }
         public AccessTokenResult AccessTokenResult { get; set; }
-        /// <summary>
-        /// 只针对这个CorpId的锁
-        /// </summary>
-        public object Lock = new object();
     }
 
     /// <summary>
-    /// 通用接口AccessToken容器，用于自动管理AccessToken，如果过期会重新获取
+    ///     通用接口AccessToken容器，用于自动管理AccessToken，如果过期会重新获取
     /// </summary>
     public class AccessTokenContainer
     {
-        static Dictionary<string, AccessTokenBag> AccessTokenCollection =
-           new Dictionary<string, AccessTokenBag>(StringComparer.OrdinalIgnoreCase);
+        private static readonly Dictionary<string, AccessTokenBag> AccessTokenCollection =
+            new Dictionary<string, AccessTokenBag>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
-        /// 注册应用凭证信息，此操作只是注册，不会马上获取Token，并将清空之前的Token，
+        ///     注册应用凭证信息，此操作只是注册，不会马上获取Token，并将清空之前的Token，
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="corpSecret"></param>
         public static void Register(string corpId, string corpSecret)
         {
-            AccessTokenCollection[corpId] = new AccessTokenBag()
+            AccessTokenCollection[corpId] = new AccessTokenBag
             {
                 CorpId = corpId,
                 CorpSecret = corpSecret,
@@ -55,7 +56,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 使用完整的应用凭证获取Token，如果不存在将自动注册
+        ///     使用完整的应用凭证获取Token，如果不存在将自动注册
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="corpSecret"></param>
@@ -71,7 +72,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取可用Token
+        ///     获取可用Token
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="getNewToken">是否强制重新获取新的Token</param>
@@ -82,7 +83,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取可用Token
+        ///     获取可用Token
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="getNewToken">是否强制重新获取新的Token</param>
@@ -109,7 +110,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 检查是否已经注册
+        ///     检查是否已经注册
         /// </summary>
         /// <param name="corpId"></param>
         /// <returns></returns>

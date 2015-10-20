@@ -42,170 +42,167 @@ namespace Senparc.Weixin.MP.TenPayLib
     public class TenPayHttpClient
     {
         /// <summary>
-        /// 请求内容，无论post和get，都用get方式提供
-        /// </summary>
-        private string ReqContent;
-
-        /// <summary>
-        /// 应答内容
-        /// </summary>
-        private string ResContent;
-
-        /// <summary>
-        /// 请求方法
-        /// </summary>
-        private string Method;
-
-        /// <summary>
-        /// 错误信息
-        /// </summary>
-        private string ErrInfo;
-
-        /// <summary>
-        /// 证书文件
-        /// </summary>
-
-        private string CertFile;
-
-        /// <summary>
-        /// 证书密码 
-        /// </summary>
-        private string CertPasswd;
-
-        /// <summary>
-        /// ca证书文件 
+        ///     ca证书文件
         /// </summary>
         private string CaFile;
 
         /// <summary>
-        /// 超时时间,以秒为单位 
+        ///     证书文件
         /// </summary>
-        private int TimeOut;
+        private string CertFile;
 
         /// <summary>
-        /// http应答编码
+        ///     证书密码
         /// </summary>
-
-        private int ResponseCode;
+        private string CertPasswd;
 
         /// <summary>
-        /// 字符编码
+        ///     字符编码
         /// </summary>
         private string Charset;
 
+        /// <summary>
+        ///     错误信息
+        /// </summary>
+        private string ErrInfo;
+
+        /// <summary>
+        ///     请求方法
+        /// </summary>
+        private string Method;
+
+        /// <summary>
+        ///     请求内容，无论post和get，都用get方式提供
+        /// </summary>
+        private string ReqContent;
+
+        /// <summary>
+        ///     应答内容
+        /// </summary>
+        private string ResContent;
+
+        /// <summary>
+        ///     http应答编码
+        /// </summary>
+        private int ResponseCode;
+
+        /// <summary>
+        ///     超时时间,以秒为单位
+        /// </summary>
+        private int TimeOut;
+
         public TenPayHttpClient()
         {
-            this.CaFile = "";
-            this.CertFile = "";
-            this.CertPasswd = "";
+            CaFile = "";
+            CertFile = "";
+            CertPasswd = "";
 
-            this.ReqContent = "";
-            this.ResContent = "";
-            this.Method = "POST";
-            this.ErrInfo = "";
-            this.TimeOut = 1 * 60;//5分钟
+            ReqContent = "";
+            ResContent = "";
+            Method = "POST";
+            ErrInfo = "";
+            TimeOut = 1*60; //5分钟
 
-            this.ResponseCode = 0;
-            this.Charset = "gb2312";
-
+            ResponseCode = 0;
+            Charset = "gb2312";
         }
 
         /// <summary>
-        /// 设置请求内容
+        ///     设置请求内容
         /// </summary>
         /// <param name="reqContent"></param>
         public void SetReqContent(string reqContent)
         {
-            this.ReqContent = reqContent;
+            ReqContent = reqContent;
         }
 
         /// <summary>
-        /// 获取结果内容
+        ///     获取结果内容
         /// </summary>
         /// <returns></returns>
         public string GetResContent()
         {
-            return this.ResContent;
+            return ResContent;
         }
 
         /// <summary>
-        /// 设置请求方法post或者get
+        ///     设置请求方法post或者get
         /// </summary>
         /// <param name="method"></param>
-
         public void SetMethod(string method)
         {
-            this.Method = method;
+            Method = method;
         }
 
         /// <summary>
-        /// 获取错误信息
+        ///     获取错误信息
         /// </summary>
         /// <returns></returns>
         public string GetErrInfo()
         {
-            return this.ErrInfo;
+            return ErrInfo;
         }
 
         /// <summary>
-        /// 设置证书信息
+        ///     设置证书信息
         /// </summary>
         /// <param name="certFile"></param>
         /// <param name="certPasswd"></param>
         public void SetCertInfo(string certFile, string certPasswd)
         {
-            this.CertFile = certFile;
-            this.CertPasswd = certPasswd;
+            CertFile = certFile;
+            CertPasswd = certPasswd;
         }
 
         /// <summary>
-        /// 设置ca
+        ///     设置ca
         /// </summary>
         /// <param name="caFile"></param>
         public void SetCaInfo(string caFile)
         {
-            this.CaFile = caFile;
+            CaFile = caFile;
         }
 
         /// <summary>
-        /// 设置超时时间,以秒为单位
+        ///     设置超时时间,以秒为单位
         /// </summary>
         /// <param name="timeOut"></param>
         public void SetTimeOut(int timeOut)
         {
-            this.TimeOut = timeOut;
+            TimeOut = timeOut;
         }
 
 
         /// <summary>
-        /// 获取http状态码
+        ///     获取http状态码
         /// </summary>
         /// <returns></returns>
         public int GetResponseCode()
         {
-            return this.ResponseCode;
+            return ResponseCode;
         }
 
         public void SetCharset(string charset)
         {
-            this.Charset = charset;
+            Charset = charset;
         }
 
         /// <summary>
-        /// 验证服务器证书
+        ///     验证服务器证书
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="certificate"></param>
         /// <param name="chain"></param>
         /// <param name="errors"></param>
         /// <returns></returns>
-        public bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        public bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain,
+            SslPolicyErrors errors)
         {
             return true;
         }
 
         /// <summary>
-        /// 执行http调用
+        ///     执行http调用
         /// </summary>
         /// <returns></returns>
         public bool Call()
@@ -217,35 +214,34 @@ namespace Senparc.Weixin.MP.TenPayLib
             try
             {
                 string postData = null;
-                if (this.Method.ToUpper() == "POST")
+                if (Method.ToUpper() == "POST")
                 {
-                    string[] sArray = Regex.Split(this.ReqContent, "\\?");
+                    var sArray = Regex.Split(ReqContent, "\\?");
 
-                    hp = (HttpWebRequest)WebRequest.Create(sArray[0]);
+                    hp = (HttpWebRequest) WebRequest.Create(sArray[0]);
 
                     if (sArray.Length >= 2)
                     {
                         postData = sArray[1];
                     }
-
                 }
                 else
                 {
-                    hp = (HttpWebRequest)WebRequest.Create(this.ReqContent);
+                    hp = (HttpWebRequest) WebRequest.Create(ReqContent);
                 }
 
 
-                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-                if (this.CertFile != "")
+                ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+                if (CertFile != "")
                 {
-                    hp.ClientCertificates.Add(new X509Certificate2(this.CertFile, this.CertPasswd));
+                    hp.ClientCertificates.Add(new X509Certificate2(CertFile, CertPasswd));
                 }
-                hp.Timeout = this.TimeOut * 1000;
+                hp.Timeout = TimeOut*1000;
 
-                Encoding encoding = Encoding.GetEncoding(this.Charset);
+                var encoding = Encoding.GetEncoding(Charset);
                 if (postData != null)
                 {
-                    byte[] data = encoding.GetBytes(postData);
+                    var data = encoding.GetBytes(postData);
 
                     hp.Method = "POST";
 
@@ -253,38 +249,35 @@ namespace Senparc.Weixin.MP.TenPayLib
 
                     hp.ContentLength = data.Length;
 
-                    Stream ws = hp.GetRequestStream();
+                    var ws = hp.GetRequestStream();
 
                     // 发送数据
 
                     ws.Write(data, 0, data.Length);
                     ws.Close();
-
-
                 }
 
 
-                wr = (HttpWebResponse)hp.GetResponse();
+                wr = (HttpWebResponse) hp.GetResponse();
                 sr = new StreamReader(wr.GetResponseStream(), encoding);
 
 
-
-                this.ResContent = sr.ReadToEnd();
+                ResContent = sr.ReadToEnd();
                 sr.Close();
                 wr.Close();
             }
             catch (Exception exp)
             {
-                this.ErrInfo += exp.Message;
+                ErrInfo += exp.Message;
                 if (wr != null)
                 {
-                    this.ResponseCode = Convert.ToInt32(wr.StatusCode);
+                    ResponseCode = Convert.ToInt32(wr.StatusCode);
                 }
 
                 return false;
             }
 
-            this.ResponseCode = Convert.ToInt32(wr.StatusCode);
+            ResponseCode = Convert.ToInt32(wr.StatusCode);
 
             return true;
         }

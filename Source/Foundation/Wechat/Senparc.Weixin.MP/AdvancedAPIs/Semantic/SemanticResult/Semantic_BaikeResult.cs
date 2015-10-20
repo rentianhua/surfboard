@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 百科服务（baike）
+    ///     百科服务（baike）
     /// </summary>
     public class Semantic_BaikeResult : BaseSemanticResultJson
     {
@@ -29,7 +29,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Baike
     {
         /// <summary>
-        /// 百科关键词
+        ///     百科关键词
         /// </summary>
         public string keyword { get; set; }
     }

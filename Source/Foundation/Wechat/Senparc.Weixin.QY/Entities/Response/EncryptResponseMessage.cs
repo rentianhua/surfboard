@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.QY.Entities.Response
 {
     /// <summary>
-    /// 返回给服务器的加密消息
+    ///     返回给服务器的加密消息
     /// </summary>
     public class EncryptResponseMessage
     {

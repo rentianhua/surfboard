@@ -24,7 +24,7 @@ namespace Senparc.Weixin.MP.Helpers
     public class JSSDKHelper
     {
         /// <summary>
-        /// 获取随机字符串
+        ///     获取随机字符串
         /// </summary>
         /// <returns></returns>
         public static string GetNoncestr()
@@ -34,7 +34,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 获取时间戳
+        ///     获取时间戳
         /// </summary>
         /// <returns></returns>
         public static string GetTimestamp()
@@ -44,7 +44,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// sha1加密
+        ///     sha1加密
         /// </summary>
         /// <returns></returns>
         private static string CreateSha1(Hashtable parameters)
@@ -57,7 +57,7 @@ namespace Senparc.Weixin.MP.Helpers
             {
                 if (parameters[k] != null)
                 {
-                    var v = (string)parameters[k];
+                    var v = (string) parameters[k];
 
                     if (sb.Length == 0)
                     {
@@ -69,11 +69,11 @@ namespace Senparc.Weixin.MP.Helpers
                     }
                 }
             }
-            return SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
+            return SHA1UtilHelper.GetSha1(sb.ToString()).ToLower();
         }
 
         /// <summary>
-        /// 生成cardSign的加密方法
+        ///     生成cardSign的加密方法
         /// </summary>
         /// <returns></returns>
         private static string CreateCardSha1(Hashtable parameters)
@@ -86,15 +86,15 @@ namespace Senparc.Weixin.MP.Helpers
             {
                 if (parameters[k] != null)
                 {
-                    var v = (string)parameters[k];
+                    var v = (string) parameters[k];
                     sb.Append(v);
                 }
             }
-            return SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
+            return SHA1UtilHelper.GetSha1(sb.ToString()).ToLower();
         }
 
         /// <summary>
-        /// 获取JS-SDK权限验证的签名Signature
+        ///     获取JS-SDK权限验证的签名Signature
         /// </summary>
         /// <param name="ticket"></param>
         /// <param name="noncestr"></param>
@@ -112,7 +112,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 获取位置签名AddrSign
+        ///     获取位置签名AddrSign
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="appSecret"></param>
@@ -133,7 +133,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 获取卡券签名CardSign
+        ///     获取卡券签名CardSign
         /// </summary>
         /// <param name="appId"></param>
         /// <param name="appSecret"></param>
@@ -143,7 +143,8 @@ namespace Senparc.Weixin.MP.Helpers
         /// <param name="cardId"></param>
         /// <param name="cardType"></param>
         /// <returns></returns>
-        public static string GetCardSign(string appId, string appSecret, string locationId, string noncestr, string timestamp, string cardId, string cardType)
+        public static string GetCardSign(string appId, string appSecret, string locationId, string noncestr,
+            string timestamp, string cardId, string cardType)
         {
             var parameters = new Hashtable();
             parameters.Add("appId", appId);

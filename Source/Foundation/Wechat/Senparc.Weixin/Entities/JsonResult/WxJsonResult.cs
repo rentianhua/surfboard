@@ -31,19 +31,21 @@ namespace Senparc.Weixin.Entities
     }
 
     /// <summary>
-    /// 公众号JSON返回结果（用于菜单接口等）
+    ///     公众号JSON返回结果（用于菜单接口等）
     /// </summary>
     public class WxJsonResult : IWxJsonResult
     {
         public ReturnCode errcode { get; set; }
         public string errmsg { get; set; }
+
         /// <summary>
-        /// 为P2P返回结果做准备
+        ///     为P2P返回结果做准备
         /// </summary>
         public virtual object P2PData { get; set; }
-        //public ReturnCode ReturnCode
-        //{
+
         //    get
+        //{
+        //public ReturnCode ReturnCode
         //    {
         //        try
         //        {

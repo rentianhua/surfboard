@@ -36,7 +36,9 @@ namespace Cedar.Core.EntLib.SettingSource.Configuration
         /// </returns>
         public override ISettingSource CreateSettingSource()
         {
-            return string.IsNullOrEmpty(FilePath) ? new SimpleFileSettingSource() : new SimpleFileSettingSource(FilePath);
+            return string.IsNullOrEmpty(FilePath)
+                ? new SimpleFileSettingSource()
+                : new SimpleFileSettingSource(FilePath);
         }
     }
 }

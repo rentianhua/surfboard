@@ -13,7 +13,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.WiFi
 {
     /// <summary>
-    /// 获取物料二维码返回结果
+    ///     获取物料二维码返回结果
     /// </summary>
     public class GetQrcodeResult : WxJsonResult
     {
@@ -23,7 +23,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.WiFi
     public class GetQrcode_Data
     {
         /// <summary>
-        /// 二维码图片url
+        ///     二维码图片url
         /// </summary>
         public string qrcode_url { get; set; }
     }

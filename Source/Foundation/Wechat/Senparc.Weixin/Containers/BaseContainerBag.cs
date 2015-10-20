@@ -12,7 +12,7 @@
 namespace Senparc.Weixin.Containers
 {
     /// <summary>
-    /// IBaseContainerBag
+    ///     IBaseContainerBag
     /// </summary>
     public interface IBaseContainerBag
     {
@@ -20,14 +20,13 @@ namespace Senparc.Weixin.Containers
     }
 
     /// <summary>
-    /// BaseContainer容器中的Value类型
+    ///     BaseContainer容器中的Value类型
     /// </summary>
     public class BaseContainerBag : IBaseContainerBag
     {
         /// <summary>
-        /// 通常为AppId
+        ///     通常为AppId
         /// </summary>
         public string Key { get; set; }
     }
-
 }

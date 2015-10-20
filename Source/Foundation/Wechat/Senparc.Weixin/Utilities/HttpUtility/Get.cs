@@ -27,26 +27,26 @@ namespace Senparc.Weixin.HttpUtility
 
         public static T GetJson<T>(string url, Encoding encoding = null)
         {
-            string returnText = RequestUtility.HttpGet(url, encoding);
+            var returnText = RequestUtility.HttpGet(url, encoding);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            var js = new JavaScriptSerializer();
 
             if (returnText.Contains("errcode"))
             {
                 //可能发生错误
-                WxJsonResult errorResult = js.Deserialize<WxJsonResult>(returnText);
+                var errorResult = js.Deserialize<WxJsonResult>(returnText);
                 if (errorResult.errcode != ReturnCode.请求成功)
                 {
                     //发生错误
                     throw new ErrorJsonResultException(
                         string.Format("微信请求发生错误！错误代码：{0}，说明：{1}",
-                                        (int)errorResult.errcode,
-                                        errorResult.errmsg),
-                                      null, errorResult);
+                            (int) errorResult.errcode,
+                            errorResult.errmsg),
+                        null, errorResult);
                 }
             }
 
-            T result = js.Deserialize<T>(returnText);
+            var result = js.Deserialize<T>(returnText);
 
             return result;
         }
@@ -56,7 +56,7 @@ namespace Senparc.Weixin.HttpUtility
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);  
 
-            WebClient wc = new WebClient();
+            var wc = new WebClient();
             var data = wc.DownloadData(url);
             foreach (var b in data)
             {
@@ -70,26 +70,26 @@ namespace Senparc.Weixin.HttpUtility
 
         public static async Task<T> GetJsonAsync<T>(string url, Encoding encoding = null)
         {
-            string returnText = await RequestUtility.HttpGetAsync(url, encoding);
+            var returnText = await RequestUtility.HttpGetAsync(url, encoding);
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            var js = new JavaScriptSerializer();
 
             if (returnText.Contains("errcode"))
             {
                 //可能发生错误
-                WxJsonResult errorResult = js.Deserialize<WxJsonResult>(returnText);
+                var errorResult = js.Deserialize<WxJsonResult>(returnText);
                 if (errorResult.errcode != ReturnCode.请求成功)
                 {
                     //发生错误
                     throw new ErrorJsonResultException(
                         string.Format("微信请求发生错误！错误代码：{0}，说明：{1}",
-                                        (int)errorResult.errcode,
-                                        errorResult.errmsg),
-                                      null, errorResult);
+                            (int) errorResult.errcode,
+                            errorResult.errmsg),
+                        null, errorResult);
                 }
             }
 
-            T result = js.Deserialize<T>(returnText);
+            var result = js.Deserialize<T>(returnText);
 
             return result;
         }
@@ -99,7 +99,7 @@ namespace Senparc.Weixin.HttpUtility
             //ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3
             //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);  
 
-            WebClient wc = new WebClient();
+            var wc = new WebClient();
             var data = await wc.DownloadDataTaskAsync(url);
             await stream.WriteAsync(data, 0, data.Length);
             //foreach (var b in data)

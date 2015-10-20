@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 天气服务（weather）
+    ///     天气服务（weather）
     /// </summary>
     public class Semantic_WeatherResult : BaseSemanticResultJson
     {
@@ -29,11 +29,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Weather
     {
         /// <summary>
-        /// 地点
+        ///     地点
         /// </summary>
         public Semantic_Location location { get; set; }
+
         /// <summary>
-        /// 时间
+        ///     时间
         /// </summary>
         public Semantic_DateTime datetime { get; set; }
     }

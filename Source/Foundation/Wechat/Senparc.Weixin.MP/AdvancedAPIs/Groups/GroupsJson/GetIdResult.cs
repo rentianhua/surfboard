@@ -16,7 +16,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.Groups
 {
     /// <summary>
-    /// 获取用户分组ID返回结果
+    ///     获取用户分组ID返回结果
     /// </summary>
     public class GetGroupIdResult : WxJsonResult
     {

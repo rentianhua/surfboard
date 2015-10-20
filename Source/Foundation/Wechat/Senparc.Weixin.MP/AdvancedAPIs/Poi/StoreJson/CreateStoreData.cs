@@ -11,7 +11,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Poi
 {
     /// <summary>
-    /// 创建门店需要Post的数据
+    ///     创建门店需要Post的数据
     /// </summary>
     public class CreateStoreData
     {
@@ -21,13 +21,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Poi
     public class CreateStore_Business
     {
         /// <summary>
-        /// 门店信息
+        ///     门店信息
         /// </summary>
         public StoreBaseInfo base_info { get; set; }
     }
 
     /// <summary>
-    /// 修改门店服务信息需要Post的数据
+    ///     修改门店服务信息需要Post的数据
     /// </summary>
     public class UpdateStoreData
     {
@@ -42,7 +42,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Poi
     public class UpdateStore_BaseInfo : StoreBaseInfoCanBeUpdate
     {
         /// <summary>
-        /// 微信的门店ID，微信内门店唯一标示ID
+        ///     微信的门店ID，微信内门店唯一标示ID
         /// </summary>
         public string poi_id { get; set; }
     }

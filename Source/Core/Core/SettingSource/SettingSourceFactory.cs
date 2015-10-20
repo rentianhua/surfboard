@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.IoC;
 using Cedar.Core.Properties;
 using Cedar.Core.SettingSource.Configuration;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -33,21 +33,22 @@ namespace Cedar.Core.SettingSource
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                if (SettingSourceFactory.settingSource != null)
+                if (settingSource != null)
                 {
-                    return SettingSourceFactory.settingSource;
+                    return settingSource;
                 }
                 //获取webconfig中的配置节
-                var settingSourceSettings = ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
+                var settingSourceSettings =
+                    ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
                 if (settingSourceSettings != null)
                 {
-                    return SettingSourceFactory.settingSource = settingSourceSettings.GetSettingSource(null);
+                    return settingSource = settingSourceSettings.GetSettingSource(null);
                 }
 
                 //当没有配置节时,使用核心库中默认的初始化配置
                 var assemblyResolver = new DefaultAssemblyResolver(Assemblies.GetAssemblies());
-                var instance = new ReflectedServiceLocatorConfigurator(assemblyResolver).CreateInstance<ISettingSource>(
-                        new object[0]);
+                var instance =
+                    new ReflectedServiceLocatorConfigurator(assemblyResolver).CreateInstance<ISettingSource>();
                 if (instance == null)
                 {
                     throw new TypeLoadException(Resources.ExceptionCannotResolveTypeName.Format(new object[]
@@ -56,41 +57,39 @@ namespace Cedar.Core.SettingSource
                     }));
                 }
 
-                return SettingSourceFactory.settingSource = instance;
+                return settingSource = instance;
             }
-            else
+            ISettingSource getSettingSource;
+            if (settingSources.TryGetValue(name, out getSettingSource))
             {
-                ISettingSource getSettingSource;
+                return getSettingSource;
+            }
+
+            ISettingSource result;
+            lock (syncHelper)
+            {
                 if (settingSources.TryGetValue(name, out getSettingSource))
                 {
-                    return getSettingSource;
+                    result = getSettingSource;
                 }
-
-                ISettingSource result;
-                lock (syncHelper)
+                else
                 {
-                    if (settingSources.TryGetValue(name, out getSettingSource))
+                    var settingSourceSettings =
+                        ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
+                    if (settingSourceSettings == null)
                     {
-                        result = getSettingSource;
+                        throw new ConfigurationErrorsException(
+                            Resources.ExceptionSettingSourceNotExists.Format(new object[]
+                            {
+                                "cedar.settingSource"
+                            }));
                     }
-                    else
-                    {
-                        var settingSourceSettings = ConfigurationManager.GetSection("cedar.settingSource") as SettingSourceSettings;
-                        if (settingSourceSettings == null)
-                        {
-                            throw new ConfigurationErrorsException(
-                                Resources.ExceptionSettingSourceNotExists.Format(new object[]
-                                {
-                                    "cedar.settingSource"
-                                }));
-                        }
-                        getSettingSource = settingSourceSettings.GetSettingSource(name);
-                        settingSources[name] = getSettingSource;
-                        result = getSettingSource;
-                    }
+                    getSettingSource = settingSourceSettings.GetSettingSource(name);
+                    settingSources[name] = getSettingSource;
+                    result = getSettingSource;
                 }
-                return result;
             }
+            return result;
         }
 
         /// <summary>

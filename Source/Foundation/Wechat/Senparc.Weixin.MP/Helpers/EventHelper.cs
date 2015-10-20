@@ -25,7 +25,7 @@ namespace Senparc.Weixin.MP.Helpers
 
         public static Event GetEventType(string str)
         {
-            return (Event)Enum.Parse(typeof(Event), str, true);
+            return (Event) Enum.Parse(typeof (Event), str, true);
         }
     }
 }

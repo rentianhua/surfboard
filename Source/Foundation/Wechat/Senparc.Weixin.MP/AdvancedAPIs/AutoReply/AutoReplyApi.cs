@@ -18,12 +18,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 获取自动回复规则
+    ///     获取自动回复规则
     /// </summary>
     public static class AutoReplyApi
     {
         /// <summary>
-        /// 获取自动回复规则
+        ///     获取自动回复规则
         /// </summary>
         /// <param name="accessTokenOrAppId">调用接口凭证</param>
         /// <returns></returns>
@@ -31,10 +31,10 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                string urlFormat = "https://api.weixin.qq.com/cgi-bin/get_current_autoreply_info?access_token={0}";
+                var urlFormat = "https://api.weixin.qq.com/cgi-bin/get_current_autoreply_info?access_token={0}";
 
-                return CommonJsonSend.Send<GetCurrentAutoreplyInfoResult>(accessToken, urlFormat, null, CommonJsonSendType.GET);
-
+                return CommonJsonSend.Send<GetCurrentAutoreplyInfoResult>(accessToken, urlFormat, null,
+                    CommonJsonSendType.GET);
             }, accessTokenOrAppId);
         }
     }

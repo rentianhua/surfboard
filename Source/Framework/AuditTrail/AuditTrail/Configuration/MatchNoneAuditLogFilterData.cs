@@ -4,12 +4,12 @@ using Cedar.Core.Configuration;
 namespace Cedar.Framwork.AuditTrail.Configuration
 {
     /// <summary>
-	/// The <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" /> based configuration element.
-	/// </summary>
-	public class MatchNoneAuditLogFilterData : AuditLogFilterDataBase
+    ///     The <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" /> based configuration element.
+    /// </summary>
+    public class MatchNoneAuditLogFilterData : AuditLogFilterDataBase
     {
         /// <summary>
-        /// Gets the provider creation expression.
+        ///     Gets the provider creation expression.
         /// </summary>
         /// <param name="settings">The settings.</param>
         /// <returns>The delegate to create a new <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" />.</returns>

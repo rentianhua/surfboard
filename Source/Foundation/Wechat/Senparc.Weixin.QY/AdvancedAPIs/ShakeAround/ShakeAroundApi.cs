@@ -20,7 +20,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
     public static class ShakeAroundApi
     {
         /// <summary>
-        /// 获取设备及用户信息
+        ///     获取设备及用户信息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="ticket">摇周边业务的ticket，可在摇到的URL中得到，ticket生效时间为30分钟，每一次摇都会重新生成新的ticket</param>
@@ -28,11 +28,12 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <returns></returns>
         public static GetShakeInfoResult GetSuiteToken(string accessToken, string ticket, int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/shakearound/getshakeinfo?access_token={0}", accessToken);
+            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/shakearound/getshakeinfo?access_token={0}",
+                accessToken);
 
             var data = new
             {
-                ticket = ticket
+                ticket
             };
 
             return CommonJsonSend.Send<GetShakeInfoResult>(null, url, data, CommonJsonSendType.POST, timeOut);

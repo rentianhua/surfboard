@@ -21,12 +21,12 @@ using Senparc.Weixin.HttpUtility;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 微信支付维权接口，官方API：https://mp.weixin.qq.com/htmledition/res/bussiness-course2/wxm-payment-kf-api.pdf
+    ///     微信支付维权接口，官方API：https://mp.weixin.qq.com/htmledition/res/bussiness-course2/wxm-payment-kf-api.pdf
     /// </summary>
     public static class TenPayRights
     {
         /// <summary>
-        /// 标记客户的投诉处理状态
+        ///     标记客户的投诉处理状态
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="openId">支付该笔订单的用户 ID</param>

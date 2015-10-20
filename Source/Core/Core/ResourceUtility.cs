@@ -3,12 +3,12 @@
 namespace Cedar.Core
 {
     /// <summary>
-    /// This unity class is used to Resource string formatting.
+    ///     This unity class is used to Resource string formatting.
     /// </summary>
     public static class ResourceUtility
     {
         /// <summary>
-        /// Formats the specified resource string based on the current culture.
+        ///     Formats the specified resource string based on the current culture.
         /// </summary>
         /// <param name="resourceString">The resource string.</param>
         /// <param name="parameters">The parameters.</param>

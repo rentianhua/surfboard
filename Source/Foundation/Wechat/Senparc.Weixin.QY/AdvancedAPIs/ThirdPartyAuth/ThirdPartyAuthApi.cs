@@ -27,59 +27,66 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
     public static class ThirdPartyAuthApi
     {
         /// <summary>
-        /// 获取应用套件令牌
+        ///     获取应用套件令牌
         /// </summary>
         /// <param name="suiteId">应用套件id</param>
         /// <param name="suiteSecret">应用套件secret</param>
         /// <param name="suiteTicket">微信后台推送的ticket</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetSuiteTokenResult GetSuiteToken(string suiteId, string suiteSecret, string suiteTicket, int timeOut = Config.TIME_OUT)
+        public static GetSuiteTokenResult GetSuiteToken(string suiteId, string suiteSecret, string suiteTicket,
+            int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/service/get_suite_token";
 
             var data = new
-                {
-                    suite_id = suiteId,
-                    suite_secret = suiteSecret,
-                    suite_ticket = suiteTicket
-                };
+            {
+                suite_id = suiteId,
+                suite_secret = suiteSecret,
+                suite_ticket = suiteTicket
+            };
 
             return CommonJsonSend.Send<GetSuiteTokenResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 获取预授权码
+        ///     获取预授权码
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
         /// <param name="appId">应用id，本参数选填，表示用户能对本套件内的哪些应用授权，不填时默认用户有全部授权权限</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetPreAuthCodeResult GetPreAuthCode(string suiteAccessToken, string suiteId, int[] appId, int timeOut = Config.TIME_OUT)
+        public static GetPreAuthCodeResult GetPreAuthCode(string suiteAccessToken, string suiteId, int[] appId,
+            int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code?suite_access_token={0}", suiteAccessToken);
+            var url =
+                string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_pre_auth_code?suite_access_token={0}",
+                    suiteAccessToken);
 
             var data = new
-                {
-                    suite_id = suiteId,
-                    appid = appId
-                };
+            {
+                suite_id = suiteId,
+                appid = appId
+            };
 
             return CommonJsonSend.Send<GetPreAuthCodeResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 获取企业号的永久授权码
+        ///     获取企业号的永久授权码
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
         /// <param name="authCode">临时授权码会在授权成功时附加在redirect_uri中跳转回应用提供商网站。</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetPermanentCodeResult GetPermanentCode(string suiteAccessToken, string suiteId, string authCode, int timeOut = Config.TIME_OUT)
+        public static GetPermanentCodeResult GetPermanentCode(string suiteAccessToken, string suiteId, string authCode,
+            int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_permanent_code?suite_access_token={0}", suiteAccessToken);
+            var url =
+                string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_permanent_code?suite_access_token={0}",
+                    suiteAccessToken);
 
             var data = new
             {
@@ -91,7 +98,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 获取企业号的授权信息
+        ///     获取企业号的授权信息
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
@@ -99,9 +106,11 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="permanentCode">永久授权码，通过get_permanent_code获取</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetAuthInfoResult GetAuthInfo(string suiteAccessToken, string suiteId, string authCorpId, string permanentCode, int timeOut = Config.TIME_OUT)
+        public static GetAuthInfoResult GetAuthInfo(string suiteAccessToken, string suiteId, string authCorpId,
+            string permanentCode, int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_auth_info?suite_access_token={0}", suiteAccessToken);
+            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_auth_info?suite_access_token={0}",
+                suiteAccessToken);
 
             var data = new
             {
@@ -114,7 +123,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 获取企业号应用
+        ///     获取企业号应用
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
@@ -123,9 +132,11 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="agentId">授权方应用id</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetAgentResult GetAgent(string suiteAccessToken, string suiteId, string authCorpId, string permanentCode, string agentId, int timeOut = Config.TIME_OUT)
+        public static GetAgentResult GetAgent(string suiteAccessToken, string suiteId, string authCorpId,
+            string permanentCode, string agentId, int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_agent?suite_access_token={0}", suiteAccessToken);
+            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_agent?suite_access_token={0}",
+                suiteAccessToken);
 
             var data = new
             {
@@ -139,7 +150,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 设置企业号应用
+        ///     设置企业号应用
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
@@ -148,23 +159,25 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="agent">要设置的企业应用的信息</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static QyJsonResult SetAgent(string suiteAccessToken, string suiteId, string authCorpId, string permanentCode, ThirdParty_AgentData agent, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult SetAgent(string suiteAccessToken, string suiteId, string authCorpId,
+            string permanentCode, ThirdParty_AgentData agent, int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/set_agent?suite_access_token={0}", suiteAccessToken);
+            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/set_agent?suite_access_token={0}",
+                suiteAccessToken);
 
             var data = new
             {
                 suite_id = suiteId,
                 auth_corpid = authCorpId,
                 permanent_code = permanentCode,
-                agent = agent
+                agent
             };
 
             return CommonJsonSend.Send<QyJsonResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 获取企业号access_token
+        ///     获取企业号access_token
         /// </summary>
         /// <param name="suiteAccessToken"></param>
         /// <param name="suiteId">应用套件id</param>
@@ -172,15 +185,17 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="permanentCode">永久授权码，通过get_permanent_code获取</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static GetCorpTokenResult GetCorpToken(string suiteAccessToken, string suiteId, string authCorpId, string permanentCode, int timeOut = Config.TIME_OUT)
+        public static GetCorpTokenResult GetCorpToken(string suiteAccessToken, string suiteId, string authCorpId,
+            string permanentCode, int timeOut = Config.TIME_OUT)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/service/get_corp_token?suite_access_token={0}", suiteAccessToken);
+            var url = string.Format(
+                "https://qyapi.weixin.qq.com/cgi-bin/service/get_corp_token?suite_access_token={0}", suiteAccessToken);
 
             var data = new
             {
                 suite_id = suiteId,
                 auth_corpid = authCorpId,
-                permanent_code = permanentCode,
+                permanent_code = permanentCode
             };
 
             return CommonJsonSend.Send<GetCorpTokenResult>(null, url, data, CommonJsonSendType.POST, timeOut);

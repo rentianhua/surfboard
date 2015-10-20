@@ -11,7 +11,7 @@
 namespace Senparc.Weixin.MP.AppStore
 {
     /// <summary>
-    /// P2P返回结果类型
+    ///     P2P返回结果类型
     /// </summary>
     public enum AppResultKind
     {
@@ -30,16 +30,16 @@ namespace Senparc.Weixin.MP.AppStore
         执行过程发生异常_积分不足 = -4002,
 
         操作用户信息失败 = -5000,
-        操作用户信息失败_用户不存在 = -5001,
+        操作用户信息失败_用户不存在 = -5001
     }
 
     /// <summary>
-    /// 性别
+    ///     性别
     /// </summary>
     public enum WeixinSex
     {
         未设置 = 0,
         男 = 1,
-        女 = 2,
+        女 = 2
     }
 }

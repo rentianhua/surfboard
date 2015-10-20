@@ -9,12 +9,10 @@ using Cedar.Core.ApplicationContexts;
 namespace Cedar.Framework.Common.Client.DelegationHandler
 {
     /// <summary>
-    /// 
     /// </summary>
     public class ApplicationContextFilterAttribute : ActionFilterAttribute
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="actionContext"></param>
         public override void OnActionExecuting(HttpActionContext actionContext)
@@ -22,7 +20,7 @@ namespace Cedar.Framework.Common.Client.DelegationHandler
             try
             {
                 ApplicationContext.Current.TransactionId = Guid.NewGuid().ToString();
-                if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0)   // 允许匿名访问
+                if (actionContext.ActionDescriptor.GetCustomAttributes<AllowAnonymousAttribute>().Count > 0) // 允许匿名访问
                 {
                     base.OnActionExecuting(actionContext);
                     return;

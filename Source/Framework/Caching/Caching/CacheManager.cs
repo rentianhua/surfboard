@@ -11,42 +11,45 @@ namespace Cedar.AuditTrail.Interception
         private static CachingProviderBase provider;
         private bool disposed;
 
-        /// <summary>
-        /// Gets the providers.
-        /// </summary>
-        /// <value>
-        /// The providers.
-        /// </value>
-        public static ServiceLocatableDictionary<CachingProviderBase> Providers
+        private CacheManager()
         {
-            get;
-            private set;
+            Providers = new ServiceLocatableDictionary<CachingProviderBase>(null);
         }
 
         /// <summary>
-        /// Gets the provider.
+        ///     Gets the providers.
         /// </summary>
         /// <value>
-        /// The provider.
+        ///     The providers.
+        /// </value>
+        public static ServiceLocatableDictionary<CachingProviderBase> Providers { get; private set; }
+
+        /// <summary>
+        ///     Gets the provider.
+        /// </summary>
+        /// <value>
+        ///     The provider.
         /// </value>
         public static CachingProviderBase Provider
         {
             get
             {
-                if (CacheManager.provider != null)
+                if (provider != null)
                 {
-                    return CacheManager.provider;
+                    return provider;
                 }
                 CachingProviderBase result;
-                lock (CacheManager.syncHelper)
+                lock (syncHelper)
                 {
-                    if (CacheManager.provider != null)
+                    if (provider != null)
                     {
-                        result = CacheManager.provider;
+                        result = provider;
                     }
                     else
                     {
-                        result = (CacheManager.provider = ServiceLocatorFactory.GetServiceLocator(null).GetService<CachingProviderBase>(null));
+                        result =
+                            (provider =
+                                ServiceLocatorFactory.GetServiceLocator(null).GetService<CachingProviderBase>(null));
                     }
                 }
                 return result;
@@ -54,7 +57,15 @@ namespace Cedar.AuditTrail.Interception
         }
 
         /// <summary>
-        /// 
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            EnsureNotDisposed();
+            disposed = true;
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
@@ -63,13 +74,7 @@ namespace Cedar.AuditTrail.Interception
             return Provider.Get(key);
         }
 
-        private CacheManager()
-        {
-            CacheManager.Providers = new ServiceLocatableDictionary<CachingProviderBase>(null);
-        }
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="functionName"></param>
         /// <returns></returns>
@@ -79,18 +84,9 @@ namespace Cedar.AuditTrail.Interception
             return new CacheManager();
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.EnsureNotDisposed();
-            this.disposed = true;
-        }
-
         private void EnsureNotDisposed()
         {
-            if (this.disposed)
+            if (disposed)
             {
                 throw new InvalidOperationException("ExceptionLoggerIsDisposed");
             }

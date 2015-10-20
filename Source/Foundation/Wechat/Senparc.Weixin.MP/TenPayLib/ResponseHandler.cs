@@ -11,7 +11,6 @@
     修改描述：整理接口
 ----------------------------------------------------------------*/
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Text;
@@ -21,7 +20,6 @@ using Senparc.Weixin.MP.Helpers;
 
 namespace Senparc.Weixin.MP.TenPayLib
 {
-
     /** 
     '============================================================================
     'Api说明：
@@ -36,54 +34,48 @@ namespace Senparc.Weixin.MP.TenPayLib
     */
 
     public class ResponseHandler
-	{
-		/// <summary>
-        /// 密钥 
-		/// </summary>
-		private string Key;
+    {
+        /// <summary>
+        ///     参与签名的参数列表
+        /// </summary>
+        private static readonly string SignField = "appid,appkey,timestamp,openid,noncestr,issubscribe";
 
         /// <summary>
-        /// appkey
+        ///     appkey
         /// </summary>
         private string Appkey;
-
-        /// <summary>
-        /// xmlMap
-        /// </summary>
-        private Hashtable XmlMap;
-
-		/// <summary>
-        /// 应答的参数
-		/// </summary>
-		protected Hashtable Parameters;
-		
-		/// <summary>
-        /// debug信息
-		/// </summary>
-		private string DebugInfo;
-        /// <summary>
-        /// 原始内容
-        /// </summary>
-        protected string Content;
 
         private string Charset = "gb2312";
 
         /// <summary>
-        /// 参与签名的参数列表
+        ///     原始内容
         /// </summary>
-        private static string SignField = "appid,appkey,timestamp,openid,noncestr,issubscribe";
-
-		protected HttpContext HttpContext;
+        protected string Content;
 
         /// <summary>
-        /// 初始化函数
+        ///     debug信息
         /// </summary>
-        public virtual void Init()
-        {
-        }
+        private string DebugInfo;
+
+        protected HttpContext HttpContext;
 
         /// <summary>
-        /// 获取页面提交的get和post参数
+        ///     密钥
+        /// </summary>
+        private string Key;
+
+        /// <summary>
+        ///     应答的参数
+        /// </summary>
+        protected Hashtable Parameters;
+
+        /// <summary>
+        ///     xmlMap
+        /// </summary>
+        private readonly Hashtable XmlMap;
+
+        /// <summary>
+        ///     获取页面提交的get和post参数
         /// </summary>
         /// <param name="httpContext"></param>
         public ResponseHandler(HttpContext httpContext)
@@ -91,31 +83,31 @@ namespace Senparc.Weixin.MP.TenPayLib
             Parameters = new Hashtable();
             XmlMap = new Hashtable();
 
-            this.HttpContext = httpContext ?? HttpContext.Current;
+            HttpContext = httpContext ?? HttpContext.Current;
             NameValueCollection collection;
             //post data
-            if (this.HttpContext.Request.HttpMethod == "POST")
+            if (HttpContext.Request.HttpMethod == "POST")
             {
-                collection = this.HttpContext.Request.Form;
+                collection = HttpContext.Request.Form;
                 foreach (string k in collection)
                 {
-                    string v = (string)collection[k];
-                    this.SetParameter(k, v);
+                    var v = collection[k];
+                    SetParameter(k, v);
                 }
             }
             //query string
-            collection = this.HttpContext.Request.QueryString;
+            collection = HttpContext.Request.QueryString;
             foreach (string k in collection)
             {
-                string v = (string)collection[k];
-                this.SetParameter(k, v);
+                var v = collection[k];
+                SetParameter(k, v);
             }
-            if (this.HttpContext.Request.InputStream.Length > 0)
+            if (HttpContext.Request.InputStream.Length > 0)
             {
-                XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.Load(this.HttpContext.Request.InputStream);
-                XmlNode root = xmlDoc.SelectSingleNode("xml");
-                XmlNodeList xnl = root.ChildNodes;
+                var xmlDoc = new XmlDocument();
+                xmlDoc.Load(HttpContext.Request.InputStream);
+                var root = xmlDoc.SelectSingleNode("xml");
+                var xnl = root.ChildNodes;
 
                 foreach (XmlNode xnf in xnl)
                 {
@@ -123,91 +115,100 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
         }
-    
-
-		/// <summary>
-        /// 获取密钥
-		/// </summary>
-		/// <returns></returns>
-		public string GetKey() 
-		{ return Key;}
-
-		/// <summary>
-        /// 设置密钥
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="appkey"></param>
-		public void SetKey(string key, string appkey) 
-		{
-            this.Key = key;
-            this.Appkey = appkey;
-        }
-
-		/// <summary>
-        /// 获取参数值
-		/// </summary>
-		/// <param name="parameter"></param>
-		/// <returns></returns>
-		public string GetParameter(string parameter) 
-		{
-			string s = (string)Parameters[parameter];
-			return (null == s) ? "" : s;
-		}
-
-		/// <summary>
-        /// 设置参数值
-		/// </summary>
-		/// <param name="parameter"></param>
-		/// <param name="parameterValue"></param>
-		public void SetParameter(string parameter,string parameterValue) 
-		{
-			if(parameter != null && parameter != "")
-			{
-				if(Parameters.Contains(parameter))
-				{
-					Parameters.Remove(parameter);
-				}
-	
-				Parameters.Add(parameter,parameterValue);		
-			}
-		}
-
-		/// <summary>
-		/// 是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。return boolean
-		/// </summary>
-		/// <returns></returns>
-        public virtual Boolean IsTenpaySign() 
-		{
-			StringBuilder sb = new StringBuilder();
-
-			ArrayList akeys=new ArrayList(Parameters.Keys); 
-			akeys.Sort();
-
-			foreach(string k in akeys)
-			{
-				string v = (string)Parameters[k];
-				if(null != v && "".CompareTo(v) != 0
-					&& "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0) 
-				{
-					sb.Append(k + "=" + v + "&");
-				}
-			}
-
-			sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToLower();
-            this.SetDebugInfo(sb.ToString() + " &sign=" + sign);
-			//debug信息
-			return GetParameter("sign").ToLower().Equals(sign); 
-		}
 
         /// <summary>
-        /// 判断微信签名
+        ///     初始化函数
+        /// </summary>
+        public virtual void Init()
+        {
+        }
+
+
+        /// <summary>
+        ///     获取密钥
         /// </summary>
         /// <returns></returns>
-        public virtual Boolean IsWXsign()
+        public string GetKey()
         {
-            StringBuilder sb = new StringBuilder();
-            Hashtable signMap = new Hashtable();
+            return Key;
+        }
+
+        /// <summary>
+        ///     设置密钥
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="appkey"></param>
+        public void SetKey(string key, string appkey)
+        {
+            Key = key;
+            Appkey = appkey;
+        }
+
+        /// <summary>
+        ///     获取参数值
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public string GetParameter(string parameter)
+        {
+            var s = (string) Parameters[parameter];
+            return (null == s) ? "" : s;
+        }
+
+        /// <summary>
+        ///     设置参数值
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <param name="parameterValue"></param>
+        public void SetParameter(string parameter, string parameterValue)
+        {
+            if (parameter != null && parameter != "")
+            {
+                if (Parameters.Contains(parameter))
+                {
+                    Parameters.Remove(parameter);
+                }
+
+                Parameters.Add(parameter, parameterValue);
+            }
+        }
+
+        /// <summary>
+        ///     是否财付通签名,规则是:按参数名称a-z排序,遇到空值的参数不参加签名。return boolean
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsTenpaySign()
+        {
+            var sb = new StringBuilder();
+
+            var akeys = new ArrayList(Parameters.Keys);
+            akeys.Sort();
+
+            foreach (string k in akeys)
+            {
+                var v = (string) Parameters[k];
+                if (null != v && "".CompareTo(v) != 0
+                    && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
+                {
+                    sb.Append(k + "=" + v + "&");
+                }
+            }
+
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToLower();
+            SetDebugInfo(sb + " &sign=" + sign);
+            //debug信息
+            return GetParameter("sign").ToLower().Equals(sign);
+        }
+
+        /// <summary>
+        ///     判断微信签名
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool IsWXsign()
+        {
+            var sb = new StringBuilder();
+            var signMap = new Hashtable();
 
             foreach (string k in XmlMap.Keys)
             {
@@ -216,15 +217,15 @@ namespace Senparc.Weixin.MP.TenPayLib
                     signMap.Add(k.ToLower(), XmlMap[k]);
                 }
             }
-            signMap.Add("appkey", this.Appkey);
+            signMap.Add("appkey", Appkey);
 
 
-            ArrayList akeys = new ArrayList(signMap.Keys);
+            var akeys = new ArrayList(signMap.Keys);
             akeys.Sort();
 
             foreach (string k in akeys)
             {
-                string v = (string)signMap[k];
+                var v = (string) signMap[k];
                 if (sb.Length == 0)
                 {
                     sb.Append(k + "=" + v);
@@ -235,23 +236,22 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            string sign = SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
+            var sign = SHA1UtilHelper.GetSha1(sb.ToString()).ToLower();
 
-            this.SetDebugInfo(sb.ToString() + " => SHA1 sign:" + sign);
+            SetDebugInfo(sb + " => SHA1 sign:" + sign);
 
             return sign.Equals(XmlMap["AppSignature"]);
-
         }
 
         /// <summary>
-        /// 判断微信维权签名
+        ///     判断微信维权签名
         /// </summary>
         /// <returns></returns>
-        public virtual Boolean IsWXsignfeedback()
+        public virtual bool IsWXsignfeedback()
         {
-            StringBuilder sb = new StringBuilder();
-            Hashtable signMap = new Hashtable();
-       
+            var sb = new StringBuilder();
+            var signMap = new Hashtable();
+
             foreach (string k in XmlMap.Keys)
             {
                 if (SignField.IndexOf(k.ToLower()) != -1)
@@ -259,16 +259,16 @@ namespace Senparc.Weixin.MP.TenPayLib
                     signMap.Add(k.ToLower(), XmlMap[k]);
                 }
             }
-            signMap.Add("appkey", this.Appkey);
-          
+            signMap.Add("appkey", Appkey);
 
-            ArrayList akeys = new ArrayList(signMap.Keys);
+
+            var akeys = new ArrayList(signMap.Keys);
             akeys.Sort();
 
             foreach (string k in akeys)
             {
-                string v = (string)signMap[k];
-                if ( sb.Length == 0 )
+                var v = (string) signMap[k];
+                if (sb.Length == 0)
                 {
                     sb.Append(k + "=" + v);
                 }
@@ -278,34 +278,34 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            string sign = SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
-            
-            this.SetDebugInfo(sb.ToString() + " => SHA1 sign:" + sign);
+            var sign = SHA1UtilHelper.GetSha1(sb.ToString()).ToLower();
 
-            return sign.Equals( XmlMap["AppSignature"] );
+            SetDebugInfo(sb + " => SHA1 sign:" + sign);
 
+            return sign.Equals(XmlMap["AppSignature"]);
         }
-   
-		/// <summary>
-        /// 获取debug信息
-		/// </summary>
-		/// <returns></returns>
-		public string GetDebugInfo() 
-		{ return DebugInfo;}
-				
-		/// <summary>
-        /// 设置debug信息
-		/// </summary>
-		/// <param name="debugInfo"></param>
-		protected void SetDebugInfo(String debugInfo)
-		{ this.DebugInfo = debugInfo;}
 
-		protected virtual string GetCharset()
-		{
-			return this.HttpContext.Request.ContentEncoding.BodyName;
-			
-		}
+        /// <summary>
+        ///     获取debug信息
+        /// </summary>
+        /// <returns></returns>
+        public string GetDebugInfo()
+        {
+            return DebugInfo;
+        }
 
-		
-	}
+        /// <summary>
+        ///     设置debug信息
+        /// </summary>
+        /// <param name="debugInfo"></param>
+        protected void SetDebugInfo(string debugInfo)
+        {
+            DebugInfo = debugInfo;
+        }
+
+        protected virtual string GetCharset()
+        {
+            return HttpContext.Request.ContentEncoding.BodyName;
+        }
+    }
 }

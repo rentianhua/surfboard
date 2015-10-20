@@ -18,12 +18,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 微小店库存接口
+    ///     微小店库存接口
     /// </summary>
     public static class StockApi
     {
         /// <summary>
-        /// 增加库存
+        ///     增加库存
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="addStockData">增加库存需要Post的数据</param>
@@ -36,7 +36,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 减少库存
+        ///     减少库存
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="reduceStockData">减少库存需要Post的数据</param>

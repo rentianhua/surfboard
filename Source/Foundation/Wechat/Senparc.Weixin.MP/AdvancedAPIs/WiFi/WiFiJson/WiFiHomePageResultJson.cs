@@ -13,7 +13,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.WiFi
 {
     /// <summary>
-    /// 查询商家主页返回结果
+    ///     查询商家主页返回结果
     /// </summary>
     public class GetHomePageResult : WxJsonResult
     {
@@ -23,15 +23,17 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.WiFi
     public class GetHomePage_Data
     {
         /// <summary>
-        /// 门店ID
+        ///     门店ID
         /// </summary>
         public long shop_id { get; set; }
+
         /// <summary>
-        /// 模板类型
+        ///     模板类型
         /// </summary>
         public int template_id { get; set; }
+
         /// <summary>
-        /// 商家主页链接
+        ///     商家主页链接
         /// </summary>
         public string url { get; set; }
     }

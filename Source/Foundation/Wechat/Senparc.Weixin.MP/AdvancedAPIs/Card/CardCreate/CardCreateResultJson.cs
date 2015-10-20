@@ -20,57 +20,60 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.Card
 {
     /// <summary>
-    /// 创建卡券返回结果
+    ///     创建卡券返回结果
     /// </summary>
     public class CardCreateResultJson : WxJsonResult
     {
         /// <summary>
-        /// 卡券ID
+        ///     卡券ID
         /// </summary>
-       public string card_id { get; set; } 
+        public string card_id { get; set; }
     }
 
     /// <summary>
-    /// 获取颜色列表返回结果
+    ///     获取颜色列表返回结果
     /// </summary>
     public class GetColorsResultJson : WxJsonResult
     {
         /// <summary>
-        /// 颜色列表
+        ///     颜色列表
         /// </summary>
         public List<Card_Color> colors { get; set; }
     }
-    
+
     public class Card_Color
     {
         /// <summary>
-        /// 可以填入的color 名称
+        ///     可以填入的color 名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 对应的颜色数值
+        ///     对应的颜色数值
         /// </summary>
         public string value { get; set; }
     }
+
     /// <summary>
-    /// 生成卡券二维码返回结果
+    ///     生成卡券二维码返回结果
     /// </summary>
     public class CreateQRResultJson : WxJsonResult
     {
         /// <summary>
-        /// 获取的二维码ticket，凭借此ticket 可以在有效时间内换取二维码。
+        ///     获取的二维码ticket，凭借此ticket 可以在有效时间内换取二维码。
         /// </summary>
         public string ticket { get; set; }
     }
 
     /// <summary>
-    /// 消耗code返回结果
+    ///     消耗code返回结果
     /// </summary>
     public class CardConsumeResultJson : WxJsonResult
     {
         public CardId card { get; set; }
+
         /// <summary>
-        /// 用户openid
+        ///     用户openid
         /// </summary>
         public string openid { get; set; }
     }
@@ -78,13 +81,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Card
     public class CardId
     {
         /// <summary>
-        /// 卡券ID
+        ///     卡券ID
         /// </summary>
         public string card_id { get; set; }
     }
 
     /// <summary>
-    /// code 解码
+    ///     code 解码
     /// </summary>
     public class CardDecryptResultJson : WxJsonResult
     {
@@ -92,7 +95,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Card
     }
 
     /// <summary>
-    /// 上传logo返回结果
+    ///     上传logo返回结果
     /// </summary>
     public class Card_UploadLogoResultJson : WxJsonResult
     {

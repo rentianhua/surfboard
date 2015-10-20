@@ -14,12 +14,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.QY.AdvancedAPIs.Chat
 {
     /// <summary>
-    /// 获取会话返回结果
+    ///     获取会话返回结果
     /// </summary>
     public class GetChatResult : QyJsonResult
     {
         /// <summary>
-        /// 会话信息
+        ///     会话信息
         /// </summary>
         public ChatInfo chat_info { get; set; }
     }
@@ -27,30 +27,33 @@ namespace Senparc.Weixin.QY.AdvancedAPIs.Chat
     public class ChatInfo
     {
         /// <summary>
-        /// 会话id
+        ///     会话id
         /// </summary>
         public string chatid { get; set; }
+
         /// <summary>
-        /// 会话标题
+        ///     会话标题
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 管理员userid
+        ///     管理员userid
         /// </summary>
         public string owner { get; set; }
+
         /// <summary>
-        /// 会话成员列表，成员用userid来标识
+        ///     会话成员列表，成员用userid来标识
         /// </summary>
         public List<string> userlist { get; set; }
     }
 
     /// <summary>
-    /// 设置成员新消息免打扰返回结果
+    ///     设置成员新消息免打扰返回结果
     /// </summary>
     public class SetMuteResult : QyJsonResult
     {
         /// <summary>
-        /// 列表中不存在的成员会返回在invaliduser里，剩余合法成员会继续执行
+        ///     列表中不存在的成员会返回在invaliduser里，剩余合法成员会继续执行
         /// </summary>
         public List<string> invaliduser { get; set; }
     }

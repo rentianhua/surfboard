@@ -21,8 +21,8 @@ namespace Senparc.Weixin.MP.AppStore
     }
 
     /// <summary>
-    /// 获取OAuth AccessToken的结果
-    /// 如果错误，返回结果{"errcode":40029,"errmsg":"invalid code"}
+    ///     获取OAuth AccessToken的结果
+    ///     如果错误，返回结果{"errcode":40029,"errmsg":"invalid code"}
     /// </summary>
     public class OAuthAccessTokenResult : WxJsonResult
     {
@@ -46,17 +46,16 @@ namespace Senparc.Weixin.MP.AppStore
         public OAuthAccountInfo account_info { get; set; }
 
         /// <summary>
-        /// 过期时间Ticks
+        ///     过期时间Ticks
         /// </summary>
         public long ExpireTimeTicks { get; set; }
+
         /// <summary>
-        /// 过期时间
+        ///     过期时间
         /// </summary>
         public DateTime ExpireTime
         {
-            get
-            {
-                return new DateTime(ExpireTimeTicks);//如果高频次读取可以使用局部变量保存
+            get { return new DateTime(ExpireTimeTicks); //如果高频次读取可以使用局部变量保存
             }
         }
     }

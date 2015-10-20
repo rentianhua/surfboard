@@ -1,11 +1,9 @@
 ﻿using System;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
-using Newtonsoft.Json.Serialization;
 
 namespace Cedar.Framwork.Caching
 {
     /// <summary>
-    /// 
     /// </summary>
     public abstract class CachingProviderBase
     {
@@ -15,22 +13,20 @@ namespace Cedar.Framwork.Caching
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public virtual bool Enabled { get; set; }
 
         public object Get(string key)
         {
             Guard.ArgumentNotNullOrEmpty(key, "key");
-            if (this.Enabled)
+            if (Enabled)
             {
-                return this.GetCore(key);
+                return GetCore(key);
             }
             return null;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -38,19 +34,17 @@ namespace Cedar.Framwork.Caching
         protected abstract void AddCore(string key, object value, TimeSpan expirationTime);
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         protected abstract object GetCore(string key);
 
         /// <summary>
-        /// Remove all cache items added by the cache store itself.
+        ///     Remove all cache items added by the cache store itself.
         /// </summary>
         protected abstract void ClearCore();
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
@@ -58,21 +52,21 @@ namespace Cedar.Framwork.Caching
         public void Add(string key, object value, TimeSpan expirationTime)
         {
             Guard.ArgumentNotNullOrEmpty(key, "key");
-            if (this.Enabled)
+            if (Enabled)
             {
-                this.AddCore(key, value, expirationTime);
+                AddCore(key, value, expirationTime);
             }
         }
 
         /// <summary>
-        /// Remove all cache items added by the cache store itself.
+        ///     Remove all cache items added by the cache store itself.
         /// </summary>
         /// <remarks>Nothing will be done if not enabled.</remarks>
         public void Clear()
         {
-            if (this.Enabled)
+            if (Enabled)
             {
-                this.ClearCore();
+                ClearCore();
             }
         }
     }

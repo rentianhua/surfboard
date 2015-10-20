@@ -19,15 +19,15 @@ namespace Senparc.Weixin.QY.Helpers
 {
     public class JSSDKHelper
     {
+        protected Hashtable Parameters;
+
         public JSSDKHelper()
         {
             Parameters = new Hashtable();
         }
 
-        protected Hashtable Parameters;
-
         /// <summary>
-        /// 设置参数值
+        ///     设置参数值
         /// </summary>
         /// <param name="parameter"></param>
         /// <param name="parameterValue"></param>
@@ -50,38 +50,38 @@ namespace Senparc.Weixin.QY.Helpers
         }
 
         /// <summary>
-        /// 获取随机字符串
+        ///     获取随机字符串
         /// </summary>
         /// <returns></returns>
         public static string GetNoncestr()
         {
-            Random random = new Random();
+            var random = new Random();
             return MD5UtilHelper.GetMD5(random.Next(1000).ToString(), "GBK");
         }
 
         /// <summary>
-        /// 获取时间戳
+        ///     获取时间戳
         /// </summary>
         /// <returns></returns>
         public static string GetTimestamp()
         {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            var ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds).ToString();
         }
 
         /// <summary>
-        /// sha1加密
+        ///     sha1加密
         /// </summary>
         /// <returns></returns>
         private string CreateSha1()
         {
-            StringBuilder sb = new StringBuilder();
-            ArrayList akeys = new ArrayList(Parameters.Keys);
+            var sb = new StringBuilder();
+            var akeys = new ArrayList(Parameters.Keys);
             akeys.Sort();
 
             foreach (string k in akeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
 
                 if (sb.Length == 0)
                 {
@@ -92,11 +92,11 @@ namespace Senparc.Weixin.QY.Helpers
                     sb.Append("&" + k + "=" + v);
                 }
             }
-            return SHA1UtilHelper.GetSha1(sb.ToString()).ToString().ToLower();
+            return SHA1UtilHelper.GetSha1(sb.ToString()).ToLower();
         }
 
         /// <summary>
-        /// 获取JS-SDK权限验证的签名Signature
+        ///     获取JS-SDK权限验证的签名Signature
         /// </summary>
         /// <param name="ticket"></param>
         /// <param name="noncestr"></param>

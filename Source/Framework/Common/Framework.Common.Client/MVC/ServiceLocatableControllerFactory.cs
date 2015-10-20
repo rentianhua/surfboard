@@ -29,7 +29,7 @@ namespace Cedar.Framework.Common.Client.MVC
         /// <summary>
         ///     Gets the service locator.
         /// </summary>
-        public IServiceLocator ServiceLocator { get; private set; }
+        public IServiceLocator ServiceLocator { get; }
 
         /// <summary>
         ///     Retrieves the controller instance for the specified request context and controller type.
