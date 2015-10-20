@@ -50,7 +50,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns>0：未被注册，非0：被注册</returns>
         public int CheckMobile(string mobile)
         {
-            const string sql = @"select count(1) from `cust_info` where mobile=@mobile;";
+            const string sql = @"select count(1) from cust_info where mobile=@mobile;";
             var result = Helper.ExecuteScalar<int>(sql, new { mobile });
             return result;
         }
@@ -63,8 +63,8 @@ namespace CCN.Modules.Customer.DataAccess
         public int CustRegister(CustModel userInfo)
         {
             //插入账户基本信息
-            const string sql = @"INSERT INTO `cust_info`(`innerid`,`custname`,`password`,`mobile`,`telephone`,`email`,`headportrait`,qrcode,`status`,authstatus,`type`,`realname`,`totalpoints`,`level`,`createdtime`,`modifiedtime`)
-                        VALUES (@innerid,@custname,@password,@mobile,@telephone,@email,@headportrait,@qrcode,@status,@authstatus,@type,@realname,@totalpoints,@level,@createdtime,@modifiedtime);";
+            const string sql = @"INSERT INTO cust_info(innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, totalpoints, level, type, createdtime)
+                        VALUES (@innerid, @custname, @password, @mobile, @telephone, @email, @headportrait, @status, @authstatus, @provid, @cityid, @area, @sex, @brithday, @qq, @totalpoints, @level, @type, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -80,8 +80,7 @@ namespace CCN.Modules.Customer.DataAccess
                     if (userInfo.Wechat != null)
                     {
                         const string sqlwechat =
-                            @"INSERT INTO cust_wechat(`innerid`,`custid`,`openid`)
-                        VALUES(uuid(),@custid,@openid);";
+                            @"INSERT INTO cust_wechat(innerid,custid,openid) VALUES(uuid(),@custid,@openid);";
                         conn.Execute(sqlwechat, new {
                             custid = userInfo.Innerid,
                             openid = userInfo.Wechat.Openid
@@ -160,7 +159,7 @@ namespace CCN.Modules.Customer.DataAccess
         }
         
         /// <summary>
-        /// 用户登录
+        /// 更新会员二维码
         /// </summary>
         /// <param name="innerid"></param>
         /// <param name="qrcode"></param>
@@ -202,6 +201,35 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public CustModel GetCustByMobile(string mobile)
+        {
+            const string sql = "select * from cust_info where mobile=@mobile;";
+
+            try
+            {
+                var custModel = Helper.Query<CustModel>(sql, new { mobile }).FirstOrDefault();
+                //获取微信信息
+                if (custModel != null)
+                {
+                    custModel.Wechat = Helper.Query<CustWechat>("select a.* from wechat_friend as a inner join cust_wechat as b on a.openid=b.openid where b.custid=@custid;", new
+                    {
+                        custid = custModel.Innerid
+                    }).FirstOrDefault();
+                }
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 获取会员列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -210,7 +238,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"cust_info";
-            const string fields = "innerid, custname, mobile, telephone, email, headportrait, status, authstatus, autherid, authtime, authdesc, type, realname, totalpoints, level, createdtime, modifiedtime";
+            const string fields = "innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, totalpoints, level, qrcode, type, createdtime, modifiedtime";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -271,7 +299,23 @@ namespace CCN.Modules.Customer.DataAccess
                 }
             }
         }
-        
+
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateCustStatus(string innerid,int status)
+        {
+            const string sql = "update cust_info set status=@status where innerid=@innerid;";
+            var custModel = Helper.Execute(sql, new
+            {
+                innerid, status
+            });
+            return custModel;
+        }
+
         #endregion
 
         #region 用户认证
@@ -285,9 +329,9 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
             const string sqlI = @"INSERT INTO `cust_authentication`
-                                (`innerid`,`custid`,`idcard`,`idname`,`idpicture`,`company`,`legalperson`,`organizationcode`,`organizationpicture`,`createdtime`,`modifiedtime`)
+                                (innerid, custid, realname, idcard, enterprisename, licencecode, licencearea, organizationcode, taxcode, relevantpicture, createdtime)
                                 VALUES
-                                (uuid(),@custid,@idcard,@idname,@idpicture,@company,@legalperson,@organizationcode,@organizationpicture,@createdtime,@modifiedtime);";
+                                (uuid(), @custid, @realname, @idcard, @enterprisename, @licencecode, @licencearea, @organizationcode, @taxcode, @relevantpicture, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -303,7 +347,7 @@ namespace CCN.Modules.Customer.DataAccess
                     tran.Rollback();
                     return 0;
                 }
-            } 
+            }
         }
 
         /// <summary>
@@ -317,7 +361,7 @@ namespace CCN.Modules.Customer.DataAccess
             sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
             sqlStr.Append(" where innerid = @innerid");
 
-            const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
+            const string sqlU = "update cust_info set authstatus=4 where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -339,29 +383,36 @@ namespace CCN.Modules.Customer.DataAccess
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
-        /// <param name="operid">操作人id</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
-        public int AuditAuthentication(CustModel info,string operid)
+        public int AuditAuthentication(CustAuthenticationModel model)
         {
-            const string sql = "update cust_info set authstatus=@authstatus,autherid=@autherid,authdesc=@authdesc,authtime=@authtime where innerid=@innerid;";
+            const string sql = "update cust_info set authstatus=@authstatus where innerid=@innerid;";
+            const string sqlau = "update cust_authentication set auditper=@auditper,auditdesc=@auditdesc,audittime=@audittime where custid=@custid;";
 
-            try
+            using (var conn = Helper.GetConnection())
             {
-                Helper.Execute(sql, new
+                var tran = conn.BeginTransaction();
+                try
                 {
-                    innerid = info.Innerid,
-                    authstatus = info.AuthStatus,
-                    autherid = operid,
-                    authtime = info.AuthTime,
-                    authdesc = info.AuthDesc
-                });
-                return 1;
+                    conn.Execute(sql, new { authstatus = model.AuditResult, innerid = model.Custid });
+                    conn.Execute(sqlau, new {
+                        auditper = model.AuditPer,
+                        auditdesc = model.AuditDesc,
+                        audittime = model.AuditTime,
+                        custid = model.Custid
+                    });
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
             }
-            catch (Exception ex)
-            {
-                return 0;
-            }
+            
         }
 
         /// <summary>
@@ -405,6 +456,8 @@ namespace CCN.Modules.Customer.DataAccess
                 return null;
             }
         }
+
+
 
         #endregion
 

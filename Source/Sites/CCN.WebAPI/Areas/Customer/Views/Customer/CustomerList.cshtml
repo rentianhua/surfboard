@@ -28,15 +28,32 @@
                 str += "<td>" + (val.Custname == null ? "" : val.Custname.sub(20)) + "</td>";
                 str += "<td>" + val.Mobile + "</td>";
                 str += "<td>" + (val.Email == null ? "" : val.Email) + "</td>";
-                str += "<td>" + (val.Status == 1 ? "正常" : "冻结") + "</td>";
+                str += "<td>" + (val.Status == 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
                 str += "<td>" + ChangAuthStatus(val.AuthStatus) + "</td>";
                 str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
-                str += "<td>" +
-                    "<a href='/customer/customer/customerview?innerid=" + val.Innerid + "'>查看详情</a> " +
-                    "<a href='/customer/customer/customerview?innerid=" + val.Innerid + "'>冻结</a> " +
-                    "</td>";
+                str += "<td><a href='/customer/customer/customerview?innerid=" + val.Innerid + "'>查看详情</a> ";
+                if (val.Status == 1) {
+                    str += "<a href='javascript:;' onclick=\"FrozenCust('" + val.Innerid + "');\">冻结</a> ";
+                }
+                else {
+                    str += "<a href='javascript:;' onclick=\"ThawCust('" + val.Innerid + "');\">解冻</a> ";
+                }
+                
+                str += "</td>";
                 str += "</tr>";
                 $("#custlist tbody").append(str);
+            });
+        }
+
+        function FrozenCust(id) {
+            $.get("/api/Customer/FrozenCust?innerid=" + id, function (result) {
+                alert(result.errmsg);
+            });
+        }
+
+        function ThawCust(id) {
+            $.get("/api/Customer/ThawCust?innerid=" + id, function (result) {
+                alert(result.errmsg);
             });
         }
 

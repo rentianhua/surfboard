@@ -90,6 +90,16 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public JResult GetCustByMobile(string mobile)
+        {
+            return BusinessComponent.GetCustByMobile(mobile);
+        }
+
+        /// <summary>
         /// 获取会员列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -119,6 +129,17 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.UpdateCustInfo(model);
         }
 
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCustStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateCustStatus(innerid, status);
+        }
+
         #endregion
 
         #region 用户认证
@@ -146,15 +167,13 @@ namespace CCN.Modules.Customer.BusinessService
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
-        public JResult AuditAuthentication(CustModel info)
+        public JResult AuditAuthentication(CustAuthenticationModel model)
         {
-            return BusinessComponent.AuditAuthentication(info);
+            return BusinessComponent.AuditAuthentication(model);
         }
-
-
-
+        
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>

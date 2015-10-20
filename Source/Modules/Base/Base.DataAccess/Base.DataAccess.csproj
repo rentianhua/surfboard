@@ -41,8 +41,9 @@
     <Reference Include="Cedar.Framework.Common.Server">
       <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
     </Reference>
-    <Reference Include="Dapper">
-      <HintPath>..\..\..\..\Lib\Dapper.dll</HintPath>
+    <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
       <HintPath>..\..\..\..\Lib\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -86,6 +87,10 @@
       <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
       <Name>Base.BusinessEntity</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

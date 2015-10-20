@@ -24,16 +24,31 @@
                 var obj = data.errmsg;
 
                 $("#custname").html(obj.Custname);
-                $("#headportrait").html(obj.Headportrait);
+                
                 $("#mobile").html(obj.Mobile);
                 $("#telephone").html(obj.Telephone);
                 $("#realname").html(obj.Realname);
-                $("#status").html(obj.Status == 1 ? "正常" : "冻结");
-                $("#qrcode").html(obj.Qrcode);
+                $("#status").html(obj.Status == 1 ? "正常" : "<font color='red'>冻结中</font>");
+
+                var headurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.Headportrait;
+                var qrcodeurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.QrCode;
+                $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
+                $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
 
                 $("#level").html(obj.Level);
                 $("#totalpoints").html(obj.Totalpoints);
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+
+                //提交过认证信息
+                if (obj.AuthStatus != 0) {
+                    $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
+                        console.log(data);
+
+                    });
+                }
+                else {
+                    $("#authstatus").html(ChangAuthStatus(0));
+                }
             });
         }
 
@@ -63,7 +78,7 @@
 </script>
 
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center;line-height:20px;">会员列表</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center;line-height:20px;">会员详情</div>
     <table style="margin: 0 auto;" class="gridtable">
         <tr>
             <td colspan="4" style="background-color:#ccc">
@@ -167,6 +182,13 @@
             <td id="Organizationcode"></td>
             <td>组织机构代码证照片</td>
             <td id="Organizationpicture"></td>
+        </tr>
+
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                <input type="button" value="审核" />
+                <input type="button" value="返回" onclick="self.location=document.referrer;" />
+            </td>
         </tr>
     </table>
 </div>

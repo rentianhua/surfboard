@@ -27,12 +27,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 手机
         /// </summary>
         public string Mobile { get; set; }
-
-        /// <summary>
-        /// 手机验证码
-        /// </summary>
-        public string VCode { get; set; }
-
+        
         /// <summary>
         /// 固话
         /// </summary>
@@ -49,11 +44,6 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Headportrait { get; set; }
 
         /// <summary>
-        /// 二维码
-        /// </summary>
-        public string QrCode { get; set; }
-
-        /// <summary>
         /// 用户状态[1.正常，2.冻结]
         /// </summary>
         public int Status { get; set; }
@@ -64,29 +54,34 @@ namespace CCN.Modules.Customer.BusinessEntity
         public int AuthStatus { get; set; }
 
         /// <summary>
-        /// 审核人id
+        /// 所在地：身份
         /// </summary>
-        public string Autherid { get; set; }
+        public int Provid { get; set; }
 
         /// <summary>
-        /// 审核时间
+        /// 所在地：城市
         /// </summary>
-        public string AuthTime { get; set; }
+        public int Cityid { get; set; }
 
         /// <summary>
-        /// 审核描述
+        /// 所在地：区/县
         /// </summary>
-        public string AuthDesc { get; set; }
+        public string Area { get; set; }
 
         /// <summary>
-        /// 类型1.车商，2,个人
+        /// 性别 1男2女
         /// </summary>
-        public int Type { get; set; }
+        public short Sex { get; set; }
+        
+        /// <summary>
+        /// 生日
+        /// </summary>
+        public DateTime? Brithday { get; set; }
 
         /// <summary>
-        /// 真实姓名
+        /// QQ
         /// </summary>
-        public string Realname { get; set; }
+        public string QQ { get; set; }
 
         /// <summary>
         /// 总积分
@@ -97,7 +92,17 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 会员等级
         /// </summary>
         public int Level { get; set; }
+        
+        /// <summary>
+        /// 二维码
+        /// </summary>
+        public string QrCode { get; set; }
 
+        /// <summary>
+        /// 类型1.车商，2,个人
+        /// </summary>
+        public int Type { get; set; }
+        
         /// <summary>
         /// 添加时间
         /// </summary>
@@ -107,6 +112,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 修改时间
         /// </summary>
         public DateTime? Modifiedtime { get; set; }
+        
+        /// <summary>
+        /// 手机验证码
+        /// </summary>
+        public string VCode { get; set; }
 
         /// <summary>
         /// 用户微信信息
@@ -150,29 +160,39 @@ namespace CCN.Modules.Customer.BusinessEntity
         public int? AuthStatus { get; set; }
 
         /// <summary>
-        /// 审核人id
+        /// 所在地：身份
         /// </summary>
-        public string Autherid { get; set; }
+        public int Provid { get; set; }
 
         /// <summary>
-        /// 审核时间
+        /// 所在地：城市
         /// </summary>
-        public string AuthTime { get; set; }
+        public int Cityid { get; set; }
 
         /// <summary>
-        /// 审核描述
+        /// 所在地：区/县
         /// </summary>
-        public string AuthDesc { get; set; }
+        public string Area { get; set; }
+
+        /// <summary>
+        /// 性别 1男2女
+        /// </summary>
+        public short Sex { get; set; }
+
+        /// <summary>
+        /// 生日
+        /// </summary>
+        public DateTime? Brithday { get; set; }
+
+        /// <summary>
+        /// QQ
+        /// </summary>
+        public string QQ { get; set; }
 
         /// <summary>
         /// 类型1.车商，2,个人
         /// </summary>
         public int? Type { get; set; }
-
-        /// <summary>
-        /// 真实姓名
-        /// </summary>
-        public string Realname { get; set; }
 
         /// <summary>
         /// 总积分
@@ -295,41 +315,46 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 用户ID
         /// </summary>
         public string Custid { get; set; }
+        
+        /// <summary>
+        /// 真实姓名
+        /// </summary>
+        public string Realname { get; set; }
 
         /// <summary>
-        /// 身份证号码
+        /// 身份证号
         /// </summary>
         public string Idcard { get; set; }
 
         /// <summary>
-        /// 身份证上名称
+        /// 企业名称
         /// </summary>
-        public string Idname { get; set; }
+        public string Enterprisename { get; set; }
 
         /// <summary>
-        /// 手持身份证照片
+        /// 工商营业执照注册号
         /// </summary>
-        public string Idpicture { get; set; }
+        public string Licencecode { get; set; }
 
         /// <summary>
-        /// 公司名称
+        /// 营业执照所在地
         /// </summary>
-        public string Company { get; set; }
+        public string Licencearea { get; set; }
 
         /// <summary>
-        /// 公司法人
-        /// </summary>
-        public string Legalperson { get; set; }
-
-        /// <summary>
-        /// 组织机构代码
+        /// 组织机构代码号
         /// </summary>
         public string Organizationcode { get; set; }
+        
+        /// <summary>
+        /// 税务登记证号
+        /// </summary>
+        public string Taxcode { get; set; }
 
         /// <summary>
-        /// 组织机构代码证照片
+        /// 相关证件图片
         /// </summary>
-        public string Organizationpicture { get; set; }
+        public string Relevantpicture { get; set; }
 
         /// <summary>
         /// 
@@ -340,6 +365,27 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 
         /// </summary>
         public DateTime? Modifiedtime { get; set; }
+
+        /// <summary>
+        /// 审核人id
+        /// </summary>
+        public string AuditPer { get; set; }
+
+        /// <summary>
+        /// 审核时间
+        /// </summary>
+        public DateTime? AuditTime { get; set; }
+
+        /// <summary>
+        /// 审核描述
+        /// </summary>
+        public string AuditDesc { get; set; }
+
+        /// <summary>
+        /// 审核结果 [1.审核通过，0.审核不过]
+        /// </summary>
+        public int? AuditResult { get; set; }
+
     }
     
     /// <summary>
