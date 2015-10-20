@@ -17,7 +17,6 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Framework.Common.Server.BaseClasses
 {
     /// <summary>
-    /// 
     /// </summary>
     public class MySqlDbHelper : MarshalByRefObject
     {
@@ -30,7 +29,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         {
             Guard.ArgumentNotNullOrEmpty(connectionStringName, "connectionStringName");
             ConnectionStringName = connectionStringName;
-            ConnectionStringSettings cnnStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            var cnnStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
             ConnectionString = cnnStringSettings.ConnectionString;
             Factory = DbProviderFactories.GetFactory(cnnStringSettings.ProviderName);
         }
@@ -41,11 +40,11 @@ namespace Cedar.Framework.Common.Server.BaseClasses
 
         /// <summary>
         /// </summary>
-        protected string ConnectionString { get; private set; }
+        protected string ConnectionString { get; }
 
         /// <summary>
         /// </summary>
-        public DbProviderFactory Factory { get; private set; }
+        public DbProviderFactory Factory { get; }
 
         //protected abstract void DeriveParameters(DbCommand discoveryCommand);
 
@@ -83,7 +82,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         //}
 
         /// <summary>
-        /// 获取链接
+        ///     获取链接
         /// </summary>
         /// <returns></returns>
         public virtual DbConnection GetConnection()
@@ -201,7 +200,6 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sql"></param>
@@ -219,7 +217,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         }
 
         /// <summary>
-        /// 执行分页存储过程
+        ///     执行分页存储过程
         /// </summary>
         /// <typeparam name="T">返回实体类型</typeparam>
         /// <param name="model">分页实体</param>
@@ -254,7 +252,9 @@ namespace Cedar.Framework.Common.Server.BaseClasses
 
                     //执行存储过程
                     IEnumerable<T> data;
-                    using (var result = connection.QueryMultiple(model.SpName, args, commandType: CommandType.StoredProcedure))
+                    using (
+                        var result = connection.QueryMultiple(model.SpName, args,
+                            commandType: CommandType.StoredProcedure))
                     {
                         //获取结果集
                         data = result.Read<T>();
@@ -276,7 +276,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
         }
 
         /// <summary>
-        /// 根据实体属性值转换成sql语句
+        ///     根据实体属性值转换成sql语句
         /// </summary>
         /// <param name="entity">实体</param>
         /// <param name="symbol">分隔符</param>

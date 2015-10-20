@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
-using Microsoft.Practices.Unity.InterceptionExtension;
 using Cedar.AuditTrail.Interception.Configuration;
 using Cedar.Framwork.AuditTrail;
+using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
+using Microsoft.Practices.Unity.InterceptionExtension;
 using Newtonsoft.Json;
 
 //using Cedar.Framwork.AuditTrail.BusinessEntity;
@@ -10,35 +10,22 @@ using Newtonsoft.Json;
 
 namespace Cedar.AuditTrail.Interception
 {
-    [ConfigurationElementType(typeof(AuditTrailCallHandlerData))]
+    [ConfigurationElementType(typeof (AuditTrailCallHandlerData))]
     public class AuditTrailCallHandler : ICallHandler
     {
-        //private IAuditTrailManagementService auditservice;
-
         /// <summary>
-        /// Gets or sets the name of the function.
-        /// </summary>
-        /// <value>The name of the function.</value>
-        public string FunctionName { get; private set; }
-
-        /// <summary>
-        /// Order in which the handler will be executed.
-        /// </summary>
-        public int Order { get; set; }
-
-        /// <summary>
-        /// Create a new AuditTrailCallHandler
+        ///     Create a new AuditTrailCallHandler
         /// </summary>
         /// <param name="functionName">The name of the function to audit.</param>
         /// <param name="order">The order in which the handler will be executed.</param>
         public AuditTrailCallHandler(string functionName, int order)
         {
-            this.FunctionName = functionName;
-            this.Order = order;
+            FunctionName = functionName;
+            Order = order;
         }
 
         /// <summary>
-        /// Create a new AuditTrailCallHandler
+        ///     Create a new AuditTrailCallHandler
         /// </summary>
         /// <param name="functionName">The name of the function to audit.</param>
         public AuditTrailCallHandler(string functionName)
@@ -47,19 +34,35 @@ namespace Cedar.AuditTrail.Interception
             //auditservice = ServiceLocatorFactory.GetServiceLocator().GetService<IAuditTrailManagementService>();
         }
 
+        //private IAuditTrailManagementService auditservice;
+
         /// <summary>
-        /// Invoking the Audit Trail related operation.
+        ///     Gets or sets the name of the function.
+        /// </summary>
+        /// <value>The name of the function.</value>
+        public string FunctionName { get; }
+
+        /// <summary>
+        ///     Order in which the handler will be executed.
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
+        ///     Invoking the Audit Trail related operation.
         /// </summary>
         /// <param name="input">Method Invocation Message.</param>
-        /// <param name="getNext">A GetNextHandlerDelegate object delegating the invocation to the next CallHandler or Target instance.</param>
+        /// <param name="getNext">
+        ///     A GetNextHandlerDelegate object delegating the invocation to the next CallHandler or Target
+        ///     instance.
+        /// </param>
         /// <returns>The return message of the method invocation.</returns>
         public IMethodReturn Invoke(IMethodInvocation input, GetNextHandlerDelegate getNext)
         {
             IMethodReturn result;
             try
             {
-                AuditLogger auditLogger = AuditLogger.CreateAuditLogger(this.FunctionName);
-                IMethodReturn methodReturn = getNext()(input, getNext);
+                var auditLogger = AuditLogger.CreateAuditLogger(FunctionName);
+                var methodReturn = getNext()(input, getNext);
                 if (methodReturn != null)
                 {
                     //var data = new AuditLogModel()
@@ -83,7 +86,9 @@ namespace Cedar.AuditTrail.Interception
                     //}
                     if (methodReturn.Exception == null)
                     {
-                        auditLogger.Write(input.MethodBase.Name, string.Empty, JsonConvert.SerializeObject(input.Arguments), JsonConvert.SerializeObject(methodReturn.ReturnValue));
+                        auditLogger.Write(input.MethodBase.Name, string.Empty,
+                            JsonConvert.SerializeObject(input.Arguments),
+                            JsonConvert.SerializeObject(methodReturn.ReturnValue));
                         auditLogger.Flush();
                     }
                 }

@@ -2,21 +2,16 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Cedar.Foundation.SMS.Common
 {
     public class SMSSDK
     {
-        private string _smsapi = ConfigurationManager.AppSettings["smsapi"];
-
         /// <summary>
-        /// 
         /// </summary>
-        public static readonly Dictionary<string, string> DicSmsResultInfo = new Dictionary<string, string>()
+        public static readonly Dictionary<string, string> DicSmsResultInfo = new Dictionary<string, string>
         {
             {"0", "成功"},
             {"-1", "账号无效"},
@@ -32,8 +27,10 @@ namespace Cedar.Foundation.SMS.Common
             {"-100", "其它错误"}
         };
 
+        private string _smsapi = ConfigurationManager.AppSettings["smsapi"];
+
         /// <summary>
-        /// 请求URL（以GET方式请求）
+        ///     请求URL（以GET方式请求）
         /// </summary>
         /// <param name="postUrl">请求地址</param>
         /// <returns>请求结果</returns>
@@ -60,34 +57,34 @@ namespace Cedar.Foundation.SMS.Common
         }
 
         /// <summary>
-        /// 请求URL（以GET方式请求）
+        ///     请求URL（以GET方式请求）
         /// </summary>
         /// <param name="postUrl">请求地址</param>
         /// <returns>请求结果</returns>
         public static string GetWebRequest2(string postUrl)
         {
             //创建请求
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(new Uri(postUrl));
+            var request = (HttpWebRequest) WebRequest.Create(new Uri(postUrl));
 
             //GET请求
             request.Method = "GET";
             request.ReadWriteTimeout = 5000;
             request.ContentType = "text/html;charset=UTF-8";
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream myResponseStream = response.GetResponseStream();
+            var response = (HttpWebResponse) request.GetResponse();
+            var myResponseStream = response.GetResponseStream();
             if (myResponseStream != null)
             {
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+                var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
 
                 //返回内容
-                string retString = myStreamReader.ReadToEnd();
+                var retString = myStreamReader.ReadToEnd();
                 return retString;
             }
             return "-1";
         }
 
         /// <summary>
-        /// 请求URL（以POST方式请求）
+        ///     请求URL（以POST方式请求）
         /// </summary>
         /// <param name="postUrl">请求地址</param>
         /// <param name="param"></param>
@@ -95,13 +92,13 @@ namespace Cedar.Foundation.SMS.Common
         public static string PostWebRequest(string postUrl, string param)
         {
             var req = (HttpWebRequest) WebRequest.Create(postUrl);
-            Encoding encoding = Encoding.UTF8;
-            byte[] bs = Encoding.ASCII.GetBytes(param);
+            var encoding = Encoding.UTF8;
+            var bs = Encoding.ASCII.GetBytes(param);
             string responseData;
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
             req.ContentLength = bs.Length;
-            using (Stream reqStream = req.GetRequestStream())
+            using (var reqStream = req.GetRequestStream())
             {
                 reqStream.Write(bs, 0, bs.Length);
                 reqStream.Close();

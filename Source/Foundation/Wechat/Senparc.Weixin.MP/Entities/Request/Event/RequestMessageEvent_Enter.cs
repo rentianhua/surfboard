@@ -16,7 +16,7 @@ namespace Senparc.Weixin.MP.Entities
     public class RequestMessageEvent_Enter : RequestMessageEventBase, IRequestMessageEventBase
     {
         /// <summary>
-        /// 事件类型
+        ///     事件类型
         /// </summary>
         public override Event Event
         {

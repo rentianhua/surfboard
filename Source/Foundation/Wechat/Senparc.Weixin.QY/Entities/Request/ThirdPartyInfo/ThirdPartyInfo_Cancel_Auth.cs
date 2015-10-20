@@ -14,18 +14,18 @@
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// 取消授权的通知
+    ///     取消授权的通知
     /// </summary>
     public class RequestMessageInfo_Cancel_Auth : ThirdPartyInfoBase, IThirdPartyInfoBase
     {
+        /// <summary>
+        ///     授权方企业号的corpid内容
+        /// </summary>
+        public string AuthCorpId { get; set; }
+
         public override ThirdPartyInfo InfoType
         {
             get { return ThirdPartyInfo.CANCEL_AUTH; }
         }
-
-        /// <summary>
-        /// 授权方企业号的corpid内容
-        /// </summary>
-        public string AuthCorpId { get; set; }
     }
 }

@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.Entities
 {
     /// <summary>
-    /// 扫码事件中的ScanCodeInfo
+    ///     扫码事件中的ScanCodeInfo
     /// </summary>
     public class ScanCodeInfo
     {

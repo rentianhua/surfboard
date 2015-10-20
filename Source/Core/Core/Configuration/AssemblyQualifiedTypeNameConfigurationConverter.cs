@@ -11,7 +11,7 @@ using Cedar.Core.Properties;
 namespace Cedar.Core.Configuration
 {
     /// <summary>
-    /// 程序集限制命名配置转化
+    ///     程序集限制命名配置转化
     /// </summary>
     public class AssemblyQualifiedTypeNameConfigurationConverter : ConfigurationConverterBase
     {
@@ -32,13 +32,10 @@ namespace Cedar.Core.Configuration
             {
                 return null;
             }
-            Type type = Type.GetType(text);
+            var type = Type.GetType(text);
             if (null == type)
             {
-                throw new ArgumentException(Resources.ExceptionCannotResolveTypeName.Format(new[]
-                {
-                    value
-                }));
+                throw new ArgumentException(Resources.ExceptionCannotResolveTypeName.Format(value));
             }
             return type;
         }

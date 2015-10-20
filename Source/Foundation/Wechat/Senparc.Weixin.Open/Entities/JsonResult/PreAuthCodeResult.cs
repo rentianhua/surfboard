@@ -11,16 +11,17 @@
 namespace Senparc.Weixin.Open.Entities
 {
     /// <summary>
-    /// 获取预授权码返回结果
+    ///     获取预授权码返回结果
     /// </summary>
     public class PreAuthCodeResult
     {
         /// <summary>
-        /// 预授权码
+        ///     预授权码
         /// </summary>
         public string pre_auth_code { get; set; }
+
         /// <summary>
-        /// 有效期，为20分钟
+        ///     有效期，为20分钟
         /// </summary>
         public int expires_in { get; set; }
     }

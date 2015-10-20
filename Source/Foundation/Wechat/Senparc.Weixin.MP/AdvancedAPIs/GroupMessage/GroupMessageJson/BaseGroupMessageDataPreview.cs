@@ -19,15 +19,17 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.GroupMessage
     public class BaseGroupMessageDataPreview
     {
         /// <summary>
-        /// OpenId
+        ///     OpenId
         /// </summary>
         public string touser { get; set; }
+
         /// <summary>
-        /// 微信号
+        ///     微信号
         /// </summary>
         public string towxname { get; set; }
+
         /// <summary>
-        /// 消息类型
+        ///     消息类型
         /// </summary>
         public string msgtype { get; set; }
     }
@@ -50,7 +52,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.GroupMessage
 
     public class GroupMessagePreview_VoiceData : BaseGroupMessageDataPreview
     {
-        public GroupMessagePreview_MediaId voice { get; set; }  
+        public GroupMessagePreview_MediaId voice { get; set; }
     }
 
     public class GroupMessagePreview_ImageData : BaseGroupMessageDataPreview

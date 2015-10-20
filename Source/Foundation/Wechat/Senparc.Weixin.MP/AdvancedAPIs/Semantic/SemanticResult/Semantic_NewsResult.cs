@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 资讯服务（news）
+    ///     资讯服务（news）
     /// </summary>
     public class Semantic_NewsResult : BaseSemanticResultJson
     {
@@ -29,11 +29,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_News
     {
         /// <summary>
-        /// 关键词
+        ///     关键词
         /// </summary>
         public string keyword { get; set; }
+
         /// <summary>
-        /// 新闻类别
+        ///     新闻类别
         /// </summary>
         public string category { get; set; }
     }

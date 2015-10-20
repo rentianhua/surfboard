@@ -20,12 +20,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 微小店订单接口
+    ///     微小店订单接口
     /// </summary>
     public static class OrderApi
     {
         /// <summary>
-        /// 根据订单ID获取订单详情
+        ///     根据订单ID获取订单详情
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="orderId">订单Id</param>
@@ -43,29 +43,30 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 根据订单状态/创建时间获取订单详情
+        ///     根据订单状态/创建时间获取订单详情
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="status">订单状态(不带该字段-全部状态, 2-待发货, 3-已发货, 5-已完成, 8-维权中, )</param>
         /// <param name="beginTime">订单创建时间起始时间(不带该字段则不按照时间做筛选)</param>
         /// <param name="endTime">订单创建时间终止时间(不带该字段则不按照时间做筛选)</param>
         /// <returns></returns>
-        public static GetByFilterResult GetByFilterOrder(string accessToken, int status, DateTime beginTime, DateTime endTime)
+        public static GetByFilterResult GetByFilterOrder(string accessToken, int status, DateTime beginTime,
+            DateTime endTime)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyfilter?access_token={0}";
 
             var data = new
-                {
-                    status = status,
-                    begintime = DateTimeHelper.GetWeixinDateTime(beginTime),
-                    endtime = DateTimeHelper.GetWeixinDateTime(endTime)
-                };
+            {
+                status,
+                begintime = DateTimeHelper.GetWeixinDateTime(beginTime),
+                endtime = DateTimeHelper.GetWeixinDateTime(endTime)
+            };
 
             return CommonJsonSend.Send<GetByFilterResult>(accessToken, urlFormat, data);
         }
 
         /// <summary>
-        /// 设置订单发货信息
+        ///     设置订单发货信息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="orderId">订单ID</param>
@@ -85,7 +86,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// 宅急送	    064zhaijisong
         /// 汇通快运	020huitong
         /// 易迅快递	zj001yixun
-        public static WxJsonResult SetdeliveryOrder(string accessToken, string orderId, string deliveryCompany, string deliveryTrackNo, int needDelivery = 1, int isOthers = 0)
+        public static WxJsonResult SetdeliveryOrder(string accessToken, string orderId, string deliveryCompany,
+            string deliveryTrackNo, int needDelivery = 1, int isOthers = 0)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/order/setdelivery?access_token={0}";
 
@@ -102,7 +104,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 关闭订单
+        ///     关闭订单
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="orderId">订单ID</param>

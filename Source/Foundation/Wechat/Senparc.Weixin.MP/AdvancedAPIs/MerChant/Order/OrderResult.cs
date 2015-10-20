@@ -4,12 +4,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 根据订单ID获取订单详情返回结果
+    ///     根据订单ID获取订单详情返回结果
     /// </summary>
     public class GetByIdOrderResult : WxJsonResult
     {
         /// <summary>
-        /// 订单详情
+        ///     订单详情
         /// </summary>
         public Order order { get; set; }
     }
@@ -17,101 +17,121 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class Order
     {
         /// <summary>
-        /// 订单ID
+        ///     订单ID
         /// </summary>
         public string order_id { get; set; }
+
         /// <summary>
-        /// 订单状态
+        ///     订单状态
         /// </summary>
         public int order_status { get; set; }
+
         /// <summary>
-        /// 订单总价格(单位 : 分)
+        ///     订单总价格(单位 : 分)
         /// </summary>
         public int order_total_price { get; set; }
+
         /// <summary>
-        /// 订单创建时间
+        ///     订单创建时间
         /// </summary>
         public string order_create_time { get; set; }
+
         /// <summary>
-        /// 订单运费价格(单位 : 分)
+        ///     订单运费价格(单位 : 分)
         /// </summary>
         public int order_express_price { get; set; }
+
         /// <summary>
-        /// 买家微信OPENID
+        ///     买家微信OPENID
         /// </summary>
         public string buyer_openid { get; set; }
+
         /// <summary>
-        /// 买家微信昵称
+        ///     买家微信昵称
         /// </summary>
         public string buyer_nick { get; set; }
+
         /// <summary>
-        /// 收货人姓名
+        ///     收货人姓名
         /// </summary>
         public string receiver_name { get; set; }
+
         /// <summary>
-        /// 收货地址省份
+        ///     收货地址省份
         /// </summary>
         public string receiver_province { get; set; }
+
         /// <summary>
-        /// 收货地址城市
+        ///     收货地址城市
         /// </summary>
         public string receiver_city { get; set; }
+
         /// <summary>
-        /// 收货详细地址
+        ///     收货详细地址
         /// </summary>
         public string receiver_address { get; set; }
+
         /// <summary>
-        /// 收货人移动电话
+        ///     收货人移动电话
         /// </summary>
         public string receiver_mobile { get; set; }
+
         /// <summary>
-        /// 收货人固定电话
+        ///     收货人固定电话
         /// </summary>
         public string receiver_phone { get; set; }
+
         /// <summary>
-        /// 商品ID
+        ///     商品ID
         /// </summary>
         public string product_id { get; set; }
+
         /// <summary>
-        /// 商品名称
+        ///     商品名称
         /// </summary>
         public string product_name { get; set; }
+
         /// <summary>
-        /// 商品价格(单位 : 分)
+        ///     商品价格(单位 : 分)
         /// </summary>
         public int product_price { get; set; }
+
         /// <summary>
-        /// 商品SKU
+        ///     商品SKU
         /// </summary>
         public string product_sku { get; set; }
+
         /// <summary>
-        /// 商品个数
+        ///     商品个数
         /// </summary>
         public int product_count { get; set; }
+
         /// <summary>
-        /// 商品图片
+        ///     商品图片
         /// </summary>
         public string product_img { get; set; }
+
         /// <summary>
-        /// 运单ID
+        ///     运单ID
         /// </summary>
         public string delivery_id { get; set; }
+
         /// <summary>
-        /// 物流公司编码
+        ///     物流公司编码
         /// </summary>
         public string delivery_company { get; set; }
+
         /// <summary>
-        /// 交易ID
+        ///     交易ID
         /// </summary>
         public string trans_id { get; set; }
     }
 
     /// <summary>
-    /// 根据订单状态/创建时间获取订单详情返回结果
+    ///     根据订单状态/创建时间获取订单详情返回结果
     /// </summary>
     public class GetByFilterResult : WxJsonResult
     {
-        public List<Order> order_list { get; set; } 
+        public List<Order> order_list { get; set; }
     }
 }
-

@@ -16,7 +16,7 @@ namespace Cedar.Core.IoC
             new Lazy<IEnumerable<Assembly>>(GetAssembliesCore);
 
         /// <summary>
-        /// 获取核心集合
+        ///     获取核心集合
         /// </summary>
         /// <returns></returns>
         private static IEnumerable<Assembly> GetAssembliesCore()
@@ -27,13 +27,13 @@ namespace Cedar.Core.IoC
                 new AssemblyName("Cedar.Core"),
                 new AssemblyName("Cedar.Core.EntLib")
             };
-            AssemblyName[] array2 = array;
-            for (int i = 0; i < array2.Length; i++)
+            var array2 = array;
+            for (var i = 0; i < array2.Length; i++)
             {
-                AssemblyName assemblyRef = array2[i];
+                var assemblyRef = array2[i];
                 try
                 {
-                    Assembly item = Assembly.Load(assemblyRef);
+                    var item = Assembly.Load(assemblyRef);
                     list.Add(item);
                 }
                 catch

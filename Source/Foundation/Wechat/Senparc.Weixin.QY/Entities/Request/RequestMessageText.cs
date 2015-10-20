@@ -13,12 +13,13 @@
 
 namespace Senparc.Weixin.QY.Entities
 {
-    public class RequestMessageText : RequestMessageBase,IRequestMessageBase
+    public class RequestMessageText : RequestMessageBase, IRequestMessageBase
     {
+        public string Content { get; set; }
+
         public override RequestMsgType MsgType
         {
             get { return RequestMsgType.Text; }
         }
-        public string Content { get; set; }
     }
 }

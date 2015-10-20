@@ -10,52 +10,58 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Framwork.AuditTrail
 {
     /// <summary>
-	/// This class is used to write audit log entry.
-	/// </summary>
-	public class AuditLogger : IDisposable
+    ///     This class is used to write audit log entry.
+    /// </summary>
+    public class AuditLogger : IDisposable
     {
         private static readonly object syncHelper = new object();
         private static AuditLogProviderBase provider;
         private bool disposed;
-        internal AuditLogEntry logEntry;
         private AuditLogListenerBase listener;
+        internal AuditLogEntry logEntry;
 
-        /// <summary>
-        /// Gets the providers.
-        /// </summary>
-        /// <value>
-        /// The providers.
-        /// </value>
-        public static ServiceLocatableDictionary<AuditLogProviderBase> Providers
+        private AuditLogger(AuditLogEntry logEntry)
         {
-            get;
-            private set;
+            Providers = new ServiceLocatableDictionary<AuditLogProviderBase>(null);
+            this.logEntry = logEntry;
+            ConfigManager.GetConfigurationSection<AuditTrailSettings>()
+                .Configure(ServiceLocatorFactory.GetServiceLocator());
         }
 
         /// <summary>
-        /// Gets the provider.
+        ///     Gets the providers.
         /// </summary>
         /// <value>
-        /// The provider.
+        ///     The providers.
+        /// </value>
+        public static ServiceLocatableDictionary<AuditLogProviderBase> Providers { get; private set; }
+
+        /// <summary>
+        ///     Gets the provider.
+        /// </summary>
+        /// <value>
+        ///     The provider.
         /// </value>
         public static AuditLogProviderBase Provider
         {
             get
             {
-                if (AuditLogger.provider != null)
+                if (provider != null)
                 {
-                    return AuditLogger.provider;
+                    return provider;
                 }
                 AuditLogProviderBase result;
-                lock (AuditLogger.syncHelper)
+                lock (syncHelper)
                 {
-                    if (AuditLogger.provider != null)
+                    if (provider != null)
                     {
-                        result = AuditLogger.provider;
+                        result = provider;
                     }
                     else
                     {
-                        result = (AuditLogger.provider = ServiceLocatorFactory.GetServiceLocator(null).GetService<AuditLogProviderBase>(null));
+                        result =
+                            (provider =
+                                ServiceLocatorFactory.GetServiceLocator(null).GetService<AuditLogProviderBase>(null));
                     }
                 }
                 return result;
@@ -63,33 +69,37 @@ namespace Cedar.Framwork.AuditTrail
         }
 
         /// <summary>
-        /// Gets the audit log listener.
+        ///     Gets the audit log listener.
         /// </summary>
         /// <value>
-        /// The audit log listener.
+        ///     The audit log listener.
         /// </value>
         public AuditLogListenerBase AuditLogListener
         {
             get
             {
-                if (this.listener != null)
+                if (listener != null)
                 {
-                    return this.listener;
+                    return listener;
                 }
-                this.listener = new CompositeAuditLogListener(ServiceLocatorFactory.GetServiceLocator(null).GetAllServices<AuditLogListenerBase>());
-                return this.listener;
+                listener =
+                    new CompositeAuditLogListener(
+                        ServiceLocatorFactory.GetServiceLocator(null).GetAllServices<AuditLogListenerBase>());
+                return listener;
             }
         }
 
-        private AuditLogger(AuditLogEntry logEntry)
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
         {
-            AuditLogger.Providers = new ServiceLocatableDictionary<AuditLogProviderBase>(null);
-            this.logEntry = logEntry;
-            ConfigManager.GetConfigurationSection<AuditTrailSettings>().Configure(ServiceLocatorFactory.GetServiceLocator());
+            EnsureNotDisposed();
+            Flush();
         }
 
         /// <summary>
-        /// Create <see cref="T:Cedar.Framwork.AuditTrail.AuditLogger" /> based on the specified function name.
+        ///     Create <see cref="T:Cedar.Framwork.AuditTrail.AuditLogger" /> based on the specified function name.
         /// </summary>
         /// <param name="functionName">Name of the function.</param>
         /// <returns>The creatd <see cref="T:Cedar.Framwork.AuditTrail.AuditLogger" />.</returns>
@@ -104,72 +114,63 @@ namespace Cedar.Framwork.AuditTrail
             {
                 //throw new InvalidOperationException(Resources.ExceptionCurrentTransactionIdNotExists);
             }
-            AuditLogEntry auditLogEntry = new AuditLogEntry(functionName, null, null, null, null);
+            var auditLogEntry = new AuditLogEntry(functionName, null, null, null, null);
             return new AuditLogger(auditLogEntry);
         }
 
         /// <summary>
-        /// Writes the specified action.
+        ///     Writes the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
         /// <param name="actionDescription">The action description.</param>
         /// <param name="actionRemarks">The action remarks.</param>
         public void Write(string action, string actionDescription, string inputsParams, dynamic actionRemarks)
         {
-            this.EnsureNotDisposed();
+            EnsureNotDisposed();
             Guard.ArgumentNotNullOrEmpty(action, "action");
-            this.logEntry.Action = action;
-            this.logEntry.ActionDescription = actionDescription;
-            this.logEntry.ActionDescription = actionRemarks;
-            this.logEntry.ActionRemarks = actionRemarks;
-            this.logEntry.InputsParams = inputsParams;
+            logEntry.Action = action;
+            logEntry.ActionDescription = actionDescription;
+            logEntry.ActionDescription = actionRemarks;
+            logEntry.ActionRemarks = actionRemarks;
+            logEntry.InputsParams = inputsParams;
         }
 
         /// <summary>
-        /// Writes the specified log data.
+        ///     Writes the specified log data.
         /// </summary>
         /// <param name="logData">The log data.</param>
         /// <param name="operationType">Type of the operation.</param>
         /// <param name="customOperationName">Name of the custom operation.</param>
         public void Write(object logData, OperationType operationType, string customOperationName = null)
         {
-            this.EnsureNotDisposed();
+            EnsureNotDisposed();
             if (operationType == OperationType.Custom)
             {
                 Guard.ArgumentNotNullOrEmpty(customOperationName, "customOperationName");
             }
-            string operation = customOperationName;
+            var operation = customOperationName;
             if (operationType != OperationType.Custom)
             {
                 operation = operationType.ToString();
             }
-            AuditLogEntryItem item = new AuditLogEntryItem(operation, Guid.NewGuid().ToString(), 1)
+            var item = new AuditLogEntryItem(operation, Guid.NewGuid().ToString(), 1)
             {
                 LogData = logData
             };
-            this.logEntry.Items.Add(item);
+            logEntry.Items.Add(item);
         }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.EnsureNotDisposed();
-            this.Flush();
-        }
-
-        /// <summary>
-        /// Drive the audit log listeners to write the stored audit log entry.
+        ///     Drive the audit log listeners to write the stored audit log entry.
         /// </summary>
         public void Flush()
         {
-            this.disposed = true;
-            this.AuditLogListener.Write(this.logEntry);
+            disposed = true;
+            AuditLogListener.Write(logEntry);
         }
 
         /// <summary>
-        /// Gets the log detail.
+        ///     Gets the log detail.
         /// </summary>
         /// <param name="tableName">Name of the table.</param>
         /// <param name="logId">The log ID.</param>
@@ -178,12 +179,12 @@ namespace Cedar.Framwork.AuditTrail
         {
             Guard.ArgumentNotNullOrEmpty(tableName, "tableName");
             Guard.ArgumentNotNullOrEmpty(logId, "logId");
-            return AuditLogger.Provider.GetLogDetail(tableName, logId);
+            return Provider.GetLogDetail(tableName, logId);
         }
 
         private void EnsureNotDisposed()
         {
-            if (this.disposed)
+            if (disposed)
             {
                 throw new InvalidOperationException(Resources.ExceptionLoggerIsDisposed);
             }

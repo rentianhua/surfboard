@@ -18,7 +18,7 @@
 namespace Senparc.Weixin.MP.Entities.Request
 {
     /// <summary>
-    /// 微信公众服务器Post过来的加密参数集合（不包括PostData）
+    ///     微信公众服务器Post过来的加密参数集合（不包括PostData）
     /// </summary>
     public class PostModel : EncryptPostModel
     {
@@ -26,7 +26,7 @@ namespace Senparc.Weixin.MP.Entities.Request
         public string AppId { get; set; }
 
         /// <summary>
-        /// 设置服务器内部保密信息
+        ///     设置服务器内部保密信息
         /// </summary>
         /// <param name="token"></param>
         /// <param name="encodingAESKey"></param>

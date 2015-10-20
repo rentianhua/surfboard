@@ -25,8 +25,9 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Groups
     {
         public int id { get; set; }
         public string name { get; set; }
+
         /// <summary>
-        /// 此属性在CreateGroupResult的Json数据中，创建结果中始终为0
+        ///     此属性在CreateGroupResult的Json数据中，创建结果中始终为0
         /// </summary>
         public int count { get; set; }
     }

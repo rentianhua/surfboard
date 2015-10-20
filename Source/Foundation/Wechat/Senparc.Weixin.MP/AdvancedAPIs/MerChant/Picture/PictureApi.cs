@@ -18,17 +18,16 @@ using Senparc.Weixin.HttpUtility;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 微小店图片接口
+    ///     微小店图片接口
     /// </summary>
     public static class PictureApi
     {
-
         public static PictureResult UploadImg(string accessToken, string fileName)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/common/upload_img?access_token={0}&filename={1}";
             var url = string.IsNullOrEmpty(accessToken) ? urlFormat : string.Format(urlFormat, accessToken, fileName);
 
-            var json=new PictureResult();
+            var json = new PictureResult();
 
             using (var fs = FileHelper.GetFileStream(fileName))
             {

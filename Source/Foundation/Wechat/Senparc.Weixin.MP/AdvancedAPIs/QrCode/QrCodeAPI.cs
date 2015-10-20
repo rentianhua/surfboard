@@ -29,19 +29,20 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 二维码接口
+    ///     二维码接口
     /// </summary>
     public static class QrCodeApi
     {
         /// <summary>
-        /// 创建二维码
+        ///     创建二维码
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="expireSeconds">该二维码有效时间，以秒为单位。 最大不超过1800。0时为永久二维码</param>
         /// <param name="sceneId">场景值ID，临时二维码时为32位整型，永久二维码时最大值为1000</param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static CreateQrCodeResult Create(string accessTokenOrAppId, int expireSeconds, int sceneId, int timeOut = Config.TIME_OUT)
+        public static CreateQrCodeResult Create(string accessTokenOrAppId, int expireSeconds, int sceneId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -77,18 +78,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     };
                 }
                 return CommonJsonSend.Send<CreateQrCodeResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 用字符串类型创建二维码
+        ///     用字符串类型创建二维码
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="sceneStr">场景值ID（字符串形式的ID），字符串类型，长度限制为1到64，仅永久二维码支持此字段</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static CreateQrCodeResult CreateByStr(string accessTokenOrAppId, string sceneStr, int timeOut = Config.TIME_OUT)
+        public static CreateQrCodeResult CreateByStr(string accessTokenOrAppId, string sceneStr,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -105,12 +106,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     }
                 };
                 return CommonJsonSend.Send<CreateQrCodeResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 获取下载二维码的地址
+        ///     获取下载二维码的地址
         /// </summary>
         /// <param name="ticket"></param>
         /// <returns></returns>
@@ -121,8 +121,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         }
 
         /// <summary>
-        /// 获取二维码（不需要AccessToken）
-        /// 错误情况下（如ticket非法）返回HTTP错误码404。
+        ///     获取二维码（不需要AccessToken）
+        ///     错误情况下（如ticket非法）返回HTTP错误码404。
         /// </summary>
         /// <param name="ticket"></param>
         /// <param name="stream"></param>
@@ -131,6 +131,5 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
             var url = GetShowQrCodeUrl(ticket);
             Get.Download(url, stream);
         }
-
     }
 }

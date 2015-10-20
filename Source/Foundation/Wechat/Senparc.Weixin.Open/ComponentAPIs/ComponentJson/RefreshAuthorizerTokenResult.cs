@@ -13,20 +13,22 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.Open.ComponentAPIs
 {
     /// <summary>
-    /// 获取（刷新）授权公众号的令牌返回结果
+    ///     获取（刷新）授权公众号的令牌返回结果
     /// </summary>
     public class RefreshAuthorizerTokenResult : WxJsonResult
     {
         /// <summary>
-        /// 授权方令牌
+        ///     授权方令牌
         /// </summary>
         public string authorizer_access_token { get; set; }
+
         /// <summary>
-        /// 有效期，为2小时
+        ///     有效期，为2小时
         /// </summary>
         public int expires_in { get; set; }
+
         /// <summary>
-        /// 刷新令牌
+        ///     刷新令牌
         /// </summary>
         public string authorizer_refresh_token { get; set; }
     }

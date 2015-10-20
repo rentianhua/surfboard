@@ -17,7 +17,6 @@
 using System;
 using System.Configuration;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Xml;
 using System.Xml.Linq;
 using Senparc.Weixin.Exceptions;
@@ -40,6 +39,8 @@ namespace Senparc.Weixin.MP
         //  <MsgId>5832509444155992350</MsgId>
         //</xml>
 
+        private static readonly string AppID = ConfigurationManager.AppSettings["APPID"];
+
         /// <summary>
         /// 获取XDocument转换后的IRequestMessageBase实例。
         /// 如果MsgType不存在，抛出UnknownRequestMsgTypeException异常
@@ -58,8 +59,7 @@ namespace Senparc.Weixin.MP
                     case RequestMsgType.Text:
                         requestMessage = new RequestMessageText();
                         EntityHelper.FillEntityWithXml(requestMessage, doc);
-                        CustomApi.SendText(ConfigurationManager.AppSettings["APPID"], requestMessage.FromUserName,
-                            "欢欢喜喜");
+                        CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
                         break;
                     case RequestMsgType.Location:
                         requestMessage = new RequestMessageLocation();
@@ -91,6 +91,8 @@ namespace Senparc.Weixin.MP
                                 break;
                             case "SUBSCRIBE"://订阅（关注）
                                 requestMessage = new RequestMessageEvent_Subscribe();
+                                EntityHelper.FillEntityWithXml(requestMessage, doc);
+                                CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢关注我们车信网！");
                                 break;
                             case "UNSUBSCRIBE"://取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();

@@ -15,67 +15,68 @@ namespace Cedar.Framwork.Caching.Configuration
         private const string PrefixPropertyName = "prefix";
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="T:Cedar.Framwork.Caching.Configuration.CachingData" /> is enabled.
+        ///     Gets or sets a value indicating whether this <see cref="T:Cedar.Framwork.Caching.Configuration.CachingData" /> is
+        ///     enabled.
         /// </summary>
         /// <value>
-        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
         /// </value>
         [ConfigurationProperty("enabled", IsRequired = false, DefaultValue = false)]
         public bool Enabled
         {
-            get { return (bool)base["enabled"]; }
+            get { return (bool) base["enabled"]; }
             set { base["enabled"] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the name of cache manager.
+        ///     Gets or sets the name of cache manager.
         /// </summary>
         /// <value>
-        /// The name of cache manager.
+        ///     The name of cache manager.
         /// </value>
         [ConfigurationProperty("cacheManager", IsRequired = false, DefaultValue = "")]
         public string CacheManager
         {
-            get { return (string)base["cacheManager"]; }
+            get { return (string) base["cacheManager"]; }
             set { base["cacheManager"] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the prefix of cache item key.
+        ///     Gets or sets the prefix of cache item key.
         /// </summary>
         /// <value>
-        /// The prefix of cache item key.
+        ///     The prefix of cache item key.
         /// </value>
         [ConfigurationProperty("prefix", IsRequired = false, DefaultValue = "")]
         public string Prefix
         {
-            get { return (string)base["prefix"]; }
+            get { return (string) base["prefix"]; }
             set { base["prefix"] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the expired time for the two expiration modes: Absolute and Sliding.
+        ///     Gets or sets the expired time for the two expiration modes: Absolute and Sliding.
         /// </summary>
         /// <value>
-        /// The expired time for the two expiration modes: Absolute and Sliding.
+        ///     The expired time for the two expiration modes: Absolute and Sliding.
         /// </value>
         [ConfigurationProperty("expiration", IsRequired = false, DefaultValue = "6000")]
         public int ExpirationTime
         {
-            get { return (int)base["expiration"]; }
+            get { return (int) base["expiration"]; }
             set { base["expiration"] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the expired time format for the expiration mode "TimeFormat".
+        ///     Gets or sets the expired time format for the expiration mode "TimeFormat".
         /// </summary>
         /// <value>
-        /// The expired time format for the expiration mode "TimeFormat".
+        ///     The expired time format for the expiration mode "TimeFormat".
         /// </value>
         [ConfigurationProperty("expirationTimeFormat", IsRequired = false, DefaultValue = "")]
         public string ExpirationTimeFormat
         {
-            get { return (string)base["expirationTimeFormat"]; }
+            get { return (string) base["expirationTimeFormat"]; }
             set { base["expirationTimeFormat"] = value; }
         }
     }

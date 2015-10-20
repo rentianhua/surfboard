@@ -32,14 +32,15 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.User
 {
     /// <summary>
-    /// 高级接口获取的用户信息
+    ///     高级接口获取的用户信息
     /// </summary>
     public class UserInfoJson : WxJsonResult
     {
         /// <summary>
-        /// 用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
+        ///     用户是否订阅该公众号标识，值为0时，代表此用户没有关注该公众号，拉取不到其余信息。
         /// </summary>
         public int subscribe { get; set; }
+
         public string openid { get; set; }
         public string nickname { get; set; }
         public int sex { get; set; }
@@ -55,7 +56,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.User
     }
 
     /// <summary>
-    /// 批量获取用户基本信息返回结果
+    ///     批量获取用户基本信息返回结果
     /// </summary>
     public class BatchGetUserInfoJson : WxJsonResult
     {

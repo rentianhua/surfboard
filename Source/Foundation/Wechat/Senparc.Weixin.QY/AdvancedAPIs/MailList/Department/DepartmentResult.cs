@@ -20,12 +20,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.QY.AdvancedAPIs.MailList
 {
     /// <summary>
-    /// 创建部门返回结果
+    ///     创建部门返回结果
     /// </summary>
     public class CreateDepartmentResult : QyJsonResult
     {
         /// <summary>
-        /// 创建的部门id
+        ///     创建的部门id
         /// </summary>
         public int id { get; set; }
     }
@@ -38,19 +38,22 @@ namespace Senparc.Weixin.QY.AdvancedAPIs.MailList
     public class DepartmentList
     {
         /// <summary>
-        /// 部门id
+        ///     部门id
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// 部门名称
+        ///     部门名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 上级部门id
+        ///     上级部门id
         /// </summary>
         public int parentid { get; set; }
+
         /// <summary>
-        /// 在父部门中的次序值。order值小的排序靠前。
+        ///     在父部门中的次序值。order值小的排序靠前。
         /// </summary>
         public int order { get; set; }
     }

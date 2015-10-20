@@ -27,21 +27,22 @@ using Senparc.Weixin.MP.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 客服接口
+    ///     客服接口
     /// </summary>
     public static class CustomApi
     {
         private const string URL_FORMAT = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token={0}";
 
         /// <summary>
-        /// 发送文本信息
+        ///     发送文本信息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
         /// <param name="content"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SendText(string accessTokenOrAppId, string openId, string content, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SendText(string accessTokenOrAppId, string openId, string content,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -51,23 +52,23 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     msgtype = "text",
                     text = new
                     {
-                        content = content
+                        content
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 发送图片消息
+        ///     发送图片消息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
         /// <param name="mediaId"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SendImage(string accessTokenOrAppId, string openId, string mediaId, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SendImage(string accessTokenOrAppId, string openId, string mediaId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -81,19 +82,19 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 发送语音消息
+        ///     发送语音消息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
         /// <param name="mediaId"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SendVoice(string accessTokenOrAppId, string openId, string mediaId, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SendVoice(string accessTokenOrAppId, string openId, string mediaId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -107,12 +108,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 发送视频消息
+        ///     发送视频消息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
@@ -121,7 +121,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="description"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SendVideo(string accessTokenOrAppId, string openId, string mediaId, string title, string description, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SendVideo(string accessTokenOrAppId, string openId, string mediaId, string title,
+            string description, int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -132,16 +133,16 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     video = new
                     {
                         media_id = mediaId,
-                        title = title,
-                        description = description
+                        title,
+                        description
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
+
         /// <summary>
-        /// 发送音乐消息
+        ///     发送音乐消息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
@@ -153,7 +154,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
         public static WxJsonResult SendMusic(string accessTokenOrAppId, string openId, string title, string description,
-                                    string musicUrl, string hqMusicUrl, string thumbMediaId, int timeOut = Config.TIME_OUT)
+            string musicUrl, string hqMusicUrl, string thumbMediaId, int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -163,27 +164,27 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     msgtype = "music",
                     music = new
                     {
-                        title = title,
-                        description = description,
+                        title,
+                        description,
                         musicurl = musicUrl,
                         hqmusicurl = hqMusicUrl,
                         thumb_media_id = thumbMediaId
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 发送图文消息
+        ///     发送图文消息
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="openId"></param>
         /// <param name="articles"></param>
         /// <param name="timeOut">代理请求超时时间（毫秒）</param>
         /// <returns></returns>
-        public static WxJsonResult SendNews(string accessTokenOrAppId, string openId, List<Article> articles, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SendNews(string accessTokenOrAppId, string openId, List<Article> articles,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -198,12 +199,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                             title = z.Title,
                             description = z.Description,
                             url = z.Url,
-                            picurl = z.PicUrl//图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图640*320，小图80*80
+                            picurl = z.PicUrl //图文消息的图片链接，支持JPG、PNG格式，较好的效果为大图640*320，小图80*80
                         }).ToList()
                     }
                 };
                 return CommonJsonSend.Send(accessToken, URL_FORMAT, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
     }

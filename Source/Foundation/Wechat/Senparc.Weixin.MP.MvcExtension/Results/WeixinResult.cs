@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
-using Senparc.Weixin.Entities;
+﻿using System.Web.Mvc;
+using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MessageHandlers;
 
 namespace Senparc.Weixin.MP.MvcExtension
 {
-
     //public static class WeixinResultExtension
     //{
     //    public WeixinResult WeixinResult()
@@ -18,7 +13,7 @@ namespace Senparc.Weixin.MP.MvcExtension
     //}
 
     /// <summary>
-    /// 返回MessageHandler结果
+    ///     返回MessageHandler结果
     /// </summary>
     public class WeixinResult : ContentResult
     {
@@ -37,10 +32,10 @@ namespace Senparc.Weixin.MP.MvcExtension
         }
 
         /// <summary>
-        /// 获取ContentResult中的Content或IMessageHandler中的ResponseDocument文本结果。
-        /// 一般在测试的时候使用。
+        ///     获取ContentResult中的Content或IMessageHandler中的ResponseDocument文本结果。
+        ///     一般在测试的时候使用。
         /// </summary>
-        new public string Content
+        public new string Content
         {
             get
             {
@@ -48,14 +43,11 @@ namespace Senparc.Weixin.MP.MvcExtension
                 {
                     return base.Content;
                 }
-                else if (_messageHandlerDocument != null && _messageHandlerDocument.FinalResponseDocument != null)
+                if (_messageHandlerDocument != null && _messageHandlerDocument.FinalResponseDocument != null)
                 {
                     return _messageHandlerDocument.FinalResponseDocument.ToString();
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
             set { base.Content = value; }
         }
@@ -67,7 +59,7 @@ namespace Senparc.Weixin.MP.MvcExtension
                 //使用IMessageHandler输出
                 if (_messageHandlerDocument == null)
                 {
-                    throw new Senparc.Weixin.Exceptions.WeixinException("执行WeixinResult时提供的MessageHandler不能为Null！", null);
+                    throw new WeixinException("执行WeixinResult时提供的MessageHandler不能为Null！", null);
                 }
 
                 if (_messageHandlerDocument.FinalResponseDocument == null)

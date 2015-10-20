@@ -21,23 +21,21 @@ namespace Senparc.Weixin.MP.TenPayLib
     public class CheckRequestHandler : ClientRequestHandler
     {
         /// <summary>
-        /// 对账单下载接口
+        ///     对账单下载接口
         /// </summary>
         /// <param name="httpContext"></param>
         public CheckRequestHandler(HttpContext httpContext)
             : base(httpContext)
         {
-
-            this.SetGateUrl("http://mch.tenpay.com/cgi-bin/mchdown_real_new.cgi");
+            SetGateUrl("http://mch.tenpay.com/cgi-bin/mchdown_real_new.cgi");
         }
-
 
 
         protected override void CreateSign()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            ArrayList akeys = new ArrayList();
+            var akeys = new ArrayList();
             akeys.Add("spid");
             akeys.Add("trans_time");
             akeys.Add("stamp");
@@ -47,7 +45,7 @@ namespace Senparc.Weixin.MP.TenPayLib
 
             foreach (string k in akeys)
             {
-                string v = (string)Parameters[k];
+                var v = (string) Parameters[k];
                 if (null != v && "".CompareTo(v) != 0
                     && "sign".CompareTo(k) != 0 && "key".CompareTo(k) != 0)
                 {
@@ -55,13 +53,13 @@ namespace Senparc.Weixin.MP.TenPayLib
                 }
             }
 
-            sb.Append("key=" + this.GetKey());
-            string sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToLower();
+            sb.Append("key=" + GetKey());
+            var sign = MD5UtilHelper.GetMD5(sb.ToString(), GetCharset()).ToLower();
 
-            this.SetParameter("sign", sign);
+            SetParameter("sign", sign);
 
             //debug信息
-            this.SetDebugInfo(sb.ToString() + " => sign:" + sign);
+            SetDebugInfo(sb + " => sign:" + sign);
         }
     }
 }

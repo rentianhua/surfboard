@@ -18,12 +18,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 微小店货架接口
+    ///     微小店货架接口
     /// </summary>
     public static class ShelfApi
     {
         /// <summary>
-        /// 增加货架
+        ///     增加货架
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="m1">控件1数据</param>
@@ -34,32 +34,33 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <param name="shelfBanner">货架招牌图片Url</param>
         /// <param name="shelfName">货架名称</param>
         /// <returns></returns>
-        public static AddShelfResult AddShelves(string accessToken, M1 m1, M2 m2, M3 m3, M4 m4, M5 m5, string shelfBanner, string shelfName)
+        public static AddShelfResult AddShelves(string accessToken, M1 m1, M2 m2, M3 m3, M4 m4, M5 m5,
+            string shelfBanner, string shelfName)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/shelf/add?access_token={0}";
 
             var data = new
+            {
+                shelf_data = new
                 {
-                    shelf_data = new
-                        {
-                            module_infos = new object[]
-                                {
-                                    m1,
-                                    m2,
-                                    m3,
-                                    m4,
-                                    m5
-                                }
-                        },
-                    shelf_banner = shelfBanner,
-                    shelf_name = shelfName
-                };
-            
+                    module_infos = new object[]
+                    {
+                        m1,
+                        m2,
+                        m3,
+                        m4,
+                        m5
+                    }
+                },
+                shelf_banner = shelfBanner,
+                shelf_name = shelfName
+            };
+
             return CommonJsonSend.Send<AddShelfResult>(accessToken, urlFormat, data);
         }
 
         /// <summary>
-        /// 删除货架
+        ///     删除货架
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="shelfId">货架Id</param>
@@ -77,7 +78,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 修改货架
+        ///     修改货架
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="m1">控件1数据</param>
@@ -89,7 +90,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <param name="shelfBanner">货架招牌图片Url</param>
         /// <param name="shelfName">货架名称</param>
         /// <returns></returns>
-        public static WxJsonResult ModShelves(string accessToken, M1 m1, M2 m2, M3 m3, M4 m4, M5 m5,int shelfId, string shelfBanner, string shelfName)
+        public static WxJsonResult ModShelves(string accessToken, M1 m1, M2 m2, M3 m3, M4 m4, M5 m5, int shelfId,
+            string shelfBanner, string shelfName)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/shelf/mod?access_token={0}";
 
@@ -99,13 +101,13 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
                 shelf_data = new
                 {
                     module_infos = new object[]
-                                {
-                                    m1,
-                                    m2,
-                                    m3,
-                                    m4,
-                                    m5
-                                }
+                    {
+                        m1,
+                        m2,
+                        m3,
+                        m4,
+                        m5
+                    }
                 },
                 shelf_banner = shelfBanner,
                 shelf_name = shelfName
@@ -115,7 +117,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 获取所有货架
+        ///     获取所有货架
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
@@ -127,7 +129,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         }
 
         /// <summary>
-        /// 根据货架ID获取货架信息
+        ///     根据货架ID获取货架信息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="shelfId">货架Id</param>

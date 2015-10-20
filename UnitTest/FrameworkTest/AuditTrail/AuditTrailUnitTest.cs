@@ -1,10 +1,8 @@
 ﻿using System;
-using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.Configuration;
 using FrameworkTest.TestService;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FrameworkTest.AuditTrail
 {
@@ -30,7 +28,7 @@ namespace FrameworkTest.AuditTrail
             ApplicationContext.Current.UserName = Guid.NewGuid().ToString();
             //AuditTrailSettings at = ConfigManager.GetConfigurationSection<AuditTrailSettings>();
             //at.Configure(iServiceLocate);
-            var result = iTestService.SayHello(new { id = "1", name = "name" });
+            var result = iTestService.SayHello(new {id = "1", name = "name"});
             Assert.IsFalse(string.IsNullOrEmpty(result));
         }
     }

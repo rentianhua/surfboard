@@ -23,7 +23,7 @@ namespace Senparc.Weixin.MP.Helpers
     public static class EntityHelper
     {
         /// <summary>
-        /// 根据XML信息填充实实体
+        ///     根据XML信息填充实实体
         /// </summary>
         /// <typeparam name="T">MessageBase为基类的类型，Response和Request都可以</typeparam>
         /// <param name="entity">实体</param>
@@ -70,7 +70,7 @@ namespace Senparc.Weixin.MP.Helpers
                             //已设为只读
                             //prop.SetValue(entity, MsgTypeHelper.GetRequestMsgType(root.Element(propName).Value), null);
                             break;
-                        case "ResponseMsgType"://Response适用
+                        case "ResponseMsgType": //Response适用
                             //已设为只读
                             //prop.SetValue(entity, MsgTypeHelper.GetResponseMsgType(root.Element(propName).Value), null);
                             break;
@@ -79,12 +79,12 @@ namespace Senparc.Weixin.MP.Helpers
                             //prop.SetValue(entity, EventHelper.GetEventType(root.Element(propName).Value), null);
                             break;
                         //以下为实体类型
-                        case "List`1"://List<T>类型，ResponseMessageNews适用
+                        case "List`1": //List<T>类型，ResponseMessageNews适用
                             var genericArguments = prop.PropertyType.GetGenericArguments();
-                            if (genericArguments[0].Name == "Article")//ResponseMessageNews适用
+                            if (genericArguments[0].Name == "Article") //ResponseMessageNews适用
                             {
                                 //文章下属节点item
-                                List<Article> articles = new List<Article>();
+                                var articles = new List<Article>();
                                 foreach (var item in root.Element(propName).Elements("item"))
                                 {
                                     var article = new Article();
@@ -95,7 +95,7 @@ namespace Senparc.Weixin.MP.Helpers
                             }
                             else if (genericArguments[0].Name == "Account")
                             {
-                                List<CustomerServiceAccount> accounts = new List<CustomerServiceAccount>();
+                                var accounts = new List<CustomerServiceAccount>();
                                 foreach (var item in root.Elements(propName))
                                 {
                                     var account = new CustomerServiceAccount();
@@ -106,12 +106,12 @@ namespace Senparc.Weixin.MP.Helpers
                             }
                             else if (genericArguments[0].Name == "PicItem")
                             {
-                                List<PicItem> picItems = new List<PicItem>();
+                                var picItems = new List<PicItem>();
                                 foreach (var item in root.Elements(propName).Elements("item"))
                                 {
                                     var picItem = new PicItem();
                                     var picMd5Sum = item.Element("PicMd5Sum").Value;
-                                    Md5Sum md5Sum = new Md5Sum() { PicMd5Sum = picMd5Sum };
+                                    var md5Sum = new Md5Sum {PicMd5Sum = picMd5Sum};
                                     picItem.item = md5Sum;
                                     picItems.Add(picItem);
                                 }
@@ -119,7 +119,7 @@ namespace Senparc.Weixin.MP.Helpers
                             }
                             else if (genericArguments[0].Name == "AroundBeacon")
                             {
-                                List<AroundBeacon> aroundBeacons = new List<AroundBeacon>();
+                                var aroundBeacons = new List<AroundBeacon>();
                                 foreach (var item in root.Elements(propName).Elements("AroundBeacon"))
                                 {
                                     var aroundBeaconItem = new AroundBeacon();
@@ -129,48 +129,48 @@ namespace Senparc.Weixin.MP.Helpers
                                 prop.SetValue(entity, aroundBeacons, null);
                             }
                             break;
-                        case "Music"://ResponseMessageMusic适用
-                            Music music = new Music();
+                        case "Music": //ResponseMessageMusic适用
+                            var music = new Music();
                             FillEntityWithXml(music, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, music, null);
                             break;
-                        case "Image"://ResponseMessageImage适用
-                            Image image = new Image();
+                        case "Image": //ResponseMessageImage适用
+                            var image = new Image();
                             FillEntityWithXml(image, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, image, null);
                             break;
-                        case "Voice"://ResponseMessageVoice适用
-                            Voice voice = new Voice();
+                        case "Voice": //ResponseMessageVoice适用
+                            var voice = new Voice();
                             FillEntityWithXml(voice, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, voice, null);
                             break;
-                        case "Video"://ResponseMessageVideo适用
-                            Video video = new Video();
+                        case "Video": //ResponseMessageVideo适用
+                            var video = new Video();
                             FillEntityWithXml(video, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, video, null);
                             break;
-                        case "ScanCodeInfo"://扫码事件中的ScanCodeInfo适用
-                            ScanCodeInfo scanCodeInfo = new ScanCodeInfo();
+                        case "ScanCodeInfo": //扫码事件中的ScanCodeInfo适用
+                            var scanCodeInfo = new ScanCodeInfo();
                             FillEntityWithXml(scanCodeInfo, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, scanCodeInfo, null);
                             break;
-                        case "SendLocationInfo"://弹出地理位置选择器的事件推送中的SendLocationInfo适用
-                            SendLocationInfo sendLocationInfo = new SendLocationInfo();
+                        case "SendLocationInfo": //弹出地理位置选择器的事件推送中的SendLocationInfo适用
+                            var sendLocationInfo = new SendLocationInfo();
                             FillEntityWithXml(sendLocationInfo, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, sendLocationInfo, null);
                             break;
-                        case "SendPicsInfo"://系统拍照发图中的SendPicsInfo适用
-                            SendPicsInfo sendPicsInfo = new SendPicsInfo();
+                        case "SendPicsInfo": //系统拍照发图中的SendPicsInfo适用
+                            var sendPicsInfo = new SendPicsInfo();
                             FillEntityWithXml(sendPicsInfo, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, sendPicsInfo, null);
                             break;
-                        case "ChosenBeacon"://摇一摇事件通知
-                            ChosenBeacon chosenBeacon = new ChosenBeacon();
+                        case "ChosenBeacon": //摇一摇事件通知
+                            var chosenBeacon = new ChosenBeacon();
                             FillEntityWithXml(chosenBeacon, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, chosenBeacon, null);
                             break;
-                        case "AroundBeacon"://摇一摇事件通知
-                            AroundBeacon aroundBeacon = new AroundBeacon();
+                        case "AroundBeacon": //摇一摇事件通知
+                            var aroundBeacon = new AroundBeacon();
                             FillEntityWithXml(aroundBeacon, new XDocument(root.Element(propName)));
                             prop.SetValue(entity, aroundBeacon, null);
                             break;
@@ -183,12 +183,12 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 将实体转为XML
+        ///     将实体转为XML
         /// </summary>
         /// <typeparam name="T">RequestMessage或ResponseMessage</typeparam>
         /// <param name="entity">实体</param>
         /// <returns></returns>
-        public static XDocument ConvertEntityToXml<T>(this T entity) where T : class , new()
+        public static XDocument ConvertEntityToXml<T>(this T entity) where T : class, new()
         {
             entity = entity ?? new T();
             var doc = new XDocument();
@@ -198,36 +198,38 @@ namespace Senparc.Weixin.MP.Helpers
             /* 注意！
              * 经过测试，微信对字段排序有严格要求，这里对排序进行强制约束
             */
-            var propNameOrder = new List<string>() { "ToUserName", "FromUserName", "CreateTime", "MsgType" };
+            var propNameOrder = new List<string> {"ToUserName", "FromUserName", "CreateTime", "MsgType"};
             //不同返回类型需要对应不同特殊格式的排序
             if (entity is ResponseMessageNews)
             {
-                propNameOrder.AddRange(new[] { "ArticleCount", "Articles", "FuncFlag",/*以下是Atricle属性*/ "Title ", "Description ", "PicUrl", "Url" });
+                propNameOrder.AddRange(new[]
+                {"ArticleCount", "Articles", "FuncFlag", /*以下是Atricle属性*/ "Title ", "Description ", "PicUrl", "Url"});
             }
             else if (entity is ResponseMessageTransfer_Customer_Service)
             {
-                propNameOrder.AddRange(new[] { "TransInfo", "KfAccount", "FuncFlag" });
+                propNameOrder.AddRange(new[] {"TransInfo", "KfAccount", "FuncFlag"});
             }
             else if (entity is ResponseMessageMusic)
             {
-                propNameOrder.AddRange(new[] { "Music", "FuncFlag", "ThumbMediaId",/*以下是Music属性*/ "Title ", "Description ", "MusicUrl", "HQMusicUrl" });
+                propNameOrder.AddRange(new[]
+                {"Music", "FuncFlag", "ThumbMediaId", /*以下是Music属性*/ "Title ", "Description ", "MusicUrl", "HQMusicUrl"});
             }
             else if (entity is ResponseMessageImage)
             {
-                propNameOrder.AddRange(new[] { "Image",/*以下是Image属性*/ "MediaId " });
+                propNameOrder.AddRange(new[] {"Image", /*以下是Image属性*/ "MediaId "});
             }
             else if (entity is ResponseMessageVoice)
             {
-                propNameOrder.AddRange(new[] { "Voice",/*以下是Voice属性*/ "MediaId " });
+                propNameOrder.AddRange(new[] {"Voice", /*以下是Voice属性*/ "MediaId "});
             }
             else if (entity is ResponseMessageVideo)
             {
-                propNameOrder.AddRange(new[] { "Video",/*以下是Video属性*/ "MediaId ", "Title", "Description" });
+                propNameOrder.AddRange(new[] {"Video", /*以下是Video属性*/ "MediaId ", "Title", "Description"});
             }
             else
             {
                 //如Text类型
-                propNameOrder.AddRange(new[] { "Content", "FuncFlag" });
+                propNameOrder.AddRange(new[] {"Content", "FuncFlag"});
             }
 
             Func<string, int> orderByPropName = propNameOrder.IndexOf;
@@ -264,7 +266,7 @@ namespace Senparc.Weixin.MP.Helpers
                 {
                     //音乐、图片、视频、语音格式
                     var musicElement = new XElement(propName);
-                    var media = prop.GetValue(entity, null);// as Music;
+                    var media = prop.GetValue(entity, null); // as Music;
                     var subNodes = ConvertEntityToXml(media).Root.Elements();
                     musicElement.Add(subNodes);
                     root.Add(musicElement);
@@ -292,17 +294,17 @@ namespace Senparc.Weixin.MP.Helpers
                     {
                         case "String":
                             root.Add(new XElement(propName,
-                                             new XCData(prop.GetValue(entity, null) as string ?? "")));
+                                new XCData(prop.GetValue(entity, null) as string ?? "")));
                             break;
                         case "DateTime":
                             root.Add(new XElement(propName,
-                                                  DateTimeHelper.GetWeixinDateTime(
-                                                      (DateTime)prop.GetValue(entity, null))));
+                                DateTimeHelper.GetWeixinDateTime(
+                                    (DateTime) prop.GetValue(entity, null))));
                             break;
                         case "Boolean":
                             if (propName == "FuncFlag")
                             {
-                                root.Add(new XElement(propName, (bool)prop.GetValue(entity, null) ? "1" : "0"));
+                                root.Add(new XElement(propName, (bool) prop.GetValue(entity, null) ? "1" : "0"));
                             }
                             else
                             {
@@ -329,7 +331,6 @@ namespace Senparc.Weixin.MP.Helpers
                             else
                             {
                                 root.Add(new XElement(propName, prop.GetValue(entity, null)));
-
                             }
                             break;
                     }
@@ -339,18 +340,18 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 将实体转为XML字符串
+        ///     将实体转为XML字符串
         /// </summary>
         /// <typeparam name="T">RequestMessage或ResponseMessage</typeparam>
         /// <param name="entity">实体</param>
         /// <returns></returns>
-        public static string ConvertEntityToXmlString<T>(this T entity) where T : class , new()
+        public static string ConvertEntityToXmlString<T>(this T entity) where T : class, new()
         {
             return entity.ConvertEntityToXml().ToString();
         }
 
         /// <summary>
-        /// ResponseMessageBase.CreateFromRequestMessage&lt;T&gt;(requestMessage)的扩展方法
+        ///     ResponseMessageBase.CreateFromRequestMessage&lt;T&gt;(requestMessage)的扩展方法
         /// </summary>
         /// <typeparam name="T">需要生成的ResponseMessage类型</typeparam>
         /// <param name="requestMessage">IRequestMessageBase接口下的接收信息类型</param>
@@ -361,7 +362,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// ResponseMessageBase.CreateFromResponseXml(xml)的扩展方法
+        ///     ResponseMessageBase.CreateFromResponseXml(xml)的扩展方法
         /// </summary>
         /// <param name="xml">返回给服务器的Response Xml</param>
         /// <returns></returns>
@@ -371,7 +372,7 @@ namespace Senparc.Weixin.MP.Helpers
         }
 
         /// <summary>
-        /// 检查是否是通过场景二维码扫入
+        ///     检查是否是通过场景二维码扫入
         /// </summary>
         /// <param name="requestMessage"></param>
         /// <returns></returns>

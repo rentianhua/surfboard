@@ -1,26 +1,22 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// 
     /// </summary>
     public class DynamicWebService
     {
         public static object ExeAPIMethod(string url, string type, string data, bool isjson = true)
         {
-            var handler = new WebRequestHandler()
+            var handler = new WebRequestHandler
             {
                 AllowAutoRedirect = false,
                 UseProxy = false
@@ -30,7 +26,7 @@ namespace Cedar.Framework.Common.BaseClasses
 
             var client = new HttpClient(handler);
             //string website = "http://wx5.smartac.co/";
-            string website = "http://op.juhe.cn/";
+            var website = "http://op.juhe.cn/";
             client.BaseAddress = new Uri(website);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response;
@@ -64,36 +60,35 @@ namespace Cedar.Framework.Common.BaseClasses
             {
                 return "";
             }
-
         }
 
         /// <summary>
-        /// Http (GET/POST)
-        /// </summary>
-        /// <param name="url">请求URL</param>
-        /// <param name="parameters">请求参数</param>
-        /// <param name="method">请求方法</param>
-        /// <returns>响应内容</returns>
-        public static string SendPost(string url, IDictionary<string, string> parameters, string method)
+        ///     Http (GET/POST)
+        /// </summary>
+        /// <param name="url">请求URL</param>
+        /// <param name="parameters">请求参数</param>
+        /// <param name="method">请求方法</param>
+        /// <returns>响应内容</returns>
+        public static string SendPost(string url, IDictionary<string, string> parameters, string method)
         {
             if (method.ToLower() == "post")
             {
                 HttpWebRequest req = null;
                 HttpWebResponse rsp = null;
-                System.IO.Stream reqStream = null;
+                Stream reqStream = null;
                 try
                 {
-                    req = (HttpWebRequest)WebRequest.Create(url);
+                    req = (HttpWebRequest) WebRequest.Create(url);
                     req.Method = method;
                     req.KeepAlive = false;
                     req.ProtocolVersion = HttpVersion.Version10;
                     req.Timeout = 5000;
                     req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
-                    byte[] postData = Encoding.UTF8.GetBytes(BuildQuery(parameters, "utf8"));
+                    var postData = Encoding.UTF8.GetBytes(BuildQuery(parameters, "utf8"));
                     reqStream = req.GetRequestStream();
                     reqStream.Write(postData, 0, postData.Length);
-                    rsp = (HttpWebResponse)req.GetResponse();
-                    Encoding encoding = Encoding.GetEncoding(rsp.CharacterSet);
+                    rsp = (HttpWebResponse) req.GetResponse();
+                    var encoding = Encoding.GetEncoding(rsp.CharacterSet);
                     return GetResponseAsString(rsp, encoding);
                 }
                 catch (Exception ex)
@@ -106,42 +101,39 @@ namespace Cedar.Framework.Common.BaseClasses
                     if (rsp != null) rsp.Close();
                 }
             }
-            else
-            {
-                //创建请求
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
+            //创建请求
+            var request = (HttpWebRequest) WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
 
-                //GET请求
-                request.Method = "GET";
-                request.ReadWriteTimeout = 5000;
-                request.ContentType = "text/html;charset=UTF-8";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream myResponseStream = response.GetResponseStream();
-                StreamReader myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+            //GET请求
+            request.Method = "GET";
+            request.ReadWriteTimeout = 5000;
+            request.ContentType = "text/html;charset=UTF-8";
+            var response = (HttpWebResponse) request.GetResponse();
+            var myResponseStream = response.GetResponseStream();
+            var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
 
-                //返回内容
-                string retString = myStreamReader.ReadToEnd();
-                return retString;
-            }
+            //返回内容
+            var retString = myStreamReader.ReadToEnd();
+            return retString;
         }
 
         /// <summary>
-        /// 组装普通文本请求参数。
+        ///     组装普通文本请求参数。
         /// </summary>
         /// <param name="parameters">Key-Value形式请求参数字典</param>
         /// <param name="encode"></param>
         /// <returns>URL编码后的请求数据</returns>
-        static string BuildQuery(IDictionary<string, string> parameters, string encode)
+        private static string BuildQuery(IDictionary<string, string> parameters, string encode)
         {
-            StringBuilder postData = new StringBuilder();
-            bool hasParam = false;
-            IEnumerator<KeyValuePair<string, string>> dem = parameters.GetEnumerator();
+            var postData = new StringBuilder();
+            var hasParam = false;
+            var dem = parameters.GetEnumerator();
             while (dem.MoveNext())
             {
-                string name = dem.Current.Key;
-                string value = dem.Current.Value;
+                var name = dem.Current.Key;
+                var value = dem.Current.Value;
                 // 忽略参数名或参数值为空的参数
-                if (!string.IsNullOrEmpty(name))//&& !string.IsNullOrEmpty(value)
+                if (!string.IsNullOrEmpty(name)) //&& !string.IsNullOrEmpty(value)
                 {
                     if (hasParam)
                     {
@@ -168,14 +160,14 @@ namespace Cedar.Framework.Common.BaseClasses
         }
 
         /// <summary>
-        /// 把响应流转换为文本。
+        ///     把响应流转换为文本。
         /// </summary>
         /// <param name="rsp">响应流对象</param>
         /// <param name="encoding">编码方式</param>
         /// <returns>响应文本</returns>
-        static string GetResponseAsString(HttpWebResponse rsp, Encoding encoding)
+        private static string GetResponseAsString(HttpWebResponse rsp, Encoding encoding)
         {
-            System.IO.Stream stream = null;
+            Stream stream = null;
             StreamReader reader = null;
             try
             {

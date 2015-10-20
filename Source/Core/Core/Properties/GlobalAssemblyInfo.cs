@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 [assembly: AssemblyProduct("Smart Rewards")]
 [assembly: AssemblyCompany("Smartac")]
@@ -27,7 +27,7 @@ using System.Diagnostics.CodeAnalysis;
 // If we didn't upgrade the minor version, we should upgrade 1 to 2 in next year.
 
 [assembly: AssemblyVersion("3.0.0.0")]
-
-[assembly: SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames", Scope = "assembly", Justification = "Assemblies are not currently being signed.")]
-
+[assembly:
+    SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames", Scope = "assembly",
+        Justification = "Assemblies are not currently being signed.")]
 [assembly: SuppressMessage("Microsoft.Performance", "CA1824:MarkAssembliesWithNeutralResourcesLanguage")]

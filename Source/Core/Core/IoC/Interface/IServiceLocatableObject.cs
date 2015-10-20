@@ -1,7 +1,7 @@
 ﻿namespace Cedar.Core.IoC
 {
     /// <summary>
-    /// Mark the class canbe locatable
+    ///     Mark the class canbe locatable
     /// </summary>
     public interface IServiceLocatableObject
     {

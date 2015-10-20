@@ -21,7 +21,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
     public static class WiFiApi
     {
         /// <summary>
-        /// 添加设备
+        ///     添加设备
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="shopId">门店ID</param>
@@ -30,7 +30,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="bssid">无线网络设备无线mac地址，格式冒号分隔，字符长度17个，并且字母小写，例如：00:1f:7a:ad:5c:a8</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static WxJsonResult AddDevice(string accessTokenOrAppId, long shopId, string ssid, string password, string bssid, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult AddDevice(string accessTokenOrAppId, long shopId, string ssid, string password,
+            string bssid, int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -39,17 +40,16 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 var data = new
                 {
                     shop_id = shopId,
-                    ssid = ssid,
-                    password = password,
-                    bssid = bssid,
+                    ssid,
+                    password,
+                    bssid
                 };
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 查询设备
+        ///     查询设备
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="pageIndex">分页下标，默认从1开始</param>
@@ -64,7 +64,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
             {
                 const string urlFormat = "https://api.weixin.qq.com/bizwifi/device/list?access_token={0}";
 
-                object data = new object();
+                var data = new object();
 
                 if (shopId.HasValue)
                 {
@@ -72,7 +72,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                     {
                         pageindex = pageIndex,
                         pagesize = pageSize,
-                        shop_id = shopId,
+                        shop_id = shopId
                     };
                 }
                 else
@@ -85,12 +85,11 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 }
 
                 return CommonJsonSend.Send<GetDeviceListResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 删除设备
+        ///     删除设备
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="bssid">需要删除的无线网络设备无线mac地址，格式冒号分隔，字符长度17个，并且字母小写，例如：00:1f:7a:ad:5c:a8</param>
@@ -104,23 +103,23 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
 
                 var data = new
                 {
-                    bssid = bssid
+                    bssid
                 };
 
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 获取物料二维码
+        ///     获取物料二维码
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="shopId"></param>
         /// <param name="imgId"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static WxJsonResult GetQrcode(string accessTokenOrAppId, long shopId, int imgId, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult GetQrcode(string accessTokenOrAppId, long shopId, int imgId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -133,20 +132,20 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 };
 
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 设置商家主页
-        /// 传入自定义链接则是使用自定义链接，否则使用默认模板
+        ///     设置商家主页
+        ///     传入自定义链接则是使用自定义链接，否则使用默认模板
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="shopId">门店ID</param>
         /// <param name="url">自定义链接（选择传入）</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static WxJsonResult SetHomePage(string accessTokenOrAppId, long shopId, string url = null, int timeOut = Config.TIME_OUT)
+        public static WxJsonResult SetHomePage(string accessTokenOrAppId, long shopId, string url = null,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -170,24 +169,24 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                         template_id = 1,
                         @struct = new
                         {
-                            url = url
+                            url
                         }
                     };
                 }
 
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 查询商家主页
+        ///     查询商家主页
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="shopId">查询的门店id</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static GetHomePageResult GetHomePage(string accessTokenOrAppId, long shopId, int timeOut = Config.TIME_OUT)
+        public static GetHomePageResult GetHomePage(string accessTokenOrAppId, long shopId,
+            int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
@@ -195,16 +194,15 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
 
                 var data = new
                 {
-                    shop_id = shopId,
+                    shop_id = shopId
                 };
 
                 return CommonJsonSend.Send<GetHomePageResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
 
         /// <summary>
-        /// 数据统计
+        ///     数据统计
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <param name="beginDate">起始日期时间，格式yyyy-mm-dd，最长时间跨度为30天</param>
@@ -212,7 +210,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="shopId">按门店ID搜索，-1为总统计</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static GetStatisticsResult GetStatistics(string accessTokenOrAppId, string beginDate, string endDate, long shopId = -1,
+        public static GetStatisticsResult GetStatistics(string accessTokenOrAppId, string beginDate, string endDate,
+            long shopId = -1,
             int timeOut = Config.TIME_OUT)
         {
             return ApiHandlerWapper.TryCommonApi(accessToken =>
@@ -223,11 +222,10 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
                 {
                     begin_date = beginDate,
                     end_date = endDate,
-                    shop_id = shopId,
+                    shop_id = shopId
                 };
 
                 return CommonJsonSend.Send<GetStatisticsResult>(accessToken, urlFormat, data, timeOut: timeOut);
-
             }, accessTokenOrAppId);
         }
     }

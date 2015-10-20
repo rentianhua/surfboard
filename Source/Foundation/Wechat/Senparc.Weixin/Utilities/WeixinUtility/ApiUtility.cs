@@ -14,13 +14,13 @@ namespace Senparc.Weixin.Utilities.WeixinUtility
     public static class ApiUtility
     {
         /// <summary>
-        /// 判断accessTokenOrAppId参数是否是AppId
+        ///     判断accessTokenOrAppId参数是否是AppId
         /// </summary>
         /// <param name="accessTokenOrAppId"></param>
         /// <returns></returns>
         public static bool IsAppId(string accessTokenOrAppId)
         {
-            return accessTokenOrAppId != null && accessTokenOrAppId.Length <= 18/*wxc3c90837b0e76080*/;
+            return accessTokenOrAppId != null && accessTokenOrAppId.Length <= 18 /*wxc3c90837b0e76080*/;
         }
     }
 }

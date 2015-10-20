@@ -17,11 +17,14 @@ namespace Senparc.Weixin.MP.AppStore
 {
     public class AppStoreManager
     {
-        public const string DEFAULT_URL = "http://api.weiweihi.com:8080";//默认Api Url地址
+        public const string DEFAULT_URL = "http://api.weiweihi.com:8080"; //默认Api Url地址
+
+        public const string BasicApiPath = "/App/Api/";
 
         //private static string _appKey;
         //private static string _secret;
         private static PassportCollection _passportCollection;
+
         public static PassportCollection PassportCollection
         {
             get
@@ -45,16 +48,15 @@ namespace Senparc.Weixin.MP.AppStore
             return null;
         }
 
-        public const string BasicApiPath = "/App/Api/";
-
         /// <summary>
-        /// 注册P2P应用基本信息（可以选择不立即载入Passport以节省系统启动时间）
+        ///     注册P2P应用基本信息（可以选择不立即载入Passport以节省系统启动时间）
         /// </summary>
         /// <param name="appKey">P2P后台申请到微信应用后的AppKey</param>
         /// <param name="secret">AppKey对应的Secret</param>
         /// <param name="url">API地址，建议使用默认值</param>
         /// <param name="getPassportImmediately">是否马上获取Passport，默认为False</param>
-        private static void Register(string appKey, string secret, string url = DEFAULT_URL, bool getPassportImmediately = false)
+        private static void Register(string appKey, string secret, string url = DEFAULT_URL,
+            bool getPassportImmediately = false)
         {
             //if (PassportCollection.BasicUrl != url)
             //{
@@ -70,8 +72,8 @@ namespace Senparc.Weixin.MP.AppStore
         }
 
         /// <summary>
-        /// 申请新的通行证。
-        /// 每次调用完毕前将有1秒左右的Thread.Sleep时间
+        ///     申请新的通行证。
+        ///     每次调用完毕前将有1秒左右的Thread.Sleep时间
         /// </summary>
         public static void ApplyPassport(string appKey, string appSecret, string url = DEFAULT_URL)
         {
@@ -98,7 +100,7 @@ namespace Senparc.Weixin.MP.AppStore
         }
 
         /// <summary>
-        /// 清除当前的通行证
+        ///     清除当前的通行证
         /// </summary>
         public static void RemovePassport(string appKey)
         {
@@ -112,8 +114,8 @@ namespace Senparc.Weixin.MP.AppStore
         }
 
         /// <summary>
-        /// 获取appKey对应的接口集合。
-        /// 调用此方法请确认此appKey已经成功使用SdkManager.Register(appKey, appSecret, appUrl)方法注册过。
+        ///     获取appKey对应的接口集合。
+        ///     调用此方法请确认此appKey已经成功使用SdkManager.Register(appKey, appSecret, appUrl)方法注册过。
         /// </summary>
         /// <param name="appKey"></param>
         /// <returns></returns>

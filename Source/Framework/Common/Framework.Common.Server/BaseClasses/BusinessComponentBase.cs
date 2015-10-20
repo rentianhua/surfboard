@@ -1,8 +1,8 @@
 ﻿#region
 
 using System;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.IoC;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 

@@ -33,7 +33,7 @@ namespace Senparc.Weixin.MP.AppStore.Api
         }
 
         /// <summary>
-        /// 获取用户信息
+        ///     获取用户信息
         /// </summary>
         /// <returns></returns>
         public GetMemberResult GetMember(int weixinId, string openId)

@@ -14,10 +14,15 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Card
 {
     /// <summary>
-    /// 创建卡券数据
+    ///     创建卡券数据
     /// </summary>
     public class CardCreateInfo
     {
+        /// <summary>
+        ///     卡券信息部分
+        /// </summary>
+        public CardCreateInfo_Card card { get; set; }
+
         #region JSON示例
 
         /*
@@ -64,10 +69,5 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Card
      */
 
         #endregion
-
-        /// <summary>
-        /// 卡券信息部分
-        /// </summary>
-        public CardCreateInfo_Card card { get; set; }
     }
 }

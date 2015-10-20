@@ -16,7 +16,7 @@ using System;
 namespace Senparc.Weixin.Exceptions
 {
     /// <summary>
-    /// 未知请求类型。
+    ///     未知请求类型。
     /// </summary>
     public class UnknownRequestMsgTypeException : WeixinException //ArgumentOutOfRangeException
     {
@@ -27,6 +27,7 @@ namespace Senparc.Weixin.Exceptions
 
         public UnknownRequestMsgTypeException(string message, Exception inner)
             : base(message, inner)
-        { }
+        {
+        }
     }
 }

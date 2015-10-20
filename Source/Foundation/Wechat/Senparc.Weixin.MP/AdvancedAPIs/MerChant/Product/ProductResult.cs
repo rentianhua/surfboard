@@ -4,7 +4,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 {
     /// <summary>
-    /// 增加商品返回结果
+    ///     增加商品返回结果
     /// </summary>
     public class AddProductResult : WxJsonResult
     {
@@ -12,7 +12,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     }
 
     /// <summary>
-    /// 查询商品返回结果
+    ///     查询商品返回结果
     /// </summary>
     public class GetProductResult : WxJsonResult
     {
@@ -21,7 +21,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     }
 
     /// <summary>
-    /// 修改商品信息
+    ///     修改商品信息
     /// </summary>
     public class ProductInfoData : BaseProductData
     {
@@ -29,7 +29,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     }
 
     /// <summary>
-    /// 获取指定状态的所有商品返回结果
+    ///     获取指定状态的所有商品返回结果
     /// </summary>
     public class GetByStatusResult : WxJsonResult
     {
@@ -43,7 +43,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     }
 
     /// <summary>
-    /// 获取指定分类的所有子分类返回结果
+    ///     获取指定分类的所有子分类返回结果
     /// </summary>
     public class GetSubResult : WxJsonResult
     {
@@ -53,17 +53,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class CateItem
     {
         /// <summary>
-        /// 子分类ID
+        ///     子分类ID
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// 子分类名称
+        ///     子分类名称
         /// </summary>
         public string name { get; set; }
     }
 
     /// <summary>
-    /// 获取指定子分类的所有SKU返回结果
+    ///     获取指定子分类的所有SKU返回结果
     /// </summary>
     public class GetSkuResult : WxJsonResult
     {
@@ -73,15 +74,17 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class Sku
     {
         /// <summary>
-        /// sku id
+        ///     sku id
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// sku 名称
+        ///     sku 名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// sku vid列表
+        ///     sku vid列表
         /// </summary>
         public List<Value> value_list { get; set; }
     }
@@ -89,17 +92,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class Value
     {
         /// <summary>
-        /// vid
+        ///     vid
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// vid名称
+        ///     vid名称
         /// </summary>
         public string name { get; set; }
     }
 
     /// <summary>
-    /// 获取指定分类的所有属性返回结果
+    ///     获取指定分类的所有属性返回结果
     /// </summary>
     public class GetPropertyResult : WxJsonResult
     {
@@ -109,15 +113,17 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class PropertyItem
     {
         /// <summary>
-        /// 属性id
+        ///     属性id
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// 属性名称
+        ///     属性名称
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 属性值
+        ///     属性值
         /// </summary>
         public List<PropertyValue> property_value { get; set; }
     }
@@ -125,11 +131,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
     public class PropertyValue
     {
         /// <summary>
-        /// 属性值id
+        ///     属性值id
         /// </summary>
         public int id { get; set; }
+
         /// <summary>
-        /// 属性值名称
+        ///     属性值名称
         /// </summary>
         public string name { get; set; }
     }

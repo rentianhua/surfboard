@@ -14,21 +14,11 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage
 {
     /// <summary>
-    /// 模板消息的数据项类型
+    ///     模板消息的数据项类型
     /// </summary>
     public class TemplateDataItem
     {
         /// <summary>
-        /// 项目值
-        /// </summary>
-        public string value { get; set; }
-        /// <summary>
-        /// 16进制颜色代码，如：#FF0000
-        /// </summary>
-        public string color { get; set; }
-
-        /// <summary>
-        /// 
         /// </summary>
         /// <param name="v">value</param>
         /// <param name="c">color</param>
@@ -37,5 +27,15 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage
             value = v;
             color = c;
         }
+
+        /// <summary>
+        ///     项目值
+        /// </summary>
+        public string value { get; set; }
+
+        /// <summary>
+        ///     16进制颜色代码，如：#FF0000
+        /// </summary>
+        public string color { get; set; }
     }
 }

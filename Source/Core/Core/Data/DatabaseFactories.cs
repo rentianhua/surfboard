@@ -1,15 +1,15 @@
-﻿using Microsoft.Practices.Unity.Utility;
-using Cedar.Core.IoC;
+﻿using Cedar.Core.IoC;
+using Microsoft.Practices.Unity.Utility;
 
 namespace Cedar.Core.Data
 {
     /// <summary>
-    /// The factory to create <see cref="T:Cedar.Core.Data.Database" /> by the specified connection string name.
+    ///     The factory to create <see cref="T:Cedar.Core.Data.Database" /> by the specified connection string name.
     /// </summary>
     public static class DatabaseFactories
     {
         /// <summary>
-        /// Gets the database.
+        ///     Gets the database.
         /// </summary>
         /// <param name="databaseName">Name of the connection string.</param>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
@@ -22,8 +22,8 @@ namespace Cedar.Core.Data
         }
 
         /// <summary>
-        /// Gets the database.
-        /// </summary>     
+        ///     Gets the database.
+        /// </summary>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
         public static Database GetDatabase()
         {

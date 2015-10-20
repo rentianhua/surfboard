@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
 {
     /// <summary>
-    /// 菜谱服务（cookbook）
+    ///     菜谱服务（cookbook）
     /// </summary>
     public class Semantic_CookbookResult : BaseSemanticResultJson
     {
@@ -29,17 +29,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class Semantic_Details_Cookbook
     {
         /// <summary>
-        /// 菜名
+        ///     菜名
         /// </summary>
         public string name { get; set; }
+
         /// <summary>
-        /// 菜系
+        ///     菜系
         /// </summary>
         public string category { get; set; }
+
         /// <summary>
-        /// 食材
+        ///     食材
         /// </summary>
         public string ingredient { get; set; }
-
     }
 }

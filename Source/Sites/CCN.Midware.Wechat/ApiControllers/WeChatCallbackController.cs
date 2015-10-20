@@ -3,6 +3,10 @@ using System.Configuration;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using CCN.Midware.Wechat.Business;
+using Cedar.Core.IoC;
+using Cedar.Foundation.WeChat.Interface;
+using Cedar.Framework.Common.BaseClasses;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.CommonAPIs;
 
@@ -14,9 +18,11 @@ namespace CCN.Midware.Wechat.Controllers
         private readonly HttpResponseMessage _response;
         private readonly string _appid = ConfigurationManager.AppSettings["APPID"];
         private readonly string _appSecret = ConfigurationManager.AppSettings["AppSecret"];
+        private readonly IWeChatManagementService _service;
 
         public WeChatCallbackController()
         {
+            _service = ServiceLocatorFactory.GetServiceLocator().GetService<IWeChatManagementService>();
             _response = new HttpResponseMessage { Content = new StringContent("") };
             var appid = ConfigurationManager.AppSettings["APPID"];
             if (!AccessTokenRedisContainer.CheckRegistered(appid))
@@ -47,23 +53,39 @@ namespace CCN.Midware.Wechat.Controllers
             var stream = Request.Content.ReadAsStringAsync().Result;
             Console.WriteLine($"----------------Start {DateTime.Now}----------------");
             Console.WriteLine(stream);
-            Task.Run(() => RequestMessageFactory.GetRequestEntity(stream));
+            Task.Run(() => RequestMessageFactory.GetRequestEntity(_service, stream));
             Console.WriteLine($"----------------End {DateTime.Now}----------------");
             return _response;
         }
 
         [HttpGet]
         [Route("GetTicket/{appid}")]
-        public string GetTicket(string appid)
+        public JResult GetTicket(string appid)
         {
-            return AccessTokenRedisContainer.TryGetAccessToken(_appid, _appSecret);
+            var ticket = AccessTokenRedisContainer.TryGetJsApiTicket(_appid, _appSecret);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = new
+                {
+                    ticket
+                }
+            };
         }
 
         [HttpGet]
         [Route("GetToken/{appid}")]
-        public string GetToken(string appid)
+        public JResult GetToken(string appid)
         {
-            return AccessTokenRedisContainer.TryGetJsApiTicket(_appid, _appSecret);
+            var token = AccessTokenRedisContainer.TryGetAccessToken(_appid, _appSecret);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = new
+                {
+                    token
+                }
+            };
         }
     }
 }

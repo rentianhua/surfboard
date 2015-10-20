@@ -27,20 +27,21 @@ using Senparc.Weixin.QY.Entities;
 namespace Senparc.Weixin.QY.CommonAPIs
 {
     /// <summary>
-    /// 通用基础API
+    ///     通用基础API
     /// </summary>
     public partial class CommonApi
     {
         public const string API_URL = "https://qyapi.weixin.qq.com/cgi-bin";
 
         /// <summary>
-        /// 获取AccessToken
+        ///     获取AccessToken
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="corpSecret"></param>
         public static AccessTokenResult GetToken(string corpId, string corpSecret)
         {
             #region 主动调用的频率限制
+
             /*
 当你获取到AccessToken时，你的应用就可以成功调用企业号后台所提供的各种接口以管理或访问企业号后台的资源或给企业号成员发消息。
 
@@ -61,6 +62,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
 创建帐号频率
 每企业创建帐号数不可超过帐号上限数*3/月
 */
+
             #endregion
 
             var url = string.Format(API_URL + "/gettoken?corpid={0}&corpsecret={1}", corpId, corpSecret);
@@ -69,7 +71,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取微信服务器的ip段
+        ///     获取微信服务器的ip段
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns></returns>
@@ -81,7 +83,7 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// 获取调用微信JS接口的临时票据
+        ///     获取调用微信JS接口的临时票据
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="corpSecret"></param>
@@ -91,41 +93,43 @@ namespace Senparc.Weixin.QY.CommonAPIs
             var accessToken = GetToken(corpId, corpSecret).access_token;
 
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token={0}",
-                                    accessToken);
+                accessToken);
 
-            JsApiTicketResult result = Get.GetJson<JsApiTicketResult>(url);
+            var result = Get.GetJson<JsApiTicketResult>(url);
             return result;
         }
 
         /// <summary>
-        /// 获取应用提供商凭证
+        ///     获取应用提供商凭证
         /// </summary>
         /// <param name="corpId"></param>
         /// <param name="providerSecret"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static ProviderTokenResult GetProviderToken(string corpId, string providerSecret, int timeOut = Config.TIME_OUT)
+        public static ProviderTokenResult GetProviderToken(string corpId, string providerSecret,
+            int timeOut = Config.TIME_OUT)
         {
             var url = "https://qyapi.weixin.qq.com/cgi-bin/service/get_provider_token";
 
             var data = new
-                {
-                    corpid = corpId,
-                    provider_secret = providerSecret
-                };
+            {
+                corpid = corpId,
+                provider_secret = providerSecret
+            };
 
             return CommonJsonSend.Send<ProviderTokenResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// userid转换成openid接口
+        ///     userid转换成openid接口
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="userId">企业号内的成员id</param>
         /// <param name="agentId">需要发送红包的应用ID，若只是使用微信支付和企业转账，则无需该参数</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static ConvertToOpenIdResult ConvertToOpenId(string accessToken, string userId, string agentId = null, int timeOut = Config.TIME_OUT)
+        public static ConvertToOpenIdResult ConvertToOpenId(string accessToken, string userId, string agentId = null,
+            int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid?access_token={0}",
                 accessToken);
@@ -140,13 +144,14 @@ namespace Senparc.Weixin.QY.CommonAPIs
         }
 
         /// <summary>
-        /// openid转换成userid接口
+        ///     openid转换成userid接口
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="openId"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static ConvertToUserIdResult ConvertToUserId(string accessToken, string openId, int timeOut = Config.TIME_OUT)
+        public static ConvertToUserIdResult ConvertToUserId(string accessToken, string openId,
+            int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_userid?access_token={0}",
                 accessToken);

@@ -13,12 +13,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.Poi
 {
     /// <summary>
-    /// 上传图片返回结果
+    ///     上传图片返回结果
     /// </summary>
     public class UploadImageResultJson : WxJsonResult
     {
         /// <summary>
-        /// 上传成功后图片的链接
+        ///     上传成功后图片的链接
         /// </summary>
         public string url { get; set; }
     }

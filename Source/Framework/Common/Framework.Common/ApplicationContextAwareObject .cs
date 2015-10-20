@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.ApplicationContexts;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -24,7 +24,7 @@ namespace Cedar.Framework.Common
         /// <summary>
         ///     Gets the disposable objects.
         /// </summary>
-        protected IList<IDisposable> DisposableObjects { get; private set; }
+        protected IList<IDisposable> DisposableObjects { get; }
 
         /// <summary>
         ///     Gets the current application context.
@@ -67,7 +67,7 @@ namespace Cedar.Framework.Common
             {
                 if (disposing)
                 {
-                    foreach (IDisposable current in DisposableObjects)
+                    foreach (var current in DisposableObjects)
                     {
                         current.Dispose();
                     }

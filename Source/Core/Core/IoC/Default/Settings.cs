@@ -7,7 +7,6 @@ using System.Collections.Generic;
 namespace Cedar.Core.IoC
 {
     /// <summary>
-    /// 
     /// </summary>
     internal static class Settings
     {
@@ -20,7 +19,6 @@ namespace Cedar.Core.IoC
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public static IEnumerable<string> SectionNames { get; private set; }
     }

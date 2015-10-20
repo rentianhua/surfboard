@@ -8,7 +8,7 @@ namespace Cedar.Framework.Common.Client.ExceptionHandlers
 {
     /// <summary>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ExceptionPolicyAttribute : Attribute
     {
         /// <summary>

@@ -23,7 +23,7 @@ namespace Senparc.Weixin.Entities
     }
 
     /// <summary>
-    /// 所有Request和Response消息的基类
+    ///     所有Request和Response消息的基类
     /// </summary>
     public class MessageBase : /*EntityBase, */IMessageBase
     {

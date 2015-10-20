@@ -16,7 +16,7 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.QY.AdvancedAPIs.Media
 {
     /// <summary>
-    /// 上传临时媒体文件返回结果
+    ///     上传临时媒体文件返回结果
     /// </summary>
     public class UploadTemporaryResultJson : QyJsonResult
     {
@@ -26,7 +26,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs.Media
     }
 
     /// <summary>
-    /// 上传永久素材返回结果
+    ///     上传永久素材返回结果
     /// </summary>
     public class UploadForeverResultJson : QyJsonResult
     {

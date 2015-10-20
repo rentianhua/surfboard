@@ -69,7 +69,7 @@ namespace Cedar.Core.EntLib.IoC
         /// </returns>
         public bool IsRegistered<T>()
         {
-            return IsRegistered(typeof(T));
+            return IsRegistered(typeof (T));
         }
 
         /// <summary>
@@ -104,12 +104,12 @@ namespace Cedar.Core.EntLib.IoC
         /// </returns>
         public T GetService<T>(string name = null)
         {
-            object service = GetService(typeof(T), name);
+            var service = GetService(typeof (T), name);
             if (service == null)
             {
                 return default(T);
             }
-            return (T)service;
+            return (T) service;
         }
 
         /// <summary>
@@ -121,11 +121,11 @@ namespace Cedar.Core.EntLib.IoC
         /// </returns>
         public IEnumerable<T> GetAllServices<T>()
         {
-            foreach (object current in GetAllServices(typeof(T)))
+            foreach (var current in GetAllServices(typeof (T)))
             {
                 if (current != null)
                 {
-                    yield return (T)current;
+                    yield return (T) current;
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace Cedar.Core.EntLib.IoC
         public void Register<TFrom, TTo>(string name = null, bool isDefault = false,
             Lifetime lifetime = Lifetime.Transient)
         {
-            Register(typeof(TFrom), typeof(TTo), name, isDefault, lifetime);
+            Register(typeof (TFrom), typeof (TTo), name, isDefault, lifetime);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Cedar.Core.EntLib.IoC
         /// Gets all keys (service type registrtion name) for the specified registered type.
         public IEnumerable<string> GetAllKeys<T>()
         {
-            return GetAllKeys(typeof(T));
+            return GetAllKeys(typeof (T));
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Cedar.Core.EntLib.IoC
         /// </returns>
         public bool IsRegistered<TFrom, TTo>()
         {
-            return IsRegistered(typeof(TFrom), typeof(TTo));
+            return IsRegistered(typeof (TFrom), typeof (TTo));
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using Cedar.Core;
-using Cedar.Core.IoC;
+﻿using Cedar.Core;
 using Cedar.Core.IoC.Configuration;
-using Cedar.Core.SettingSource.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FrameworkTest.Core

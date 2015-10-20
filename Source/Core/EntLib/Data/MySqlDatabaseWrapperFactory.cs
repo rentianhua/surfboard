@@ -5,25 +5,21 @@ using Cedar.Core.EntLib.Properties;
 using Cedar.Core.IoC;
 using Cedar.Core.SettingSource;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
-using Microsoft.Practices.Unity.Utility;
 using Microsoft.Practices.EnterpriseLibrary.Data.Configuration;
+using Microsoft.Practices.Unity.Utility;
 using MySql.Data.Entity;
 
 namespace Cedar.Core.EntLib.Data
 {
-    [MapTo(typeof(IDatabaseFactory), 0, Lifetime = Lifetime.Singleton)]
+    [MapTo(typeof (IDatabaseFactory), 0, Lifetime = Lifetime.Singleton)]
     public class DatabaseWrapperFactory : IDatabaseFactory
     {
-        static DatabaseWrapperFactory()
-        {
-        }
-
         /// <summary>
-        /// Gets the database.
+        ///     Gets the database.
         /// </summary>
         /// <param name="databaseName">Name of the connection string.</param>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
-        public Core.Data.Database GetDatabase(string databaseName)
+        public Database GetDatabase(string databaseName)
         {
             Guard.ArgumentNotNullOrEmpty(databaseName, "databaseName");
             ConnectionStringsSection connectionStringsSection;
@@ -31,20 +27,20 @@ namespace Cedar.Core.EntLib.Data
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionNoConnectionStringSection);
             }
-            ConnectionStringSettings connectionStringSettings = connectionStringsSection.ConnectionStrings[databaseName];
-            
-            MySqlConnectionFactory factory = new MySqlConnectionFactory();
+            var connectionStringSettings = connectionStringsSection.ConnectionStrings[databaseName];
+
+            var factory = new MySqlConnectionFactory();
             return new MySqlDatabaseWrapper(() => factory, databaseName, connectionStringSettings);
         }
 
         /// <summary>
-        /// Gets the database.
+        ///     Gets the database.
         /// </summary>
         /// <returns>The <see cref="T:Cedar.Core.Data.Database" />.</returns>
-        public Core.Data.Database GetDatabase()
+        public Database GetDatabase()
         {
             var configurationSection = ConfigManager.GetConfigurationSection<DatabaseSettings>("dataConfiguration");
-            string defaultDatabase = configurationSection.DefaultDatabase;
+            var defaultDatabase = configurationSection.DefaultDatabase;
             if (string.IsNullOrEmpty(defaultDatabase))
             {
                 throw new ConfigurationErrorsException(Resources.ExceptionDefaultDatabaseNotExists);
@@ -52,7 +48,8 @@ namespace Cedar.Core.EntLib.Data
             return GetDatabase(configurationSection.DefaultDatabase);
         }
 
-        private static void ValidateConnectionStringSettings(string name, ConnectionStringSettings connectionStringSettings)
+        private static void ValidateConnectionStringSettings(string name,
+            ConnectionStringSettings connectionStringSettings)
         {
             if (connectionStringSettings == null)
             {
@@ -63,10 +60,12 @@ namespace Cedar.Core.EntLib.Data
             }
             if (string.IsNullOrEmpty(connectionStringSettings.ProviderName))
             {
-                throw new ConfigurationErrorsException(Resources.ExceptionNoProviderDefinedForConnectionString.Format(new object[]
-                {
-                    name
-                }), connectionStringSettings.ElementInformation.Source, connectionStringSettings.ElementInformation.LineNumber);
+                throw new ConfigurationErrorsException(
+                    Resources.ExceptionNoProviderDefinedForConnectionString.Format(new object[]
+                    {
+                        name
+                    }), connectionStringSettings.ElementInformation.Source,
+                    connectionStringSettings.ElementInformation.LineNumber);
             }
         }
 
@@ -86,9 +85,13 @@ namespace Cedar.Core.EntLib.Data
             return null;
         }
 
-        private DatabaseData GetDatabaseData(ConnectionStringSettings connectionString, DatabaseSettings databaseSettings)
+        private DatabaseData GetDatabaseData(ConnectionStringSettings connectionString,
+            DatabaseSettings databaseSettings)
         {
-            return CreateDatabaseData(GetAttribute(GetProviderMapping(connectionString.ProviderName, databaseSettings).DatabaseType).ConfigurationType, connectionString);
+            return
+                CreateDatabaseData(
+                    GetAttribute(GetProviderMapping(connectionString.ProviderName, databaseSettings).DatabaseType)
+                        .ConfigurationType, connectionString);
         }
 
         private static DatabaseData CreateDatabaseData(Type configurationElementType, ConnectionStringSettings settings)
@@ -96,22 +99,28 @@ namespace Cedar.Core.EntLib.Data
             object obj;
             try
             {
-                Func<string, ConfigurationSection> func = (string sectionName) => SettingSourceFactory.GetSettingSource(null).GetConfigurationSection(sectionName);
+                Func<string, ConfigurationSection> func =
+                    (string sectionName) =>
+                        SettingSourceFactory.GetSettingSource(null).GetConfigurationSection(sectionName);
                 obj = Activator.CreateInstance(configurationElementType, settings, func);
             }
             catch (MissingMethodException innerException)
             {
-                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotHaveRequiredConstructor.Format(configurationElementType), innerException);
+                throw new InvalidOperationException(
+                    Resources.ExceptionDatabaseDataTypeDoesNotHaveRequiredConstructor.Format(configurationElementType),
+                    innerException);
             }
 
             DatabaseData result;
             try
             {
-                result = (DatabaseData)obj;
+                result = (DatabaseData) obj;
             }
             catch (InvalidCastException innerException2)
             {
-                throw new InvalidOperationException(Resources.ExceptionDatabaseDataTypeDoesNotInheritFromDatabaseData.Format(configurationElementType), innerException2);
+                throw new InvalidOperationException(
+                    Resources.ExceptionDatabaseDataTypeDoesNotInheritFromDatabaseData.Format(configurationElementType),
+                    innerException2);
             }
             return result;
         }
@@ -120,7 +129,7 @@ namespace Cedar.Core.EntLib.Data
         {
             if (databaseSettings != null)
             {
-                DbProviderMapping dbProviderMapping = databaseSettings.ProviderMappings.Get(dbProviderName);
+                var dbProviderMapping = databaseSettings.ProviderMappings.Get(dbProviderName);
                 if (dbProviderMapping != null)
                 {
                     return dbProviderMapping;
@@ -131,13 +140,16 @@ namespace Cedar.Core.EntLib.Data
 
         private static ConfigurationElementTypeAttribute GetAttribute(Type databaseType)
         {
-            var configurationElementTypeAttribute = (ConfigurationElementTypeAttribute)Attribute.GetCustomAttribute(databaseType, typeof(ConfigurationElementTypeAttribute), false);
+            var configurationElementTypeAttribute =
+                (ConfigurationElementTypeAttribute)
+                    Attribute.GetCustomAttribute(databaseType, typeof (ConfigurationElementTypeAttribute), false);
             if (configurationElementTypeAttribute == null)
             {
-                throw new InvalidOperationException(Resources.ExceptionNoConfigurationElementTypeAttribute.Format(new object[]
-                {
-                    databaseType.Name
-                }));
+                throw new InvalidOperationException(
+                    Resources.ExceptionNoConfigurationElementTypeAttribute.Format(new object[]
+                    {
+                        databaseType.Name
+                    }));
             }
             return configurationElementTypeAttribute;
         }

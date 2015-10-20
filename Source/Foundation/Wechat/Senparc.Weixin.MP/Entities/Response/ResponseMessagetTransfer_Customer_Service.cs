@@ -15,23 +15,23 @@ using System.Collections.Generic;
 
 namespace Senparc.Weixin.MP.Entities
 {
-	public class ResponseMessageTransfer_Customer_Service : ResponseMessageBase, IResponseMessageBase
-	{
-		public ResponseMessageTransfer_Customer_Service()
-		{
-			TransInfo = new List<CustomerServiceAccount>();
-		}
+    public class ResponseMessageTransfer_Customer_Service : ResponseMessageBase, IResponseMessageBase
+    {
+        public ResponseMessageTransfer_Customer_Service()
+        {
+            TransInfo = new List<CustomerServiceAccount>();
+        }
 
-		new public virtual ResponseMsgType MsgType
-		{
-			get { return ResponseMsgType.Transfer_Customer_Service; }
-		}
+        public List<CustomerServiceAccount> TransInfo { get; set; }
 
-		public List<CustomerServiceAccount> TransInfo { get; set; }
-	}
+        public new virtual ResponseMsgType MsgType
+        {
+            get { return ResponseMsgType.Transfer_Customer_Service; }
+        }
+    }
 
-	public class CustomerServiceAccount
-	{
-		public string KfAccount { get; set; }
-	}
- }
+    public class CustomerServiceAccount
+    {
+        public string KfAccount { get; set; }
+    }
+}

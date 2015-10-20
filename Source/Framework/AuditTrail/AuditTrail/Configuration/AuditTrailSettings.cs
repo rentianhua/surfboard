@@ -1,5 +1,4 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Cedar.Core.Configuration;
 using Cedar.Core.IoC;
 using Microsoft.Practices.Unity.Utility;
@@ -7,7 +6,6 @@ using Microsoft.Practices.Unity.Utility;
 namespace Cedar.Framwork.AuditTrail.Configuration
 {
     /// <summary>
-    /// 
     /// </summary>
     [ConfigurationSectionName("cedar.auditTrail")]
     public class AuditTrailSettings : ServiceLocatableSettings
@@ -18,112 +16,100 @@ namespace Cedar.Framwork.AuditTrail.Configuration
         private const string AuditLogFiltersProperty = "auditLogFilters";
 
         /// <summary>
-        /// Gets or sets the default provider name.
+        ///     Gets or sets the default provider name.
         /// </summary>
         /// <value>
-        /// The default provider name.
+        ///     The default provider name.
         /// </value>
         [ConfigurationProperty(DefaultAuditLogProviderProperty, IsRequired = true)]
         public string DefaultProvider
         {
-            get
-            {
-                return (string)base[DefaultAuditLogProviderProperty];
-            }
-            set
-            {
-                base[DefaultAuditLogProviderProperty] = value;
-            }
+            get { return (string) base[DefaultAuditLogProviderProperty]; }
+            set { base[DefaultAuditLogProviderProperty] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the audit log providers.
+        ///     Gets or sets the audit log providers.
         /// </summary>
         /// <value>
-        /// The audit log providers.
+        ///     The audit log providers.
         /// </value>
         [ConfigurationProperty(AuditLogProvidersProperty, IsRequired = true)]
         public NameTypeConfigurationElementCollection<AuditLogProviderDataBase> AuditLogProviders
         {
             get
             {
-                return (NameTypeConfigurationElementCollection<AuditLogProviderDataBase>)base[AuditLogProvidersProperty];
+                return (NameTypeConfigurationElementCollection<AuditLogProviderDataBase>) base[AuditLogProvidersProperty];
             }
-            set
-            {
-                base[AuditLogProvidersProperty] = value;
-            }
+            set { base[AuditLogProvidersProperty] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the audit log listeners.
+        ///     Gets or sets the audit log listeners.
         /// </summary>
         /// <value>
-        /// The audit log listeners.
+        ///     The audit log listeners.
         /// </value>
         [ConfigurationProperty(AuditLogListenersProperty, IsRequired = true)]
         public NameTypeConfigurationElementCollection<AuditLogListenerDataBase> AuditLogListeners
         {
             get
             {
-                return (NameTypeConfigurationElementCollection<AuditLogListenerDataBase>)base[AuditLogListenersProperty];
+                return (NameTypeConfigurationElementCollection<AuditLogListenerDataBase>) base[AuditLogListenersProperty];
             }
-            set
-            {
-                base[AuditLogListenersProperty] = value;
-            }
+            set { base[AuditLogListenersProperty] = value; }
         }
 
         /// <summary>
-        /// Gets or sets the audit log filters.
+        ///     Gets or sets the audit log filters.
         /// </summary>
         /// <value>
-        /// The audit log filters.
+        ///     The audit log filters.
         /// </value>
         [ConfigurationProperty(AuditLogFiltersProperty, IsRequired = false)]
         public NameTypeConfigurationElementCollection<AuditLogFilterDataBase> AuditLogFilters
         {
             get
             {
-                return (NameTypeConfigurationElementCollection<AuditLogFilterDataBase>)base[AuditLogFiltersProperty];
+                return (NameTypeConfigurationElementCollection<AuditLogFilterDataBase>) base[AuditLogFiltersProperty];
             }
-            set
-            {
-                base[AuditLogFiltersProperty] = value;
-            }
+            set { base[AuditLogFiltersProperty] = value; }
         }
 
         /// <summary>
-        /// Configures the specified service locator.
+        ///     Configures the specified service locator.
         /// </summary>
         /// <param name="serviceLocator">The service locator.</param>
         public override void Configure(IServiceLocator serviceLocator)
         {
             Guard.ArgumentNotNull(serviceLocator, "serviceLocator");
-            foreach (AuditLogProviderDataBase auditLogProviderDataBase in this.AuditLogProviders)
+            foreach (AuditLogProviderDataBase auditLogProviderDataBase in AuditLogProviders)
             {
-                Func<AuditLogProviderBase> providerCreator = auditLogProviderDataBase.GetProviderCreator(this);
+                var providerCreator = auditLogProviderDataBase.GetProviderCreator(this);
                 if (providerCreator != null)
                 {
-                    serviceLocator.Register<AuditLogProviderBase>(providerCreator, auditLogProviderDataBase.Name, auditLogProviderDataBase.Name == this.DefaultProvider, auditLogProviderDataBase.Lifetime);
+                    serviceLocator.Register(providerCreator, auditLogProviderDataBase.Name,
+                        auditLogProviderDataBase.Name == DefaultProvider, auditLogProviderDataBase.Lifetime);
                 }
             }
 
-            foreach (AuditLogListenerDataBase auditLogListenerDataBase in this.AuditLogListeners)
+            foreach (AuditLogListenerDataBase auditLogListenerDataBase in AuditLogListeners)
             {
-                Func<AuditLogListenerBase> providerCreator2 = auditLogListenerDataBase.GetProviderCreator(this);
+                var providerCreator2 = auditLogListenerDataBase.GetProviderCreator(this);
                 if (providerCreator2 != null)
                 {
-                    serviceLocator.Register<AuditLogListenerBase>(providerCreator2, auditLogListenerDataBase.Name, false, auditLogListenerDataBase.Lifetime);
+                    serviceLocator.Register(providerCreator2, auditLogListenerDataBase.Name, false,
+                        auditLogListenerDataBase.Lifetime);
                 }
             }
 
-            foreach (AuditLogFilterDataBase auditLogFilterDataBase in this.AuditLogFilters)
+            foreach (AuditLogFilterDataBase auditLogFilterDataBase in AuditLogFilters)
             {
-                Func<IAuditLogFilter> providerCreator3 = auditLogFilterDataBase.GetProviderCreator(this);
+                var providerCreator3 = auditLogFilterDataBase.GetProviderCreator(this);
                 if (providerCreator3 != null)
                 {
-                    serviceLocator.Register<IAuditLogFilter>(providerCreator3, auditLogFilterDataBase.Name, false, auditLogFilterDataBase.Lifetime);
+                    serviceLocator.Register(providerCreator3, auditLogFilterDataBase.Name, false,
+                        auditLogFilterDataBase.Lifetime);
                 }
             }
         }

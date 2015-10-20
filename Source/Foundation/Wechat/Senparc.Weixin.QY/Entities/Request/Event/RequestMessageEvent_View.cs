@@ -14,12 +14,12 @@
 namespace Senparc.Weixin.QY.Entities
 {
     /// <summary>
-    /// 事件之URL跳转视图（View）
+    ///     事件之URL跳转视图（View）
     /// </summary>
     public class RequestMessageEvent_View : RequestMessageEventBase, IRequestMessageEventBase, IRequestMessageEventKey
     {
         /// <summary>
-        /// 事件类型
+        ///     事件类型
         /// </summary>
         public override Event Event
         {
@@ -27,7 +27,7 @@ namespace Senparc.Weixin.QY.Entities
         }
 
         /// <summary>
-        /// 事件KEY值，设置的跳转URL
+        ///     事件KEY值，设置的跳转URL
         /// </summary>
         public string EventKey { get; set; }
     }

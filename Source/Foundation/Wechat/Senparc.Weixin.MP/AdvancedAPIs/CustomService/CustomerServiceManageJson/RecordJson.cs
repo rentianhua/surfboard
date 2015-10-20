@@ -14,34 +14,38 @@
 namespace Senparc.Weixin.MP.AdvancedAPIs.CustomService
 {
     /// <summary>
-    /// 客服记录消息
+    ///     客服记录消息
     /// </summary>
-    public class RecordJson 
+    public class RecordJson
     {
         /// <summary>
-        /// 客服账号
+        ///     客服账号
         /// </summary>
         public string worker { get; set; }
+
         /// <summary>
-        /// 用户的标识，对当前公众号唯一
+        ///     用户的标识，对当前公众号唯一
         /// </summary>
         public string openid { get; set; }
+
         /// <summary>
-        /// 操作ID（会话状态）
+        ///     操作ID（会话状态）
         /// </summary>
         public Opercode opercode { get; set; }
+
         /// <summary>
-        /// 操作时间，UNIX时间戳
+        ///     操作时间，UNIX时间戳
         /// </summary>
         public long time { get; set; }
+
         /// <summary>
-        /// 聊天记录
+        ///     聊天记录
         /// </summary>
         public string text { get; set; }
     }
 
     /// <summary>
-    /// 操作ID(会化状态）定义
+    ///     操作ID(会化状态）定义
     /// </summary>
     public enum Opercode
     {

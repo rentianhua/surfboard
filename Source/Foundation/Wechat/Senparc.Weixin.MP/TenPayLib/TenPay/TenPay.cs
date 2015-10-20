@@ -21,12 +21,12 @@ using Senparc.Weixin.MP.CommonAPIs;
 namespace Senparc.Weixin.MP.AdvancedAPIs
 {
     /// <summary>
-    /// 微信支付接口，官方API：https://mp.weixin.qq.com/paymch/readtemplate?t=mp/business/course2_tmpl&lang=zh_CN&token=25857919#4
+    ///     微信支付接口，官方API：https://mp.weixin.qq.com/paymch/readtemplate?t=mp/business/course2_tmpl&lang=zh_CN&token=25857919#4
     /// </summary>
     public static class TenPay
     {
         /// <summary>
-        /// Native
+        ///     Native
         /// </summary>
         /// <param name="sign">签名</param>
         /// <param name="appId">开放平台账户的唯一标识</param>
@@ -42,7 +42,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         }
 
         /// <summary>
-        /// 发货通知
+        ///     发货通知
         /// </summary>
         /// <param name="appId">公众平台账户的AppId</param>
         /// <param name="openId">购买用户的OpenId</param>
@@ -53,7 +53,9 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         /// <param name="deliver_Msg">发货状态信息，失败时可以填上UTF8 编码的错误提示信息，比如“该商品已退款</param>
         /// <param name="app_Signature">签名</param>
         /// <param name="sign_Method">签名方法</param>
-        public static WxJsonResult Delivernotify(string appId, string openId, string transId, string out_Trade_No, string deliver_TimesTamp, string deliver_Status, string deliver_Msg, string app_Signature, string sign_Method = "sha1")
+        public static WxJsonResult Delivernotify(string appId, string openId, string transId, string out_Trade_No,
+            string deliver_TimesTamp, string deliver_Status, string deliver_Msg, string app_Signature,
+            string sign_Method = "sha1")
         {
             var accessToken = AccessTokenRedisContainer.GetAccessToken(appId);
 
@@ -77,14 +79,15 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
         }
 
         /// <summary>
-        /// 订单查询
+        ///     订单查询
         /// </summary>
         /// <param name="appId">公众平台账户的AppId</param>
         /// <param name="package">查询订单的关键信息数据</param>
         /// <param name="timesTamp">linux 时间戳</param>
         /// <param name="app_Signature">签名</param>
         /// <param name="sign_Method">签名方法</param>
-        public static OrderqueryResult Orderquery(string appId, string package, string timesTamp, string app_Signature, string sign_Method)
+        public static OrderqueryResult Orderquery(string appId, string package, string timesTamp, string app_Signature,
+            string sign_Method)
         {
             var accessToken = AccessTokenRedisContainer.GetAccessToken(appId);
 
@@ -94,7 +97,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
             var data = new
             {
                 appid = appId,
-                package = package,
+                package,
                 timestamp = timesTamp,
                 app_signature = app_Signature,
                 sign_method = sign_Method

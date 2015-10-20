@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// 
     /// </summary>
     public class JuheUtility
     {
@@ -17,7 +13,7 @@ namespace Cedar.Framework.Common.BaseClasses
         private readonly string _url = "http://op.juhe.cn/che300/query";
 
         /// <summary>
-        /// 初始化
+        ///     初始化
         /// </summary>
         public JuheUtility()
         {
@@ -32,7 +28,6 @@ namespace Cedar.Framework.Common.BaseClasses
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public string GetUsedCarPrice(Dictionary<string, string> paramList)
@@ -46,7 +41,7 @@ namespace Cedar.Framework.Common.BaseClasses
 
             //合并参数
             var parameters = paramBase.Concat(paramList).ToDictionary(k => k.Key, v => v.Value);
-            
+
             var result = DynamicWebService.SendPost(_url, parameters, "get");
 
             var obj = JObject.Parse(result);

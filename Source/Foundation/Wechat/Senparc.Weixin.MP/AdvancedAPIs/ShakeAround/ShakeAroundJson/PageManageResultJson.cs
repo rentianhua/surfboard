@@ -14,12 +14,12 @@ using Senparc.Weixin.Entities;
 namespace Senparc.Weixin.MP.AdvancedAPIs.ShakeAround
 {
     /// <summary>
-    /// 新增与编辑页面返回结果基类
+    ///     新增与编辑页面返回结果基类
     /// </summary>
     public class BasePageResultJson : WxJsonResult
     {
         /// <summary>
-        /// 返回数据
+        ///     返回数据
         /// </summary>
         public BasePage_Data data { get; set; }
     }
@@ -27,34 +27,32 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.ShakeAround
     public class BasePage_Data
     {
         /// <summary>
-        /// 页面id
+        ///     页面id
         /// </summary>
         public long page_id { get; set; }
     }
 
     /// <summary>
-    /// 新增页面返回结果
+    ///     新增页面返回结果
     /// </summary>
     public class AddPageResultJson : BasePageResultJson
     {
-        
     }
 
     /// <summary>
-    /// 编辑页面返回结果
+    ///     编辑页面返回结果
     /// </summary>
     public class UpdatePageResultJson : BasePageResultJson
     {
-
     }
 
     /// <summary>
-    /// 查询页面列表返回结果
+    ///     查询页面列表返回结果
     /// </summary>
     public class SearchPagesResultJson : WxJsonResult
     {
         /// <summary>
-        /// 查询页面列表返回数据
+        ///     查询页面列表返回数据
         /// </summary>
         public SearchPages_Data data { get; set; }
     }
@@ -62,11 +60,12 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.ShakeAround
     public class SearchPages_Data
     {
         /// <summary>
-        /// 页面基本信息
+        ///     页面基本信息
         /// </summary>
         public List<SearchPages_Data_Page> pages { get; set; }
+
         /// <summary>
-        /// 商户名下的页面总数
+        ///     商户名下的页面总数
         /// </summary>
         public int total_count { get; set; }
     }
@@ -74,27 +73,32 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.ShakeAround
     public class SearchPages_Data_Page : WxJsonResult
     {
         /// <summary>
-        /// 页面的备注信息
+        ///     页面的备注信息
         /// </summary>
         public string comment { get; set; }
+
         /// <summary>
-        /// 在摇一摇页面展示的副标题
+        ///     在摇一摇页面展示的副标题
         /// </summary>
         public string description { get; set; }
+
         /// <summary>
-        /// 在摇一摇页面展示的图片
+        ///     在摇一摇页面展示的图片
         /// </summary>
         public string icon_url { get; set; }
+
         /// <summary>
-        /// 摇周边页面唯一ID
+        ///     摇周边页面唯一ID
         /// </summary>
         public long page_id { get; set; }
+
         /// <summary>
-        /// 跳转链接
+        ///     跳转链接
         /// </summary>
         public string page_url { get; set; }
+
         /// <summary>
-        /// 在摇一摇页面展示的主标题
+        ///     在摇一摇页面展示的主标题
         /// </summary>
         public string title { get; set; }
     }

@@ -21,11 +21,10 @@ using Senparc.Weixin.QY.CommonAPIs;
 
 namespace Senparc.Weixin.QY.AdvancedAPIs
 {
-
     public static class ChatApi
     {
         /// <summary>
-        /// 创建会话
+        ///     创建会话
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="chatId">会话id。字符串类型，最长32个字符。只允许字符0-9及字母a-zA-Z, 如果值内容为64bit无符号整型：要求值范围在[1, 2^63)之间，[2^63, 2^64)为系统分配会话id区间</param>
@@ -34,36 +33,38 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="userlist">会话成员列表，成员用userid来标识。会话成员必须在3人或以上，1000人以下</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult CreateChat(string accessToken, string chatId, string name, string owner, string[] userlist, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult CreateChat(string accessToken, string chatId, string name, string owner,
+            string[] userlist, int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/create?access_token={0}", accessToken);
 
             var data = new
             {
                 chatid = chatId,
-                name = name,
-                owner = owner,
-                userlist = userlist
+                name,
+                owner,
+                userlist
             };
 
             return CommonJsonSend.Send<QyJsonResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 获取会话
+        ///     获取会话
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="chatId"></param>
         /// <returns></returns>
         public static GetChatResult GetChat(string accessToken, string chatId)
         {
-            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/get?access_token={0}&chatid={1}", accessToken, chatId);
+            var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/get?access_token={0}&chatid={1}",
+                accessToken, chatId);
 
             return Get.GetJson<GetChatResult>(url);
         }
 
         /// <summary>
-        /// 修改会话信息
+        ///     修改会话信息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="chatId">会话id</param>
@@ -74,7 +75,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="delUserList">会话退出成员列表，成员用userid来标识</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult UpdateChat(string accessToken, string chatId, string opUser, string name = null, string owner = null, string[] addUserList = null, string[] delUserList = null, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult UpdateChat(string accessToken, string chatId, string opUser, string name = null,
+            string owner = null, string[] addUserList = null, string[] delUserList = null, int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/update?access_token={0}", accessToken);
 
@@ -82,8 +84,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
             {
                 chatid = chatId,
                 op_user = opUser,
-                name = name,
-                owner = owner,
+                name,
+                owner,
                 add_user_list = addUserList,
                 del_user_list = delUserList
             };
@@ -92,28 +94,29 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 退出会话
+        ///     退出会话
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="chatId"></param>
         /// <param name="opUser"></param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult QuitChat(string accessToken, string chatId, string opUser, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult QuitChat(string accessToken, string chatId, string opUser,
+            int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/quit?access_token={0}", accessToken);
 
             var data = new
             {
                 chatid = chatId,
-                op_user = opUser,
+                op_user = opUser
             };
 
             return CommonJsonSend.Send<QyJsonResult>(null, url, data, CommonJsonSendType.POST, timeOut);
         }
 
         /// <summary>
-        /// 清除消息未读状态
+        ///     清除消息未读状态
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="opUser">会话所有者的userid</param>
@@ -121,7 +124,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="chatIdOrUserId">会话值，为userid|chatid，分别表示：成员id|会话id，单聊是userid，群聊是chatid</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult ClearNotify(string accessToken, string opUser, Chat_Type type, string chatIdOrUserId, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult ClearNotify(string accessToken, string opUser, Chat_Type type, string chatIdOrUserId,
+            int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/clearnotify?access_token={0}", accessToken);
 
@@ -130,7 +134,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
                 op_user = opUser,
                 chat = new
                 {
-                    type = type,
+                    type,
                     id = chatIdOrUserId
                 }
             };
@@ -139,7 +143,7 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         }
 
         /// <summary>
-        /// 发消息
+        ///     发消息
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="sender">发送人的userId</param>
@@ -149,7 +153,8 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
         /// <param name="contentOrMediaId">文本消息是content，图片或文件是mediaId</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static QyJsonResult SendChatMessage(string accessToken, string sender, Chat_Type type, ChatMsgType msgType, string chatIdOrUserId, string contentOrMediaId, int timeOut = Config.TIME_OUT)
+        public static QyJsonResult SendChatMessage(string accessToken, string sender, Chat_Type type,
+            ChatMsgType msgType, string chatIdOrUserId, string contentOrMediaId, int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/send?access_token={0}", accessToken);
 
@@ -158,48 +163,48 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
             switch (msgType)
             {
                 case ChatMsgType.text:
-                    data = new SendTextMessageData()
+                    data = new SendTextMessageData
                     {
-                        receiver = new Receiver()
+                        receiver = new Receiver
                         {
                             type = type.ToString(),
                             id = chatIdOrUserId
                         },
                         sender = sender,
                         msgtype = msgType.ToString(),
-                        text = new Chat_Content()
+                        text = new Chat_Content
                         {
                             content = contentOrMediaId
                         }
                     };
                     break;
                 case ChatMsgType.image:
-                    data = new SendImageMessageData()
+                    data = new SendImageMessageData
                     {
-                        receiver = new Receiver()
+                        receiver = new Receiver
                         {
                             type = type.ToString(),
                             id = chatIdOrUserId
                         },
                         sender = sender,
                         msgtype = msgType.ToString(),
-                        image = new Chat_Image()
+                        image = new Chat_Image
                         {
                             media_id = contentOrMediaId
                         }
                     };
                     break;
                 case ChatMsgType.file:
-                    data = new SendFileMessageData()
+                    data = new SendFileMessageData
                     {
-                        receiver = new Receiver()
+                        receiver = new Receiver
                         {
                             type = type.ToString(),
                             id = chatIdOrUserId
                         },
                         sender = sender,
                         msgtype = msgType.ToString(),
-                        file = new Chat_File()
+                        file = new Chat_File
                         {
                             media_id = contentOrMediaId
                         }
@@ -227,13 +232,14 @@ namespace Senparc.Weixin.QY.AdvancedAPIs
 //}
 
         /// <summary>
-        /// 设置成员新消息免打扰
+        ///     设置成员新消息免打扰
         /// </summary>
         /// <param name="accessToken"></param>
         /// <param name="userMuteList">成员新消息免打扰参数，数组，最大支持10000个成员</param>
         /// <param name="timeOut"></param>
         /// <returns></returns>
-        public static SetMuteResult SetMute(string accessToken, List<UserMute> userMuteList, int timeOut = Config.TIME_OUT)
+        public static SetMuteResult SetMute(string accessToken, List<UserMute> userMuteList,
+            int timeOut = Config.TIME_OUT)
         {
             var url = string.Format("https://qyapi.weixin.qq.com/cgi-bin/chat/setmute?access_token={0}", accessToken);
 

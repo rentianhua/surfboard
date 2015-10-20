@@ -3,12 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Practices.Unity;
-using Microsoft.Practices.Unity.Configuration;
-using Microsoft.Practices.Unity.Utility;
 using Cedar.Core.Configuration;
 using Cedar.Core.EntLib.IoC.Configuration;
 using Cedar.Core.IoC;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
+using Microsoft.Practices.Unity.Utility;
 
 #endregion
 
@@ -52,7 +52,7 @@ namespace Cedar.Core.EntLib.IoC
         /// <value>
         ///     The unity container.
         /// </value>
-        public IUnityContainer UnityContainer { get; private set; }
+        public IUnityContainer UnityContainer { get; }
 
         /// <summary>
         ///     Gets the service based on the specified registered type and optional registration name.
@@ -75,8 +75,8 @@ namespace Cedar.Core.EntLib.IoC
                     name = text;
                 }
                 result = (string.IsNullOrWhiteSpace(name)
-                    ? UnityContainer.Resolve(registeredType, new ResolverOverride[0])
-                    : UnityContainer.Resolve(registeredType, name, new ResolverOverride[0]));
+                    ? UnityContainer.Resolve(registeredType)
+                    : UnityContainer.Resolve(registeredType, name));
             }
             catch (ResolutionFailedException ex)
             {
@@ -98,7 +98,7 @@ namespace Cedar.Core.EntLib.IoC
             IEnumerable<object> result;
             try
             {
-                result = UnityContainer.ResolveAll(registeredType, new ResolverOverride[0]);
+                result = UnityContainer.ResolveAll(registeredType);
             }
             catch (ResolutionFailedException ex)
             {
@@ -119,7 +119,7 @@ namespace Cedar.Core.EntLib.IoC
             Guard.ArgumentNotNull(registeredType, "registeredType");
             return (
                 from registration in UnityContainer.Registrations
-                select registration.Name).ToArray<string>();
+                select registration.Name).ToArray();
         }
 
         /// <summary>
@@ -168,14 +168,14 @@ namespace Cedar.Core.EntLib.IoC
         {
             Guard.ArgumentNotNull(registeredType, "registeredType");
             Guard.ArgumentNotNull(mappedToType, "mappedToType");
-            LifetimeManager lifetimeManager = (lifetime == Lifetime.Singleton)
+            var lifetimeManager = (lifetime == Lifetime.Singleton)
                 ? (LifetimeManager) new ContainerControlledLifetimeManager()
                 : new TransientLifetimeManager();
             if (isDefault)
             {
                 UnityContainer.Configure<DefaultInjectionExtension>().Register(registeredType, name);
             }
-            UnityContainer.RegisterType(registeredType, mappedToType, name, lifetimeManager, new InjectionMember[0]);
+            UnityContainer.RegisterType(registeredType, mappedToType, name, lifetimeManager);
         }
 
         /// <summary>
@@ -194,13 +194,11 @@ namespace Cedar.Core.EntLib.IoC
             {
                 UnityContainer.Configure<DefaultInjectionExtension>().Register<T>(name);
             }
-            LifetimeManager lifetimeManager = (lifetime == Lifetime.Singleton)
+            var lifetimeManager = (lifetime == Lifetime.Singleton)
                 ? (LifetimeManager) new ContainerControlledLifetimeManager()
                 : new TransientLifetimeManager();
-            UnityContainer.RegisterType(typeof (T), name, lifetimeManager, new InjectionMember[]
-            {
-                new InjectionFactory((IUnityContainer container) => creator())
-            });
+            UnityContainer.RegisterType(typeof (T), name, lifetimeManager,
+                new InjectionFactory((IUnityContainer container) => creator()));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Cedar.Core.IoC.Configuration
         [ConfigurationProperty(DefaultServiceLocatorProperty, IsRequired = false, DefaultValue = "")]
         public string DefaultServiceLocator
         {
-            get { return (string)base[DefaultServiceLocatorProperty]; }
+            get { return (string) base[DefaultServiceLocatorProperty]; }
             set { base[DefaultServiceLocatorProperty] = value; }
         }
 
@@ -42,7 +42,10 @@ namespace Cedar.Core.IoC.Configuration
         [ConfigurationProperty(ServiceLocatorsProperty, IsRequired = true)]
         public NameTypeConfigurationElementCollection<ServiceLocatorDataBase> ServiceLocators
         {
-            get { return (NameTypeConfigurationElementCollection<ServiceLocatorDataBase>)base[ServiceLocatorsProperty]; }
+            get
+            {
+                return (NameTypeConfigurationElementCollection<ServiceLocatorDataBase>) base[ServiceLocatorsProperty];
+            }
             set { base[ServiceLocatorsProperty] = value; }
         }
 
@@ -55,7 +58,10 @@ namespace Cedar.Core.IoC.Configuration
         [ConfigurationProperty(ResolvedAssembliesProperty, IsRequired = false)]
         public ConfigurationElementCollection<AssemblyConfigurationElement> ResolvedAssemblies
         {
-            get { return (ConfigurationElementCollection<AssemblyConfigurationElement>)base[ResolvedAssembliesProperty]; }
+            get
+            {
+                return (ConfigurationElementCollection<AssemblyConfigurationElement>) base[ResolvedAssembliesProperty];
+            }
             set { base[ResolvedAssembliesProperty] = value; }
         }
 

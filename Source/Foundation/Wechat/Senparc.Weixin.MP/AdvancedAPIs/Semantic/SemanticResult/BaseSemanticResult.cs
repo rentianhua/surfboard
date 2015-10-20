@@ -18,16 +18,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class BaseSemanticResultJson : WxJsonResult
     {
         /// <summary>
-        /// 用于标识用户请求后的状态
-        /// 文档中写的是res，但实际测试应该是ret
+        ///     用于标识用户请求后的状态
+        ///     文档中写的是res，但实际测试应该是ret
         /// </summary>
         public string ret { get; set; }
+
         /// <summary>
-        /// 用户的输入字符串
+        ///     用户的输入字符串
         /// </summary>
         public string query { get; set; }
+
         /// <summary>
-        /// 服务的全局类别id
+        ///     服务的全局类别id
         /// </summary>
         public string type { get; set; }
     }
@@ -35,8 +37,8 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.Semantic
     public class BaseSemanticIntent
     {
         /// <summary>
-        /// SEARCH 普通查询
-        /// ROUTE 路线查询
+        ///     SEARCH 普通查询
+        ///     ROUTE 路线查询
         /// </summary>
         public string intent { get; set; }
     }

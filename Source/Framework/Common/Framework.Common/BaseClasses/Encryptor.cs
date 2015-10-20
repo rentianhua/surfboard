@@ -7,7 +7,7 @@ using System.Text;
 namespace Cedar.Framework.Common.BaseClasses
 {
     /// <summary>
-    /// For 加密解密的常用算法,DES,MD5,SHA1,RSA,Rijndael,...此类不能被代码格式化;
+    ///     For 加密解密的常用算法,DES,MD5,SHA1,RSA,Rijndael,...此类不能被代码格式化;
     /// </summary>
     /// {Design BY:Tim, Use:Tim, For 加密解密算法,DES,MD5,SHA1,RSA,Rijndael,... }
     public class Encryptor
@@ -47,7 +47,7 @@ namespace Cedar.Framework.Common.BaseClasses
         }
 
         /// <summary>
-        /// MD5加密
+        ///     MD5加密
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>

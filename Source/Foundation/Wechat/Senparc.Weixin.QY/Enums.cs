@@ -17,11 +17,11 @@
 namespace Senparc.Weixin.QY
 {
     /// <summary>
-    /// 接收消息类型
+    ///     接收消息类型
     /// </summary>
     public enum RequestMsgType
     {
-        DEFAULT,//默认
+        DEFAULT, //默认
         Text, //文本
         Location, //地理位置
         Image, //图片
@@ -29,121 +29,121 @@ namespace Senparc.Weixin.QY
         Video, //视频
         Link, //连接信息
         Event, //事件推送
-        ShortVideo, //小视频
+        ShortVideo //小视频
     }
 
     /// <summary>
-    /// 当RequestMsgType类型为Event时，Event属性的类型
+    ///     当RequestMsgType类型为Event时，Event属性的类型
     /// </summary>
     public enum Event
     {
         /// <summary>
-        /// 进入会话（似乎已从官方API中移除）
+        ///     进入会话（似乎已从官方API中移除）
         /// </summary>
         ENTER,
 
         /// <summary>
-        /// 地理位置
+        ///     地理位置
         /// </summary>
         LOCATION,
 
         /// <summary>
-        /// 订阅
+        ///     订阅
         /// </summary>
         subscribe,
 
         /// <summary>
-        /// 取消订阅
+        ///     取消订阅
         /// </summary>
         unsubscribe,
 
         /// <summary>
-        /// 自定义菜单点击事件
+        ///     自定义菜单点击事件
         /// </summary>
         CLICK,
 
         /// <summary>
-        /// 二维码扫描
+        ///     二维码扫描
         /// </summary>
         scan,
 
         /// <summary>
-        /// URL跳转
+        ///     URL跳转
         /// </summary>
         VIEW,
 
         /// <summary>
-        /// 事件推送群发结果
+        ///     事件推送群发结果
         /// </summary>
         MASSSENDJOBFINISH,
 
         /// <summary>
-        /// 模板信息发送完成
+        ///     模板信息发送完成
         /// </summary>
         TEMPLATESENDJOBFINISH,
 
         /// <summary>
-        /// 扫码推事件
+        ///     扫码推事件
         /// </summary>
         SCANCODE_PUSH,
 
         /// <summary>
-        /// 扫码推事件且弹出“消息接收中”提示框
+        ///     扫码推事件且弹出“消息接收中”提示框
         /// </summary>
         SCANCODE_WAITMSG,
 
         /// <summary>
-        /// 弹出系统拍照发图
+        ///     弹出系统拍照发图
         /// </summary>
         PIC_SYSPHOTO,
 
         /// <summary>
-        /// 弹出拍照或者相册发图
+        ///     弹出拍照或者相册发图
         /// </summary>
         PIC_PHOTO_OR_ALBUM,
 
         /// <summary>
-        /// 弹出微信相册发图器
+        ///     弹出微信相册发图器
         /// </summary>
         PIC_WEIXIN,
 
         /// <summary>
-        /// 弹出地理位置选择器
+        ///     弹出地理位置选择器
         /// </summary>
         LOCATION_SELECT,
 
         /// <summary>
-        /// 用户进入应用的事件推送
+        ///     用户进入应用的事件推送
         /// </summary>
         ENTER_AGENT,
 
         /// <summary>
-        /// 异步任务完成事件推送
+        ///     异步任务完成事件推送
         /// </summary>
-        BATCH_JOB_RESULT,
+        BATCH_JOB_RESULT
     }
 
     public enum ThirdPartyInfo
     {
         /// <summary>
-        /// 推送suite_ticket协议
+        ///     推送suite_ticket协议
         /// </summary>
         SUITE_TICKET,
 
         /// <summary>
-        /// 变更授权的通知
+        ///     变更授权的通知
         /// </summary>
         CHANGE_AUTH,
 
         /// <summary>
-        /// 取消授权的通知
+        ///     取消授权的通知
         /// </summary>
-        CANCEL_AUTH,
+        CANCEL_AUTH
     }
 
 
     /// <summary>
-    /// 发送消息类型
+    ///     发送消息类型
     /// </summary>
     public enum ResponseMsgType
     {
@@ -157,63 +157,73 @@ namespace Senparc.Weixin.QY
     }
 
     /// <summary>
-    /// 菜单按钮类型
+    ///     菜单按钮类型
     /// </summary>
     public enum ButtonType
     {
         /// <summary>
-        /// 点击
+        ///     点击
         /// </summary>
         click,
+
         /// <summary>
-        /// Url
+        ///     Url
         /// </summary>
         view,
+
         /// <summary>
-        /// 扫码推事件
+        ///     扫码推事件
         /// </summary>
         scancode_push,
+
         /// <summary>
-        /// 扫码推事件且弹出“消息接收中”提示框
+        ///     扫码推事件且弹出“消息接收中”提示框
         /// </summary>
         scancode_waitmsg,
+
         /// <summary>
-        /// 弹出系统拍照发图
+        ///     弹出系统拍照发图
         /// </summary>
         pic_sysphoto,
+
         /// <summary>
-        /// 弹出拍照或者相册发图
+        ///     弹出拍照或者相册发图
         /// </summary>
         pic_photo_or_album,
+
         /// <summary>
-        /// 弹出微信相册发图器
+        ///     弹出微信相册发图器
         /// </summary>
         pic_weixin,
+
         /// <summary>
-        /// 弹出地理位置选择器
+        ///     弹出地理位置选择器
         /// </summary>
         location_select
     }
 
     /// <summary>
-    /// 上传媒体文件类型
+    ///     上传媒体文件类型
     /// </summary>
     public enum UploadMediaFileType
     {
         /// <summary>
-        /// 图片: 1MB，支持JPG格式
+        ///     图片: 1MB，支持JPG格式
         /// </summary>
         image,
+
         /// <summary>
-        /// 语音：2MB，播放长度不超过60s，支持AMR格式
+        ///     语音：2MB，播放长度不超过60s，支持AMR格式
         /// </summary>
         voice,
+
         /// <summary>
-        /// 视频：10MB，支持MP4格式
+        ///     视频：10MB，支持MP4格式
         /// </summary>
         video,
+
         /// <summary>
-        /// 普通文件：10MB
+        ///     普通文件：10MB
         /// </summary>
         file
     }
@@ -315,20 +325,22 @@ namespace Senparc.Weixin.QY
 
 
     /// <summary>
-    /// 语言
+    ///     语言
     /// </summary>
     public enum Language
     {
         /// <summary>
-        /// 中文简体
+        ///     中文简体
         /// </summary>
         zh_CN,
+
         /// <summary>
-        /// 中文繁体
+        ///     中文繁体
         /// </summary>
         zh_TW,
+
         /// <summary>
-        /// 英文
+        ///     英文
         /// </summary>
         en
     }
@@ -363,16 +375,16 @@ namespace Senparc.Weixin.QY
     //}
 
     /// <summary>
-    /// 群聊类型
+    ///     群聊类型
     /// </summary>
     public enum Chat_Type
     {
         single = 0,
-        group = 1,
+        group = 1
     }
 
     /// <summary>
-    /// 群聊发送消息类型
+    ///     群聊发送消息类型
     /// </summary>
     public enum ChatMsgType
     {
@@ -382,7 +394,7 @@ namespace Senparc.Weixin.QY
     }
 
     /// <summary>
-    /// 免打扰状态
+    ///     免打扰状态
     /// </summary>
     public enum Mute_Status
     {

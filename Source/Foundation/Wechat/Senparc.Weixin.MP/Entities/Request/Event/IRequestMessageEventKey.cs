@@ -14,7 +14,7 @@
 namespace Senparc.Weixin.MP.Entities
 {
     /// <summary>
-    /// 具有EventKey属性的RequestMessage接口
+    ///     具有EventKey属性的RequestMessage接口
     /// </summary>
     public interface IRequestMessageEventKey
     {
