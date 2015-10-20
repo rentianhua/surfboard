@@ -114,8 +114,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChat.DataAccess", "Source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChat.Interface", "Source\Foundation\Wechat\Weixin.Interface\WeChat.Interface.csproj", "{527134B6-D0FF-4453-82A4-DE61FFE7BF26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCN.Midware.Wechat", "Source\Sites\CCN.Midware.Wechat\CCN.Midware.Wechat.csproj", "{B559AC6B-7467-462B-8790-2A021AE922C1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -249,12 +247,6 @@ Global
 		{527134B6-D0FF-4453-82A4-DE61FFE7BF26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{527134B6-D0FF-4453-82A4-DE61FFE7BF26}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{527134B6-D0FF-4453-82A4-DE61FFE7BF26}.Test|Any CPU.Build.0 = Release|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{B559AC6B-7467-462B-8790-2A021AE922C1}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -178,7 +178,9 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public CustModel GetCustById(string innerid)
         {
-            const string sql = "select * from cust_info where innerid=@innerid;";
+            const string sql = @"select a.*,b.provname,c.cityname from cust_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid where a.innerid=@innerid;";
 
             try
             {
