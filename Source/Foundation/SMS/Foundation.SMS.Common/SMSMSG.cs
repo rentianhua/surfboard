@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Text;
 using System.Web;
+using PostMsg_Net;
+using PostMsg_Net.common;
 
 namespace Cedar.Foundation.SMS.Common
 {
