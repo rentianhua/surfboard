@@ -296,7 +296,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select frientsid ,b.custname, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.realname, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
+            const string sql = @"select frientsid ,b.custname, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.brithday, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
                                 inner join cust_info as b on a.frientsid=b.innerid 
                                 where a.userid=@userid;";
             try
