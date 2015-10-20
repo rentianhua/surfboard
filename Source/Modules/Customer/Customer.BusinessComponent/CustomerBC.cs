@@ -32,15 +32,6 @@ namespace CCN.Modules.Customer.BusinessComponent
             
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        //[AuditTrailCallHandler("GetALlCustomers")]
-        public List<dynamic> GetALlCustomers()
-        {
-            return DataAccess.GetALlCustomers();
-        }
-
         #region 用户模块
 
         /// <summary>
@@ -91,6 +82,8 @@ namespace CCN.Modules.Customer.BusinessComponent
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
             userInfo.Createdtime = DateTime.Now;
+            userInfo.Totalpoints = 0;
+            userInfo.Level = 0;
 
             var innerid = Guid.NewGuid().ToString();
             userInfo.Innerid = innerid;
@@ -109,21 +102,22 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("cust_qrcode_yyyyMMddHHmmssfff"));
+                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
                     //保存图片到临时文件夹
-                    bitmap.Save(filename);
+                    bitmap.Save(filepath);
 
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
-                    var qrcodeKey = qinniu.PutFile(filename);
+                    var qrcodeKey = qinniu.PutFile(filepath, "", filename);
                     
                     //删除本地临时文件
-                    if (File.Exists(filename))
+                    if (File.Exists(filepath))
                     {
-                        File.Delete(filename);
+                        File.Delete(filepath);
                     }
                     
                     //上传成功更新会员二维码
@@ -175,15 +169,11 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = new JResult();
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
-                result.errcode = 403;
-                result.errmsg = "帐户名不能为空";
-                return result;
+                return JResult._jResult(403, "帐户名不能为空");
             }
             if (string.IsNullOrWhiteSpace(loginInfo.Password))
             {
-                result.errcode = 404;
-                result.errmsg = "密码不能为空";
-                return result;
+                return JResult._jResult(404, "密码不能为空");
             }
 
             var en = new Encryptor();
@@ -192,22 +182,36 @@ namespace CCN.Modules.Customer.BusinessComponent
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
             {
-                result.errcode = 401;
-                result.errmsg = "帐户名或登录密码不正确";
+                return JResult._jResult(401, "帐户名或登录密码不正确");
             }
-            else if (userInfo.Status == 2)
+            if (userInfo.Status == 2)
             {
-                result.errcode = 402;
-                result.errmsg = "帐户被冻结";
+                return JResult._jResult(402, "帐户被冻结");
             }
-            else
-            {
-                result.errcode = 0;
-                result.errmsg = userInfo;
-            }
-            return result;
+            return JResult._jResult(0, userInfo);
         }
         
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult CustLoginByOpenid(string openid)
+        {
+            var result = new JResult();
+            var userInfo = DataAccess.CustLoginByOpenid(openid);
+            if (userInfo == null)
+            {
+                return JResult._jResult(405, "会员不存在");
+            }
+            if (userInfo.Status == 2)
+            {
+                return JResult._jResult(402, "帐户被冻结");
+            }
+
+            return JResult._jResult(0, userInfo);
+        }
+
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -215,20 +219,31 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult GetCustById(string innerid)
         {
-            var list = DataAccess.GetCustById(innerid);
-            if (list == null)
+            var model = DataAccess.GetCustById(innerid);
+            if (model == null)
             {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
             {
                 errcode = 0,
-                errmsg = list
+                errmsg = model
             };
+        }
+
+        /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public JResult GetCustByMobile(string mobile)
+        {
+            var model = DataAccess.GetCustByMobile(mobile);
+            return JResult._jResult(model);
         }
 
         /// <summary>
@@ -248,10 +263,45 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
         {
+
+            var model = DataAccess.GetCustByMobile(mRetrievePassword.Mobile);
+            if (model == null)
+            {
+                return JResult._jResult(403, "账户不存在");
+            }
+
+            if (model.Status == 2)
+            {
+                return JResult._jResult(404, "账户被冻结");
+            }
+            
             //密码加密
             var en = new Encryptor();
             mRetrievePassword.NewPassword = en.EncryptMd5(mRetrievePassword.NewPassword);
             var result = DataAccess.UpdatePassword(mRetrievePassword);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 405,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCustInfo(CustModel model)
+        {
+            var newModel = new CustModel {
+                Innerid= model.Innerid,
+                Custname = model.Custname,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                Headportrait = model.Headportrait
+            };
+
+            var result = DataAccess.UpdateCustInfo(newModel);
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -259,6 +309,17 @@ namespace CCN.Modules.Customer.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCustStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateCustStatus(innerid, status);
+            return JResult._jResult(result);
+        }
         #endregion
 
         #region 用户认证
@@ -304,6 +365,10 @@ namespace CCN.Modules.Customer.BusinessComponent
                 };
             }
             model.Modifiedtime = DateTime.Now;
+            model.AuditPer = null;
+            model.AuditDesc = null;
+            model.AuditTime = null;
+            model.AuditResult = null;
             var result = DataAccess.UpdateAuthentication(model);
             return new JResult
             {
@@ -315,10 +380,10 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
         [AuditTrailCallHandler("CustomerBC.AuditAuthentication")]
-        public JResult AuditAuthentication(CustModel info)
+        public JResult AuditAuthentication(CustAuthenticationModel model)
         {
             var operid = ApplicationContext.Current.UserId;
             if (string.IsNullOrWhiteSpace(operid))
@@ -329,7 +394,13 @@ namespace CCN.Modules.Customer.BusinessComponent
                     errmsg = "操作人信息不存在"
                 };
             }
-            var result = DataAccess.AuditAuthentication(info, operid);
+
+            model.AuditPer = operid;
+            
+            //设置认证状态
+            model.AuditResult = model.AuditResult == 1 ? 2 : 3;
+
+            var result = DataAccess.AuditAuthentication(model);
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -351,7 +422,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
@@ -368,19 +439,19 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult GetCustAuthByCustid(string custid)
         {
-            var list = DataAccess.GetCustAuthByCustid(custid);
-            if (list == null)
+            var model = DataAccess.GetCustAuthByCustid(custid);
+            if (model == null)
             {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "没有数据"
+                    errmsg = ""
                 };
             }
             return new JResult
             {
                 errcode = 0,
-                errmsg = list
+                errmsg = model
             };
         }
 
@@ -625,19 +696,19 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             if (model == null)
             {
-                return _jResult(401, "参数不正确");
+                return JResult._jResult(401, "参数不正确");
             }
             if (string.IsNullOrWhiteSpace(model.Custid))
             {
-                return _jResult(402, "会员不存在");
+                return JResult._jResult(402, "会员不存在");
             }
             if (model.Point == 0)
             {
-                return _jResult(403, "积分不够");
+                return JResult._jResult(403, "积分不够");
             }
             if (string.IsNullOrWhiteSpace(model.Cardid))
             {
-                return _jResult(404, "礼券不存在");
+                return JResult._jResult(404, "礼券不存在");
             }
 
             //生成随机数
@@ -646,42 +717,92 @@ namespace CCN.Modules.Customer.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            bitmap.Save(filename);
+            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            bitmap.Save(filepath);
 
             //上传图片到七牛云
             var qinniu = new QiniuUtility();
-            model.QrCode = qinniu.PutFile(filename);
+            model.QrCode = qinniu.PutFile(filepath, "", filename);
 
             //删除本地临时文件
-            if (File.Exists(filename))
+            if (File.Exists(filepath))
             {
-                File.Delete(filename);
+                File.Delete(filepath);
             }
 
             //开始兑换
             model.Createdtime = DateTime.Now;
             var result = DataAccess.PointExchangeCoupon(model);
-            return _jResult(
+            return JResult._jResult(
                 result > 0 ? 0 : 400, 
                 result > 0 ? "兑换成功" : "兑换失败");
         }
 
         #endregion
 
+        #region 会员礼券
+
         /// <summary>
-        /// 
+        /// 获取获取礼券列表
         /// </summary>
-        /// <param name="errcode"></param>
-        /// <param name="errmsg"></param>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        private static JResult _jResult(int errcode, object errmsg)
+        public BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query)
         {
-            return new JResult
-            {
-                errcode = errcode,
-                errmsg = errmsg
-            };
+            return DataAccess.GetCouponPageList(query);
         }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult AddCoupon(CouponInfoModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Count = model.Maxcount;
+            model.Createdtime = DateTime.Now;
+            model.IsEnabled = 1;
+            var result = DataAccess.AddCoupon(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateCoupon(CouponInfoModel model)
+        {
+            model.Count = null;
+            model.Maxcount = null;
+            model.Createdtime = null;
+            model.Vtype = null;
+            model.Vstart = null;
+            model.Vend = null;
+            model.Value1 = null;
+            model.Value2 = null;
+            model.IsEnabled = null;
+            model.Modifiedtime = DateTime.Now;            
+
+            var result = DataAccess.UpdateCoupon(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCouponById(string innerid)
+        {
+            var model = DataAccess.GetCouponById(innerid);
+            return JResult._jResult(model);
+        }
+
+        #endregion
+
+        
     }
 }

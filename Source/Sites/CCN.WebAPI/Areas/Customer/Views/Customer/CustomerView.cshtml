@@ -1,0 +1,197 @@
+﻿
+@{
+    ViewBag.Title = "CustomerView";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<script type="text/javascript">
+
+    var innerid = "@ViewBag.innerid";
+
+        $(function() {
+            Init();
+        });
+
+        function Init() {
+
+            if (innerid === "") {
+                return;
+            }
+
+            $.get("/api/Customer/GetCustById?innerid=" + innerid, function (data) {
+                console.log(data);
+
+                var obj = data.errmsg;
+
+                $("#custname").html(obj.Custname);
+                
+                $("#mobile").html(obj.Mobile);
+                $("#telephone").html(obj.Telephone);
+                $("#realname").html(obj.Realname);
+                $("#status").html(obj.Status == 1 ? "正常" : "<font color='red'>冻结中</font>");
+
+                var headurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.Headportrait;
+                var qrcodeurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.QrCode;
+                $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
+                $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
+
+                $("#level").html(obj.Level);
+                $("#totalpoints").html(obj.Totalpoints);
+                $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+
+                //提交过认证信息
+                if (obj.AuthStatus != 0) {
+                    $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
+                        console.log(data);
+
+                    });
+                }
+                else {
+                    $("#authstatus").html(ChangAuthStatus(0));
+                }
+            });
+        }
+
+        //认证状态[0.未提交认证，1.提交认证(待审核)，2.审核通过，3.审核不过，4.重新填写(重新提交认证)]
+        function ChangAuthStatus(status) {
+
+            switch (status) {
+                case 0:
+                    return "未提交认证";
+                    break;
+                case 1:
+                    return "待审核";
+                    break;
+                case 2:
+                    return "审核通过";
+                    break;
+                case 3:
+                    return "审核不过";
+                    break;
+                case 4:
+                    return "重新填写";
+                    break;
+                default:
+
+            }
+        }
+</script>
+
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center;line-height:20px;">会员详情</div>
+    <table style="margin: 0 auto;" class="gridtable">
+        <tr>
+            <td colspan="4" style="background-color:#ccc">
+                会员基本信息
+            </td>
+        </tr>
+        <tr>
+            <td>
+                头像
+            </td>
+            <td id="headportrait"></td>
+            <td>
+                二维码
+            </td>
+            <td id="qrcode"></td>
+        </tr>
+        <tr>
+            <td>
+                会员昵称
+            </td>
+            <td id="custname"></td>
+            <td>
+                手机号
+            </td>
+            <td id="mobile"></td>
+        </tr>
+        <tr>
+            <td>
+                真实姓名
+            </td>
+            <td id="realname"></td>
+            <td>
+                固定电话
+            </td>
+            <td id="telephone"></td>
+        </tr>
+        <tr>
+            
+            <td>
+                当前等级
+            </td>
+            <td id="level"></td>
+            <td>
+                当前积分
+            </td>
+            <td id="totalpoints"></td>
+        </tr>
+        <tr>
+            <td>
+                会员状态
+            </td>
+            <td id="status"></td>
+            <td>
+                注册时间
+            </td>
+            <td id="createdtime"></td>
+        </tr>
+        <tr>
+            <td colspan="4" style="background-color:#ccc">
+                会员认证信息
+            </td>
+        </tr>
+        <tr>
+            <td>
+                认证状态
+            </td>
+            <td id="authstatus"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                身份证号码
+            </td>
+            <td id="Idcard"></td>
+            <td>
+                身份证上名称
+            </td>
+            <td id="Idname"></td>
+        </tr>
+        <tr>
+            <td>
+                手持身份证照片
+            </td>
+            <td id="Idpicture"></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                公司名称
+            </td>
+            <td id="Company"></td>
+            <td>公司法人</td>
+            <td id="Legalperson"></td>
+        </tr>
+        <tr>
+            <td>
+                组织机构代码
+            </td>
+            <td id="Organizationcode"></td>
+            <td>组织机构代码证照片</td>
+            <td id="Organizationpicture"></td>
+        </tr>
+
+        <tr>
+            <td colspan="4" style="text-align:center;">
+                <input type="button" value="审核" />
+                <input type="button" value="返回" onclick="self.location=document.referrer;" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+

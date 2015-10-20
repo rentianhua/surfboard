@@ -12,11 +12,6 @@ namespace CCN.Modules.Customer.Interface
     /// </summary>
     public interface ICustomerManagementService
     {
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        List<dynamic> GetALlCustomers();
-
         #region 用户模块
 
         /// <summary>
@@ -48,11 +43,25 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLogin(CustLoginInfo loginInfo);
 
         /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        JResult CustLoginByOpenid(string openid);
+
+        /// <summary>
         /// 获取会员详情
         /// </summary>
         /// <param name="innerid">会员id</param>
         /// <returns></returns>
         JResult GetCustById(string innerid);
+
+        /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        JResult GetCustByMobile(string mobile);
 
         /// <summary>
         /// 获取会员列表
@@ -67,6 +76,21 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="mRetrievePassword"></param>
         /// <returns></returns>
         JResult UpdatePassword(CustRetrievePassword mRetrievePassword);
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCustInfo(CustModel model);
+
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateCustStatus(string innerid, int status);
 
         #endregion
 
@@ -89,9 +113,9 @@ namespace CCN.Modules.Customer.Interface
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
-        JResult AuditAuthentication(CustModel info);
+        JResult AuditAuthentication(CustAuthenticationModel model);
 
 
         /// <summary>
@@ -210,6 +234,39 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="model">兑换相关信息</param>
         /// <returns></returns>
         JResult PointExchangeCoupon(CustPointExChangeCouponModel model);
+
+        #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query);
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult AddCoupon(CouponInfoModel model);
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult UpdateCoupon(CouponInfoModel model);
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        JResult GetCouponById(string innerid);
+
 
         #endregion
     }

@@ -101,7 +101,19 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLogin(loginInfo);
         }
-        
+
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        [Route("CustLoginByOpenid")]
+        [HttpPost]
+        public JResult CustLoginByOpenid(string openid)
+        {
+            return _custservice.CustLoginByOpenid(openid);
+        }
+
         /// <summary>
         /// 获取会员详情
         /// </summary>
@@ -137,13 +149,9 @@ namespace CCN.WebAPI.ApiControllers
         {
             if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
             {
-                return new JResult
-                {
-                    errcode = 400,
-                    errmsg = "手机号不能空"
-                };
+                return JResult._jResult(402, "手机号不能空");
             }
-            
+
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
 
             //检查验证码
@@ -151,10 +159,48 @@ namespace CCN.WebAPI.ApiControllers
             if (cresult.errcode != 0)
             {
                 //验证码错误
+                //400验证码错误
+                //401验证码过期
                 return cresult;
             }
 
             return _custservice.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCustInfo")]
+        [HttpPost]
+        public JResult UpdateCustInfo([FromBody]CustModel model)
+        {
+            return _custservice.UpdateCustInfo(model);
+        }
+
+        /// <summary>
+        /// 修改会员状态(冻结)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("FrozenCust")]
+        [HttpGet]
+        public JResult FrozenCust(string innerid)
+        {
+            return _custservice.UpdateCustStatus(innerid, 2);
+        }
+
+        /// <summary>
+        /// 修改会员状态(解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("ThawCust")]
+        [HttpGet]
+        public JResult ThawCust(string innerid)
+        {
+            return _custservice.UpdateCustStatus(innerid, 1);
         }
         #endregion
 
@@ -188,14 +234,14 @@ namespace CCN.WebAPI.ApiControllers
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
         [Route("AuditAuthentication")]
         [HttpPost]
         [ApplicationContextFilter]
-        public JResult AuditAuthentication([FromBody] CustModel info)
+        public JResult AuditAuthentication([FromBody] CustAuthenticationModel model)
         {
-            return _custservice.AuditAuthentication(info);
+            return _custservice.AuditAuthentication(model);
         }
 
         /// <summary>
@@ -221,6 +267,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.GetCustAuthByCustid(custid);
         }
+
         #endregion
 
         #region 会员标签
@@ -387,6 +434,59 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.PointExchangeCoupon(model);
         }
+
+        #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCouponPageList")]
+        [HttpPost]
+        public BasePageList<CouponInfoModel> GetCouponPageList([FromBody] CouponQueryModel query)
+        {
+            return _custservice.GetCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("AddCoupon")]
+        [HttpPost]
+        public JResult AddCoupon([FromBody] CouponInfoModel model)
+        {
+            return _custservice.AddCoupon(model);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("UpdateCoupon")]
+        [HttpPut]
+        public JResult UpdateCoupon([FromBody] CouponInfoModel model)
+        {
+            return _custservice.UpdateCoupon(model);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        [Route("GetCouponById")]
+        [HttpGet]
+        public JResult GetCouponById(string innerid)
+        {
+            return _custservice.GetCouponById(innerid);
+        }
+
 
         #endregion
     }

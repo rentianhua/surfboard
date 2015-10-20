@@ -22,16 +22,7 @@ namespace CCN.Modules.Customer.BusinessService
             : base(bc)
         {
         }
-
-        /// <summary>
-        /// </summary>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CustomerManagementService.GetALlCustomers")]
-        public List<dynamic> GetALlCustomers()
-        {
-            return BusinessComponent.GetALlCustomers();
-        }
-
+        
         #region 用户模块
 
         /// <summary>
@@ -78,6 +69,15 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.CustLogin(loginInfo);
         }
 
+        /// <summary>
+        /// 用户登录(openid登录)
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult CustLoginByOpenid(string openid)
+        {
+            return BusinessComponent.CustLoginByOpenid(openid);
+        }
 
         /// <summary>
         /// 获取会员详情
@@ -87,6 +87,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult GetCustById(string innerid)
         {
             return BusinessComponent.GetCustById(innerid);
+        }
+
+        /// <summary>
+        /// 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public JResult GetCustByMobile(string mobile)
+        {
+            return BusinessComponent.GetCustByMobile(mobile);
         }
 
         /// <summary>
@@ -107,6 +117,27 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
         {
             return BusinessComponent.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCustInfo(CustModel model)
+        {
+            return BusinessComponent.UpdateCustInfo(model);
+        }
+
+        /// <summary>
+        /// 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCustStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateCustStatus(innerid, status);
         }
 
         #endregion
@@ -136,15 +167,13 @@ namespace CCN.Modules.Customer.BusinessService
         /// <summary>
         /// 审核认证信息
         /// </summary>
-        /// <param name="info">会员相关信息</param>
+        /// <param name="model">会员相关信息</param>
         /// <returns></returns>
-        public JResult AuditAuthentication(CustModel info)
+        public JResult AuditAuthentication(CustAuthenticationModel model)
         {
-            return BusinessComponent.AuditAuthentication(info);
+            return BusinessComponent.AuditAuthentication(model);
         }
-
-
-
+        
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
@@ -305,6 +334,51 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
             return BusinessComponent.PointExchangeCoupon(model);
+        }
+
+
+        #endregion
+
+        #region 会员礼券
+
+        /// <summary>
+        /// 获取获取礼券列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query)
+        {
+            return BusinessComponent.GetCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 添加礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult AddCoupon(CouponInfoModel model)
+        {
+            return BusinessComponent.AddCoupon(model);
+        }
+
+        /// <summary>
+        /// 修改礼券
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateCoupon(CouponInfoModel model)
+        {
+            return BusinessComponent.UpdateCoupon(model);
+        }
+
+        /// <summary>
+        /// 获取礼券信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCouponById(string innerid)
+        {
+            return BusinessComponent.GetCouponById(innerid);
         }
 
 

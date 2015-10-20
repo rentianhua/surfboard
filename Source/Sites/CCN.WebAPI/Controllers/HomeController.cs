@@ -10,7 +10,7 @@ namespace CCN.WebAPI.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "苏州车信网";
 
             return View();
         }

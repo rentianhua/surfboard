@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
@@ -227,5 +232,44 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        /// <summary>
+        ///     上传文件
+        /// </summary>
+        /// <returns>图片主键</returns>
+        [HttpPost]
+        [Route("FileUpload")]
+        public string FileUpload()
+        {
+            var files = HttpContext.Current.Request.Files;
+            if (files.Count == 0)
+            {
+                return "0";
+            }
+
+            var filename = string.Concat("card_logo_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
+
+            try
+            {
+                files[0].SaveAs(filepath);
+
+                //上传图片到七牛云
+                var qinniu = new QiniuUtility();
+                var qrcodeKey = qinniu.PutFile(filepath, "", filename);
+
+                //删除本地临时文件
+                if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
+
+                return qrcodeKey;
+            }
+            catch (Exception ex)
+            {
+                return "-2";
+            }
+        }
     }
 }

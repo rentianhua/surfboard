@@ -414,9 +414,14 @@ namespace CCN.Modules.Car.BusinessEntity
         public DateTime? buytime { get; set; }
 
         /// <summary>
-        /// 收购价格(万元)
+        /// min收购价格(万元)
         /// </summary>
-        public decimal? buyprice { get; set; }
+        public decimal? minbuyprice { get; set; }
+
+        /// <summary>
+        /// max收购价格(万元)
+        /// </summary>
+        public decimal? maxbuyprice { get; set; }
 
         /// <summary>
         /// 成交价格（万元）
@@ -522,5 +527,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 会员ID
         /// </summary>
         public string custid { get; set; }
+
+        /// <summary>
+        /// 全局搜索字段
+        /// </summary>
+        public string SearchField { get; set; }
+
     }
 }
