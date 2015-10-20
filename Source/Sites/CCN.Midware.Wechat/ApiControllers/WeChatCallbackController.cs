@@ -24,9 +24,8 @@ namespace CCN.Midware.Wechat.Controllers
         {
             _service = ServiceLocatorFactory.GetServiceLocator().GetService<IWeChatManagementService>();
             _response = new HttpResponseMessage { Content = new StringContent("") };
-            var appid = ConfigurationManager.AppSettings["APPID"];
-            if (!AccessTokenRedisContainer.CheckRegistered(appid))
-                AccessTokenRedisContainer.Register(appid, ConfigurationManager.AppSettings["AppSecret"]);
+            if (!AccessTokenRedisContainer.CheckRegistered(_appid))
+                AccessTokenRedisContainer.Register(_appid, _appSecret);
         }
 
         [HttpGet]
