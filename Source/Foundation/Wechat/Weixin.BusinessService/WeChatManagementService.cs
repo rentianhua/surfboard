@@ -34,10 +34,11 @@ namespace Cedar.Foundation.WeChat.BusinessService
         /// </summary>
         /// <param name="appid"></param>
         /// <param name="openid"></param>
+        /// <param name="isUpdate"></param>
         /// <returns></returns>
-        public JResult GenerateWechatFriend(string appid, string openid)
+        public JResult GenerateWechatFriend(string appid, string openid, bool isUpdate = false)
         {
-            var result = BusinessComponent.GenerateWechatFriendByOpenid(appid, openid);
+            var result = BusinessComponent.GenerateWechatFriendByOpenid(appid, openid, isUpdate);
             return new JResult
             {
                 errcode = 0,

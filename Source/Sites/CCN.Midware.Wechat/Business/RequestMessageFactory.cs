@@ -80,11 +80,12 @@ namespace CCN.Midware.Wechat.Business
                             case "SUBSCRIBE"://订阅（关注）
                                 requestMessage = new RequestMessageEvent_Subscribe();
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
-                                var result = service.GenerateWechatFriend(requestMessage.ToUserName, requestMessage.FromUserName);
+                                service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
                                 CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢关注我们车信网！");
                                 break;
                             case "UNSUBSCRIBE"://取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();
+                                service.GenerateWechatFriend(requestMessage.ToUserName, requestMessage.FromUserName, true);
                                 break;
                             case "CLICK"://菜单点击
                                 requestMessage = new RequestMessageEvent_Click();
