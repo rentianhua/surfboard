@@ -21,8 +21,9 @@ namespace Cedar.Foundation.WeChat.Interface
         /// </summary>
         /// <param name="appid"></param>
         /// <param name="openid"></param>
+        /// <param name="isUpdate"></param>
         /// <returns></returns>
-        JResult GenerateWechatFriend(string appid, string openid);
+        JResult GenerateWechatFriend(string appid, string openid, bool isUpdate = false);
 
         /// <summary>
         ///     根据openid获取微信粉丝信息
