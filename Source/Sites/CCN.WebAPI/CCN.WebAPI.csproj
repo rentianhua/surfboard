@@ -63,6 +63,14 @@
     <Reference Include="CCN.Modules.Customer.Interface">
       <HintPath>..\..\..\Lib\CCN.Modules.Customer.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="CCN.Modules.DataAnalysis.BusinessService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\CCN.Modules.DataAnalysis.BusinessService.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.DataAnalysis.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\CCN.Modules.DataAnalysis.Interface.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Core">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.dll</HintPath>
     </Reference>
@@ -197,6 +205,7 @@
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
     <Compile Include="ApiControllers\CustRelationsController.cs" />
+    <Compile Include="ApiControllers\DataAnalysisController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
