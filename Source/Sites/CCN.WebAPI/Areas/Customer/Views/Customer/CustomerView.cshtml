@@ -35,10 +35,20 @@
                 $("#telephone").html(obj.Telephone);
                 $("#brithday").html(obj.Brithday);
                 $("#qq").html(obj.QQ);
-                $("#location").html(obj.ProvName + " " + obj.CityName + " " + obj.Area);
+                $("#location").html(
+                    (obj.ProvName == null ? "" : obj.ProvName) + " " +
+                    (obj.CityName == null ? "" : obj.CityName) + " " +
+                    (obj.Area == null ? "" : obj.Area));
                 $("#status").html(obj.Status == 1 ? "正常" : "<font color='red'>冻结中</font>");
 
-                var headurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.Headportrait;
+                var headurl = "";
+                if (obj.Headportrait != "") {
+                    headurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.Headportrait;
+                }
+                else {
+                    headurl = obj.Wechat == null ? "" : obj.Wechat.Photo;
+                }
+
                 var qrcodeurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.QrCode;
                 $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
                 $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
@@ -48,17 +58,34 @@
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
 
                 $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
-                obj.AuthStatus = 4;
+
                 //提交过认证信息
                 if (obj.AuthStatus != 0) {
                     $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
                         console.log(data);
-                        //if (data.errcode != 0) {
-                        //    alert("获取会员认证信息失败！");
-                        //    return;
-                        //}
+                        if (data.errcode != 0) {
+                            alert("获取会员认证信息失败！");
+                            return;
+                        }
                         var authObj = data.errmsg;
-                        
+
+                        $("#realname").html(authObj.Realname);
+                        $("#idcard").html(authObj.Idcard);
+                        $("#enterprisename").html(authObj.Enterprisename);
+                        $("#licencecode").html(authObj.Licencecode);
+                        $("#licencearea").html(authObj.Licencearea);
+                        $("#organizationcode").html(authObj.Organizationcode);
+                        $("#taxcode").html(authObj.Taxcode);
+
+                        var applytime = authObj.Modifiedtime == null ? authObj.Createdtime : authObj.Modifiedtime;
+                        $("#applytime").html(Dateformat(applytime, "yyyy-MM-dd HH:mm:ss"));
+
+                        $.each(authObj.Relevantpicture.split(","), function (key, val) {
+                            if ($.trim(val).length > 0) {
+                                $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='http://7xlopw.com2.z0.glb.qiniucdn.com/" + val + "' />");
+                            }                            
+                        });
+
                         //初始化块
                         switch (obj.AuthStatus) {
                             case 1:
@@ -69,6 +96,10 @@
                             case 2:
                             case 3:
                                 $("tr[name='auditresult']").removeClass("hide");
+
+                                $("#auditper").html(authObj.AuditPer);
+                                $("#audittime").html(Dateformat(authObj.AuditTime, "yyyy-MM-dd HH:mm:ss"));
+                                $("#auditdescview").html(authObj.AuditDesc);
                                 break;
                             default:
 
@@ -78,12 +109,26 @@
             });
 
             $("#btnAudit").click(function () {
-                confirm("确认审核", function () {
-                    $.post("/api/Customer/AuditAuthentication", json, function (data) {
-                        if (data.errcode == 0) {
 
-                        }
-                    });
+                var res = $("#auditresult").val();
+                if (res === "-1") {
+                    alert("请选择审核结果！");
+                    return;
+                }
+
+                var json = { Custid: innerid, AuditResult: res, AuditDesc: $("#auditdesc").val() };
+                if (!confirm("确认审核!")) {
+                    return;
+                }
+
+                $.post("/api/Customer/AuditAuthentication", json, function (data) {
+                    if (data.errcode == 0) {
+                        alert("操作成功");
+                        self.location = document.referrer;
+                    }
+                    else {
+                        alert("操作失败");
+                    }
                 });
             });
         }

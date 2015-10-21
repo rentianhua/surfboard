@@ -197,6 +197,30 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
+        #region 会员点赞
+
+        /// <summary>
+        /// 给会员点赞
+        /// </summary>
+        /// <param name="model">粉丝信息</param>
+        /// <returns></returns>
+        public JResult CustPraise(CustLaudator model)
+        {
+            return BusinessComponent.CustPraise(model);
+        }
+
+        /// <summary>
+        /// 根据会员id获取所有点赞人列表
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult GetLaudatorListByCustid(string custid)
+        {
+            return BusinessComponent.GetLaudatorListByCustid(custid);
+        }
+
+        #endregion
+
         #region 会员标签
 
 

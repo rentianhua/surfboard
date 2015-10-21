@@ -66,7 +66,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return new JResult
                 {
-                    errcode = 401,
+                    errcode = 402,
                     errmsg = "手机号被其他人注册"
                 };
             }
@@ -75,6 +75,23 @@ namespace CCN.Modules.Customer.BusinessComponent
             userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
                 userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
 
+            if (userInfo.Wechat != null && !string.IsNullOrWhiteSpace(userInfo.Wechat.Openid))
+            {
+                //检查openid是否被其他手机号注册
+                var m = DataAccess.CustInfoByOpenid(userInfo.Wechat.Openid);
+                if (m != null) //openid已绑定其他手机号（如果绑定自己手机号，CheckMobile接口就过滤掉）
+                {
+                    return JResult._jResult(403, "openid已绑定其他手机号");
+                }
+
+                //填充会员
+                var wechat = DataAccess.CustWechatByOpenid(userInfo.Wechat.Openid);
+                if (wechat != null)
+                {
+                    userInfo.Custname = wechat.Nickname;
+                }
+            }
+            
             //密码加密
             var en = new Encryptor();
             userInfo.Password = en.EncryptMd5(userInfo.Password);
@@ -87,13 +104,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             var innerid = Guid.NewGuid().ToString();
             userInfo.Innerid = innerid;
-
-            if (userInfo.Wechat != null)
-            {
-                userInfo.Wechat.Custid = userInfo.Innerid;
-                userInfo.Wechat.Createdtime = DateTime.Now;
-            }
-
+            
             var result = DataAccess.CustRegister(userInfo);
 
             #region 生成二维码
@@ -102,8 +113,8 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("cust_qrcode_yyyyMMddHHmmssfff"));
-                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
@@ -154,7 +165,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             return new JResult
             {
-                errcode = result > 0 ? 0 : 400,
+                errcode = result > 0 ? 0 : 404,
                 errmsg = result > 0 ? "注册成功" : "注册失败"
             };
         }
@@ -341,7 +352,17 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             model.Createdtime = DateTime.Now;
             model.Modifiedtime = null;
-            var result = DataAccess.AddAuthentication(model);
+
+            var result = 0;
+            var m = DataAccess.GetCustAuthByCustid(model.Custid);
+            if (m == null)
+            {
+                result = DataAccess.AddAuthentication(model);
+            }
+            else {
+                result = DataAccess.UpdateAuthentication(model);
+            }
+            
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -399,6 +420,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             
             //设置认证状态
             model.AuditResult = model.AuditResult == 1 ? 2 : 3;
+            model.AuditTime = DateTime.Now;
 
             var result = DataAccess.AuditAuthentication(model);
             return new JResult
@@ -453,6 +475,83 @@ namespace CCN.Modules.Customer.BusinessComponent
                 errcode = 0,
                 errmsg = model
             };
+        }
+
+        #endregion
+
+        #region 会员点赞
+
+        /// <summary>
+        /// 给会员点赞
+        /// </summary>
+        /// <param name="model">粉丝信息</param>
+        /// <returns></returns>
+        public JResult CustPraise(CustLaudator model)
+        {
+            if (model == null || string.IsNullOrWhiteSpace(model.Openid) || string.IsNullOrWhiteSpace(model.Tocustid))
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
+
+            var m = DataAccess.GetCustLaudatorByOpenid(model.Openid, model.Tocustid);
+            if (m != null) //说明点赞人信息已经存在
+            {
+                model.Innerid = m.Innerid; //
+                //说明之前的信息是匿名的,现在非匿名，需要更新信息 或者 修改了信息后赞人，库中数据也更新
+                //if (string.IsNullOrWhiteSpace(m.Nickname) && !m.Nickname.Equals(model.Nickname)) 
+                if (!m.Nickname.Equals(model.Nickname) && !string.IsNullOrWhiteSpace(m.Nickname))
+                {
+                    var uModel = new CustLaudator();
+                    uModel.Accountid = model.Accountid;
+                    uModel.Openid = model.Openid;
+                    uModel.Nickname = model.Nickname;
+                    uModel.Sex = model.Sex;
+                    uModel.Photo = model.Photo;
+                    uModel.Remarkname = model.Remarkname;
+                    uModel.Area = model.Area;
+                    uModel.Subscribe_time = model.Subscribe_time;
+                    uModel.Subscribe = model.Subscribe;
+                    uModel.Country = model.Country;
+                    uModel.Province = model.Province;
+                    uModel.City = model.City;
+                    DataAccess.UpdateLaudator(uModel);
+                }
+                if (m.IsPraise > 0)
+                {
+                    return JResult._jResult(402, "重复点赞");
+                }
+            }
+            else
+            {
+                model.Innerid = Guid.NewGuid().ToString();
+                model.Createdtime = DateTime.Now;
+                var addresult = DataAccess.AddLaudator(model);
+                if (addresult == 0)
+                {
+                    return JResult._jResult(403, "点赞人信息保存失败");
+                }
+            }
+
+            CustLaudatorRelation rel = new CustLaudatorRelation();
+            rel.Laudatorid = model.Innerid;
+            rel.Tocustid = model.Tocustid;
+            rel.Carid = model.Carid;
+            rel.Createdtime = DateTime.Now;
+            var res = DataAccess.SaveLaudatorRelation(rel);
+            return JResult._jResult(
+                res > 0 ? 0 : 400,
+                res > 0 ? "赞成功" : "赞失败");
+        }
+
+        /// <summary>
+        /// 根据会员id获取所有点赞人列表
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult GetLaudatorListByCustid(string custid)
+        {
+            var list = DataAccess.GetLaudatorListByCustid(custid);
+            return JResult._jResult(0, list);
         }
 
         #endregion
@@ -718,7 +817,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             //保存二维码图片到临时文件夹
             var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
             bitmap.Save(filepath);
 
             //上传图片到七牛云
