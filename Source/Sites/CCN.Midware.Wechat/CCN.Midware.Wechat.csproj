@@ -62,7 +62,7 @@
       <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.Interface.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common">
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Framework.Common.dll</HintPath>
+      <HintPath>..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
