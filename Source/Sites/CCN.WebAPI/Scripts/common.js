@@ -74,7 +74,7 @@ var setCookie = function() {
     var expireTime = new Date().getTime() + 1000 * 36000;
     var da = new Date();
     da.setTime(expireTime);
-    document.cookie = 'userid=tim;expires=' + da.toGMTString() + ';path=/';
+    document.cookie = 'userid=adminid;expires=' + da.toGMTString() + ';path=/';
     document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
 }
 

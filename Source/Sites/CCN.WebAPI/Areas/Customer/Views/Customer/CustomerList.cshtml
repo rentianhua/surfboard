@@ -48,12 +48,14 @@
         function FrozenCust(id) {
             $.get("/api/Customer/FrozenCust?innerid=" + id, function (result) {
                 alert(result.errmsg);
+                QueryList();
             });
         }
 
         function ThawCust(id) {
             $.get("/api/Customer/ThawCust?innerid=" + id, function (result) {
                 alert(result.errmsg);
+                QueryList();
             });
         }
 
