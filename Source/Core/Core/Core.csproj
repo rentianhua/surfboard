@@ -121,6 +121,11 @@
     <Compile Include="Data\IParameterCache.cs" />
     <Compile Include="Data\UpdateBehavior.cs" />
     <Compile Include="IoC\ServiceLocatableDictionary.cs" />
+    <Compile Include="Logging\ComponentTypeAttribute.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\ILoggerFactory.cs" />
+    <Compile Include="Logging\LoggerFactories.cs" />
+    <Compile Include="Logging\MessageLogEntryInterfaces.cs" />
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="IoC\Default\Assemblies.cs" />
     <Compile Include="IoC\Configuration\AssemblyConfigurationElement.cs" />
