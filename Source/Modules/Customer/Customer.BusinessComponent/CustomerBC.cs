@@ -75,7 +75,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
                 userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
 
-            if (userInfo.Wechat != null && !string.IsNullOrWhiteSpace(userInfo.Wechat.Openid))
+            if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))
             {
                 //检查openid是否被其他手机号注册
                 var m = DataAccess.CustInfoByOpenid(userInfo.Wechat.Openid);
@@ -91,10 +91,10 @@ namespace CCN.Modules.Customer.BusinessComponent
                     userInfo.Custname = wechat.Nickname;
                 }
             }
-            
+
             //密码加密
-            var en = new Encryptor();
-            userInfo.Password = en.EncryptMd5(userInfo.Password);
+            userInfo.Password = Encryptor.EncryptAes(userInfo.Password);
+
             userInfo.Type = 1; //这版只有车商
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
@@ -113,8 +113,8 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
+                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
@@ -187,8 +187,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return JResult._jResult(404, "密码不能为空");
             }
 
-            var en = new Encryptor();
-            loginInfo.Password = en.EncryptMd5(loginInfo.Password);
+            loginInfo.Password = Encryptor.EncryptAes(loginInfo.Password);
             
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
@@ -287,8 +286,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             
             //密码加密
-            var en = new Encryptor();
-            mRetrievePassword.NewPassword = en.EncryptMd5(mRetrievePassword.NewPassword);
+            mRetrievePassword.NewPassword = Encryptor.EncryptAes(mRetrievePassword.NewPassword);
             var result = DataAccess.UpdatePassword(mRetrievePassword);
             return new JResult
             {
@@ -360,6 +358,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 result = DataAccess.AddAuthentication(model);
             }
             else {
+                model.Innerid = m.Innerid;
                 result = DataAccess.UpdateAuthentication(model);
             }
             
@@ -816,8 +815,8 @@ namespace CCN.Modules.Customer.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
+            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
             bitmap.Save(filepath);
 
             //上传图片到七牛云

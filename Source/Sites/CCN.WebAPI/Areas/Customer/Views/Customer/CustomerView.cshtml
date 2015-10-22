@@ -54,7 +54,10 @@
                 $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
 
                 $("#level").html(obj.Level);
-                $("#totalpoints").html(obj.Totalpoints);
+                if (obj.TotalModel != undefined && obj.TotalModel != null) {
+                    $("#totalpoints").html(obj.TotalModel.Currpoint);
+                }
+                
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
 
                 $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
