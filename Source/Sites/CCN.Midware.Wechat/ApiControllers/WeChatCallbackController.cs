@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Midware.Wechat.Business;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.Interface;
 using Cedar.Framework.Common.BaseClasses;
 using Senparc.Weixin.MP;
@@ -32,10 +34,11 @@ namespace CCN.Midware.Wechat.Controllers
         [Route("DataDispatcher")]
         public HttpResponseMessage DataDispatcher(string signature, string timestamp, string nonce, string echostr)
         {
-            Console.WriteLine($"----------------get Start {DateTime.Now}----------------");
-            Console.WriteLine($"----------------{signature}_{timestamp}_{nonce}_{echostr}----------------");
-            Console.WriteLine($"----------------pass:{signature}----------------");
-            Console.WriteLine($"----------------{CheckSignature.Check(signature, timestamp, nonce, "weixin")}----------------");
+            //Console.WriteLine($"----------------get Start {DateTime.Now}----------------");
+            //Console.WriteLine($"----------------{signature}_{timestamp}_{nonce}_{echostr}----------------");
+            //Console.WriteLine($"----------------pass:{signature}----------------");
+            //Console.WriteLine($"----------------{CheckSignature.Check(signature, timestamp, nonce, "weixin")}----------------");
+            LoggerFactories.CreateLogger().Write($"{CheckSignature.Check(signature, timestamp, nonce, "weixin")}", TraceEventType.Information);
             _response.Content = CheckSignature.Check(signature, timestamp, nonce, !string.IsNullOrEmpty(ConfigurationManager.AppSettings["wechattoken"]) ?
                 ConfigurationManager.AppSettings["wechattoken"] : null)
                 ? new StringContent(echostr) : _response.Content;
@@ -50,10 +53,18 @@ namespace CCN.Midware.Wechat.Controllers
         public HttpResponseMessage DataDispatcher()
         {
             var stream = Request.Content.ReadAsStringAsync().Result;
-            Console.WriteLine($"----------------Start {DateTime.Now}----------------");
-            Console.WriteLine(stream);
-            Task.Run(() => RequestMessageFactory.GetRequestEntity(_service, stream));
-            Console.WriteLine($"----------------End {DateTime.Now}----------------");
+            try
+            {
+                Console.WriteLine($"----------------Start {DateTime.Now}----------------");
+                LoggerFactories.CreateLogger().Write(stream, TraceEventType.Information);
+                Console.WriteLine(stream);
+                Task.Run(() => RequestMessageFactory.GetRequestEntity(_service, stream));
+                Console.WriteLine($"----------------End {DateTime.Now}----------------");
+            }
+            catch (Exception e)
+            {
+                LoggerFactories.CreateLogger().Write(stream, TraceEventType.Error, e);
+            }
             return _response;
         }
 

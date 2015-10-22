@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Cedar.Core.Logging;
 using Microsoft.Owin;
 using Microsoft.Owin.Hosting;
 using Owin;
@@ -18,7 +19,9 @@ namespace CCN.Midware.Wechat
             string host = $"http://{ConfigurationManager.AppSettings["hostip"]}";
             using (WebApp.Start<Startup>(host))
             {
-                Console.WriteLine($"Service start and linsent on {host}...");
+                var hoststr = $"Service start and linsent on {host}...";
+                LoggerFactories.CreateLogger().Write(hoststr, TraceEventType.Information);
+                Console.WriteLine(hoststr);
                 if (!AccessTokenRedisContainer.CheckRegistered(_appid))
                     AccessTokenRedisContainer.Register(_appid, _appSecret);
                 Console.ReadLine();
