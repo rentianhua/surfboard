@@ -29,7 +29,7 @@ namespace CCN.Modules.Customer.DataAccess
 
         }
         
-        #region 用户模块
+        #region 会员基础
 
         /// <summary>
         /// 会员注册检查Email是否被注册
@@ -157,7 +157,34 @@ namespace CCN.Modules.Customer.DataAccess
 
             return custModel;
         }
-        
+
+        /// <summary>
+        /// 根据openid获取会员基本信息
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public CustModel CustInfoByOpenid(string openid)
+        {
+            const string sql = "select b.* from cust_wechat as a inner join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
+            var custModel = Helper.Query<CustModel>(sql, new { openid }).FirstOrDefault();
+            return custModel;
+        }
+
+        /// <summary>
+        /// 获取微信信息
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public CustWechat CustWechatByOpenid(string openid)
+        {
+            CustWechat wechat = Helper.Query<CustWechat>("select * from wechat_friend where openid=@openid;", new
+            {
+                openid
+            }).FirstOrDefault();
+
+            return wechat;
+        }
+
         /// <summary>
         /// 更新会员二维码
         /// </summary>
@@ -320,7 +347,7 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
-        #region 用户认证
+        #region 会员认证
 
         /// <summary>
         /// 用户添加认证信息
@@ -460,6 +487,127 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
 
+
+        #endregion
+
+        #region 会员点赞
+
+        /// <summary>
+        /// 保存点赞人信息
+        /// </summary>
+        /// <param name="model">点赞人信息</param>
+        /// <returns></returns>
+        public int AddLaudator(CustLaudator model)
+        {
+            const string sql = @"INSERT INTO cust_laudator
+                                (innerid, accountid, nickname, photo, openid, remarkname, area, sex, subscribe_time, subscribe, country, province, city, createdtime)
+                                VALUES (@innerid, @accountid, @nickname, @photo, @openid, @remarkname, @area, @sex, @subscribe_time, @subscribe, @country, @province, @city, @createdtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 用户修改认证信息
+        /// </summary>
+        /// <param name="model">认证信息</param>
+        /// <returns></returns>
+        public int UpdateLaudator(CustLaudator model)
+        {
+            var sqlStr = new StringBuilder("update cust_laudator set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where openid=@openid;");
+            
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存关系表
+        /// </summary>
+        /// <param name="relModel">关系对象</param>
+        /// <returns></returns>
+        public int SaveLaudatorRelation(CustLaudatorRelation relModel)
+        {
+            const string sql = "insert into cust_laudator_relation (laudatorid, tocustid, carid, createdtime) values (@laudatorid, @tocustid, @carid, @createdtime);";
+
+            try
+            {
+                var result = Helper.Execute(sql, relModel);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取点赞人信息 by openid
+        /// </summary>
+        /// <param name="openid">点赞者的openid</param>
+        /// <param name="tocustid">被点赞者的会员id</param>
+        /// <returns></returns>
+        public CustLaudator GetCustLaudatorByOpenid(string openid, string tocustid)
+        {
+            const string sql = "select a.*,(select count(1) from cust_laudator_relation where laudatorid=a.innerid and tocustid=@tocustid) as ispraise from cust_laudator as a where openid=@openid;";
+
+            try
+            {
+                var custModel = Helper.Query<CustLaudator>(sql, new { openid, tocustid }).FirstOrDefault();
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 根据会员id获取所有点赞人列表
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustLaudator> GetLaudatorListByCustid(string custid)
+        {
+            const string sql = "select a.createdtime,b.openid,b.nickname,b.photo from cust_laudator_relation as a inner join cust_laudator as b on a.laudatorid=b.innerid where a.tocustid=@tocustid;";
+
+            try
+            {
+                var list = Helper.Query<CustLaudator>(sql, new { tocustid = custid });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         #endregion
 

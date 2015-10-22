@@ -109,6 +109,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>用户信息</returns>
         [Route("CustLoginByOpenid")]
         [HttpPost]
+        [NonAction]
         public JResult CustLoginByOpenid(string openid)
         {
             return _custservice.CustLoginByOpenid(openid);
@@ -266,6 +267,34 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCustAuthByCustid(string custid)
         {
             return _custservice.GetCustAuthByCustid(custid);
+        }
+
+        #endregion
+
+        #region 会员点赞
+
+        /// <summary>
+        /// 给会员点赞
+        /// </summary>
+        /// <param name="model">粉丝信息</param>
+        /// <returns></returns>
+        [Route("CustPraise")]
+        [HttpPost]
+        public JResult CustPraise([FromBody] CustLaudator model)
+        {
+            return _custservice.CustPraise(model);
+        }
+
+        /// <summary>
+        /// 根据会员id获取所有点赞人列表
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        [Route("GetLaudatorListByCustid")]
+        [HttpGet]
+        public JResult GetLaudatorListByCustid(string custid)
+        {
+            return _custservice.GetLaudatorListByCustid(custid);
         }
 
         #endregion

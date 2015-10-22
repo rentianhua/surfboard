@@ -280,7 +280,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 
         /// </summary>
-        public DateTime? Subscribe_time { get; set; }
+        public string Subscribe_time { get; set; }
 
         /// <summary>
         /// 

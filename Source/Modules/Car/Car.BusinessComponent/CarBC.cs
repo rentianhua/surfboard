@@ -9,6 +9,7 @@ using Cedar.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Car.BusinessComponent
 {
@@ -121,6 +122,19 @@ namespace CCN.Modules.Car.BusinessComponent
                 jResult.errmsg = "没有车辆评估信息";
                 return jResult;
             }
+
+            try
+            {
+                JObject jobj = JObject.Parse(result);
+                result = Math.Round(Convert.ToDouble(jobj["eval_price"]), 2).ToString();
+            }
+            catch (Exception)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+            
 
             //保存评估信息
             Task.Factory.StartNew(() =>

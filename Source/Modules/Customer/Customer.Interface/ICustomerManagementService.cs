@@ -135,6 +135,24 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
+        #region 会员点赞
+
+        /// <summary>
+        /// 给会员点赞
+        /// </summary>
+        /// <param name="model">粉丝信息</param>
+        /// <returns></returns>
+        JResult CustPraise(CustLaudator model);
+
+        /// <summary>
+        /// 根据会员id获取所有点赞人列表
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        JResult GetLaudatorListByCustid(string custid);
+
+        #endregion
+
         #region 会员标签
 
 
