@@ -138,7 +138,7 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         /// <summary>
-        /// 判断验证码
+        /// 获取验证码
         /// </summary>
         /// <param name="target"></param>
         /// <param name="vcode">验证码</param>
