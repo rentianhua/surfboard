@@ -130,6 +130,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 用户微信信息
         /// </summary>
         public CustWechat Wechat { get; set; }
+
+        /// <summary>
+        /// 会员的统计信息
+        /// </summary>
+        public CustTotalModel TotalModel { get; set; }
     }
 
     /// <summary>

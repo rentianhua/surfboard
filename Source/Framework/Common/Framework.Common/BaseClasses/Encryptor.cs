@@ -12,7 +12,7 @@ namespace Cedar.Framework.Common.BaseClasses
     /// {Design BY:Tim, Use:Tim, For 加密解密算法,DES,MD5,SHA1,RSA,Rijndael,... }
     public class Encryptor
     {
-        private const string MKeyIv = "Chinaccn"; /* 默认密钥,长度必须是8位 */
+        private const string MKeyIv = "Chinaccn2015"; /* 默认密钥,长度必须是8位 */
         private static readonly byte[] Keys = {0x12, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF}; /* 默认密钥向量 */
 
         #region SHA1 加密(不可逆算法) ;
@@ -276,6 +276,62 @@ namespace Cedar.Framework.Common.BaseClasses
             {
                 return decryptString;
             }
+        }
+
+        #endregion
+
+        #region AES 加密
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plainStr"></param>
+        /// <returns></returns>
+        public static string EncryptAes(string plainStr)
+        {
+            var md5Password = GenerateHash(MKeyIv);
+            var md5Vi = GenerateHash(MKeyIv + md5Password).Substring(0, 16);
+
+            var bKey = Encoding.UTF8.GetBytes(md5Password);
+            var bIv = Encoding.UTF8.GetBytes(md5Vi);
+            var byteArray = Encoding.UTF8.GetBytes(plainStr);
+            
+            string encrypt = null;
+            var aes = Rijndael.Create();
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            aes.KeySize = 256;
+            try
+            {
+                using (var mStream = new MemoryStream())
+                {
+                    using (var cStream = new CryptoStream(mStream, aes.CreateEncryptor(bKey, bIv), CryptoStreamMode.Write))
+                    {
+                        cStream.Write(byteArray, 0, byteArray.Length);
+                        cStream.FlushFinalBlock();
+                        encrypt = Convert.ToBase64String(mStream.ToArray());
+                    }
+                }
+            }
+            catch
+            {
+                // ignored
+            }
+            aes.Clear();
+
+            return encrypt;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePathAndName"></param>
+        /// <returns></returns>
+        public static string GenerateHash(string filePathAndName)
+        {
+            var hashData = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(filePathAndName)); // MD5
+
+            return hashData.Select(b => b.ToString("X").ToLower()).Aggregate("", (current, hexValue) => current + ((hexValue.Length == 1 ? "0" : "") + hexValue));
         }
 
         #endregion

@@ -219,6 +219,11 @@ namespace CCN.Modules.Customer.DataAccess
                     {
                         custid = innerid
                     }).FirstOrDefault();
+
+                    custModel.TotalModel =
+                        Helper.Query<CustTotalModel>(
+                            "select innerid, custid, currpoint, currpouponnum from cust_total_info where custid=@custid;",
+                            new {custid = innerid}).FirstOrDefault();
                 }
                 return custModel;
 
