@@ -247,8 +247,8 @@ namespace CCN.WebAPI.ApiControllers
                 return "0";
             }
 
-            var filename = string.Concat("card_logo_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            var filename = string.Concat("card_logo_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
 
             try
             {
