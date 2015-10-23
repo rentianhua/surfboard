@@ -1,17 +1,14 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
-using System.Runtime.Serialization.Formatters;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
 using Cedar.AuditTrail.Interception;
 using Cedar.Core.ApplicationContexts;
-using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -29,7 +26,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public CustomerBC(CustomerDA da)
             : base(da)
         {
-            
+
         }
 
         #region 用户模块
@@ -61,6 +58,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult CustRegister(CustModel userInfo)
         {
+            //LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             var mYan = DataAccess.CheckMobile(userInfo.Mobile);
             if (mYan > 0)
             {
@@ -75,7 +73,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
                 userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
 
-            if (userInfo.Wechat != null && !string.IsNullOrWhiteSpace(userInfo.Wechat.Openid))
+            if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))
             {
                 //检查openid是否被其他手机号注册
                 var m = DataAccess.CustInfoByOpenid(userInfo.Wechat.Openid);
@@ -91,10 +89,10 @@ namespace CCN.Modules.Customer.BusinessComponent
                     userInfo.Custname = wechat.Nickname;
                 }
             }
-            
+
             //密码加密
-            var en = new Encryptor();
-            userInfo.Password = en.EncryptMd5(userInfo.Password);
+            userInfo.Password = Encryptor.EncryptAes(userInfo.Password);
+
             userInfo.Type = 1; //这版只有车商
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
@@ -104,17 +102,17 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             var innerid = Guid.NewGuid().ToString();
             userInfo.Innerid = innerid;
-            
+
             var result = DataAccess.CustRegister(userInfo);
 
             #region 生成二维码
-            
+
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
+                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
                     var website = ConfigHelper.GetAppSettings("website");
                     var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
 
@@ -124,13 +122,13 @@ namespace CCN.Modules.Customer.BusinessComponent
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
                     var qrcodeKey = qinniu.PutFile(filepath, "", filename);
-                    
+
                     //删除本地临时文件
                     if (File.Exists(filepath))
                     {
                         File.Delete(filepath);
                     }
-                    
+
                     //上传成功更新会员二维码
                     if (!string.IsNullOrWhiteSpace(qrcodeKey))
                     {
@@ -140,6 +138,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 catch (Exception ex)
                 {
                     // ignored
+                    LoggerFactories.CreateLogger().Write("CustRegister接口异常", TraceEventType.Error, ex);
                 }
             });
             #endregion
@@ -177,7 +176,6 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
-            var result = new JResult();
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 return JResult._jResult(403, "帐户名不能为空");
@@ -187,9 +185,8 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return JResult._jResult(404, "密码不能为空");
             }
 
-            var en = new Encryptor();
-            loginInfo.Password = en.EncryptMd5(loginInfo.Password);
-            
+            loginInfo.Password = Encryptor.EncryptAes(loginInfo.Password);
+
             var userInfo = DataAccess.CustLogin(loginInfo);
             if (userInfo == null)
             {
@@ -201,7 +198,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             return JResult._jResult(0, userInfo);
         }
-        
+
         /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
@@ -209,7 +206,6 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLoginByOpenid(string openid)
         {
-            var result = new JResult();
             var userInfo = DataAccess.CustLoginByOpenid(openid);
             if (userInfo == null)
             {
@@ -285,10 +281,9 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(404, "账户被冻结");
             }
-            
+
             //密码加密
-            var en = new Encryptor();
-            mRetrievePassword.NewPassword = en.EncryptMd5(mRetrievePassword.NewPassword);
+            mRetrievePassword.NewPassword = Encryptor.EncryptAes(mRetrievePassword.NewPassword);
             var result = DataAccess.UpdatePassword(mRetrievePassword);
             return new JResult
             {
@@ -304,8 +299,9 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCustInfo(CustModel model)
         {
-            var newModel = new CustModel {
-                Innerid= model.Innerid,
+            var newModel = new CustModel
+            {
+                Innerid = model.Innerid,
                 Custname = model.Custname,
                 Telephone = model.Telephone,
                 Email = model.Email,
@@ -353,16 +349,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             model.Createdtime = DateTime.Now;
             model.Modifiedtime = null;
 
-            var result = 0;
+            int result;
             var m = DataAccess.GetCustAuthByCustid(model.Custid);
             if (m == null)
             {
                 result = DataAccess.AddAuthentication(model);
             }
-            else {
+            else
+            {
+                model.Innerid = m.Innerid;
                 result = DataAccess.UpdateAuthentication(model);
             }
-            
+
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -417,7 +415,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
 
             model.AuditPer = operid;
-            
+
             //设置认证状态
             model.AuditResult = model.AuditResult == 1 ? 2 : 3;
             model.AuditTime = DateTime.Now;
@@ -488,9 +486,9 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult CustPraise(CustLaudator model)
         {
-            if (model == null || string.IsNullOrWhiteSpace(model.Openid) || string.IsNullOrWhiteSpace(model.Tocustid))
+            if (string.IsNullOrWhiteSpace(model?.Openid) || string.IsNullOrWhiteSpace(model.Tocustid))
             {
-                return JResult._jResult(401,"参数不完整");
+                return JResult._jResult(401, "参数不完整");
             }
 
             var m = DataAccess.GetCustLaudatorByOpenid(model.Openid, model.Tocustid);
@@ -501,19 +499,21 @@ namespace CCN.Modules.Customer.BusinessComponent
                 //if (string.IsNullOrWhiteSpace(m.Nickname) && !m.Nickname.Equals(model.Nickname)) 
                 if (!m.Nickname.Equals(model.Nickname) && !string.IsNullOrWhiteSpace(m.Nickname))
                 {
-                    var uModel = new CustLaudator();
-                    uModel.Accountid = model.Accountid;
-                    uModel.Openid = model.Openid;
-                    uModel.Nickname = model.Nickname;
-                    uModel.Sex = model.Sex;
-                    uModel.Photo = model.Photo;
-                    uModel.Remarkname = model.Remarkname;
-                    uModel.Area = model.Area;
-                    uModel.Subscribe_time = model.Subscribe_time;
-                    uModel.Subscribe = model.Subscribe;
-                    uModel.Country = model.Country;
-                    uModel.Province = model.Province;
-                    uModel.City = model.City;
+                    var uModel = new CustLaudator
+                    {
+                        Accountid = model.Accountid,
+                        Openid = model.Openid,
+                        Nickname = model.Nickname,
+                        Sex = model.Sex,
+                        Photo = model.Photo,
+                        Remarkname = model.Remarkname,
+                        Area = model.Area,
+                        Subscribe_time = model.Subscribe_time,
+                        Subscribe = model.Subscribe,
+                        Country = model.Country,
+                        Province = model.Province,
+                        City = model.City
+                    };
                     DataAccess.UpdateLaudator(uModel);
                 }
                 if (m.IsPraise > 0)
@@ -532,11 +532,13 @@ namespace CCN.Modules.Customer.BusinessComponent
                 }
             }
 
-            CustLaudatorRelation rel = new CustLaudatorRelation();
-            rel.Laudatorid = model.Innerid;
-            rel.Tocustid = model.Tocustid;
-            rel.Carid = model.Carid;
-            rel.Createdtime = DateTime.Now;
+            var rel = new CustLaudatorRelation
+            {
+                Laudatorid = model.Innerid,
+                Tocustid = model.Tocustid,
+                Carid = model.Carid,
+                Createdtime = DateTime.Now
+            };
             var res = DataAccess.SaveLaudatorRelation(rel);
             return JResult._jResult(
                 res > 0 ? 0 : 400,
@@ -570,7 +572,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = DataAccess.AddTag(model);
             return new JResult
             {
-                errcode = result > 0 ?  0 : 400,
+                errcode = result > 0 ? 0 : 400,
                 errmsg = result > 0 ? "添加成功" : "添加失败"
             };
         }
@@ -816,8 +818,8 @@ namespace CCN.Modules.Customer.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
+            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
             bitmap.Save(filepath);
 
             //上传图片到七牛云
@@ -834,7 +836,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             model.Createdtime = DateTime.Now;
             var result = DataAccess.PointExchangeCoupon(model);
             return JResult._jResult(
-                result > 0 ? 0 : 400, 
+                result > 0 ? 0 : 400,
                 result > 0 ? "兑换成功" : "兑换失败");
         }
 
@@ -883,7 +885,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             model.Value1 = null;
             model.Value2 = null;
             model.IsEnabled = null;
-            model.Modifiedtime = DateTime.Now;            
+            model.Modifiedtime = DateTime.Now;
 
             var result = DataAccess.UpdateCoupon(model);
             return JResult._jResult(result);
@@ -902,6 +904,6 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
-        
+
     }
 }

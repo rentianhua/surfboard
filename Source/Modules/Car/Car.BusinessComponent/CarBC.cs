@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
@@ -174,6 +175,10 @@ namespace CCN.Modules.Car.BusinessComponent
             model.createdtime = DateTime.Now;
             model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
+            if (result > 0)
+            {
+                DataAccess.AddShareInfo(model.Innerid);
+            }
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -242,8 +247,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = result > 0 ? "操作成功" : "操作失败"
             };
         }
-
-
+        
         /// <summary>
         /// 删除车辆(物理删除，暂不用)
         /// </summary>
@@ -367,6 +371,18 @@ namespace CCN.Modules.Car.BusinessComponent
             return DataAccess.KeepCar(id);
         }
 
+        /// <summary>
+        /// 获取车辆 分享/查看次数
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetCarShareInfo(string carid)
+        {
+            var carInfo = DataAccess.GetCarShareInfo(carid);
+            return carInfo == null 
+                ? JResult._jResult(400, "") 
+                : JResult._jResult(0, carInfo);
+        }
         #endregion
 
         #region 车辆图片
