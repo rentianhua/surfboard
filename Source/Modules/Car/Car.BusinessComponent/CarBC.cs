@@ -177,7 +177,7 @@ namespace CCN.Modules.Car.BusinessComponent
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
-                errmsg = model.Innerid
+                errmsg = ""
             };
         }
 
