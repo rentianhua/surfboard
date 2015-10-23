@@ -74,6 +74,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalysis.DataAccess", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalysis.Interface", "Source\Modules\DataAnalysis\DataAnalysis.Interface\DataAnalysis.Interface.csproj", "{6D08832F-7DF7-435D-B992-B63A9965B74F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPITest", "WebAPITest", "{2F242995-FF7B-4B57-91C8-DC0EE35C3A53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPITest", "UnitTest\WebAPI\WebAPITest\WebAPITest.csproj", "{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -188,6 +192,10 @@ Global
 		{6D08832F-7DF7-435D-B992-B63A9965B74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D08832F-7DF7-435D-B992-B63A9965B74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D08832F-7DF7-435D-B992-B63A9965B74F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -225,6 +233,7 @@ Global
 		{6AEAD942-6E96-4E96-8018-900F48043FED} = {525DFF88-8541-43BB-A93D-7F7D544BD33F}
 		{31D9E79E-797C-4A07-A3C5-9562AFC650BE} = {525DFF88-8541-43BB-A93D-7F7D544BD33F}
 		{6D08832F-7DF7-435D-B992-B63A9965B74F} = {525DFF88-8541-43BB-A93D-7F7D544BD33F}
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F} = {2F242995-FF7B-4B57-91C8-DC0EE35C3A53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.PolicyInjection.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45

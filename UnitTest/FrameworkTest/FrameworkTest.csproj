@@ -128,10 +128,6 @@
       <HintPath>..\..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Senparc.Weixin, Version=4.3.2.28986, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Senparc.Weixin.dll</HintPath>
@@ -175,7 +171,6 @@
     <Compile Include="Core\SettingSourceUnitTest.cs" />
     <Compile Include="DataBase\RedisWrapperUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
-    <Compile Include="Logging\LoggingUnitTest.cs" />
     <Compile Include="TestService\ITestService.cs" />
     <Compile Include="TestService\Models.cs" />
     <Compile Include="TestService\TestService.cs" />
@@ -196,9 +191,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ConfigFiles\connectionStrings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="ConfigFiles\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="ConfigFiles\serviceLocation.config">
