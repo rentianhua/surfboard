@@ -390,12 +390,12 @@ namespace CCN.Modules.Car.DataAccess
                 //累计分享次数
                 var sql = "update car_share set sharecount=sharecount+1 where carid=@carid;";
                 var resCount = Helper.Execute(sql, new {carid = id});
-                if (resCount == 0)
-                {
-                    //表示没有子表数据
-                    sql = "INSERT INTO `car_share`(`innerid`,`carid`,`sharecount`,`seecount`,`praisecount`,`commentcount`) VALUES(uuid(), @carid, 1, 0, 0, 0);";
-                    Helper.Execute(sql, new { carid = id });
-                }
+                //if (resCount == 0)
+                //{
+                //    //表示没有子表数据
+                //    sql = "INSERT INTO `car_share`(`innerid`,`carid`,`sharecount`,`seecount`,`praisecount`,`commentcount`) VALUES(uuid(), @carid, 1, 0, 0, 0);";
+                //    Helper.Execute(sql, new { carid = id });
+                //}
             }
             catch (Exception ex)
             {
@@ -460,6 +460,30 @@ namespace CCN.Modules.Car.DataAccess
                 return 0;
             }
             return 1;
+        }
+
+        /// <summary>
+        /// 初始化车辆 分享/查看次数
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public int AddShareInfo(string carid)
+        {
+            const string sql = "insert into car_share (innerid, carid, sharecount, seecount, praisecount, commentcount) values (uuid(), @carid, 0, 0, 0, 0);";
+            var result = Helper.Execute(sql, new { carid });
+            return result;
+        }
+
+        /// <summary>
+        /// 获取车辆 分享/查看次数
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public CarShareModel GetCarShareInfo(string carid)
+        {
+            const string sql = @"select innerid, carid, sharecount, seecount, commentcount from car_share where carid=@carid;";
+            var result = Helper.Query<CarShareModel>(sql, new { carid }).FirstOrDefault();
+            return result;
         }
 
         #region 车辆图片

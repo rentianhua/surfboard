@@ -85,13 +85,6 @@ Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
 Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
 Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
 Y:\GitHub\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
-E:\tim\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
-E:\tim\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
-E:\tim\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
-E:\tim\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
-E:\tim\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
-E:\tim\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
-E:\tim\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
 D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
 D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
 D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll

@@ -238,6 +238,17 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.CommentCar(id, content);
         }
 
+        /// <summary>
+        /// 获取车辆 分享/查看次数
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        [Route("GetCarShareInfo")]
+        [HttpGet]
+        public JResult GetCarShareInfo(string carid)
+        {
+            return _baseservice.GetCarShareInfo(carid);
+        }
         #endregion
 
         #region 车辆图片
