@@ -9,6 +9,8 @@ using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using CCN.Modules.Rewards.BusinessEntity;
+using CCN.Modules.Rewards.Interface;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
@@ -176,25 +178,28 @@ namespace CCN.WebAPI.ApiControllers
 
             #region 注册送积分
 
-            Task.Factory.StartNew(() =>
+            if (result.errcode == 0)
             {
-                var custService = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-
-                //获取会员id
-                var custid = ApplicationContext.Current.UserId;
-
-                custService.ChangePoint(new CustPointModel()
+                Task.Factory.StartNew(() =>
                 {
-                    Custid = custid,
-                    Createdtime = DateTime.Now,
-                    Type = 1,
-                    Innerid = Guid.NewGuid().ToString(),
-                    Point = 10,
-                    Remark = "",
-                    Sourceid = 1,
-                    Validtime = null
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
+                    //获取会员id
+                    var custid = ApplicationContext.Current.UserId;
+
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = custid,
+                        Createdtime = DateTime.Now,
+                        Type = 1,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10,
+                        Remark = "",
+                        Sourceid = 1,
+                        Validtime = null
+                    });
                 });
-            });
+            }
 
             #endregion
 
