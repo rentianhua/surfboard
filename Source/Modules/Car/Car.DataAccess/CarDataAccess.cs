@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Car.BusinessEntity;
@@ -159,7 +160,7 @@ namespace CCN.Modules.Car.DataAccess
                 a.post_time,
                 a.audit_time,
                 a.sold_time,
-                a.keep_time,
+                a.closecasetime,
                 a.eval_price,
                 a.next_year_eval_price,
                 pr.provname,
@@ -198,7 +199,7 @@ namespace CCN.Modules.Car.DataAccess
                 sellreason, a.masterdesc, a.dealdesc, a.deletedesc, a.estimateprice, 
                 a.`status`, a.createdtime, a.modifiedtime, 
                 a.seller_type,
-                a.post_time, a.audit_time, a.sold_time, a.keep_time, 
+                a.post_time, a.audit_time, a.sold_time, a.closecasetime, 
                 a.eval_price, a.next_year_eval_price, 
                 pr.provname,
                 ct.cityname,
@@ -229,9 +230,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                                (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`keep_time`,`eval_price`,`next_year_eval_price`)
+                                (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`)
                                 VALUES
-                                (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@keep_time,@eval_price,@next_year_eval_price);";
+                                (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price);";
             int result;
             try
             {
@@ -314,7 +315,7 @@ namespace CCN.Modules.Car.DataAccess
         {
             try
             {
-                const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc,sold_time=@sold_time where `innerid`=@innerid;";
+                const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc,sold_time=@sold_time,closecasetime=@closecasetime where `innerid`=@innerid;";
                 Helper.Execute(sql, new { innerid = model.Innerid,model.dealprice, model.dealdesc });
             }
             catch (Exception ex)
@@ -351,8 +352,8 @@ namespace CCN.Modules.Car.DataAccess
         /// <returns></returns>
         public int GetCarSales(string modelid)
         {
-            const string sql1 = "select count(1) from car_info where model_id=@modelid and `status`=2;";
-            const string sql2 = "select count(1) from car_info_bak where model_id=@modelid;";
+            const string sql1 = "select count(1) from car_info where model_id=@modelid and `status`=2 and date_format(sold_time,'%Y-%m')=date_format(now(),'%Y-%m');";
+            const string sql2 = "select count(1) from car_info_bak where model_id=@modelid and date_format(modifiedtime,'%Y-%m')=date_format(now(),'%Y-%m');";
             var num1 = Helper.ExecuteScalar<int>(sql1, new {modelid});
             var num2 = Helper.ExecuteScalar<int>(sql2, new {modelid});
             return num1 + num2;
@@ -542,17 +543,38 @@ namespace CCN.Modules.Car.DataAccess
         [AuditTrailCallHandler("CarDataAccess.DeleteCarPicture")]
         public int DeleteCarPicture(string innerid)
         {
-            const string sql = @"delete from car_picture where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_pictureid = innerid
+                };
 
-            try
-            {
-                Helper.Execute(sql, new {innerid});
-                return 1;
+                var args = new DynamicParameters(obj);
+                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                using (var result = conn.QueryMultiple("ccnsp_deletepicture", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    //var data = result.Read<T>();
+                }
+                
+                return args.Get<int>("p_values");
             }
-            catch (Exception ex)
-            {
-                return 0;
-            }
+
+
+            //const string sql = @"delete from car_picture where innerid=@innerid;";
+
+            //try
+            //{
+            //    Helper.Execute(sql, new {innerid});
+            //    return 1;
+            //}
+            //catch (Exception ex)
+            //{
+            //    return 0;
+            //}
         }
 
         /// <summary>
@@ -681,30 +703,7 @@ namespace CCN.Modules.Car.DataAccess
             }
             return 1;
         }
-
-        /// <summary>
-        /// 车辆归档
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int KeepCar(string id)
-        {
-            const string sql = @"UPDATE `car_info` SET `keep_time`=@keep_time WHERE `innerid`=@innerid;";
-            try
-            {
-                var result = Helper.Execute(sql, new { keep_time = DateTime.Now, innerid = id });
-                if (result == 0)
-                {
-                    return 0;
-                }
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-            return 1;
-        }
-
+        
         #endregion
 
         #endregion

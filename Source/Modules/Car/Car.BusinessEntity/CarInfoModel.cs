@@ -178,14 +178,14 @@ namespace CCN.Modules.Car.BusinessEntity
         public DateTime? audit_time { get; set; }
 
         /// <summary>
-        /// 销售时间
+        /// 成交时间
         /// </summary>
         public DateTime? sold_time { get; set; }
 
         /// <summary>
-        /// 存档时间
+        /// 结案时间[线上操作时间]
         /// </summary>
-        public DateTime? keep_time { get; set; }
+        public DateTime? closecasetime { get; set; }
 
         /// <summary>
         /// 车源估值情况
@@ -509,14 +509,14 @@ namespace CCN.Modules.Car.BusinessEntity
         public DateTime? audit_time { get; set; }
 
         /// <summary>
-        /// 销售时间
+        /// 成交时间
         /// </summary>
         public DateTime? sold_time { get; set; }
 
         /// <summary>
-        /// 存档时间
+        /// 结案时间[线上操作时间]
         /// </summary>
-        public DateTime? keep_time { get; set; }
+        public DateTime? closecasetime { get; set; }
 
         /// <summary>
         /// 商业险到期时间
