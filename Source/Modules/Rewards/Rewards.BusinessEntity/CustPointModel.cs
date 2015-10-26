@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cedar.Framework.Common.BaseClasses;
 
-namespace CCN.Modules.Customer.BusinessEntity
+namespace CCN.Modules.Rewards.BusinessEntity
 {
     /// <summary>
     /// 积分model

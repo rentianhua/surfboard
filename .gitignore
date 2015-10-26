@@ -195,7 +195,4 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.op
 
-Lib/*.pdb
-Lib/*.xml
-Lib/*.txt
-Lib/*.dll.config
+Lib/*.*

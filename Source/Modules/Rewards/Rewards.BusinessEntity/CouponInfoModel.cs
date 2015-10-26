@@ -1,7 +1,7 @@
 ﻿using System;
 using Cedar.Framework.Common.BaseClasses;
 
-namespace CCN.Modules.Customer.BusinessEntity
+namespace CCN.Modules.Rewards.BusinessEntity
 {
     /// <summary>
     /// 礼券model
