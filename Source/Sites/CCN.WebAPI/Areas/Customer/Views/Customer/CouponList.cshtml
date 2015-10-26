@@ -27,7 +27,7 @@
             var json = { isenabled: 1, PageSize: pagesize, PageIndex: pageclickednumber };
 
             $.ajax({
-                url: '/api/Customer/GetCouponPageList',
+                url: '/api/Rewards/GetCouponPageList',
                 data: JSON.stringify(json),
                 type: 'post',
                 datatype: 'application/json',
