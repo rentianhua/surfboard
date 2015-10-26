@@ -328,7 +328,9 @@
     <Content Include="Areas\Customer\Views\Customer\CouponView.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustomerList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustomerView.cshtml" />
-    <Content Include="ConfigFiles\log4net.config" />
+    <Content Include="ConfigFiles\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
