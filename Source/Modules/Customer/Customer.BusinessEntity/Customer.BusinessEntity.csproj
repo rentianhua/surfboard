@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustCommon.cs" />
     <Compile Include="CustModel.cs" />
     <Compile Include="CustLaudator.cs" />
     <Compile Include="CustTagModel.cs" />

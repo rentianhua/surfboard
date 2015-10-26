@@ -35,6 +35,7 @@
                 $("#telephone").html(obj.Telephone);
                 $("#brithday").html(obj.Brithday);
                 $("#qq").html(obj.QQ);
+                $("#signature").html(obj.Signature);
                 $("#location").html(
                     (obj.ProvName == null ? "" : obj.ProvName) + " " +
                     (obj.CityName == null ? "" : obj.CityName) + " " +
@@ -228,6 +229,12 @@
             <td id="location"></td>
         </tr>
         <tr>
+            <td>
+                个人签名
+            </td>
+            <td colspan="3" id="signature"></td>
+        </tr>
+        <tr>
             <td colspan="4" style="background-color:#ccc">
                 会员认证信息
             </td>
@@ -236,9 +243,7 @@
             <td>
                 认证状态
             </td>
-            <td id="authstatus"></td>
-            <td></td>
-            <td></td>
+            <td colspan="3" id="authstatus"></td>
         </tr>
         <tr>
             <td>
