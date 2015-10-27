@@ -116,5 +116,15 @@ namespace CCN.Modules.DataAnalysis.Interface
 
         #endregion
 
+        #region
+
+        /// <summary>
+        /// 个人收入分析
+        /// </summary>
+        /// <returns></returns>
+        JResult GetPersonalIncome();
+
+        #endregion
+
     }
 }

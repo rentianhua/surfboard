@@ -170,5 +170,18 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         }
 
         #endregion
+
+        #region 个人收入分析 
+
+        /// <summary>
+        /// 个人收入分析
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncome()
+        {
+            return BusinessComponent.GetPersonalIncome();
+        }
+
+        #endregion
     }
 }

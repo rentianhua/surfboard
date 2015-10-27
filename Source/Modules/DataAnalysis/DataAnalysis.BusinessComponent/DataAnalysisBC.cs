@@ -351,5 +351,29 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
 
         #endregion
 
+        #region 个人收入分析
+        /// <summary>
+        /// 个人收入分析
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncome()
+        {
+            var list = DataAccess.GetPersonalIncome();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+        #endregion
+
     }
 }

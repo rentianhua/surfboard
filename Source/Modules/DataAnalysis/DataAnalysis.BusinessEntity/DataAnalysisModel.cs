@@ -25,5 +25,10 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// value2
         /// </summary>
         public string value2 { get; set; }
+
+        /// <summary>
+        /// value3
+        /// </summary>
+        public List<DataAnalysisModel> value3 { get; set; }
     }
 }
