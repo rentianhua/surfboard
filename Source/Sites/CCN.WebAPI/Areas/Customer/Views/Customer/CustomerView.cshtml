@@ -44,13 +44,13 @@
 
                 var headurl = "";
                 if (obj.Headportrait != "") {
-                    headurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.Headportrait;
+                    headurl = getQiniuUrl(obj.Headportrait);
                 }
                 else {
                     headurl = obj.Wechat == null ? "" : obj.Wechat.Photo;
                 }
 
-                var qrcodeurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/" + obj.QrCode;
+                var qrcodeurl = getQiniuUrl(obj.QrCode);
                 $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
                 $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
 
@@ -83,8 +83,8 @@
 
                         $.each(authObj.Relevantpicture.split(","), function (key, val) {
                             if ($.trim(val).length > 0) {
-                                $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='http://7xlopw.com2.z0.glb.qiniucdn.com/" + val + "' />");
-                            }                            
+                                $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='" + getQiniuUrl(val) + "' />");
+                            }
                         });
 
                         //初始化块

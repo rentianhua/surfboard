@@ -94,7 +94,15 @@ namespace CCN.Modules.Rewards.BusinessService
             return BusinessComponent.GetCouponById(innerid);
         }
 
-
+        /// <summary>
+        /// 修改礼券库存
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateStock(CouponInfoModel model)
+        {
+            return BusinessComponent.UpdateStock(model);
+        }
         #endregion
     }
 }

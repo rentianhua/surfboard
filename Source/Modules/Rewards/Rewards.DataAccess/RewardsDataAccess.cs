@@ -10,8 +10,6 @@ namespace CCN.Modules.Rewards.DataAccess
 {
     public class RewardsDataAccess : DataAccessBase
     {
-
-
         #region 会员积分
 
         /// <summary>
@@ -303,6 +301,30 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 修改礼券库存
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public int UpdateStock(CouponInfoModel model)
+        {
+            const string sql = "update coupon_card set maxcount=maxcount+@count,count=count+@count where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new {innerid = model.Innerid, count = model.Count}, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
 
         #endregion
     }
