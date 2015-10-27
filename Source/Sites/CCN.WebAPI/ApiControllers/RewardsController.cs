@@ -24,8 +24,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             _rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
         }
-
-
+        
         #region 会员积分
 
         /// <summary>
@@ -114,6 +113,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCouponById(string innerid)
         {
             return _rewardsservice.GetCouponById(innerid);
+        }
+
+        /// <summary>
+        /// 修改礼券库存
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("UpdateStock")]
+        [HttpPost]
+        public JResult UpdateStock(CouponInfoModel model)
+        {
+            return _rewardsservice.UpdateStock(model);
         }
 
         #endregion
