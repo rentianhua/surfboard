@@ -213,5 +213,15 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region  个人收入分析
+        [Route("GetPersonalIncome")]
+        [HttpGet]
+        public JResult GetPersonalIncome()
+        {
+            var result = _dataanalysisservice.GetPersonalIncome();
+            return result;
+        }
+        #endregion
     }
 }

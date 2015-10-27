@@ -605,5 +605,97 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         }
 
         #endregion
+
+        #region 个人收入分析
+        /// <summary>
+        /// 个人收入分析
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetPersonalIncome()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+            List<DataAnalysisModel> list1 = new List<DataAnalysisModel>();
+            List<DataAnalysisModel> list2 = new List<DataAnalysisModel>();
+            List<DataAnalysisModel> list3 = new List<DataAnalysisModel>();
+            List<DataAnalysisModel> list4 = new List<DataAnalysisModel>();
+
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "一季度";
+            da1.value = "85859";
+
+            DataAnalysisModel daM1 = new DataAnalysisModel();
+            daM1.key = "一月";
+            daM1.value = "35655";
+            list1.Add(daM1);
+            DataAnalysisModel daM2 = new DataAnalysisModel();
+            daM2.key = "二月";
+            daM2.value = "12268";
+            list1.Add(daM2);
+            DataAnalysisModel daM3 = new DataAnalysisModel();
+            daM3.key = "三月";
+            daM3.value = "37936";
+            list1.Add(daM3);
+            da1.value3 = list1;
+
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "二季度";
+            da2.value = "122286";
+            DataAnalysisModel daM4 = new DataAnalysisModel();
+            daM4.key = "四月";
+            daM4.value = "45634";
+            list2.Add(daM4);
+            DataAnalysisModel daM5 = new DataAnalysisModel();
+            daM5.key = "五月";
+            daM5.value = "36566";
+            list2.Add(daM5);
+            DataAnalysisModel daM6 = new DataAnalysisModel();
+            daM6.key = "六月";
+            daM6.value = "40086";
+            list2.Add(daM6);
+            da2.value3 = list2;
+
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "三季度";
+            da3.value = "123989";
+            DataAnalysisModel daM7 = new DataAnalysisModel();
+            daM7.key = "七月";
+            daM7.value = "38919";
+            list3.Add(daM7);
+            DataAnalysisModel daM8 = new DataAnalysisModel();
+            daM8.key = "八月";
+            daM8.value = "45052";
+            list3.Add(daM8);
+            DataAnalysisModel daM9 = new DataAnalysisModel();
+            daM9.key = "九月";
+            daM9.value = "40018";
+            list3.Add(daM9);
+            da3.value3 = list3;
+
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "四季度";
+            da4.value = "101525";
+            DataAnalysisModel daM10= new DataAnalysisModel();
+            daM10.key = "十月";
+            daM10.value = "37536";
+            list4.Add(daM10);
+            DataAnalysisModel daM11 = new DataAnalysisModel();
+            daM11.key = "十一月";
+            daM11.value = "32835";
+            list4.Add(daM11);
+            DataAnalysisModel daM12 = new DataAnalysisModel();
+            daM12.key = "十二月";
+            daM12.value = "31154";
+            list4.Add(daM12);
+            da4.value3 = list4;
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+
+            return list;
+        }
+        #endregion
     }
 }
