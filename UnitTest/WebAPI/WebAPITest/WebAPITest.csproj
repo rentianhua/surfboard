@@ -1,3 +1,5 @@
+﻿
+
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
@@ -8,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WebAPITest</RootNamespace>
     <AssemblyName>WebAPITest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -16,6 +18,7 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,6 +38,112 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CCN.Modules.Base.BusinessComponent">
+      <HintPath>..\..\..\Lib\CCN.Modules.Base.BusinessComponent.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Base.BusinessEntity">
+      <HintPath>..\..\..\Lib\CCN.Modules.Base.BusinessEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Base.BusinessService">
+      <HintPath>..\..\..\Lib\CCN.Modules.Base.BusinessService.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Base.DataAccess">
+      <HintPath>..\..\..\Lib\CCN.Modules.Base.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Base.Interface">
+      <HintPath>..\..\..\Lib\CCN.Modules.Base.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Car.BusinessComponent">
+      <HintPath>..\..\..\Lib\CCN.Modules.Car.BusinessComponent.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Car.BusinessEntity">
+      <HintPath>..\..\..\Lib\CCN.Modules.Car.BusinessEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Car.BusinessService">
+      <HintPath>..\..\..\Lib\CCN.Modules.Car.BusinessService.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Car.DataAccess">
+      <HintPath>..\..\..\Lib\CCN.Modules.Car.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Car.Interface">
+      <HintPath>..\..\..\Lib\CCN.Modules.Car.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.AuditTrail.Interception">
+      <HintPath>..\..\..\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Core">
+      <HintPath>..\..\..\Lib\Cedar.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.SMS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Cedar.Foundation.SMS.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.BusinessComponent">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.BusinessComponent.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.BusinessEntity">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.BusinessEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.BusinessService">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.BusinessService.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.DataAccess">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.Interface">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common">
+      <HintPath>..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common.Client">
+      <HintPath>..\..\..\Lib\Cedar.Framework.Common.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.Common.Server">
+      <HintPath>..\..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Cedar.Framwork.AuditTrail.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.Caching">
+      <HintPath>..\..\..\Lib\Cedar.Framwork.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.Caching.Interception">
+      <HintPath>..\..\..\Lib\Cedar.Framwork.Caching.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Unity.Interception.4.0.1\lib\Net45\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention, Version=4.0.0.0, Culture=neutral, PublicKeyToken=6d32ff45e0ccc69f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <Choose>
@@ -60,7 +169,35 @@
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ConfigFiles\applicationContexts.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ConfigFiles\auditTrail.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\caching.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\connectionStrings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\serviceLocation.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\settingSource.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="ConfigFiles\unity.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
@@ -81,11 +218,4 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
