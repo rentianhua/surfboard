@@ -104,7 +104,6 @@ namespace WebAPITest.Car
                 post_time = DateTime.Now,
                 audit_time = DateTime.Now,
                 sold_time = DateTime.Now,
-                keep_time = DateTime.Now,
                 estimateprice = "车源估值情况",
                 eval_price = 0,
                 next_year_eval_price = 0,
