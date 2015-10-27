@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
@@ -126,7 +127,7 @@ namespace CCN.Modules.Car.BusinessComponent
             try
             {
                 JObject jobj = JObject.Parse(result);
-                result = Math.Round(Convert.ToDouble(jobj["eval_price"]), 2).ToString();
+                result = Math.Round(Convert.ToDouble(jobj["eval_price"].ToString()), 2).ToString();
             }
             catch (Exception)
             {
@@ -174,10 +175,14 @@ namespace CCN.Modules.Car.BusinessComponent
             model.createdtime = DateTime.Now;
             model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
+            if (result > 0)
+            {
+                DataAccess.AddShareInfo(model.Innerid);
+            }
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
-                errmsg = ""
+                errmsg = model.Innerid
             };
         }
 
@@ -234,7 +239,11 @@ namespace CCN.Modules.Car.BusinessComponent
             if (model.sold_time == null)
             {
                 model.sold_time = DateTime.Now; //成交时间    
-            }            
+            }
+            if (model.closecasetime == null)
+            {
+                model.closecasetime = DateTime.Now; //结案时间
+            }
             var result = DataAccess.DealCar(model);
             return new JResult
             {
@@ -242,8 +251,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = result > 0 ? "操作成功" : "操作失败"
             };
         }
-
-
+        
         /// <summary>
         /// 删除车辆(物理删除，暂不用)
         /// </summary>
@@ -356,17 +364,19 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.CancelCar(id);
         }
-
+        
         /// <summary>
-        /// 车辆归档
+        /// 获取车辆 分享/查看次数
         /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int KeepCar(string id)
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetCarShareInfo(string carid)
         {
-            return DataAccess.KeepCar(id);
+            var carInfo = DataAccess.GetCarShareInfo(carid);
+            return carInfo == null 
+                ? JResult._jResult(400, "") 
+                : JResult._jResult(0, carInfo);
         }
-
         #endregion
 
         #region 车辆图片
@@ -396,7 +406,8 @@ namespace CCN.Modules.Car.BusinessComponent
 
             var result = DataAccess.AddCarPicture(model);
 
-            if (result > 0)
+            //设置第一张图片为封面
+            if (result > 0 && model.Sort == 1)
             {
                 DataAccess.SetCarCover(model.Carid, model.Path);
             }
@@ -417,6 +428,10 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult DeleteCarPicture(string innerid)
         {
             var result = DataAccess.DeleteCarPicture(innerid);
+            if (result > 0)
+            {
+                
+            }
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,

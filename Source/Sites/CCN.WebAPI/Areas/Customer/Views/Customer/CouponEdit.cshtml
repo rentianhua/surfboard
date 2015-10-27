@@ -38,7 +38,7 @@
             }
 
             $.ajax({
-                url: '/api/Customer/GetCouponById?innerid=' + id,
+                url: '/api/Rewards/GetCouponById?innerid=' + id,
                 type: 'get',
                 datatype: 'application/json',
                 async: false,
@@ -152,7 +152,7 @@
             json.Logourl = result;
             
             if (id === "") {
-                $.post("/api/Customer/AddCoupon", json, function(result) {
+                $.post("/api/Rewards/AddCoupon", json, function (result) {
                     var str = result.errcode === 0 ? "添加成功" : "添加失败";
                     alert(str);
                     //location.href = "/customer/customer/couponlist";
@@ -161,7 +161,7 @@
 
                 json.Innerid = id;
                 $.ajax({
-                    url: '/api/Customer/UpdateCoupon',
+                    url: '/api/Rewards/UpdateCoupon',
                     type: 'put',
                     datatype: 'application/json',
                     data: json,

@@ -92,6 +92,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string QQ { get; set; }
 
         /// <summary>
+        /// 个人签名
+        /// </summary>
+        public string Signature { get; set; }
+
+        /// <summary>
         /// 总积分
         /// </summary>
         public int Totalpoints { get; set; }
@@ -196,6 +201,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// QQ
         /// </summary>
         public string QQ { get; set; }
+
+        /// <summary>
+        /// 个人签名
+        /// </summary>
+        public string Signature { get; set; }
 
         /// <summary>
         /// 类型1.车商，2,个人

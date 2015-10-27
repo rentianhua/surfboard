@@ -44,10 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CouponInfoModel.cs" />
-    <Compile Include="CustCommon.cs" />
     <Compile Include="CustModel.cs" />
-    <Compile Include="CustPointModel.cs" />
     <Compile Include="CustLaudator.cs" />
     <Compile Include="CustTagModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

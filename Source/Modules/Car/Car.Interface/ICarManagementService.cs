@@ -134,12 +134,11 @@ namespace CCN.Modules.Car.Interface
         int CancelCar(string id);
 
         /// <summary>
-        /// 车辆归档
+        /// 获取车辆 分享/查看次数
         /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        int KeepCar(string id);
-
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        JResult GetCarShareInfo(string carid);
         #endregion
 
         #region 车辆图片

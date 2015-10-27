@@ -196,17 +196,16 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.CancelCar(id);
         }
-
+        
         /// <summary>
-        /// 车辆归档
+        /// 获取车辆 分享/查看次数
         /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int KeepCar(string id)
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetCarShareInfo(string carid)
         {
-            return BusinessComponent.KeepCar(id);
+            return BusinessComponent.GetCarShareInfo(carid);
         }
-
         #endregion
 
         #region 车辆图片
