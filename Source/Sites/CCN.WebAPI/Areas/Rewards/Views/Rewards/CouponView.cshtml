@@ -1,24 +1,14 @@
 ﻿
 @{
-    Layout = null;
+    ViewBag.Title = "CouponView";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>礼券详情</title>
-    <link href="~/Content/Site.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/common.js"></script>
-    
-    <script type="text/javascript">
+<script type="text/javascript">
 
         var id = "@ViewBag.innerid";
 
         $(function () {
-            setCookie(); //设置cookie
             Init();
         });
 
@@ -28,7 +18,7 @@
                 return;
             }
 
-            
+
             $.ajax({
                 url: '/api/Rewards/GetCouponById?innerid=' + id,
                 type: 'get',
@@ -42,7 +32,7 @@
 
                     var obj = data.errmsg;
                     $("#title").html(obj.Title);
-                    $("#logo").html(obj.Logourl);
+                    $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                     $("#amount").html(obj.Amount);
                     $("#count").html(obj.Maxcount+"/"+obj.Count);
                     $("#codetype").html(obj.Codetype);
@@ -58,9 +48,7 @@
         }
 
 
-    </script>
-</head>
-<body>
+</script>
     <div>
         <div style="font-size:18px;font-weight:bold;text-align:center">礼券详情</div>
         <table id="coupon" class="gridtable">
@@ -71,7 +59,9 @@
                 </tr>
                 <tr>
                     <td>Logo</td>
-                    <td id="logo"></td>
+                    <td>
+                        <img id="logoimg" style="max-width: 150px;max-height:150px" src=""/>
+                    </td>
                 </tr>
                 <tr>
                     <td>面值</td>
@@ -89,18 +79,17 @@
                     <td>Code展示类</td>
                     <td id="codetype"></td>
                 </tr>
-            <tr>
-                <td>创建时间</td>
-                <td id="createdtime"></td>
-            </tr>
+                <tr>
+                    <td>创建时间</td>
+                    <td id="createdtime"></td>
+                </tr>
                 <tr>
                     <td></td>
                     <td>
-                        <input type="button" value="返回" onclick="self.location=document.referrer;"/>
+                        <input type="button" value="返回" onclick="self.location=document.referrer;" />
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
-</body>
-</html>
+
