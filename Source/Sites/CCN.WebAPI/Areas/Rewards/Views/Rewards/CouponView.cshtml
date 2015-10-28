@@ -4,12 +4,21 @@
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
+<style type="text/css">
+    #divv1 .Wdate {
+        width: 100px;
+    }
+</style>
+
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
+    var CardModel = null;
 
     $(function() {
+        BindDDL();
         Init();
+
     });
 
     function Init() {
@@ -30,20 +39,22 @@
                 }
 
                 var obj = data.errmsg;
+                CardModel = obj;
+                 
                 $("#title").html(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").html(obj.Amount);
                 $("#count").html(obj.Maxcount + "/" + obj.Count);
                 $("#codetype").html(obj.Codetype);
-                $("#createdtime").html(obj.Createdtime);
-
+                $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+                
                 if (obj.Vtype === 1) {
                     $("#vvalue").html(Dateformat(obj.Vstart, "yyyy-MM-dd") + " 至" + Dateformat(obj.Vend, "yyyy-MM-dd"));
                 } else {
                     $("#vvalue").html("领取后 " + obj.Value1 + " 天开始生效，有效天数为 " + obj.Value2 + " 天");
                 }
 
-                $("#aDelay").click(ShowDelayDiv(obj.Vtype));
+                $("#aDelay").click(ShowDelayDiv);
             }
         });
     }
@@ -61,15 +72,67 @@
         });
     }
 
-    function ShowDelayDiv(type) {
-        alert(type);
+    function AddDelay(type) {
+
+        var json = { Innerid: id };
+        var vstart = $("#vstart").val();
+        var vend = $("#vend").val();
+        var value1 = $("#selectvalue1").val();
+        var value2 = $("#selectvalue2").val();
         if (type === 1) {
+
+            if ($.trim(vstart).length === 0) {
+                alert("请填写开始生效时间");
+                return;
+            }
+            if ($.trim(vend).length === 0) {
+                alert("请填写有效结束时间");
+                return;
+            }
+        } else {
+            if ($.trim(value1).length === 0) {
+                alert("请填写开始生效时间");
+                return;
+            }
+            if ($.trim(value2).length === 0) {
+                alert("请填写有效结束时间");
+                return;
+            }
+        }
+
+
+        $.post("/api/Rewards/UpdateStock", json, function(result) {
+            alert(result.errmsg);
+            location.reload();
+        });
+    }
+
+    function ShowDelayDiv() {
+        $("#vvalue").addClass("hide");
+        $("#aDelay").addClass("hide");
+        if (CardModel.Vtype === 1) {
             $("#divv1").removeClass('hide');
         } else {
             $("#divv2").removeClass('hide');
         }
     }
 
+    function CancelDelay() {
+
+        $("#vvalue").removeClass("hide");
+        $("#aDelay").removeClass("hide");
+        $("#divv1").addClass('hide');
+        $("#divv2").addClass('hide');
+    }
+
+    function BindDDL() {
+        var i;
+        for (i = 0; i <= 90; i++) {
+            $("#selectvalue1").append("<option value='" + i + "'>" + (i === 0 ? "当" : i) + "天</option>");
+            $("#selectvalue2").append("<option value='" + i + "'>" + (i === 0 ? "永久有效" : (i + "天")) + "</option>");
+        }
+        $("#selectvalue2").append("<option value='100'>100天</option>");
+    }
 
 </script>
     <div>
@@ -93,15 +156,24 @@
                 <tr>
                     <td>有效期</td>
                     <td>
-                        <label id="vvalue"></label>
-                        <a href="javascript:;" id="aDelay">延期</a>
+                        <div>
+                            <label id="vvalue"></label>
+                            <a href="javascript:;" id="aDelay">延期</a>
+                        </div>
                         <div id="divv1" class="margintop hide">
+                            固定日期
                             <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
                             <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
+                            <input type="button" value="确定" onclick="AddDelay(1);"/>
+                            <input type="button" value="取消" onclick="CancelDelay();"/>
                         </div>
                         <div id="divv2" class="margintop hide">
-                            领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
-                            <input type="number" id="value2" placeholder="" maxlength="5" />
+                            领取后
+                            <select id="selectvalue1"></select>
+                            生效 ,有效天数
+                            <select id="selectvalue2"></select>
+                            <input type="button" value="确定" onclick="AddDelay(2);"/>
+                            <input type="button" value="取消" onclick="CancelDelay();" />
                         </div>
                     </td>
                 </tr>
