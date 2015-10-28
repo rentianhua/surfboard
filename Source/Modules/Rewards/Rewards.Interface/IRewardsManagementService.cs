@@ -76,6 +76,13 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         JResult UpdateStock(CouponInfoModel model);
 
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult UpdateValidity(CouponInfoModel model);
+
         #endregion
     }
 }

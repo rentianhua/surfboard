@@ -33,8 +33,10 @@ namespace CCN.Modules.CustRelations.DataAccess
         public BasePageList<CustViewModel> GetCustPageList(CustQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"cust_info as a";
-            var fields = $"innerid,custname,mobile,`level`,headportrait,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
+            const string tableName = @"cust_info as a 
+                                        inner join cust_wechat as c on a.innerid=c.custid
+                                        left join wechat_friend as d on d.openid=c.openid";
+            var fields = $"a.innerid,a.custname,a.mobile,a.`level`,a.headportrait,d.photo ,(select count(1) from car_info where custid=a.innerid) as carnum,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -296,8 +298,11 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select frientsid ,b.custname, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.brithday, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
+            const string sql = @"select frientsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.frientsid) as carnum
+                                from cust_relations as a
                                 inner join cust_info as b on a.frientsid=b.innerid 
+                                left join cust_wechat as c on a.frientsid=c.custid
+                                left join wechat_friend as d on d.openid=c.openid
                                 where a.userid=@userid;";
             try
             {
