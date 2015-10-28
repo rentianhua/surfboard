@@ -10,7 +10,7 @@ using Cedar.Core.ApplicationContexts;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.Framwork.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 
 #endregion
 
