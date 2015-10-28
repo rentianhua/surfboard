@@ -7,8 +7,8 @@
     <ProjectGuid>{7CA048FA-FA26-46E9-9919-EC0C22F3097E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cedar.Framwork.AuditTrail</RootNamespace>
-    <AssemblyName>Cedar.Framwork.AuditTrail</AssemblyName>
+    <RootNamespace>Cedar.Framework.AuditTrail</RootNamespace>
+    <AssemblyName>Cedar.Framework.AuditTrail</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Cedar.Framwork.AuditTrail.XML</DocumentationFile>
+    <DocumentationFile>bin\Cedar.Framework.AuditTrail.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

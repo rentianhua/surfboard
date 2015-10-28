@@ -3,7 +3,7 @@ using Cedar.Core.Configuration;
 using Cedar.Core.IoC;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail.Configuration
+namespace Cedar.Framework.AuditTrail.Configuration
 {
     /// <summary>
     /// </summary>

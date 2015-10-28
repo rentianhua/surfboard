@@ -78,13 +78,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.Framwork.AuditTrail, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Cedar.Framwork.AuditTrail.dll</HintPath>
-    </Reference>
-    <Reference Include="Cedar.Framwork.AuditTrail.Interception">
-      <HintPath>..\..\Lib\Cedar.Framwork.AuditTrail.Interception.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Framwork.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Cedar.Framwork.Caching.dll</HintPath>
@@ -173,7 +166,6 @@
     <Compile Include="Core\ConfigManagerUnitTest.cs" />
     <Compile Include="Core\SettingSourceUnitTest.cs" />
     <Compile Include="DataBase\RedisWrapperUnitTest.cs" />
-    <Compile Include="DemoInstanceService.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

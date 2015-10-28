@@ -1,10 +1,12 @@
 ﻿using System;
 using Cedar.Core.IoC;
-using Cedar.Framwork.Caching;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 
-namespace Cedar.AuditTrail.Interception
+namespace Cedar.Framework.Caching
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CacheManager : IDisposable
     {
         private static readonly object syncHelper = new object();

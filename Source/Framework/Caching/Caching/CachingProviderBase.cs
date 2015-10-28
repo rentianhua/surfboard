@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 
-namespace Cedar.Framwork.Caching
+namespace Cedar.Framework.Caching
 {
     /// <summary>
     /// </summary>

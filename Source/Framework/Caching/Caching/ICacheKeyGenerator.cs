@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Cedar.Framwork.Caching
+namespace Cedar.Framework.Caching
 {
     public interface ICacheKeyGenerator
     {

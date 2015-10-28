@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cedar.Core;
+using Cedar.Framework.AuditTrail.Base;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail
 {
     /// <summary>
     ///     This static class is used to store the type based AuditLogFormatter list.

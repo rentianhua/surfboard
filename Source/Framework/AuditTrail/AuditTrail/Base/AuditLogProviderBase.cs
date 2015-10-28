@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     This is base class of all concrete audit log provider classes used to retrieve and archive audit log entries.
@@ -10,7 +10,7 @@ namespace Cedar.Framwork.AuditTrail
     public abstract class AuditLogProviderBase
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Cedar.Framwork.AuditTrail.AuditLogProviderBase" /> class.
+        ///     Initializes a new instance of the <see cref="T:Cedar.Framework.AuditTrail.Base.AuditLogProviderBase" /> class.
         /// </summary>
         /// <param name="name">The provider name.</param>
         public AuditLogProviderBase(string name)

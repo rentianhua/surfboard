@@ -1,18 +1,18 @@
 ﻿using Cedar.Core.IoC;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     This class is base class of all concrete audit log listener to listen the log writing request and write log entry.
     /// </summary>
     public abstract class AuditLogListenerBase
     {
-        private IAuditLogFilter filter;
         private readonly string filterName;
+        private IAuditLogFilter filter;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Cedar.Framwork.AuditTrail.AuditLogListenerBase" /> class.
+        ///     Initializes a new instance of the <see cref="T:Cedar.Framework.AuditTrail.Base.AuditLogListenerBase" /> class.
         /// </summary>
         /// <param name="name">The listern name.</param>
         /// <param name="filterName">The configuration name of audit log filter.</param>

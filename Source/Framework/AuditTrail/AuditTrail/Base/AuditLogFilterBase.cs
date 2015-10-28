@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     This is base class of all concrete audit log fiter classes.

@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace Cedar.Framwork.Caching
+namespace Cedar.Framework.Caching
 {
     public class DefaultCacheKeyGenerator : ICacheKeyGenerator
     {

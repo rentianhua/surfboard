@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.Configuration;
-using Cedar.Framwork.AuditTrail.Properties;
+using Cedar.Framework.AuditTrail.Base;
+using Cedar.Framework.AuditTrail.Configuration;
+using Cedar.Framework.AuditTrail.Properties;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail
 {
     /// <summary>
     ///     This class is used to write audit log entry.
@@ -99,10 +100,10 @@ namespace Cedar.Framwork.AuditTrail
         }
 
         /// <summary>
-        ///     Create <see cref="T:Cedar.Framwork.AuditTrail.AuditLogger" /> based on the specified function name.
+        ///     Create <see cref="T:Cedar.Framework.AuditTrail.AuditLogger" /> based on the specified function name.
         /// </summary>
         /// <param name="functionName">Name of the function.</param>
-        /// <returns>The creatd <see cref="T:Cedar.Framwork.AuditTrail.AuditLogger" />.</returns>
+        /// <returns>The creatd <see cref="T:Cedar.Framework.AuditTrail.AuditLogger" />.</returns>
         public static AuditLogger CreateAuditLogger(string functionName)
         {
             Guard.ArgumentNotNullOrEmpty(functionName, "functionName");
@@ -186,7 +187,7 @@ namespace Cedar.Framwork.AuditTrail
         {
             if (disposed)
             {
-                throw new InvalidOperationException(Resources.ExceptionLoggerIsDisposed);
+                throw new InvalidOperationException("Resources.ExceptionLoggerIsDisposed");
             }
         }
     }

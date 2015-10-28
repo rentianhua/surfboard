@@ -92,13 +92,7 @@ D:\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
 D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
 D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 D:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
-C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
-C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
-C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
-C:\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
 C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
-C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
-C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
 E:\CCN\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll.config
 E:\CCN\surfboard\Lib\Cedar.Framwork.Caching.Interception.XML
 E:\CCN\surfboard\Lib\Cedar.Framwork.Caching.Interception.dll
@@ -113,3 +107,9 @@ E:\github\surfboard\Lib\Cedar.Framwork.Caching.Interception.pdb
 E:\github\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Caching.Interception.csprojResolveAssemblyReference.cache
 E:\github\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.dll
 E:\github\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framwork.Caching.Interception.pdb
+C:\surfboard\Lib\Cedar.Framework.Caching.Interception.dll.config
+C:\surfboard\Lib\Cedar.Framework.Caching.Interception.xml
+C:\surfboard\Lib\Cedar.Framework.Caching.Interception.dll
+C:\surfboard\Lib\Cedar.Framework.Caching.Interception.pdb
+C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framework.Caching.Interception.dll
+C:\surfboard\Source\Framework\Caching\Caching.Interception\obj\Debug\Cedar.Framework.Caching.Interception.pdb

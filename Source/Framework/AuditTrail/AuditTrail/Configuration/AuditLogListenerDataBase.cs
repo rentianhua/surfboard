@@ -1,7 +1,8 @@
 ﻿using System.Configuration;
 using Cedar.Core.Configuration;
+using Cedar.Framework.AuditTrail.Base;
 
-namespace Cedar.Framwork.AuditTrail.Configuration
+namespace Cedar.Framework.AuditTrail.Configuration
 {
     /// <summary>
     ///     This is base class of all concrete audit log listener classes.

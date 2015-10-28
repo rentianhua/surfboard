@@ -3,7 +3,7 @@ using Cedar.Core.Configuration;
 using Cedar.Core.EntLib.Data;
 using Newtonsoft.Json;
 
-namespace Cedar.Framwork.Caching.Redis
+namespace Cedar.Framework.Caching.Redis
 {
     /// <summary>
     /// </summary>

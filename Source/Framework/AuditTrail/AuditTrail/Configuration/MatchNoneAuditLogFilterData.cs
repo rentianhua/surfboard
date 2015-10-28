@@ -1,10 +1,11 @@
 ﻿using System;
 using Cedar.Core.Configuration;
+using Cedar.Framework.AuditTrail.Base;
 
-namespace Cedar.Framwork.AuditTrail.Configuration
+namespace Cedar.Framework.AuditTrail.Configuration
 {
     /// <summary>
-    ///     The <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" /> based configuration element.
+    ///     The <see cref="T:Cedar.Framework.AuditTrail.MatchAllAuditLogFilter" /> based configuration element.
     /// </summary>
     public class MatchNoneAuditLogFilterData : AuditLogFilterDataBase
     {
@@ -12,7 +13,7 @@ namespace Cedar.Framwork.AuditTrail.Configuration
         ///     Gets the provider creation expression.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <returns>The delegate to create a new <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" />.</returns>
+        /// <returns>The delegate to create a new <see cref="T:Cedar.Framework.AuditTrail.MatchAllAuditLogFilter" />.</returns>
         public override Func<IAuditLogFilter> GetProviderCreator(ServiceLocatableSettings settings)
         {
             return () => new MatchNoneAuditLogFilter(null);
