@@ -7,8 +7,8 @@
     <ProjectGuid>{7D7EDB88-C49D-417E-BCE2-8A7B5C8E0093}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cedar.AuditTrail.Interception</RootNamespace>
-    <AssemblyName>Cedar.AuditTrail.Interception</AssemblyName>
+    <RootNamespace>Cedar.Framwork.AuditTrail.Interception</RootNamespace>
+    <AssemblyName>Cedar.Framwork.AuditTrail.Interception</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\</SolutionDir>
@@ -23,7 +23,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\..\Lib\Cedar.AuditTrail.Interception.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\Lib\Cedar.Framwork.AuditTrail.Interception.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
