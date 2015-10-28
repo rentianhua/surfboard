@@ -7,7 +7,7 @@ using CCN.Modules.DataAnalysis.BusinessComponent;
 using CCN.Modules.DataAnalysis.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
-using Cedar.Framwork.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 
 namespace CCN.Modules.DataAnalysis.BusinessService
 {

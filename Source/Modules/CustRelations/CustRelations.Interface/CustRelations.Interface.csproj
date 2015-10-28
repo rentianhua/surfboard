@@ -32,9 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.AuditTrail.Interception, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Cedar.Framework.AuditTrail, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Y:\GitHub\surfboard\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
+      <HintPath>..\..\..\..\Lib\Cedar.Framework.AuditTrail.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framework.AuditTrail.Interception, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Cedar.Framework.AuditTrail.Interception.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

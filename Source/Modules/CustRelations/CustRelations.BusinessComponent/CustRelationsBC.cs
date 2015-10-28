@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.DataAccess;
-using Cedar.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
