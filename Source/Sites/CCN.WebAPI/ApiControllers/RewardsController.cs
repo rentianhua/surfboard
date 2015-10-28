@@ -127,6 +127,18 @@ namespace CCN.WebAPI.ApiControllers
             return _rewardsservice.UpdateStock(model);
         }
 
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("UpdateValidity")]
+        [HttpPost]
+        public JResult UpdateValidity(CouponInfoModel model)
+        {
+            return _rewardsservice.UpdateValidity(model);
+        }
+
         #endregion
     }
 }

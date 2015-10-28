@@ -103,6 +103,16 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.UpdateStock(model);
         }
+
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateValidity(CouponInfoModel model)
+        {
+            return BusinessComponent.UpdateValidity(model);
+        }
         #endregion
     }
 }

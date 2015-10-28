@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
 
-        var id = "@ViewBag.innerid";
+    var id = "@ViewBag.innerid";
 
     $(function() {
         Init();
@@ -38,10 +38,12 @@
                 $("#createdtime").html(obj.Createdtime);
 
                 if (obj.Vtype === 1) {
-                    $("#vtype").html(Dateformat(obj.Vstart, "yyyy-MM-dd") + " 至" + Dateformat(obj.Vend, "yyyy-MM-dd"));
+                    $("#vvalue").html(Dateformat(obj.Vstart, "yyyy-MM-dd") + " 至" + Dateformat(obj.Vend, "yyyy-MM-dd"));
                 } else {
-                    $("#vtype").html("领取后 " + obj.Value1 + " 天开始生效，有效天数为 " + obj.Value2 + " 天");
+                    $("#vvalue").html("领取后 " + obj.Value1 + " 天开始生效，有效天数为 " + obj.Value2 + " 天");
                 }
+
+                $("#aDelay").click(ShowDelayDiv(obj.Vtype));
             }
         });
     }
@@ -53,10 +55,19 @@
             return;
         }
         var json = { Innerid: id, Count: addcount };
-        $.post("/api/Rewards/UpdateStock", json, function (result) {
+        $.post("/api/Rewards/UpdateStock", json, function(result) {
             alert(result.errmsg);
             location.reload();
         });
+    }
+
+    function ShowDelayDiv(type) {
+        alert(type);
+        if (type === 1) {
+            $("#divv1").removeClass('hide');
+        } else {
+            $("#divv2").removeClass('hide');
+        }
     }
 
 
@@ -81,7 +92,18 @@
                 </tr>
                 <tr>
                     <td>有效期</td>
-                    <td id="vtype"></td>
+                    <td>
+                        <label id="vvalue"></label>
+                        <a href="javascript:;" id="aDelay">延期</a>
+                        <div id="divv1" class="margintop hide">
+                            <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
+                            <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
+                        </div>
+                        <div id="divv2" class="margintop hide">
+                            领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
+                            <input type="number" id="value2" placeholder="" maxlength="5" />
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>库存</td>
