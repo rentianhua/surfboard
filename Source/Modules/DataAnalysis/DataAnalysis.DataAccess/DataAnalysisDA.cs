@@ -79,10 +79,10 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "Male";
-            da1.value = "87%";
+            da1.value = "87";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "Female";
-            da2.value = "13%";
+            da2.value = "13";
 
             list.Add(da1);
             list.Add(da2);
@@ -166,16 +166,16 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "3年内";
-            da1.value = "18.32%";
+            da1.value = "18.32";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "3-6年";
-            da2.value = "67.25%";
+            da2.value = "67.25";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "6-10年";
-            da3.value = "5.38%";
+            da3.value = "5.38";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "10年以上";
-            da4.value = "9.05%";
+            da4.value = "9.05";
 
             list.Add(da1);
             list.Add(da2);
@@ -195,22 +195,22 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "<=1万公里";
-            da1.value = "17.4%";
+            da1.value = "17.4";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "1-3万公里";
-            da2.value = "28.5%";
+            da2.value = "28.5";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "3-5万公里";
-            da3.value = "31.7%";
+            da3.value = "31.7";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "5-10万公里";
-            da4.value = "17.4%";
+            da4.value = "17.4";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "10-15万公里";
-            da5.value = "3.8%";
+            da5.value = "3.8";
             DataAnalysisModel da6 = new DataAnalysisModel();
             da6.key = ">15万公里";
-            da6.value = "17.4%";
+            da6.value = "17.4";
 
             list.Add(da1);
             list.Add(da2);
@@ -232,19 +232,19 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "丰田";
-            da1.value = "37.1%";
+            da1.value = "37.1";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "日产";
-            da2.value = "37%";
+            da2.value = "37";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "现代";
-            da3.value = "36.2%";
+            da3.value = "36.2";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "马自达";
-            da4.value = "36.1%";
+            da4.value = "36.1";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "福特";
-            da5.value = "36%";
+            da5.value = "36";
 
             list.Add(da1);
             list.Add(da2);
@@ -265,19 +265,19 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "路虎";
-            da1.value = "29.7%";
+            da1.value = "29.7";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "奥迪";
-            da2.value = "28.9%";
+            da2.value = "28.9";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "金杯";
-            da3.value = "27.9%";
+            da3.value = "27.9";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "吉利";
-            da4.value = "26.5%";
+            da4.value = "26.5";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "保时捷";
-            da5.value = "25.5%";
+            da5.value = "25.5";
 
             list.Add(da1);
             list.Add(da2);
@@ -298,19 +298,19 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "长城";
-            da1.value = "32.8%";
+            da1.value = "32.8";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "雪弗兰";
-            da2.value = "32.1%";
+            da2.value = "32.1";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "大众";
-            da3.value = "32.0%";
+            da3.value = "32.0";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "奥迪";
-            da4.value = "31.5%";
+            da4.value = "31.5";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "保时捷";
-            da5.value = "30%";
+            da5.value = "30";
 
             list.Add(da1);
             list.Add(da2);
@@ -331,19 +331,19 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "比亚迪";
-            da1.value = "27.2%";
+            da1.value = "27.2";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "现代";
-            da2.value = "26.5%";
+            da2.value = "26.5";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "本田";
-            da3.value = "25.7%";
+            da3.value = "25.7";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "日产";
-            da4.value = "24.7%";
+            da4.value = "24.7";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "丰田";
-            da5.value = "24.2%";
+            da5.value = "24.2";
 
             list.Add(da1);
             list.Add(da2);
@@ -368,34 +368,34 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "大众";
-            da1.value = "18%";
+            da1.value = "18";
             DataAnalysisModel da2 = new DataAnalysisModel();
             da2.key = "丰田";
-            da2.value = "14%";
+            da2.value = "14";
             DataAnalysisModel da3 = new DataAnalysisModel();
             da3.key = "奥迪";
-            da3.value = "12%";
+            da3.value = "12";
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "宝马";
-            da4.value = "12%";
+            da4.value = "12";
             DataAnalysisModel da5 = new DataAnalysisModel();
             da5.key = "本田";
-            da5.value = "11%";
+            da5.value = "11";
             DataAnalysisModel da6 = new DataAnalysisModel();
             da6.key = "奔驰";
-            da6.value = "8%";
+            da6.value = "8";
             DataAnalysisModel da7 = new DataAnalysisModel();
             da7.key = "现代";
-            da7.value = "8%";
+            da7.value = "8";
             DataAnalysisModel da8 = new DataAnalysisModel();
             da8.key = "别克";
-            da8.value = "7%";
+            da8.value = "7";
             DataAnalysisModel da9 = new DataAnalysisModel();
             da9.key = "日产";
-            da9.value = "6%";
+            da9.value = "6";
             DataAnalysisModel da10 = new DataAnalysisModel();
             da10.key = "未知";
-            da10.value = "4%";
+            da10.value = "4";
 
             list.Add(da1);
             list.Add(da2);
