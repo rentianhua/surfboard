@@ -178,6 +178,20 @@ namespace CCN.Modules.Rewards.BusinessComponent
             return JResult._jResult(model);
         }
 
+        /// <summary>
+        /// 修改礼券库存
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateStock(CouponInfoModel model)
+        {
+            if (model?.Count == null || model.Count == 0)
+            {
+                return JResult._jResult(401,"参数无效");
+            }
+            var result = DataAccess.UpdateStock(model);
+            return JResult._jResult(result);
+        }
         #endregion
 
 

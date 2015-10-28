@@ -286,7 +286,14 @@ namespace CCN.Modules.Customer.BusinessComponent
                 Custname = model.Custname,
                 Telephone = model.Telephone,
                 Email = model.Email,
-                Headportrait = model.Headportrait
+                Headportrait = model.Headportrait,
+                Provid = model.Provid,
+                Cityid = model.Cityid,
+                Area = model.Area,
+                Sex = model.Sex,
+                Brithday = model.Brithday,
+                QQ = model.QQ,
+                Signature = model.Signature
             };
 
             var result = DataAccess.UpdateCustInfo(newModel);

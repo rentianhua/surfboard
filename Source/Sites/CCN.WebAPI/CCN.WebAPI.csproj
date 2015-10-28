@@ -197,6 +197,8 @@
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
+    <Folder Include="Areas\Rewards\Models\" />
+    <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Models\" />
     <Folder Include="TempFile\" />
   </ItemGroup>
@@ -243,6 +245,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Areas\Rewards\Controllers\RewardsController.cs" />
+    <Compile Include="Areas\Rewards\RewardsAreaRegistration.cs" />
     <Compile Include="Common\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -323,14 +327,15 @@
     <Content Include="ConfigFiles\unity.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Customer\Views\Customer\CouponList.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\CouponEdit.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\CouponView.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustomerList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustomerView.cshtml" />
     <Content Include="ConfigFiles\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Rewards\Views\web.config" />
+    <Content Include="Areas\Rewards\Views\Rewards\CouponList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\CouponEdit.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\CouponView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -396,10 +401,6 @@
     <ProjectReference Include="..\..\Modules\Car\Car.Interface\Car.Interface.csproj">
       <Project>{9589c3e4-a3a5-4b8f-89a6-fa37de391507}</Project>
       <Name>Car.Interface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Modules\Customer\Customer.BusinessEntity\Customer.BusinessEntity.csproj">
-      <Project>{1ebb63b5-19b8-44d6-94b2-04ceaf8754aa}</Project>
-      <Name>Customer.BusinessEntity</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Modules\CustRelations\CustRelations.BusinessEntity\CustRelations.BusinessEntity.csproj">
       <Project>{e5222921-e8d5-4477-bcb6-a6c6523a8ba6}</Project>

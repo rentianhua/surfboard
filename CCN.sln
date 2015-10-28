@@ -74,6 +74,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalysis.DataAccess", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAnalysis.Interface", "Source\Modules\DataAnalysis\DataAnalysis.Interface\DataAnalysis.Interface.csproj", "{6D08832F-7DF7-435D-B992-B63A9965B74F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebAPITest", "WebAPITest", "{2F242995-FF7B-4B57-91C8-DC0EE35C3A53}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rewards", "Rewards", "{280A3AE4-894C-4C53-88D1-F29A95131AB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewards.BusinessEntity", "Source\Modules\Rewards\Rewards.BusinessEntity\Rewards.BusinessEntity.csproj", "{88B61178-19B0-4945-9678-7244D5BE888B}"
@@ -85,6 +87,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewards.BusinessService", "Source\Modules\Rewards\Rewards.BusinessService\Rewards.BusinessService.csproj", "{75B8EBFC-0FE7-4B2C-BCA4-F0A1315B2CB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rewards.BusinessComponent", "Source\Modules\Rewards\Rewards.BusinessComponent\Rewards.BusinessComponent.csproj", "{FED844A2-EDAE-4D04-945A-728F4BBCA4F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPITest", "UnitTest\WebAPI\WebAPITest\WebAPITest.csproj", "{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -220,6 +224,10 @@ Global
 		{FED844A2-EDAE-4D04-945A-728F4BBCA4F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FED844A2-EDAE-4D04-945A-728F4BBCA4F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FED844A2-EDAE-4D04-945A-728F4BBCA4F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -263,6 +271,7 @@ Global
 		{E845B4C0-4C23-46FE-8A61-1074C9929856} = {280A3AE4-894C-4C53-88D1-F29A95131AB4}
 		{75B8EBFC-0FE7-4B2C-BCA4-F0A1315B2CB5} = {280A3AE4-894C-4C53-88D1-F29A95131AB4}
 		{FED844A2-EDAE-4D04-945A-728F4BBCA4F0} = {280A3AE4-894C-4C53-88D1-F29A95131AB4}
+		{63AFB0B7-66E3-4FCE-A24C-C26FFEF7046F} = {2F242995-FF7B-4B57-91C8-DC0EE35C3A53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.PolicyInjection.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45

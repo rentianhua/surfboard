@@ -127,7 +127,7 @@ namespace CCN.Modules.Car.BusinessComponent
             try
             {
                 JObject jobj = JObject.Parse(result);
-                result = Math.Round(Convert.ToDouble(jobj["eval_price"]), 2).ToString();
+                result = Math.Round(Convert.ToDouble(jobj["eval_price"].ToString()), 2).ToString();
             }
             catch (Exception)
             {
@@ -182,7 +182,7 @@ namespace CCN.Modules.Car.BusinessComponent
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
-                errmsg = ""
+                errmsg = model.Innerid
             };
         }
 
@@ -239,7 +239,11 @@ namespace CCN.Modules.Car.BusinessComponent
             if (model.sold_time == null)
             {
                 model.sold_time = DateTime.Now; //成交时间    
-            }            
+            }
+            if (model.closecasetime == null)
+            {
+                model.closecasetime = DateTime.Now; //结案时间
+            }
             var result = DataAccess.DealCar(model);
             return new JResult
             {
@@ -360,17 +364,7 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.CancelCar(id);
         }
-
-        /// <summary>
-        /// 车辆归档
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int KeepCar(string id)
-        {
-            return DataAccess.KeepCar(id);
-        }
-
+        
         /// <summary>
         /// 获取车辆 分享/查看次数
         /// </summary>
@@ -412,7 +406,8 @@ namespace CCN.Modules.Car.BusinessComponent
 
             var result = DataAccess.AddCarPicture(model);
 
-            if (result > 0)
+            //设置第一张图片为封面
+            if (result > 0 && model.Sort == 1)
             {
                 DataAccess.SetCarCover(model.Carid, model.Path);
             }
@@ -433,6 +428,10 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult DeleteCarPicture(string innerid)
         {
             var result = DataAccess.DeleteCarPicture(innerid);
+            if (result > 0)
+            {
+                
+            }
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,

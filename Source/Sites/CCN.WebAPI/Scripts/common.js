@@ -78,6 +78,11 @@ var setCookie = function() {
     document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
 }
 
+var getQiniuUrl = function(key) {
+    var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";
+    return qiniuurl + key;
+}
+
 /*
 * 文件上传(返回文件标识，文件名为空时上传不成功)
 * @id              {string} 上传控件id

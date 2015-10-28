@@ -196,17 +196,7 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.CancelCar(id);
         }
-
-        /// <summary>
-        /// 车辆归档
-        /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int KeepCar(string id)
-        {
-            return BusinessComponent.KeepCar(id);
-        }
-
+        
         /// <summary>
         /// 获取车辆 分享/查看次数
         /// </summary>

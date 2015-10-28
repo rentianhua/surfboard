@@ -69,6 +69,12 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         JResult GetCouponById(string innerid);
 
+        /// <summary>
+        /// 修改礼券库存
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult UpdateStock(CouponInfoModel model);
 
         #endregion
     }
