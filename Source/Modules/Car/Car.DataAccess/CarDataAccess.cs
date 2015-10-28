@@ -4,11 +4,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Car.BusinessEntity;
-using Cedar.Core.Data;
-using Cedar.Core.EntLib.Data;
+using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.Framwork.AuditTrail.Interception;
 using Dapper;
 
 namespace CCN.Modules.Car.DataAccess

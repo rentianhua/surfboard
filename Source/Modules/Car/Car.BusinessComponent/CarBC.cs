@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.Core.IoC;
-using Cedar.Framwork.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Car.BusinessComponent

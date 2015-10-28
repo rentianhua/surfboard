@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CCN.Modules.Base.BusinessComponent;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.Framwork.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 
 namespace CCN.Modules.Base.BusinessService
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BaseManagementService: ServiceBase<BaseBC>, IBaseManagementService
+    public class BaseManagementService : ServiceBase<BaseBC>, IBaseManagementService
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bc"></param>
-        public BaseManagementService(BaseBC bc) :base(bc)
+        public BaseManagementService(BaseBC bc) : base(bc)
         {
 
         }
@@ -59,9 +55,9 @@ namespace CCN.Modules.Base.BusinessService
         /// <param name="vcode">验证码</param>
         /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns>返回结果。1.正确，0不正确</returns>
-        public JResult CheckVerification(string target, string vcode,int utype)
+        public JResult CheckVerification(string target, string vcode, int utype)
         {
-            return BusinessComponent.CheckVerification(target, vcode,utype);
+            return BusinessComponent.CheckVerification(target, vcode, utype);
         }
 
         /// <summary>
