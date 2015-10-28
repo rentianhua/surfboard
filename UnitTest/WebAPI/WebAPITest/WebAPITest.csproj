@@ -66,9 +66,6 @@
     <Reference Include="CCN.Modules.Car.Interface">
       <HintPath>..\..\..\Lib\CCN.Modules.Car.Interface.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.AuditTrail.Interception">
-      <HintPath>..\..\..\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Core">
       <HintPath>..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>
@@ -107,6 +104,9 @@
     <Reference Include="Cedar.Framwork.AuditTrail, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Cedar.Framwork.AuditTrail.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.Interception">
+      <HintPath>..\..\..\Lib\Cedar.Framwork.AuditTrail.Interception.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framwork.Caching">
       <HintPath>..\..\..\Lib\Cedar.Framwork.Caching.dll</HintPath>

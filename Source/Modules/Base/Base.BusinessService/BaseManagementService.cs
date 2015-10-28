@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessComponent;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
-using Cedar.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Cedar.Framwork.AuditTrail.Interception;
 
 namespace CCN.Modules.Base.BusinessService
 {

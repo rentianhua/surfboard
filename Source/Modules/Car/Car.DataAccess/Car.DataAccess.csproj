@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.AuditTrail.Interception">
-      <HintPath>..\..\..\..\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Core">
       <HintPath>..\..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>
@@ -45,6 +42,9 @@
     </Reference>
     <Reference Include="Cedar.Framework.Common.Server">
       <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.Server.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.Interception">
+      <HintPath>..\..\..\..\Lib\Cedar.Framwork.AuditTrail.Interception.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.40.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Dapper.1.42\lib\net45\Dapper.dll</HintPath>

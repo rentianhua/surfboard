@@ -6,11 +6,11 @@ using System.IO;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
-using Cedar.AuditTrail.Interception;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Cedar.Framwork.AuditTrail.Interception;
 
 #endregion
 

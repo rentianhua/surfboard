@@ -16,7 +16,7 @@ namespace FrameworkTest.DataBase
 
         public RedisWrapperUnitTest()
         {
-            _wrapper = new RedisDatabaseWrapper("172.16.0.204", 4);
+            _wrapper = new RedisDatabaseWrapper("172.16.0.204", 4, "2257013F03EA762AB1559A00F22D2F86");
         }
 
         [TestMethod]
@@ -37,7 +37,7 @@ namespace FrameworkTest.DataBase
             var hashSetresult = _wrapper.StringSet(key, key);
             var hashGetresult = _wrapper.StringGet(key);
             var keyExpireresult = _wrapper.KeyExpire(key, timespan);
-            Thread.Sleep(timespan);
+            Thread.Sleep(new TimeSpan(0, 0, 3));
             var newhashGetresult = _wrapper.StringGet(key);
             Assert.IsTrue(hashSetresult);
             Assert.IsNotNull(hashGetresult);
