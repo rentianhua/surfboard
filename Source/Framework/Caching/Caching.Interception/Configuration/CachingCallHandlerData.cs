@@ -3,14 +3,17 @@ using System.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity;
 
-namespace Cedar.Framwork.Caching.Interception.Configuration
+namespace Cedar.Framework.Caching.Interception.Configuration
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CachingCallHandlerData : CallHandlerData
     {
         private const string ExpirationTimePropertyName = "expirationTime";
 
         /// <summary>
-        ///     Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance.
+        ///     Create a new <see cref="T:Cedar.Framework.Caching.Interception.Configuration.CachingCallHandlerData" /> instance.
         /// </summary>
         public CachingCallHandlerData()
         {
@@ -18,7 +21,7 @@ namespace Cedar.Framwork.Caching.Interception.Configuration
         }
 
         /// <summary>
-        ///     Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance
+        ///     Create a new <see cref="T:Cedar.Framework.Caching.Interception.Configuration.CachingCallHandlerData" /> instance
         ///     with the given name.
         /// </summary>
         /// <param name="handlerName">Name of handler to store in config file.</param>
@@ -28,7 +31,7 @@ namespace Cedar.Framwork.Caching.Interception.Configuration
         }
 
         /// <summary>
-        ///     Create a new <see cref="T:Cedar.Framwork.Caching.Interception.Configuration.CachingCallHandlerData" /> instance
+        ///     Create a new <see cref="T:Cedar.Framework.Caching.Interception.Configuration.CachingCallHandlerData" /> instance
         ///     with the given name.
         /// </summary>
         /// <param name="handlerName">Name of handler to store in config file.</param>

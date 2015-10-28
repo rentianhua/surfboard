@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     This class represent a single item of an audit log entry.
@@ -8,7 +8,7 @@ namespace Cedar.Framwork.AuditTrail
     public class AuditLogEntryItem
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Cedar.Framwork.AuditTrail.AuditLogEntryItem" /> class.
+        ///     Initializes a new instance of the <see cref="T:Cedar.Framework.AuditTrail.Base.AuditLogEntryItem" /> class.
         /// </summary>
         /// <param name="operation">The operation.</param>
         /// <param name="logId">The log id.</param>

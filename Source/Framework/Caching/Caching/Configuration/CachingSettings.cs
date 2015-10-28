@@ -3,7 +3,7 @@ using Cedar.Core.Configuration;
 using Cedar.Core.IoC;
 using Microsoft.Practices.EnterpriseLibrary.Common.Utility;
 
-namespace Cedar.Framwork.Caching.Configuration
+namespace Cedar.Framework.Caching.Configuration
 {
     /// <summary>
     /// </summary>

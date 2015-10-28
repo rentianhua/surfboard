@@ -7,8 +7,8 @@
     <ProjectGuid>{CFC68F4D-2269-4FAF-8B9C-1D7B6EBC1B51}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cedar.Framwork.Caching.Interception</RootNamespace>
-    <AssemblyName>Cedar.Framwork.Caching.Interception</AssemblyName>
+    <RootNamespace>Cedar.Framework.Caching.Interception</RootNamespace>
+    <AssemblyName>Cedar.Framework.Caching.Interception</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\..\Lib\Cedar.Framwork.Caching.Interception.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\..\Lib\Cedar.Framework.Caching.Interception.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

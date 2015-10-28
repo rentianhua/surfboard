@@ -1,4 +1,4 @@
-﻿namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     The type of operation to be audited.

@@ -3,7 +3,7 @@ using System.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity;
 
-namespace Cedar.Framwork.AuditTrail.Interception.Configuration
+namespace Cedar.Framework.AuditTrail.Interception.Configuration
 {
     /// <summary>
     ///     AuditTrail CallhandlerData containing the configuration definition for CallHandler.

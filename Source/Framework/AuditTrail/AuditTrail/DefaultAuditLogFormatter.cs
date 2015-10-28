@@ -2,8 +2,9 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Text;
+using Cedar.Framework.AuditTrail.Base;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail
 {
     /// <summary>
     ///     The audit log formatter which is by default used.

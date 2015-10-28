@@ -1,4 +1,4 @@
-﻿namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     All of audit log filters used by audit log listeners to determine whether to write the given log entry.

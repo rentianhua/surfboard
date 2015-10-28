@@ -1,8 +1,9 @@
 ﻿using Cedar.Core.Configuration;
-using Cedar.Framwork.AuditTrail.Configuration;
+using Cedar.Framework.AuditTrail.Base;
+using Cedar.Framework.AuditTrail.Configuration;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail
 {
     /// <summary>
     ///     This audit log filter match all <see cref="T:Cedar.Framwork.AuditTrail.AuditLogEntry" />.
@@ -11,7 +12,7 @@ namespace Cedar.Framwork.AuditTrail
     public class MatchAllAuditLogFilter : AuditLogFilterBase
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="T:Cedar.Framwork.AuditTrail.MatchAllAuditLogFilter" /> class.
+        ///     Initializes a new instance of the <see cref="T:Cedar.Framework.AuditTrail.MatchAllAuditLogFilter" /> class.
         /// </summary>
         /// <param name="name">The name.</param>
         public MatchAllAuditLogFilter(string name = null) : base(string.IsNullOrEmpty(null) ? "MatchAll" : name)

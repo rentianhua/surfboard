@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cedar.Framework.AuditTrail.Base;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail
 {
     internal class CompositeAuditLogListener : AuditLogListenerBase
     {

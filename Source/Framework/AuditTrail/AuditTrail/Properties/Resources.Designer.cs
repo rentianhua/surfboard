@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Cedar.Framwork.AuditTrail.Properties
-{
+namespace Cedar.Framework.AuditTrail.Properties {
     using System;
-
-
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,140 +22,41 @@ namespace Cedar.Framwork.AuditTrail.Properties
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources
-    {
-
+    internal class Resources {
+        
         private static global::System.Resources.ResourceManager resourceMan;
-
+        
         private static global::System.Globalization.CultureInfo resourceCulture;
-
+        
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources()
-        {
+        internal Resources() {
         }
-
+        
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager
-        {
-            get
-            {
-                if (object.ReferenceEquals(resourceMan, null))
-                {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cedar.Framwork.AuditTrail.Properties.Resources", typeof(Resources).Assembly);
+        internal static global::System.Resources.ResourceManager ResourceManager {
+            get {
+                if (object.ReferenceEquals(resourceMan, null)) {
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Cedar.Framework.AuditTrail.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
             }
         }
-
+        
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture
-        {
-            get
-            {
+        internal static global::System.Globalization.CultureInfo Culture {
+            get {
                 return resourceCulture;
             }
-            set
-            {
+            set {
                 resourceCulture = value;
-            }
-        }
-
-        /// <summary>
-		///   Looks up a localized string similar to {0} Can not  be null..
-		/// </summary>
-		internal static string CanotBeNull
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("CanotBeNull", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot get the transaction ID from the current application context..
-        /// </summary>
-        internal static string ExceptionCurrentTransactionIdNotExists
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionCurrentTransactionIdNotExists", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to Cannot get the user name from the current application context..
-        /// </summary>
-        internal static string ExceptionCurrentUserNameNotExists
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionCurrentUserNameNotExists", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to The specified "{0}" is not a valid  AuditLogFormatter type..
-        /// </summary>
-        internal static string ExceptionInvalidAuditLogFormatterType
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionInvalidAuditLogFormatterType", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to The specified audit log entry field name "{0}" is invalid..
-        /// </summary>
-        internal static string ExceptionInvalidFieldName
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionInvalidFieldName", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to This method invocation is invalid because the AuditLogger is disposed..
-        /// </summary>
-        internal static string ExceptionLoggerIsDisposed
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionLoggerIsDisposed", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to There is no StorageProvider configured..
-        /// </summary>
-        internal static string ExceptionNoStorageProviderConfigured
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionNoStorageProviderConfigured", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to The Custom Encoder '{0}' with Type '{1}' must derive from IServiceLocator..
-        /// </summary>
-        internal static string ExceptionTypeForCustomEncoderMustDeriveFrom
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionTypeForCustomEncoderMustDeriveFrom", Resources.resourceCulture);
-            }
-        }
-        /// <summary>
-        ///   Looks up a localized string similar to The Storage Provider '{0}' with Type '{1}' must derive from IServiceLocator..
-        /// </summary>
-        internal static string ExceptionTypeForCustomStorgateProviderMustDeriveFrom
-        {
-            get
-            {
-                return Resources.ResourceManager.GetString("ExceptionTypeForCustomStorgateProviderMustDeriveFrom", Resources.resourceCulture);
             }
         }
     }

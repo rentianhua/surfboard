@@ -3,7 +3,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail.Interception
+namespace Cedar.Framework.AuditTrail.Interception
 {
     /// <summary>
     ///     AuditTrail HanlderAttribute.

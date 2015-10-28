@@ -1,8 +1,11 @@
 ﻿using System.Configuration;
 using Cedar.Core.Configuration;
 
-namespace Cedar.Framwork.Caching.Configuration
+namespace Cedar.Framework.Caching.Configuration
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CachingData : ProviderDataBase<CachingProviderBase>
     {
         private const string EnabledProperty = "enabled";
@@ -15,7 +18,7 @@ namespace Cedar.Framwork.Caching.Configuration
         private const string PrefixPropertyName = "prefix";
 
         /// <summary>
-        ///     Gets or sets a value indicating whether this <see cref="T:Cedar.Framwork.Caching.Configuration.CachingData" /> is
+        ///     Gets or sets a value indicating whether this <see cref="T:Cedar.Framework.Caching.Configuration.CachingData" /> is
         ///     enabled.
         /// </summary>
         /// <value>

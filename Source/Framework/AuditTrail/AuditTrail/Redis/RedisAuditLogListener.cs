@@ -1,9 +1,10 @@
 ﻿using Cedar.Core.Configuration;
 using Cedar.Core.EntLib.Data;
+using Cedar.Framework.AuditTrail.Base;
 using Microsoft.Practices.Unity.Utility;
 using Newtonsoft.Json;
 
-namespace Cedar.Framwork.AuditTrail.Redis
+namespace Cedar.Framework.AuditTrail.Redis
 {
     /// <summary>
     ///     This audit log listener which writes the log entries into database.

@@ -1,4 +1,4 @@
-﻿namespace Cedar.Framwork.AuditTrail
+﻿namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     All of the audit log formatters used to forma the log data object as a literal text must implement this interface.

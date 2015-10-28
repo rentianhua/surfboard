@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using Cedar.Core.Configuration;
 using Cedar.Core.EntLib.Data;
+using Cedar.Framework.AuditTrail.Base;
 using Microsoft.Practices.Unity.Utility;
 
-namespace Cedar.Framwork.AuditTrail.Redis
+namespace Cedar.Framework.AuditTrail.Redis
 {
     /// <summary>
     /// </summary>

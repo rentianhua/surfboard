@@ -1,13 +1,10 @@
 ﻿using System;
-using Cedar.Framwork.AuditTrail.Interception.Configuration;
+using Cedar.Framework.AuditTrail.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Newtonsoft.Json;
 
-//using Cedar.Framwork.AuditTrail.BusinessEntity;
-//using Cedar.Framwork.AuditTrail.Interface;
-
-namespace Cedar.Framwork.AuditTrail.Interception
+namespace Cedar.Framework.AuditTrail.Interception
 {
     /// <summary>
     /// 

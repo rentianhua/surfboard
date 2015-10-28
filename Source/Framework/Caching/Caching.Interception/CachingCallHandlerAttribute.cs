@@ -2,7 +2,7 @@
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace Cedar.Framwork.Caching.Interception
+namespace Cedar.Framework.Caching.Interception
 {
     /// <summary>
     /// </summary>
@@ -12,7 +12,7 @@ namespace Cedar.Framwork.Caching.Interception
         private readonly TimeSpan expirationTime;
 
         /// <summary>
-        ///     Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute" /> using the default
+        ///     Creates a <see cref="T:Cedar.Framework.Caching.Interception.CachingCallHandlerAttribute" /> using the default
         ///     expiration time of 5 minutes.
         /// </summary>
         public CachingCallHandlerAttribute()
@@ -21,7 +21,7 @@ namespace Cedar.Framwork.Caching.Interception
         }
 
         /// <summary>
-        ///     Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandlerAttribute" /> using the given
+        ///     Creates a <see cref="T:Cedar.Framework.Caching.Interception.CachingCallHandlerAttribute" /> using the given
         ///     expiration time.
         /// </summary>
         /// <param name="hours">Hours until expiration.</param>

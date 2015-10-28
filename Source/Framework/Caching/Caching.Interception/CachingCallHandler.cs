@@ -2,12 +2,15 @@
 using System.Reflection;
 using System.Web;
 using System.Web.Caching;
-using Cedar.Framwork.Caching.Interception.Configuration;
+using Cedar.Framework.Caching.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 
-namespace Cedar.Framwork.Caching.Interception
+namespace Cedar.Framework.Caching.Interception
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ConfigurationElementType(typeof (CachingCallHandlerData))]
     public class CachingCallHandler : ICallHandler
     {
@@ -17,7 +20,7 @@ namespace Cedar.Framwork.Caching.Interception
         public static readonly TimeSpan DefaultExpirationTime = new TimeSpan(0, 0, 0);
 
         /// <summary>
-        ///     Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the default expiration
+        ///     Creates a <see cref="T:Cedar.Framework.Caching.Interception.CachingCallHandler" /> that uses the default expiration
         ///     time of 5 minutes.
         /// </summary>
         public CachingCallHandler() : this(DefaultExpirationTime)
@@ -25,7 +28,7 @@ namespace Cedar.Framwork.Caching.Interception
         }
 
         /// <summary>
-        ///     Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the given expiration
+        ///     Creates a <see cref="T:Cedar.Framework.Caching.Interception.CachingCallHandler" /> that uses the given expiration
         ///     time.
         /// </summary>
         /// <param name="expirationTime">
@@ -39,7 +42,7 @@ namespace Cedar.Framwork.Caching.Interception
         }
 
         /// <summary>
-        ///     Creates a <see cref="T:Cedar.Framwork.Caching.Interception.CachingCallHandler" /> that uses the given expiration
+        ///     Creates a <see cref="T:Cedar.Framework.Caching.Interception.CachingCallHandler" /> that uses the given expiration
         ///     time.
         /// </summary>
         /// <param name="expirationTime">

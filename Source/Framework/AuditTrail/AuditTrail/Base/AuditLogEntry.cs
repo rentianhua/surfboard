@@ -6,7 +6,7 @@ using System.Reflection;
 using Cedar.Core;
 using Cedar.Core.ApplicationContexts;
 
-namespace Cedar.Framwork.AuditTrail
+namespace Cedar.Framework.AuditTrail.Base
 {
     /// <summary>
     ///     This class represents a single audit log entry.
