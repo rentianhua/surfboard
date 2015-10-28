@@ -5,8 +5,8 @@ using CCN.Modules.Customer.BusinessComponent;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
+using Cedar.Framwork.AuditTrail.Interception;
 
 #endregion
 

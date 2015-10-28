@@ -37,11 +37,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cedar.AuditTrail.Interception, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Cedar.AuditTrail.Interception.dll</HintPath>
-    </Reference>
     <Reference Include="Cedar.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Cedar.Core.dll</HintPath>
@@ -82,6 +81,9 @@
     <Reference Include="Cedar.Framwork.AuditTrail, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Cedar.Framwork.AuditTrail.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Framwork.AuditTrail.Interception">
+      <HintPath>..\..\Lib\Cedar.Framwork.AuditTrail.Interception.dll</HintPath>
     </Reference>
     <Reference Include="Cedar.Framwork.Caching, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -148,6 +150,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -171,6 +174,11 @@
     <Compile Include="Core\SettingSourceUnitTest.cs" />
     <Compile Include="DataBase\RedisWrapperUnitTest.cs" />
     <Compile Include="DemoInstanceService.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="TestService\ITestService.cs" />
     <Compile Include="TestService\Models.cs" />
     <Compile Include="TestService\TestService.cs" />
@@ -206,6 +214,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Choose>

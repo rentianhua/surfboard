@@ -36,7 +36,7 @@
       <HintPath>..\..\..\..\Lib\Google.ProtocolBuffers.dll</HintPath>
     </Reference>
     <Reference Include="PostMsg_Net">
-      <HintPath>..\..\..\..\UnitTest\FrameworkTest\bin\Debug\PostMsg_Net.dll</HintPath>
+      <HintPath>ExternalFile\PostMsg_Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,6 +53,11 @@
     <Compile Include="SMSMSG.cs" />
     <Compile Include="SMSSDK.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="ExternalFile\Google.ProtocolBuffers.dll" />
+    <Content Include="ExternalFile\PostMsg_Net.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

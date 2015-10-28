@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
-using Cedar.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
+using Cedar.Framwork.AuditTrail.Interception;
 using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Car.BusinessComponent
@@ -24,7 +24,7 @@ namespace CCN.Modules.Car.BusinessComponent
         public CarBC(CarDataAccess da)
             : base(da)
         {
-            
+
         }
 
         #region 车辆
@@ -54,7 +54,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 jResult.errmsg = "";
                 return jResult;
             }
-            
+
             jResult.errcode = 0;
             jResult.errmsg = carInfo;
             return jResult;
@@ -97,9 +97,9 @@ namespace CCN.Modules.Car.BusinessComponent
                 jResult.errmsg = "车辆信息不存在";
                 return jResult;
             }
-            
+
             //车辆评估信息已经存在
-            if(!string.IsNullOrWhiteSpace(carInfo.estimateprice))
+            if (!string.IsNullOrWhiteSpace(carInfo.estimateprice))
             {
                 jResult.errcode = 0;
                 jResult.errmsg = carInfo.estimateprice;
@@ -135,7 +135,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 jResult.errmsg = "没有车辆评估信息";
                 return jResult;
             }
-            
+
 
             //保存评估信息
             Task.Factory.StartNew(() =>
@@ -251,7 +251,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = result > 0 ? "操作成功" : "操作失败"
             };
         }
-        
+
         /// <summary>
         /// 删除车辆(物理删除，暂不用)
         /// </summary>
@@ -364,7 +364,7 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.CancelCar(id);
         }
-        
+
         /// <summary>
         /// 获取车辆 分享/查看次数
         /// </summary>
@@ -373,8 +373,8 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult GetCarShareInfo(string carid)
         {
             var carInfo = DataAccess.GetCarShareInfo(carid);
-            return carInfo == null 
-                ? JResult._jResult(400, "") 
+            return carInfo == null
+                ? JResult._jResult(400, "")
                 : JResult._jResult(0, carInfo);
         }
         #endregion
@@ -430,7 +430,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var result = DataAccess.DeleteCarPicture(innerid);
             if (result > 0)
             {
-                
+
             }
             return new JResult
             {

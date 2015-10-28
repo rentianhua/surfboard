@@ -1,6 +1,5 @@
 ﻿using System;
-using Cedar.AuditTrail.Interception.Configuration;
-using Cedar.Framwork.AuditTrail;
+using Cedar.Framwork.AuditTrail.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
 using Newtonsoft.Json;
@@ -8,8 +7,11 @@ using Newtonsoft.Json;
 //using Cedar.Framwork.AuditTrail.BusinessEntity;
 //using Cedar.Framwork.AuditTrail.Interface;
 
-namespace Cedar.AuditTrail.Interception
+namespace Cedar.Framwork.AuditTrail.Interception
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ConfigurationElementType(typeof (AuditTrailCallHandlerData))]
     public class AuditTrailCallHandler : ICallHandler
     {
