@@ -20,9 +20,12 @@ namespace CCN.Modules.Rewards.DataAccess
         public int ChangePoint(CustPointModel model)
         {
 
-            const string sql = @"insert into point_record(innerid, custid, type, sourceid, point, remark, validtime, createdtime) values (@innerid, @custid, @type, @sourceid, @point, @remark, @validtime, @createdtime);";
-            const string sqlUCustCurr = "update cust_total_info set currpoint=currpoint+@changenum where custid=@custid;";
-            const string sqlUCustInfo = "update cust_info set totalpoints=totalpoints+@changenum where innerid=@innerid;";
+            const string sql =
+                @"insert into point_record(innerid, custid, type, sourceid, point, remark, validtime, createdtime) values (@innerid, @custid, @type, @sourceid, @point, @remark, @validtime, @createdtime);";
+            const string sqlUCustCurr =
+                "update cust_total_info set currpoint=currpoint+@changenum where custid=@custid;";
+            const string sqlUCustInfo =
+                "update cust_info set totalpoints=totalpoints+@changenum where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -35,7 +38,7 @@ namespace CCN.Modules.Rewards.DataAccess
                     switch (model.Type)
                     {
                         case 1: //加积分 同时要累积到会员的基本信息中，用于会员升级用等
-                            conn.Execute(sqlUCustInfo, new { changenum = model.Point, innerid = model.Custid }, tran);
+                            conn.Execute(sqlUCustInfo, new {changenum = model.Point, innerid = model.Custid}, tran);
                             break;
                         case 2: //减积分 将积分变成负数
                             model.Point = -Math.Abs(model.Point);
@@ -43,7 +46,7 @@ namespace CCN.Modules.Rewards.DataAccess
                     }
 
                     //变更会员的当前积分数
-                    conn.Execute(sqlUCustCurr, new { changenum = model.Point, custid = model.Custid }, tran);
+                    conn.Execute(sqlUCustCurr, new {changenum = model.Point, custid = model.Custid}, tran);
 
                     tran.Commit();
                     return 1;
@@ -65,8 +68,10 @@ namespace CCN.Modules.Rewards.DataAccess
         public BasePageList<CustPointViewModel> GetCustPointLogPageList(CustPointQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"point_record as a left join base_code as b on a.sourceid=b.codevalue and b.typekey='point_source'";
-            const string fields = "a.innerid, a.custid, a.type, a.point, a.remark, a.validtime, a.createdtime,b.codename as source";
+            const string tableName =
+                @"point_record as a left join base_code as b on a.sourceid=b.codevalue and b.typekey='point_source'";
+            const string fields =
+                "a.innerid, a.custid, a.type, a.point, a.remark, a.validtime, a.createdtime,b.codename as source";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder($"a.custid='{query.Custid}'");
@@ -91,7 +96,8 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and a.point<={query.MaxPoint}");
             }
 
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
             var list = Helper.ExecutePaging<CustPointViewModel>(model, query.Echo);
             return list;
         }
@@ -104,10 +110,14 @@ namespace CCN.Modules.Rewards.DataAccess
         public int PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
             var guid = Guid.NewGuid().ToString();
-            const string sqlISent = @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
-            const string sqlIRecord = @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 2, @sourceid, @point, @remark, null, @createdtime);";
-            const string sqlIExChange = @"insert into point_exchange (innerid, custid, recordid, `point`, `code`, createdtime) values (uuid(), @custid, @recordid, @point, @code, @createdtime);";
-            const string sqlICode = @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
+            const string sqlISent =
+                @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
+            const string sqlIRecord =
+                @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 2, @sourceid, @point, @remark, null, @createdtime);";
+            const string sqlIExChange =
+                @"insert into point_exchange (innerid, custid, recordid, `point`, `code`, createdtime) values (uuid(), @custid, @recordid, @point, @code, @createdtime);";
+            const string sqlICode =
+                @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
             const string sqlUCoupon = "update coupon_card set count=count-1 where innerid=@cardid;";
             const string sqlUPoint = "update cust_total_info set currpoint=currpoint-@point where custid=@custid;";
 
@@ -160,10 +170,10 @@ namespace CCN.Modules.Rewards.DataAccess
                     }, tran);
 
                     //更新卡券库存
-                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+                    conn.Execute(sqlUCoupon, new {cardid = model.Cardid}, tran);
 
                     //更新会员的积分
-                    conn.Execute(sqlUPoint, new { custid = model.Custid, point = model.Point }, tran);
+                    conn.Execute(sqlUPoint, new {custid = model.Custid, point = model.Point}, tran);
 
                     tran.Commit();
                     return 1;
@@ -189,7 +199,8 @@ namespace CCN.Modules.Rewards.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_card";
-            const string fields = "innerid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype, createdtime, modifiedtime, isenabled";
+            const string fields =
+                "innerid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype, createdtime, modifiedtime, isenabled";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -219,7 +230,8 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and amount<={query.MaxAmount}");
             }
 
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
             var list = Helper.ExecutePaging<CouponInfoModel>(model, query.Echo);
             return list;
         }
@@ -291,7 +303,7 @@ namespace CCN.Modules.Rewards.DataAccess
 
             try
             {
-                var custModel = Helper.Query<CouponInfoModel>(sql, new { innerid }).FirstOrDefault();
+                var custModel = Helper.Query<CouponInfoModel>(sql, new {innerid}).FirstOrDefault();
                 return custModel;
 
             }
@@ -308,7 +320,8 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public int UpdateStock(CouponInfoModel model)
         {
-            const string sql = "update coupon_card set maxcount=maxcount+@count,count=count+@count where innerid=@innerid";
+            const string sql =
+                "update coupon_card set maxcount=maxcount+@count,count=count+@count where innerid=@innerid";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -323,6 +336,44 @@ namespace CCN.Modules.Rewards.DataAccess
                     tran.Rollback();
                     return 0;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public int UpdateValidity(CouponInfoModel model)
+        {
+
+            try
+            {
+                if (model.Vtype == 1)
+                {
+                    const string sql = "update coupon_card set vstart=@vstart,vend=@vend where innerid=@innerid";
+                    Helper.Execute(sql, new
+                    {
+                        innerid = model.Innerid,
+                        vstart = model.Vstart,
+                        vend = model.Vend
+                    });
+                }
+                else
+                {
+                    const string sql = "update coupon_card set value1=@value1,value2=@value2 where innerid=@innerid";
+                    Helper.Execute(sql, new
+                    {
+                        innerid = model.Innerid,
+                        value1 = model.Value1,
+                        value2 = model.Value2
+                    });
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
         }
 

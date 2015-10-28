@@ -78,6 +78,11 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         public string Headportrait { get; set; }
 
         /// <summary>
+        /// 微信头像
+        /// </summary>
+        public string Photo { get; set; }
+
+        /// <summary>
         /// 用户状态[1.正常，2.冻结]
         /// </summary>
         public int Status { get; set; }
@@ -108,9 +113,16 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         public int Level { get; set; }
 
         /// <summary>
+        /// 拥有车辆数
+        /// </summary>
+        public int Carnum { get; set; }
+
+        /// <summary>
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
+
+
     }
 
     /// <summary>

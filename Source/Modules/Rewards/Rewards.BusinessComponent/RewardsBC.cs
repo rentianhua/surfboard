@@ -192,6 +192,36 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var result = DataAccess.UpdateStock(model);
             return JResult._jResult(result);
         }
+
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult UpdateValidity(CouponInfoModel model)
+        {
+            var m = DataAccess.GetCouponById(model.Innerid);
+            if (m == null)
+            {
+                return JResult._jResult(401, "礼券不存在");
+            }
+            if (m.Vtype == 1)
+            {
+                if (model.Vstart > m.Vstart || model.Vend < m.Vend)
+                {
+                    return JResult._jResult(402, "有效期只能延长");
+                }
+            }
+            else
+            {
+                if (model.Value2 < m.Value2)
+                {
+                    return JResult._jResult(402, "有效期只能延长");
+                }
+            }
+            var result = DataAccess.UpdateValidity(model);
+            return JResult._jResult(result);
+        }
         #endregion
 
 
