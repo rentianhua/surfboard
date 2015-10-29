@@ -71,5 +71,16 @@ namespace CCN.Modules.CustRelations.Interface
         JResult GetCustRelationsByUserId(string userid);
 
         #endregion
+
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query);
+
+        #endregion
     }
 }

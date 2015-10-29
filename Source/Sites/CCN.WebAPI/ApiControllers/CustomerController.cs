@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Base.Interface;
@@ -7,6 +8,7 @@ using CCN.Modules.Customer.Interface;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Client.DelegationHandler;
 
@@ -98,9 +100,9 @@ namespace CCN.WebAPI.ApiControllers
             if (result.errcode == 0)
             {
                 Task.Factory.StartNew(() =>
-                {
+                {                    
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                    rewardsservice.ChangePoint(new CustPointModel
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = result.errmsg.ToString(),
                         Createdtime = userInfo.Createdtime,
@@ -111,6 +113,7 @@ namespace CCN.WebAPI.ApiControllers
                         Sourceid = 1,
                         Validtime = null
                     });
+                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
                 });
             }
             
@@ -455,5 +458,20 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        [Route("DeleteCustomer")]
+        [HttpGet]
+        public JResult DeleteCustomer(string mobile)
+        {
+            return _custservice.DeleteCustomer(mobile);
+        }
+
+        #endregion
     }
 }

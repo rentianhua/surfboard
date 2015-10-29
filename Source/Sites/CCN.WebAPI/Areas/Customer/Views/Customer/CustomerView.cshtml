@@ -22,7 +22,7 @@
             $.get("/api/Customer/GetCustById?innerid=" + innerid, function (data) {
                 console.log(data);
 
-                if (data.errcode != 0) {
+                if (data.errcode !== 0) {
                     alert("获取会员基本信息失败！");
                     return;
                 }
@@ -40,10 +40,10 @@
                     (obj.ProvName == null ? "" : obj.ProvName) + " " +
                     (obj.CityName == null ? "" : obj.CityName) + " " +
                     (obj.Area == null ? "" : obj.Area));
-                $("#status").html(obj.Status == 1 ? "正常" : "<font color='red'>冻结中</font>");
+                $("#status").html(obj.Status === 1 ? "正常" : "<font color='red'>冻结中</font>");
 
                 var headurl = "";
-                if (obj.Headportrait != "") {
+                if (obj.Headportrait !== "") {
                     headurl = getQiniuUrl(obj.Headportrait);
                 }
                 else {
@@ -61,10 +61,10 @@
                 $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
 
                 //提交过认证信息
-                if (obj.AuthStatus != 0) {
+                if (obj.AuthStatus !== 0) {
                     $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
                         console.log(data);
-                        if (data.errcode != 0) {
+                        if (data.errcode !== 0) {
                             alert("获取会员认证信息失败！");
                             return;
                         }
@@ -81,11 +81,13 @@
                         var applytime = authObj.Modifiedtime == null ? authObj.Createdtime : authObj.Modifiedtime;
                         $("#applytime").html(Dateformat(applytime, "yyyy-MM-dd HH:mm:ss"));
 
-                        $.each(authObj.Relevantpicture.split(","), function (key, val) {
-                            if ($.trim(val).length > 0) {
-                                $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='" + getQiniuUrl(val) + "' />");
-                            }
-                        });
+                        if (authObj.Relevantpicture != null && authObj.Relevantpicture != undefined) {
+                            $.each(authObj.Relevantpicture.split(","), function (key, val) {
+                                if ($.trim(val).length > 0) {
+                                    $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='" + getQiniuUrl(val) + "' />");
+                                }
+                            });
+                        }
 
                         //初始化块
                         switch (obj.AuthStatus) {
@@ -123,7 +125,7 @@
                 }
 
                 $.post("/api/Customer/AuditAuthentication", json, function (data) {
-                    if (data.errcode == 0) {
+                    if (data.errcode === 0) {
                         alert("操作成功");
                         self.location = document.referrer;
                     }

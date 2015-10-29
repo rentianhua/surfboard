@@ -13,11 +13,7 @@
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
-<<<<<<< HEAD
     var CardModel = null;
-=======
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
-
     $(function() {
         BindDDL();
         Init();
@@ -57,11 +53,7 @@
                     $("#vvalue").html("领取后 " + obj.Value1 + " 天开始生效，有效天数为 " + obj.Value2 + " 天");
                 }
 
-<<<<<<< HEAD
                 $("#aDelay").click(ShowDelayDiv);
-=======
-                $("#aDelay").click(ShowDelayDiv(obj.Vtype));
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
             }
         });
     }
@@ -74,7 +66,6 @@
         }
         var json = { Innerid: id, Count: addcount };
         $.post("/api/Rewards/UpdateStock", json, function(result) {
-<<<<<<< HEAD
             alert(result.errmsg);
             location.reload();
         });
@@ -110,30 +101,21 @@
 
 
         $.post("/api/Rewards/UpdateStock", json, function(result) {
-=======
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
             alert(result.errmsg);
             location.reload();
         });
     }
 
-<<<<<<< HEAD
     function ShowDelayDiv() {
         $("#vvalue").addClass("hide");
         $("#aDelay").addClass("hide");
         if (CardModel.Vtype === 1) {
-=======
-    function ShowDelayDiv(type) {
-        alert(type);
-        if (type === 1) {
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
             $("#divv1").removeClass('hide');
         } else {
             $("#divv2").removeClass('hide');
         }
     }
 
-<<<<<<< HEAD
     function CancelDelay() {
 
         $("#vvalue").removeClass("hide");
@@ -150,8 +132,6 @@
         }
         $("#selectvalue2").append("<option value='100'>100天</option>");
     }
-=======
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
 
 </script>
     <div>
@@ -175,7 +155,6 @@
                 <tr>
                     <td>有效期</td>
                     <td>
-<<<<<<< HEAD
                         <div>
                             <label id="vvalue"></label>
                             <a href="javascript:;" id="aDelay">延期</a>
@@ -194,17 +173,6 @@
                             <select id="selectvalue2"></select>
                             <input type="button" value="确定" onclick="AddDelay(2);"/>
                             <input type="button" value="取消" onclick="CancelDelay();" />
-=======
-                        <label id="vvalue"></label>
-                        <a href="javascript:;" id="aDelay">延期</a>
-                        <div id="divv1" class="margintop hide">
-                            <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
-                            <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
-                        </div>
-                        <div id="divv2" class="margintop hide">
-                            领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
-                            <input type="number" id="value2" placeholder="" maxlength="5" />
->>>>>>> 4da11a6a8d44af97f69bc939ec8cfc1f96c2b332
                         </div>
                     </td>
                 </tr>

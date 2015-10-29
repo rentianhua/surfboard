@@ -442,7 +442,7 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
-        /// 累计点赞次数
+        /// 累计评论次数
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
