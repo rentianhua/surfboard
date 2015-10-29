@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Linq;
@@ -836,6 +837,37 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
-        
+        #region 数据清理
+
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public int DeleteCustomer(string mobile)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_mobile = mobile
+                };
+
+                var args = new DynamicParameters(obj);
+                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                using (var result = conn.QueryMultiple("ccnsp_clearData", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    //var data = result.Read<T>();
+                }
+
+                return args.Get<int>("p_values");
+            }
+        }
+
+        #endregion
     }
 }
