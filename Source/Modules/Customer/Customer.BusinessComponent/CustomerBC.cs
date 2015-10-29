@@ -11,6 +11,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -58,7 +59,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult CustRegister(CustModel userInfo)
         {
-            //LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             var mYan = DataAccess.CheckMobile(userInfo.Mobile);
             if (mYan > 0)
             {
@@ -157,6 +158,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
+            LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 return JResult._jResult(403, "帐户名不能为空");
@@ -733,5 +735,23 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
+        #region 数据清理
+        
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public JResult DeleteCustomer(string mobile)
+        {
+            var result = DataAccess.DeleteCustomer(mobile);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "删除成功" : "删除失败"
+            };
+        }
+
+        #endregion
     }
 }

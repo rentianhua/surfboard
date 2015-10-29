@@ -230,5 +230,15 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        JResult DeleteCustomer(string mobile);
+
+        #endregion
     }
 }

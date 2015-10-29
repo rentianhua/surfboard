@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustRelationsApplyModels.cs" />
+    <Compile Include="CustRelationsCarModel.cs" />
     <Compile Include="CustRelationsModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

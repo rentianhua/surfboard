@@ -108,5 +108,19 @@ namespace CCN.Modules.CustRelations.BusinessService
         }
 
         #endregion
+
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query)
+        {
+            return BusinessComponent.GetHaveCarCustList(query);
+        }
+
+        #endregion
     }
 }

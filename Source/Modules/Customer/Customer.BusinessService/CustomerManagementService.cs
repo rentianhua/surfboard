@@ -328,5 +328,18 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public JResult DeleteCustomer(string mobile)
+        {
+            return BusinessComponent.DeleteCustomer(mobile);
+        }
+
+        #endregion
     }
 }

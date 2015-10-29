@@ -139,6 +139,11 @@ namespace CCN.WebAPI.ApiControllers
             return _rewardsservice.UpdateValidity(model);
         }
 
+        #region 礼券对外接口
+
+
+
+        #endregion
         #endregion
     }
 }

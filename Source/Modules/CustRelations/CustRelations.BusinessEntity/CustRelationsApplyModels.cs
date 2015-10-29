@@ -93,18 +93,13 @@ namespace CCN.Modules.CustRelations.BusinessEntity
     /// <summary>
     /// 好友关系申请model
     /// </summary>
-    public class CustRelationsApplyViewModels
+    public class CustRelationsApplyViewModels : CustRelationsViewModel
     {
 
         /// <summary>
         /// 主键
         /// </summary>
         public string Innerid { get; set; }
-
-        /// <summary>
-        /// 提交用户id
-        /// </summary>
-        public string Fromid { get; set; }
 
         /// <summary>
         /// 欲加好友id
@@ -114,16 +109,11 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         /// <summary>
         /// [0待接收/1已接收/2拒绝]
         /// </summary>
-        public int Status { get; set; }
+        public int ApplyStatus { get; set; }
 
         /// <summary>
         /// 来源
         /// </summary>
         public string Source { get; set; }
-
-        /// <summary>
-        /// 会员头像
-        /// </summary>
-        public string FromUserIcon { get; set; }
     }
 }

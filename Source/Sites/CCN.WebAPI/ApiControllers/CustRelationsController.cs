@@ -120,5 +120,21 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetHaveCarCustList")]
+        [HttpPost]
+        public BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query)
+        {
+            return _service.GetHaveCarCustList(query);
+        }
+
+        #endregion
     }
 }
