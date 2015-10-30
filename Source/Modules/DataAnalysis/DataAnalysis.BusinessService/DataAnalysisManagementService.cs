@@ -181,6 +181,24 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetPersonalIncome();
         }
 
+        /// <summary>
+        /// 个人季度收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByQuarter()
+        {
+            return BusinessComponent.GetPersonalIncomeByQuarter();
+        }
+
+        /// <summary>
+        /// 个人月收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByMonth()
+        {
+            return BusinessComponent.GetPersonalIncomeByMonth();
+        }
+
         #endregion
     }
 }

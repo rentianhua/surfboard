@@ -352,14 +352,72 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         #endregion
 
         #region 个人收入分析
+
+        /// <summary>
+        /// 季度数字装汉字
+        /// </summary>
+        /// <returns></returns>
+        private string NumToChanrQuarter(string quarterNum)
+        {
+            string strReturn = string.Empty;
+            switch (quarterNum) {
+                case "1":
+                    strReturn = "一季度";
+                    break;
+                case "2":
+                    strReturn = "二季度";
+                    break;
+                case "3":
+                    strReturn = "三季度";
+                    break;
+                case "4":
+                    strReturn = "四季度";
+                    break;
+            }
+                
+            return strReturn;
+        }
+
         /// <summary>
         /// 个人收入分析
         /// </summary>
         /// <returns></returns>
         public JResult GetPersonalIncome()
         {
-            var list = DataAccess.GetPersonalIncome();
-            if (list == null)
+            var listQuarter = DataAccess.GetPersonalIncomeByQuarter();
+            var listMonth = DataAccess.GetPersonalIncomeByMonth();
+            if (listQuarter != null && listMonth != null)
+            {
+                foreach (var model in listQuarter)
+                {
+                    model.value5 = listMonth.Where(s => s.value == model.key).ToList();
+                    model.key = NumToChanrQuarter(model.key);
+                }
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = listQuarter
+                };
+            }
+            else
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+        }
+
+        /// <summary>
+        /// 个人季度收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByQuarter()
+        {
+            var listQuarter = DataAccess.GetPersonalIncomeByQuarter();
+
+            if (listQuarter == null)
             {
                 return new JResult
                 {
@@ -370,7 +428,30 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
             return new JResult
             {
                 errcode = 0,
-                errmsg = list
+                errmsg = listQuarter
+            };
+        }
+
+        /// <summary>
+        /// 个人月收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByMonth()
+        {
+            var listMonth = DataAccess.GetPersonalIncomeByMonth();
+
+            if (listMonth == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = listMonth
             };
         }
         #endregion
