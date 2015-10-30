@@ -30,5 +30,15 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// value3
         /// </summary>
         public List<DataAnalysisModel> value3 { get; set; }
+
+        /// <summary>
+        /// value4
+        /// </summary>
+        public decimal value4 { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IEnumerable<dynamic> value5 { get; set; }
     }
 }

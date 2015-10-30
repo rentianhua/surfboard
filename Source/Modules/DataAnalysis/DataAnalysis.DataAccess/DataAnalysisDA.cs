@@ -607,13 +607,63 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         #endregion
 
         #region 个人收入分析
+
+        /// <summary>
+        /// 个人季度收入
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetPersonalIncomeByQuarter()
+        {
+
+            //获取当前年份
+            int yearflg = DateTime.Now.Year;
+
+            const string sql = @"select sum(ifnull(dealprice, 0)) as value4, 
+                                 quarter(sold_time) as `key` from car_info_bak
+                                    where year(sold_time) = @yearflg   
+                                    group by `key` 
+                                    order by `key` desc;";
+            try
+            {
+                return Helper.Query<DataAnalysisModel>(sql, new { yearflg });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 个人月收入
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetPersonalIncomeByMonth()
+        {
+
+            //获取当前年份
+            int yearflg = DateTime.Now.Year;
+
+            const string sql = @"select sum(ifnull(dealprice, 0)) as value4, month(sold_time) as `key`, 
+                                 quarter(sold_time) as value from car_info_bak
+                                    where year(sold_time) = @yearflg   
+                                    group by `key`, value 
+                                    order by `key` desc;";
+            try
+            {
+                return Helper.Query<DataAnalysisModel>(sql, new { yearflg });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// 个人收入分析
         /// </summary>
         /// <returns></returns>
         public IEnumerable<dynamic> GetPersonalIncome()
         {
-            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+            
+            List <DataAnalysisModel> list = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list1 = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list2 = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list3 = new List<DataAnalysisModel>();
