@@ -179,6 +179,22 @@ namespace CCN.Modules.Rewards.BusinessComponent
         }
 
         /// <summary>
+        /// 更新礼券状态
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateStatus(string cardid, int status)
+        {
+            if (string.IsNullOrWhiteSpace(cardid) || (status != 0 && status !=1))
+            {
+               return  JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateStatus(cardid, status);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
         /// 修改礼券库存
         /// </summary>
         /// <param name="model">礼券信息</param>
@@ -207,7 +223,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
             }
             if (m.Vtype == 1)
             {
-                if (model.Vstart > m.Vstart || model.Vend < m.Vend)
+                if (model.Vend < m.Vend)
                 {
                     return JResult._jResult(402, "有效期只能延长");
                 }
@@ -222,8 +238,102 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var result = DataAccess.UpdateValidity(model);
             return JResult._jResult(result);
         }
+
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BindWechatProduct(CouponCardProduct model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Cardid) || string.IsNullOrWhiteSpace(model.ProductId))
+            {
+                return JResult._jResult(402, "参数不完整！");
+            }
+            var count = DataAccess.ValidatedBindRepeat(model.ProductId);
+            if (count > 0)
+            {
+                return JResult._jResult(401,"该商品ID已绑定其他礼券！");
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.BindWechatProduct(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 礼券与微信小店产品解除绑定
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <returns></returns>
+        public JResult UnBindWechatProduct(string cardid)
+        {
+            var result = DataAccess.UnBindWechatProduct(cardid);
+            return JResult._jResult(result);
+        }
+
         #endregion
 
+        #region 礼券对外接口
 
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public JResult CouponToCustomer(CouponBuyModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不正确");
+            }
+
+
+
+
+            //if (string.IsNullOrWhiteSpace(model.Openid))
+            //{
+            //    return JResult._jResult(402, "会员不存在");
+            //}
+            //if (model.Point == 0)
+            //{
+            //    return JResult._jResult(403, "积分不够");
+            //}
+            //if (string.IsNullOrWhiteSpace(model.Cardid))
+            //{
+            //    return JResult._jResult(404, "礼券不存在");
+            //}
+
+            ////生成随机数
+            //model.Code = RandomUtility.GetRandomCode();
+            ////生成二维码位图
+            //var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
+
+            ////保存二维码图片到临时文件夹
+            //var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            //var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            //bitmap.Save(filepath);
+
+            ////上传图片到七牛云
+            //var qinniu = new QiniuUtility();
+            //model.QrCode = qinniu.PutFile(filepath, "", filename);
+
+            ////删除本地临时文件
+            //if (File.Exists(filepath))
+            //{
+            //    File.Delete(filepath);
+            //}
+
+            ////开始兑换
+            //model.Createdtime = DateTime.Now;
+            //var result = DataAccess.PointExchangeCoupon(model);
+            //return JResult._jResult(
+            //    result > 0 ? 0 : 400,
+            //    result > 0 ? "兑换成功" : "兑换失败");
+            return null;
+        }
+
+
+        #endregion
     }
 }

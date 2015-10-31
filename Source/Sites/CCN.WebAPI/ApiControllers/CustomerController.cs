@@ -278,6 +278,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        [Route("CancelAudit")]
+        [HttpGet]
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            return _custservice.CancelAuditAuthentication(custid);
+        }
+
+        /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
         /// <param name="innerid">id</param>

@@ -12,7 +12,7 @@
 
         function QueryList() {
             var json = { Mobile: $("#mobile").val() };
-            $("#custlist").getPageListWithSort(20, "/api/Customer/GetCustPageList", json, LoadData);
+            $("#custlist").getPageList(20, "/api/Customer/GetCustPageList", json, LoadData);
         }
 
         function LoadData(data, index) {
@@ -28,11 +28,11 @@
                 str += "<td>" + (val.Custname == null ? "" : val.Custname.sub(20)) + "</td>";
                 str += "<td>" + val.Mobile + "</td>";
                 str += "<td>" + (val.Email == null ? "" : val.Email) + "</td>";
-                str += "<td>" + (val.Status == 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
+                str += "<td>" + (val.Status === 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
                 str += "<td>" + ChangAuthStatus(val.AuthStatus) + "</td>";
                 str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
                 str += "<td><a href='/customer/customer/customerview?innerid=" + val.Innerid + "'>查看详情</a> ";
-                if (val.Status == 1) {
+                if (val.Status === 1) {
                     str += "<a href='javascript:;' onclick=\"FrozenCust('" + val.Innerid + "');\">冻结</a> ";
                 }
                 else {

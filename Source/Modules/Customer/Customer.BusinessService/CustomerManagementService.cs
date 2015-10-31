@@ -173,7 +173,17 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.AuditAuthentication(model);
         }
-        
+
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            return BusinessComponent.CancelAuditAuthentication(custid);
+        }
+
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>

@@ -57,9 +57,10 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
+
         public JResult CustRegister(CustModel userInfo)
         {
-            LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("注册：" + JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             var mYan = DataAccess.CheckMobile(userInfo.Mobile);
             if (mYan > 0)
             {
@@ -114,8 +115,8 @@ namespace CCN.Modules.Customer.BusinessComponent
                 {
                     var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
-                    var website = ConfigHelper.GetAppSettings("website");
-                    var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
+                    //var website = ConfigHelper.GetAppSettings("website");
+                    var bitmap = BarCodeUtility.CreateBarcode(userInfo.Mobile, 240, 240);
 
                     //保存图片到临时文件夹
                     bitmap.Save(filepath);
@@ -158,7 +159,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
-            LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("登录："+JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 return JResult._jResult(403, "帐户名不能为空");
@@ -416,6 +417,17 @@ namespace CCN.Modules.Customer.BusinessComponent
                 errcode = result > 0 ? 0 : 400,
                 errmsg = result > 0 ? "审核成功" : "审核失败"
             };
+        }
+
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            var result = DataAccess.CancelAuditAuthentication(custid);
+            return JResult._jResult(result);
         }
 
 

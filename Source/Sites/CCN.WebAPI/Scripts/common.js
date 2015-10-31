@@ -74,12 +74,13 @@ var setCookie = function() {
     var expireTime = new Date().getTime() + 1000 * 36000;
     var da = new Date();
     da.setTime(expireTime);
-    document.cookie = 'userid=adminid;expires=' + da.toGMTString() + ';path=/';
+    document.cookie = 'userid=admin;expires=' + da.toGMTString() + ';path=/';
     document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
 }
 
 var getQiniuUrl = function(key) {
-    var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";
+    //var qiniuurl = "http://7xnwvr.com2.z0.glb.qiniucdn.com/";  //正式空间
+    var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";   //测试空间
     return qiniuurl + key;
 }
 
