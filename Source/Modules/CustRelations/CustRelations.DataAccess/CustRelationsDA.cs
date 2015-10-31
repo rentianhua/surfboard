@@ -34,7 +34,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"cust_info as a 
-                                        inner join cust_wechat as c on a.innerid=c.custid
+                                        left join cust_wechat as c on a.innerid=c.custid
                                         left join wechat_friend as d on d.openid=c.openid";
             var fields = $"a.innerid,a.custname,a.mobile,a.`level`,a.headportrait,d.photo ,(select count(1) from car_info where custid=a.innerid) as carnum,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.custname asc,a.createdtime desc" : query.Order;
@@ -253,8 +253,13 @@ namespace CCN.Modules.CustRelations.DataAccess
                     //接受
                     if (status == 1)
                     {
-                        conn.Execute(sqlInsert, new { userid = fromid, frientsid = toid, createdtime = DateTime.Now }, tran);
-                        conn.Execute(sqlInsert, new { userid = toid, frientsid = fromid, createdtime = DateTime.Now }, tran);
+                        const string sqlR = "select count(1) as count from cust_relations where userid=@userid and frientsid=@frientsid;";
+                        var isR = conn.Query<int>(sqlR, new {userid = fromid, frientsid = toid}).FirstOrDefault();
+                        if (isR == 0)
+                        {
+                            conn.Execute(sqlInsert, new { userid = fromid, frientsid = toid, createdtime = DateTime.Now }, tran);
+                            conn.Execute(sqlInsert, new { userid = toid, frientsid = fromid, createdtime = DateTime.Now }, tran);
+                        }
                     }
 
                     tran.Commit();

@@ -117,6 +117,12 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult AuditAuthentication(CustAuthenticationModel model);
 
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        JResult CancelAuditAuthentication(string custid);
 
         /// <summary>
         /// 获取会员认证信息 by innerid

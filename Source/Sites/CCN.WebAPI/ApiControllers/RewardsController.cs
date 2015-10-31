@@ -116,13 +116,26 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 更新礼券状态
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateStatus")]
+        [HttpPost]
+        public JResult UpdateStatus(string cardid, int status)
+        {
+            return _rewardsservice.UpdateStatus( cardid,  status);
+        }
+        
+        /// <summary>
         /// 修改礼券库存
         /// </summary>
         /// <param name="model">礼券信息</param>
         /// <returns></returns>
         [Route("UpdateStock")]
         [HttpPost]
-        public JResult UpdateStock(CouponInfoModel model)
+        public JResult UpdateStock([FromBody]CouponInfoModel model)
         {
             return _rewardsservice.UpdateStock(model);
         }
@@ -134,16 +147,51 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateValidity")]
         [HttpPost]
-        public JResult UpdateValidity(CouponInfoModel model)
+        public JResult UpdateValidity([FromBody]CouponInfoModel model)
         {
             return _rewardsservice.UpdateValidity(model);
         }
 
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BindWechatProduct")]
+        [HttpPost]
+        public JResult BindWechatProduct(CouponCardProduct model)
+        {
+            return _rewardsservice.BindWechatProduct(model);
+        }
+
+        /// <summary>
+        /// 礼券与微信小店产品解除绑定
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <returns></returns>
+        [Route("UnBindWechatProduct")]
+        [HttpGet]
+        public JResult UnBindWechatProduct(string cardid)
+        {
+            return _rewardsservice.UnBindWechatProduct(cardid);
+        }
+        #endregion
         #region 礼券对外接口
 
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        [Route("CouponToCustomer")]
+        [HttpPost]
+        public JResult CouponToCustomer(CouponBuyModel model)
+        {
+            return null;//_rewardsservice.CouponToCustomer(model);
+        }
 
 
-        #endregion
+
         #endregion
     }
 }

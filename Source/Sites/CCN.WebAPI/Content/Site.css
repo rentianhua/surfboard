@@ -20,6 +20,15 @@ textarea {
     display: none
 }
 
+label {
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+
+.margintop {
+        margin-top: 10px;
+    }
+
 /*table start*/
 table.gridtable {
             font-family: verdana, arial, sans-serif;

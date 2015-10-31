@@ -48,8 +48,7 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.PointExchangeCoupon(model);
         }
-
-
+        
         #endregion
 
         #region 会员礼券
@@ -93,6 +92,17 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.GetCouponById(innerid);
         }
+        
+        /// <summary>
+        /// 更新礼券状态
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateStatus(string cardid, int status)
+        {
+            return BusinessComponent.UpdateStatus(cardid, status);
+        }
 
         /// <summary>
         /// 修改礼券库存
@@ -113,6 +123,27 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.UpdateValidity(model);
         }
+        
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BindWechatProduct(CouponCardProduct model)
+        {
+            return BusinessComponent.BindWechatProduct(model);
+        }
+
+        /// <summary>
+        /// 礼券与微信小店产品解除绑定
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <returns></returns>
+        public JResult UnBindWechatProduct(string cardid)
+        {
+            return BusinessComponent.UnBindWechatProduct(cardid);
+        }
+
         #endregion
     }
 }

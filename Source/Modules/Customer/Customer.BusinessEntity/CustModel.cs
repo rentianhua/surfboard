@@ -57,19 +57,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 所在地：身份
         /// </summary>
         public int? Provid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ProvName { get; set; }
 
         /// <summary>
         /// 所在地：城市
         /// </summary>
         public int? Cityid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string CityName { get; set; }
 
         /// <summary>
         /// 所在地：区/县
@@ -483,5 +475,27 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 当前礼券数
         /// </summary>
         public int Currpouponnum { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CustViewModel : CustModel
+    {
+        /// <summary>
+        /// 会员所在城市
+        /// </summary>
+        public string CityName { get; set; }
+
+
+        /// <summary>
+        /// 会员所在省份
+        /// </summary>
+        public string ProvName { get; set; }
+
+        /// <summary>
+        /// 会员总数信息
+        /// </summary>
+        public CustTotalModel TotalInfo { get; set; }
     }
 }

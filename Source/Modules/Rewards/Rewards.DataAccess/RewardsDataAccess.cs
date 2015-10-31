@@ -119,7 +119,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string sqlICode =
                 @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
             const string sqlUCoupon = "update coupon_card set count=count-1 where innerid=@cardid;";
-            const string sqlUPoint = "update cust_total_info set currpoint=currpoint-@point where custid=@custid;";
+            const string sqlUPoint = "update cust_total_info set currpoint=currpoint-@point,currpouponnum=currpouponnum+1 where custid=@custid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -165,7 +165,6 @@ namespace CCN.Modules.Rewards.DataAccess
                         code = model.Code,
                         gettime = model.Createdtime,
                         sourceid = model.Sourceid,
-                        point = model.Point,
                         qrcode = model.QrCode
                     }, tran);
 
@@ -299,7 +298,7 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public CouponInfoModel GetCouponById(string innerid)
         {
-            const string sql = "select * from coupon_card where innerid=@innerid;";
+            const string sql = "select a.*,b.productid from coupon_card as a left join coupon_card_product as b on a.innerid=b.cardid where a.innerid=@innerid;";
 
             try
             {
@@ -310,6 +309,33 @@ namespace CCN.Modules.Rewards.DataAccess
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// 更新礼券状态
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateStatus(string cardid,int status)
+        {
+            const string sql = "update coupon_card set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = cardid, isenabled = status }, tran);
+                    //需要考虑已发出去的礼券这么处理
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
             }
         }
 
@@ -376,6 +402,133 @@ namespace CCN.Modules.Rewards.DataAccess
                 return 0;
             }
         }
+
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="productid"></param>
+        /// <returns></returns>
+        public int ValidatedBindRepeat(string productid)
+        {
+            const string sql = @"select count(1) from coupon_card_product where productid=@productid;";
+
+            try
+            {
+                var count = Helper.ExecuteScalar<int>(sql, new { productid });
+                return count;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int BindWechatProduct(CouponCardProduct model)
+        {
+            const string sql = @"INSERT INTO coupon_card_product (innerid, cardid, productid, createdtime)
+                                VALUES (@innerid, @cardid, @productid, @createdtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 礼券与微信小店产品解除绑定
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <returns></returns>
+        public int UnBindWechatProduct(string cardid)
+        {
+            const string sql = @"delete from coupon_card_product where cardid=@cardid;";
+
+            try
+            {
+                Helper.Execute(sql, new { cardid});
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        #endregion
+
+        #region 礼券对外接口
+
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public int CouponToCustomer(CouponSendModel model)
+        {
+            const string sqlISent =
+                @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
+            const string sqlICode =
+                @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
+            const string sqlUCoupon = "update coupon_card set count=count-1 where innerid=@cardid;";
+            const string sqlUCouponTotal = "update cust_total_info set currpouponnum=currpouponnum+@number where custid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //插入领取通知
+                    conn.Execute(sqlISent, new
+                    {
+                        cardid = model.Cardid,
+                        custid = model.Custid,
+                        createdtime = model.Createdtime,
+                        receivetime = model.Createdtime,
+                        sourceid = model.Sourceid
+                    }, tran);
+
+                    foreach (var item in model.ListCode)
+                    {
+                        //插入礼券code
+                        conn.Execute(sqlICode, new
+                        {
+                            cardid = model.Cardid,
+                            custid = model.Custid,
+                            code = item.Code,
+                            gettime = model.Createdtime,
+                            sourceid = model.Sourceid,
+                            qrcode = item.QrCode
+                        }, tran);
+
+                    }
+                    
+                    //更新卡券库存
+                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+
+                    //更新会员的积分
+                    conn.Execute(sqlUCouponTotal, new { custid = model.Custid, number = model.Number }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
 
         #endregion
     }

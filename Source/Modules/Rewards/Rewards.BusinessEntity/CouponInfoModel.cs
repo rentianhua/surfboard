@@ -84,10 +84,14 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public DateTime? Modifiedtime { get; set; }
 
         /// <summary>
-        /// 使用启用
+        /// 是否启用
         /// </summary>
         public int? IsEnabled { get; set; }
-        
+
+        /// <summary>
+        /// 绑定的微小店的产品id
+        /// </summary>
+        public string ProductId { get; set; }
     }
 
     /// <summary>
@@ -140,5 +144,31 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public int? IsEnabled { get; set; }
 
+    }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CouponCardProduct
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 礼券
+        /// </summary>
+        public string Cardid { get; set; }
+
+        /// <summary>
+        /// 微信小店产品id
+        /// </summary>
+        public string ProductId { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
     }
 }
