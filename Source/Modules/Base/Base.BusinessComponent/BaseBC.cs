@@ -69,7 +69,6 @@ namespace CCN.Modules.Base.BusinessComponent
             string content;
             switch (utype)
             {
-                
                 case 1:
                     content = $"{vcode}（平台注册验证码，{valid}分钟内有效）";
                     break;
@@ -210,21 +209,13 @@ namespace CCN.Modules.Base.BusinessComponent
             }
             
             var listProv = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
-            var listResult = new List<JsonGroupByModel>();
-            foreach (var item in listProv)
-            {
-                var il = list.Where(x => x.Initial == item).ToList();
-                if (!il.Any())
+            var listResult = (from item in listProv
+                let il = list.Where(x => x.Initial.ToUpper().Trim() == item).ToList()
+                where il.Any()
+                select new JsonGroupByModel
                 {
-                    continue;
-                }
-                var m = new JsonGroupByModel
-                {
-                    Initial = item,
-                    ProvList = il
-                };
-                listResult.Add(m);
-            }
+                    Initial = item, ProvList = il
+                }).ToList();
 
             return new JResult
             {
@@ -245,6 +236,16 @@ namespace CCN.Modules.Base.BusinessComponent
         public IEnumerable<BaseCarBrandModel> GetCarBrand(string initial)
         {
             return DataAccess.GetCarBrand(initial);
+        }
+
+        /// <summary>
+        /// 获取品牌热度Top n
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarBrandHotTop(int top)
+        {
+            var list = DataAccess.GetCarBrandHotTop(top);
+            return list.Any() ? JResult._jResult(0,list) : JResult._jResult(400, "");
         }
 
         /// <summary>

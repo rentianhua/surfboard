@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
@@ -244,7 +245,18 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
         {
-            return DataAccess.GetCustPageList(query);
+            if (!string.IsNullOrWhiteSpace(query?.Mobile) && query.Mobile.Trim().Length >= 4)
+
+                return DataAccess.GetCustPageList(query);
+
+            var list = new BasePageList<CustModel>
+            {
+                aaData = null,
+                iTotalRecords = 0,
+                iTotalDisplayRecords = 0,
+                sEcho = 0
+            };
+            return list;
         }
 
         /// <summary>
@@ -558,6 +570,27 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(0, list);
         }
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult RepeatPraise(string custid, string openid)
+        {
+            var list = DataAccess.GetLaudatorListByCustid(custid).ToList();
+            if (!list.Any())
+            {
+                return JResult._jResult(0, "");
+            }
+            if (list.Any(item => item.Openid.Equals(openid)))
+            {
+                return JResult._jResult(400, "");
+            }
+            
+            return JResult._jResult(00, "");
+        }
+
         #endregion
 
         #region 会员标签
@@ -748,6 +781,20 @@ namespace CCN.Modules.Customer.BusinessComponent
         #endregion
 
         #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteAll()
+        {
+            var result = DataAccess.DeleteAll();
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "清除成功" : "清除失败"
+            };
+        }
         
         /// <summary>
         /// 删除会员所有信息

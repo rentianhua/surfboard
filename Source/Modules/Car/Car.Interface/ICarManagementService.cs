@@ -160,6 +160,13 @@ namespace CCN.Modules.Car.Interface
         /// <summary>
         /// 添加车辆图片
         /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(WeichatPictureModel picModel);
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
         /// <param name="innerid">车辆图片id</param>
         /// <returns></returns>
         JResult DeleteCarPicture(string innerid);

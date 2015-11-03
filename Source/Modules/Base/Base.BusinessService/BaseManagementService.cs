@@ -112,6 +112,15 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         /// <summary>
+        /// 获取品牌热度Top n
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarBrandHotTop(int top)
+        {
+            return BusinessComponent.GetCarBrandHotTop(top);
+        }
+
+        /// <summary>
         /// 根据品牌id获取车系
         /// </summary>
         /// <param name="brandId">品牌id</param>

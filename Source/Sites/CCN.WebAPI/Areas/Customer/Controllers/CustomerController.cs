@@ -31,6 +31,15 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 用户编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CustomerAdd(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
         #endregion
     }
 }

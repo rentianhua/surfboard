@@ -157,6 +157,13 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult GetLaudatorListByCustid(string custid);
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        JResult RepeatPraise(string custid, string openid);
         #endregion
 
         #region 会员标签
@@ -237,6 +244,12 @@ namespace CCN.Modules.Customer.Interface
         #endregion
 
         #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        JResult DeleteAll();
 
         /// <summary>
         /// 删除会员所有信息

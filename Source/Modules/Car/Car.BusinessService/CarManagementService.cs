@@ -233,6 +233,16 @@ namespace CCN.Modules.Car.BusinessService
         /// <summary>
         /// 添加车辆图片
         /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(WeichatPictureModel picModel)
+        {
+            return BusinessComponent.AddCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
         /// <param name="innerid">车辆图片id</param>
         /// <returns></returns>
         public JResult DeleteCarPicture(string innerid)

@@ -170,6 +170,17 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 获取品牌热度Top n
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetCarBrandHotTop")]
+        [HttpGet]
+        public JResult GetCarBrandHotTop(int top = 5)
+        {
+            return _baseservice.GetCarBrandHotTop(top);
+        }
+
+        /// <summary>
         /// 根据品牌id获取车系
         /// </summary>
         /// <param name="brandId">品牌id</param>

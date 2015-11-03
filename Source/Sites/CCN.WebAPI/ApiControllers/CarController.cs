@@ -14,6 +14,7 @@ using CCN.Modules.Rewards.Interface;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -310,6 +311,13 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.AddCarPicture(model);
         }
 
+        [Route("AddCarPictureList")]
+        [HttpPost]
+        public JResult AddCarPictureList([FromBody] WeichatPictureModel picModel)
+        {
+            return _baseservice.AddCarPictureList(picModel);
+        }
+        
         /// <summary>
         /// 添加车辆图片
         /// </summary>
