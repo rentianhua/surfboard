@@ -70,5 +70,50 @@ namespace Cedar.Framework.Common.BaseClasses
             }
             return "";
         }
+
+        /// <summary>
+        /// 获取文件名
+        /// </summary>
+        /// <param name="picture"></param>
+        /// <returns></returns>
+        public static string GetFileName(Picture picture)
+        {
+            var filename = string.Concat(picture, "_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+            return filename;
+        }
+
+        /// <summary>
+        /// 获取文件路径
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public static string GetFilePath(string filename)
+        {
+            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            return filepath;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum Picture
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        car_picture,
+        /// <summary>
+        /// 
+        /// </summary>
+        cust_qrcode,
+        /// <summary>
+        /// 
+        /// </summary>
+        card_logo,
+        /// <summary>
+        /// 
+        /// </summary>
+        card_qrcode
     }
 }

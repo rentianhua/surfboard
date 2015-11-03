@@ -871,6 +871,26 @@ namespace CCN.Modules.Customer.DataAccess
 
         #region 数据清理
 
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteAll()
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                var args = new DynamicParameters();
+                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                using (var result = conn.QueryMultiple("ccnsp_clearall", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    //var data = result.Read<T>();
+                }
+
+                return args.Get<int>("p_values");
+            }
+        }
 
         /// <summary>
         /// 删除会员所有信息

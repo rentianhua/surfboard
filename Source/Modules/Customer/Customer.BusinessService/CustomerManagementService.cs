@@ -229,6 +229,16 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.GetLaudatorListByCustid(custid);
         }
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult RepeatPraise(string custid, string openid)
+        {
+            return BusinessComponent.RepeatPraise(custid, openid);
+        }
         #endregion
 
         #region 会员标签
@@ -339,6 +349,15 @@ namespace CCN.Modules.Customer.BusinessService
         #endregion
 
         #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteAll()
+        {
+            return BusinessComponent.DeleteAll();
+        }
 
         /// <summary>
         /// 删除会员所有信息

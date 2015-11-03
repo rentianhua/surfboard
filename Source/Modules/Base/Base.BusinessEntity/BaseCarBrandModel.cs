@@ -40,5 +40,10 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 品牌图标
         /// </summary>
         public string Logurl { get; set; }
+
+        /// <summary>
+        /// 热度
+        /// </summary>
+        public int Hot { get; set; }
     }
 }
