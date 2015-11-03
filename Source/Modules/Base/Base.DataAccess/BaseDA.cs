@@ -133,7 +133,18 @@ namespace CCN.Modules.Base.DataAccess
             {
                 where += $" and initial='{initial.ToUpper()}'";
             }
-            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl from base_carbrand where {where} order by initial asc,brandname asc";
+            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl,hot from base_carbrand where {where} order by initial asc,brandname asc";
+            var brandList = Helper.Query<BaseCarBrandModel>(sql);
+            return brandList;
+        }
+
+        /// <summary>
+        /// 获取品牌热度Top n
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarBrandModel> GetCarBrandHotTop(int top)
+        {
+            var sql = "select innerid, brandname, initial, isenabled, remark, logurl, hot from base_carbrand where isenabled=1 order by hot desc,brandname asc limit " + top;
             var brandList = Helper.Query<BaseCarBrandModel>(sql);
             return brandList;
         }

@@ -54,5 +54,26 @@ namespace CCN.Modules.Car.BusinessEntity
             Createdtime = DateTime.Now;
         }
     }
-    
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class WeichatPictureModel
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string AccessToken { get; set; }
+
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 图片链接id
+        /// </summary>
+        public List<string> MediaIdList { get; set; }
+    }
+
 }

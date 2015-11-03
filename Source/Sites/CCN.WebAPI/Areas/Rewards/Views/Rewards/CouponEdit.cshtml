@@ -140,7 +140,7 @@
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                //location.href = "/rewards/rewards/couponlist";
+                location.href = "/rewards/rewards/couponlist";
             });
         } else {
 
