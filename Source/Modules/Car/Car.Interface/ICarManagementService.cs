@@ -33,6 +33,13 @@ namespace CCN.Modules.Car.Interface
         JResult GetCarViewById(string id);
 
         /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo"></param>
+        /// <returns></returns>
+        JResult GetCarEvaluateByCar(CarInfoModel carInfo);
+
+        /// <summary>
         /// 车辆估值
         /// </summary>
         /// <param name="id">车辆id</param>
