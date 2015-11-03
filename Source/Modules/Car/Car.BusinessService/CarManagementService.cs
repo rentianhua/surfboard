@@ -54,6 +54,16 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        {
+            return BusinessComponent.GetCarEvaluateByCar(carInfo);
+        }
+
+        /// <summary>
         /// 车辆估值
         /// </summary>
         /// <param name="id">车辆id</param>
