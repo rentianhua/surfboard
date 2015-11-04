@@ -529,6 +529,67 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        public int GetCoupon(CouponSendModel model)
+        {
+            const string sqlISent =
+                @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
+            const string sqlICode =
+                @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
+            const string sqlUCoupon = "update coupon_card set count=count-1 where innerid=@cardid;";
+            const string sqlUCouponTotal = "update cust_total_info set currpouponnum=currpouponnum+@number where custid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //插入领取通知
+                    conn.Execute(sqlISent, new
+                    {
+                        cardid = model.Cardid,
+                        custid = model.Custid,
+                        createdtime = model.Createdtime,
+                        receivetime = model.Createdtime,
+                        sourceid = model.Sourceid
+                    }, tran);
+
+                    foreach (var item in model.ListCode)
+                    {
+                        //插入礼券code
+                        conn.Execute(sqlICode, new
+                        {
+                            cardid = model.Cardid,
+                            custid = model.Custid,
+                            code = item.Code,
+                            gettime = model.Createdtime,
+                            sourceid = model.Sourceid,
+                            qrcode = item.QrCode
+                        }, tran);
+
+                    }
+
+                    //更新卡券库存
+                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+
+                    //更新会员的积分
+                    conn.Execute(sqlUCouponTotal, new { custid = model.Custid, number = model.Number }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
 
         #endregion
     }

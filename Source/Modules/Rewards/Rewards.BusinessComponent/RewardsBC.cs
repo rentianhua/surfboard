@@ -283,12 +283,19 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult CouponToCustomer(CouponBuyModel model)
         {
-            if (model == null)
+            if (model == null || string.IsNullOrWhiteSpace(model.Openid) || string.IsNullOrWhiteSpace(model.ProductId))
             {
                 return JResult._jResult(401, "参数不正确");
             }
 
+            //var couponModel = DataAccess.GetCouponById()
 
+            var sendModel = new CouponSendModel
+            {
+                Cardid = ""
+            };
+
+            DataAccess.CouponToCustomer(sendModel);
 
 
             //if (string.IsNullOrWhiteSpace(model.Openid))
