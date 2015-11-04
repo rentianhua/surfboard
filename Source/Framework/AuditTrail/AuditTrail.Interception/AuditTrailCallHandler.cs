@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics.Tracing;
+using System.Threading.Tasks;
 using Cedar.Framework.AuditTrail.Interception.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.Unity.InterceptionExtension;
@@ -9,7 +11,7 @@ namespace Cedar.Framework.AuditTrail.Interception
     /// <summary>
     /// 
     /// </summary>
-    [ConfigurationElementType(typeof (AuditTrailCallHandlerData))]
+    [ConfigurationElementType(typeof(AuditTrailCallHandlerData))]
     public class AuditTrailCallHandler : ICallHandler
     {
         /// <summary>
@@ -60,35 +62,12 @@ namespace Cedar.Framework.AuditTrail.Interception
             IMethodReturn result;
             try
             {
-                var auditLogger = AuditLogger.CreateAuditLogger(FunctionName);
                 var methodReturn = getNext()(input, getNext);
                 if (methodReturn != null)
                 {
-                    //var data = new AuditLogModel()
-                    //{
-                    //    ID = Guid.NewGuid().ToString(),
-                    //    AuditName = FunctionName,
-                    //    AuditType = input.MethodBase.Name,
-                    //    Arguments = input.Arguments,
-                    //    LogDateTime = DateTime.Now,
-                    //    Result = methodReturn.ReturnValue,
-                    //    Target = input.Target,
-                    //    TransactionID = "TransactionID"
-                    //};
-                    //try
-                    //{
-                    //    auditservice.InsertAuditLog(data);
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    //todo add log
-                    //}
                     if (methodReturn.Exception == null)
                     {
-                        auditLogger.Write(input.MethodBase.Name, string.Empty,
-                            JsonConvert.SerializeObject(input.Arguments),
-                            JsonConvert.SerializeObject(methodReturn.ReturnValue));
-                        auditLogger.Flush();
+                        Task.Run(() => { Log(input, methodReturn); });
                     }
                 }
                 result = methodReturn;
@@ -98,6 +77,15 @@ namespace Cedar.Framework.AuditTrail.Interception
                 result = input.CreateExceptionMethodReturn(ex);
             }
             return result;
+        }
+
+        private void Log(IMethodInvocation input, IMethodReturn methodReturn)
+        {
+            var auditLogger = AuditLogger.CreateAuditLogger(FunctionName);
+            auditLogger.Write(input.MethodBase.Name, string.Empty,
+               JsonConvert.SerializeObject(input.Arguments),
+               JsonConvert.SerializeObject(methodReturn.ReturnValue));
+            auditLogger.Flush();
         }
     }
 }

@@ -47,6 +47,14 @@
       <HintPath>..\..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CCN.Modules.Rewards.BusinessEntity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\CCN.Modules.Rewards.BusinessEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="CCN.Modules.Rewards.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\CCN.Modules.Rewards.Interface.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Core">
       <HintPath>..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>
