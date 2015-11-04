@@ -41,8 +41,20 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 return new BasePageList<CustViewModel>
                 {
                     aaData = null,
-                    iTotalDisplayRecords = 0,
-                    iTotalRecords = 0
+                    iTotalDisplayRecords = null,
+                    iTotalRecords = null,
+                    sEcho = null
+                };
+            }
+            //手机号小于4位不给搜索
+            if (string.IsNullOrWhiteSpace(query.Mobile) || query.Mobile.Trim().Length < 4)
+            {
+                return new BasePageList<CustViewModel>
+                {
+                    aaData = null,
+                    iTotalDisplayRecords = null,
+                    iTotalRecords = null,
+                    sEcho = null
                 };
             }
 

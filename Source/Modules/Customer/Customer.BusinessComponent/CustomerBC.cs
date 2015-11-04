@@ -245,18 +245,18 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
         {
-            if (!string.IsNullOrWhiteSpace(query?.Mobile) && query.Mobile.Trim().Length >= 4)
+            //if (!string.IsNullOrWhiteSpace(query?.Mobile) && query.Mobile.Trim().Length >= 4)
 
-                return DataAccess.GetCustPageList(query);
+            return DataAccess.GetCustPageList(query);
 
-            var list = new BasePageList<CustModel>
-            {
-                aaData = null,
-                iTotalRecords = 0,
-                iTotalDisplayRecords = 0,
-                sEcho = 0
-            };
-            return list;
+            //var list = new BasePageList<CustModel>
+            //{
+            //    aaData = null,
+            //    iTotalRecords = 0,
+            //    iTotalDisplayRecords = 0,
+            //    sEcho = 0
+            //};
+            //return list;
         }
 
         /// <summary>

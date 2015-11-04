@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Rewards.BusinessEntity;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Dapper;
@@ -179,6 +181,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Information, ex);
                     tran.Rollback();
                     return 0;
                 }
@@ -302,8 +305,8 @@ namespace CCN.Modules.Rewards.DataAccess
 
             try
             {
-                var custModel = Helper.Query<CouponInfoModel>(sql, new {innerid}).FirstOrDefault();
-                return custModel;
+                var couponModel = Helper.Query<CouponInfoModel>(sql, new {innerid}).FirstOrDefault();
+                return couponModel;
 
             }
             catch (Exception ex)
@@ -469,7 +472,7 @@ namespace CCN.Modules.Rewards.DataAccess
         #region 礼券对外接口
 
         /// <summary>
-        /// 修改礼券有效期
+        /// 批量发放礼券给会员
         /// </summary>
         /// <param name="model">礼券信息</param>
         /// <returns></returns>
@@ -479,7 +482,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
             const string sqlICode =
                 @"insert into coupon_code (innerid, cardid, `code`, custid, gettime, sourceid, qrcode) values (uuid(), @cardid, @code, @custid, @gettime, @sourceid, @qrcode);";
-            const string sqlUCoupon = "update coupon_card set count=count-1 where innerid=@cardid;";
+            const string sqlUCoupon = "update coupon_card set count=count-@number where innerid=@cardid;";
             const string sqlUCouponTotal = "update cust_total_info set currpouponnum=currpouponnum+@number where custid=@custid;";
 
             using (var conn = Helper.GetConnection())
@@ -513,7 +516,7 @@ namespace CCN.Modules.Rewards.DataAccess
                     }
                     
                     //更新卡券库存
-                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+                    conn.Execute(sqlUCoupon, new { cardid = model.Cardid, number = model.Number }, tran);
 
                     //更新会员的积分
                     conn.Execute(sqlUCouponTotal, new { custid = model.Custid, number = model.Number }, tran);
@@ -523,12 +526,50 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Information, ex);
                     tran.Rollback();
                     return 0;
                 }
             }
         }
 
+        /// <summary>
+        /// 根据商品id获取礼券信息
+        /// </summary>
+        /// <param name="productid">商品id</param>
+        /// <returns></returns>
+        public CouponInfoModel GetCouponByProductId(string productid)
+        {
+            const string sql = @"select a.* from coupon_card as a left join coupon_card_product as b on a.innerid=b.cardid where b.productid=@productid;";
+            try
+            {
+                var couponModel = Helper.Query<CouponInfoModel>(sql, new { productid }).FirstOrDefault();
+                return couponModel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 根据openid获取custid
+        /// </summary>
+        /// <param name="openid">商品id</param>
+        /// <returns></returns>
+        public string GetCustidByOpenid(string openid)
+        {
+            const string sql = @"select custid from cust_wechat where openid=@openid;";
+            try
+            {
+                var custid = Helper.Query<string>(sql, new { openid }).FirstOrDefault();
+                return custid;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         #endregion
     }
