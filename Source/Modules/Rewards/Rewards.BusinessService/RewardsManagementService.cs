@@ -145,5 +145,20 @@ namespace CCN.Modules.Rewards.BusinessService
         }
 
         #endregion
+
+        #region 礼券对外接口
+
+        /// <summary>
+        /// 批量购买礼券
+        /// </summary>
+        /// <param name="model">购买信息</param>
+        /// <returns></returns>
+        public JResult WholesaleCoupon(CouponBuyModel model)
+        {
+            return BusinessComponent.WholesaleCoupon(model);
+        }
+
+
+        #endregion
     }
 }

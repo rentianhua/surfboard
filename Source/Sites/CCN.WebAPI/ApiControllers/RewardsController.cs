@@ -176,22 +176,22 @@ namespace CCN.WebAPI.ApiControllers
             return _rewardsservice.UnBindWechatProduct(cardid);
         }
         #endregion
+
         #region 礼券对外接口
 
         /// <summary>
-        /// 修改礼券有效期
+        /// 批量购买礼券
         /// </summary>
-        /// <param name="model">礼券信息</param>
+        /// <param name="model">购买信息</param>
         /// <returns></returns>
-        [Route("CouponToCustomer")]
+        [Route("WholesaleCoupon")]
         [HttpPost]
-        public JResult CouponToCustomer(CouponBuyModel model)
+        [NonAction]
+        public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            return null;//_rewardsservice.CouponToCustomer(model);
+            return _rewardsservice.WholesaleCoupon(model);
         }
-
-
-
+        
         #endregion
     }
 }

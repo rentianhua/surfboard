@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.DataAccess;
@@ -277,67 +278,71 @@ namespace CCN.Modules.Rewards.BusinessComponent
         #region 礼券对外接口
 
         /// <summary>
-        /// 修改礼券有效期
+        /// 批量购买礼券
         /// </summary>
-        /// <param name="model">礼券信息</param>
+        /// <param name="model">购买信息</param>
         /// <returns></returns>
-        public JResult CouponToCustomer(CouponBuyModel model)
+        public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            if (model == null || string.IsNullOrWhiteSpace(model.Openid) || string.IsNullOrWhiteSpace(model.ProductId))
+            if (string.IsNullOrWhiteSpace(model?.Openid) || string.IsNullOrWhiteSpace(model.ProductId))
             {
                 return JResult._jResult(401, "参数不正确");
             }
 
-            //var couponModel = DataAccess.GetCouponById()
+            var couponModel = DataAccess.GetCouponByProductId(model.ProductId);
+            if (couponModel == null)
+            {
+                return JResult._jResult(402, "该商品ID没有绑定礼券");
+            }
 
+            var custid = DataAccess.GetCustidByOpenid(model.Openid);
+            if (string.IsNullOrWhiteSpace(custid))
+            {
+                return JResult._jResult(403, "会员不存在");
+            }
+                        
+            var codeList = new List<CouponCodeModel>();
+
+            for (int i = 0; i < model.Number; i++)
+            {
+                //生成随机数
+                var code = RandomUtility.GetRandomCode();
+                //生成二维码位图
+                var bitmap = BarCodeUtility.CreateBarcode(code, 240, 240);
+                var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+                var filepath = QiniuUtility.GetFilePath(filename);
+                bitmap.Save(filepath);
+
+                //上传图片到七牛云
+                var qinniu = new QiniuUtility();
+                var qrcode = qinniu.PutFile(filepath, "", filename);
+
+                //删除本地临时文件
+                if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
+
+                codeList.Add(new CouponCodeModel
+                {
+                    Code = code,
+                    QrCode = qrcode
+                });
+            }
+            
             var sendModel = new CouponSendModel
             {
-                Cardid = ""
+                Cardid = couponModel.Innerid,
+                Createdtime = DateTime.Now,
+                Number = model.Number,
+                Custid = custid,
+                ListCode = codeList
             };
 
-            DataAccess.CouponToCustomer(sendModel);
-
-
-            //if (string.IsNullOrWhiteSpace(model.Openid))
-            //{
-            //    return JResult._jResult(402, "会员不存在");
-            //}
-            //if (model.Point == 0)
-            //{
-            //    return JResult._jResult(403, "积分不够");
-            //}
-            //if (string.IsNullOrWhiteSpace(model.Cardid))
-            //{
-            //    return JResult._jResult(404, "礼券不存在");
-            //}
-
-            ////生成随机数
-            //model.Code = RandomUtility.GetRandomCode();
-            ////生成二维码位图
-            //var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
-
-            ////保存二维码图片到临时文件夹
-            //var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            //var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
-            //bitmap.Save(filepath);
-
-            ////上传图片到七牛云
-            //var qinniu = new QiniuUtility();
-            //model.QrCode = qinniu.PutFile(filepath, "", filename);
-
-            ////删除本地临时文件
-            //if (File.Exists(filepath))
-            //{
-            //    File.Delete(filepath);
-            //}
-
-            ////开始兑换
-            //model.Createdtime = DateTime.Now;
-            //var result = DataAccess.PointExchangeCoupon(model);
-            //return JResult._jResult(
-            //    result > 0 ? 0 : 400,
-            //    result > 0 ? "兑换成功" : "兑换失败");
-            return null;
+            var result = DataAccess.CouponToCustomer(sendModel);
+            return JResult._jResult(
+                result > 0 ? 0 : 400,
+                result > 0 ? "购买成功" : "购买失败");
         }
 
 
