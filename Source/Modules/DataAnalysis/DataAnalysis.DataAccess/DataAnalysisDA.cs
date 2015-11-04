@@ -619,7 +619,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             int yearflg = DateTime.Now.Year;
 
             const string sql = @"select sum(ifnull(dealprice, 0)) as value4, 
-                                 quarter(sold_time) as `key` from car_info_bak
+                                 quarter(sold_time) as `key` from car_info
                                     where year(sold_time) = @yearflg   
                                     group by `key` 
                                     order by `key` desc;";
@@ -643,7 +643,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             int yearflg = DateTime.Now.Year;
 
             const string sql = @"select sum(ifnull(dealprice, 0)) as value4, month(sold_time) as `key`, 
-                                 quarter(sold_time) as value from car_info_bak
+                                 quarter(sold_time) as value from car_info
                                     where year(sold_time) = @yearflg   
                                     group by `key`, value 
                                     order by `key` desc;";
