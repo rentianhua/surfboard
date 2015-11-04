@@ -9,8 +9,15 @@ namespace CCN.WebAPI.Areas.Car.Controllers
     public class CarController : Controller
     {
         // GET: Car/Car
-        public ActionResult CarList()
+        public ActionResult CarList(string custid)
         {
+            if (string.IsNullOrWhiteSpace(custid))
+            {
+                return RedirectToAction("CustomerList", "Customer");
+            }
+
+
+
             return View();
         }
 
