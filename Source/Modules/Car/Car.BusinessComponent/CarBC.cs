@@ -82,6 +82,57 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo"></param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        {
+            var jResult = new JResult();
+            
+            var paramList = new Dictionary<string, string>
+            {
+                {"modelId", carInfo.model_id.ToString()},
+                {"regDate", Convert.ToDateTime(carInfo.register_date).ToString("yyyy-MM")},
+                {"mile", carInfo.mileage.ToString()},
+                {"zone", carInfo.cityid.ToString()}
+            };
+
+            var juhe = new JuheUtility();
+            var result = juhe.GetUsedCarPrice(paramList);
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+
+            try
+            {
+                JObject jobj = JObject.Parse(result);
+                result = Math.Round(Convert.ToDouble(jobj["eval_price"].ToString()), 2).ToString();
+            }
+            catch (Exception)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+
+            //估价
+            carInfo.estimateprice = result;
+            //保存评估信息
+            DataAccess.SaveCarEvaluateInfo(carInfo);
+
+            jResult.errcode = 0;
+            jResult.errmsg = result;
+
+            return jResult;
+        }
+
+
+        /// <summary>
         /// 车辆估值
         /// </summary>
         /// <param name="id">车辆id</param>
