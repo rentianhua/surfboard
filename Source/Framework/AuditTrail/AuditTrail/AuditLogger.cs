@@ -5,7 +5,6 @@ using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Framework.AuditTrail.Base;
 using Cedar.Framework.AuditTrail.Configuration;
-using Cedar.Framework.AuditTrail.Properties;
 using Microsoft.Practices.Unity.Utility;
 
 namespace Cedar.Framework.AuditTrail
@@ -120,11 +119,12 @@ namespace Cedar.Framework.AuditTrail
         }
 
         /// <summary>
-        ///     Writes the specified action.
+        /// 
         /// </summary>
-        /// <param name="action">The action.</param>
-        /// <param name="actionDescription">The action description.</param>
-        /// <param name="actionRemarks">The action remarks.</param>
+        /// <param name="action"></param>
+        /// <param name="actionDescription"></param>
+        /// <param name="inputsParams"></param>
+        /// <param name="actionRemarks"></param>
         public void Write(string action, string actionDescription, string inputsParams, dynamic actionRemarks)
         {
             EnsureNotDisposed();

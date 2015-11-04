@@ -27,19 +27,20 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     根据订单ID获取订单详情
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="orderId">订单Id</param>
         /// <returns></returns>
-        public static GetByIdOrderResult GetByIdOrder(string accessToken, string orderId)
+        public static GetByIdOrderResult GetByIdOrder(string accessTokenOrAppId, string orderId)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                order_id = orderId
-            };
-
-            return CommonJsonSend.Send<GetByIdOrderResult>(accessToken, urlFormat, data);
+                var data = new
+                {
+                    order_id = orderId
+                };
+                return CommonJsonSend.Send<GetByIdOrderResult>(accessToken, urlFormat, data);
+            }, accessTokenOrAppId);
         }
 
         /// <summary>
@@ -106,19 +107,20 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     关闭订单
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="orderId">订单ID</param>
         /// <returns></returns>
-        public static WxJsonResult CloseOrder(string accessToken, string orderId)
+        public static WxJsonResult CloseOrder(string accessTokenOrAppId, string orderId)
         {
             var urlFormat = "https://api.weixin.qq.com/merchant/order/close?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                order_id = orderId
-            };
-
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+                var data = new
+                {
+                    order_id = orderId
+                };
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+            }, accessTokenOrAppId);
         }
     }
 }

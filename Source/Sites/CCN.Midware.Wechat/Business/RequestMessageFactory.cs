@@ -6,9 +6,11 @@ using System.Xml;
 using System.Xml.Linq;
 using Cedar.Core.IoC;
 using Cedar.Foundation.WeChat.Interface;
+using Newtonsoft.Json;
 using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 using Senparc.Weixin.MP.Entities;
 using Senparc.Weixin.MP.Entities.Request;
 using Senparc.Weixin.MP.Helpers;
@@ -81,7 +83,7 @@ namespace CCN.Midware.Wechat.Business
                                 requestMessage = new RequestMessageEvent_Subscribe();
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
-                                CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢关注我们车信网！");
+                                CustomApi.SendText(AppID, requestMessage.FromUserName, "欢迎关注车信网！");
                                 break;
                             case "UNSUBSCRIBE"://取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();
@@ -158,6 +160,11 @@ namespace CCN.Midware.Wechat.Business
                                 break;
                             case "MERCHANT_ORDER"://微小店订单付款通知
                                 requestMessage = new RequestMessageEvent_Merchant_Order();
+                                var merchantOrderresult = (RequestMessageEvent_Merchant_Order)requestMessage;
+                                EntityHelper.FillEntityWithXml(requestMessage, doc);
+                                var orderresult = OrderApi.GetByIdOrder(AppID, merchantOrderresult.OrderId);
+                                if (orderresult.errcode == 0)
+                                    Console.WriteLine(JsonConvert.SerializeObject(orderresult.order));
                                 break;
                             case "SUBMIT_MEMBERCARD_USER_INFO"://接收会员信息事件通知
                                 requestMessage = new RequestMessageEvent_Submit_Membercard_User_Info();
@@ -191,7 +198,6 @@ namespace CCN.Midware.Wechat.Business
         {
             return GetRequestEntity(service, XDocument.Parse(xml));
         }
-
 
         /// <summary>
         /// 获取XDocument转换后的IRequestMessageBase实例。
