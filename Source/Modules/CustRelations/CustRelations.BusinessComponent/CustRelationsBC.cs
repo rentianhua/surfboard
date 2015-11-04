@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.DataAccess;
-using Cedar.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
@@ -261,6 +261,20 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = errmsg
             };
         }
+        #endregion
+
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query)
+        {
+            return DataAccess.GetHaveCarCustList(query);
+        }
+
         #endregion
     }
 }

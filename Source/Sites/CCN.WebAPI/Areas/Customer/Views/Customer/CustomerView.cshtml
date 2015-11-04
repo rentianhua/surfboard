@@ -8,155 +8,176 @@
 
     var innerid = "@ViewBag.innerid";  //会员id
 
-        $(function() {
-            Init();
-        });
+    $(function() {
+        Init();
+    });
 
-        function Init() {
+    function Init() {
 
-            if (innerid === "") {
+        if (innerid === "") {
+            return;
+        }
+
+        //会员基本信息
+        $.get("/api/Customer/GetCustById?innerid=" + innerid, function (data) {
+            console.log(data);
+
+            if (data.errcode !== 0) {
+                alert("获取会员基本信息失败！");
                 return;
             }
 
-            //会员基本信息
-            $.get("/api/Customer/GetCustById?innerid=" + innerid, function (data) {
-                console.log(data);
+            var obj = data.errmsg;
 
-                if (data.errcode != 0) {
-                    alert("获取会员基本信息失败！");
-                    return;
-                }
+            $("#custname").html(obj.Custname);
 
-                var obj = data.errmsg;
+            $("#mobile").html(obj.Mobile);
+            $("#telephone").html(obj.Telephone);
+            $("#brithday").html(obj.Brithday);
+            $("#qq").html(obj.QQ);
+            $("#signature").html(obj.Signature);
+            $("#location").html(
+                (obj.ProvName == null ? "" : obj.ProvName) + " " +
+                (obj.CityName == null ? "" : obj.CityName) + " " +
+                (obj.Area == null ? "" : obj.Area));
+            $("#status").html(obj.Status === 1 ? "正常" : "<font color='red'>冻结中</font>");
 
-                $("#custname").html(obj.Custname);
-                
-                $("#mobile").html(obj.Mobile);
-                $("#telephone").html(obj.Telephone);
-                $("#brithday").html(obj.Brithday);
-                $("#qq").html(obj.QQ);
-                $("#signature").html(obj.Signature);
-                $("#location").html(
-                    (obj.ProvName == null ? "" : obj.ProvName) + " " +
-                    (obj.CityName == null ? "" : obj.CityName) + " " +
-                    (obj.Area == null ? "" : obj.Area));
-                $("#status").html(obj.Status == 1 ? "正常" : "<font color='red'>冻结中</font>");
+            var headurl = "";
+            if (obj.Headportrait != null && obj.Headportrait !== "") {
+                headurl = getQiniuUrl(obj.Headportrait);
+            }
+            else {
+                headurl = obj.Wechat == null ? "" : obj.Wechat.Photo;
+            }
 
-                var headurl = "";
-                if (obj.Headportrait != "") {
-                    headurl = getQiniuUrl(obj.Headportrait);
-                }
-                else {
-                    headurl = obj.Wechat == null ? "" : obj.Wechat.Photo;
-                }
+            var qrcodeurl = getQiniuUrl(obj.QrCode);
+            $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
+            $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
 
-                var qrcodeurl = getQiniuUrl(obj.QrCode);
-                $("#headportrait").html("<img width='150' height='150' src='" + headurl + "' />");
-                $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
+            $("#level").html(obj.Level);
+            $("#totalpoints").html(obj.Totalpoints);
+            $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
 
-                $("#level").html(obj.Level);
-                $("#totalpoints").html(obj.Totalpoints);
-                $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
 
-                $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
+            //提交过认证信息
+            if (obj.AuthStatus !== 0) {
+                $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
+                    console.log(data);
+                    if (data.errcode !== 0) {
+                        alert("获取会员认证信息失败！");
+                        return;
+                    }
+                    var authObj = data.errmsg;
 
-                //提交过认证信息
-                if (obj.AuthStatus != 0) {
-                    $.get("/api/Customer/GetCustAuthByCustid?custid=" + innerid, function (data) {
-                        console.log(data);
-                        if (data.errcode != 0) {
-                            alert("获取会员认证信息失败！");
-                            return;
-                        }
-                        var authObj = data.errmsg;
+                    $("#realname").html(authObj.Realname);
+                    $("#idcard").html(authObj.Idcard);
+                    $("#enterprisename").html(authObj.Enterprisename);
+                    $("#licencecode").html(authObj.Licencecode);
+                    $("#licencearea").html(authObj.Licencearea);
+                    $("#organizationcode").html(authObj.Organizationcode);
+                    $("#taxcode").html(authObj.Taxcode);
 
-                        $("#realname").html(authObj.Realname);
-                        $("#idcard").html(authObj.Idcard);
-                        $("#enterprisename").html(authObj.Enterprisename);
-                        $("#licencecode").html(authObj.Licencecode);
-                        $("#licencearea").html(authObj.Licencearea);
-                        $("#organizationcode").html(authObj.Organizationcode);
-                        $("#taxcode").html(authObj.Taxcode);
+                    var applytime = authObj.Modifiedtime == null ? authObj.Createdtime : authObj.Modifiedtime;
+                    $("#applytime").html(Dateformat(applytime, "yyyy-MM-dd HH:mm:ss"));
 
-                        var applytime = authObj.Modifiedtime == null ? authObj.Createdtime : authObj.Modifiedtime;
-                        $("#applytime").html(Dateformat(applytime, "yyyy-MM-dd HH:mm:ss"));
-
+                    if (authObj.Relevantpicture != null && authObj.Relevantpicture != undefined) {
                         $.each(authObj.Relevantpicture.split(","), function (key, val) {
                             if ($.trim(val).length > 0) {
                                 $("#relevantpicture").append("<img style='max-width:200px;max-height=150px' src='" + getQiniuUrl(val) + "' />");
                             }
                         });
-
-                        //初始化块
-                        switch (obj.AuthStatus) {
-                            case 1:
-                            case 4:
-                                $("#btnAudit").removeClass("hide");
-                                $("#audit").removeClass("hide");
-                                break;
-                            case 2:
-                            case 3:
-                                $("tr[name='auditresult']").removeClass("hide");
-
-                                $("#auditper").html(authObj.AuditPer);
-                                $("#audittime").html(Dateformat(authObj.AuditTime, "yyyy-MM-dd HH:mm:ss"));
-                                $("#auditdescview").html(authObj.AuditDesc);
-                                break;
-                            default:
-
-                        }
-                    });
-                }
-            });
-
-            $("#btnAudit").click(function () {
-
-                var res = $("#auditresult").val();
-                if (res === "-1") {
-                    alert("请选择审核结果！");
-                    return;
-                }
-
-                var json = { Custid: innerid, AuditResult: res, AuditDesc: $("#auditdesc").val() };
-                if (!confirm("确认审核!")) {
-                    return;
-                }
-
-                $.post("/api/Customer/AuditAuthentication", json, function (data) {
-                    if (data.errcode == 0) {
-                        alert("操作成功");
-                        self.location = document.referrer;
                     }
-                    else {
-                        alert("操作失败");
+
+                    //初始化块
+                    switch (obj.AuthStatus) {
+                        case 1:
+                        case 4:
+                            $("#btnAudit").removeClass("hide");
+                            $("#audit").removeClass("hide");
+                            break;
+                        case 2:
+                        case 3:
+                            $("tr[name='auditresult']").removeClass("hide");
+                            $("#auditper").html(authObj.AuditPer);
+                            $("#audittime").html(Dateformat(authObj.AuditTime, "yyyy-MM-dd HH:mm:ss"));
+                            $("#auditdescview").html(authObj.AuditDesc);
+                            $("#btnCancelAudit").removeClass("hide");
+                            break;
+                        default:
+
                     }
                 });
-            });
-        }
-
-        //认证状态[0.未提交认证，1.提交认证(待审核)，2.审核通过，3.审核不过，4.重新填写(重新提交认证)]
-        function ChangAuthStatus(status) {
-
-            switch (status) {
-                case 0:
-                    return "未提交认证";
-                    break;
-                case 1:
-                    return "待审核";
-                    break;
-                case 2:
-                    return "审核通过";
-                    break;
-                case 3:
-                    return "审核不过";
-                    break;
-                case 4:
-                    return "重新填写";
-                    break;
-                default:
-
             }
+        });
+
+        $("#btnAudit").click(function () {
+
+            var res = $("#auditresult").val();
+            if (res === "-1") {
+                alert("请选择审核结果！");
+                return;
+            }
+
+            var json = { Custid: innerid, AuditResult: res, AuditDesc: $("#auditdesc").val() };
+            if (!confirm("确认审核？")) {
+                return;
+            }
+
+            $.post("/api/Customer/AuditAuthentication", json, function (data) {
+                if (data.errcode === 0) {
+                    alert("操作成功");
+                    self.location = document.referrer;
+                }
+                else {
+                    alert("操作失败");
+                }
+            });
+        });
+
+        $("#btnCancelAudit").click(function () {
+
+            if (!confirm("确认审核？")) {
+                return;
+            }
+
+            $.get("/api/Customer/CancelAudit?custid=" + innerid, function (data) {
+                if (data.errcode === 0) {
+                    alert("操作成功");
+                    self.location = document.referrer;
+                }
+                else {
+                    alert("操作失败");
+                }
+            });
+        });
+    }
+
+
+
+    //认证状态[0.未提交认证，1.提交认证(待审核)，2.审核通过，3.审核不过，4.重新填写(重新提交认证)]
+    function ChangAuthStatus(status) {
+
+        switch (status) {
+            case 0:
+                return "未提交认证";
+                break;
+            case 1:
+                return "待审核";
+                break;
+            case 2:
+                return "审核通过";
+                break;
+            case 3:
+                return "审核不过";
+                break;
+            case 4:
+                return "重新填写";
+                break;
+            default:
+
         }
+    }
 </script>
 
 <div>
@@ -340,7 +361,8 @@
         <!--审核结果-->
         <tr>
             <td colspan="4" style="text-align:center;">
-                <input type="button" value="审核" class="hide" id="btnAudit" />
+                <input type="button" value="审核" class="hide" id="btnAudit"/>
+                <input type="button" value="撤销审核" class="hide" id="btnCancelAudit" />
                 <input type="button" value="返回" onclick="self.location=document.referrer;" />
             </td>
         </tr>

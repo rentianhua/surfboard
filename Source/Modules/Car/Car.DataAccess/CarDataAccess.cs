@@ -324,6 +324,26 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
+        /// 保存评估记录
+        /// </summary>
+        /// <param name="carInfo">车辆信息</param>
+        /// <returns>1.操作成功</returns>
+        public int SaveCarEvaluateInfo(CarInfoModel carInfo)
+        {
+            try
+            {
+                const string sql = @"insert into `car_evaluation` (`innerid`, `model_id`, `cityid`, `register_date`, `mileage`, `estimateprice`, `createdtime`) 
+                    values (uuid(),@modelid, @cityid, @registerdate, @mileage, @estimateprice,now());";
+                Helper.Execute(sql, new { modelid = carInfo.model_id, cityid = carInfo.cityid, registerdate=carInfo.register_date, mileage=carInfo.mileage, estimateprice =carInfo.estimateprice});
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
         /// 保存评估信息
         /// </summary>
         /// <param name="carid">车辆id</param>
@@ -442,7 +462,7 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
-        /// 累计点赞次数
+        /// 累计评论次数
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>

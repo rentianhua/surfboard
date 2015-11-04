@@ -33,9 +33,11 @@ namespace CCN.Modules.CustRelations.DataAccess
         public BasePageList<CustViewModel> GetCustPageList(CustQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"cust_info as a";
-            var fields = $"innerid,custname,mobile,`level`,headportrait,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            const string tableName = @"cust_info as a 
+                                        left join cust_wechat as c on a.innerid=c.custid
+                                        left join wechat_friend as d on d.openid=c.openid";
+            var fields = $"a.innerid,a.custname,a.mobile,a.`level`,a.headportrait,d.photo ,(select count(1) from car_info where custid=a.innerid) as carnum,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.custname asc,a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
 
@@ -70,19 +72,23 @@ namespace CCN.Modules.CustRelations.DataAccess
         public BasePageList<CustRelationsApplyViewModels> GetCustRelationsPageList(CustRelationsApplyQueryModels query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"cust_relations_apply";
-            const string fields = " * ";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            const string tableName = @"cust_relations_apply as a 
+                                        inner join cust_info as b on a.fromid=b.innerid 
+                                        left join cust_wechat as c on a.fromid=c.custid
+                                        left join wechat_friend as d on d.openid=c.openid
+                                        left join base_code as bc1 on a.sourceid=bc1.codevalue and bc1.typekey='cust_source'";
+            const string fields = " a.innerid ,a.fromid as Frientsid,a.status as ApplyStatus,bc1.codename as Source,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.fromid) as carnum ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
 
             if (!string.IsNullOrWhiteSpace(query.Toid))
             {
-                sqlWhere.Append($" and toid='{query.Toid}'");
+                sqlWhere.Append($" and a.toid='{query.Toid}'");
             }
 
             sqlWhere.Append(query.Status != null
-                ? $" and status={query.Status}"
+                ? $" and a.status={query.Status}"
                 : "");
             
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -247,8 +253,13 @@ namespace CCN.Modules.CustRelations.DataAccess
                     //接受
                     if (status == 1)
                     {
-                        conn.Execute(sqlInsert, new { userid = fromid, frientsid = toid, createdtime = DateTime.Now }, tran);
-                        conn.Execute(sqlInsert, new { userid = toid, frientsid = fromid, createdtime = DateTime.Now }, tran);
+                        const string sqlR = "select count(1) as count from cust_relations where userid=@userid and frientsid=@frientsid;";
+                        var isR = conn.Query<int>(sqlR, new {userid = fromid, frientsid = toid}).FirstOrDefault();
+                        if (isR == 0)
+                        {
+                            conn.Execute(sqlInsert, new { userid = fromid, frientsid = toid, createdtime = DateTime.Now }, tran);
+                            conn.Execute(sqlInsert, new { userid = toid, frientsid = fromid, createdtime = DateTime.Now }, tran);
+                        }
                     }
 
                     tran.Commit();
@@ -296,9 +307,12 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select frientsid ,b.custname, b.mobile, b.telephone, b.email, b.headportrait, b.`status`, b.authstatus, b.`type`, b.brithday, b.totalpoints, b.`level`, b.createdtime from cust_relations as a
+            const string sql = @"select frientsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.frientsid) as carnum
+                                from cust_relations as a
                                 inner join cust_info as b on a.frientsid=b.innerid 
-                                where a.userid=@userid;";
+                                left join cust_wechat as c on a.frientsid=c.custid
+                                left join wechat_friend as d on d.openid=c.openid
+                                where a.userid=@userid order by b.custname asc;";
             try
             {
                 return Helper.Query<CustRelationsViewModel>(sql, new { userid });
@@ -311,6 +325,50 @@ namespace CCN.Modules.CustRelations.DataAccess
 
         #endregion
 
-        
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    inner join cust_info as b on a.custid=b.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join cust_wechat as c on a.custid=c.custid
+                                    left join wechat_friend as d on d.openid=c.openid
+                                    left join base_city as ct on b.cityid=ct.innerid ";
+            const string fields = "b.innerid, b.custname, b.mobile, b.email, b.headportrait,d.photo ,c3.modelname as model_name,ct.cityname as custcityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("1=1");
+
+            if (query.model_id != null)
+            {
+                sqlWhere.Append($" and a.model_id='{query.model_id}'");
+            }
+            //会员所在省份
+            if (query.custprovid != null)
+            {
+                sqlWhere.Append($" and b.provid={query.custprovid}");
+            }
+            //会员所在城市
+            if (query.cuscityid != null)
+            {
+                sqlWhere.Append($" and b.cityid={query.cuscityid}");
+            }
+            
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CustRelationsCarViewModel>(model, query.Echo);
+            return list;
+        }
+
+        #endregion
     }
 }

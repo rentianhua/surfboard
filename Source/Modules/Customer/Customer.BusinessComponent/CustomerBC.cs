@@ -3,6 +3,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.DataAccess;
@@ -11,6 +12,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using Newtonsoft.Json;
 
 #endregion
 
@@ -56,9 +58,10 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
+
         public JResult CustRegister(CustModel userInfo)
         {
-            //LoggerFactories.CreateLogger().Write(JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("注册：" + JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             var mYan = DataAccess.CheckMobile(userInfo.Mobile);
             if (mYan > 0)
             {
@@ -113,8 +116,8 @@ namespace CCN.Modules.Customer.BusinessComponent
                 {
                     var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
-                    var website = ConfigHelper.GetAppSettings("website");
-                    var bitmap = BarCodeUtility.CreateBarcode(website + "?innerid=" + userInfo.Innerid, 240, 240);
+                    //var website = ConfigHelper.GetAppSettings("website");
+                    var bitmap = BarCodeUtility.CreateBarcode(userInfo.Mobile, 240, 240);
 
                     //保存图片到临时文件夹
                     bitmap.Save(filepath);
@@ -157,6 +160,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
+            LoggerFactories.CreateLogger().Write("登录："+JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 return JResult._jResult(403, "帐户名不能为空");
@@ -241,7 +245,18 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public BasePageList<CustModel> GetCustPageList(CustQueryModel query)
         {
-            return DataAccess.GetCustPageList(query);
+            if (!string.IsNullOrWhiteSpace(query?.Mobile) && query.Mobile.Trim().Length >= 4)
+
+                return DataAccess.GetCustPageList(query);
+
+            var list = new BasePageList<CustModel>
+            {
+                aaData = null,
+                iTotalRecords = 0,
+                iTotalDisplayRecords = 0,
+                sEcho = 0
+            };
+            return list;
         }
 
         /// <summary>
@@ -416,6 +431,17 @@ namespace CCN.Modules.Customer.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            var result = DataAccess.CancelAuditAuthentication(custid);
+            return JResult._jResult(result);
+        }
+
 
         /// <summary>
         /// 获取会员认证信息 by innerid
@@ -542,6 +568,27 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             var list = DataAccess.GetLaudatorListByCustid(custid);
             return JResult._jResult(0, list);
+        }
+
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult RepeatPraise(string custid, string openid)
+        {
+            var list = DataAccess.GetLaudatorListByCustid(custid).ToList();
+            if (!list.Any())
+            {
+                return JResult._jResult(0, "");
+            }
+            if (list.Any(item => item.Openid.Equals(openid)))
+            {
+                return JResult._jResult(400, "");
+            }
+            
+            return JResult._jResult(00, "");
         }
 
         #endregion
@@ -733,5 +780,37 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteAll()
+        {
+            var result = DataAccess.DeleteAll();
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "清除成功" : "清除失败"
+            };
+        }
+        
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public JResult DeleteCustomer(string mobile)
+        {
+            var result = DataAccess.DeleteCustomer(mobile);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "删除成功" : "删除失败"
+            };
+        }
+
+        #endregion
     }
 }

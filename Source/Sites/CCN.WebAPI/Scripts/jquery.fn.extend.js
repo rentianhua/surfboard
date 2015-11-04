@@ -65,7 +65,7 @@ $.fn.extend({
     * @isbigdata {bool}  是否是大数据,默认为true,
     * @return   {object}    DataTables enhanced之后的对象
     */
-    getPageListWithSort: function (pageSize, webApi, query, callBack, isbigdata) {
+    getPageList: function (pageSize, webApi, query, callBack, isbigdata) {
 
         var sEmptyTable = "抱歉！暂无数据...";
         var skip = '跳转';
@@ -523,7 +523,6 @@ $.fn.extend({
 
 //#endregion
 
-
 $.fn.extend({
     /**
     *控件弹出验证信息
@@ -536,8 +535,6 @@ $.fn.extend({
         $(this).validationEngine("showPrompt", getLanguage(name), "error", false, true);
     }
 });
-
-
 
 $.fn.extend({
     labeltxt: function (value, num) {
@@ -613,5 +610,69 @@ $.fn.extend({
                 $(this).next("div").find("a").addClass("requireValid");
             }
         }
+    }
+});
+
+/*
+普通select封装
+*/
+$.fn.extend({
+    selectEmpty: function () {
+        this.empty().append("<option></option>");
+    },
+    selectVal: function (val) {
+        if (typeof (val) === "number") {
+            val = val.toString();
+        }
+        var count = this.get(0).options.length;
+        for (var i = 0; i < count; i++) {
+            if (this.get(0).options[i].value === val) {
+                this.get(0).options[i].selected = true;
+                break;
+            }
+        }
+    },
+    selectDisabled: function () {
+        this.prop("disabled", false);
+    },
+    selectEnabled: function () {
+        this.prop("disabled", true);
+    },
+    selectAppend: function (value, text) {//chosen添加option
+        this.append("<option value='" + value + "'>" + text + "</option>");
+    },
+    //绑定数据jsonData：数据，valueName：value元素名，textName：text元素名
+    selectBind: function (jsonData, valueName, textName) {
+        var $obj = this;
+        $obj.empty();
+        $obj.append("<option><option>");
+        $.each(jsonData, function(index, value) {
+            var valval = "";
+            var textval = "";
+            if (valueName != undefined) {
+                valval = value[valueName];
+            } else {
+                valval = value;
+            }
+            if (textName != undefined) {
+                textval = value[textName];
+            } else {
+                textval = value;
+            }
+            var opt = $('<option />', {
+                value: valval,
+                text: textval
+            });
+            opt.appendTo($obj);
+        });
+    },
+    selectTxt: function () {
+        return $(this).find("option[value=" + $(this).val() + "]").text();
+    },
+    selectHide: function () {
+        $(this).hide();
+    },
+    selectShow: function () {
+        $(this).show();
     }
 });

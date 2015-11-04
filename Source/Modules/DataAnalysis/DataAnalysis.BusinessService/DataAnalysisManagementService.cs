@@ -7,7 +7,7 @@ using CCN.Modules.DataAnalysis.BusinessComponent;
 using CCN.Modules.DataAnalysis.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
-using Cedar.Framwork.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 
 namespace CCN.Modules.DataAnalysis.BusinessService
 {
@@ -179,6 +179,24 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         public JResult GetPersonalIncome()
         {
             return BusinessComponent.GetPersonalIncome();
+        }
+
+        /// <summary>
+        /// 个人季度收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByQuarter()
+        {
+            return BusinessComponent.GetPersonalIncomeByQuarter();
+        }
+
+        /// <summary>
+        /// 个人月收入
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetPersonalIncomeByMonth()
+        {
+            return BusinessComponent.GetPersonalIncomeByMonth();
         }
 
         #endregion

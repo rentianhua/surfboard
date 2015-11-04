@@ -54,6 +54,16 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo">车辆id</param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        {
+            return BusinessComponent.GetCarEvaluateByCar(carInfo);
+        }
+
+        /// <summary>
         /// 车辆估值
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -218,6 +228,16 @@ namespace CCN.Modules.Car.BusinessService
         public JResult AddCarPicture(CarPictureModel model)
         {
             return BusinessComponent.AddCarPicture(model);
+        }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(WeichatPictureModel picModel)
+        {
+            return BusinessComponent.AddCarPictureList(picModel);
         }
 
         /// <summary>

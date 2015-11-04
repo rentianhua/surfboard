@@ -5,9 +5,7 @@
 }
 
 <style type="text/css">
-    .margintop {
-        margin-top: 10px;
-    }
+    
 </style>
 <script type="text/javascript">
 
@@ -142,7 +140,7 @@
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                //location.href = "/rewards/rewards/couponlist";
+                location.href = "/rewards/rewards/couponlist";
             });
         } else {
 
@@ -215,8 +213,8 @@
                         <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd',  isShowToday: false })">
                     </div>
                     <div id="radiotype2" class="margintop hide" style="margin-top: 10px">
-                        <input type="number" id="value1" placeholder="领取后多少天开始生效" maxlength="3" /> -
-                        <input type="number" id="value2" placeholder="有效天数" maxlength="5" />
+                        领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
+                        <input type="number" id="value2" placeholder="" maxlength="5" />
                     </div>
                 </td>
             </tr>

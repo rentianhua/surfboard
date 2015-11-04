@@ -70,11 +70,41 @@ namespace CCN.Modules.Rewards.Interface
         JResult GetCouponById(string innerid);
 
         /// <summary>
+        /// 更新礼券状态
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateStatus(string cardid, int status);
+
+        /// <summary>
         /// 修改礼券库存
         /// </summary>
         /// <param name="model">礼券信息</param>
         /// <returns></returns>
         JResult UpdateStock(CouponInfoModel model);
+
+        /// <summary>
+        /// 修改礼券有效期
+        /// </summary>
+        /// <param name="model">礼券信息</param>
+        /// <returns></returns>
+        JResult UpdateValidity(CouponInfoModel model);
+
+
+        /// <summary>
+        /// 礼券与微信小店产品绑定
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult BindWechatProduct(CouponCardProduct model);
+
+        /// <summary>
+        /// 礼券与微信小店产品解除绑定
+        /// </summary>
+        /// <param name="cardid"></param>
+        /// <returns></returns>
+        JResult UnBindWechatProduct(string cardid);
 
         #endregion
     }

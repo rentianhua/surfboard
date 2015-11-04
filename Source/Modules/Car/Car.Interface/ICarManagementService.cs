@@ -33,6 +33,13 @@ namespace CCN.Modules.Car.Interface
         JResult GetCarViewById(string id);
 
         /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo"></param>
+        /// <returns></returns>
+        JResult GetCarEvaluateByCar(CarInfoModel carInfo);
+
+        /// <summary>
         /// 车辆估值
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -149,6 +156,13 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆图片信息</param>
         /// <returns></returns>
         JResult AddCarPicture(CarPictureModel model);
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(WeichatPictureModel picModel);
 
         /// <summary>
         /// 添加车辆图片

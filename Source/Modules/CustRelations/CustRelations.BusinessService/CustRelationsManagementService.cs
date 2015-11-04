@@ -5,7 +5,7 @@ using CCN.Modules.CustRelations.BusinessComponent;
 using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Cedar.AuditTrail.Interception;
+using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 
 #endregion
@@ -105,6 +105,20 @@ namespace CCN.Modules.CustRelations.BusinessService
         {
             var list = BusinessComponent.GetCustRelationsByUserId(userid);
             return list;
+        }
+
+        #endregion
+
+        #region 社交圈
+
+        /// <summary>
+        /// 社交圈搜车
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CustRelationsCarViewModel> GetHaveCarCustList(CustRelationsCarQueryModel query)
+        {
+            return BusinessComponent.GetHaveCarCustList(query);
         }
 
         #endregion

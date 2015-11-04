@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
@@ -8,6 +10,7 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json.Linq;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace CCN.Modules.Car.BusinessComponent
 {
@@ -77,6 +80,57 @@ namespace CCN.Modules.Car.BusinessComponent
             jResult.errmsg = carInfo;
             return jResult;
         }
+
+        /// <summary>
+        /// 车辆估值（根据城市，车型，时间）
+        /// </summary>
+        /// <param name="carInfo"></param>
+        /// <returns></returns>
+        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        {
+            var jResult = new JResult();
+            
+            var paramList = new Dictionary<string, string>
+            {
+                {"modelId", carInfo.model_id.ToString()},
+                {"regDate", Convert.ToDateTime(carInfo.register_date).ToString("yyyy-MM")},
+                {"mile", carInfo.mileage.ToString()},
+                {"zone", carInfo.cityid.ToString()}
+            };
+
+            var juhe = new JuheUtility();
+            var result = juhe.GetUsedCarPrice(paramList);
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+
+            try
+            {
+                JObject jobj = JObject.Parse(result);
+                result = Math.Round(Convert.ToDouble(jobj["eval_price"].ToString()), 2).ToString();
+            }
+            catch (Exception)
+            {
+                jResult.errcode = 400;
+                jResult.errmsg = "没有车辆评估信息";
+                return jResult;
+            }
+
+            //估价
+            carInfo.estimateprice = result;
+            //保存评估信息
+            DataAccess.SaveCarEvaluateInfo(carInfo);
+
+            jResult.errcode = 0;
+            jResult.errmsg = result;
+
+            return jResult;
+        }
+
 
         /// <summary>
         /// 车辆估值
@@ -415,6 +469,67 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = ""
             };
         }
+
+        /// <summary>
+        /// 添加车辆图片
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.AddCarPictureList")]
+        public JResult AddCarPictureList(WeichatPictureModel picModel)
+        {
+            if (picModel == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+            
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in picModel.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+                var filepath = QiniuUtility.GetFilePath(filename);
+
+                //创建文件
+                var writer = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
+
+                //下载图片写入文件流
+                MediaApi.Get(picModel.AccessToken,item, writer);
+                writer.Close();
+                writer.Dispose();
+
+                //上传到七牛
+                var qnKey = qinniu.PutFile(filepath, "", filename);
+                //删除本地临时文件
+                if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                    continue;
+                var pictureModel = new CarPictureModel
+                {
+                    Carid = picModel.Carid,
+                    Createdtime = DateTime.Now,
+                    Path = qnKey
+                };
+                AddCarPicture(pictureModel);
+            }
+            
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = ""
+            };
+        }
+
 
         /// <summary>
         /// 删除车辆图片

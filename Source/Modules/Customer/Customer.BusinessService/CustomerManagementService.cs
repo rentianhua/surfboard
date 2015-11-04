@@ -173,7 +173,17 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.AuditAuthentication(model);
         }
-        
+
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            return BusinessComponent.CancelAuditAuthentication(custid);
+        }
+
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
@@ -219,6 +229,16 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.GetLaudatorListByCustid(custid);
         }
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult RepeatPraise(string custid, string openid)
+        {
+            return BusinessComponent.RepeatPraise(custid, openid);
+        }
         #endregion
 
         #region 会员标签
@@ -328,5 +348,27 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteAll()
+        {
+            return BusinessComponent.DeleteAll();
+        }
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public JResult DeleteCustomer(string mobile)
+        {
+            return BusinessComponent.DeleteCustomer(mobile);
+        }
+
+        #endregion
     }
 }

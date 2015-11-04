@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Linq;
@@ -203,7 +204,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// </summary>
         /// <param name="innerid">会员id</param>
         /// <returns></returns>
-        public CustModel GetCustById(string innerid)
+        public CustViewModel GetCustById(string innerid)
         {
             const string sql = @"select a.*,b.provname,c.cityname from cust_info as a 
                 left join base_province as b on a.provid=b.innerid 
@@ -211,7 +212,7 @@ namespace CCN.Modules.Customer.DataAccess
 
             try
             {
-                var custModel = Helper.Query<CustModel>(sql, new {innerid}).FirstOrDefault();
+                var custModel = Helper.Query<CustViewModel>(sql, new {innerid}).FirstOrDefault();
                 //获取微信信息
                 if (custModel != null)
                 {
@@ -219,6 +220,8 @@ namespace CCN.Modules.Customer.DataAccess
                     {
                         custid = innerid
                     }).FirstOrDefault();
+
+                    custModel.TotalInfo = Helper.Query<CustTotalModel>("select * from cust_total_info where custid=@custid;", new { custid = innerid }).FirstOrDefault();
                 }
                 return custModel;
 
@@ -443,6 +446,36 @@ namespace CCN.Modules.Customer.DataAccess
             }
             
         }
+
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int CancelAuditAuthentication(string custid)
+        {
+            const string sql = "update cust_info set authstatus=1 where innerid=@innerid;";
+            const string sqlau = "update cust_authentication set auditper='',auditdesc='',audittime=null where custid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = custid });
+                    conn.Execute(sqlau, new { custid });
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
 
         /// <summary>
         /// 获取会员认证信息 by innerid
@@ -836,6 +869,57 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
-        
+        #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteAll()
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                var args = new DynamicParameters();
+                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                using (var result = conn.QueryMultiple("ccnsp_clearall", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    //var data = result.Read<T>();
+                }
+
+                return args.Get<int>("p_values");
+            }
+        }
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public int DeleteCustomer(string mobile)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_mobile = mobile
+                };
+
+                var args = new DynamicParameters(obj);
+                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                using (var result = conn.QueryMultiple("ccnsp_clearData", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    //var data = result.Read<T>();
+                }
+
+                return args.Get<int>("p_values");
+            }
+        }
+
+        #endregion
     }
 }

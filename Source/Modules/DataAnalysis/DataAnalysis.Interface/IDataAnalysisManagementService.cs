@@ -124,6 +124,18 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <returns></returns>
         JResult GetPersonalIncome();
 
+        /// <summary>
+        /// 个人季度收入
+        /// </summary>
+        /// <returns></returns>
+        JResult GetPersonalIncomeByQuarter();
+
+        /// <summary>
+        /// 个人月收入
+        /// </summary>
+        /// <returns></returns>
+        JResult GetPersonalIncomeByMonth();
+
         #endregion
 
     }

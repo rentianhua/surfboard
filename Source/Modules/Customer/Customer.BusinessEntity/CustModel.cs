@@ -46,30 +46,22 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 用户状态[1.正常，2.冻结]
         /// </summary>
-        public int Status { get; set; }
+        public int? Status { get; set; }
 
         /// <summary>
         /// 认证状态[0.未提交认证，1.提交认证(待审核)，2.审核通过，3.审核不过，4.重新填写(重新提交认证)]
         /// </summary>
-        public int AuthStatus { get; set; }
+        public int? AuthStatus { get; set; }
 
         /// <summary>
         /// 所在地：身份
         /// </summary>
-        public int Provid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string ProvName { get; set; }
+        public int? Provid { get; set; }
 
         /// <summary>
         /// 所在地：城市
         /// </summary>
-        public int Cityid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        public string CityName { get; set; }
+        public int? Cityid { get; set; }
 
         /// <summary>
         /// 所在地：区/县
@@ -79,7 +71,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 性别 1男2女
         /// </summary>
-        public short Sex { get; set; }
+        public short? Sex { get; set; }
         
         /// <summary>
         /// 生日
@@ -99,12 +91,12 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 总积分
         /// </summary>
-        public int Totalpoints { get; set; }
+        public int? Totalpoints { get; set; }
 
         /// <summary>
         /// 会员等级
         /// </summary>
-        public int Level { get; set; }
+        public int? Level { get; set; }
         
         /// <summary>
         /// 二维码
@@ -114,7 +106,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 类型1.车商，2,个人
         /// </summary>
-        public int Type { get; set; }
+        public int? Type { get; set; }
         
         /// <summary>
         /// 添加时间
@@ -483,5 +475,27 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 当前礼券数
         /// </summary>
         public int Currpouponnum { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CustViewModel : CustModel
+    {
+        /// <summary>
+        /// 会员所在城市
+        /// </summary>
+        public string CityName { get; set; }
+
+
+        /// <summary>
+        /// 会员所在省份
+        /// </summary>
+        public string ProvName { get; set; }
+
+        /// <summary>
+        /// 会员总数信息
+        /// </summary>
+        public CustTotalModel TotalInfo { get; set; }
     }
 }

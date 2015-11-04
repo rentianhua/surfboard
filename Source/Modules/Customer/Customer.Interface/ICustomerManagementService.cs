@@ -117,6 +117,12 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult AuditAuthentication(CustAuthenticationModel model);
 
+        /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        JResult CancelAuditAuthentication(string custid);
 
         /// <summary>
         /// 获取会员认证信息 by innerid
@@ -151,6 +157,13 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult GetLaudatorListByCustid(string custid);
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        JResult RepeatPraise(string custid, string openid);
         #endregion
 
         #region 会员标签
@@ -230,5 +243,21 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        JResult DeleteAll();
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        JResult DeleteCustomer(string mobile);
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Base.Interface;
@@ -7,6 +8,7 @@ using CCN.Modules.Customer.Interface;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Client.DelegationHandler;
 
@@ -66,7 +68,14 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns>
-        /// errcode,0.成功，400.验证码错误，401.异常
+        /// errcode,
+        /// 0.成功
+        /// 400.验证码错误
+        /// 401 验证码过期
+        /// 402 手机号被其他人注册
+        /// 403 openid已绑定其他手机号
+        /// 404 异常
+        /// 405 手机号不能空
         /// </returns>
         [Route("CustRegister")]
         [HttpPost]
@@ -76,7 +85,7 @@ namespace CCN.WebAPI.ApiControllers
             {
                 return new JResult
                 {
-                    errcode = 400,
+                    errcode = 405,
                     errmsg = "手机号不能空"
                 };
             }
@@ -88,6 +97,8 @@ namespace CCN.WebAPI.ApiControllers
             if (cresult.errcode != 0)
             {
                 //验证码错误
+                //400 验证码错误
+                //401 验证码过期
                 return cresult;
             }
 
@@ -98,9 +109,9 @@ namespace CCN.WebAPI.ApiControllers
             if (result.errcode == 0)
             {
                 Task.Factory.StartNew(() =>
-                {
+                {                    
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                    rewardsservice.ChangePoint(new CustPointModel
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = result.errmsg.ToString(),
                         Createdtime = userInfo.Createdtime,
@@ -111,9 +122,64 @@ namespace CCN.WebAPI.ApiControllers
                         Sourceid = 1,
                         Validtime = null
                     });
+                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
                 });
             }
             
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns>
+        /// errcode,
+        /// 0.成功
+        /// 402 手机号被其他人注册
+        /// 403 openid已绑定其他手机号
+        /// 404 异常
+        /// 405 手机号不能空
+        /// </returns>
+        [Route("AddCustomer")]
+        [HttpPost]
+        public JResult AddCustomer([FromBody] CustModel userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo.Mobile))
+            {
+                return new JResult
+                {
+                    errcode = 405,
+                    errmsg = "手机号不能空"
+                };
+            }
+            
+            var result = _custservice.CustRegister(userInfo);
+
+            #region 注册送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = result.errmsg.ToString(),
+                        Createdtime = userInfo.Createdtime,
+                        Type = 1,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10,
+                        Remark = "",
+                        Sourceid = 1,
+                        Validtime = null
+                    });
+                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
+                });
+            }
+
             #endregion
 
             return result;
@@ -275,6 +341,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 撤销审核
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        [Route("CancelAudit")]
+        [HttpGet]
+        public JResult CancelAuditAuthentication(string custid)
+        {
+            return _custservice.CancelAuditAuthentication(custid);
+        }
+
+        /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
         /// <param name="innerid">id</param>
@@ -326,6 +404,18 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.GetLaudatorListByCustid(custid);
         }
 
+        /// <summary>
+        /// 判断是否点赞
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        [Route("RepeatPraise")]
+        [HttpGet]
+        public JResult RepeatPraise(string custid, string openid)
+        {
+            return _custservice.RepeatPraise(custid, openid);
+        }
         #endregion
 
         #region 会员标签
@@ -455,5 +545,31 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
+        #region 数据清理
+
+        /// <summary>
+        /// 清除所有数据(除基础数据)
+        /// </summary>
+        /// <returns></returns>
+        [Route("DeleteAll")]
+        [HttpGet]
+        public JResult DeleteAll()
+        {
+            return _custservice.DeleteAll();
+        }
+
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        [Route("DeleteCustomer")]
+        [HttpGet]
+        public JResult DeleteCustomer(string mobile)
+        {
+            return _custservice.DeleteCustomer(mobile);
+        }
+
+        #endregion
     }
 }
