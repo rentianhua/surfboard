@@ -1,10 +1,14 @@
 ﻿
 using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using CCN.Modules.Rewards.BusinessEntity;
+using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.Interface;
 using Newtonsoft.Json;
 using Senparc.Weixin.Exceptions;
@@ -164,7 +168,20 @@ namespace CCN.Midware.Wechat.Business
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 var orderresult = OrderApi.GetByIdOrder(AppID, merchantOrderresult.OrderId);
                                 if (orderresult.errcode == 0)
-                                    Console.WriteLine(JsonConvert.SerializeObject(orderresult.order));
+                                {
+                                    var rewardsManagementService = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                                    var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()
+                                    {
+                                        ProductId = orderresult.order.product_id,
+                                        OrderId = orderresult.order.order_id,
+                                        Accountid = AppID,
+                                        Number = orderresult.order.product_count,
+                                        Openid = orderresult.order.buyer_openid
+                                    });
+                                    var text = JsonConvert.SerializeObject(orderresult.order);
+                                    var logresult = $"MERCHANT_ORDER:{text}    result:{wholesaleCouponresult}";
+                                    LoggerFactories.CreateLogger().Write(logresult, TraceEventType.Information);
+                                }
                                 break;
                             case "SUBMIT_MEMBERCARD_USER_INFO"://接收会员信息事件通知
                                 requestMessage = new RequestMessageEvent_Submit_Membercard_User_Info();
@@ -178,12 +195,15 @@ namespace CCN.Midware.Wechat.Business
                         }
                         break;
                     default:
-                        throw new UnknownRequestMsgTypeException(string.Format("MsgType：{0} 在RequestMessageFactory中没有对应的处理程序！", msgType), new ArgumentOutOfRangeException());//为了能够对类型变动最大程度容错（如微信目前还可以对公众账号suscribe等未知类型，但API没有开放），建议在使用的时候catch这个异常
+                        throw new UnknownRequestMsgTypeException(
+                            $"MsgType：{msgType} 在RequestMessageFactory中没有对应的处理程序！", new ArgumentOutOfRangeException());
+                        //为了能够对类型变动最大程度容错（如微信目前还可以对公众账号suscribe等未知类型，但API没有开放），建议在使用的时候catch这个异常
                 }
             }
             catch (ArgumentException ex)
             {
-                throw new WeixinException(string.Format("RequestMessage转换出错！可能是MsgType不存在！，XML：{0}", doc.ToString()), ex);
+                //throw new WeixinException(string.Format("RequestMessage转换出错！可能是MsgType不存在！，XML：{0}", doc.ToString()), ex);
+                LoggerFactories.CreateLogger().Write($"RequestMessage转换出错！可能是MsgType不存在！，XML：{doc}", TraceEventType.Error, ex);
             }
             return requestMessage;
         }
