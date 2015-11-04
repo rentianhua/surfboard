@@ -107,5 +107,16 @@ namespace CCN.Modules.Rewards.Interface
         JResult UnBindWechatProduct(string cardid);
 
         #endregion
+
+        #region 礼券对外接口
+
+        /// <summary>
+        /// 批量购买礼券
+        /// </summary>
+        /// <param name="model">购买信息</param>
+        /// <returns></returns>
+        JResult WholesaleCoupon(CouponBuyModel model);
+        
+        #endregion
     }
 }
