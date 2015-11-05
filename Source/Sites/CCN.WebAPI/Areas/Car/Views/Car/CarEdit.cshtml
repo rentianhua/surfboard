@@ -14,6 +14,7 @@
 
     $(function () {
         InitBrand();
+        InitProv();
         InitCode();
         Init();
     });
@@ -73,6 +74,32 @@
                 var val = j < 10 ? ("0" + j) : j;
                 $("#selectregmonth").append("<option value='" + val + "'>" + val + "</option>");
             }
+        });
+    }
+
+    //初始化省份
+    function InitProv() {
+        $("#selectprov").empty();
+        $("#selectprov").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetProvList", function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+            });
+        });
+    }
+
+    //初始化城市
+    function InitCity(provid) {
+        $("#selectcity").empty();
+        $("#selectcity").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCityList/?provid=" + provid, function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+            });
         });
     }
 
@@ -139,75 +166,87 @@
 
     function Submit() {
 
-        var vtype = $("input:radio[name='radiotype']:checked").val();
+        var brandid = $("#selectbrand").val();
+        var seriesid = $("#selectseries").val();
+        var modelid = $("#selectmodel").val();
+
+        if (modelid === "0") {
+            alert("请选择车型！");
+            return false;
+        }
+
+        var provid = $("#selectprov").val();
+        var cityid = $("#selectcity").val();
+
+        if (cityid === "0") {
+            alert("请选择城市！");
+            return false;
+        }
+
+        var colorid = $("#selectcolor").val();
+        var txtmileage = $("#txtmileage").val();
+
+        var regyear = $("#selectregyear").val();
+        var regmonth = $("#selectregmonth").val();
+
+        if (colorid === "0") {
+            alert("请选择颜色！");
+            return false;
+        }
+
+        if ($.trim(txtmileage).length === 0) {
+            alert("请填写公里数！");
+            return false;
+        }
+
+        //更多信息
+
+        var txtbuydate = $("#txtbuydate").val();
+        var txtbuyprice = $("#txtbuyprice").val();
+        var txtsoldyprice = $("#txtsoldyprice").val();
+
+        var isproblem = $("input:radio[name='radioisproblem']:checked").val();
+        var istain = $("input:radio[name='radioistain']:checked").val();
+
+        var caresc = $("#caresc").val();
+
         var json = {
-            Title: $("#title").val(),
-            Logourl: "",
-            Amount: $("#amount").val(),
-            Vtype: vtype,
-            Maxcount: $("#count").val(),
-            Codetype: $("#codetype").val()
+            brand_id: brandid,
+            series_id: seriesid,
+            model_id: modelid,
+            provid: provid,
+            cityid: cityid,
+            colorid: colorid,
+            buytime: txtbuydate,
+            buyprice: txtbuyprice,
+            mileage: txtmileage,
+            register_date: regyear + "-" + regmonth + "-01 00:00:00",
+            price: txtsoldyprice,
+            isproblem: isproblem,
+            istain: istain,
+            remark: caresc
         };
 
-        if (vtype === "1") { //有效时间范围
-            json.Vstart = $("#vstart").val();
-            json.Vend = $("#vend").val();
-        } else {//起效/有效天数
-            json.Value1 = $("#value1").val();
-            json.Value2 = $("#value2").val();
-        }
+        //var result;
+        //uploadfile("logourl", 1024 * 2, "", function (res) {
+        //    result = res;
+        //});
 
-        if (json.Title === "") {
-            alert('请填写标题'); return false;
-        }
-
-        if (json.Amount === "") {
-            alert('请填写面值【整数】'); return false;
-        }
-
-        if (json.Vtype == undefined) {
-            alert('请选择有效期类型'); return false;
-        }
-
-        if (json.Vtype === "1") {
-            if (json.Vstart === "" || json.Vend === "") {
-                alert('请选择有效期开始时间和结束时间！'); return false;
-            }
-        }
-        else if (json.Vtype === "2") {
-            if (json.Value1 === "" || json.Value2 === "") {
-                alert('请填写起效和有效天数【整数】！'); return false;
-            }
-        }
-
-        if (json.Maxcount === "") {
-            alert('请填写最大库存【整数】'); return false;
-        }
-
-        if (json.Codetype === "") {
-            alert('请填写Code展示类型【参考说明】'); return false;
-        }
-
-        var result;
-        uploadfile("logourl", 1024 * 2, "", function (res) {
-            result = res;
-        });
-
-        if (result === "0") {
-            alert('请上传图片');
-            return false;
-        } else if (result === "-1") {
-            alert('图片格式不正确');
-            return false;
-        } else if (result === "-2") {
-            alert('上传异常');
-            return false;
-        } else if (result === "-3") {
-            alert('文件大小超出');
-            return false;
-        }
-
-        json.Logourl = result;
+        //if (result === "0") {
+        //    alert('请上传图片');
+        //    return false;
+        //} else if (result === "-1") {
+        //    alert('图片格式不正确');
+        //    return false;
+        //} else if (result === "-2") {
+        //    alert('上传异常');
+        //    return false;
+        //} else if (result === "-3") {
+        //    alert('文件大小超出');
+        //    return false;
+        //}
+        console.log(json);
+        return false;
 
         if (id === "") {
             $.post("/api/Rewards/AddCoupon", json, function (result) {
@@ -256,6 +295,17 @@
                 </td>
             </tr>
             <tr>
+                <td>地区</td>
+                <td>
+                    <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                        <option value="0">请选择</option>
+                    </select>
+                    <select id="selectcity">
+                        <option value="0">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>颜色</td>
                 <td>
                     <select id="selectcolor"></select>
@@ -264,22 +314,22 @@
             <tr>
                 <td>行驶里程</td>
                 <td>
-                    <input type="datetime" id="txtmileage" /> 万公里
+                    <input type="datetime" id="txtmileage" placeholder="行驶里程" /> 万公里
                 </td>
             </tr>
-        <tr>
-            <td>上牌时间</td>
-            <td>
-                <select id="selectregyear">
-                    <option value="0">请选择</option>
-                </select>
-                年
-                <select id="selectregmonth">
-                    <option value="0">请选择</option>
-                </select>
-                月
-            </td>
-        </tr>
+            <tr>
+                <td>上牌时间</td>
+                <td>
+                    <select id="selectregyear">
+                        <option value="0">请选择</option>
+                    </select>
+                    年
+                    <select id="selectregmonth">
+                        <option value="0">请选择</option>
+                    </select>
+                    月
+                </td>
+            </tr>
             <tr>
                 <td>车辆图片</td>
                 <td>
@@ -294,46 +344,44 @@
                 <td>收购日期</td>
                 <td id="">
                     <input id="txtbuydate" class="Wdate" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                    <br/>注：您收购此车的时间。
                     <br />该信息我们将严格保密，仅您可见。
                 </td>
             </tr>
-        <tr>
-            <td>收购价格</td>
-            <td id="">
-                <input id="txtbuyprice" type="text" placeholder="收购价格">
-                <br/>注：您收购此车的价格(单位：万元)
-                <br/>该信息我们将严格保密，仅您可见。
-            </td>
-        </tr>
-        <tr>
-            <td>待售价格</td>
-            <td id="">
-                <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
-            </td>
-        </tr>
-        <tr>
-            <td>重大事故/水侵/火烧</td>
-            <td>
-                <input type="radio" name="radioisproblem" id="rYes" value="1"/>
-                <label for="rYes">是</label>
-                <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked"/>
-                <label for="rNo">否</label>
-            </td>
-        </tr>
-        <tr>
-            <td>定期4S保养</td>
-            <td>
-                <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked"/>
-                <label for="radioistain1">是</label>
-                <input type="radio" name="radioistain" id="radioistain2" value="0"/>
-                <label for="radioistain2">否</label>
-            </td>
-        </tr>
+            <tr>
+                <td>收购价格</td>
+                <td id="">
+                    <input id="txtbuyprice" type="text" placeholder="收购价格"> 万元
+                    <br />该信息我们将严格保密，仅您可见。
+                </td>
+            </tr>
+            <tr>
+                <td>待售价格</td>
+                <td id="">
+                    <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
+                </td>
+            </tr>
+            <tr>
+                <td>重大事故/水侵/火烧</td>
+                <td>
+                    <input type="radio" name="radioisproblem" id="rYes" value="1" />
+                    <label for="rYes">是</label>
+                    <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
+                    <label for="rNo">否</label>
+                </td>
+            </tr>
+            <tr>
+                <td>定期4S保养</td>
+                <td>
+                    <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
+                    <label for="radioistain1">是</label>
+                    <input type="radio" name="radioistain" id="radioistain2" value="0" />
+                    <label for="radioistain2">否</label>
+                </td>
+            </tr>
             <tr>
                 <td>备注</td>
                 <td>
-                    <textarea id="cardesc" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                    <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
                 </td>
             </tr>
             <tr>

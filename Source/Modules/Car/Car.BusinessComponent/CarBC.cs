@@ -36,7 +36,24 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
-            return DataAccess.GetCarPageList(query);
+            var list = DataAccess.GetCarPageList(query);
+            if (list.aaData == null || !list.aaData.Any())
+                return list;
+            var carids = list.aaData.Aggregate("", (current, model) => current + $"'{model.Innerid}',").TrimEnd(',');                
+            var listShare = DataAccess.GetShareList(carids).ToList();
+            if (!listShare.Any())
+            {
+                return list;
+            }
+
+            foreach (var model in list.aaData)
+            {
+                var firstOrDefault = listShare.Where(x => x.Carid == model.Innerid).ToList().FirstOrDefault();
+                if (firstOrDefault != null)
+                    model.ShareModel = firstOrDefault;
+            }
+
+            return list;
         }
 
         /// <summary>

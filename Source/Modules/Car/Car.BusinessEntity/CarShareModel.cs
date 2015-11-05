@@ -15,12 +15,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 主键
         /// </summary>
-        public string Carid { get; set; }
+        public string Innerid { get; set; }
 
         /// <summary>
-        /// 封面图片
+        /// 车辆
         /// </summary>
-        public string Innerid { get; set; }
+        public string Carid { get; set; }
 
         /// <summary>
         /// 分享次数
@@ -31,6 +31,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 查看次数
         /// </summary>
         public int SeeCount { get; set; }
+
+        /// <summary>
+        /// 点赞次数
+        /// </summary>
+        public int PraiseCount { get; set; }
 
         /// <summary>
         /// 评论次数

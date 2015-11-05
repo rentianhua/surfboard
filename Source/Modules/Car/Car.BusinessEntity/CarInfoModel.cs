@@ -361,6 +361,12 @@ namespace CCN.Modules.Car.BusinessEntity
         public string dischargeName { get; set; }
 
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CarShareModel ShareModel { get; set; }
+        
     }
 
     /// <summary>
