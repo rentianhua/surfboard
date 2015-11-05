@@ -58,7 +58,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="carInfo">车辆id</param>
         /// <returns></returns>
-        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        public JResult GetCarEvaluateByCar(CarEvaluateModel carInfo)
         {
             return BusinessComponent.GetCarEvaluateByCar(carInfo);
         }

@@ -37,7 +37,7 @@ namespace CCN.Modules.Car.Interface
         /// </summary>
         /// <param name="carInfo"></param>
         /// <returns></returns>
-        JResult GetCarEvaluateByCar(CarInfoModel carInfo);
+        JResult GetCarEvaluateByCar(CarEvaluateModel carInfo);
 
         /// <summary>
         /// 车辆估值
