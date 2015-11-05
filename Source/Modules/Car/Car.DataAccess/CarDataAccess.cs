@@ -328,13 +328,13 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="carInfo">车辆信息</param>
         /// <returns>1.操作成功</returns>
-        public int SaveCarEvaluateInfo(CarInfoModel carInfo)
+        public int SaveCarEvaluateInfo(CarEvaluateModel carInfo)
         {
             try
             {
-                const string sql = @"insert into `car_evaluation` (`innerid`, `model_id`, `cityid`, `register_date`, `mileage`, `estimateprice`, `createdtime`) 
+                const string sql = @"insert into `car_evaluation` (`innerid`, `model_id`, `cityid`, `register_date`, `mileage`, `estimateprice`,`price`, `createdtime`,`openid`) 
                     values (uuid(),@modelid, @cityid, @registerdate, @mileage, @estimateprice,now());";
-                Helper.Execute(sql, new { modelid = carInfo.model_id, cityid = carInfo.cityid, registerdate=carInfo.register_date, mileage=carInfo.mileage, estimateprice =carInfo.estimateprice});
+                Helper.Execute(sql, new { modelid = carInfo.model_id, cityid = carInfo.cityid, registerdate=carInfo.register_date, mileage=carInfo.mileage, estimateprice =carInfo.estimateprice,price=carInfo.price,openid=carInfo.openid});
             }
             catch (Exception ex)
             {
