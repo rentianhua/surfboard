@@ -86,22 +86,28 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="carInfo"></param>
         /// <returns></returns>
-        public JResult GetCarEvaluateByCar(CarInfoModel carInfo)
+        public JResult GetCarEvaluateByCar(CarEvaluateModel carInfo)
         {
             var jResult = new JResult();
-            
+            decimal price5 = 0;
+            decimal estimateprice5 = 0;
+            decimal price10 = 0;
+            decimal estimateprice10 = 0;
+
             var paramList = new Dictionary<string, string>
             {
                 {"modelId", carInfo.model_id.ToString()},
                 {"regDate", Convert.ToDateTime(carInfo.register_date).ToString("yyyy-MM")},
-                {"mile", carInfo.mileage.ToString()},
+                {"mile", "5"},
                 {"zone", carInfo.cityid.ToString()}
             };
 
             var juhe = new JuheUtility();
-            var result = juhe.GetUsedCarPrice(paramList);
+            var result5 = juhe.GetUsedCarPrice(paramList);
+            paramList["mile"] = "10";
+            var result10 = juhe.GetUsedCarPrice(paramList);
 
-            if (string.IsNullOrWhiteSpace(result))
+            if (string.IsNullOrWhiteSpace(result5) && string.IsNullOrWhiteSpace(result10))
             {
                 jResult.errcode = 400;
                 jResult.errmsg = "没有车辆评估信息";
@@ -110,8 +116,13 @@ namespace CCN.Modules.Car.BusinessComponent
 
             try
             {
-                JObject jobj = JObject.Parse(result);
-                result = Math.Round(Convert.ToDouble(jobj["eval_price"].ToString()), 2).ToString();
+                JObject jobj5 = JObject.Parse(result5);
+                estimateprice5 = Math.Round(Convert.ToDecimal(jobj5["eval_price"].ToString()), 2);
+                price5 = Math.Round(Convert.ToDecimal(jobj5["price"].ToString()), 2);
+
+                JObject jobj10 = JObject.Parse(result5);
+                estimateprice10 = Math.Round(Convert.ToDecimal(jobj10["eval_price"].ToString()), 2) ;
+                price10 = Math.Round(Convert.ToDecimal(jobj10["price"].ToString()), 2);
             }
             catch (Exception)
             {
@@ -121,9 +132,17 @@ namespace CCN.Modules.Car.BusinessComponent
             }
 
             //估价
-            carInfo.estimateprice = result;
+            carInfo.estimateprice = (estimateprice5 + estimateprice10) / 2;
+            //指导价
+            carInfo.price = price5 > 0 ? price5 : price10;
             //保存评估信息
             DataAccess.SaveCarEvaluateInfo(carInfo);
+
+            //最低价，最高价，指导价
+            string[] result = new string[3] { "0", "0", "0" };
+            result[0] = estimateprice5.ToString();
+            result[1] = estimateprice10.ToString();
+            result[2] = carInfo.price.ToString();
 
             jResult.errcode = 0;
             jResult.errmsg = result;
@@ -486,7 +505,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     errmsg = "参数不完整"
                 };
             }
-            
+
             //上传图片到七牛云
             var qinniu = new QiniuUtility();
 
@@ -499,7 +518,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 var writer = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
 
                 //下载图片写入文件流
-                MediaApi.Get(picModel.AccessToken,item, writer);
+                MediaApi.Get(picModel.AccessToken, item, writer);
                 writer.Close();
                 writer.Dispose();
 
@@ -522,7 +541,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 };
                 AddCarPicture(pictureModel);
             }
-            
+
             return new JResult
             {
                 errcode = 0,

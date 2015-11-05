@@ -75,37 +75,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarEvaluateByCar")]
         [HttpPost]
-        public JResult GetCarEvaluateByCar([FromBody] CarInfoModel carinfo)
+        public JResult GetCarEvaluateByCar([FromBody] CarEvaluateModel carinfo)
         {
-            var jResult = new JResult();
-            //获取5万公里估价
-            carinfo.mileage = 5;
-            var jResult5 = _baseservice.GetCarEvaluateByCar(carinfo);
-            //获取10万公里估价
-            carinfo.mileage = 10;
-            var jResult10 = _baseservice.GetCarEvaluateByCar(carinfo);
-            if (jResult5.errcode == 0 || jResult10.errcode == 0)
-            {
-                jResult.errcode = 0;
-                if (jResult5.errcode == 0 && jResult10.errcode == 0)
-                {
-                    jResult.errmsg = Math.Round((Convert.ToDouble(jResult5.errmsg.ToString()) + Convert.ToDouble(jResult10.errmsg.ToString())) / 2, 2).ToString();
-                }
-                else if (jResult5.errcode == 0 && jResult10.errcode > 0)
-                {
-                    jResult.errmsg = Math.Round(Convert.ToDouble(jResult5.errmsg.ToString()), 2).ToString();
-                }
-                else if (jResult5.errcode > 0 && jResult10.errcode == 0)
-                {
-                    jResult.errmsg = Math.Round(Convert.ToDouble(jResult10.errmsg.ToString()), 2).ToString();
-                }
-            }
-            else
-            {
-                jResult.errcode = 400;
-                jResult.errmsg = "没有车辆评估信息";
-            }
-            return jResult;
+            return _baseservice.GetCarEvaluateByCar(carinfo); ;
         }
 
         /// <summary>
@@ -317,7 +289,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _baseservice.AddCarPictureList(picModel);
         }
-        
+
         /// <summary>
         /// 添加车辆图片
         /// </summary>

@@ -186,7 +186,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("WholesaleCoupon")]
         [HttpPost]
-        [NonAction]
+        //[NonAction]
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
             return _rewardsservice.WholesaleCoupon(model);

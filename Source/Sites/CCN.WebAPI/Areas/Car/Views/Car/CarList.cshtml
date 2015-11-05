@@ -27,9 +27,9 @@
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
-            str += "<td>" + (val.Title == null ? "" : val.Title.sub(400)) + "</td>";
-            str += "<td>" + val.Maxcount + "</td>";
-            str += "<td>" + val.Count + "</td>";
+            str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
+            str += "<td>" + val.buytime + "</td>";
+            str += "<td>" + val.buyprice + "</td>";
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" +
