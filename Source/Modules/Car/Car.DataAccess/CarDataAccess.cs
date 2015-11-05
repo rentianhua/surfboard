@@ -115,6 +115,25 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="carSets">车辆ID集合</param>
+        /// <returns></returns>
+        public IEnumerable<CarShareModel> GetShareList(string carSets)
+        {
+            var sql = $"select innerid, carid, sharecount, seecount, praisecount, commentcount from car_share where carid in ({carSets});";
+            try
+            {
+                return Helper.Query<CarShareModel>(sql);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
+        /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
