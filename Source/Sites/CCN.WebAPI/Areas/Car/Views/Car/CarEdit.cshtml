@@ -4,5 +4,346 @@
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
-<h2>CarEdit</h2>
+
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    $(function () {
+        InitBrand();
+        InitCode();
+        Init();
+    });
+
+    //初始化品牌
+    function InitBrand() {
+        $("#selectbrand").empty();
+        $("#selectbrand").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarBrand", function (data) {
+
+            data = data.errmsg;
+            $.each(data, function(k, v) {
+                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+            });
+        });
+    }
+
+    //初始化车系
+    function InitSeries(brandid) {
+        $("#selectseries").empty();
+        $("#selectseries").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarSeries?brandId=" + brandid, function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
+            });
+        });
+    }
+
+    //初始化车型
+    function InitModel(seriesid) {
+        $("#selectmodel").empty();
+        $("#selectmodel").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarModel?seriesId=" + seriesid, function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
+            });
+        });
+    }
+
+    function GetModelInfo(modelid) {
+        $.get("/api/Base/GetCarModelById?innerid=" + modelid, function (data) {
+            $("#selectregyear").empty();
+            $("#selectregyear").append("<option value='0'>请选择</option>");
+            var model = data.errmsg;
+            for (var i = model.Minregyear; i <= model.Maxregyear; i++) {
+                $("#selectregyear").append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            $("#selectregmonth").empty();
+            $("#selectregmonth").append("<option value='0'>请选择</option>");
+            for (var j = 1; j <= 12; j++) {
+
+                var val = j < 10 ? ("0" + j) : j;
+                $("#selectregmonth").append("<option value='" + val + "'>" + val + "</option>");
+            }
+        });
+    }
+
+    //初始化颜色
+    function InitCode() {
+        $("#selectcolor").empty();
+        $("#selectcolor").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCodeByTypeKey?typekey=car_color", function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcolor").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
+            });
+        });
+    }
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/Rewards/GetCouponById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function(data) {
+
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                console.log(data);
+
+                var obj = data.errmsg;
+                $("#title").val(obj.Title);
+                $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
+                $("#amount").val(obj.Amount);
+
+                $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
+                $("#codetype").val(obj.Codetype);
+
+                $("#vtypeTd")
+                    .children().prop("disabled", true)
+                    .children().prop("disabled", true);
+                $("input[name='radiotype'][value=" + obj.Vtype + "]").prop("checked", true);
+
+                if (obj.Vtype === 1) {
+                    $("#radiotype1").removeClass("hide");
+                    $("#radiotype2").addClass("hide");
+                    $("#vstart").val(Dateformat(obj.Vstart, "yyyy-MM-dd"));
+                    $("#vend").val(Dateformat(obj.Vend, "yyyy-MM-dd"));
+                } else {
+                    $("#radiotype1").addClass("hide");
+                    $("#radiotype2").removeClass("hide");
+                    $("#value1").val(obj.Value1);
+                    $("#value2").val(obj.Value2);
+                }
+
+            }
+        });
+    }
+
+    function Submit() {
+
+        var vtype = $("input:radio[name='radiotype']:checked").val();
+        var json = {
+            Title: $("#title").val(),
+            Logourl: "",
+            Amount: $("#amount").val(),
+            Vtype: vtype,
+            Maxcount: $("#count").val(),
+            Codetype: $("#codetype").val()
+        };
+
+        if (vtype === "1") { //有效时间范围
+            json.Vstart = $("#vstart").val();
+            json.Vend = $("#vend").val();
+        } else {//起效/有效天数
+            json.Value1 = $("#value1").val();
+            json.Value2 = $("#value2").val();
+        }
+
+        if (json.Title === "") {
+            alert('请填写标题'); return false;
+        }
+
+        if (json.Amount === "") {
+            alert('请填写面值【整数】'); return false;
+        }
+
+        if (json.Vtype == undefined) {
+            alert('请选择有效期类型'); return false;
+        }
+
+        if (json.Vtype === "1") {
+            if (json.Vstart === "" || json.Vend === "") {
+                alert('请选择有效期开始时间和结束时间！'); return false;
+            }
+        }
+        else if (json.Vtype === "2") {
+            if (json.Value1 === "" || json.Value2 === "") {
+                alert('请填写起效和有效天数【整数】！'); return false;
+            }
+        }
+
+        if (json.Maxcount === "") {
+            alert('请填写最大库存【整数】'); return false;
+        }
+
+        if (json.Codetype === "") {
+            alert('请填写Code展示类型【参考说明】'); return false;
+        }
+
+        var result;
+        uploadfile("logourl", 1024 * 2, "", function (res) {
+            result = res;
+        });
+
+        if (result === "0") {
+            alert('请上传图片');
+            return false;
+        } else if (result === "-1") {
+            alert('图片格式不正确');
+            return false;
+        } else if (result === "-2") {
+            alert('上传异常');
+            return false;
+        } else if (result === "-3") {
+            alert('文件大小超出');
+            return false;
+        }
+
+        json.Logourl = result;
+
+        if (id === "") {
+            $.post("/api/Rewards/AddCoupon", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(str);
+                location.href = "/rewards/rewards/couponlist";
+            });
+        } else {
+
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Rewards/UpdateCoupon',
+                type: 'put',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function(result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(str);
+                    location.href = "/rewards/rewards/couponlist";
+                }
+            });
+        }
+    }
+
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">车辆添加</div>
+    <table id="cartable" class="gridtable">
+        <tbody>
+            <tr>
+                <td colspan="2" style="background-color:#ccc">车辆基本信息</td>
+            </tr>
+            <tr>
+                <td>选车</td>
+                <td>
+                    <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                        <option value="0">请选择</option>
+                    </select>
+                    <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                        <option value="0">请选择</option>
+                    </select>
+                    <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
+                        <option value="0">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>颜色</td>
+                <td>
+                    <select id="selectcolor"></select>
+                </td>
+            </tr>
+            <tr>
+                <td>行驶里程</td>
+                <td>
+                    <input type="datetime" id="txtmileage" /> 万公里
+                </td>
+            </tr>
+        <tr>
+            <td>上牌时间</td>
+            <td>
+                <select id="selectregyear">
+                    <option value="0">请选择</option>
+                </select>
+                年
+                <select id="selectregmonth">
+                    <option value="0">请选择</option>
+                </select>
+                月
+            </td>
+        </tr>
+            <tr>
+                <td>车辆图片</td>
+                <td>
+                    <input type="file" id="logourl" />
+                    <img id="logoimg" style="max-width: 150px;max-height:150px" src="" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="background-color:#ccc">更多信息</td>
+            </tr>
+            <tr>
+                <td>收购日期</td>
+                <td id="">
+                    <input id="txtbuydate" class="Wdate" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                    <br/>注：您收购此车的时间。
+                    <br />该信息我们将严格保密，仅您可见。
+                </td>
+            </tr>
+        <tr>
+            <td>收购价格</td>
+            <td id="">
+                <input id="txtbuyprice" type="text" placeholder="收购价格">
+                <br/>注：您收购此车的价格(单位：万元)
+                <br/>该信息我们将严格保密，仅您可见。
+            </td>
+        </tr>
+        <tr>
+            <td>待售价格</td>
+            <td id="">
+                <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
+            </td>
+        </tr>
+        <tr>
+            <td>重大事故/水侵/火烧</td>
+            <td>
+                <input type="radio" name="radioisproblem" id="rYes" value="1"/>
+                <label for="rYes">是</label>
+                <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked"/>
+                <label for="rNo">否</label>
+            </td>
+        </tr>
+        <tr>
+            <td>定期4S保养</td>
+            <td>
+                <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked"/>
+                <label for="radioistain1">是</label>
+                <input type="radio" name="radioistain" id="radioistain2" value="0"/>
+                <label for="radioistain2">否</label>
+            </td>
+        </tr>
+            <tr>
+                <td>备注</td>
+                <td>
+                    <textarea id="cardesc" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="保存" onclick="Submit()" />
+                    <input type="button" value="返回" onclick="self.location = document.referrer;" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
