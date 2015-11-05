@@ -179,7 +179,7 @@ namespace CCN.Midware.Wechat.Business
                                         Openid = orderresult.order.buyer_openid
                                     });
                                     var text = JsonConvert.SerializeObject(orderresult.order);
-                                    var logresult = $"MERCHANT_ORDER:{text}    result:{wholesaleCouponresult}";
+                                    var logresult = $"MERCHANT_ORDER:{text}    result:{JsonConvert.SerializeObject(wholesaleCouponresult)}";
                                     LoggerFactories.CreateLogger().Write(logresult, TraceEventType.Information);
                                 }
                                 break;
