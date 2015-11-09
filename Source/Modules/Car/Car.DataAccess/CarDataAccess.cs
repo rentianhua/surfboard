@@ -71,19 +71,19 @@ namespace CCN.Modules.Car.DataAccess
             }
 
             //品牌
-            if (query.brand_id != null)
+            if (query.brand_id != null && query.brand_id != 0)
             {
                 sqlWhere.Append($" and a.brand_id={query.brand_id}");
             }
 
             //车系
-            if (query.series_id != null)
+            if (query.series_id != null && query.series_id != 0)
             {
                 sqlWhere.Append($" and a.series_id={query.series_id}");
             }
 
             //车型
-            if (query.model_id != null)
+            if (query.model_id != null && query.model_id != 0)
             {
                 sqlWhere.Append($" and a.model_id={query.model_id}");
             }

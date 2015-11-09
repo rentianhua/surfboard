@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.DataAccess;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Newtonsoft.Json;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -284,6 +287,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
+            LoggerFactories.CreateLogger().Write("购买礼券參數：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(model?.Openid) || string.IsNullOrWhiteSpace(model.ProductId))
             {
                 return JResult._jResult(401, "参数不正确");

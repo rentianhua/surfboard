@@ -38,6 +38,7 @@
                 str += "<a href='javascript:;' onclick=\"ThawCust('" + val.Innerid + "');\">解冻</a> ";
             }
             str += "<a href='javascript:;' onclick=\"DeleteCustomer('" + val.Mobile + "');\">删除</a> ";
+            str += "<a href='/car/car/carlist?custid=" + val.Innerid + "'>车辆管理</a> ";
             str += "</td>";
             str += "</tr>";
             $("#custlist tbody").append(str);
