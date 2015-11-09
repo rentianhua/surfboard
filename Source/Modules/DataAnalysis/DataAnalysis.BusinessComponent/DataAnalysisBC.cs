@@ -91,6 +91,28 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 职业分布
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetOccupationPer()
+        {
+            var list = DataAccess.GetOccupationPer();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
         #endregion
 
         #region 2015年交易额交易量折线图
@@ -102,6 +124,28 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         public JResult GetTradeLineByYear()
         {
             var list = DataAccess.GetTradeLineByYear();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 2014-2015二手车交易量月度统计表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTradeTotalByMonth()
+        {
+            var list = DataAccess.GetTradeTotalByMonth();
             if (list == null)
             {
                 return new JResult
@@ -253,6 +297,28 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 供应量占比
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplyPer()
+        {
+            var list = DataAccess.GetSupplyPer();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
         #endregion
 
         #region 品牌热度排行
@@ -264,6 +330,28 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         public JResult GetHotBrandTop10()
         {
             var list = DataAccess.GetHotBrandTop10();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 1-7月交易量占比
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTradePer1To7()
+        {
+            var list = DataAccess.GetTradePer1To7();
             if (list == null)
             {
                 return new JResult
@@ -454,6 +542,33 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
                 errmsg = listMonth
             };
         }
+        #endregion
+
+        #region 汽车保有量
+
+        /// <summary>
+        /// 汽车保有量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarRetainQuantity()
+        {
+            var listMonth = DataAccess.GetCarRetainQuantity();
+
+            if (listMonth == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = listMonth
+            };
+        }
+
         #endregion
 
     }

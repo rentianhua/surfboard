@@ -32,6 +32,12 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <returns></returns>
         JResult GetGenterPer();
 
+        /// <summary>
+        /// 职业分布
+        /// </summary>
+        /// <returns></returns>
+        JResult GetOccupationPer();
+
         #endregion
 
         #region  2015年交易额交易量折线图
@@ -41,6 +47,12 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// </summary>
         /// <returns></returns>
         JResult GetTradeLineByYear();
+
+        /// <summary>
+        /// 2014-2015二手车交易量月度统计表
+        /// </summary>
+        /// <returns></returns>
+        JResult GetTradeTotalByMonth();
 
         #endregion
 
@@ -82,6 +94,11 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <returns></returns>
         JResult GetUnSatisfaction1To3();
 
+        /// <summary>
+        /// 供应量占比
+        /// </summary>
+        /// <returns></returns>
+        JResult GetSupplyPer();
         #endregion
 
         #region 品牌热度排行
@@ -91,6 +108,12 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// </summary>
         /// <returns></returns>
         JResult GetHotBrandTop10();
+
+        /// <summary>
+        /// 1-7月交易量占比
+        /// </summary>
+        /// <returns></returns>
+        JResult GetTradePer1To7();
 
         #endregion
 
@@ -135,6 +158,16 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// </summary>
         /// <returns></returns>
         JResult GetPersonalIncomeByMonth();
+
+        #endregion
+
+        #region 汽车保有量
+
+        /// <summary>
+        /// 汽车保有量
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCarRetainQuantity();
 
         #endregion
 

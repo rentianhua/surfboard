@@ -53,6 +53,15 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetGenterPer();
         }
 
+        /// <summary>
+        /// 职业分布
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetOccupationPer()
+        {
+            return BusinessComponent.GetOccupationPer();
+        }
+
         #endregion
 
         #region  2015年交易额交易量折线图
@@ -66,6 +75,15 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetTradeLineByYear();
         }
 
+        /// <summary>
+        /// 2014-2015二手车交易量月度统计表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTradeTotalByMonth()
+        {
+            return BusinessComponent.GetTradeTotalByMonth();
+        }
+        
         #endregion
 
         #region 二手车属性
@@ -124,6 +142,15 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetUnSatisfaction3To5();
         }
 
+        /// <summary>
+        /// 供应量占比
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplyPer()
+        {
+            return BusinessComponent.GetSupplyPer();
+        }
+
         #endregion
 
         #region 品牌热度排行
@@ -137,6 +164,14 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetHotBrandTop10();
         }
 
+        /// <summary>
+        /// 1-7月交易量占比
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTradePer1To7()
+        {
+            return BusinessComponent.GetTradePer1To7();
+        }
         #endregion
 
         #region 交易量
@@ -197,6 +232,19 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         public JResult GetPersonalIncomeByMonth()
         {
             return BusinessComponent.GetPersonalIncomeByMonth();
+        }
+
+        #endregion
+
+        #region 汽车保有量
+
+        /// <summary>
+        /// 汽车保有量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarRetainQuantity()
+        {
+            return BusinessComponent.GetCarRetainQuantity();
         }
 
         #endregion
