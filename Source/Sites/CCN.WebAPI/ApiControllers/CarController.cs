@@ -290,6 +290,13 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.AddCarPictureList(picModel);
         }
 
+        [Route("AddCarPictureKeyList")]
+        [HttpPost]
+        public JResult AddCarPictureList([FromBody] PictureListModel picModel)
+        {
+            return _baseservice.AddCarPictureList(picModel);
+        }
+
         /// <summary>
         /// 添加车辆图片
         /// </summary>

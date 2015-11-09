@@ -90,10 +90,12 @@ var getQiniuUrl = function(key) {
 * @callback        {obj} 回调方法
 * @exts            {Exts} 格式类型"gif,jpg,png"
 * @fileSize        {number} 文件大小(KB)
+* @linkType        {string} 文件所属模块分类
+* @maxnum          {number} 多选时控制文件数量
 * @async          -{bool} 是否异步执行
 * return           -1(FileTypeError):文件格式不正确；-2(UploadError):上传异常；-3(FileSizeError)：文件大小超出
 */
-var uploadfile = function (id, fileSize, exts, callback, async) {
+var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum) {
 
     var imgTypes = new Array("gif", "jpg", "jpeg", "png", "bmp");
     if (exts) {
@@ -106,6 +108,14 @@ var uploadfile = function (id, fileSize, exts, callback, async) {
         return;
     }
 
+    maxnum = maxnum || 0;
+    if (maxnum !== 0) {
+        if (files.length > maxnum) {
+            callback("-4"); //选中文件数超过最大数
+            return;
+        }
+    }
+
     //执行同步还是异步 默认值为false
     async = async || false;
     //文件大小 默认值为2*1024KB
@@ -113,14 +123,12 @@ var uploadfile = function (id, fileSize, exts, callback, async) {
 
     var data = new FormData();
     for (var i = 0; i < files.length; i++) {
-        if (fileSize != undefined && fileSize !== "") {
-            var size = (files[i].size / 1024).toFixed(2);
-            if (size > fileSize) {
-                if (callback != undefined) {
-                    callback("-3");
-                }
-                return;
+        var size = (files[i].size / 1024).toFixed(2);
+        if (size > fileSize) {
+            if (callback != undefined) {
+                callback("-3");
             }
+            return;
         }
 
         var fileName = files[i].name;
@@ -137,10 +145,10 @@ var uploadfile = function (id, fileSize, exts, callback, async) {
 
     $.ajax({
         type: "POST",
-        url: "/api/Base/FileUpload",
+        url: "/api/Base/FileUpload?type=" + linkType,
         contentType: false,
         processData: false,
-        async: false,
+        async: async,
         data: data,
         success: function (results) {
             if (callback != undefined) {

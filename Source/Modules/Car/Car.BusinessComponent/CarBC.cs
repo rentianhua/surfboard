@@ -511,7 +511,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="picModel">车辆图片信息</param>
         /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList")]
+        [AuditTrailCallHandler("CarBC.AddCarPictureList.WeichatPictureModel")]
         public JResult AddCarPictureList(WeichatPictureModel picModel)
         {
             if (picModel == null)
@@ -566,6 +566,42 @@ namespace CCN.Modules.Car.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 添加车辆图片(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.AddCarPictureList.PictureListModel")]
+        public JResult AddCarPictureList(PictureListModel picModel)
+        {
+            if (picModel == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+            
+            foreach (var item in picModel.KeyList)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+                var pictureModel = new CarPictureModel
+                {
+                    Carid = picModel.Carid,
+                    Createdtime = DateTime.Now,
+                    Path = item
+                };
+                AddCarPicture(pictureModel);
+            }
+
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = ""
+            };
+        }
 
         /// <summary>
         /// 删除车辆图片

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,8 +14,11 @@ using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Client.DelegationHandler;
+using Newtonsoft.Json;
+using WebGrease;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -250,7 +254,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>图片主键</returns>
         [HttpPost]
         [Route("FileUpload")]
-        public string FileUpload()
+        public string FileUpload(string type)
         {
             var files = HttpContext.Current.Request.Files;
             if (files.Count == 0)
@@ -258,27 +262,34 @@ namespace CCN.WebAPI.ApiControllers
                 return "0";
             }
 
-            var filename = string.Concat("card_logo_", DateTime.Now.ToString("yyyyMMddHHmmssfff"));
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename, ".jpg");
-
             try
             {
-                files[0].SaveAs(filepath);
-
-                //上传图片到七牛云
-                var qinniu = new QiniuUtility();
-                var qrcodeKey = qinniu.PutFile(filepath, "", filename);
-
-                //删除本地临时文件
-                if (File.Exists(filepath))
+                var keys = "";
+                for (var i = 0;i < files.Count; i++)
                 {
-                    File.Delete(filepath);
+                    var filename = string.Concat(type + "_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
+                    var filepath = QiniuUtility.GetFilePath(filename);
+                    
+                    files[i].SaveAs(filepath);
+
+                    //上传图片到七牛云
+                    var qinniu = new QiniuUtility();
+                    var qrcodeKey = qinniu.PutFile(filepath, "", filename);
+
+                    //删除本地临时文件
+                    if (File.Exists(filepath))
+                    {
+                        File.Delete(filepath);
+                    }
+
+                    keys += qrcodeKey + ",";
                 }
 
-                return qrcodeKey;
+                return keys.TrimEnd(',');
             }
             catch (Exception ex)
             {
+                LoggerFactories.CreateLogger().Write("上傳文件異常：", TraceEventType.Error, ex);
                 return "-2";
             }
         }

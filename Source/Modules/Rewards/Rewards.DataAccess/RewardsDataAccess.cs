@@ -526,7 +526,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Information, ex);
+                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Error, ex);
                     tran.Rollback();
                     return 0;
                 }
