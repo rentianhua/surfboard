@@ -64,6 +64,18 @@ namespace CCN.WebAPI.ApiControllers
             return result;
         }
 
+        /// <summary>
+        /// 职业分布
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetOccupationPer")]
+        [HttpGet]
+        public JResult GetOccupationPer()
+        {
+            var result = _dataanalysisservice.GetOccupationPer();
+            return result;
+        }
+
         #endregion
 
         #region 2015年交易额交易量折线图
@@ -77,6 +89,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetTradeLineByYear()
         {
             var result = _dataanalysisservice.GetTradeLineByYear();
+            return result;
+        }
+
+        /// <summary>
+        /// 2014-2015二手车交易量月度统计表
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetTradeTotalByMonth")]
+        [HttpGet]
+        public JResult GetTradeTotalByMonth()
+        {
+            var result = _dataanalysisservice.GetTradeTotalByMonth();
             return result;
         }
 
@@ -156,6 +180,18 @@ namespace CCN.WebAPI.ApiControllers
             return result;
         }
 
+        /// <summary>
+        /// 供应量占比
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetSupplyPer")]
+        [HttpGet]
+        public JResult GetSupplyPer()
+        {
+            var result = _dataanalysisservice.GetSupplyPer();
+            return result;
+        }
+
         #endregion
 
         #region 品牌热度排行
@@ -169,6 +205,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetHotBrandTop10()
         {
             var result = _dataanalysisservice.GetHotBrandTop10();
+            return result;
+        }
+
+        /// <summary>
+        /// 1-7月交易量占比
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetTradePer1To7")]
+        [HttpGet]
+        public JResult GetTradePer1To7()
+        {
+            var result = _dataanalysisservice.GetTradePer1To7();
             return result;
         }
 
@@ -222,6 +270,22 @@ namespace CCN.WebAPI.ApiControllers
             var result = _dataanalysisservice.GetPersonalIncome();
             return result;
         }
+        #endregion
+
+        #region 汽车保有量
+
+        /// <summary>
+        /// 汽车保有量
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetCarRetainQuantity")]
+        [HttpGet]
+        public JResult GetCarRetainQuantity()
+        {
+            var result = _dataanalysisservice.GetCarRetainQuantity();
+            return result;
+        }
+
         #endregion
     }
 }

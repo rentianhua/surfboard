@@ -90,6 +90,51 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             return list;
         }
 
+        /// <summary>
+        /// 职业分布
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetOccupationPer()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "工人";
+            da1.value = "27.62";
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "技术人员";
+            da2.value = "22.97";
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "销售人员";
+            da3.value = "11.76";
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "专业人士";
+            da4.value = "6.24";
+            DataAnalysisModel da5 = new DataAnalysisModel();
+            da5.key = "文职/办事人员";
+            da5.value = "4.42";
+            DataAnalysisModel da6 = new DataAnalysisModel();
+            da6.key = "教师";
+            da6.value = "1.89";
+            DataAnalysisModel da7 = new DataAnalysisModel();
+            da7.key = "在校学生";
+            da7.value = "0.87";
+            DataAnalysisModel da8 = new DataAnalysisModel();
+            da8.key = "其他";
+            da8.value = "24.23";
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+            list.Add(da5);
+            list.Add(da6);
+            list.Add(da7);
+            list.Add(da8);
+
+            return list;
+        }
+
         #endregion
 
         #region 2015年交易额交易量折线图
@@ -148,6 +193,84 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             list.Add(da7);
             list.Add(da8);
             list.Add(da9);
+
+            return list;
+        }
+
+        /// <summary>
+        /// 2014-2015二手车交易量月度统计表
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetTradeTotalByMonth()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "2014/02";
+            da1.value = "32.95";
+            da1.value2 = "15.25";
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "2014/03";
+            da2.value = "51.37";
+            da2.value2 = "5.48";
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "2014/04";
+            da3.value = "50.15";
+            da3.value2 = "8.46";
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "2014/05";
+            da4.value = "48.71";
+            da4.value2 = "0";
+            DataAnalysisModel da5 = new DataAnalysisModel();
+            da5.key = "2014/06";
+            da5.value = "50.43";
+            da5.value2 = "24.15";
+            DataAnalysisModel da6 = new DataAnalysisModel();
+            da6.key = "2014/07";
+            da6.value = "52.38";
+            da6.value2 = "17.79";
+            DataAnalysisModel da7 = new DataAnalysisModel();
+            da7.key = "2014/08";
+            da7.value = "48.98";
+            da7.value2 = "10.74";
+            DataAnalysisModel da8 = new DataAnalysisModel();
+            da8.key = "2014/09";
+            da8.value = "54.06";
+            da8.value2 = "0";
+            DataAnalysisModel da9 = new DataAnalysisModel();
+            da9.key = "2014/10";
+            da9.value = "53.28";
+            da9.value2 = "0";
+            DataAnalysisModel da10 = new DataAnalysisModel();
+            da10.key = "2014/02";
+            da10.value = "53.91";
+            da10.value2 = "16.29";
+            DataAnalysisModel da11 = new DataAnalysisModel();
+            da11.key = "2014/03";
+            da11.value = "60.18";
+            da11.value2 = "12.76";
+            DataAnalysisModel da12 = new DataAnalysisModel();
+            da12.key = "2014/04";
+            da12.value = "49.04";
+            da12.value2 = "0";
+            DataAnalysisModel da13 = new DataAnalysisModel();
+            da13.key = "2014/05";
+            da13.value = "36.58";
+            da13.value2 = "11.02";
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+            list.Add(da5);
+            list.Add(da6);
+            list.Add(da7);
+            list.Add(da8);
+            list.Add(da9);
+            list.Add(da10);
+            list.Add(da11);
+            list.Add(da12);
+            list.Add(da13);
 
             return list;
         }
@@ -354,6 +477,59 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             return list;
         }
 
+        /// <summary>
+        /// 供应量占比
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetSupplyPer()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "黑";
+            da1.value = "28";
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "白";
+            da2.value = "19";
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "银";
+            da3.value = "18";
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "红";
+            da4.value = "10";
+            DataAnalysisModel da5 = new DataAnalysisModel();
+            da5.key = "灰";
+            da5.value = "9";
+            DataAnalysisModel da6 = new DataAnalysisModel();
+            da6.key = "蓝";
+            da6.value = "8";
+            DataAnalysisModel da7 = new DataAnalysisModel();
+            da7.key = "金";
+            da7.value = "3";
+            DataAnalysisModel da8 = new DataAnalysisModel();
+            da8.key = "绿";
+            da8.value = "2";
+            DataAnalysisModel da9 = new DataAnalysisModel();
+            da9.key = "黄";
+            da9.value = "2";
+            DataAnalysisModel da10 = new DataAnalysisModel();
+            da10.key = "橙";
+            da10.value = "2";
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+            list.Add(da5);
+            list.Add(da6);
+            list.Add(da7);
+            list.Add(da8);
+            list.Add(da9);
+            list.Add(da10);
+
+            return list;
+        }
+
         #endregion
 
         #region 品牌热度排行
@@ -394,8 +570,61 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             da9.key = "日产";
             da9.value = "6";
             DataAnalysisModel da10 = new DataAnalysisModel();
-            da10.key = "未知";
+            da10.key = "其他";
             da10.value = "4";
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+            list.Add(da5);
+            list.Add(da6);
+            list.Add(da7);
+            list.Add(da8);
+            list.Add(da9);
+            list.Add(da10);
+
+            return list;
+        }
+
+        /// <summary>
+        /// 1-7月交易量占比
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetTradePer1To7()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "五菱荣光";
+            da1.value = "5.77";
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "大众捷达";
+            da2.value = "2.85";
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "长安之星";
+            da3.value = "2.43";
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "雪弗兰赛欧三厢";
+            da4.value = "2.30";
+            DataAnalysisModel da5 = new DataAnalysisModel();
+            da5.key = "一汽夏利";
+            da5.value = "2.29";
+            DataAnalysisModel da6 = new DataAnalysisModel();
+            da6.key = "本田雅阁";
+            da6.value = "1.69";
+            DataAnalysisModel da7 = new DataAnalysisModel();
+            da7.key = "别克君威";
+            da7.value = "1.62";
+            DataAnalysisModel da8 = new DataAnalysisModel();
+            da8.key = "奥迪A6L";
+            da8.value = "1.38";
+            DataAnalysisModel da9 = new DataAnalysisModel();
+            da9.key = "雪铁龙富康";
+            da9.value = "1.34";
+            DataAnalysisModel da10 = new DataAnalysisModel();
+            da10.key = "奇瑞QQ";
+            da10.value = "1.31";
 
             list.Add(da1);
             list.Add(da2);
@@ -746,6 +975,63 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             return list;
         }
+        #endregion
+
+        #region 汽车保有量
+
+        /// <summary>
+        /// 汽车保有量
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetCarRetainQuantity()
+        {
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            DataAnalysisModel da1 = new DataAnalysisModel();
+            da1.key = "北京";
+            da1.value = "537.1";
+            DataAnalysisModel da2 = new DataAnalysisModel();
+            da2.key = "重庆";
+            da2.value = "399.8";
+            DataAnalysisModel da3 = new DataAnalysisModel();
+            da3.key = "成都";
+            da3.value = "336.1";
+            DataAnalysisModel da4 = new DataAnalysisModel();
+            da4.key = "深圳";
+            da4.value = "290.5";
+            DataAnalysisModel da5 = new DataAnalysisModel();
+            da5.key = "上海";
+            da5.value = "272.3";
+            DataAnalysisModel da6 = new DataAnalysisModel();
+            da6.key = "广州";
+            da6.value = "269.5";
+            DataAnalysisModel da7 = new DataAnalysisModel();
+            da7.key = "天津";
+            da7.value = "258.9";
+            DataAnalysisModel da8 = new DataAnalysisModel();
+            da8.key = "杭州";
+            da8.value = "251.7";
+            DataAnalysisModel da9 = new DataAnalysisModel();
+            da9.key = "苏州";
+            da9.value = "245";
+            DataAnalysisModel da10 = new DataAnalysisModel();
+            da10.key = "郑州";
+            da10.value = "230.8";
+
+            list.Add(da1);
+            list.Add(da2);
+            list.Add(da3);
+            list.Add(da4);
+            list.Add(da5);
+            list.Add(da6);
+            list.Add(da7);
+            list.Add(da8);
+            list.Add(da9);
+            list.Add(da10);
+
+            return list;
+        }
+
         #endregion
     }
 }
