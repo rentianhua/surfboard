@@ -102,7 +102,7 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.UpdateCar(model);
         }
-        
+
         /// <summary>
         /// 删除车辆
         /// </summary>
@@ -158,11 +158,12 @@ namespace CCN.Modules.Car.BusinessService
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
-        public JResult UpSeeCount(string id)
+        public JResult UpSeeCount(string id, int count)
         {
 
-            return BusinessComponent.UpSeeCount(id);
+            return BusinessComponent.UpSeeCount(id, count);
         }
 
         /// <summary>
@@ -206,7 +207,7 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.CancelCar(id);
         }
-        
+
         /// <summary>
         /// 获取车辆 分享/查看次数
         /// </summary>

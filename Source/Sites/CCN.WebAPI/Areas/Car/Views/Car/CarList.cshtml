@@ -11,7 +11,7 @@
     $(function () {
         InitBrand();
         QueryList();
-        $("#btnAdd").click(function() {
+        $("#btnAdd").click(function () {
             location.href = "/car/car/caredit?custid=" + custid;
         });
     });
@@ -67,7 +67,7 @@
 
         var str = "";
 
-        $.each(data, function(key, val) {
+        $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
@@ -78,12 +78,27 @@
             str += "<td>" + Dateformat(val.register_date, "yyyy-MM") + "</td>";
             str += "<td>" + val.price + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
+            str += "<td data-value='" + val.ShareModel.SeeCount + "'>" + val.ShareModel.SeeCount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
             str += "<td>" +
                 "<a href='/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "'>修改</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
+        });
+    }
+
+    /*
+    *新增浏览次数
+    */
+    function AddSeeCount(id, obj) {
+        var count = 0;
+        //获取10-20之间的随机数
+        count = Math.ceil(Math.random() * 10) + 10 + parseInt($(obj).parent().attr("data-value"));
+        $.get("/api/Car/UpSeeCount?id=" + id + "&count=" + count, function (result) {
+            if (result.errcode == 0) {
+                $(obj).parent().html(count + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + id + "',this);\">+</a></td>")
+            }
         });
     }
 
@@ -134,7 +149,7 @@
                 <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
                     <option value="0">请选择</option>
                 </select>
-                <input type="button" value="搜索" onclick="QueryList();"/>
+                <input type="button" value="搜索" onclick="QueryList();" />
             </td>
             <td style="text-align: right">
                 <a id="btnAdd" href="javascript:;">添加</a>
@@ -145,17 +160,18 @@
             <td colspan="2">
                 <table id="carlist" class="gridtable">
                     <thead>
-                    <tr>
-                        <td>序号</td>
-                        <td>车型</td>
-                        <td>收购日期</td>
-                        <td>收购价格</td>
-                        <td>公里数</td>
-                        <td>上牌时间</td>
-                        <td>销售价</td>
-                        <td>状态</td>
-                        <td>操作</td>
-                    </tr>
+                        <tr>
+                            <td>序号</td>
+                            <td>车型</td>
+                            <td>收购日期</td>
+                            <td>收购价格</td>
+                            <td>公里数</td>
+                            <td>上牌时间</td>
+                            <td>销售价</td>
+                            <td>状态</td>
+                            <td>浏览次数</td>
+                            <td>操作</td>
+                        </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -166,7 +182,7 @@
 <div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
 
     描述:
-    <input type="text" id="deldesc" maxlength="200"/>
+    <input type="text" id="deldesc" maxlength="200" />
     <input type="button" value="确定" id="delsubmit" />
     <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>
