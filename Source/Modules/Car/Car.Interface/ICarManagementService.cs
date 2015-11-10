@@ -66,7 +66,7 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
         JResult UpdateCar(CarInfoModel model);
-        
+
         /// <summary>
         /// 删除车辆
         /// </summary>
@@ -107,8 +107,9 @@ namespace CCN.Modules.Car.Interface
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
-        JResult UpSeeCount(string id);
+        JResult UpSeeCount(string id, int count);
 
         /// <summary>
         /// 累计点赞次数

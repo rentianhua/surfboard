@@ -275,12 +275,13 @@ namespace CCN.WebAPI.ApiControllers
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
         [Route("UpSeeCount")]
         [HttpGet]
-        public JResult UpSeeCount(string id)
+        public JResult UpSeeCount(string id, int count = 1)
         {
-            return _baseservice.UpSeeCount(id);
+            return _baseservice.UpSeeCount(id, count);
         }
 
         /// <summary>
