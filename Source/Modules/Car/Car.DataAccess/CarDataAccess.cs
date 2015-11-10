@@ -44,8 +44,8 @@ namespace CCN.Modules.Car.DataAccess
             #region 查询条件
             var sqlWhere = new StringBuilder("1=1");
 
-            sqlWhere.Append(query.status != null 
-                ? $" and a.status={query.status}" 
+            sqlWhere.Append(query.status != null
+                ? $" and a.status={query.status}"
                 : " and a.status<>0");
 
             if (!string.IsNullOrWhiteSpace(query.custid))
@@ -259,7 +259,7 @@ namespace CCN.Modules.Car.DataAccess
             {
                 result = 0;
             }
-            
+
             return result;
         }
 
@@ -333,7 +333,7 @@ namespace CCN.Modules.Car.DataAccess
             try
             {
                 const string sql = "update car_info set status=2,dealprice=@dealprice,dealdesc=@dealdesc,sold_time=@sold_time,closecasetime=@closecasetime where `innerid`=@innerid;";
-                Helper.Execute(sql, new { innerid = model.Innerid,model.dealprice, model.dealdesc });
+                Helper.Execute(sql, new { innerid = model.Innerid, model.dealprice, model.dealdesc });
             }
             catch (Exception ex)
             {
@@ -353,7 +353,7 @@ namespace CCN.Modules.Car.DataAccess
             {
                 const string sql = @"insert into `car_evaluation` (`innerid`, `model_id`, `cityid`, `register_date`, `mileage`, `estimateprice`,`price`, `createdtime`,`openid`) 
                     values (uuid(),@modelid, @cityid, @registerdate, @mileage, @estimateprice,now());";
-                Helper.Execute(sql, new { modelid = carInfo.model_id, cityid = carInfo.cityid, registerdate=carInfo.register_date, mileage=carInfo.mileage, estimateprice =carInfo.estimateprice,price=carInfo.price,openid=carInfo.openid});
+                Helper.Execute(sql, new { modelid = carInfo.model_id, cityid = carInfo.cityid, registerdate = carInfo.register_date, mileage = carInfo.mileage, estimateprice = carInfo.estimateprice, price = carInfo.price, openid = carInfo.openid });
             }
             catch (Exception ex)
             {
@@ -373,7 +373,7 @@ namespace CCN.Modules.Car.DataAccess
             try
             {
                 const string sql = "update car_info set estimateprice=@estimateprice where `innerid`=@innerid;";
-                Helper.Execute(sql, new { innerid = carid, estimateprice= evaluate });
+                Helper.Execute(sql, new { innerid = carid, estimateprice = evaluate });
             }
             catch (Exception ex)
             {
@@ -391,8 +391,8 @@ namespace CCN.Modules.Car.DataAccess
         {
             const string sql1 = "select count(1) from car_info where model_id=@modelid and `status`=2 and date_format(sold_time,'%Y-%m')=date_format(now(),'%Y-%m');";
             const string sql2 = "select count(1) from car_info_bak where model_id=@modelid and date_format(modifiedtime,'%Y-%m')=date_format(now(),'%Y-%m');";
-            var num1 = Helper.ExecuteScalar<int>(sql1, new {modelid});
-            var num2 = Helper.ExecuteScalar<int>(sql2, new {modelid});
+            var num1 = Helper.ExecuteScalar<int>(sql1, new { modelid });
+            var num2 = Helper.ExecuteScalar<int>(sql2, new { modelid });
             return num1 + num2;
         }
 
@@ -427,7 +427,7 @@ namespace CCN.Modules.Car.DataAccess
             {
                 //累计分享次数
                 var sql = "update car_share set sharecount=sharecount+1 where carid=@carid;";
-                var resCount = Helper.Execute(sql, new {carid = id});
+                var resCount = Helper.Execute(sql, new { carid = id });
                 //if (resCount == 0)
                 //{
                 //    //表示没有子表数据
@@ -441,18 +441,19 @@ namespace CCN.Modules.Car.DataAccess
             }
             return 1;
         }
-        
+
         /// <summary>
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
-        public int UpSeeCount(string id)
+        public int UpSeeCount(string id, int count = 1)
         {
-            const string sql = @"update car_share set seecount=seecount+1 where carid=@carid;";
+            const string sql = @"update car_share set seecount=seecount+@count where carid=@carid;";
             try
             {
-                Helper.Execute(sql, new { carid = id });
+                Helper.Execute(sql, new { carid = id, count = count });
             }
             catch (Exception ex)
             {
@@ -486,7 +487,7 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="id">车辆id</param>
         /// <param name="content">评论内容</param>
         /// <returns>1.累计成功</returns>
-        public int CommentCar(string id,string content)
+        public int CommentCar(string id, string content)
         {
             const string sql = @"update car_share set commentcount=commentcount+1 where carid=@carid;";
             try
@@ -538,7 +539,7 @@ namespace CCN.Modules.Car.DataAccess
                         (innerid, carid, typeid, path, sort, createdtime)
                         VALUES
                         (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
-            
+
             try
             {
                 Helper.Execute(sql, model);
@@ -563,7 +564,7 @@ namespace CCN.Modules.Car.DataAccess
 
             try
             {
-                Helper.Execute(sql, new {innerid = carid, pic_url = imgKey});
+                Helper.Execute(sql, new { innerid = carid, pic_url = imgKey });
                 return 1;
             }
             catch (Exception ex)
@@ -596,7 +597,7 @@ namespace CCN.Modules.Car.DataAccess
                     //获取结果集
                     //var data = result.Read<T>();
                 }
-                
+
                 return args.Get<int>("p_values");
             }
 
@@ -629,8 +630,8 @@ namespace CCN.Modules.Car.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sql, new {innerid = listPicture[0].Innerid, sort = listPicture[0].Sort}, tran);
-                    conn.Execute(sql, new {innerid = listPicture[1].Innerid, sort = listPicture[1].Sort}, tran);
+                    conn.Execute(sql, new { innerid = listPicture[0].Innerid, sort = listPicture[0].Sort }, tran);
+                    conn.Execute(sql, new { innerid = listPicture[1].Innerid, sort = listPicture[1].Sort }, tran);
 
                     tran.Commit();
                     return 1;
@@ -740,7 +741,7 @@ namespace CCN.Modules.Car.DataAccess
             }
             return 1;
         }
-        
+
         #endregion
 
         #endregion
