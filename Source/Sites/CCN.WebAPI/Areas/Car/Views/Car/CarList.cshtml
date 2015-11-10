@@ -11,7 +11,7 @@
     $(function () {
         InitBrand();
         QueryList();
-        $("#btnAdd").click(function () {
+        $("#btnAdd").click(function() {
             location.href = "/car/car/caredit?custid=" + custid;
         });
     });
@@ -94,9 +94,11 @@
     function AddSeeCount(id, obj) {
         var count = 0;
         //获取10-20之间的随机数
-        count = Math.ceil(Math.random() * 10) + 10 + parseInt($(obj).parent().attr("data-value"));
+        count = Math.ceil(Math.random() * 10) + 10;
         $.get("/api/Car/UpSeeCount?id=" + id + "&count=" + count, function (result) {
             if (result.errcode == 0) {
+                count += parseInt($(obj).parent().attr("data-value"));
+                $(obj).parent().attr("data-value",count);
                 $(obj).parent().html(count + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + id + "',this);\">+</a></td>")
             }
         });
