@@ -37,6 +37,20 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         JResult PointExchangeCoupon(CustPointExChangeCouponModel model);
 
+        /// <summary>
+        /// 登录奖励积分算法
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        int LoginAlgorithm(string custid);
+
+        /// <summary>
+        /// 获取认证积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        IEnumerable<CustPointModel> GetAuthPointRecord(string custid);
+
         #endregion
 
         #region 会员礼券

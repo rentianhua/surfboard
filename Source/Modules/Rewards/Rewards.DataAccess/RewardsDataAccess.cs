@@ -195,7 +195,7 @@ namespace CCN.Modules.Rewards.DataAccess
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public IEnumerable<CustPointModel> VLogin(string custid)
+        public IEnumerable<CustPointModel> GetLoginPointRecord(string custid)
         {
             const string sql =
                 @"select * from point_record where custid=@custid and `type`=1 and sourceid=2 and createdtime>=date_sub(curdate(),interval 1 day);";
@@ -211,7 +211,26 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 获取认证积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustPointModel> GetAuthPointRecord(string custid)
+        {
+            const string sql =
+                @"select * from point_record where custid=@custid and `type`=1 and sourceid=3;";
 
+            try
+            {
+                //插入积分变更记录
+                return Helper.Query<CustPointModel>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         #endregion
 

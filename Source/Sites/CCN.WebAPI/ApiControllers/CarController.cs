@@ -112,7 +112,32 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCar([FromBody] CarInfoModel model)
         {
-            return _baseservice.AddCar(model);
+            var result = _baseservice.AddCar(model);
+
+            #region 车辆录入送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = model.custid,
+                        Createdtime = DateTime.Now,
+                        Type = 1,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10,
+                        Remark = "",
+                        Sourceid = 4,
+                        Validtime = null
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -136,7 +161,32 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult DeleteCar([FromBody] CarInfoModel model)
         {
-            return _baseservice.DeleteCar(model);
+            var result = _baseservice.DeleteCar(model);
+
+            #region 车辆删除扣除积分
+
+            if (result.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = model.custid,
+                        Createdtime = DateTime.Now,
+                        Type = 2,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10,
+                        Remark = "",
+                        Sourceid = 101,
+                        Validtime = null
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -189,7 +239,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             var result = _baseservice.ShareCar(id);
 
-            #region 注册送积分
+            #region 分享送积分
 
             if (result.errcode == 0)
             {

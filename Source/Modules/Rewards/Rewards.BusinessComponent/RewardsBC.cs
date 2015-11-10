@@ -122,30 +122,57 @@ namespace CCN.Modules.Rewards.BusinessComponent
         }
 
         /// <summary>
-        /// 登录奖励验证
+        /// 登录奖励积分算法
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public JResult VLogin(string custid)
+        public int LoginAlgorithm(string custid)
         {
-            var list = DataAccess.VLogin(custid).ToList();
+            var list = DataAccess.GetLoginPointRecord(custid).ToList();
             if (!list.Any())
             {
-                return JResult._jResult(1,10); //表示第一次登录，奖励10个积分
+                return 10; //表示第一次登录，奖励10个积分
             }
 
-            if (list.Count(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == DateTime.Now.ToString("yyyyMMdd")) > 0)
+            var nDate = DateTime.Now;
+
+            if (list.Count(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == nDate.ToString("yyyyMMdd")) > 0)
             {
-                return JResult._jResult(2, 0); //今天奖励过了，不奖励了
+                return 0; //今天奖励过了，不奖励了
             }
 
-            var yesModel = list.FirstOrDefault(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == DateTime.Now.AddDays(-1).ToString("yyyyMMdd"));
-            if (yesModel != null) //表示昨天有登录奖励过，今天奖励的积分要在昨天的基础+5
+            var yesModel = list.FirstOrDefault(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == nDate.AddDays(-1).ToString("yyyyMMdd"));
+            if (yesModel != null) //表示昨天有登录奖励过，今天奖励的积分要在昨天的基础+N
             {
-                return JResult._jResult(3, yesModel.Point + 5);
+                if (nDate.Day <= 10)
+                {
+                    return yesModel.Point + 5;
+                }
+                if (nDate.Day > 10 && nDate.Day <= 20)
+                {
+                    return yesModel.Point + 10;
+                }
+                if (nDate.Day == 21)
+                {
+                    return 180;
+                }
+                if (nDate.Day > 21)
+                {
+                    return 200;
+                }
             }
-            
-            return JResult._jResult(0, 0);
+
+            return 0;
+        }
+
+        /// <summary>
+        /// 获取认证积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustPointModel> GetAuthPointRecord(string custid)
+        {
+            return DataAccess.GetAuthPointRecord(custid);
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Base.Interface;
@@ -203,14 +204,27 @@ namespace CCN.WebAPI.ApiControllers
                 Task.Factory.StartNew(() =>
                 {
                     var custModel = (CustModel) result.errmsg;
+
+                    if (custModel == null)
+                    {
+                        return;
+                    }
+
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
+                    var point = rewardsservice.LoginAlgorithm(custModel.Innerid);
+                    if (point == 0)
+                    {
+                        return;
+                    }
+
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custModel.Innerid,
                         Createdtime = DateTime.Now,
                         Type = 1,
                         Innerid = Guid.NewGuid().ToString(),
-                        Point = 10, //注册+10
+                        Point = point,
                         Remark = "",
                         Sourceid = 2,
                         Validtime = null
@@ -364,7 +378,40 @@ namespace CCN.WebAPI.ApiControllers
         [ApplicationContextFilter]
         public JResult AuditAuthentication([FromBody] CustAuthenticationModel model)
         {
-            return _custservice.AuditAuthentication(model);
+            var result = _custservice.AuditAuthentication(model);
+
+            #region 认证送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
+                    var recordList = rewardsservice.GetAuthPointRecord(model.Custid);
+                    if (recordList.Any())
+                    {
+                        return;
+                    }
+
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = model.Custid,
+                        Createdtime = DateTime.Now,
+                        Type = 1,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 1000, //认证+1000
+                        Remark = "",
+                        Sourceid = 3,
+                        Validtime = null
+                    });
+                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
