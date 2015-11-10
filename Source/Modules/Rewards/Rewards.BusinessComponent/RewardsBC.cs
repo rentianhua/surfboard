@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.DataAccess;
 using Cedar.Core.Logging;
@@ -118,6 +119,33 @@ namespace CCN.Modules.Rewards.BusinessComponent
             return JResult._jResult(
                 result > 0 ? 0 : 400,
                 result > 0 ? "兑换成功" : "兑换失败");
+        }
+
+        /// <summary>
+        /// 登录奖励验证
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult VLogin(string custid)
+        {
+            var list = DataAccess.VLogin(custid).ToList();
+            if (!list.Any())
+            {
+                return JResult._jResult(1,10); //表示第一次登录，奖励10个积分
+            }
+
+            if (list.Count(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == DateTime.Now.ToString("yyyyMMdd")) > 0)
+            {
+                return JResult._jResult(2, 0); //今天奖励过了，不奖励了
+            }
+
+            var yesModel = list.FirstOrDefault(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == DateTime.Now.AddDays(-1).ToString("yyyyMMdd"));
+            if (yesModel != null) //表示昨天有登录奖励过，今天奖励的积分要在昨天的基础+5
+            {
+                return JResult._jResult(3, yesModel.Point + 5);
+            }
+            
+            return JResult._jResult(0, 0);
         }
 
         #endregion

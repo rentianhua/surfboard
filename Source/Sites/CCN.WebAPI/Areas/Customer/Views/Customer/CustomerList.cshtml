@@ -100,27 +100,10 @@
         return "";
     }
 
-    function ClearData() {
-
-        if (!confirm("确认清理!")) {
-            return;
-        }
-
-        $.get("/api/Customer/DeleteAll", function (delres) {
-            if (delres.errcode === 0) {
-                alert("清理成功");
-                location.href = "/customer/customer/customerlist";
-            } else {
-                alert("清理失败");
-            }
-        });
-    }
 </script>
 
 <div>
-    <div style="text-align: right;">
-        <a href="javascript:;" onclick="ClearData();">清理数据</a>
-    </div>
+
     <div style="font-size: 18px; font-weight: bold; text-align: center; line-height: 20px;">会员列表</div>
     <table style="margin: 0 auto;">
         <tr>

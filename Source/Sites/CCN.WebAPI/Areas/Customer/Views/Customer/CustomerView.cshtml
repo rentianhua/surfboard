@@ -55,7 +55,16 @@
             $("#qrcode").html("<img width='150' height='150' src='" + qrcodeurl + "' />");
 
             $("#level").html(obj.Level);
-            $("#totalpoints").html(obj.Totalpoints);
+           
+
+            if (obj.TotalInfo == null) {
+                $("#totalpoints").html(0);
+                $("#totalcoupon").html(0);
+            } else {
+                $("#totalpoints").html(obj.TotalInfo.Currpoint);
+                $("#totalcoupon").html(obj.TotalInfo.Currpouponnum);
+            }
+
             $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
 
             $("#authstatus").html(ChangAuthStatus(obj.AuthStatus));
@@ -219,35 +228,43 @@
             <td id="telephone"></td>
         </tr>
         <tr>
-            
-            <td>
-                当前等级
-            </td>
-            <td id="level"></td>
-            <td>
-                当前积分
-            </td>
-            <td id="totalpoints"></td>
-        </tr>
-        <tr>
             <td>
                 会员状态
             </td>
             <td id="status"></td>
             <td>
+                当前等级
+            </td>
+            <td id="level"></td>
+
+        </tr>
+        <tr>
+            <td>
+                当前积分数
+            </td>
+            <td id="totalpoints"></td>
+            <td>
+                当前礼券数
+            </td>
+            <td id="totalcoupon"></td>
+        </tr>
+        <tr>
+            
+            <td>
                 注册时间
             </td>
             <td id="createdtime"></td>
-        </tr>
-        <tr>
             <td>
                 QQ
             </td>
             <td id="qq"></td>
+        </tr>
+        <tr>
+            
             <td>
                 所在地
             </td>
-            <td id="location"></td>
+            <td id="location" colspan="3"></td>
         </tr>
         <tr>
             <td>
