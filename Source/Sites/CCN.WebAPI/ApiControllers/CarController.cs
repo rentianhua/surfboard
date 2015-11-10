@@ -200,6 +200,8 @@ namespace CCN.WebAPI.ApiControllers
                     //获取会员id
                     var custid = ApplicationContext.Current.UserId;
 
+                    //会员每分享一次有效车辆信息至朋友圈奖励10积分，每个会员每天最多由此获得150积分
+                    //////////////////////////
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -208,7 +210,7 @@ namespace CCN.WebAPI.ApiControllers
                         Innerid = Guid.NewGuid().ToString(),
                         Point = 10,
                         Remark = "",
-                        Sourceid = 1,
+                        Sourceid = 5,
                         Validtime = null
                     });
                 });

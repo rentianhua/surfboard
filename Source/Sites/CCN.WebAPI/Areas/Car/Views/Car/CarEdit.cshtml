@@ -219,6 +219,10 @@
             $("input[name='radioisproblem'][value=" + obj.isproblem + "]").prop("checked", true);
             $("input[name='radioistain'][value=" + obj.istain + "]").prop("checked", true);
 
+            $("#txtckyear_date").val(Dateformat(obj.ckyear_date, "yyyy-MM-dd"));
+            $("#txttlci_date").val(Dateformat(obj.tlci_date, "yyyy-MM-dd"));
+            $("#txtaudit_date").val(Dateformat(obj.audit_date, "yyyy-MM-dd"));
+
             $("#caresc").val(obj.remark);
 
             //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
@@ -340,6 +344,10 @@
         var isproblem = $("input:radio[name='radioisproblem']:checked").val();
         var istain = $("input:radio[name='radioistain']:checked").val();
 
+        var txtckyearDate = $("#txtckyear_date").val();
+        var txttlciDate = $("#txttlci_date").val();
+        var txtauditDate = $("#txtaudit_date").val();
+
         var caresc = $("#caresc").val();
 
         var json = {
@@ -353,11 +361,14 @@
             buytime: txtbuydate,
             buyprice: txtbuyprice,
             mileage: txtmileage,
-            register_date: regyear + "-" + regmonth + "-01 00:00:00",
+            register_date: regyear + "-" + regmonth + "-01",
             price: txtsoldyprice,
             isproblem: isproblem,
             istain: istain,
-            remark: caresc
+            remark: caresc,
+            ckyear_date: txtckyearDate,
+            tlci_date: txttlciDate,
+            audit_date: txtauditDate
         };
 
         //showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
@@ -366,26 +377,25 @@
             keysRes = res;
         }, null, 9);
 
-        if (keysRes === "0") {
-            alert('请上传图片');
-            return false;
-        } else if (keysRes === "-1") {
-            alert('图片格式不正确');
-            return false;
-        } else if (keysRes === "-2") {
-            alert('上传异常');
-            return false;
-        } else if (keysRes === "-3") {
-            alert('文件大小超出');
-            return false;
-        } else if (keysRes === "-4") {
-            alert('请最多上传9张图片');
-            return false;
-        }
-
-        console.log(json);
-
         if (id === "") {
+
+            if (keysRes === "0") {
+                alert('请上传图片');
+                return false;
+            } else if (keysRes === "-1") {
+                alert('图片格式不正确');
+                return false;
+            } else if (keysRes === "-2") {
+                alert('上传异常');
+                return false;
+            } else if (keysRes === "-3") {
+                alert('文件大小超出');
+                return false;
+            } else if (keysRes === "-4") {
+                alert('请最多上传9张图片');
+                return false;
+            }
+
             $.post("/api/Car/AddCar", json, function(result) {
                 hideloading();
                 if (result.errcode === 0) {
@@ -401,14 +411,30 @@
 
             });
         } else {
+
+            if (keysRes === "-1") {
+                alert('图片格式不正确');
+                return false;
+            } else if (keysRes === "-2") {
+                alert('上传异常');
+                return false;
+            } else if (keysRes === "-3") {
+                alert('文件大小超出');
+                return false;
+            } else if (keysRes === "-4") {
+                alert('请最多上传9张图片');
+                return false;
+            }
+
             json.Innerid = id;
             $.post("/api/Car/UpdateCar", json, function(result) {
                 hideloading();
                 if (result.errcode === 0) {
+                    if (keysRes !== "0") {
+                        $.post("/api/Car/AddCarPictureKeyList", { Carid: id, KeyList: keysRes.split(',') }, function () {
 
-                    $.post("/api/Car/AddCarPictureKeyList", { Carid: id, KeyList: keysRes.split(',') }, function() {
-
-                    });
+                        });
+                    }
                     alert("修改成功");
                     location.reload();
                 } else {
@@ -528,6 +554,26 @@
                 <label for="radioistain2">否</label>
             </td>
         </tr>
+
+        <tr>
+            <td>年检到期时间</td>
+            <td>
+                <input id="txtckyear_date" class="Wdate" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+            </td>
+        </tr>
+        <tr>
+            <td>交强险到期时间</td>
+            <td>
+                <input id="txttlci_date" class="Wdate" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+            </td>
+        </tr>
+            <tr>
+                <td>商业险到期时间</td>
+                <td>
+                    <input id="txtaudit_date" class="Wdate" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                </td>
+            </tr>
+
         <tr>
             <td>备注</td>
             <td>

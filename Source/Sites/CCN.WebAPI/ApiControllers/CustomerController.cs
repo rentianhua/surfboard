@@ -117,7 +117,7 @@ namespace CCN.WebAPI.ApiControllers
                         Createdtime = userInfo.Createdtime,
                         Type = 1,
                         Innerid = Guid.NewGuid().ToString(),
-                        Point = 10,
+                        Point = 500, //注册+500
                         Remark = "",
                         Sourceid = 1,
                         Validtime = null
@@ -171,7 +171,7 @@ namespace CCN.WebAPI.ApiControllers
                         Createdtime = userInfo.Createdtime,
                         Type = 1,
                         Innerid = Guid.NewGuid().ToString(),
-                        Point = 10,
+                        Point = 500, //注册+500
                         Remark = "",
                         Sourceid = 1,
                         Validtime = null
@@ -194,7 +194,34 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
-            return _custservice.CustLogin(loginInfo);
+            var result = _custservice.CustLogin(loginInfo);
+
+            #region 登录送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var custModel = (CustModel) result.errmsg;
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = custModel.Innerid,
+                        Createdtime = DateTime.Now,
+                        Type = 1,
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10, //注册+10
+                        Remark = "",
+                        Sourceid = 2,
+                        Validtime = null
+                    });
+                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
