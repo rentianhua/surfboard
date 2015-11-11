@@ -38,6 +38,7 @@
                 str += "<a href='javascript:;' onclick=\"ThawCust('" + val.Innerid + "');\">解冻</a> ";
             }
             str += "<a href='javascript:;' onclick=\"DeleteCustomer('" + val.Mobile + "');\">删除</a> ";
+            str += "<a href='/car/car/carlist?custid=" + val.Innerid + "'>车辆管理</a> ";
             str += "</td>";
             str += "</tr>";
             $("#custlist tbody").append(str);
@@ -99,27 +100,10 @@
         return "";
     }
 
-    function ClearData() {
-
-        if (!confirm("确认清理!")) {
-            return;
-        }
-
-        $.get("/api/Customer/DeleteAll", function (delres) {
-            if (delres.errcode === 0) {
-                alert("清理成功");
-                location.href = "/customer/customer/customerlist";
-            } else {
-                alert("清理失败");
-            }
-        });
-    }
 </script>
 
 <div>
-    <div style="text-align: right;">
-        <a href="javascript:;" onclick="ClearData();">清理数据</a>
-    </div>
+
     <div style="font-size: 18px; font-weight: bold; text-align: center; line-height: 20px;">会员列表</div>
     <table style="margin: 0 auto;">
         <tr>

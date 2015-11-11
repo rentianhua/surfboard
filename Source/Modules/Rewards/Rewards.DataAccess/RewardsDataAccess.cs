@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -187,6 +189,29 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
             }
         }
+
+        /// <summary>
+        /// 登录奖励验证
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustPointModel> VLogin(string custid)
+        {
+            const string sql =
+                @"select * from point_record where custid=@custid and `type`=1 and sourceid=2 and createdtime>=date_sub(curdate(),interval 1 day);";
+
+            try
+            {
+                //插入积分变更记录
+                return Helper.Query<CustPointModel>(sql, new {custid});
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+
 
         #endregion
 
@@ -526,7 +551,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Information, ex);
+                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Error, ex);
                     tran.Rollback();
                     return 0;
                 }

@@ -36,7 +36,24 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
-            return DataAccess.GetCarPageList(query);
+            var list = DataAccess.GetCarPageList(query);
+            if (list.aaData == null || !list.aaData.Any())
+                return list;
+            var carids = list.aaData.Aggregate("", (current, model) => current + $"'{model.Innerid}',").TrimEnd(',');
+            var listShare = DataAccess.GetShareList(carids).ToList();
+            if (!listShare.Any())
+            {
+                return list;
+            }
+
+            foreach (var model in list.aaData)
+            {
+                var firstOrDefault = listShare.Where(x => x.Carid == model.Innerid).ToList().FirstOrDefault();
+                if (firstOrDefault != null)
+                    model.ShareModel = firstOrDefault;
+            }
+
+            return list;
         }
 
         /// <summary>
@@ -121,7 +138,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 price5 = Math.Round(Convert.ToDecimal(jobj5["price"].ToString()), 2);
 
                 JObject jobj10 = JObject.Parse(result5);
-                estimateprice10 = Math.Round(Convert.ToDecimal(jobj10["eval_price"].ToString()), 2) ;
+                estimateprice10 = Math.Round(Convert.ToDecimal(jobj10["eval_price"].ToString()), 2);
                 price10 = Math.Round(Convert.ToDecimal(jobj10["price"].ToString()), 2);
             }
             catch (Exception)
@@ -372,10 +389,11 @@ namespace CCN.Modules.Car.BusinessComponent
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
-        public JResult UpSeeCount(string id)
+        public JResult UpSeeCount(string id, int count)
         {
-            var result = DataAccess.UpSeeCount(id);
+            var result = DataAccess.UpSeeCount(id, count);
             return new JResult
             {
                 errcode = result > 0 ? 0 : 400,
@@ -494,7 +512,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="picModel">车辆图片信息</param>
         /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList")]
+        [AuditTrailCallHandler("CarBC.AddCarPictureList.WeichatPictureModel")]
         public JResult AddCarPictureList(WeichatPictureModel picModel)
         {
             if (picModel == null)
@@ -549,6 +567,42 @@ namespace CCN.Modules.Car.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 添加车辆图片(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        [AuditTrailCallHandler("CarBC.AddCarPictureList.PictureListModel")]
+        public JResult AddCarPictureList(PictureListModel picModel)
+        {
+            if (picModel == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            foreach (var item in picModel.KeyList)
+            {
+                if (string.IsNullOrWhiteSpace(item))
+                    continue;
+                var pictureModel = new CarPictureModel
+                {
+                    Carid = picModel.Carid,
+                    Createdtime = DateTime.Now,
+                    Path = item
+                };
+                AddCarPicture(pictureModel);
+            }
+
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = ""
+            };
+        }
 
         /// <summary>
         /// 删除车辆图片

@@ -9,11 +9,55 @@
     var custid = "@ViewBag.custid";
 
     $(function () {
+        InitBrand();
         QueryList();
+        $("#btnAdd").click(function() {
+            location.href = "/car/car/caredit?custid=" + custid;
+        });
     });
 
+    //初始化品牌
+    function InitBrand() {
+        $("#selectbrand").empty();
+        $("#selectbrand").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarBrand", function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+            });
+        });
+    }
+
+    //初始化车系
+    function InitSeries(brandid) {
+        $("#selectseries").empty();
+        $("#selectseries").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarSeries?brandId=" + brandid, function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
+            });
+        });
+    }
+
+    //初始化车型
+    function InitModel(seriesid) {
+        $("#selectmodel").empty();
+        $("#selectmodel").append("<option value='0'>请选择</option>");
+        $.get("/api/Base/GetCarModel?seriesId=" + seriesid, function (data) {
+
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
+            });
+        });
+    }
+
+
     function QueryList() {
-        var json = { custid: custid };
+        var json = { custid: custid, brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val() };
         $("#carlist").getPageList(20, "/api/Car/GetCarPageList", json, LoadData);
     }
 
@@ -23,43 +67,95 @@
 
         var str = "";
 
-        $.each(data, function(key, val) {
+        $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
-            str += "<td>" + val.buytime + "</td>";
+            str += "<td>" + Dateformat(val.buytime, "yyyy-MM-dd") + "</td>";
             str += "<td>" + val.buyprice + "</td>";
-            str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
-            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + val.mileage + "</td>";
+            str += "<td>" + Dateformat(val.register_date, "yyyy-MM") + "</td>";
+            str += "<td>" + val.price + "</td>";
+            str += "<td>" + ChangeStatusName(val.status) + "</td>";
+            str += "<td data-value='" + val.ShareModel.SeeCount + "'>" + val.ShareModel.SeeCount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
             str += "<td>" +
-                "<a href='/rewards/rewards/couponedit?innerid=" + val.Innerid + "'>修改</a> " +
-                "<a href='/rewards/rewards/couponview?innerid=" + val.Innerid + "'>查询详情</a> " +
-                "<a href='javascript:;' onclick=\"UpdateStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用" : "启用") + "</a> " +
+                "<a href='/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "'>修改</a> " +
+                "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
         });
     }
 
-    function UpdateStatus(cardid, status) {
-        status = status === 1 ? 0 : 1;
-        $.post("/api/Rewards/UpdateStatus?cardid=" + cardid + "&status=" + status, null, function (result) {
-            alert(result.errmsg);
-            location.reload();
+    /*
+    *新增浏览次数
+    */
+    function AddSeeCount(id, obj) {
+        var count = 0;
+        //获取10-20之间的随机数
+        count = Math.ceil(Math.random() * 10) + 10;
+        $.get("/api/Car/UpSeeCount?id=" + id + "&count=" + count, function (result) {
+            if (result.errcode == 0) {
+                count += parseInt($(obj).parent().attr("data-value"));
+                $(obj).parent().attr("data-value",count);
+                $(obj).parent().html(count + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + id + "',this);\">+</a></td>")
+            }
         });
+    }
+
+    function DeleteCar(id, obj) {
+
+        $(obj).after($("#deleteDiv").removeClass("hide"));
+
+        $("#delsubmit").unbind("click").bind("click", function () {
+            var json = { Innerid: id, deletedesc: $("#deldesc").val() };
+            $.post("/api/Car/DeleteCar", json, function (delres) {
+                if (delres.errcode === 0) {
+                    //alert("删除成功");
+                    location.reload();
+                } else {
+                    alert("删除失败");
+                }
+            });
+        });
+    }
+
+    function ChangeStatusName(status) {
+        switch (status) {
+            case 0:
+                return "已删除";
+            case 1:
+                return "在售";
+            case 2:
+                return "已售";
+            default:
+
+        }
+        return "";
     }
 
 </script>
 <div style="margin: 0 auto;">
-    <div style="font-size: 18px; font-weight: bold; text-align: center">礼券列表</div>
+    <div style="font-size: 18px; font-weight: bold; text-align: center">车辆列表 @ViewBag.custname</div>
     <table style="margin: 0 auto;">
         <tr>
             <td>
-                礼券名称：<input type="tel" id="title" /><input type="button" value="搜索" onclick="QueryList();" />
+                品牌/车系/车型：
+                <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                    <option value="0">请选择</option>
+                </select>
+                <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                    <option value="0">请选择</option>
+                </select>
+                <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
+                    <option value="0">请选择</option>
+                </select>
+                <input type="button" value="搜索" onclick="QueryList();" />
             </td>
             <td style="text-align: right">
-                <a href='/car/car/caredit'>添加</a>
+                <a id="btnAdd" href="javascript:;">添加</a>
+                <a href='/customer/customer/customerlist'>返回</a>
             </td>
         </tr>
         <tr>
@@ -74,7 +170,8 @@
                             <td>公里数</td>
                             <td>上牌时间</td>
                             <td>销售价</td>
-                            <td>创建时间</td>
+                            <td>状态</td>
+                            <td>浏览次数</td>
                             <td>操作</td>
                         </tr>
                     </thead>
@@ -83,5 +180,12 @@
             </td>
         </tr>
     </table>
+</div>
+<div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
+
+    描述:
+    <input type="text" id="deldesc" maxlength="200" />
+    <input type="button" value="确定" id="delsubmit" />
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>
 

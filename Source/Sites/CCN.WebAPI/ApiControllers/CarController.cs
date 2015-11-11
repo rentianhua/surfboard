@@ -200,6 +200,8 @@ namespace CCN.WebAPI.ApiControllers
                     //获取会员id
                     var custid = ApplicationContext.Current.UserId;
 
+                    //会员每分享一次有效车辆信息至朋友圈奖励10积分，每个会员每天最多由此获得150积分
+                    //////////////////////////
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -208,7 +210,7 @@ namespace CCN.WebAPI.ApiControllers
                         Innerid = Guid.NewGuid().ToString(),
                         Point = 10,
                         Remark = "",
-                        Sourceid = 1,
+                        Sourceid = 5,
                         Validtime = null
                     });
                 });
@@ -223,12 +225,13 @@ namespace CCN.WebAPI.ApiControllers
         /// 累计车辆查看次数
         /// </summary>
         /// <param name="id">车辆id</param>
+        /// <param name="count">新增次数</param>
         /// <returns>1.累计成功</returns>
         [Route("UpSeeCount")]
         [HttpGet]
-        public JResult UpSeeCount(string id)
+        public JResult UpSeeCount(string id, int count = 1)
         {
-            return _baseservice.UpSeeCount(id);
+            return _baseservice.UpSeeCount(id, count);
         }
 
         /// <summary>
@@ -286,6 +289,13 @@ namespace CCN.WebAPI.ApiControllers
         [Route("AddCarPictureList")]
         [HttpPost]
         public JResult AddCarPictureList([FromBody] WeichatPictureModel picModel)
+        {
+            return _baseservice.AddCarPictureList(picModel);
+        }
+
+        [Route("AddCarPictureKeyList")]
+        [HttpPost]
+        public JResult AddCarPictureList([FromBody] PictureListModel picModel)
         {
             return _baseservice.AddCarPictureList(picModel);
         }

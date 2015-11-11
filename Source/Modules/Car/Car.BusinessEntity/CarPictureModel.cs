@@ -76,4 +76,19 @@ namespace CCN.Modules.Car.BusinessEntity
         public List<string> MediaIdList { get; set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PictureListModel
+    {
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 七牛key列表
+        /// </summary>
+        public List<string> KeyList { get; set; }
+    }
 }
