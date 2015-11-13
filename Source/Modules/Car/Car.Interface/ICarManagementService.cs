@@ -12,6 +12,13 @@ namespace CCN.Modules.Car.Interface
         #region 车辆
 
         /// <summary>
+        /// 全城搜车列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> SearchCarPageList(CarGlobalQueryModel query);
+
+        /// <summary>
         /// 获取车辆列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -192,6 +199,38 @@ namespace CCN.Modules.Car.Interface
         /// <param name="listPicture">车辆图片列表</param>
         /// <returns></returns>
         JResult ExchangePictureSort(List<CarPictureModel> listPicture);
+
+        #endregion
+
+        #region 车辆收藏
+
+        /// <summary>
+        /// 添加收藏
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCollection(CarCollectionModel model);
+
+        /// <summary>
+        /// 删除收藏 by innerid
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCollection(string innerid);
+
+        /// <summary>
+        /// 删除收藏 by carid
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        JResult DeleteCollectionByCarid(string carid);
+
+        /// <summary>
+        /// 获取收藏的车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query);
 
         #endregion
     }

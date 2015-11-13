@@ -24,6 +24,16 @@ namespace CCN.Modules.Car.BusinessService
         #region 车辆
 
         /// <summary>
+        /// 全城搜车列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageList(CarGlobalQueryModel query)
+        {
+            return BusinessComponent.SearchCarPageList(query);
+        }
+
+        /// <summary>
         /// 获取车辆列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -280,6 +290,51 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.ExchangePictureSort(listPicture);
         }
+
+        #endregion
+
+        #region 车辆收藏
+
+        /// <summary>
+        /// 添加收藏
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCollection(CarCollectionModel model)
+        {
+            return BusinessComponent.AddCollection(model);
+        }
+
+        /// <summary>
+        /// 删除收藏 by innerid
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCollection(string innerid)
+        {
+            return BusinessComponent.DeleteCollection(innerid);
+        }
+
+        /// <summary>
+        /// 删除收藏 by carid
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        public JResult DeleteCollectionByCarid(string carid)
+        {
+            return BusinessComponent.DeleteCollectionByCarid(carid);
+        }
+
+        /// <summary>
+        /// 获取收藏的车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query)
+        {
+            return BusinessComponent.GetCollectionList(query);
+        }
+
 
         #endregion
     }

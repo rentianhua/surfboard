@@ -111,7 +111,7 @@ namespace CCN.Modules.Base.BusinessComponent
             }
 
             #region 发送验证码
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 switch (model.TType)
                 {

@@ -51,6 +51,13 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         IEnumerable<CustPointModel> GetAuthPointRecord(string custid);
 
+        /// <summary>
+        /// 获取今天分享获得积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        int GetSharePointRecord(string custid);
+
         #endregion
 
         #region 会员礼券

@@ -44,10 +44,15 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 };
             }
             model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
 
             if (model.Type == 0)
             {
                 model.Type = 1;
+            }
+            if (string.IsNullOrWhiteSpace(model.Remark))
+            {
+                model.Remark = "";
             }
 
             var result = DataAccess.ChangePoint(model);
@@ -144,22 +149,47 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var yesModel = list.FirstOrDefault(x => x.Createdtime != null && x.Createdtime.Value.ToString("yyyyMMdd") == nDate.AddDays(-1).ToString("yyyyMMdd"));
             if (yesModel != null) //表示昨天有登录奖励过，今天奖励的积分要在昨天的基础+N
             {
-                if (nDate.Day <= 10)
+                list.RemoveAt(0); //删除昨天的记录
+                var days = 1;  //记录已经连续登录days天，昨天的记录有，表示初始化连续1天
+                foreach (var it in list)
+                {
+                    
+                    //第一条数据是昨天的
+                    if (it.Createdtime != null &&
+                        it.Createdtime.Value.ToShortDateString()
+                            .Equals(nDate.AddDays(-(days+1)).ToShortDateString()))
+                    {
+                        days ++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (days < 10)  //10天以内连续登录 ，在昨天的基础上+5
                 {
                     return yesModel.Point + 5;
                 }
-                if (nDate.Day > 10 && nDate.Day <= 20)
+
+                if (days >= 10 && days < 20) //10天以上 20天以内连续登录 ，在昨天的基础上+10
                 {
                     return yesModel.Point + 10;
                 }
-                if (nDate.Day == 21)
+
+                if (days == 20) //连续第21天登录
                 {
                     return 180;
                 }
-                if (nDate.Day > 21)
+
+                if (days > 20) //连续21天以上登录
                 {
                     return 200;
                 }
+            }
+            else //昨天没有登录，断了重新开始累计
+            {
+                return 10;
             }
 
             return 0;
@@ -173,6 +203,16 @@ namespace CCN.Modules.Rewards.BusinessComponent
         public IEnumerable<CustPointModel> GetAuthPointRecord(string custid)
         {
             return DataAccess.GetAuthPointRecord(custid);
+        }
+
+        /// <summary>
+        /// 获取今天分享获得积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int GetSharePointRecord(string custid)
+        {
+            return DataAccess.GetSharePointRecord(custid);
         }
 
         #endregion

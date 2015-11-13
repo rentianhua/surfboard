@@ -59,6 +59,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 检查是否好友关系
+        /// </summary>
+        /// <param name="fromid">自己id</param>
+        /// <param name="toid">好友id</param>
+        /// <returns></returns>
+        [Route("CheckRelations")]
+        [HttpGet]
+        public JResult CheckRelations(string fromid, string toid)
+        {
+            return _service.CheckRelations(fromid, toid);
+        }
+
+        /// <summary>
         /// 添加好友申请
         /// </summary>
         /// <param name="model"></param>

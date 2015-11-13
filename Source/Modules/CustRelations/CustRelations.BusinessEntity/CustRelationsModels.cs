@@ -25,7 +25,7 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         /// <summary>
         /// 好友id
         /// </summary>
-        public string Frientsid { get; set; }
+        public string Friendsid { get; set; }
 
         /// <summary>
         /// 添加时间
@@ -50,7 +50,7 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         /// <summary>
         /// 好友id
         /// </summary>
-        public string Frientsid { get; set; }
+        public string Friendsid { get; set; }
         
         /// <summary>
         /// 会员名

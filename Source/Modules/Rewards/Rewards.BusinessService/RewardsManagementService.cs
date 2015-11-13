@@ -70,6 +70,16 @@ namespace CCN.Modules.Rewards.BusinessService
             return BusinessComponent.GetAuthPointRecord(custid);
         }
 
+        /// <summary>
+        /// 获取今天分享获得积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int GetSharePointRecord(string custid)
+        {
+            return BusinessComponent.GetSharePointRecord(custid);
+        }
+
         #endregion
 
         #region 会员礼券

@@ -363,6 +363,16 @@ namespace CCN.Modules.Car.BusinessEntity
         #endregion
 
         /// <summary>
+        /// 会员id
+        /// </summary>
+        public string custid { get; set; }
+
+        /// <summary>
+        /// 0 非好友，>0已是好友 ,-1 自己的车
+        /// </summary>
+        public int isfriend { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public CarShareModel ShareModel { get; set; }
@@ -538,6 +548,69 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 全局搜索字段
         /// </summary>
         public string SearchField { get; set; }
+
+    }
+
+    /// <summary>
+    /// 全城搜车条件
+    /// </summary>
+    public class CarGlobalQueryModel : QueryModel
+    {
+        
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string custid { get; set; }
+
+        /// <summary>
+        /// 省份id
+        /// </summary>
+        public int? provid { get; set; }
+
+        /// <summary>
+        /// 城市id
+        /// </summary>
+        public int? cityid { get; set; }
+
+        /// <summary>
+        /// 品牌id
+        /// </summary>
+        public int? brand_id { get; set; }
+
+        /// <summary>
+        /// 车系id
+        /// </summary>
+        public int? series_id { get; set; }
+
+        /// <summary>
+        /// 车型id
+        /// </summary>
+        public int? model_id { get; set; }
+        
+        /// <summary>
+        /// min销售价格(万元)
+        /// </summary>
+        public decimal? minprice { get; set; }
+
+        /// <summary>
+        /// max销售价格(万元)
+        /// </summary>
+        public decimal? maxprice { get; set; }
+
+        /// <summary>
+        /// min上牌年份
+        /// </summary>
+        public int? minyear { get; set; }
+
+        /// <summary>
+        /// max上牌年份
+        /// </summary>
+        public int? maxyear { get; set; }
+
+        /// <summary>
+        /// 全局搜索字段
+        /// </summary>
+        public string keyword { get; set; }
 
     }
 }

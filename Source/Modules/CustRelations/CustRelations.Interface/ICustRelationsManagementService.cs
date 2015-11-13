@@ -36,6 +36,14 @@ namespace CCN.Modules.CustRelations.Interface
         JResult GetRelationsApplyById(string innerid);
 
         /// <summary>
+        /// 检查是否好友关系
+        /// </summary>
+        /// <param name="fromid">自己id</param>
+        /// <param name="toid">好友id</param>
+        /// <returns></returns>
+        JResult CheckRelations(string fromid, string toid);
+
+        /// <summary>
         /// 添加好友申请
         /// </summary>
         /// <param name="model"></param>

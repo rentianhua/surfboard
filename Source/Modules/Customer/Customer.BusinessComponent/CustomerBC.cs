@@ -110,7 +110,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             #region 生成二维码
 
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 try
                 {
