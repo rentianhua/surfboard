@@ -64,6 +64,13 @@ namespace Senparc.Weixin.HttpUtility
             }
         }
 
+        public static byte[] Download(string url)
+        {
+            var wc = new WebClient();
+            var data = wc.DownloadData(url);
+            return data;
+        }
+
         #endregion
 
         #region 异步方法

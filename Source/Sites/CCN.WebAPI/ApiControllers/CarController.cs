@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,8 +14,10 @@ using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Newtonsoft.Json;
+using WebGrease;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -32,6 +35,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #region 车辆基本信息
+
+        /// <summary>
+        /// 全城搜车列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("SearchCarPageList")]
+        [HttpPost]
+        public BasePageList<CarInfoListViewModel> SearchCarPageList([FromBody] CarGlobalQueryModel query)
+        {
+            return _baseservice.SearchCarPageList(query);
+        }
 
         /// <summary>
         /// 分页查询车辆
@@ -112,7 +127,29 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCar([FromBody] CarInfoModel model)
         {
-            return _baseservice.AddCar(model);
+            var result = _baseservice.AddCar(model);
+
+            #region 车辆录入送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Run(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = model.custid,
+                        Type = 1,
+                        Point = 10,
+                        Remark = "车辆录入送积分",
+                        Sourceid = 4
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -136,7 +173,37 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult DeleteCar([FromBody] CarInfoModel model)
         {
-            return _baseservice.DeleteCar(model);
+            var result = _baseservice.DeleteCar(model);
+
+            #region 车辆删除扣除积分
+
+            if (result.errcode == 0)
+            {
+                Task.Run(() =>
+                {
+                    //获取会员id
+                    var custid = ApplicationContext.Current.UserId;
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
+                        return;
+                    }
+                    
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = custid,
+                        Type = 2, //扣除
+                        Point = 10,
+                        Remark = "车辆删除扣除积分",
+                        Sourceid = 101
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -148,7 +215,38 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult DealCar([FromBody] CarInfoModel model)
         {
-            return _baseservice.DealCar(model);
+            var result = _baseservice.DealCar(model);
+
+            #region 车辆结案送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Run(() =>
+                {
+                    //获取会员id
+                    var custid = ApplicationContext.Current.UserId;
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        LoggerFactories.CreateLogger().Write("车辆结案送积分:会员id空", TraceEventType.Warning);
+                        return;
+                    }
+
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = custid,
+                        Type = 1,
+                        Point = 1000,
+                        Remark = "车辆结案送积分",
+                        Sourceid = 6
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>
@@ -189,29 +287,33 @@ namespace CCN.WebAPI.ApiControllers
         {
             var result = _baseservice.ShareCar(id);
 
-            #region 注册送积分
+            #region 分享送积分
 
             if (result.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
-                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-
                     //获取会员id
                     var custid = ApplicationContext.Current.UserId;
 
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        LoggerFactories.CreateLogger().Write("分享送积分:会员id空", TraceEventType.Warning);
+                        return;
+                    }
+
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
                     //会员每分享一次有效车辆信息至朋友圈奖励10积分，每个会员每天最多由此获得150积分
-                    //////////////////////////
+                    rewardsservice.GetSharePointRecord(custid);
+
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
-                        Createdtime = DateTime.Now,
                         Type = 1,
-                        Innerid = Guid.NewGuid().ToString(),
                         Point = 10,
-                        Remark = "",
-                        Sourceid = 5,
-                        Validtime = null
+                        Remark = "分享送积分",
+                        Sourceid = 5
                     });
                 });
             }
@@ -290,7 +392,20 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCarPictureList([FromBody] WeichatPictureModel picModel)
         {
-            return _baseservice.AddCarPictureList(picModel);
+            Task.Run(() =>
+            {
+                try
+                {
+                    var jreult = _baseservice.AddCarPictureList(picModel);
+                    //LoggerFactories.CreateLogger().Write("批量添加微信图片：" + jreult.errcode, TraceEventType.Information);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("批量添加微信图片异常：" + ex.Message, TraceEventType.Information);
+                }
+            });
+
+            return JResult._jResult(0,"");
         }
 
         [Route("AddCarPictureKeyList")]
@@ -335,6 +450,59 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _baseservice.ExchangePictureSort(listPicture);
         }
+
+        #endregion
+
+        #region 车辆收藏
+
+        /// <summary>
+        /// 添加收藏
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCollection")]
+        [HttpPost]
+        public JResult AddCollection([FromBody] CarCollectionModel model)
+        {
+            return _baseservice.AddCollection(model);
+        }
+
+        /// <summary>
+        /// 删除收藏 by innerid
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCollection")]
+        [HttpDelete]
+        public JResult DeleteCollection(string innerid)
+        {
+            return _baseservice.DeleteCollection(innerid);
+        }
+
+        /// <summary>
+        /// 删除收藏 by carid
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        [Route("DeleteCollectionByCarid")]
+        [HttpDelete]
+        public JResult DeleteCollectionByCarid(string carid)
+        {
+            return _baseservice.DeleteCollectionByCarid(carid);
+        }
+
+        /// <summary>
+        /// 获取收藏的车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCollectionList")]
+        [HttpPost]
+        public BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query)
+        {
+            return _baseservice.GetCollectionList(query);
+        }
+
 
         #endregion
     }

@@ -127,6 +127,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 用户微信信息
         /// </summary>
         public CustWechat Wechat { get; set; }
+
+        /// <summary>
+        /// 推荐人
+        /// </summary>
+        public string RecommendedId { get; set; }
     }
 
     /// <summary>

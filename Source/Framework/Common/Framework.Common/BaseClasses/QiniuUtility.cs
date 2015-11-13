@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.IO;
 using Qiniu.Conf;
 using Qiniu.IO;
 using Qiniu.IO.Resumable;
@@ -21,6 +22,33 @@ namespace Cedar.Framework.Common.BaseClasses
             //Config.SECRET_KEY = "d2BpCvutzDgHzu9ah92LMwDYRnR1sARGXbN1JMz_";
             Config.Init();
         }
+
+
+        /// <summary>
+        ///     普通上传
+        /// </summary>
+        /// <param name="stream">文件流</param>
+        /// <param name="bucket">空间名称</param>
+        /// <param name="key">文件key</param>
+        /// <returns>key</returns>
+        public string Put(Stream stream, string bucket = "", string key = "")
+        {
+            if (bucket == "")
+            {
+                bucket = BUCKET;
+            }
+            var policy = new PutPolicy(bucket, 3600);
+            var upToken = policy.Token();
+            var extra = new PutExtra();
+            var client = new IOClient();
+            var ret = client.Put(upToken, key, stream, extra);
+            if (ret != null)
+            {
+                return ret.key;
+            }
+            return "";
+        }
+
 
         /// <summary>
         ///     普通上传

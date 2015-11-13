@@ -94,7 +94,21 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = model
             };
         }
-        
+
+        /// <summary>
+        /// 检查是否好友关系
+        /// </summary>
+        /// <param name="fromid">自己id</param>
+        /// <param name="toid">好友id</param>
+        /// <returns></returns>
+        public JResult CheckRelations(string fromid, string toid)
+        {
+            var count = DataAccess.CheckRelations(fromid, toid);
+            return JResult._jResult(
+                count == 0 ? 0 : 1, 
+                count == 0 ? "非好友" : "好友");
+        }
+
         /// <summary>
         /// 添加好友申请
         /// </summary>
@@ -121,6 +135,16 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 };
             }
 
+            var number = DataAccess.GetApplyNumber(model.Fromid);
+            if (number >= 15)
+            {
+                return new JResult
+                {
+                    errcode = 202,
+                    errmsg = "今天添加好友达到上限"
+                };
+            }
+
             var cRelationsApply = DataAccess.CheckRelationsApply(model.Fromid, model.Toid);
             if (cRelationsApply > 0)
             {
@@ -131,37 +155,6 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                     errcode = 200,
                     errmsg = "重复申请"
                 };
-                #region old
-                //switch (rModel.Status)
-                //{
-                //    case 0:
-                //        model.Modifiedtime = DateTime.Now;
-                //        DataAccess.UpdateRelationsApply(model);
-                //        return new JResult
-                //        {
-                //            errcode = 200,
-                //            errmsg = "重复申请"
-                //        };
-                //    case 1:
-                //        return new JResult
-                //        {
-                //            errcode = 201,
-                //            errmsg = "已经是好友"
-                //        };
-                //        //case 2:
-                //        //    return new JResult
-                //        //    {
-                //        //        errcode = 202,
-                //        //        errmsg = "拒绝加好友"
-                //        //    };
-                //        //case 3:
-                //        //    return new JResult
-                //        //    {
-                //        //        errcode = 203,
-                //        //        errmsg = "忽略加好友"
-                //        //    };
-                //}
-                #endregion
             }
 
             model.Status = 0;

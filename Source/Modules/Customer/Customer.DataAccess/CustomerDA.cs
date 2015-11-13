@@ -64,8 +64,8 @@ namespace CCN.Modules.Customer.DataAccess
         public int CustRegister(CustModel userInfo)
         {
             //插入账户基本信息
-            const string sql = @"INSERT INTO cust_info(innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, signature, totalpoints, level, type, createdtime)
-                        VALUES (@innerid, @custname, @password, @mobile, @telephone, @email, @headportrait, @status, @authstatus, @provid, @cityid, @area, @sex, @brithday, @qq, @signature, @totalpoints, @level, @type, @createdtime);";
+            const string sql = @"INSERT INTO cust_info(innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, signature, totalpoints, level, type, recommendedid, createdtime)
+                        VALUES (@innerid, @custname, @password, @mobile, @telephone, @email, @headportrait, @status, @authstatus, @provid, @cityid, @area, @sex, @brithday, @qq, @signature, @totalpoints, @level, @type, @recommendedid, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
