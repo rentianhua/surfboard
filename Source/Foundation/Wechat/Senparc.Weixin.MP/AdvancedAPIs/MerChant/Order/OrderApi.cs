@@ -32,9 +32,9 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <returns></returns>
         public static GetByIdOrderResult GetByIdOrder(string accessTokenOrAppId, string orderId)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={0}";
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
+                var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyid?access_token={0}";
                 var data = new
                 {
                     order_id = orderId
@@ -46,30 +46,41 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     根据订单状态/创建时间获取订单详情
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="status">订单状态(不带该字段-全部状态, 2-待发货, 3-已发货, 5-已完成, 8-维权中, )</param>
         /// <param name="beginTime">订单创建时间起始时间(不带该字段则不按照时间做筛选)</param>
         /// <param name="endTime">订单创建时间终止时间(不带该字段则不按照时间做筛选)</param>
         /// <returns></returns>
-        public static GetByFilterResult GetByFilterOrder(string accessToken, int status, DateTime beginTime,
+        public static GetByFilterResult GetByFilterOrder(string accessTokenOrAppId, int status, DateTime beginTime,
             DateTime endTime)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyfilter?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                status,
-                begintime = DateTimeHelper.GetWeixinDateTime(beginTime),
-                endtime = DateTimeHelper.GetWeixinDateTime(endTime)
-            };
+                var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyfilter?access_token={0}";
+                var data = new
+                {
+                    status,
+                    begintime = DateTimeHelper.GetWeixinDateTime(beginTime),
+                    endtime = DateTimeHelper.GetWeixinDateTime(endTime)
+                };
+                return CommonJsonSend.Send<GetByFilterResult>(accessToken, urlFormat, data);
+            }, accessTokenOrAppId);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/order/getbyfilter?access_token={0}";
 
-            return CommonJsonSend.Send<GetByFilterResult>(accessToken, urlFormat, data);
+            //var data = new
+            //{
+            //    status,
+            //    begintime = DateTimeHelper.GetWeixinDateTime(beginTime),
+            //    endtime = DateTimeHelper.GetWeixinDateTime(endTime)
+            //};
+
+            //return CommonJsonSend.Send<GetByFilterResult>(accessToken, urlFormat, data);
         }
 
         /// <summary>
         ///     设置订单发货信息
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="orderId">订单ID</param>
         /// <param name="deliveryCompany">物流公司ID(参考《物流公司ID》；当need_delivery为0时，可不填本字段；当need_delivery为1时，该字段不能为空；当need_delivery为1且is_others为1时，本字段填写其它物流公司名称)</param>
         /// <param name="deliveryTrackNo">运单ID(当need_delivery为0时，可不填本字段；当need_delivery为1时，该字段不能为空；)</param>
@@ -87,21 +98,35 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// 宅急送	    064zhaijisong
         /// 汇通快运	020huitong
         /// 易迅快递	zj001yixun
-        public static WxJsonResult SetdeliveryOrder(string accessToken, string orderId, string deliveryCompany,
+        public static WxJsonResult SetdeliveryOrder(string accessTokenOrAppId, string orderId, string deliveryCompany,
             string deliveryTrackNo, int needDelivery = 1, int isOthers = 0)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/order/setdelivery?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                order_id = orderId,
-                delivery_company = deliveryCompany,
-                delivery_track_no = deliveryTrackNo,
-                need_delivery = needDelivery,
-                is_others = isOthers
-            };
+                var urlFormat = "https://api.weixin.qq.com/merchant/order/setdelivery?access_token={0}";
+                var data = new
+                {
+                    order_id = orderId,
+                    delivery_company = deliveryCompany,
+                    delivery_track_no = deliveryTrackNo,
+                    need_delivery = needDelivery,
+                    is_others = isOthers
+                };
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/order/setdelivery?access_token={0}";
+
+            //var data = new
+            //{
+            //    order_id = orderId,
+            //    delivery_company = deliveryCompany,
+            //    delivery_track_no = deliveryTrackNo,
+            //    need_delivery = needDelivery,
+            //    is_others = isOthers
+            //};
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
         }
 
         /// <summary>
@@ -112,15 +137,25 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <returns></returns>
         public static WxJsonResult CloseOrder(string accessTokenOrAppId, string orderId)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/order/close?access_token={0}";
             return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
+                var urlFormat = "https://api.weixin.qq.com/merchant/order/close?access_token={0}";
                 var data = new
                 {
                     order_id = orderId
                 };
                 return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
             }, accessTokenOrAppId);
+
+            //var urlFormat = "https://api.weixin.qq.com/merchant/order/close?access_token={0}";
+            //return ApiHandlerWapper.TryCommonApi(accessToken =>
+            //{
+            //    var data = new
+            //    {
+            //        order_id = orderId
+            //    };
+            //    return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+            //}, accessTokenOrAppId);
         }
     }
 }

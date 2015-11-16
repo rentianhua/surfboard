@@ -25,58 +25,86 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     增加分组
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="addGroupData">增加分组需要Post的数据</param>
         /// <returns></returns>
-        public static AddGroupResult AddGroup(string accessToken, AddGroupData addGroupData)
+        public static AddGroupResult AddGroup(string accessTokenOrAppId, AddGroupData addGroupData)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/group/add?access_token={0}";
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
+            {
+                var url = $"https://api.weixin.qq.com/merchant/group/add?access_token={accessToken}";
+                return CommonJsonSend.Send<AddGroupResult>(accessToken, url, addGroupData);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<AddGroupResult>(accessToken, urlFormat, addGroupData);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/group/add?access_token={0}";
+
+            //return CommonJsonSend.Send<AddGroupResult>(accessToken, urlFormat, addGroupData);
         }
 
         /// <summary>
         ///     删除分组
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="groupId">分组Id</param>
         /// <returns></returns>
-        public static WxJsonResult DeleteGroup(string accessToken, int groupId)
+        public static WxJsonResult DeleteGroup(string accessTokenOrAppId, int groupId)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/group/del?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                group_id = groupId
-            };
+                var url = $"https://api.weixin.qq.com/merchant/group/del?access_token={accessToken}";
+                var data = new
+                {
+                    group_id = groupId
+                };
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, url, data);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/group/del?access_token={0}";
+
+            //var data = new
+            //{
+            //    group_id = groupId
+            //};
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, data);
         }
 
         /// <summary>
         ///     修改分组属性
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="propertyModGroup">修改分组属性需要Post的数据</param>
         /// <returns></returns>
-        public static WxJsonResult PropertyModGroup(string accessToken, PropertyModGroup propertyModGroup)
+        public static WxJsonResult PropertyModGroup(string accessTokenOrAppId, PropertyModGroup propertyModGroup)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/group/propertymod?access_token={0}";
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
+            {
+                var url = $"https://api.weixin.qq.com/merchant/group/propertymod?access_token={accessToken}";
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, url, propertyModGroup);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, propertyModGroup);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/group/propertymod?access_token={0}";
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, propertyModGroup);
         }
 
         /// <summary>
         ///     修改分组商品
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="productModGroup">修改分组商品需要Post的数据</param>
         /// <returns></returns>
-        public static WxJsonResult ProductModGroup(string accessToken, ProductModGroup productModGroup)
+        public static WxJsonResult ProductModGroup(string accessTokenOrAppId, ProductModGroup productModGroup)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/group/productmod?access_token={0}";
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
+            {
+                var url = $"https://api.weixin.qq.com/merchant/group/productmod?access_token={accessToken}";
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, url, productModGroup);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, productModGroup);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/group/productmod?access_token={0}";
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, productModGroup);
         }
 
         /// <summary>
@@ -94,19 +122,29 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     根据分组ID获取分组信息
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="groupId">分组Id</param>
         /// <returns></returns>
-        public static GetByIdGroup GetByIdGroup(string accessToken, int groupId)
+        public static GetByIdGroup GetByIdGroup(string accessTokenOrAppId, int groupId)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/group/getbyid?access_token={0}";
-
-            var data = new
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
             {
-                group_id = groupId
-            };
+                var url = $"https://api.weixin.qq.com/merchant/group/getbyid?access_token={accessToken}";
+                var data = new
+                {
+                    group_id = groupId
+                };
+                return CommonJsonSend.Send<GetByIdGroup>(accessToken, url, data);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<GetByIdGroup>(accessToken, urlFormat, data);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/group/getbyid?access_token={0}";
+
+            //var data = new
+            //{
+            //    group_id = groupId
+            //};
+
+            //return CommonJsonSend.Send<GetByIdGroup>(accessToken, urlFormat, data);
         }
     }
 }
