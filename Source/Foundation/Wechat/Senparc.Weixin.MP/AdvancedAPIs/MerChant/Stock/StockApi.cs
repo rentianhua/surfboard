@@ -25,27 +25,39 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     增加库存
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="addStockData">增加库存需要Post的数据</param>
         /// <returns></returns>
-        public static WxJsonResult AddStock(string accessToken, AddStockData addStockData)
+        public static WxJsonResult AddStock(string accessTokenOrAppId, AddStockData addStockData)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/stock/add?access_token={0}";
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
+            {
+                var urlFormat = "https://api.weixin.qq.com/merchant/stock/add?access_token={0}";
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, addStockData);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, addStockData);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/stock/add?access_token={0}";
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, addStockData);
         }
 
         /// <summary>
         ///     减少库存
         /// </summary>
-        /// <param name="accessToken"></param>
+        /// <param name="accessTokenOrAppId"></param>
         /// <param name="reduceStockData">减少库存需要Post的数据</param>
         /// <returns></returns>
-        public static WxJsonResult ReduceStock(string accessToken, ReduceStockData reduceStockData)
+        public static WxJsonResult ReduceStock(string accessTokenOrAppId, ReduceStockData reduceStockData)
         {
-            var urlFormat = "https://api.weixin.qq.com/merchant/stock/reduce?access_token={0}";
+            return ApiHandlerWapper.TryCommonApi(accessToken =>
+            {
+                var urlFormat = "https://api.weixin.qq.com/merchant/stock/reduce?access_token={0}";
+                return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, reduceStockData);
+            }, accessTokenOrAppId);
 
-            return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, reduceStockData);
+            //var urlFormat = "https://api.weixin.qq.com/merchant/stock/reduce?access_token={0}";
+
+            //return CommonJsonSend.Send<WxJsonResult>(accessToken, urlFormat, reduceStockData);
         }
     }
 }

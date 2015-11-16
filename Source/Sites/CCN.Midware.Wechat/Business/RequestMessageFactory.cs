@@ -11,6 +11,7 @@ using Cedar.Core.IoC;
 using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.Interface;
 using Newtonsoft.Json;
+using Senparc.Weixin;
 using Senparc.Weixin.Exceptions;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
@@ -167,7 +168,7 @@ namespace CCN.Midware.Wechat.Business
                                 var merchantOrderresult = (RequestMessageEvent_Merchant_Order)requestMessage;
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 var orderresult = OrderApi.GetByIdOrder(AppID, merchantOrderresult.OrderId);
-                                if (orderresult.errcode == 0)
+                                if (orderresult.errcode == ReturnCode.请求成功)
                                 {
                                     var rewardsManagementService = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                                     var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()

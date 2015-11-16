@@ -51,6 +51,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\CCN.Modules.Rewards.BusinessEntity.dll</HintPath>
     </Reference>
+    <Reference Include="CCN.Modules.Rewards.BusinessService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\CCN.Modules.Rewards.BusinessService.dll</HintPath>
+    </Reference>
     <Reference Include="CCN.Modules.Rewards.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\CCN.Modules.Rewards.Interface.dll</HintPath>
