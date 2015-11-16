@@ -14,7 +14,8 @@
 
         var json = {
             mobile: $("#mobile").val(),
-            password: $("#password").val()
+            password: $("#password").val(),
+            custname: $("#custname").val()
         };
 
         if ($.trim(json.mobile).length === 0) {
@@ -62,7 +63,7 @@
 
 </script>
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">会员注册</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">会员快速注册</div>
     <table id="coupon" class="gridtable">
         <tbody>
             <tr>
@@ -75,6 +76,12 @@
                 <td>密码</td>
                 <td>
                     <input type="text" id="password" />
+                </td>
+            </tr>
+            <tr>
+                <td>昵称</td>
+                <td>
+                    <input type="text" id="custname" />
                 </td>
             </tr>
             <tr>

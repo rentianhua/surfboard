@@ -363,6 +363,29 @@ namespace CCN.Modules.Car.DataAccess
         {
             var sql = new StringBuilder("update `car_info` set ");
             sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+
+            //非必填字段的修改
+            if (!model.buytime.HasValue)
+            {
+                sql.Append(",buytime=null");
+            }
+            if (!model.buyprice.HasValue)
+            {
+                sql.Append(",buyprice=null");
+            }
+            if (!model.ckyear_date.HasValue)
+            {
+                sql.Append(",ckyear_date=null");
+            }
+            if (!model.tlci_date.HasValue)
+            {
+                sql.Append(",tlci_date=null");
+            }
+            if (!model.audit_date.HasValue)
+            {
+                sql.Append(",audit_date=null");
+            }
+
             sql.Append(" where innerid = @innerid");
             int result;
             try

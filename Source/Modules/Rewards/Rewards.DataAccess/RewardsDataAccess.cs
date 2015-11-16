@@ -634,6 +634,12 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        public int CancelCoupon(string code)
+        {
+
+            return 0;
+        }
+
         #endregion
     }
 }

@@ -9,6 +9,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -444,6 +445,13 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 result > 0 ? "购买成功" : "购买失败");
         }
 
+        
+        
+        public void GetProductList()
+        {
+
+            var result = ProductApi.GetByStatus("",0);
+        }
 
         #endregion
     }
