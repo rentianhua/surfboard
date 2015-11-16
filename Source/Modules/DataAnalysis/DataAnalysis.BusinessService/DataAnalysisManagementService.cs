@@ -248,5 +248,16 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取日增长量
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public JResult GetDayGrowth(DateTime startTime, DateTime endTime)
+        {
+            return BusinessComponent.GetDayGrowth(startTime, endTime);
+        }
     }
 }

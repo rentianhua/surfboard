@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using CCN.Modules.DataAnalysis.Interface;
+using CCN.Modules.DataAnalysis.BusinessEntity;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 
@@ -287,5 +288,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取日增长量
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        [Route("GetDayGrowth")]
+        [HttpPost]
+        public JResult GetDayGrowth(DataQueryModel query)
+        {
+            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime);
+            return result;
+        }
     }
 }
