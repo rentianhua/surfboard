@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.DataAnalysis.BusinessEntity;
+using Cedar.Framework.Common.BaseClasses;
+using Dapper;
+using System.Data;
 
 namespace CCN.Modules.DataAnalysis.DataAccess
 {
@@ -1033,5 +1036,31 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取会员/车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime,DateTime endTime)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_startdatetime = startTime,
+                    p_enddatetime = endTime
+                };
+
+                var args = new DynamicParameters(obj);
+                using (var result = conn.QueryMultiple("ccnsp_daygrowth", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    return result.Read<DataAnalysisModel>();
+                }
+                
+            }
+            
+        }
     }
 }

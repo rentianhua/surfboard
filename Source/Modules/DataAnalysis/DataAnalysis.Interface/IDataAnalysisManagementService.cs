@@ -171,5 +171,13 @@ namespace CCN.Modules.DataAnalysis.Interface
 
         #endregion
 
+        /// <summary>
+        /// 获取日增长量
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        JResult GetDayGrowth(DateTime startTime, DateTime endTime);
+
     }
 }
