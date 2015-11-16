@@ -67,7 +67,7 @@ namespace Cedar.Framework.AuditTrail.Interception
                 {
                     if (methodReturn.Exception == null)
                     {
-                        Task.Run(() => { Log(input, methodReturn); });
+                        //Task.Run(() => { Log(input, methodReturn); });
                     }
                 }
                 result = methodReturn;

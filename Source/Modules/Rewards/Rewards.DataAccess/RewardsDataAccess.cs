@@ -117,7 +117,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string sqlISent =
                 @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
             const string sqlIRecord =
-                @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 2, @sourceid, @point, @remark, null, @createdtime);";
+                @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 100, @sourceid, @point, @remark, null, @createdtime);";
             const string sqlIExChange =
                 @"insert into point_exchange (innerid, custid, recordid, `point`, `code`, createdtime) values (uuid(), @custid, @recordid, @point, @code, @createdtime);";
             const string sqlICode =
@@ -195,15 +195,15 @@ namespace CCN.Modules.Rewards.DataAccess
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public IEnumerable<CustPointModel> VLogin(string custid)
+        public IEnumerable<CustPointModel> GetLoginPointRecord(string custid)
         {
-            const string sql =
-                @"select * from point_record where custid=@custid and `type`=1 and sourceid=2 and createdtime>=date_sub(curdate(),interval 1 day);";
+            var date = DateTime.Now.AddDays(-22);
+            var sql =
+                $"select * from point_record where custid=@custid and `type`=1 and sourceid=2 and createdtime>='{date}' order by createdtime desc;";
 
             try
             {
-                //插入积分变更记录
-                return Helper.Query<CustPointModel>(sql, new {custid});
+                return Helper.Query<CustPointModel>(sql, new {custid});  
             }
             catch (Exception ex)
             {
@@ -211,7 +211,45 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 获取认证积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustPointModel> GetAuthPointRecord(string custid)
+        {
+            const string sql =
+                @"select * from point_record where custid=@custid and `type`=1 and sourceid=3;";
 
+            try
+            {
+                return Helper.Query<CustPointModel>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取今天分享获得积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int GetSharePointRecord(string custid)
+        {
+            const string sql =
+                @"select sum(point) as totalpoint from point_record where custid=@custid and `type`=1 and sourceid=5 and date(createdtime)=curdate();";
+
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
 
         #endregion
 

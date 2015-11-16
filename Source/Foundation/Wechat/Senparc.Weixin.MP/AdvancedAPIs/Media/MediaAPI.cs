@@ -102,6 +102,18 @@ namespace Senparc.Weixin.MP.AdvancedAPIs
             HttpUtility.Get.Download(url, stream);
         }
 
+        /// <summary>
+        ///     获取临时素材（原下载媒体文件）
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <param name="mediaId"></param>
+        public static byte[] Get(string accessToken, string mediaId)
+        {
+            var url = string.Format("http://api.weixin.qq.com/cgi-bin/media/get?access_token={0}&media_id={1}",
+                accessToken, mediaId);
+            return HttpUtility.Get.Download(url);
+        }
+
         #endregion
 
         #region 永久素材

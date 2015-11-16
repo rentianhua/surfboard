@@ -30,6 +30,29 @@ namespace CCN.Modules.Car.BusinessComponent
         #region 车辆
 
         /// <summary>
+        /// 全城搜车列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageList(CarGlobalQueryModel query)
+        {
+            var list = DataAccess.SearchCarPageList(query);
+
+            if (list.aaData == null)
+                return list;
+
+            foreach (var item in list.aaData)
+            {
+                if (item.custid.Equals(query.custid))
+                {
+                    item.isfriend = -1;
+                }
+            }
+
+            return list;
+        }
+
+        /// <summary>
         /// 获取车辆列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -225,7 +248,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
 
             //保存评估信息
-            Task.Factory.StartNew(() =>
+            Task.Run(() =>
             {
                 DataAccess.SaveCarEvaluateInfo(id, result);
             });
@@ -530,23 +553,31 @@ namespace CCN.Modules.Car.BusinessComponent
             foreach (var item in picModel.MediaIdList)
             {
                 var filename = QiniuUtility.GetFileName(Picture.car_picture);
-                var filepath = QiniuUtility.GetFilePath(filename);
-
-                //创建文件
-                var writer = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
-
+                //var filepath = QiniuUtility.GetFilePath(filename);
+                
                 //下载图片写入文件流
-                MediaApi.Get(picModel.AccessToken, item, writer);
-                writer.Close();
-                writer.Dispose();
+                var filebyte = MediaApi.Get(picModel.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
 
                 //上传到七牛
-                var qnKey = qinniu.PutFile(filepath, "", filename);
-                //删除本地临时文件
-                if (File.Exists(filepath))
-                {
-                    File.Delete(filepath);
-                }
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                ////创建文件
+                //var writer = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
+
+                ////下载图片写入文件流
+                //MediaApi.Get(picModel.AccessToken, item, writer);
+                //writer.Close();
+                //writer.Dispose();
+
+                ////上传到七牛
+                //var qnKey = qinniu.PutFile(filepath, "", filename);
+                ////删除本地临时文件
+                //if (File.Exists(filepath))
+                //{
+                //    File.Delete(filepath);
+                //}
 
                 //上传图片成功
                 if (string.IsNullOrWhiteSpace(qnKey))
@@ -672,6 +703,80 @@ namespace CCN.Modules.Car.BusinessComponent
                 errcode = result > 0 ? 0 : 400,
                 errmsg = ""
             };
+        }
+
+        #endregion
+
+        #region 车辆收藏
+
+        /// <summary>
+        /// 添加收藏
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCollection(CarCollectionModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Custid) || string.IsNullOrWhiteSpace(model.Carid))
+            {
+                return JResult._jResult(401,"参数不完整！");
+            }
+
+            if (DataAccess.CheckCollection(model) != null)
+            {
+                return JResult._jResult(402, "重复收藏！");
+            }
+            
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.AddCollection(model);
+
+            return JResult._jResult(result > 0 ? 0 : 400, model.Innerid);
+        }
+
+        /// <summary>
+        /// 删除收藏 by innerid
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCollection(string innerid)
+        {
+            var result = DataAccess.DeleteCollection(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除收藏 by carid
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        public JResult DeleteCollectionByCarid(string carid)
+        {
+            var result = DataAccess.DeleteCollectionByCarid(carid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取收藏的车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query)
+        {
+            if (string.IsNullOrWhiteSpace(query?.Custid))
+            {
+                return new BasePageList<CarCollectionViewListModel>();
+            }
+
+            var list = DataAccess.GetCollectionList(query);
+            if (list.aaData == null)
+                return list;
+
+            foreach (var item in list.aaData.Where(item => item.custid.Equals(query.Custid)))
+            {
+                item.isfriend = -1;
+            }
+            
+            return list;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using CCN.Modules.Rewards.BusinessComponent;
+﻿using System.Collections.Generic;
+using CCN.Modules.Rewards.BusinessComponent;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Framework.Common.BaseClasses;
@@ -48,7 +49,37 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.PointExchangeCoupon(model);
         }
-        
+
+        /// <summary>
+        /// 登录奖励积分算法
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int LoginAlgorithm(string custid)
+        {
+            return BusinessComponent.LoginAlgorithm(custid);
+        }
+
+        /// <summary>
+        /// 获取认证积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public IEnumerable<CustPointModel> GetAuthPointRecord(string custid)
+        {
+            return BusinessComponent.GetAuthPointRecord(custid);
+        }
+
+        /// <summary>
+        /// 获取今天分享获得积分记录
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public int GetSharePointRecord(string custid)
+        {
+            return BusinessComponent.GetSharePointRecord(custid);
+        }
+
         #endregion
 
         #region 会员礼券

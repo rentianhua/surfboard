@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Car.BusinessEntity;
+using Cedar.Core.Logging;
 using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
@@ -23,7 +25,96 @@ namespace CCN.Modules.Car.DataAccess
         {
         }
 
-        #region 车辆
+        #region 车辆基本信息
+
+        /// <summary>
+        /// 全城搜车列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageList(CarGlobalQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname," +
+                                  $" (select count(1) from cust_relations where userid='{query.custid}' and friendsid=a.custid) as isfriend";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.status=1");
+
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //销售价大于..
+            if (query.minprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice>={query.minprice}");
+            }
+
+            //销售价小于..
+            if (query.maxprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice<={query.maxprice}");
+            }
+
+            if (query.minyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date<='{date}'");
+            }
+
+            if (query.maxyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date>={date}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
+            {
+                //sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+                //车辆添加时会将【品牌/车系】放到该字段
+                sqlWhere.Append($" and title like '%{query.keyword}%'");
+            }
+
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
 
         /// <summary>
         /// 获取车辆列表
@@ -524,6 +615,64 @@ namespace CCN.Modules.Car.DataAccess
             var result = Helper.Query<CarShareModel>(sql, new { carid }).FirstOrDefault();
             return result;
         }
+        
+        #region 赞不用
+
+        /// <summary>
+        /// 审核车辆
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <param name="status">审核状态</param>
+        /// <returns>1.操作成功</returns>
+        public int AuditCar(string id, int status)
+        {
+            const string sql = @"UPDATE `car_info` SET status=@status,`audit_time`=@audit_time WHERE `innerid`=@innerid;";
+            try
+            {
+                var result = Helper.Execute(sql, new
+                {
+                    status,
+                    audit_time = DateTime.Now,
+                    innerid = id
+                });
+                if (result == 0)
+                {
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 核销车辆
+        /// </summary>
+        /// <param name="id">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int CancelCar(string id)
+        {
+            const string sql = @"UPDATE `car_info` SET `sold_time`=@sold_time WHERE `innerid`=@innerid;";
+            try
+            {
+                var result = Helper.Execute(sql, new { sold_time = DateTime.Now, innerid = id });
+                if (result == 0)
+                {
+                    return 0;
+                }
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        #endregion
+
+        #endregion
 
         #region 车辆图片
 
@@ -688,61 +837,117 @@ namespace CCN.Modules.Car.DataAccess
 
         #endregion
 
-        #region 赞不用
+        #region 车辆收藏
 
         /// <summary>
-        /// 审核车辆
+        /// 检查重复收藏
         /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <param name="status">审核状态</param>
-        /// <returns>1.操作成功</returns>
-        public int AuditCar(string id, int status)
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public CarCollectionModel CheckCollection(CarCollectionModel model)
         {
-            const string sql = @"UPDATE `car_info` SET status=@status,`audit_time`=@audit_time WHERE `innerid`=@innerid;";
-            try
-            {
-                var result = Helper.Execute(sql, new
-                {
-                    status,
-                    audit_time = DateTime.Now,
-                    innerid = id
-                });
-                if (result == 0)
-                {
-                    return 0;
-                }
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-            return 1;
+            const string sql =
+                @"select innerid, custid, carid, remark, createdtime from car_collection where custid=@custid and carid=@carid;";
+            return
+                Helper.Query<CarCollectionModel>(sql, new {custid = model.Custid, carid = model.Carid}).FirstOrDefault();
+
         }
 
         /// <summary>
-        /// 核销车辆
+        /// 添加收藏
         /// </summary>
-        /// <param name="id">车辆id</param>
-        /// <returns>1.操作成功</returns>
-        public int CancelCar(string id)
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCollection(CarCollectionModel model)
         {
-            const string sql = @"UPDATE `car_info` SET `sold_time`=@sold_time WHERE `innerid`=@innerid;";
+            const string sql = @"INSERT INTO car_collection
+                        (innerid, custid, carid, remark, createdtime)
+                        VALUES
+                        (@innerid, @custid, @carid, @remark, @createdtime);";
+
             try
             {
-                var result = Helper.Execute(sql, new { sold_time = DateTime.Now, innerid = id });
-                if (result == 0)
-                {
-                    return 0;
-                }
+                Helper.Execute(sql, model);
+                return 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerFactories.CreateLogger().Write("添加收藏异常：", TraceEventType.Error, ex);
                 return 0;
             }
-            return 1;
         }
 
-        #endregion
+        /// <summary>
+        /// 删除收藏 by innerid
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteCollection(string innerid)
+        {
+            const string sql = "delete from car_collection where innerid=@innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除收藏异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除收藏 by carid
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        public int DeleteCollectionByCarid(string carid)
+        {
+            const string sql = "delete from car_collection where carid=@carid;";
+
+            try
+            {
+                Helper.Execute(sql, new { carid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除收藏异常[by carid]：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取收藏的车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_collection as b 
+                                    inner join car_info as a on a.innerid=b.carid
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            var fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date," +
+                         "c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,b.remark,b.createdtime as Collectiontime," +
+                         $" (select count(1) from cust_relations where userid='{query.Custid}' and friendsid=a.custid) as isfriend";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "b.createdtime desc" : query.Order;
+
+            #region 查询条件
+
+            var sqlWhere = $"b.custid='{query.Custid}' and a.status<>0";
+
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarCollectionViewListModel>(model, query.Echo);
+            return list;
+        }
 
         #endregion
     }

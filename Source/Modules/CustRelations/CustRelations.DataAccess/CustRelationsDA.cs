@@ -36,7 +36,7 @@ namespace CCN.Modules.CustRelations.DataAccess
             const string tableName = @"cust_info as a 
                                         left join cust_wechat as c on a.innerid=c.custid
                                         left join wechat_friend as d on d.openid=c.openid";
-            var fields = $"a.innerid,a.custname,a.mobile,a.`level`,a.headportrait,d.photo ,(select count(1) from car_info where custid=a.innerid) as carnum,(select count(1) from cust_relations where userid='{query.Oneselfid}' and frientsid=a.innerid) as isfriends";
+            var fields = $"a.innerid,a.custname,a.mobile,a.`level`,a.headportrait,d.photo ,(select count(1) from car_info where custid=a.innerid) as carnum,(select count(1) from cust_relations where userid='{query.Oneselfid}' and friendsid=a.innerid) as isfriends";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.custname asc,a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -77,7 +77,7 @@ namespace CCN.Modules.CustRelations.DataAccess
                                         left join cust_wechat as c on a.fromid=c.custid
                                         left join wechat_friend as d on d.openid=c.openid
                                         left join base_code as bc1 on a.sourceid=bc1.codevalue and bc1.typekey='cust_source'";
-            const string fields = " a.innerid ,a.fromid as Frientsid,a.status as ApplyStatus,bc1.codename as Source,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.fromid) as carnum ";
+            const string fields = " a.innerid ,a.fromid as Friendsid,a.status as ApplyStatus,bc1.codename as Source,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.fromid) as carnum ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -134,17 +134,35 @@ namespace CCN.Modules.CustRelations.DataAccess
         }
 
         /// <summary>
+        /// 获取当天已经申请添加好友人数
+        /// </summary>
+        /// <param name="fromid"></param>
+        /// <returns></returns>
+        public int GetApplyNumber(string fromid)
+        {
+            const string sql = "select count(1) as count from cust_relations_apply where fromid=@fromid and date(createdtime)=curdate();";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { fromid });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 检查是否已建立关系
         /// </summary>
         /// <param name="userid"></param>
-        /// <param name="frientsid"></param>
+        /// <param name="friendsid"></param>
         /// <returns></returns>
-        public int CheckRelations(string userid, string frientsid)
+        public int CheckRelations(string userid, string friendsid)
         {
-            const string sql = "select count(1) as count from cust_relations where userid=@userid and frientsid=@frientsid;";
+            const string sql = "select count(1) as count from cust_relations where userid=@userid and friendsid=@friendsid;";
             try
             {
-                return Helper.ExecuteScalar<int>(sql, new { userid, frientsid });
+                return Helper.ExecuteScalar<int>(sql, new { userid, friendsid });
             }
             catch (Exception ex)
             {
@@ -242,7 +260,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         {
             var result = 1;
             const string sqlUpdate = "update cust_relations_apply set `status`=@status where innerid=@innerid;";
-            const string sqlInsert = "insert into cust_relations (innerid, userid, frientsid, createdtime) values (uuid(), @userid, @frientsid, @createdtime);";
+            const string sqlInsert = "insert into cust_relations (innerid, userid, friendsid, createdtime) values (uuid(), @userid, @friendsid, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -253,12 +271,12 @@ namespace CCN.Modules.CustRelations.DataAccess
                     //接受
                     if (status == 1)
                     {
-                        const string sqlR = "select count(1) as count from cust_relations where userid=@userid and frientsid=@frientsid;";
-                        var isR = conn.Query<int>(sqlR, new {userid = fromid, frientsid = toid}).FirstOrDefault();
+                        const string sqlR = "select count(1) as count from cust_relations where userid=@userid and friendsid=@friendsid;";
+                        var isR = conn.Query<int>(sqlR, new {userid = fromid, friendsid = toid}).FirstOrDefault();
                         if (isR == 0)
                         {
-                            conn.Execute(sqlInsert, new { userid = fromid, frientsid = toid, createdtime = DateTime.Now }, tran);
-                            conn.Execute(sqlInsert, new { userid = toid, frientsid = fromid, createdtime = DateTime.Now }, tran);
+                            conn.Execute(sqlInsert, new { userid = fromid, friendsid = toid, createdtime = DateTime.Now }, tran);
+                            conn.Execute(sqlInsert, new { userid = toid, friendsid = fromid, createdtime = DateTime.Now }, tran);
                         }
                     }
 
@@ -282,7 +300,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         public int DeleteRelations(string fromid, string toid)
         {
             const string sql2 =
-                "delete from cust_relations where (userid=@fromid and frientsid=@toid) or (userid=@toid and frientsid=@fromid);";
+                "delete from cust_relations where (userid=@fromid and friendsid=@toid) or (userid=@toid and friendsid=@fromid);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -307,10 +325,10 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select frientsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.frientsid) as carnum
+            const string sql = @"select friendsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.friendsid) as carnum
                                 from cust_relations as a
-                                inner join cust_info as b on a.frientsid=b.innerid 
-                                left join cust_wechat as c on a.frientsid=c.custid
+                                inner join cust_info as b on a.friendsid=b.innerid 
+                                left join cust_wechat as c on a.friendsid=c.custid
                                 left join wechat_friend as d on d.openid=c.openid
                                 where a.userid=@userid order by b.custname asc;";
             try
