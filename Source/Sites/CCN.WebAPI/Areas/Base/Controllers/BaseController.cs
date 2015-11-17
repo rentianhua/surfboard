@@ -54,5 +54,53 @@ namespace CCN.WebAPI.Areas.Base.Controllers
             var list = _baseservice.GetCarModel(seriesid);
             return View(list);
         }
+        #region 品牌信息
+        public ActionResult BaseCarBrandList()
+        {
+            return View();
+        }
+        public ActionResult BaseCarBrandView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        public ActionResult BaseCarBrandEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion
+        #region 车型信息
+        public ActionResult BaseCarModelList()
+        {
+            return View();
+        }
+        public ActionResult BaseCarModelEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        public ActionResult BaseCarModelView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion
+        #region  车系信息
+        public ActionResult BaseCarSeriesList()
+        {
+            return View();
+        }
+        public ActionResult BaseCarSeriesEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        public ActionResult BaseCarSeriesView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion    
     }
 }

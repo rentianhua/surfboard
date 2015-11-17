@@ -105,6 +105,160 @@ namespace CCN.Modules.Base.Interface
         /// <param name="innerid">id</param>
         /// <returns></returns>
         JResult GetCarModelById(int innerid);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="brandname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCarBrandName(string brandname, string innerid);
+        #endregion
+
+        #region 品牌信息
+        /// <summary>
+        /// 获取品牌列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseCarBrandListViewModel> GetCarBrandList(BaseCarBrandQueryModel query);
+        /// <summary>
+        /// 获取品牌信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCarBrandById(string innerid);
+        /// <summary>
+        /// 更新品牌状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateBrandStatus(string carid, int status);
+        /// <summary>
+        /// 添加品牌信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCarBrand(BaseCarBrandModel model);
+        /// <summary>
+        /// 删除品牌信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCarBrand(string innerid);
+        /// <summary>
+        /// 更新品牌信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCarBrand(BaseCarBrandModel model);
+        /// <summary>
+        /// 获取品牌ID最大值
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCarBrandMaxId();
+        #endregion
+        #region 车型信息
+        /// <summary>
+        /// 获取车型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseCarModelListViewModel> GetCarModelList(BaseCarModelQueryModel query);
+        /// <summary>
+        /// 获取车型信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetBaseCarModelById(string innerid);
+        /// <summary>
+        /// 更新车型状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateModelStatus(string carid, int status);
+        /// <summary>
+        /// 添加车型欣喜
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCarModel(BaseCarModelModel model);
+        /// <summary>
+        /// 删除车型信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCarModel(string innerid);
+        /// <summary>
+        /// 更新车型信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCarModel(BaseCarModelModel model);
+        /// <summary>
+        /// ID最大值
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCarModelMaxId();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCarModelName(string modelname,string innerid);
+        #endregion
+        #region 车系信息
+        /// <summary>
+        /// 获取车系列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList(BaseCarSeriesQueryModel query);
+        /// <summary>
+        /// 获取车系信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCarSeriesById(string innerid);
+        /// <summary>
+        /// 更新车系状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateSeriesStatus(string carid, int status);
+        /// <summary>
+        /// 添加车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCarSeries(BaseCarSeriesModel model);
+        /// <summary>
+        /// 删除车系信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCarSeries(string innerid);
+        /// <summary>
+        /// 更新车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCarSeries(BaseCarSeriesModel model);
+        /// <summary>
+        /// ID最大值
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCarSeriesMaxId();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="seriesname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCarSeriesName(string seriesname,string innerid);
 
         #endregion
     }
