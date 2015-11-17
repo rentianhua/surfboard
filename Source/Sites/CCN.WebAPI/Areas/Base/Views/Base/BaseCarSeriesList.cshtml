@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "CarSeries";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        QueryList();
+    });
+    debugger
+    function QueryList() {
+        var json = { SeriesName: $("#title").val() };
+        $("#carserieslist").getPageList(20, "/api/Base/GetCarSeriesList", json, LoadData);
+    }
+    function LoadData(data, index) {
+        $("#carserieslist tbody").empty();
+        var str = "";
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.Innerid + "</td>";
+            str += "<td>" + (val.SeriesName == null ? "" : val.SeriesName.sub(400)) + "</td>";
+            str += "<td>" + val.SeriesGroupName + "</td>";
+            str += "<td>" + val.Brandid + "</td>";
+            str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
+            str += "<td>" + val.Remark + "</td>";
+            str += "<td>" +
+                "<a href='/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "'>修改</a>" +
+                "<a href='/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "'>详情</a>" +
+                "<a href='javascript:;' onclick=\"DeleteCarSeries('" + val.Innerid + "');\">删除</a>" +
+                "<a href='javascript:;' onclick=\"UpdateSeriesStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用" : "启用") + "</a>" +
+                "</td>";
+            str += "</tr>";
+            $("#carserieslist tbody").append(str);
+        });
+    }
+    function UpdateSeriesStatus(carid, status) {
+        status = status === 1 ? 0 : 1;
+        $.post("/api/Base/UpdateSeriesStatus?carid=" + carid + "&status=" + status, null, function (result) {
+            alert(result.errmsg);
+            location.reload();
+        });
+    }
+    function DeleteCarSeries(Innerid) {
+        if(!confirm("确认删除！")){
+        return;
+        }
+        $.post("/api/Base/DeleteCarSeries?innerid=" + Innerid, function (result) {
+            var str = result.errcode === 0 ? "删除成功" : "删除失败";
+            alert(str);
+            location.href = "/Base/Base/BaseCarSeriesList";
+        });
+    }
+</script>
+<div style="margin:0 auto">
+    <div style="font-size:18px;font-weight: bold; text-align: center">车系信息列表</div>
+    <table style="margin:0 auto">
+        <tr>
+            <td>
+                车系名称:<input type="tel" id="title" /><input type="button" value="搜索" onclick="QueryList();" />
+            </td>
+            <td style="text-align:right">
+                <a href='/Base/Base/BaseCarSeriesEdit'>添加</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="carserieslist" class="gridtable">
+                    <thead>
+                        <tr>
+                            <td>
+                                id
+                            </td>
+                            <td>
+                                主键id
+                            </td>
+                            <td>
+                                车系名称
+                            </td>
+                            <td>
+                                车系组 进口/国产
+                            </td>
+                            <td>
+                                品牌id
+                            </td>
+                            <td>
+                                是否启用
+                            </td>
+                            <td>
+                                备注
+                            </td>
+                            <td>
+                                操作
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</div>
