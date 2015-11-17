@@ -201,7 +201,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Base\Models\" />
-    <Folder Include="Areas\Base\Views\Base\" />
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Car\Models\" />
     <Folder Include="Areas\Car\Views\Shared\" />
@@ -359,13 +358,20 @@
     <Content Include="Areas\Car\Views\web.config" />
     <Content Include="Areas\Car\Views\Car\CarList.cshtml" />
     <Content Include="Areas\Car\Views\Car\CarEdit.cshtml" />
-    
-	<Content Include="Areas\Rewards\Views\Rewards\ProductList.cshtml" />
-    
-	<Content Include="Areas\DataAnalysis\Views\web.config" />
+    <Content Include="Areas\Rewards\Views\Rewards\ProductList.cshtml" />
+    <Content Include="Areas\DataAnalysis\Views\web.config" />
     <Content Include="Areas\DataAnalysis\Views\DataAnalysis\CustGrowthList.cshtml" />
-    
-	<None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarBrandEdit.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarBrandList.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarBrandView.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarModelEdit.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarModelList.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarModelView.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarSeriesEdit.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarSeriesList.cshtml" />
+    <Content Include="Areas\Base\Views\Base\BaseCarSeriesView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CustWeChatList.cshtml" />
+    <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\common.js" />
