@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MenuConfig>
+  <MenuGroups>
+    <MenuGroup name="首页" url="/Customer/Customer/CustomerList" icon="icon-home" info="欢迎登录车信网！">
+    </MenuGroup>
+    <MenuGroup name="会员管理" icon="icon-cog">
+      <MenuArray>
+        <Menu name="会员列表" url="/Customer/Customer/CustomerList" info="会员列表" permission="" />
+        <Menu name="会员新增" url="/Customer/Customer/CustomerAdd" info="会员新增" permission="" />
+      </MenuArray>
+    </MenuGroup>
+
+    <MenuGroup name="车辆管理" icon="icon-leaf">
+      <MenuArray>
+        <Menu name="车辆列表" url="/Customer/Customer/CustomerList" info="车辆列表" permission="" />
+        <Menu name="车辆新增" url="/Customer/Customer/CustomerList" info="车辆新增" permission="" />
+      </MenuArray>
+    </MenuGroup>
+    
+  </MenuGroups>
+</MenuConfig>
