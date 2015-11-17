@@ -290,7 +290,7 @@ namespace CCN.WebAPI.ApiControllers
         #endregion
 
         /// <summary>
-        /// 获取日增长量
+        /// 获取日增长量 
         /// </summary>
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
@@ -300,6 +300,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetDayGrowth(DataQueryModel query)
         {
             var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取汇总数据（会员/粉丝/车辆）
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetTotal")]
+        [HttpGet]
+        public JResult GetTotal()
+        {
+            var result = _dataanalysisservice.GetTotal();
             return result;
         }
     }
