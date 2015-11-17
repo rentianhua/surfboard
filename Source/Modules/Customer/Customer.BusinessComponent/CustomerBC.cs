@@ -815,5 +815,17 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         #endregion
+
+        #region cust_wechat
+        /// <summary>
+        /// 获取cust_wechat信息列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CustWeChatViewModel> GetCustWeChatList(CustWeChatQueryModel query)
+        {
+            return DataAccess.GetCustWeChatList(query);
+        }
+        #endregion
     }
 }

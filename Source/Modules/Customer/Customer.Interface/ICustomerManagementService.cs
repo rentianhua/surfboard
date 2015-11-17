@@ -259,5 +259,14 @@ namespace CCN.Modules.Customer.Interface
         JResult DeleteCustomer(string mobile);
 
         #endregion
+
+        #region cust_wechat
+        /// <summary>
+        /// 获取cust_wechat信息列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CustWeChatViewModel> GetCustWeChatList(CustWeChatQueryModel query);
+        #endregion
     }
 }

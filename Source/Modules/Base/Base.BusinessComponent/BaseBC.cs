@@ -292,5 +292,346 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         #endregion
+
+        #region 品牌信息
+        /// <summary>
+        /// 获取品牌列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCarBrandListViewModel> GetCarBrandList(BaseCarBrandQueryModel query)
+        {
+            return DataAccess.GetCarBrandList(query);
+        }
+        /// <summary>
+        /// 获取品牌信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCarBrandById(string innerid)
+        {
+            var model = DataAccess.GetCarBrandById(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新品牌状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateBrandStatus(string carid, int status)
+        {
+            if (string.IsNullOrWhiteSpace(carid) || (status != 0 && status != 1))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateBrandStatus(carid, status);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 添加品牌信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarBrand(BaseCarBrandModel model)
+        {
+            //model.innerid = Guid.NewGuid();设置值
+            model.IsEnabled = 1;
+            var result = DataAccess.AddCarBrand(model);
+            return JResult._jResult(result);
+        }
+        /// <summary>
+        /// 删除品牌信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCarBrand(string innerid)
+        {
+            if (string.IsNullOrWhiteSpace(innerid))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.DeleteCarBrand(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新品牌信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarBrand(BaseCarBrandModel model)
+        {
+            if (model.Remark == null)
+            {
+                model.Remark = "  ";
+            }
+            //添加信息
+            var result = DataAccess.UpdateCarBrand(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+        /// <summary>
+        /// ID最大值
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarBrandMaxId()
+        {
+            var model = DataAccess.GetCarBrandMaxId();
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="brandname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCarBrandName(string brandname, string innerid)
+        {
+            var model = DataAccess.GetCarBrandName(brandname, innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+        #endregion
+        #region 车型信息
+        /// <summary>
+        /// 获取车型信息
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCarModelListViewModel> GetCarModelList(BaseCarModelQueryModel query)
+        {
+            return DataAccess.GetCarModelList(query);
+        }
+        /// <summary>
+        /// 获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetBaseCarModelById(string innerid)
+        {
+            var model = DataAccess.GetBaseCarModelById(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新车型状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateModelStatus(string carid, int status)
+        {
+            if (string.IsNullOrWhiteSpace(carid) || (status != 0 && status != 1))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateModelStatus(carid, status);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 添加车型信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarModel(BaseCarModelModel model)
+        {
+            //model.innerid = Guid.NewGuid();设置值
+            model.IsEnabled = 1;
+            var result = DataAccess.AddCarModel(model);
+            return JResult._jResult(result);
+        }
+        /// <summary>
+        /// 删除车型信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCarModel(string innerid)
+        {
+            if (string.IsNullOrWhiteSpace(innerid))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.DeleteCarModel(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新车型信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarModel(BaseCarModelModel model)
+        {
+            if (model.Remark == null)
+            {
+                model.Remark = "  ";
+            }
+            //添加信息
+            var result = DataAccess.UpdateCarModel(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+        /// <summary>
+        /// 获取ID最大值
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarModelMaxId()
+        {
+            var model = DataAccess.GetCarModelMaxId();
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCarModelName(string modelname,string innerid)
+        {
+            var model = DataAccess.GetCarModelName(modelname,innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+        #endregion
+        #region 车系信息
+        /// <summary>
+        /// 获取车系信息列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList(BaseCarSeriesQueryModel query)
+        {
+            return DataAccess.GetCarSeriesList(query);
+        }
+        /// <summary>
+        /// 获取车系信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public JResult GetCarSeriesById(string innerid)
+        {
+            var model = DataAccess.GetCarSeriesById(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新车系状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateSeriesStatus(string carid, int status)
+        {
+            if (string.IsNullOrWhiteSpace(carid) || (status != 0 && status != 1))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateSeriesStatus(carid, status);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 添加车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarSeries(BaseCarSeriesModel model)
+        {
+            //model.innerid = Guid.NewGuid();设置值
+            //model.Innerid = 2400;
+            model.IsEnabled = 1;
+            var result = DataAccess.AddCarSeries(model);
+            return JResult._jResult(result);
+        }
+        /// <summary>
+        /// 删除车系信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCarSeries(string innerid)
+        {
+            if (string.IsNullOrWhiteSpace(innerid))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.DeleteCarSeries(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 更新车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarSeries(BaseCarSeriesModel model)
+        {
+            if (model.Remark == null)
+            {
+                model.Remark = "  ";
+            }
+            //添加信息
+            var result = DataAccess.UpdateCarSeries(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+        /// <summary>
+        /// 获取ID最大值
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarSeriesMaxId()
+        {
+            var model = DataAccess.GetCarSeriesMaxId();
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="seriesname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCarSeriesName(string seriesname,string innerid)
+        {
+            var model = DataAccess.GetCarSeriesName(seriesname, innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+        #endregion
     }
 }

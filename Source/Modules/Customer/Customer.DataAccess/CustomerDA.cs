@@ -921,5 +921,30 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         #endregion
+
+
+        #region cust_wechat
+        /// <summary>
+        /// 获取cust_wechat信息列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CustWeChatViewModel> GetCustWeChatList(CustWeChatQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" wechat_friend ";
+            const string fields = "ifnull(accountid,'') accountid,ifnull(nickname,'') nickname,ifnull(openid,'') openid,ifnull(remarkname,'空') remarkname,sex,ifnull(createdtime,current_date()) createdtime ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.accountid))
+            {
+                sqlWhere.Append($" and accountid like '%{query.accountid}%'");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CustWeChatViewModel>(model, query.Echo);
+            return list;
+        }
+        #endregion
     }
 }
