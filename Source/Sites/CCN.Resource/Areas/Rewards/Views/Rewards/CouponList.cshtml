@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "CouponList";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+<script type="text/javascript">
+
+    $(function () {
+        QueryList();
+    });
+
+    function QueryList() {
+        var json = { title: $("#title").val() };
+        $("#couponlist").getPageList(20, "/api/Rewards/GetCouponPageList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#couponlist tbody").empty();
+
+        var str = "";
+
+        $.each(data, function(key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + (val.Title == null ? "" : val.Title.sub(400)) + "</td>";
+            str += "<td>" + val.Maxcount + "</td>";
+            str += "<td>" + val.Count + "</td>";
+            str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" +
+                "<a href='/rewards/rewards/couponedit?innerid=" + val.Innerid + "'>修改</a> " +
+                "<a href='/rewards/rewards/couponview?innerid=" + val.Innerid + "'>查询详情</a> " +
+                "<a href='javascript:;' onclick=\"UpdateStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用" : "启用") + "</a> " +
+                "</td>";
+            str += "</tr>";
+            $("#couponlist tbody").append(str);
+        });
+    }
+
+    function UpdateStatus(cardid, status) {
+        status = status === 1 ? 0 : 1;
+        $.post("/api/Rewards/UpdateStatus?cardid=" + cardid + "&status=" + status, null, function (result) {
+            alert(result.errmsg);
+            location.reload();
+        });
+    }
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">礼券列表</div>
+    <table style="margin: 0 auto;">
+        <tr>
+            <td>
+                礼券名称：<input type="tel" id="title"/><input type="button" value="搜索" onclick="QueryList();"/>
+            </td>
+            <td style="text-align: right">
+                <a href='/rewards/rewards/couponedit'>添加</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="couponlist" class="gridtable">
+
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>标题</td>
+                            <td>总库存</td>
+                            <td>剩余库存</td>
+                            <td>状态</td>
+                            <td>创建时间</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
