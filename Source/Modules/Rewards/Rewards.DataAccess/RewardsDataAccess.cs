@@ -532,6 +532,17 @@ namespace CCN.Modules.Rewards.DataAccess
 
         #endregion
 
+        #region 礼券Code
+
+        public CodeModel GetCode(string code)
+        {
+            const string sql = @"select * from coupon_code where code=@code;";
+            var codeModel = Helper.Query<CodeModel>(sql, new { code }).FirstOrDefault();
+            return codeModel;
+        }
+
+        #endregion
+
         #region 礼券对外接口
 
         /// <summary>
@@ -631,6 +642,42 @@ namespace CCN.Modules.Rewards.DataAccess
             catch (Exception ex)
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public int CancelCoupon(string code)
+        {
+            //const string sqlUCoupon = "update coupon_card set usedcount=usedcount+1 where innerid=@cardid;";
+            const string sqlUCode = "update coupon_code set usedtime=@usedtime where code=@code;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var nowDate = DateTime.Now;
+                    //更新礼券code
+                    conn.Execute(sqlUCode, new {usedtime = nowDate, code}, tran);
+
+                    //更新卡券库存
+                    //conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
+
+                    //更新会员的积分
+                    //conn.Execute(sqlUPoint, new { custid = model.Custid, point = model.Point }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("核销礼券异常：", TraceEventType.Information, ex);
+                    tran.Rollback();
+                    return 0;
+                }
             }
         }
 

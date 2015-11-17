@@ -25,5 +25,10 @@ namespace CCN.WebAPI.Areas.Rewards.Controllers
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
+
+        public ActionResult ProductList()
+        {
+            return View();
+        }
     }
 }

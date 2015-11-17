@@ -3,7 +3,14 @@
     ViewBag.Title = "CarEdit";
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
-<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Content/cover.css" rel="stylesheet"/>
+<style type="text/css">
+    .required {
+        color: red;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+</style>
 <script>
 
     function showloading() {
@@ -126,6 +133,10 @@
                 $.each(data, function(k, v) {
                     $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
                 });
+
+                var jsid = 11;
+                $("#selectprov").selectVal(jsid);
+                InitCity(jsid);
             }
         });
     }
@@ -145,6 +156,7 @@
                 $.each(data, function(k, v) {
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
+                $("#selectcity").selectVal(125);
             }
         });
     }
@@ -179,7 +191,7 @@
                 alert("获取数据异常！");
             }
 
-            console.log(data);
+            //console.log(data);
 
             var obj = data.errmsg;
 
@@ -295,9 +307,9 @@
             return false;
         }
 
-        var re = /^\d*\.{0,1}\d{0,1}$/;
+        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!re.test(txtmileage)) {
-            alert("里程数只能输入数字！");
+            alert("里程数只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -316,18 +328,18 @@
         var txtbuyprice = $("#txtbuyprice").val();
         var txtsoldyprice = $("#txtsoldyprice").val();
 
-        if ($.trim(txtbuydate).length === 0) {
-            alert("请选择收购日期！");
-            return false;
-        }
+        //if ($.trim(txtbuydate).length === 0) {
+        //    alert("请选择收购日期！");
+        //    return false;
+        //}
 
-        if ($.trim(txtbuyprice).length === 0) {
-            alert("请填写收购价格！");
-            return false;
-        }
+        //if ($.trim(txtbuyprice).length === 0) {
+        //    alert("请填写收购价格！");
+        //    return false;
+        //}
 
-        if (!re.test(txtbuyprice)) {
-            alert("收购价格只能输入数字！");
+        if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
+            alert("收购价格只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -337,7 +349,7 @@
         }
 
         if (!re.test(txtsoldyprice)) {
-            alert("待售价格只能输入数字！");
+            alert("待售价格只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -404,7 +416,7 @@
 
                     });
                     alert("添加成功");
-                    location.href = "/car/car/carlist?custid=" + custid;
+                    goList();
                 } else {
                     alert("添加失败:" + result.errmsg);
                 }
@@ -458,7 +470,7 @@
             <td colspan="2" style="background-color: #ccc">车辆基本信息</td>
         </tr>
         <tr>
-            <td>选车</td>
+            <td>选车<label class="required">*</label></td>
             <td>
                 <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                     <option value="0">请选择</option>
@@ -472,7 +484,7 @@
             </td>
         </tr>
         <tr>
-            <td>地区</td>
+            <td>地区<label class="required">*</label></td>
             <td>
                 <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
                     <option value="0">请选择</option>
@@ -483,19 +495,19 @@
             </td>
         </tr>
         <tr>
-            <td>颜色</td>
+            <td>颜色<label class="required">*</label></td>
             <td>
                 <select id="selectcolor"></select>
             </td>
         </tr>
         <tr>
-            <td>行驶里程</td>
+            <td>行驶里程<label class="required">*</label></td>
             <td>
                 <input type="text" id="txtmileage" placeholder="行驶里程"/> 万公里
             </td>
         </tr>
         <tr>
-            <td>上牌时间</td>
+            <td>上牌时间<label class="required">*</label></td>
             <td>
                 <select id="selectregyear">
                     <option value="0">请选择</option>
@@ -508,7 +520,7 @@
             </td>
         </tr>
         <tr>
-            <td>车辆图片</td>
+            <td>车辆图片<label class="required">*</label></td>
             <td id="imgList">
                 <input type="file" multiple="" id="picture"/>
             </td>
@@ -531,7 +543,7 @@
             </td>
         </tr>
         <tr>
-            <td>待售价格</td>
+            <td>待售价格<label class="required">*</label></td>
             <td id="">
                 <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
             </td>
