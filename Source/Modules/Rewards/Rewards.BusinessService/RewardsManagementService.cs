@@ -189,6 +189,118 @@ namespace CCN.Modules.Rewards.BusinessService
             return BusinessComponent.WholesaleCoupon(model);
         }
 
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public JResult CancelCoupon(string code)
+        {
+            return BusinessComponent.CancelCoupon(code);
+        }
+
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCoupon(CardCancelSummaryQueryModel query)
+        {
+            return BusinessComponent.GetCoupon(query);
+        }
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult ShopLogin(string loginname, string password)
+        {
+            return BusinessComponent.ShopLogin(loginname, password);
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShop(ShopModel model)
+        {
+            return BusinessComponent.AddShop(model);
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShop(ShopModel model)
+        {
+            return BusinessComponent.UpdateShop(model);
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShop(string innerid)
+        {
+            return BusinessComponent.DeleteShop(innerid);
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
+        {
+            return BusinessComponent.GetShopPageList(query);
+        }
+
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSettLog(SettlementLogModel model)
+        {
+            return BusinessComponent.AddSettLog(model);
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateSettLog(SettlementLogModel model)
+        {
+            return BusinessComponent.UpdateSettLog(model);
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelSettLog(string innerid)
+        {
+            return BusinessComponent.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        {
+            return BusinessComponent.GetSettLogPageList(query);
+        }
 
         #endregion
     }

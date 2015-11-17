@@ -680,6 +680,239 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
             }
         }
+        
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IEnumerable<CardCancelSummaryModel> GetCoupon(CardCancelSummaryQueryModel query)
+        {
+            const string sqlSelect =
+                "select innerid as Cardid, title, titlesub, logourl, amount, buyprice, costprice, maxcount, count, codetype, createdtime, (select count(1) from coupon_code where cardid=a.innerid and usedtime>@starttime and usedtime<@endtime) as CanedCount from coupon_card as a where a.shopid=@shopid;";
+            
+            //更新礼券code
+            return Helper.Query<CardCancelSummaryModel>(sqlSelect,
+                new {starttime = query.StartTime, endtime = query.EndTime, shopid = query.Shopid});
+        }
+        
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public ShopModel GetShopModel(string loginname, string password)
+        {
+            const string sqlSelect =
+                "select innerid, shopname, loginname, password, telephone, email, headportrait, status, provid, cityid, area, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where loginname=@loginname and password=@password";
+
+            //更新礼券code
+            return Helper.Query<ShopModel>(sqlSelect, new { loginname, password }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        public int AddShop(ShopModel model)
+        {
+            const string sql = "insert into coupon_shop (innerid, shopname, loginname, password, telephone, email, headportrait, status, provid, cityid, area, qq, signature, qrcode, createdtime, modifiedtime) " +
+                               "values (@innerid, @shopname, @loginname, @password, @telephone, @email, @headportrait, @status, @provid, @cityid, @area, @qq, @signature, @qrcode, @createdtime, @modifiedtime);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加商户异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        public int UpdateShop(ShopModel model)
+        {
+            var sqlStr = new StringBuilder("update coupon_shop set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新商户异常：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteShop(string innerid)
+        {
+            const string sql = "delete from coupon_shop where innerid=@innerid;";
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除商户异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName =
+                @"coupon_shop as a 
+                left join base_province as pr on a.provid=pr.innerid
+                left join base_city as ct on a.cityid=ct.innerid ";
+            const string fields =
+                "a.innerid, a.shopname, a.loginname, a.telephone, a.email, a.headportrait, a.createdtime,a.status,pr.provname,ct.cityname,a.area";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Status != null
+                ? $" and a.status={query.Status}"
+                : "");
+
+            if (!string.IsNullOrWhiteSpace(query.Shopname))
+            {
+                sqlWhere.Append($" and shopname like '%{query.Shopname}%'");
+            }
+            
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<ShopViewModel>(model, query.Echo);
+            return list;
+        }
+
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddSettLog(SettlementLogModel model)
+        {
+            const string sql = "insert into coupon_settlement (innerid, shopid, orderid, setttime, setttotal, settcyclestart, settcycleend, settserialnum, settaccount) values (@innerid, @shopid, @orderid, @setttime, @setttotal, @settcyclestart, @settcycleend, @settserialnum, @settaccount);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("结算记录录入异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateSettLog(SettlementLogModel model)
+        {
+            var sqlStr = new StringBuilder("update coupon_settlement set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新结算记录异常：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DelSettLog(string innerid)
+        {
+            const string sql = "delete from coupon_settlement where innerid=@innerid;";
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除结算记录异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+        
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"coupon_settlement";
+            const string fields = "*";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "setttime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            if (!string.IsNullOrWhiteSpace(query.Shopid))
+            {
+                sqlWhere.Append($" and shopid='{query.Shopid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Orderid))
+            {
+                sqlWhere.Append($" and orderid like '%{query.Orderid}%'");
+            }
+            
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<SettlementLogModel>(model, query.Echo);
+            return list;
+        }
 
         #endregion
     }

@@ -515,6 +515,145 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 result > 0 ? "核销成功" : "核销失败");
         }
 
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCoupon(CardCancelSummaryQueryModel query)
+        {
+            var list = DataAccess.GetCoupon(query).ToList();
+
+            if (!list.Any()) return JResult._jResult(0, list);
+
+            foreach (var item in list)
+            {
+                item.TotalPrice = item.CostPrice*item.CanedCount;
+            }
+
+            return JResult._jResult(0, list);
+        }
+
+        #endregion
+
+        #region 商户管理
+
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult ShopLogin(string loginname, string password)
+        {
+            var shopModel = DataAccess.GetShopModel(loginname, password);
+
+            if (shopModel == null)
+            {
+                return JResult._jResult(400, "注册失败");
+            }
+
+            shopModel.Password = "";
+
+            return JResult._jResult(0, shopModel);
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShop(ShopModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.AddShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShop(ShopModel model)
+        {
+            model.Createdtime = null;
+            model.Modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShop(string innerid)
+        {
+            var result = DataAccess.DeleteShop(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
+        {
+            return DataAccess.GetShopPageList(query);
+        }
+
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSettLog(SettlementLogModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            if (!model.SettTime.HasValue)
+            {
+                model.SettTime = DateTime.Now;
+            }
+            
+            var result = DataAccess.AddSettLog(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateSettLog(SettlementLogModel model)
+        {
+            var result = DataAccess.UpdateSettLog(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelSettLog(string innerid)
+        {
+            var result = DataAccess.DelSettLog(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        {
+            return DataAccess.GetSettLogPageList(query);
+        }
+
         #endregion
     }
 }
