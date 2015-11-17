@@ -9,6 +9,7 @@ using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -191,7 +192,24 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _rewardsservice.WholesaleCoupon(model);
         }
-        
+
+        /// <summary>
+        /// 获取商品列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetProductList")]
+        [HttpGet]
+        public GetByStatusResult GetProductList()
+        {
+            //var appid = ConfigHelper.GetAppSettings("APPID");
+            //var result = ProductApi.GetByStatus(appid, 0);
+
+            var accessToken = "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
+            var result = ProductApi.GetByStatus(accessToken, 0);
+            
+            return result;
+        }
+
         #endregion
     }
 }

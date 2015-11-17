@@ -48,7 +48,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     商品sku定义
         /// </summary>
-        public Sku_info sku_info { get; set; }
+        public List<Sku_info> sku_info { get; set; }
 
         /// <summary>
         ///     商品主图
@@ -94,7 +94,7 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     sku值
         /// </summary>
-        public int[] vid { get; set; }
+        public List<int> vid { get; set; }
     }
 
     public class Detail
@@ -153,22 +153,22 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
         /// <summary>
         ///     是否包邮(0-否, 1-是), 如果包邮delivery_info字段可省略
         /// </summary>
-        public bool isPostFree { get; set; }
+        public int isPostFree { get; set; }
 
         /// <summary>
         ///     是否提供发票(0-否, 1-是)
         /// </summary>
-        public bool isHasReceipt { get; set; }
+        public int isHasReceipt { get; set; }
 
         /// <summary>
         ///     是否保修(0-否, 1-是)
         /// </summary>
-        public bool isUnderGuaranty { get; set; }
+        public int isUnderGuaranty { get; set; }
 
         /// <summary>
         ///     是否支持退换货(0-否, 1-是)
         /// </summary>
-        public bool isSupportReplace { get; set; }
+        public int isSupportReplace { get; set; }
     }
 
     public class Location

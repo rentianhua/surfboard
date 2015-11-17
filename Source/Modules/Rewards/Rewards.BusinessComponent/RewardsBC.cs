@@ -445,12 +445,74 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 result > 0 ? "购买成功" : "购买失败");
         }
 
-        
-        
-        public void GetProductList()
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public JResult CancelCoupon(string code)
         {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return JResult._jResult(401,"code空");
+            }
 
-            var result = ProductApi.GetByStatus("",0);
+            var codeModel = DataAccess.GetCode(code);
+            if (codeModel == null)
+            {
+                return JResult._jResult(402, "code不存在");
+            }
+
+            if (codeModel.Gettime == null)
+            {
+                return JResult._jResult(500, "code数据异常");
+            }
+
+            if (codeModel.Usedtime != null)
+            {
+                return JResult._jResult(403, "该券已被使用");
+            }
+
+            var cardModel = DataAccess.GetCouponById(codeModel.Cardid);
+            if (cardModel == null)
+            {
+                return JResult._jResult(404, "礼券不存在");
+            }
+
+            if (cardModel.IsEnabled != 1)
+            {
+                return JResult._jResult(405, "礼券被禁用");
+            }
+
+            var nowDate = DateTime.Now;
+
+            if (cardModel.Vtype.HasValue && cardModel.Vtype.Value == 1 )
+            {
+                if (cardModel.Vstart > nowDate && cardModel.Vend < nowDate)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+            }
+            else if (cardModel.Vtype.HasValue && cardModel.Vtype.Value == 2)
+            {
+                if (cardModel.Value1 == null || cardModel.Value2 == null)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+
+                var startTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value);
+                var endTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value).AddDays(cardModel.Value2.Value);
+                if (startTime > nowDate && endTime < nowDate)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+            }
+
+            var result = DataAccess.CancelCoupon(code);
+
+            return JResult._jResult(
+                result > 0 ? 0 : 400,
+                result > 0 ? "核销成功" : "核销失败");
         }
 
         #endregion

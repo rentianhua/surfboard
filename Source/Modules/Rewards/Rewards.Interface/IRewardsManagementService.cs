@@ -137,7 +137,7 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="model">购买信息</param>
         /// <returns></returns>
         JResult WholesaleCoupon(CouponBuyModel model);
-        
+
         #endregion
     }
 }

@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CounponBuyModel.cs" />
+    <Compile Include="CodeModel.cs" />
     <Compile Include="CouponInfoModel.cs" />
     <Compile Include="CustPointModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
