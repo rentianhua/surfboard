@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.DataAnalysis.BusinessEntity;
+using Cedar.Framework.Common.BaseClasses;
+using Dapper;
+using System.Data;
 
 namespace CCN.Modules.DataAnalysis.DataAccess
 {
@@ -44,7 +47,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         public IEnumerable<dynamic> GetAgeArea()
         {
             List<DataAnalysisModel> list = new List<DataAnalysisModel>();
-            
+
             DataAnalysisModel da1 = new DataAnalysisModel();
             da1.key = "First";
             da1.value = "1";
@@ -706,7 +709,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
             return list;
         }
-        
+
         /// <summary>
         /// 二手车交易量全国占比排行倒数8省份
         /// </summary>
@@ -891,8 +894,8 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// <returns></returns>
         public IEnumerable<dynamic> GetPersonalIncome()
         {
-            
-            List <DataAnalysisModel> list = new List<DataAnalysisModel>();
+
+            List<DataAnalysisModel> list = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list1 = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list2 = new List<DataAnalysisModel>();
             List<DataAnalysisModel> list3 = new List<DataAnalysisModel>();
@@ -954,7 +957,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             DataAnalysisModel da4 = new DataAnalysisModel();
             da4.key = "四季度";
             da4.value = "101525";
-            DataAnalysisModel daM10= new DataAnalysisModel();
+            DataAnalysisModel daM10 = new DataAnalysisModel();
             daM10.key = "10";
             daM10.value = "37536";
             list4.Add(daM10);
@@ -1033,5 +1036,55 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         }
 
         #endregion
+
+        #region  日数据统计
+
+        /// <summary>
+        /// 获取汇总数据（会员/粉丝/车辆）
+        /// </summary>
+        /// <returns></returns>
+        public DataAnalysisModel GetTotal()
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append("select * from (select count(1) as value from cust_info) as t1,(select count(1) as value2 from car_info) as t2,(select count(1) as value4 from wechat_friend) as t3; ");
+            try
+            {
+                var custModel = Helper.Query<DataAnalysisModel>(sql.ToString()).FirstOrDefault();
+                return custModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取会员/车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_startdatetime = startTime,
+                    p_enddatetime = endTime
+                };
+
+                var args = new DynamicParameters(obj);
+                using (var result = conn.QueryMultiple("ccnsp_daygrowth", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    return result.Read<DataAnalysisModel>();
+                }
+
+            }
+        }
+
+        #endregion
+
     }
 }

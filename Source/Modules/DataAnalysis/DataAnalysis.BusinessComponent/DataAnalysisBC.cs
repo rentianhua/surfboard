@@ -571,5 +571,50 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
 
         #endregion
 
+        /// <summary>
+        /// 日增长量
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        public JResult GetDayGrowth(DateTime startTime, DateTime endTime)
+        {
+            var list = DataAccess.GetDayGrowth(startTime, endTime);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 获取汇总数据（会员/粉丝/车辆）
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTotal()
+        {
+            var model = DataAccess.GetTotal();
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
     }
 }

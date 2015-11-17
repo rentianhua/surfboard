@@ -171,5 +171,19 @@ namespace CCN.Modules.DataAnalysis.Interface
 
         #endregion
 
+        /// <summary>
+        /// 获取日增长量
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="endTime"></param>
+        /// <returns></returns>
+        JResult GetDayGrowth(DateTime startTime, DateTime endTime);
+
+        /// <summary>
+        /// 获取汇总数据（会员/粉丝/车辆）
+        /// </summary>
+        /// <returns></returns>
+        JResult GetTotal();
+
     }
 }
