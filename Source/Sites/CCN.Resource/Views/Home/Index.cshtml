@@ -28,17 +28,17 @@
                     <tr>
                         <td>
                             会员总数：
-                            <span id="custtotal" style="color:red">0</span>
+                            <span id="custtotal" style="color: red">0</span>
                             @*<input id="custtotal" type="text" placeholder="会员总数" >*@
                         </td>
                         <td>
-                            粉丝总数：
-                            <span id="fanstotal" style="color:red">0</span>
+                            车辆总数：
+                            <span id="cartotal" style="color: red">0</span>
                             @*<input id="fanstotal" type="text" placeholder="粉丝总数" >*@
                         </td>
                         <td>
-                            车辆总数：
-                            <span id="cartotal" style="color:red">0</span>
+                            粉丝总数：
+                            <span id="fanstotal" style="color: red">0</span>
                             @*<input id="cartotal" type="text" placeholder="车辆总数" >*@
                         </td>
                     </tr>
@@ -100,8 +100,8 @@
         $.get("/api/DataAnalysis/GetTotal", function (data) {
             var obj = data.errmsg;
             $("#custtotal").html(obj.value);
-            $("#fanstotal").html(obj.value2);
-            $("#cartotal").html(obj.value4);
+            $("#cartotal").html(obj.value2);
+            $("#fanstotal").html(obj.value4);
         });
     }
 
@@ -124,8 +124,8 @@
                 str += "<td>" + (key + 1) + "</td>";
                 str += "<td>" + Dateformat(val.key, "yyyy-MM-dd") + "</td>";
                 str += "<td>" + val.value + "</td>";
-                str += "<td>" + val.value4 + "</td>";
                 str += "<td>" + val.value2 + "</td>";
+                str += "<td>" + val.value4 + "</td>";
                 str += "</tr>";
                 $("#anaiysislist tbody").append(str);
             });
