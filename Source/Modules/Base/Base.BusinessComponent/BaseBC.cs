@@ -27,7 +27,44 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         #region Code
-
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeTypeListModel> GetCodeTypeList(BaseCodeTypeQueryModel query)
+        {
+            return DataAccess.GetCodeTypeList(query);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeTypeStatus(string id, int status)
+        {
+            if (string.IsNullOrWhiteSpace(id) || (status != 0 && status != 1))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateCodeTypeStatus(id, status);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCodeType(string innerid)
+        {
+            if (string.IsNullOrWhiteSpace(innerid))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.DeleteCodeType(innerid);
+            return JResult._jResult(model);
+        }
         /// <summary>
         /// 获取代码值列表
         /// </summary>
@@ -50,7 +87,7 @@ namespace CCN.Modules.Base.BusinessComponent
                 errmsg = ""
             };
         }
-
+       
         #endregion
 
         #region 验证码

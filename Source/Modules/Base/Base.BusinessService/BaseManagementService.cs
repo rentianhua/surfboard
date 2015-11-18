@@ -23,7 +23,34 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         #region Code
-
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeTypeListModel> GetCodeTypeList(BaseCodeTypeQueryModel query)
+        {
+            return BusinessComponent.GetCodeTypeList(query);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeTypeStatus(string id, int status)
+        {
+            return BusinessComponent.UpdateCodeTypeStatus(id, status);
+        }
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCodeType(string innerid)
+        {
+            return BusinessComponent.DeleteCodeType(innerid);
+        }
         /// <summary>
         /// 获取代码值列表
         /// </summary>
@@ -33,7 +60,6 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.GetCodeByTypeKey(typekey);
         }
-
         #endregion
 
         #region 验证码

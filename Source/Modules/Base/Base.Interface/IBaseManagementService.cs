@@ -14,14 +14,32 @@ namespace CCN.Modules.Base.Interface
     public interface IBaseManagementService
     {
         #region Code
-
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseCodeTypeListModel> GetCodeTypeList(BaseCodeTypeQueryModel query);
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateCodeTypeStatus(string id, int status);
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCodeType(string innerid);
         /// <summary>
         /// 获取代码值列表
         /// </summary>
         /// <param name="typekey">代码类型key</param>
         /// <returns></returns>
         JResult GetCodeByTypeKey(string typekey);
-
+      
         #endregion
 
         #region 验证码

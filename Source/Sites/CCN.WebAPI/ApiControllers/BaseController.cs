@@ -48,7 +48,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _baseservice.GetCodeByTypeKey(typekey);
         }
-
+       
         #endregion
 
         #region 验证码

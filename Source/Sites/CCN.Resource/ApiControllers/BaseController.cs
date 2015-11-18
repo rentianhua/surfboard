@@ -36,6 +36,40 @@ namespace CCN.Resource.ApiControllers
         }
 
         #region Code
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeTypeList")]
+        [HttpPost]
+        public BasePageList<BaseCodeTypeListModel> GetCodeTypeList([FromBody] BaseCodeTypeQueryModel query)
+        {
+            return _baseservice.GetCodeTypeList(query);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateCodeTypeStatus")]
+        [HttpPost]
+        public JResult UpdateCodeTypeStatus(string id, int status)
+        {
+            return _baseservice.UpdateCodeTypeStatus(id, status);
+        }
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCodeType")]
+        [HttpPost]
+        public JResult DeleteCodeType(string innerid)
+        {
+            return _baseservice.DeleteCodeType(innerid);
+        }
 
         /// <summary>
         /// 获取代码值列表
@@ -48,7 +82,7 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.GetCodeByTypeKey(typekey);
         }
-
+        
         #endregion
 
         #region 验证码

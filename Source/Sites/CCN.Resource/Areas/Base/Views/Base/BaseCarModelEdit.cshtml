@@ -105,6 +105,7 @@
     }
     function Submit() {
         var regyear = /^(\d{4})$/;
+        var regprice = /^\d*\.{0,1}\d{0,1}$/;
         //判断下拉框
         if ($("#selectbrand").val() == 0) {
             alert("品牌名称不为空！");
@@ -121,6 +122,12 @@
         if (!$("#modelprice").val()) {
             alert("指导价不为空！");
             return;
+        }
+        else {
+            if (!regprice.test($("#modelprice").val())) {
+                alert("指导价格式输入不正确！");
+                return false;
+            }
         }
         if (!$("#modelyear").val()) {
             alert("年款输入不为空！");
