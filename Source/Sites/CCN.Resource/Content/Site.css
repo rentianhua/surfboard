@@ -109,3 +109,8 @@ table.gridtable {
             text-align: center;
             margin-top: -1px;
         }
+
+.searchLayout {
+        margin-top: 7px;
+        text-align: right;
+    }
