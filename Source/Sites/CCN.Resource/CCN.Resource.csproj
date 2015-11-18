@@ -553,6 +553,10 @@
       <Project>{9589c3e4-a3a5-4b8f-89a6-fa37de391507}</Project>
       <Name>Car.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Modules\DataAnalysis\DataAnalysis.BusinessEntity\DataAnalysis.BusinessEntity.csproj">
+      <Project>{7c36d3ed-b3dd-41e9-9bbd-0709f00be722}</Project>
+      <Name>DataAnalysis.BusinessEntity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Rewards\Rewards.BusinessEntity\Rewards.BusinessEntity.csproj">
       <Project>{88b61178-19b0-4945-9678-7244d5be888b}</Project>
       <Name>Rewards.BusinessEntity</Name>
