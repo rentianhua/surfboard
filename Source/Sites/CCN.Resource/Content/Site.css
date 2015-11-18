@@ -29,6 +29,12 @@ label {
         margin-top: 10px;
     }
 
+.required {
+        color: red;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
 /*table start*/
 table.gridtable {
             font-family: verdana, arial, sans-serif;
@@ -114,3 +120,11 @@ table.gridtable {
         margin-top: 7px;
         text-align: right;
     }
+
+
+.rd input[type=radio] {
+    opacity: 100;
+    position: initial;
+    width: 12px;
+    height: 12px;
+}

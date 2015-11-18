@@ -126,6 +126,10 @@
                 $.each(data, function (k, v) {
                     $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
                 });
+
+                var jsid = 11;
+                $("#selectprov").selectVal(jsid);
+                InitCity(jsid);
             }
         });
     }
@@ -145,6 +149,7 @@
                 $.each(data, function (k, v) {
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
+                $("#selectcity").selectVal(125);
             }
         });
     }
@@ -292,9 +297,9 @@
             return false;
         }
 
-        var re = /^\d*\.{0,1}\d{0,1}$/;
+        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!re.test(txtmileage)) {
-            alert("里程数只能输入数字！");
+            alert("里程数只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -313,18 +318,18 @@
         var txtbuyprice = $("#txtbuyprice").val();
         var txtsoldyprice = $("#txtsoldyprice").val();
 
-        if ($.trim(txtbuydate).length === 0) {
-            alert("请选择收购日期！");
-            return false;
-        }
+        //if ($.trim(txtbuydate).length === 0) {
+        //    alert("请选择收购日期！");
+        //    return false;
+        //}
 
-        if ($.trim(txtbuyprice).length === 0) {
-            alert("请填写收购价格！");
-            return false;
-        }
+        //if ($.trim(txtbuyprice).length === 0) {
+        //    alert("请填写收购价格！");
+        //    return false;
+        //}
 
-        if (!re.test(txtbuyprice)) {
-            alert("收购价格只能输入数字！");
+        if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
+            alert("收购价格只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -334,7 +339,7 @@
         }
 
         if (!re.test(txtsoldyprice)) {
-            alert("待售价格只能输入数字！");
+            alert("待售价格只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -401,7 +406,7 @@
 
                     });
                     alert("添加成功");
-                    location.href = "/car/car/carlist?custid=" + custid;
+                    goList();
                 } else {
                     alert("添加失败:" + result.errmsg);
                 }
@@ -424,7 +429,7 @@
             }
 
             json.Innerid = id;
-            $.post("/api/Car/UpdateCar", json, function (result) {
+            $.post("/api/Car/UpdateCar", json, function(result) {
                 hideloading();
                 if (result.errcode === 0) {
                     if (keysRes !== "0") {
@@ -433,7 +438,7 @@
                         });
                     }
                     alert("修改成功");
-                    location.href = "/car/car/carlist?custid=" + custid;
+                    location.reload();
                 } else {
                     alert("修改失败:" + result.errmsg);
                 }
@@ -482,7 +487,7 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">选车</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>选车</label>
                             <div class="controls col-sm-10">
                                 <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                                     <option value="0">请选择</option>
@@ -498,7 +503,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">地区</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
                             <div class="controls col-sm-10">
                                 <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
                                     <option value="0">请选择</option>
@@ -514,7 +519,7 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">颜色</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
                             <div class="controls col-sm-10">
                                 <select id="selectcolor"></select>
                             </div>
@@ -522,7 +527,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">上牌时间</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>上牌时间</label>
                             <div class="controls col-sm-10">
                                 <select id="selectregyear">
                                     <option value="0">年份</option>
@@ -538,7 +543,7 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">行驶里程</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程</label>
                             <div class="controls col-sm-10">
                                 <input type="text" id="txtmileage" placeholder="行驶里程" /> 万公里
                             </div>
@@ -549,10 +554,10 @@
                     </div>
                 </div>
 
-                <div class="row form-group" >
+                <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">车辆图片</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
                             <div class="controls col-sm-10" id="imgList">
                                 <input type="file" multiple="" id="picture" />
                             </div>
@@ -593,7 +598,7 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">代售价格</label>
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>待售价格</label>
                             <div class="col-sm-10">
                                 <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
                             </div>
@@ -623,6 +628,31 @@
                             <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
                             <div class="col-sm-10">
                                 <input id="txttlci_date" class="Wdate" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
+                            <div class="col-sm-10 rd">
+                                <input type="radio" name="radioisproblem" id="rYes" value="1" />
+                                <label for="rYes">是</label>
+                                <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
+                                <label for="rNo">否</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
+                            <div class="col-sm-10 rd">
+                                <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
+                                <label for="radioistain1">是</label>
+                                <input type="radio" name="radioistain" id="radioistain2" value="0" />
+                                <label for="radioistain2">否</label>
                             </div>
                         </div>
                     </div>
