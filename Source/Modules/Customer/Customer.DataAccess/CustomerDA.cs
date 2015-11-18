@@ -271,7 +271,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"cust_info";
-            const string fields = "innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, totalpoints, level, qrcode, type, createdtime, modifiedtime";
+            const string fields = "innerid, custname, password, mobile, telephone, email, headportrait, status, authstatus, provid, cityid, area, sex, brithday, qq, totalpoints, level, qrcode, type, createdtime, modifiedtime,(select count(1) from car_info where custid=cust_info.innerid and status<>0) as carnum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");

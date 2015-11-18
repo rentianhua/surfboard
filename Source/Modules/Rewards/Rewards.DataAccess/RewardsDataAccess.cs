@@ -275,6 +275,11 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and isenabled={query.IsEnabled}");
             }
 
+            if (!string.IsNullOrWhiteSpace(query.Shopid))
+            {
+                sqlWhere.Append($" and shopid='{query.Shopid}'");
+            }
+
             if (!string.IsNullOrWhiteSpace(query.Title))
             {
                 sqlWhere.Append($" and title like '%{query.Title}%'");
@@ -714,6 +719,55 @@ namespace CCN.Modules.Rewards.DataAccess
         }
 
         /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public ShopModel GetShopById(string innerid)
+        {
+            const string sqlSelect =
+                "select innerid, shopname, loginname, password, telephone, email, headportrait, status, provid, cityid, area, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where innerid=@innerid";
+
+            //更新礼券code
+            return Helper.Query<ShopModel>(sqlSelect, new { innerid }).FirstOrDefault();
+        }
+        
+        /// <summary>
+        /// 验证商户名重复
+        /// </summary>
+        /// <returns></returns>
+        public int CheckShopName(string shopname)
+        {
+            const string sql = "select count(1) as count from coupon_shop where shopname=@shopname;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new {shopname});
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("验证商户名重复异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 验证商户登录名重复
+        /// </summary>
+        /// <returns></returns>
+        public int CheckLoginName(string loginname)
+        {
+            const string sql = "select count(1) as count from coupon_shop where loginname=@loginname;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { loginname });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("验证商户登录名重复异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 添加商户
         /// </summary>
         /// <returns></returns>
@@ -758,6 +812,23 @@ namespace CCN.Modules.Rewards.DataAccess
                     return 0;
                 }
             }
+        }
+        
+        /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateShopStatus(string innerid, int status)
+        {
+            const string sql = "update coupon_shop set status=@status where innerid=@innerid;";
+            var result = Helper.Execute(sql, new
+            {
+                innerid,
+                status
+            });
+            return result;
         }
 
         /// <summary>
@@ -810,6 +881,19 @@ namespace CCN.Modules.Rewards.DataAccess
                 query.PageIndex);
             var list = Helper.ExecutePaging<ShopViewModel>(model, query.Echo);
             return list;
+        }
+
+        /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            const string sqlSelect =
+                "select innerid as Value, shopname as Text from coupon_shop where status=1";
+
+            //更新礼券code
+            return Helper.Query<ItemShop>(sqlSelect);
         }
 
         #endregion
@@ -883,7 +967,20 @@ namespace CCN.Modules.Rewards.DataAccess
                 return 0;
             }
         }
-        
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        public SettlementLogModel GetSettLogById(string innerid)
+        {
+            const string sqlSelect =
+                "select * from coupon_settlement where innerid=@innerid";
+
+            //更新礼券code
+            return Helper.Query<SettlementLogModel>(sqlSelect, new { innerid }).FirstOrDefault();
+        }
+
         /// <summary>
         /// 结算记录列表
         /// </summary>

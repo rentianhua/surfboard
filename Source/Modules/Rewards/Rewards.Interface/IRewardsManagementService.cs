@@ -156,6 +156,12 @@ namespace CCN.Modules.Rewards.Interface
         #region 商户管理
 
         /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopById(string innerid);
+
+        /// <summary>
         /// 商户登录
         /// </summary>
         /// <returns></returns>
@@ -174,6 +180,14 @@ namespace CCN.Modules.Rewards.Interface
         JResult UpdateShop(ShopModel model);
 
         /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateShopStatus(string innerid, int status);
+
+        /// <summary>
         /// 删除商户
         /// </summary>
         /// <returns></returns>
@@ -186,6 +200,11 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query);
 
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ItemShop> GetShopList();
         #endregion
 
         #region 结算记录
@@ -210,6 +229,12 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult DelSettLog(string innerid);
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetSettLogById(string innerid);
 
         /// <summary>
         /// 结算记录列表

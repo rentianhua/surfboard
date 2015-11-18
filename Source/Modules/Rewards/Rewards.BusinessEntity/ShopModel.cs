@@ -200,4 +200,19 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public string Area { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ItemShop
+    {
+        /// <summary>
+        /// shopid
+        /// </summary>
+        public string Value { get; set; }
+        /// <summary>
+        /// 商户名
+        /// </summary>
+        public string Text { get; set; }
+    }
 }

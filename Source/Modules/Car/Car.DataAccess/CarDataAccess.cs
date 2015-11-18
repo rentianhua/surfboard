@@ -80,13 +80,13 @@ namespace CCN.Modules.Car.DataAccess
             //销售价大于..
             if (query.minprice.HasValue)
             {
-                sqlWhere.Append($" and a.buyprice>={query.minprice}");
+                sqlWhere.Append($" and a.price>={query.minprice}");
             }
 
             //销售价小于..
             if (query.maxprice.HasValue)
             {
-                sqlWhere.Append($" and a.buyprice<={query.maxprice}");
+                sqlWhere.Append($" and a.price<={query.maxprice}");
             }
 
             if (query.minyear.HasValue)

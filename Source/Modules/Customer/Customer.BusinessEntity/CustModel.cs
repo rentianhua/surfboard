@@ -132,6 +132,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 推荐人
         /// </summary>
         public string RecommendedId { get; set; }
+
+        /// <summary>
+        /// 车辆数量
+        /// </summary>
+        public int CarNum { get; set; }
     }
 
     /// <summary>
