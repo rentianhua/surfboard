@@ -623,7 +623,6 @@ $.fn.extend({
         if (typeof (val) === "number") {
             val = val.toString();
         }
-        debugger
         var count = this.get(0).options.length;
         for (var i = 0; i < count; i++) {
             if (this.get(0).options[i].value === val) {
