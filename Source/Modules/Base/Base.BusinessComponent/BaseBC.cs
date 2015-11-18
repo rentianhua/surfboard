@@ -335,7 +335,6 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddCarBrand(BaseCarBrandModel model)
         {
-            //model.innerid = Guid.NewGuid();设置值
             model.IsEnabled = 1;
             var result = DataAccess.AddCarBrand(model);
             return JResult._jResult(result);

@@ -197,7 +197,7 @@ namespace CCN.Modules.Base.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"base_carbrand ";
-            const string fields = " innerid,brandname,initial,isenabled,ifnull(remark,'空') remark,logurl,hot ";
+            const string fields = " innerid,brandname,initial,isenabled,ifnull(remark,'') remark,ifnull(logurl,'') logurl,hot ";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " initial asc " : query.Order;
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.BrandName))
