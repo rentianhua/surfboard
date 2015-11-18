@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewBag.Title = "CarSeriesView";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+<script type="text/javascript">
+    debugger
+    var id = "@ViewBag.innerid";
+    var CarSeries = null;
+    $(function () {
+        Init();
+    });
+    debugger
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+        debugger
+        $.ajax({
+            url: '/api/Base/GetCarSeriesById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                CarSeries = obj;
+                $("#innerid").html(obj.Innerid);
+                $("#seriesname").html(obj.SeriesName);
+                $("#seriesgroupname").html(obj.SeriesGroupName);
+                $("#brandid").html(obj.Brandid);
+                if (obj.IsEnabled === 1) {
+                    $("#isenabled").text("启用中");
+                }
+                else {
+                    $("#isenabled").text("禁用中");
+                }
+                $("#remark").html(obj.Remark);
+            }
+        });
+        debugger
+    }
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">车系信息详情</div>
+    <table id="carseries" class="gridtable">
+        <tbody>
+            <tr>
+                <td>主键id</td>
+                <td id="innerid"></td>
+            </tr>
+            <tr>
+                <td>车系名称</td>
+                <td id="seriesname"></td>
+            </tr>
+            <tr>
+                <td>车系组</td>
+                <td id="seriesgroupname"></td>
+            </tr>
+            <tr>
+                <td>品牌id</td>
+                <td id="brandid"></td>
+            </tr>
+            <tr>
+                <td>是否可用</td>
+                <td id="isenabled"></td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td id="remark"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" value="返回" onclick="location.href = '/Base/Base/BaseCarSeriesList';" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+

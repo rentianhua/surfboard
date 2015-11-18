@@ -197,8 +197,8 @@ namespace CCN.Modules.Base.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"base_carbrand ";
-            const string fields = " innerid,brandname,initial,isenabled,ifnull(remark,'空') remark,ifnull(logurl,'空') logurl,hot ";
-            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " innerid desc " : query.Order;
+            const string fields = " innerid,brandname,initial,isenabled,ifnull(remark,'空') remark,logurl,hot ";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " initial asc " : query.Order;
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.BrandName))
             {
@@ -553,9 +553,9 @@ namespace CCN.Modules.Base.DataAccess
         public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList(BaseCarSeriesQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"base_carseries ";
-            const string fields = "innerid,seriesname,seriesgroupname,brandid,isenabled,ifnull(remark,'空') remark";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " innerid desc" : query.Order;
+            const string tableName = @"base_carseries as a left join base_carbrand as b on a.brandid=b.innerid ";
+            const string fields = "a.innerid,seriesname,seriesgroupname,brandid,a.isenabled,ifnull(a.remark,'空') remark,b.brandname ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " brandid desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.SeriesName))
