@@ -12,7 +12,7 @@ namespace CCN.Modules.Base.BusinessEntity
     public class BaseCodeModel
     {
         /// <summary>
-        /// id
+        /// 主键id
         /// </summary>
         public string Innerid { get; set; }
 
