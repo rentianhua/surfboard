@@ -7,7 +7,6 @@
     $(function () {
         QueryList();
     });
-    debugger
     function QueryList() {
         var json = { brandname: $("#carbrand").val() };
         $("#carbrandlist").getPageList(20, "/api/Base/GetCarBrandList", json, LoadData);
@@ -16,7 +15,6 @@
         $("#carbrandlist tbody").empty();
 
         var str = "";
-        debugger
         $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
@@ -37,7 +35,6 @@
             $("#carbrandlist tbody").append(str);
         });
     }
-    debugger
     function UpdateBrandStatus(carid, status) {
         status = status === 1 ? 0 : 1;
         $.post("/api/Base/UpdateBrandStatus?carid=" + carid + "&status=" + status, null, function (result) {
@@ -49,7 +46,6 @@
         if (!confirm("确认删除！")) {
             return;
         }
-        debugger
         $.post("/api/Base/DeleteCarBrand?innerid=" + innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
             alert(str);
@@ -62,7 +58,7 @@
         <div class="row">
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <div class="form-group">
-                    <label for="mobile" class="col-sm-4 control-label no-padding-right searchLayout">品牌名称：</label>
+                    <label for="carbrand" class="col-sm-4 control-label no-padding-right searchLayout">品牌名称：</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="carbrand" placeholder="品牌名称">
                     </div>
@@ -80,8 +76,8 @@
     </div>
     <table class="table table-striped table-hover table-bordered" id="carbrandlist">
         <thead>
-            <tr>
-                <td>id</td>
+            <tr role="row">
+                <td>序号</td>
                 <td>品牌名称</td>
                 <td>首字母</td>
                 <td>是否可用</td>

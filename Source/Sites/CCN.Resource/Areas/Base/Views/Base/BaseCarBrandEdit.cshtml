@@ -10,7 +10,6 @@
     $(function () {
         Init();
     });
-
     function Init() {
         if (id === "") {
             $.ajax({
@@ -35,9 +34,6 @@
                 if (data.errcode !== 0) {
                     alert("获取数据异常！");
                 }
-
-                console.log(data);
-
                 var obj = data.errmsg;
                 $("#brandname").val(obj.BrandName);
                 $("#initial").val(obj.Initial);
@@ -54,17 +50,20 @@
             return;
         }
         var reg = /^[A-Z]$/;
-        if ($("#initial").val()) {
-            if (!reg.test($("#initial").val())) {
-                alert("首字母输入错误！");
-                return;
-            }
+        if (!$("#initial").val()) {
+            alert("首字母不为空！");
+            return; 
         }
-
+        else{
+            if (!reg.test($("#initial").val())) {
+                alert("首字母格式输入不正确！");
+                return;
+        }
+        }
         var json = {
             BrandName: $("#brandname").val(),
             Initial: $("#initial").val(),
-            Logurl: "",//
+            Logurl: "",
             Remark: $("#remark").val(),
             Hot: $.trim($("#hot").val()).length === 0 ? 0 : $("#hot").val()
         };

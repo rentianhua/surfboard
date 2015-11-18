@@ -28,7 +28,8 @@
                 }
                 var obj = data.errmsg;
                 CarModel = obj;
-                $("#innerid").html(obj.Innerid);
+                $("#brandname").html(obj.BrandName);
+                $("#seriesname").html(obj.SeriesName);
                 $("#modelname").html(obj.Modelname);
                 $("#modelprice").html(obj.Modelprice);
                 $("#modelyear").html(obj.Modelyear);
@@ -55,8 +56,8 @@
     <table id="carmodel" class="gridtable">
         <tbody>
             <tr>
-                <td>主键id</td>
-                <td id="innerid"></td>
+                <td>品牌/车系</td>
+                <td><span id="brandname"></span>/<span id="seriesname"></span></td>
             </tr>
             <tr>
                 <td>车型名称</td>

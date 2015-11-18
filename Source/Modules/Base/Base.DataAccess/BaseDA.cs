@@ -374,14 +374,20 @@ namespace CCN.Modules.Base.DataAccess
         public BasePageList<BaseCarModelListViewModel> GetCarModelList(BaseCarModelQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"base_carmodel ";
-            const string fields = " innerid,modelname,modelprice,modelyear,minregyear,maxregyear,liter,geartype,dischargestandard,seriesid,isenabled,ifnull(remark,'空') remark ";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " innerid desc" : query.Order;
+            const string tableName = @"base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid";
+            const string fields = " a.innerid,modelname,modelprice,modelyear,minregyear,maxregyear,liter,geartype,dischargestandard,seriesid,a.isenabled,ifnull(a.remark,'') remark,b.seriesname,c.brandname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " innerid asc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 ");
             if (!string.IsNullOrWhiteSpace(query.Modelname))
             {
                 sqlWhere.Append($" and modelname like '%{query.Modelname}%'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.BrandId)) {
+                sqlWhere.Append($" and c.innerid = '{query.BrandId}'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.SeriesId)) {
+                sqlWhere.Append($" and b.innerid = '{query.SeriesId}'");
             }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<BaseCarModelListViewModel>(model, query.Echo);
@@ -394,7 +400,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public BaseCarModelModel GetBaseCarModelById(string innerid)
         {
-            const string sql = @"select * from base_carmodel where innerid=@innerid ;";
+            const string sql = @"select a.*,b.seriesname,c.brandname from base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid where a.innerid=@innerid ;";
             try
             {
                 var carmodelModel = Helper.Query<BaseCarModelModel>(sql, new { innerid }).FirstOrDefault();
@@ -554,13 +560,16 @@ namespace CCN.Modules.Base.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"base_carseries as a left join base_carbrand as b on a.brandid=b.innerid ";
-            const string fields = "a.innerid,seriesname,seriesgroupname,brandid,a.isenabled,ifnull(a.remark,'空') remark,b.brandname ";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " brandid desc" : query.Order;
+            const string fields = "a.innerid,seriesname,seriesgroupname,brandid,a.isenabled,ifnull(a.remark,'') remark,b.brandname ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " brandid asc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.SeriesName))
             {
                 sqlWhere.Append($" and seriesname like '%{query.SeriesName}%'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.BrandId)) {
+                sqlWhere.Append($" and b.innerid = '{query.BrandId}'");
             }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<BaseCarSeriesListViewModel>(model, query.Echo);
@@ -573,7 +582,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public BaseCarSeriesModel GetCarSeriesById(string innerid)
         {
-            const string sql = @"select * from base_carseries where innerid=@innerid;";
+            const string sql = @"select a.*,b.brandname from base_carseries as a left join base_carbrand as b on a.brandid=b.innerid where a.innerid=@innerid;";
             try
             {
                 var carseriesModel = Helper.Query<BaseCarSeriesModel>(sql, new { innerid }).FirstOrDefault();
