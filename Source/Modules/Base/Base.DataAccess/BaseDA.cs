@@ -29,7 +29,75 @@ namespace CCN.Modules.Base.DataAccess
         }
 
         #region Code
-
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeTypeListModel> GetCodeTypeList(BaseCodeTypeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"base_code_type ";
+            const string fields = "innerid,typekey,typename,isenabled";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " innerid asc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            if (!string.IsNullOrWhiteSpace(query.Typename))
+            {
+                sqlWhere.Append($" and typename like '%{query.Typename}%'");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseCodeTypeListModel>(model, query.Echo);
+            return list;
+        }
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateCodeTypeStatus(string id, int status)
+        {
+            const string sql = "update base_code_type set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = id, isenabled = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteCodeType(string innerid)
+        {
+            const string sql = @"delete from base_code_type where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
         /// <summary>
         /// 获取代码值列表
         /// </summary>
@@ -41,7 +109,7 @@ namespace CCN.Modules.Base.DataAccess
             var list = Helper.Query<BaseCodeSelectModel>(sql, new { typekey });
             return list;
         }
-
+       
         #endregion
 
         #region 验证码

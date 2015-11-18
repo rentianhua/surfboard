@@ -22,5 +22,13 @@ namespace CCN.Resource.Areas.System.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult BaseCodeTypeList() {
+            return View();
+        }
+
     }
 }
