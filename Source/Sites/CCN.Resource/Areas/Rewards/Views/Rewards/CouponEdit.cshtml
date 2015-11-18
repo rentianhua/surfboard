@@ -138,7 +138,7 @@
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                location.href = "/rewards/rewards/couponlist";
+                goCouponList();
             });
         } else {
 
@@ -152,7 +152,7 @@
                 success: function(result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
                     alert(str);
-                    location.href = "/rewards/rewards/couponlist";
+                    goCouponList();
                 }
             });
         }
@@ -171,6 +171,10 @@
             }
 
         });
+    }
+
+    function goCouponList() {
+        getBodyHtml('mainbody',  "/rewards/rewards/couponlist");
     }
 
 </script>

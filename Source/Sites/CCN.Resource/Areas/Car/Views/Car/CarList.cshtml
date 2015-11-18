@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarList";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //ViewBag.Title = "CarList";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -11,7 +11,8 @@
     $(function () {
         InitBrand();
         QueryList();
-        $("#btnAdd").click(function() {
+        $("#btnAdd").click(function () {
+            //getBodyHtml('mainbody', "/car/car/caredit?custid=" + custid);
             location.href = "/car/car/caredit?custid=" + custid;
         });
     });
@@ -138,7 +139,7 @@
 </script>
 <div style="margin: 0 auto;">
     <div style="font-size: 18px; font-weight: bold; text-align: center">车辆列表 @ViewBag.custname</div>
-    <table style="margin-bottom: 5px;;">
+    <table style="margin-bottom: 5px;">
         <tr>
             <td>
                 品牌/车系/车型：
@@ -154,7 +155,10 @@
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
             </td>
             <td style="text-align: right">
-                <a id="btnAdd" href="javascript:;">添加</a>
+                <div>
+                    <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>    
+                </div>
+                
                 @*<a href='/customer/customer/customerlist'>返回</a>*@
             </td>
         </tr>

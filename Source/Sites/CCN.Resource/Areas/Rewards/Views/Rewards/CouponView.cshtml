@@ -175,7 +175,9 @@
         }
         
     }
-
+    function goCouponList() {
+        getBodyHtml('mainbody', "/rewards/rewards/couponlist");
+    }
 </script>
 <div>
     <div style="font-size:18px;font-weight:bold;text-align:center">礼券详情</div>
@@ -255,7 +257,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="button" value="返回" onclick="location.href = '/rewards/rewards/couponlist';" />
+                    <input type="button" value="返回" onclick="goCouponList();" />
                 </td>
             </tr>
         </tbody>

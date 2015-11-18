@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CustomerEdit";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    //ViewBag.Title = "CustomerEdit";
+    //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
 <script type="text/javascript">
@@ -14,7 +14,8 @@
 
         var json = {
             mobile: $("#mobile").val(),
-            password: $("#password").val()
+            password: $("#password").val(),
+            custname: $("#custname").val()
         };
 
         if ($.trim(json.mobile).length === 0) {
@@ -28,7 +29,7 @@
         }
 
         var mobile = $("#mobile").val(); //获取手机号
-        var telReg = !!mobile.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+        var telReg = !!mobile.match(/^(0|86|17951)?(13[0-9]|15[012356789]|17[0678]|18[0-9]|14[57])[0-9]{8}$/);
         //如果手机号码不能通过验证
         if (!telReg) {
             alert("请填写正确的手机号");
@@ -56,13 +57,13 @@
             default:
             }
             alert(str);
-            location.href = "/customer/customer/customerlist";
+            getBodyHtml('mainbody', '/customer/customer/customerlist');
         });
     }
 
 </script>
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">会员注册</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">会员快速注册</div>
     <table id="coupon" class="gridtable">
         <tbody>
             <tr>
@@ -78,10 +79,16 @@
                 </td>
             </tr>
             <tr>
+                <td>昵称</td>
+                <td>
+                    <input type="text" id="custname" />
+                </td>
+            </tr>
+            <tr>
                 <td></td>
                 <td>
                     <input type="submit" value="保存" onclick="Submit()" />
-                    <input type="button" value="返回" onclick="self.location=document.referrer;" />
+                    <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
                 </td>
             </tr>
         </tbody>
