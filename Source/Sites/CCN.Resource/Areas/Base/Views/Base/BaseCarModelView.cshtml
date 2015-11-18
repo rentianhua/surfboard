@@ -1,22 +1,22 @@
 ﻿
 @{
     ViewBag.Title = "CarModelView";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script type="text/javascript">
-    debugger
+    
     var id = "@ViewBag.innerid";
     var CarModel = null;
     $(function () {
         Init();
     });
-    debugger
+    
     function Init() {
 
         if (id === "") {
             return;
         }
-        debugger
+        
         $.ajax({
             url: '/api/Base/GetBaseCarModelById?innerid=' + id,
             type: 'get',
@@ -28,7 +28,8 @@
                 }
                 var obj = data.errmsg;
                 CarModel = obj;
-                $("#innerid").html(obj.Innerid);
+                $("#brandname").html(obj.BrandName);
+                $("#seriesname").html(obj.SeriesName);
                 $("#modelname").html(obj.Modelname);
                 $("#modelprice").html(obj.Modelprice);
                 $("#modelyear").html(obj.Modelyear);
@@ -47,7 +48,7 @@
                 $("#remark").html(obj.Remark);
             }
         });
-        debugger
+        
     }
 </script>
 <div>
@@ -55,8 +56,8 @@
     <table id="carmodel" class="gridtable">
         <tbody>
             <tr>
-                <td>主键id</td>
-                <td id="innerid"></td>
+                <td>品牌/车系</td>
+                <td><span id="brandname"></span>/<span id="seriesname"></span></td>
             </tr>
             <tr>
                 <td>车型名称</td>
@@ -104,7 +105,7 @@
             </tr>
             <tr>
                 <td></td>
-                <td><input type="button" value="返回" onclick="location.href = '/Base/Base/BaseCarModelList';" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');" /></td>
             </tr>
         </tbody>
     </table>

@@ -54,7 +54,7 @@
         $.get("/api/Customer/DeleteCustomer?mobile=" + mobile, function (delres) {
             if (delres.errcode === 0) {
                 alert("删除成功");
-                location.href = "/customer/customer/customerlist";
+                getBodyHtml('mainbody', '/customer/customer/customerlist');
             } else {
                 alert("删除失败");
             }
@@ -101,13 +101,6 @@
     }
 
 </script>
-
-<style>
-    .searchLayout {
-        margin-top: 7px;
-        text-align: right;
-    }
-</style>
 
 <div>
 

@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "CarBrandEdit";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -10,7 +10,6 @@
     $(function () {
         Init();
     });
-
     function Init() {
         if (id === "") {
             $.ajax({
@@ -35,9 +34,6 @@
                 if (data.errcode !== 0) {
                     alert("获取数据异常！");
                 }
-
-                console.log(data);
-
                 var obj = data.errmsg;
                 $("#brandname").val(obj.BrandName);
                 $("#initial").val(obj.Initial);
@@ -50,21 +46,24 @@
 
     function Submit() {
         if (!$("#brandname").val()) {
-            alert("品牌名称！");
+            alert("品牌名称不为空！");
             return;
         }
         var reg = /^[A-Z]$/;
-        if ($("#initial").val()) {
-            if (!reg.test($("#initial").val())) {
-                alert("首字母输入错误！");
-                return;
-            }
+        if (!$("#initial").val()) {
+            alert("首字母不为空！");
+            return; 
         }
-
+        else{
+            if (!reg.test($("#initial").val())) {
+                alert("首字母格式输入不正确！");
+                return;
+        }
+        }
         var json = {
             BrandName: $("#brandname").val(),
             Initial: $("#initial").val(),
-            Logurl: "",//
+            Logurl: "",
             Remark: $("#remark").val(),
             Hot: $.trim($("#hot").val()).length === 0 ? 0 : $("#hot").val()
         };
@@ -73,7 +72,7 @@
             $.post("/api/Base/AddCarBrand", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                location.href = "/Base/Base/BaseCarBrandList";
+                getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
             });
         }
         else {
@@ -87,7 +86,7 @@
                 success: function (result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
                     alert(str);
-                    location.href = "/Base/Base/BaseCarBrandList";
+                    getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
                 }
             });
         }
@@ -123,7 +122,7 @@
             </tr>
             <tr>
                 <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="self.location = document.referrer;" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');" /></td>
             </tr>
         </tbody>
     </table>

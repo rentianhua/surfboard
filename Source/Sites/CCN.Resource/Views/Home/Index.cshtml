@@ -1,32 +1,30 @@
 ﻿<div class="row">
     <div class="col-xs-12 col-md-12">
         <div class="widget">
-            <div class="widget-header bordered-bottom bordered-yellow">
-                <span class="widget-caption">日增长量</span>
-                <div class="widget-buttons">
-                    <a href="#" data-toggle="maximize">
-                        <i class="fa fa-expand"></i>
-                    </a>
-                    <a href="#" data-toggle="collapse">
-                        <i class="fa fa-minus"></i>
-                    </a>
-                    <a href="#" data-toggle="dispose">
-                        <i class="fa fa-times"></i>
-                    </a>
+            <div class="row form-group" style="padding-top:5px;">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="starttime" class="col-sm-3 control-label no-padding-right">开始时间</label>
+                        <div class="col-sm-9">
+                            <input id="starttime" class="Wdate" type="text" placeholder="开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label for="endtime" class="col-sm-3 control-label no-padding-right">结束时间</label>
+                        <div class="col-sm-9">
+                            <input id="endtime" class="Wdate" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"><input type="button" value="搜索" onclick="QueryList();" />
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="widget-body no-padding">
-                <table style="margin: 0 auto;">
-                    <tr>
-                        <td>
-                            开始时间：
-                            <input id="starttime" class="Wdate" type="text" placeholder="开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                        </td>
-                        <td>
-                            结束时间：
-                            <input id="endtime" class="Wdate" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"><input type="button" value="搜索" onclick="QueryList();" />
-                        </td>
-                    </tr>
+            <div class="widget-header bordered-bottom bordered-yellow">
+                <span class="widget-caption">汇总数据</span>
+            </div>
+            
+            <table class="table table-bordered table-hover table-striped" id="">
+                <tbody>
                     <tr>
                         <td>
                             会员总数：
@@ -44,8 +42,25 @@
                             @*<input id="cartotal" type="text" placeholder="车辆总数" >*@
                         </td>
                     </tr>
-
-                </table>
+                </tbody>
+            </table>
+            <table style="margin: 0 auto;"></table>
+            <br />
+            <div class="widget-header bordered-bottom bordered-yellow">
+                <span class="widget-caption">日增长量</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body no-padding">
                 <table class="table table-bordered table-hover table-striped" id="anaiysislist">
                     <thead class="bordered-darkorange">
                         <tr role="row">

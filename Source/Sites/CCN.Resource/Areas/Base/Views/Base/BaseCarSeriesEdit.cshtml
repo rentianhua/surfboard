@@ -1,13 +1,12 @@
 ﻿
 @{
     ViewBag.Title = "CarSeriesEdit";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
     var id = "@ViewBag.innerid";
     var maxid;
-    var Isenabled;
     $(function () {
         InitBrand();
     });
@@ -36,13 +35,12 @@
                 if (data.errcode !== 0) {
                     alert("获取数据异常！");
                 }
-                console.log(data);
+               
                 var obj = data.errmsg;
                 $("#selectbrand").selectVal(obj.Brandid);
                 $("#seriesname").val(obj.SeriesName);
                 $("#seriesgroupname").val(obj.SeriesGroupName);
                 $("#remark").val(obj.Remark);
-                Isenabled = obj.IsEnabled;
             }
         });
     }
@@ -85,7 +83,6 @@
             Brandid: $("#selectbrand").val(),
             Remark: $("#remark").val(),
         };
-        debugger
         if (id === "") {
             //添加验证,验证是否存在还可添加
             $.ajax({
@@ -104,7 +101,7 @@
                         $.post("/api/Base/AddCarSeries", json, function (result) {
                             var str = result.errcode === 0 ? "添加成功" : "添加失败";
                             alert(str);
-                            location.href = "/Base/Base/BaseCarSeriesList";
+                            getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
                         });
                     }
                 }
@@ -133,7 +130,7 @@
                             success: function (result) {
                                 var str = result.errcode === 0 ? "更新成功" : "更新失败";
                                 alert(str);
-                                location.href = "/Base/Base/BaseCarSeriesList";
+                                getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
                             }
                         });
                     }
@@ -147,14 +144,6 @@
     <table id="carseries" class="gridtable">
         <tbody>
             <tr>
-                <td>车系名称</td>
-                <td><input type="text" id="seriesname" /></td>
-            </tr>
-            <tr>
-                <td>车系组 进口/国产</td>
-                <td><input type="text" id="seriesgroupname" /></td>
-            </tr>
-            <tr>
                 <td>品牌名称</td>
                 <td>
                     <select id="selectbrand">
@@ -163,12 +152,20 @@
                 </td>
             </tr>
             <tr>
+                <td>车系名称</td>
+                <td><input type="text" id="seriesname" /></td>
+            </tr>
+            <tr>
+                <td>车系组 进口/国产</td>
+                <td><input type="text" id="seriesgroupname" /></td>
+            </tr> 
+            <tr>
                 <td>备注</td>
                 <td><textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea></td>
             </tr>
             <tr>
                 <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="self.location = document.referrer;" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');" /></td>
             </tr>
         </tbody>
     </table>
