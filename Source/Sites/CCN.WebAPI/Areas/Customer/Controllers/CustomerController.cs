@@ -41,5 +41,12 @@ namespace CCN.WebAPI.Areas.Customer.Controllers
             return View();
         }
         #endregion
+        /// <summary>
+        /// 粉丝列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CustWeChatList() {
+            return View();
+        }
     }
 }
