@@ -25,7 +25,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             _rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
         }
-        
+
         #region 会员积分
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("ChangePoint")]
         [HttpPost]
-        public JResult ChangePoint([FromBody]CustPointModel model)
+        public JResult ChangePoint([FromBody] CustPointModel model)
         {
             return _rewardsservice.ChangePoint(model);
         }
@@ -47,7 +47,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCustPointLogPageList")]
         [HttpPost]
-        public BasePageList<CustPointViewModel> GetCustPointLogPageList([FromBody]CustPointQueryModel query)
+        public BasePageList<CustPointViewModel> GetCustPointLogPageList([FromBody] CustPointQueryModel query)
         {
             return _rewardsservice.GetCustPointLogPageList(query);
         }
@@ -126,9 +126,9 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult UpdateStatus(string cardid, int status)
         {
-            return _rewardsservice.UpdateStatus( cardid,  status);
+            return _rewardsservice.UpdateStatus(cardid, status);
         }
-        
+
         /// <summary>
         /// 修改礼券库存
         /// </summary>
@@ -136,7 +136,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateStock")]
         [HttpPost]
-        public JResult UpdateStock([FromBody]CouponInfoModel model)
+        public JResult UpdateStock([FromBody] CouponInfoModel model)
         {
             return _rewardsservice.UpdateStock(model);
         }
@@ -148,7 +148,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateValidity")]
         [HttpPost]
-        public JResult UpdateValidity([FromBody]CouponInfoModel model)
+        public JResult UpdateValidity([FromBody] CouponInfoModel model)
         {
             return _rewardsservice.UpdateValidity(model);
         }
@@ -176,6 +176,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _rewardsservice.UnBindWechatProduct(cardid);
         }
+
         #endregion
 
         #region 礼券对外接口
@@ -188,11 +189,35 @@ namespace CCN.WebAPI.ApiControllers
         [Route("WholesaleCoupon")]
         [HttpPost]
         //[NonAction]
-        public JResult WholesaleCoupon(CouponBuyModel model)
+        public JResult WholesaleCoupon([FromBody]CouponBuyModel model)
         {
             return _rewardsservice.WholesaleCoupon(model);
         }
 
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [Route("CancelCoupon")]
+        [HttpGet]
+        public JResult CancelCoupon(string code)
+        {
+            return _rewardsservice.CancelCoupon(code);
+        }
+
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCoupon")]
+        [HttpPost]
+        public JResult GetCoupon([FromBody]CardCancelSummaryQueryModel query)
+        {
+            return _rewardsservice.GetCoupon(query);
+        }
+        
         /// <summary>
         /// 获取商品列表
         /// </summary>
@@ -204,10 +229,123 @@ namespace CCN.WebAPI.ApiControllers
             //var appid = ConfigHelper.GetAppSettings("APPID");
             //var result = ProductApi.GetByStatus(appid, 0);
 
-            var accessToken = "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
+            var accessToken =
+                "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
             var result = ProductApi.GetByStatus(accessToken, 0);
-            
+
             return result;
+        }
+
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        [Route("ShopLogin")]
+        [HttpGet]
+        public JResult ShopLogin(string loginname, string password)
+        {
+            return _rewardsservice.ShopLogin(loginname, password);
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        [Route("AddShop")]
+        [HttpPost]
+        public JResult AddShop([FromBody] ShopModel model)
+        {
+            return _rewardsservice.AddShop(model);
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateShop")]
+        [HttpPut]
+        public JResult UpdateShop([FromBody] ShopModel model)
+        {
+            return _rewardsservice.UpdateShop(model);
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        [Route("DeleteShop")]
+        [HttpDelete]
+        public JResult DeleteShop(string innerid)
+        {
+            return _rewardsservice.DeleteShop(innerid);
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetShopPageList")]
+        [HttpPost]
+        public BasePageList<ShopViewModel> GetShopPageList([FromBody] ShopQueryModel query)
+        {
+            return _rewardsservice.GetShopPageList(query);
+        }
+
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddSettLog")]
+        [HttpPost]
+        public JResult AddSettLog([FromBody] SettlementLogModel model)
+        {
+            return _rewardsservice.AddSettLog(model);
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateSettLog")]
+        [HttpPut]
+        public JResult UpdateSettLog([FromBody] SettlementLogModel model)
+        {
+            return _rewardsservice.UpdateSettLog(model);
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DelSettLog")]
+        [HttpDelete]
+        public JResult DelSettLog(string innerid)
+        {
+            return _rewardsservice.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetSettLogPageList")]
+        [HttpPost]
+        public BasePageList<SettlementLogModel> GetSettLogPageList([FromBody] SettlementLogQueryModel query)
+        {
+            return _rewardsservice.GetSettLogPageList(query);
         }
 
         #endregion

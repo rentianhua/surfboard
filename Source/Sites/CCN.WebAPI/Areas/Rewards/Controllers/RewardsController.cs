@@ -26,7 +26,20 @@ namespace CCN.WebAPI.Areas.Rewards.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 商品id
+        /// </summary>
+        /// <returns></returns>
         public ActionResult ProductList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 商铺id
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopList()
         {
             return View();
         }
