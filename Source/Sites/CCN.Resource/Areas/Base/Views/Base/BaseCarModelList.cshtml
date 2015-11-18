@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "CarSeries";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+    //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
 <script type="text/javascript">
@@ -105,31 +105,35 @@
 <div>
     <div style="padding-bottom:5px">
         <div class="row">
-            <div class="col-lg-3 col-sm-3 col-xs-3">
+            <div class="col-lg-4 col-sm-4 col-xs-4">
                 <div class="form-group">
                     <span>
-                        <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
-                        <select id="selectseries">
-                            <option value="0">请选择</option>
-                        </select>
+                        <label for="selectbrand" class="col-sm-4 control-label no-padding-right searchLayout">品牌名称：</label>
+                        <span>
+                            <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                                <option value="0">请选择</option>
+                            </select>
+                            <select id="selectseries">
+                                <option value="0">请选择</option>
+                            </select>
+                        </span>
                     </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
                     <label for="carmodel" class="col-sm-4 control-label no-padding-right searchLayout">车型名称：</label>
                     <div class="col-sm-8">
                         <input type="text" class="form-control" id="carmodel" placeholder="车型名称">
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                 <span style="text-align:right">
                     <a href='/Base/Base/BaseCarModelEdit'>添加</a>
                 </span>
-            </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">
-            </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>
         </div>
     </div>

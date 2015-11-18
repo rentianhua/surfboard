@@ -598,5 +598,20 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region cust_wechat
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCustWeChatList")]
+        [HttpPost]
+        public BasePageList<CustWeChatViewModel> GetCustWeChatList([FromBody] CustWeChatQueryModel query)
+        {
+            return _custservice.GetCustWeChatList(query);
+        }
+
+        #endregion
     }
 }

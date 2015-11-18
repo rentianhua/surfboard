@@ -169,7 +169,6 @@ var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum
 显示body中的内容
 */
 var getBodyHtml = function (id, url) {
-    debugger
     $.get(url, function (result) {
         $("#" + id).empty();
         $("#" + id).append(result);

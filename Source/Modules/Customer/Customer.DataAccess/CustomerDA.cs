@@ -29,7 +29,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
 
         }
-        
+
         #region 会员基础
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace CCN.Modules.Customer.DataAccess
         public int CheckEmail(string email)
         {
             const string sql = @"select count(1) as count from cust_info where email=@email;";
-            var result = Helper.ExecuteScalar<int>(sql, new {email});
+            var result = Helper.ExecuteScalar<int>(sql, new { email });
             return result;
         }
 
@@ -71,18 +71,19 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sql, userInfo ,tran);
+                    conn.Execute(sql, userInfo, tran);
 
                     //插入会员的总数信息
                     const string sqlTotal = "insert into cust_total_info (innerid, custid) values (uuid(),@custid);";
-                    conn.Execute(sqlTotal, new { custid  = userInfo.Innerid }, tran);
+                    conn.Execute(sqlTotal, new { custid = userInfo.Innerid }, tran);
 
                     //插入关联
                     if (userInfo.Wechat != null)
                     {
                         const string sqlwechat =
                             @"INSERT INTO cust_wechat(innerid,custid,openid) VALUES(uuid(),@custid,@openid);";
-                        conn.Execute(sqlwechat, new {
+                        conn.Execute(sqlwechat, new
+                        {
                             custid = userInfo.Innerid,
                             openid = userInfo.Wechat.Openid
                         }, tran);
@@ -145,7 +146,7 @@ namespace CCN.Modules.Customer.DataAccess
         public CustModel CustLoginByOpenid(string openid)
         {
             const string sql = "select b.* from cust_wechat as a left join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
-            var custModel = Helper.Query<CustModel>(sql, new {openid}).FirstOrDefault();
+            var custModel = Helper.Query<CustModel>(sql, new { openid }).FirstOrDefault();
 
             //获取微信信息
             if (custModel != null)
@@ -192,10 +193,10 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="innerid"></param>
         /// <param name="qrcode"></param>
         /// <returns>用户信息</returns>
-        public int UpdateQrCode(string innerid,string qrcode)
+        public int UpdateQrCode(string innerid, string qrcode)
         {
             const string sql = "update cust_info set qrcode=@qrcode where innerid=@innerid;";
-            var custModel = Helper.Execute(sql, new {qrcode, innerid});
+            var custModel = Helper.Execute(sql, new { qrcode, innerid });
             return custModel;
         }
 
@@ -212,7 +213,7 @@ namespace CCN.Modules.Customer.DataAccess
 
             try
             {
-                var custModel = Helper.Query<CustViewModel>(sql, new {innerid}).FirstOrDefault();
+                var custModel = Helper.Query<CustViewModel>(sql, new { innerid }).FirstOrDefault();
                 //获取微信信息
                 if (custModel != null)
                 {
@@ -283,7 +284,7 @@ namespace CCN.Modules.Customer.DataAccess
             {
                 sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
             }
-            
+
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CustModel>(model, query.Echo);
             return list;
@@ -297,7 +298,8 @@ namespace CCN.Modules.Customer.DataAccess
         public int UpdatePassword(CustRetrievePassword mRetrievePassword)
         {
             const string sql = "update cust_info set password=@password where mobile=@mobile;";
-            var custModel = Helper.Execute(sql, new {
+            var custModel = Helper.Execute(sql, new
+            {
                 password = mRetrievePassword.NewPassword,
                 mobile = mRetrievePassword.Mobile
             });
@@ -314,7 +316,7 @@ namespace CCN.Modules.Customer.DataAccess
             var sqlStr = new StringBuilder("update cust_info set ");
             sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
             sqlStr.Append(" where innerid = @innerid");
-            
+
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -338,12 +340,13 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="innerid"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public int UpdateCustStatus(string innerid,int status)
+        public int UpdateCustStatus(string innerid, int status)
         {
             const string sql = "update cust_info set status=@status where innerid=@innerid;";
             var custModel = Helper.Execute(sql, new
             {
-                innerid, status
+                innerid,
+                status
             });
             return custModel;
         }
@@ -369,7 +372,7 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sqlU, new {innerid = model.Custid}, tran);
+                    conn.Execute(sqlU, new { innerid = model.Custid }, tran);
                     conn.Execute(sqlI, model, tran);
                     tran.Commit();
                     return 1;
@@ -428,7 +431,8 @@ namespace CCN.Modules.Customer.DataAccess
                 try
                 {
                     conn.Execute(sql, new { authstatus = model.AuditResult, innerid = model.Custid });
-                    conn.Execute(sqlau, new {
+                    conn.Execute(sqlau, new
+                    {
                         auditper = model.AuditPer,
                         auditdesc = model.AuditDesc,
                         audittime = model.AuditTime,
@@ -444,7 +448,7 @@ namespace CCN.Modules.Customer.DataAccess
                     return 0;
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -562,7 +566,7 @@ namespace CCN.Modules.Customer.DataAccess
             var sqlStr = new StringBuilder("update cust_laudator set ");
             sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
             sqlStr.Append(" where openid=@openid;");
-            
+
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -693,7 +697,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="innerid">标签ID</param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public int UpdateTagStatus(string innerid,int status)
+        public int UpdateTagStatus(string innerid, int status)
         {
             const string sql = @"UPDATE cust_tag SET isenabled = @isenabled WHERE innerid = @innerid;";
 
@@ -794,7 +798,7 @@ namespace CCN.Modules.Customer.DataAccess
                     //插入关系
                     conn.Execute(sql, model, tran);
                     //更新热度
-                    conn.Execute(sqlH, new {innerid = model.Tagid}, tran);
+                    conn.Execute(sqlH, new { innerid = model.Tagid }, tran);
 
                     tran.Commit();
                     return 1;
@@ -847,7 +851,7 @@ namespace CCN.Modules.Customer.DataAccess
                                 left join cust_tag as b on a.tagid=b.innerid 
                                 WHERE toid=@custid group by tagid;";
 
-            var list = Helper.Query<dynamic>(sql, new {custid});
+            var list = Helper.Query<dynamic>(sql, new { custid });
             return list;
         }
 
@@ -857,13 +861,13 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="custid"></param>
         /// <param name="tagid"></param>
         /// <returns></returns>
-        public IEnumerable<dynamic> GetTagRelationWithOper(string custid ,string tagid)
+        public IEnumerable<dynamic> GetTagRelationWithOper(string custid, string tagid)
         {
             const string sql = @"select b.custname, a.createdtime from cust_tag_relation as a 
                                 left join cust_info as b on a.fromid=b.innerid 
                                 where tagid=@tagid and toid=@custid;";
 
-            var list = Helper.Query<dynamic>(sql, new {tagid, custid});
+            var list = Helper.Query<dynamic>(sql, new { tagid, custid });
             return list;
         }
 
@@ -933,13 +937,14 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @" wechat_friend ";
-            const string fields = "ifnull(accountid,'') accountid,ifnull(nickname,'') nickname,ifnull(openid,'') openid,ifnull(remarkname,'空') remarkname,sex,ifnull(createdtime,current_date()) createdtime ";
+            const string fields = @"ifnull(accountid,'') accountid,ifnull(nickname,'') nickname,ifnull(openid,'') openid,ifnull(remarkname,'') remarkname,sex,ifnull(createdtime,current_date()) createdtime 
+                                    ,innerid, nickname, photo, area, isdel, subscribe_time, subscribe, country, province, city";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 ");
-            if (!string.IsNullOrWhiteSpace(query.accountid))
+            if (!string.IsNullOrWhiteSpace(query.nickname))
             {
-                sqlWhere.Append($" and accountid like '%{query.accountid}%'");
+                sqlWhere.Append($" and nickname like '%{query.nickname}%'");
             }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CustWeChatViewModel>(model, query.Echo);

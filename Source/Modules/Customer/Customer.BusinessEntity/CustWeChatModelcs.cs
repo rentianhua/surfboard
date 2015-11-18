@@ -7,111 +7,94 @@ using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Customer.BusinessEntity
 {
-       /// <summary>
-        /// cust_wechat
-        /// </summary>
-        public class CustWeChatModel
-        {
+    /// <summary>
+    /// cust_wechat
+    /// </summary>
+    public class CustWeChatModel
+    {
         /// <summary>
         /// 
         /// </summary>
-            public string innerid { get; set; }
+        public string innerid { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string accountid { get; set; }
+        public string accountid { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string nickname { get; set; }
+        public string nickname { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string photo { get; set; }
+        public string photo { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string openid { get; set; }
+        public string openid { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string remarkname { get; set; }
+        public string remarkname { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string area { get; set; }
+        public string area { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public int? sex { get; set; }
+        public int? sex { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public int? isdel { get; set; }
+        public int? isdel { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string subscribe_time { get; set; }
+        public string subscribe_time { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public int? subscribe { get; set; }
+        public int? subscribe { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string country { get; set; }
+        public string country { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string province { get; set; }
+        public string province { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public string city { get; set; }
+        public string city { get; set; }
         /// <summary>
         /// 
         /// </summary>
-            public DateTime? createdtime { get; set; }
-        }
-        /// <summary>
-        /// 列表显示信息
-        /// </summary>
-        public class CustWeChatViewModel
-        {
-        /// <summary>
-        /// 
-        /// </summary>
-            public string accountid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-            public string nickname { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-            public string openid { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-            public string remarkname { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-            public int? sex { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-            public DateTime? createdtime { get; set; }
-        }
-        /// <summary>
-        /// 查询信息条件
-        /// </summary>
-        public class CustWeChatQueryModel : QueryModel {
-        /// <summary>
-        /// 
-        /// </summary>
-            public string accountid { get; set; }
+        public DateTime? createdtime { get; set; }
     }
+    /// <summary>
+    /// 列表显示信息
+    /// </summary>
+    public class CustWeChatViewModel : CustWeChatModel
+    {
+
     }
+    /// <summary>
+    /// 查询信息条件
+    /// </summary>
+    public class CustWeChatQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 公众号
+        /// </summary>
+        public string accountid { get; set; }
+
+        /// <summary>
+        /// 昵称
+        /// </summary>
+        public string nickname { get; set; }
+    }
+}
 
 
