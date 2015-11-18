@@ -33,8 +33,6 @@
                     alert("获取数据异常！");
                 }
 
-                console.log(data);
-
                 var obj = data.errmsg;
                 $("#title").val(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));

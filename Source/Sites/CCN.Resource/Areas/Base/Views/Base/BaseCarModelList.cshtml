@@ -87,7 +87,7 @@
         status = status === 1 ? 0 : 1;
         $.post("/api/base/UpdateModelStatus?carid=" + carid + "&status=" + status, null, function (result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
         });
     }
     function DeleteCarModel(innerid) {
@@ -98,7 +98,7 @@
         $.post("/api/base/DeleteCarModel?innerid=" + innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
             alert(str);
-            location.href = "/base/base/BaseCarModelList";
+            getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
         });
     }
 </script>
