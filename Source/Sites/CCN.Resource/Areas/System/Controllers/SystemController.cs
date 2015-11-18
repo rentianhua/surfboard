@@ -29,6 +29,25 @@ namespace CCN.Resource.Areas.System.Controllers
         public ActionResult BaseCodeTypeList() {
             return View();
         }
+        /// <summary>
+        /// 展示基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult BaseCodeTypeView(string innerid) {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        /// <summary>
+        /// 编辑基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult BaseCodeTypeEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
 
     }
 }

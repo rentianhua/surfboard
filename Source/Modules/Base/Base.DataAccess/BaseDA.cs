@@ -45,6 +45,9 @@ namespace CCN.Modules.Base.DataAccess
             {
                 sqlWhere.Append($" and typename like '%{query.Typename}%'");
             }
+            if (!string.IsNullOrWhiteSpace(query.Typekey)) {
+                sqlWhere.Append($" and typekey = '{query.Typekey}'");
+            }
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<BaseCodeTypeListModel>(model, query.Echo);
             return list;
@@ -99,6 +102,85 @@ namespace CCN.Modules.Base.DataAccess
             }
         }
         /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseCodeTypeModel GetCodeTypeById(string innerid)
+        {
+            const string sql = @"select innerid,typekey,typename,isenabled from base_code_type where innerid=@innerid";
+            try
+            {
+                var codetypemodel = Helper.Query<BaseCodeTypeModel>(sql, new { innerid }).FirstOrDefault();
+                return codetypemodel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCodeType(BaseCodeTypeModel model)
+        {
+            const string sql = @"INSERT INTO `base_code_type`
+                                (`innerid`,`typekey`,`typename`,`isenabled`)
+                                VALUES
+                                (@innerid,@typekey,@typename,@isenabled);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCodeType(BaseCodeTypeModel model)
+        {
+            var sql = new StringBuilder("update `base_code_type` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        /// <summary>
+        /// 获取基础数据代码类型key
+        /// </summary>
+        /// <param name="typekey"></param>
+        /// <returns></returns>
+        public string GetCodeTypeByTypeKey(string typekey)
+        {
+            string  result;
+            const string sql = "select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
+            result = Helper.ExecuteScalar<string>(sql,new { typekey});
+            return result;
+        }
+
+        /// <summary>
         /// 获取代码值列表
         /// </summary>
         /// <param name="typekey">代码类型key</param>
@@ -109,7 +191,6 @@ namespace CCN.Modules.Base.DataAccess
             var list = Helper.Query<BaseCodeSelectModel>(sql, new { typekey });
             return list;
         }
-       
         #endregion
 
         #region 验证码

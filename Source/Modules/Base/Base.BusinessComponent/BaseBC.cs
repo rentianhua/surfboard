@@ -66,6 +66,62 @@ namespace CCN.Modules.Base.BusinessComponent
             return JResult._jResult(model);
         }
         /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCodeTypeById(string innerid)
+        {
+            var model = DataAccess.GetCodeTypeById(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCodeType(BaseCodeTypeModel model)
+        {
+            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey);
+            if (test==model.Typekey) {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "代码类型key重复！"
+                };
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Isenabled = 1;
+            var result = DataAccess.AddCodeType(model);
+            return new JResult {
+                errcode=0,
+                errmsg=result
+            };
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeType(BaseCodeTypeModel model)
+        {
+            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey);
+            if (test== model.Typekey) {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "代码类型key重复！"
+                };
+            }
+            //添加信息
+            var result = DataAccess.UpdateCodeType(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = ""
+            };
+        }
+        /// <summary>
         /// 获取代码值列表
         /// </summary>
         /// <param name="typekey">代码类型key</param>

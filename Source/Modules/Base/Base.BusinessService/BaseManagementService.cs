@@ -52,6 +52,34 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.DeleteCodeType(innerid);
         }
         /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCodeTypeById(string innerid)
+        {
+            return BusinessComponent.GetCodeTypeById(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCodeType(BaseCodeTypeModel model)
+        {
+            return BusinessComponent.AddCodeType(model);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeType(BaseCodeTypeModel model)
+        {
+            return BusinessComponent.UpdateCodeType(model);
+        }
+
+        /// <summary>
         /// 获取代码值列表
         /// </summary>
         /// <param name="typekey">代码类型key</param>
