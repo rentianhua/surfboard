@@ -1,19 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <MenuConfig>
   <MenuGroups>
-    <MenuGroup name="首页" url="/Customer/Customer/CustomerList" icon="icon-home" info="欢迎登录车信网！">
+    <MenuGroup name="首页" url="/Home/Index" icon="menu-icon glyphicon glyphicon-home" info="欢迎登录车信网！" submenu="false">
     </MenuGroup>
-    <MenuGroup name="会员管理" icon="icon-cog">
+    <MenuGroup name="会员模块" icon="menu-icon glyphicon glyphicon-tasks" submenu="true">
       <MenuArray>
         <Menu name="会员列表" url="/Customer/Customer/CustomerList" info="会员列表" permission="" />
-        <Menu name="会员新增" url="/Customer/Customer/CustomerAdd" info="会员新增" permission="" />
+        <Menu name="粉丝列表" url="/Customer/Customer/CustWeChatList" info="粉丝列表" permission="" />
       </MenuArray>
     </MenuGroup>
 
-    <MenuGroup name="车辆管理" icon="icon-leaf">
+    <MenuGroup name="车辆管理" icon="menu-icon fa fa-th" submenu="true">
       <MenuArray>
         <Menu name="车辆列表" url="/Customer/Customer/CustomerList" info="车辆列表" permission="" />
         <Menu name="车辆新增" url="/Customer/Customer/CustomerList" info="车辆新增" permission="" />
+      </MenuArray>
+    </MenuGroup>
+
+    <MenuGroup name="基础模块" icon="menu-icon fa fa-desktop" class="menu-dropdown">
+      <MenuArray>
+        <Menu name="菜单列表" url="/Customer/Customer/CustomerList" info="车辆列表" permission="" submenu="false"/>
+        <Menu name="车辆基本数据" url="/Customer/Customer/CustomerList" info="车辆新增" permission="" submenu="true">
+          <MenuSub name="品牌列表" url="/Customer/Customer/CustomerList" info="品牌列表" permission="" />
+          <MenuSub name="车系列表" url="/Customer/Customer/CustomerList" info="车系列表" permission="" />
+          <MenuSub name="车型列表" url="/Customer/Customer/CustomerList" info="车型列表" permission="" />
+        </Menu>
       </MenuArray>
     </MenuGroup>
     
