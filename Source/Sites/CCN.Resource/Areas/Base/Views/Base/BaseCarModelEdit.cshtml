@@ -74,8 +74,6 @@
                     alert("获取数据异常！");
                 }
 
-                console.log(data);
-
                 var obj = data.errmsg;
                 $("#modelname").val(obj.Modelname);
                 $("#modelprice").val(obj.Modelprice);
@@ -213,7 +211,7 @@
                             $.post("/api/Base/AddCarModel", json, function (result) {
                                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                                 alert(str);
-                                location.href = "/Base/Base/BaseCarModelList";
+                                getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                             });
                         }
                     }
@@ -242,7 +240,7 @@
                                 success: function (result) {
                                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
                                     alert(str);
-                                    location.href = "/Base/Base/BaseCarModelList";
+                                    getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                                 }
                             });
                         }

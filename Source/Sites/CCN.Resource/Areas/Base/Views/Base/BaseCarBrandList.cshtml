@@ -39,7 +39,7 @@
         status = status === 1 ? 0 : 1;
         $.post("/api/Base/UpdateBrandStatus?carid=" + carid + "&status=" + status, null, function (result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
         });
     }
     function DeleteCarBrand(innerid) {
@@ -49,7 +49,7 @@
         $.post("/api/Base/DeleteCarBrand?innerid=" + innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
             alert(str);
-            location.href = "/Base/Base/BaseCarBrandList";
+            getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
         });
     }
 </script>
