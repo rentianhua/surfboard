@@ -31,7 +31,10 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 品牌id
         /// </summary>
         public int? Brandid { get; set; }
-
+        /// <summary>
+        /// 品牌名称
+        /// </summary>
+        public string BrandName { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -72,7 +75,10 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 品牌id
         /// </summary>
         public int? Brandid { get; set; }
-
+        /// <summary>
+        /// 品牌名称
+        /// </summary>
+        public string BrandName { get; set; }
         /// <summary>
         /// 是否启用
         /// </summary>
@@ -91,6 +97,10 @@ namespace CCN.Modules.Base.BusinessEntity
         /// <summary>
         /// 车系名称
         /// </summary>
-        public string SeriesName { get; set; }
+        public string SeriesName{ get; set; }
+        /// <summary>
+        /// 品牌名称
+        /// </summary>
+        public string BrandId { get; set; }
     }
 }

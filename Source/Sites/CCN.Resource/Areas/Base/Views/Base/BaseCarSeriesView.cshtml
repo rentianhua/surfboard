@@ -4,19 +4,16 @@
     Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 <script type="text/javascript">
-    debugger
     var id = "@ViewBag.innerid";
     var CarSeries = null;
     $(function () {
         Init();
     });
-    debugger
     function Init() {
 
         if (id === "") {
             return;
         }
-        debugger
         $.ajax({
             url: '/api/Base/GetCarSeriesById?innerid=' + id,
             type: 'get',
@@ -28,10 +25,9 @@
                 }
                 var obj = data.errmsg;
                 CarSeries = obj;
-                $("#innerid").html(obj.Innerid);
+                $("#brandname").html(obj.BrandName);
                 $("#seriesname").html(obj.SeriesName);
                 $("#seriesgroupname").html(obj.SeriesGroupName);
-                $("#brandid").html(obj.Brandid);
                 if (obj.IsEnabled === 1) {
                     $("#isenabled").text("启用中");
                 }
@@ -41,7 +37,6 @@
                 $("#remark").html(obj.Remark);
             }
         });
-        debugger
     }
 </script>
 <div>
@@ -49,8 +44,8 @@
     <table id="carseries" class="gridtable">
         <tbody>
             <tr>
-                <td>主键id</td>
-                <td id="innerid"></td>
+                <td>品牌名称</td>
+                <td id="brandname"></td>
             </tr>
             <tr>
                 <td>车系名称</td>
@@ -59,10 +54,6 @@
             <tr>
                 <td>车系组</td>
                 <td id="seriesgroupname"></td>
-            </tr>
-            <tr>
-                <td>品牌id</td>
-                <td id="brandid"></td>
             </tr>
             <tr>
                 <td>是否可用</td>
