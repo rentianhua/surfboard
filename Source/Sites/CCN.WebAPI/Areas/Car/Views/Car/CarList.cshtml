@@ -73,7 +73,13 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.buytime, "yyyy-MM-dd") + "</td>";
-            str += "<td>" + (val.buyprice == null ? "" : val.buyprice) + "</td>";
+
+            var bp = "";
+            if (val.buyprice != null && val.buyprice !== 0) {
+                bp = val.buyprice;
+            }
+
+            str += "<td>" + bp + "</td>";
             str += "<td>" + val.mileage + "</td>";
             str += "<td>" + Dateformat(val.register_date, "yyyy-MM") + "</td>";
             str += "<td>" + val.price + "</td>";

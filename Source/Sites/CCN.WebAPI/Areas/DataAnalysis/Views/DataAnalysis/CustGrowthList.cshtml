@@ -71,34 +71,53 @@
             </td>
         </tr>
         <tr>
-            <td>
-                会员总数：
-                <span id="custtotal" style="color:red">0</span>
-                @*<input id="custtotal" type="text" placeholder="会员总数" >*@
+
+            <td colspan="3">
+                <table class="gridtable" style="min-width: 580px; margin-top: 20px;">
+                    <tr>
+                        <td style="font-weight: bold; background-color: #ccc; font-size: 14px;"  colspan="3">
+                            汇总信息
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            会员总数：
+                            <span id="custtotal" style="color: red">0</span>
+                            @*<input id="custtotal" type="text" placeholder="会员总数" >*@
+                        </td>
+                        <td>
+                            粉丝总数：
+                            <span id="fanstotal" style="color: red">0</span>
+                            @*<input id="fanstotal" type="text" placeholder="粉丝总数" >*@
+                        </td>
+                        <td>
+                            车辆总数：
+                            <span id="cartotal" style="color: red">0</span>
+                            @*<input id="cartotal" type="text" placeholder="车辆总数" >*@
+                        </td>
+                    </tr>
+                </table>
             </td>
-            <td>
-                粉丝总数：
-                <span id="fanstotal" style="color:red">0</span>
-                @*<input id="fanstotal" type="text" placeholder="粉丝总数" >*@
-            </td>
-            <td>
-                车辆总数：
-                <span id="cartotal" style="color:red">0</span>
-                @*<input id="cartotal" type="text" placeholder="车辆总数" >*@
-            </td>
+
         </tr>
         <tr>
             <td colspan="3">
-                <table id="anaiysislist" class="gridtable">
+                
+                <table id="anaiysislist" class="gridtable" style="min-width: 580px;margin-top: 20px;">
 
                     <thead>
                         <tr>
-                            <td>序号</td>
-                            <td>日期</td>
-                            <td>会员增长数</td>
-                            <td>粉丝增长数</td>
-                            <td>车辆增长数</td>
+                            <td style="font-weight: bold; background-color: #ccc; font-size: 14px;" colspan="5">
+                                明细信息
+                            </td>
                         </tr>
+                    <tr>
+                        <td>序号</td>
+                        <td>日期</td>
+                        <td>会员增长数</td>
+                        <td>粉丝增长数</td>
+                        <td>车辆增长数</td>
+                    </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
