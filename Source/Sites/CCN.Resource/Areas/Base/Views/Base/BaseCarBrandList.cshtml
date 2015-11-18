@@ -9,7 +9,7 @@
     });
     debugger
     function QueryList() {
-        var json = { brandname: $("#title").val() };
+        var json = { brandname: $("#carbrand").val() };
         $("#carbrandlist").getPageList(20, "/api/Base/GetCarBrandList", json, LoadData);
     }
     function LoadData(data,index) {
@@ -70,6 +70,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <span style="text-align:right"><a href='/Base/Base/BaseCarBrandEdit'>添加</a></span>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>
