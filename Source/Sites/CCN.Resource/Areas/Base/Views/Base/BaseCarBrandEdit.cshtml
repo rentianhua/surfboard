@@ -1,0 +1,131 @@
+﻿
+@{
+    ViewBag.Title = "CarBrandEdit";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    var maxid;
+    $(function () {
+        Init();
+    });
+
+    function Init() {
+        if (id === "") {
+            $.ajax({
+                url: '/api/Base/GetCarBrandMaxId',
+                type: 'get',
+                datetype: 'application/json',
+                async: false,
+                success: function (data) {
+                    var obj = data.errmsg;
+                    maxid = obj.MaxId;
+                }
+            });
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCarBrandById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                console.log(data);
+
+                var obj = data.errmsg;
+                $("#brandname").val(obj.BrandName);
+                $("#initial").val(obj.Initial);
+                $("#remark").val(obj.Remark);
+                $("#logurl").attr("src", getQiniuUrl(obj.Logurl));
+                $("#hot").val(obj.Hot);
+            }
+        });
+    }
+
+    function Submit() {
+        if (!$("#brandname").val()) {
+            alert("品牌名称！");
+            return;
+        }
+        var reg = /^[A-Z]$/;
+        if ($("#initial").val()) {
+            if (!reg.test($("#initial").val())) {
+                alert("首字母输入错误！");
+                return;
+            }
+        }
+
+        var json = {
+            BrandName: $("#brandname").val(),
+            Initial: $("#initial").val(),
+            Logurl: "",//
+            Remark: $("#remark").val(),
+            Hot: $.trim($("#hot").val()).length === 0 ? 0 : $("#hot").val()
+        };
+        if (id === "") {
+            json.Innerid = maxid + 1;
+            $.post("/api/Base/AddCarBrand", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(str);
+                location.href = "/Base/Base/BaseCarBrandList";
+            });
+        }
+        else {
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Base/UpdateCarBrand',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(str);
+                    location.href = "/Base/Base/BaseCarBrandList";
+                }
+            });
+        }
+    }
+</script>
+
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">品牌信息编辑</div>
+    <table id="carbrand" class="gridtable">
+        <tbody>
+            <tr>
+                <td>品牌名称</td>
+                <td><input type="text" id="brandname" /></td>
+            </tr>
+            <tr>
+                <td>首字母</td>
+                <td><input type="text" id="initial" /></td>
+            </tr>
+            <tr>
+                <td>品牌图标</td>
+                <td>
+                    <input type="file" id="fLogurl" />
+                    <img id="logurl" style="max-width: 150px;max-height:150px" src="" />
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td><textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea></td>
+            </tr>
+            <tr>
+                <td>热度</td>
+                <td><input type="text" id="hot" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="保存" onclick="Submit()" /></td>
+                <td><input type="button" value="返回" onclick="self.location = document.referrer;" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

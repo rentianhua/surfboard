@@ -1,3 +1,119 @@
-﻿<div style="width:100px;height:100px">
-    这里面显示内容位置
+﻿<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-yellow">
+                <span class="widget-caption">日增长量</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body no-padding">
+                <table style="margin: 0 auto;">
+                    <tr>
+                        <td>
+                            开始时间：
+                            <input id="starttime" class="Wdate" type="text" placeholder="开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                        </td>
+                        <td>
+                            结束时间：
+                            <input id="endtime" class="Wdate" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"><input type="button" value="搜索" onclick="QueryList();" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            会员总数：
+                            <span id="custtotal" style="color:red">0</span>
+                            @*<input id="custtotal" type="text" placeholder="会员总数" >*@
+                        </td>
+                        <td>
+                            粉丝总数：
+                            <span id="fanstotal" style="color:red">0</span>
+                            @*<input id="fanstotal" type="text" placeholder="粉丝总数" >*@
+                        </td>
+                        <td>
+                            车辆总数：
+                            <span id="cartotal" style="color:red">0</span>
+                            @*<input id="cartotal" type="text" placeholder="车辆总数" >*@
+                        </td>
+                    </tr>
+
+                </table>
+                <table class="table table-bordered table-hover table-striped" id="anaiysislist">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th>序号</th>
+                            <th>日期</th>
+                            <th>会员增长数</th>
+                            <th>车辆增长数</th>
+                            <th>粉丝增长数</th>
+                        </tr>
+                    </thead>
+
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script type="text/javascript">
+
+    $(function () {
+        var myDate = new Date();
+
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+        var start = year + "-" + month + "-" + "01";
+        $("#starttime").val(start);
+        $("#endtime").val(year + "-" + month + "-" + day);
+
+        QueryList();
+        InitTotal();
+    });
+
+    //获取总数
+    function InitTotal() {
+        $.get("/api/DataAnalysis/GetTotal", function (data) {
+            var obj = data.errmsg;
+            $("#custtotal").html(obj.value);
+            $("#fanstotal").html(obj.value2);
+            $("#cartotal").html(obj.value4);
+        });
+    }
+
+    //获取列表数据
+    function QueryList() {
+        var json = {
+            starttime: $("#starttime").val(),
+            endtime: $("#endtime").val()
+        };
+
+        $.post("/api/DataAnalysis/GetDayGrowth", json, function (data) {
+            $("#anaiysislist tbody").empty();
+            var str = "";
+            $.each(data.errmsg, function (key, val) {
+                var myDate = new Date(val.key);
+                console.log();
+
+                str = "";
+                str += "<tr>";
+                str += "<td>" + (key + 1) + "</td>";
+                str += "<td>" + Dateformat(val.key, "yyyy-MM-dd") + "</td>";
+                str += "<td>" + val.value + "</td>";
+                str += "<td>" + val.value4 + "</td>";
+                str += "<td>" + val.value2 + "</td>";
+                str += "</tr>";
+                $("#anaiysislist tbody").append(str);
+            });
+        });
+    }
+</script>
