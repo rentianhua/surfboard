@@ -35,7 +35,7 @@
                 if (data.errcode !== 0) {
                     alert("获取数据异常！");
                 }
-                console.log(data);
+               
                 var obj = data.errmsg;
                 $("#selectbrand").selectVal(obj.Brandid);
                 $("#seriesname").val(obj.SeriesName);
@@ -165,7 +165,7 @@
             </tr>
             <tr>
                 <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="self.location = document.referrer;" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');" /></td>
             </tr>
         </tbody>
     </table>
