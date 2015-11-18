@@ -70,6 +70,34 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.DeleteCodeType(innerid);
         }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeTypeById")]
+        [HttpGet]
+        public JResult GetCodeTypeById(string innerid)
+        {
+            return _baseservice.GetCodeTypeById(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCodeType")]
+        [HttpPost]
+        public JResult AddCodeType([FromBody] BaseCodeTypeModel model)
+        {
+            return _baseservice.AddCodeType(model);
+        }
+        [Route("UpdateCodeType")]
+        [HttpPost]
+        public JResult UpdateCodeType([FromBody] BaseCodeTypeModel model)
+        {
+            return _baseservice.UpdateCodeType(model);
+        }
 
         /// <summary>
         /// 获取代码值列表

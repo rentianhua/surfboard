@@ -34,6 +34,25 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult DeleteCodeType(string innerid);
         /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCodeTypeById(string innerid);
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCodeType(BaseCodeTypeModel model);
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCodeType(BaseCodeTypeModel model);
+
+        /// <summary>
         /// 获取代码值列表
         /// </summary>
         /// <param name="typekey">代码类型key</param>
