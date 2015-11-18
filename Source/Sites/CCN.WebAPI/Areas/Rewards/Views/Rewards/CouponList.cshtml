@@ -6,11 +6,29 @@
 <script type="text/javascript">
 
     $(function () {
+        InitShop();
         QueryList();
     });
 
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
+
     function QueryList() {
-        var json = { title: $("#title").val() };
+        var json = { title: $("#title").val(), shopid: $("#selectshop").val() === "0" ? "" : $("#selectshop").val() };
         $("#couponlist").getPageList(20, "/api/Rewards/GetCouponPageList", json, LoadData);
     }
 
@@ -53,6 +71,9 @@
     <table style="margin: 0 auto;">
         <tr>
             <td>
+                所属商户：<select id="selectshop" onchange="QueryList();">
+                            <option value="0">请选择</option>
+                        </select>
                 礼券名称：<input type="tel" id="title"/><input type="button" value="搜索" onclick="QueryList();"/>
             </td>
             <td style="text-align: right">

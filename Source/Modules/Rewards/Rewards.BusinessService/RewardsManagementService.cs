@@ -213,6 +213,15 @@ namespace CCN.Modules.Rewards.BusinessService
         #region 商户管理
 
         /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopById(string innerid)
+        {
+            return BusinessComponent.GetShopById(innerid);
+        }
+
+        /// <summary>
         /// 商户登录
         /// </summary>
         /// <returns></returns>
@@ -240,6 +249,17 @@ namespace CCN.Modules.Rewards.BusinessService
         }
 
         /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateShopStatus(innerid, status);
+        }
+
+        /// <summary>
         /// 删除商户
         /// </summary>
         /// <returns></returns>
@@ -256,6 +276,15 @@ namespace CCN.Modules.Rewards.BusinessService
         public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
         {
             return BusinessComponent.GetShopPageList(query);
+        }
+
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            return BusinessComponent.GetShopList();
         }
 
         #endregion
@@ -290,6 +319,15 @@ namespace CCN.Modules.Rewards.BusinessService
         public JResult DelSettLog(string innerid)
         {
             return BusinessComponent.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSettLogById(string innerid)
+        {
+            return BusinessComponent.GetSettLogById(innerid);
         }
 
         /// <summary>

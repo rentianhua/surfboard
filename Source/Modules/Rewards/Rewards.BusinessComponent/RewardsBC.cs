@@ -538,6 +538,15 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
         #region 商户管理
 
+        /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopById(string innerid)
+        {
+            var model = DataAccess.GetShopById(innerid);
+            return JResult._jResult(model);
+        }
 
         /// <summary>
         /// 商户登录
@@ -545,11 +554,17 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult ShopLogin(string loginname, string password)
         {
+            password = Encryptor.EncryptAes(password);
             var shopModel = DataAccess.GetShopModel(loginname, password);
 
             if (shopModel == null)
             {
-                return JResult._jResult(400, "注册失败");
+                return JResult._jResult(400, "登录名或密码错误");
+            }
+
+            if (shopModel.Status == 2)
+            {
+                return JResult._jResult(401, "商户被禁用");
             }
 
             shopModel.Password = "";
@@ -563,8 +578,28 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult AddShop(ShopModel model)
         {
+
+            if (string.IsNullOrWhiteSpace(model?.Shopname) 
+                || string.IsNullOrWhiteSpace(model.Loginname) 
+                || string.IsNullOrWhiteSpace(model.Password))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            if (DataAccess.CheckShopName(model.Shopname) > 0)
+            {
+                return JResult._jResult(402,"商户名称重复");
+            }
+
+            if (DataAccess.CheckLoginName(model.Loginname) > 0)
+            {
+                return JResult._jResult(403, "商户登录名重复");
+            }
+
             model.Innerid = Guid.NewGuid().ToString();
             model.Createdtime = DateTime.Now;
+            model.Status = 1;
+            model.Password = Encryptor.EncryptAes(model.Password);
             var result = DataAccess.AddShop(model);
             return JResult._jResult(result);
         }
@@ -578,6 +613,18 @@ namespace CCN.Modules.Rewards.BusinessComponent
             model.Createdtime = null;
             model.Modifiedtime = DateTime.Now;
             var result = DataAccess.UpdateShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateShopStatus(innerid, status);
             return JResult._jResult(result);
         }
 
@@ -601,6 +648,14 @@ namespace CCN.Modules.Rewards.BusinessComponent
             return DataAccess.GetShopPageList(query);
         }
 
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            return DataAccess.GetShopList();
+        }
         #endregion
 
         #region 结算记录
@@ -642,6 +697,16 @@ namespace CCN.Modules.Rewards.BusinessComponent
         {
             var result = DataAccess.DelSettLog(innerid);
             return JResult._jResult(result);
+        }
+        
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSettLogById(string innerid)
+        {
+            var model = DataAccess.GetSettLogById(innerid);
+            return JResult._jResult(model);
         }
 
         /// <summary>

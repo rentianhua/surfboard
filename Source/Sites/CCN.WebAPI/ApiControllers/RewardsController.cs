@@ -241,6 +241,17 @@ namespace CCN.WebAPI.ApiControllers
         #region 商户管理
 
         /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopById")]
+        [HttpGet]
+        public JResult GetShopById(string innerid)
+        {
+            return _rewardsservice.GetShopById(innerid);
+        }
+
+        /// <summary>
         /// 商户登录
         /// </summary>
         /// <returns></returns>
@@ -274,6 +285,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateShopStatus")]
+        [HttpPost]
+        public JResult UpdateShopStatus(string innerid, int status)
+        {
+            return _rewardsservice.UpdateShopStatus(innerid, status);
+        }
+
+        /// <summary>
         /// 删除商户
         /// </summary>
         /// <returns></returns>
@@ -294,6 +318,17 @@ namespace CCN.WebAPI.ApiControllers
         public BasePageList<ShopViewModel> GetShopPageList([FromBody] ShopQueryModel query)
         {
             return _rewardsservice.GetShopPageList(query);
+        }
+
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopList")]
+        [HttpGet]
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            return _rewardsservice.GetShopList();
         }
 
         #endregion
@@ -334,6 +369,17 @@ namespace CCN.WebAPI.ApiControllers
         public JResult DelSettLog(string innerid)
         {
             return _rewardsservice.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetSettLogById")]
+        [HttpGet]
+        public JResult GetSettLogById(string innerid)
+        {
+            return _rewardsservice.GetSettLogById(innerid);
         }
 
         /// <summary>

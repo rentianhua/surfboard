@@ -36,11 +36,21 @@ namespace CCN.WebAPI.Areas.Rewards.Controllers
         }
 
         /// <summary>
-        /// 商铺id
+        /// 商铺列表
         /// </summary>
         /// <returns></returns>
         public ActionResult ShopList()
         {
+            return View();
+        }
+
+        /// <summary>
+        /// 商铺编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
     }

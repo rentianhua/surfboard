@@ -29,6 +29,12 @@ label {
         margin-top: 10px;
     }
 
+.required {
+        color: red;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+
 /*table start*/
 table.gridtable {
             font-family: verdana, arial, sans-serif;

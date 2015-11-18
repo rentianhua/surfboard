@@ -159,6 +159,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public int? IsEnabled { get; set; }
 
+        /// <summary>
+        /// 商铺id
+        /// </summary>
+        public string Shopid { get; set; }
+
     }
     
     /// <summary>
