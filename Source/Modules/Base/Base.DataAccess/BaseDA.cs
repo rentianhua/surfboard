@@ -525,6 +525,11 @@ namespace CCN.Modules.Base.DataAccess
             return model;
         }
 
+
+
+
+        #endregion
+
         #region 品牌信息
         /// <summary>
         /// 获取品牌列表
@@ -665,222 +670,31 @@ namespace CCN.Modules.Base.DataAccess
         /// 获取ID最大值
         /// </summary>
         /// <returns></returns>
-        public BaseCarModelModel GetCarBrandMaxId()
+        public int GetCarBrandMaxId()
         {
+            int result;
             const string sql = @"select max(base_carbrand.innerid) MaxId from base_carbrand;";
-            try
-            {
-                var carbrandModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
-                return carbrandModel;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            result = Helper.Execute<int>(sql);
+            return result;
         }
         /// <summary>
-        /// 
+        /// 验证品牌信息是否同名
         /// </summary>
         /// <param name="brandname"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
         public BaseCarModelModel GetCarBrandName(string brandname, string innerid)
         {
-            string where = " isenabled=1 and brandname=" + brandname;
-            if (!string.IsNullOrWhiteSpace(innerid))
-            {
-                where += $" and innerid='{innerid}'";
-            }
-            var sql = $"select brandname from base_carbrand where {where} ";
-            try
-            {
-                var carseriesModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
-                return carseriesModel;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-        #endregion
-        #region 车型信息
-        /// <summary>
-        /// 获取车型列表
-        /// </summary>
-        /// <param name="query">查询条件</param>
-        /// <returns></returns>
-        public BasePageList<BaseCarModelListViewModel> GetCarModelList(BaseCarModelQueryModel query)
-        {
-            const string spName = "sp_common_pager";
-            const string tableName = @"base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid";
-            const string fields = " a.innerid,modelname,modelprice,modelyear,minregyear,maxregyear,liter,geartype,dischargestandard,seriesid,a.isenabled,ifnull(a.remark,'') remark,b.seriesname,c.brandname";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " innerid asc" : query.Order;
-            //查詢條件
-            var sqlWhere = new StringBuilder(" 1=1 ");
-            if (!string.IsNullOrWhiteSpace(query.Modelname))
-            {
-                sqlWhere.Append($" and modelname like '%{query.Modelname}%'");
-            }
-            if (!string.IsNullOrWhiteSpace(query.BrandId)) {
-                sqlWhere.Append($" and c.innerid = '{query.BrandId}'");
-            }
-            if (!string.IsNullOrWhiteSpace(query.SeriesId)) {
-                sqlWhere.Append($" and b.innerid = '{query.SeriesId}'");
-            }
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
-            var list = Helper.ExecutePaging<BaseCarModelListViewModel>(model, query.Echo);
-            return list;
-        }
-        /// <summary>
-        /// 获取车型信息
-        /// </summary>
-        /// <param name="innerid">id</param>
-        /// <returns></returns>
-        public BaseCarModelModel GetBaseCarModelById(string innerid)
-        {
-            const string sql = @"select a.*,b.seriesname,c.brandname from base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid where a.innerid=@innerid ;";
-            try
-            {
-                var carmodelModel = Helper.Query<BaseCarModelModel>(sql, new { innerid }).FirstOrDefault();
-                return carmodelModel;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// 更改车型状态
-        /// </summary>
-        /// <param name="carid"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        public int UpdateModelStatus(string carid, int status)
-        {
-            const string sql = "update base_carmodel set isenabled=@isenabled where innerid=@innerid";
-            using (var conn = Helper.GetConnection())
-            {
-                var tran = conn.BeginTransaction();
-                try
-                {
-                    conn.Execute(sql, new { innerid = carid, isenabled = status }, tran);
-                    tran.Commit();
-                    return 1;
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    return 0;
-                }
-            }
-        }
-        /// <summary>
-        /// 添加车型信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public int AddCarModel(BaseCarModelModel model)
-        {
-            const string sql = @"INSERT INTO `base_carmodel`
-                                (`innerid`,`modelname`,`modelprice`,`modelyear`,`minregyear`,`maxregyear`,`liter`,`geartype`,`dischargestandard`,`seriesid`,`isenabled`,`remark`)
-                                VALUES
-                                (@innerid,@modelname,@modelprice,@modelyear,@minregyear,@maxregyear,@liter,@geartype,@dischargestandard,@seriesid,@isenabled,@remark);";
-            using (var conn = Helper.GetConnection())
-            {
-                var tran = conn.BeginTransaction();
-                try
-                {
-                    conn.Execute(sql, model, tran);
-                    tran.Commit();
-                    return 1;
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    return 0;
-                }
-            }
-        }
-        /// <summary>
-        /// 删除车型信息
-        /// </summary>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        public int DeleteCarModel(string innerid)
-        {
-            const string sql = @"delete from base_carmodel where innerid=@innerid;";
-            using (var conn = Helper.GetConnection())
-            {
-                var tran = conn.BeginTransaction();
-                try
-                {
-                    conn.Execute(sql, new { innerid = innerid }, tran);
-                    tran.Commit();
-                    return 1;
-                }
-                catch (Exception ex)
-                {
-                    tran.Rollback();
-                    return 0;
-                }
-            }
-        }
-        /// <summary>
-        ///更新车型信息 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public int UpdateCarModel(BaseCarModelModel model)
-        {
-            var sql = new StringBuilder("update `base_carmodel` set ");
-            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
-            sql.Append(" where innerid = @innerid");
-            int result;
-            try
-            {
-                result = Helper.Execute(sql.ToString(), model);
-            }
-            catch (Exception ex)
-            {
-                result = 0;
-            }
-            return result;
-        }
-        /// <summary>
-        /// 获取车型ID最大值
-        /// </summary>
-        /// <returns></returns>
-        public BaseCarModelModel GetCarModelMaxId()
-        {
-            const string sql = @"select max(base_carmodel.innerid) MaxId from base_carmodel;";
-            try
-            {
-                var carmodelModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
-                return carmodelModel;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="modelname"></param>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        public BaseCarModelModel GetCarModelName(string modelname, string innerid)
-        {
-            string where = " isenabled=1 and modelname=" + modelname;
+            string where = " isenabled=1 and brandname='" + brandname + "'";
             if (!string.IsNullOrWhiteSpace(innerid))
             {
                 where += $" and innerid!='{innerid}'";
             }
-            var sql = $"select modelname from base_carmodel where {where} ";
+            var sql = $"select brandname,innerid from base_carbrand where {where} ";
             try
             {
-                var carseriesModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
-                return carseriesModel;
+                var carbrandModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
+                return carbrandModel;
             }
             catch (Exception ex)
             {
@@ -906,7 +720,8 @@ namespace CCN.Modules.Base.DataAccess
             {
                 sqlWhere.Append($" and seriesname like '%{query.SeriesName}%'");
             }
-            if (!string.IsNullOrWhiteSpace(query.BrandId)) {
+            if (!string.IsNullOrWhiteSpace(query.BrandId))
+            {
                 sqlWhere.Append($" and b.innerid = '{query.BrandId}'");
             }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -1032,18 +847,12 @@ namespace CCN.Modules.Base.DataAccess
         /// 获取ID最大值
         /// </summary>
         /// <returns></returns>
-        public BaseCarSeriesModel GetCarSeriesMaxId()
+        public int  GetCarSeriesMaxId()
         {
+            int result;
             const string sql = @"select max(base_carseries.innerid) MaxId from base_carseries;";
-            try
-            {
-                var carseriesModel = Helper.Query<BaseCarSeriesModel>(sql).FirstOrDefault();
-                return carseriesModel;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            result = Helper.Execute<int>(sql);
+            return result;
         }
         /// <summary>
         ///  获取车系名称
@@ -1051,14 +860,14 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="seriesname"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public BaseCarSeriesModel GetCarSeriesName(string seriesname,string innerid)
+        public BaseCarSeriesModel GetCarSeriesName(string seriesname, string innerid)
         {
-            string where = " isenabled=1 and seriesname=" + seriesname;
+            string where = " isenabled=1 and seriesname='" + seriesname+"'";
             if (!string.IsNullOrWhiteSpace(innerid))
             {
                 where += $" and innerid!='{innerid}'";
             }
-            var sql = $"select seriesname,brandid from base_carseries where {where} "; 
+            var sql = $"select seriesname,innerid from base_carseries where {where} ";
             try
             {
                 var carseriesModel = Helper.Query<BaseCarSeriesModel>(sql).FirstOrDefault();
@@ -1070,7 +879,187 @@ namespace CCN.Modules.Base.DataAccess
             }
         }
         #endregion
-
+        #region 车型信息
+        /// <summary>
+        /// 获取车型列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<BaseCarModelListViewModel> GetCarModelList(BaseCarModelQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid";
+            const string fields = " a.innerid,modelname,modelprice,modelyear,minregyear,maxregyear,liter,geartype,dischargestandard,seriesid,a.isenabled,ifnull(a.remark,'') remark,b.seriesname,c.brandname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " innerid asc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.Modelname))
+            {
+                sqlWhere.Append($" and modelname like '%{query.Modelname}%'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.BrandId))
+            {
+                sqlWhere.Append($" and c.innerid = '{query.BrandId}'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.SeriesId))
+            {
+                sqlWhere.Append($" and b.innerid = '{query.SeriesId}'");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseCarModelListViewModel>(model, query.Echo);
+            return list;
+        }
+        /// <summary>
+        /// 获取车型信息
+        /// </summary>
+        /// <param name="innerid">id</param>
+        /// <returns></returns>
+        public BaseCarModelModel GetBaseCarModelById(string innerid)
+        {
+            const string sql = @"select a.*,b.seriesname,c.brandname from base_carmodel as a left join base_carseries as b on a.seriesid=b.innerid left join base_carbrand c on b.brandid=c.innerid where a.innerid=@innerid ;";
+            try
+            {
+                var carmodelModel = Helper.Query<BaseCarModelModel>(sql, new { innerid }).FirstOrDefault();
+                return carmodelModel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 更改车型状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateModelStatus(string carid, int status)
+        {
+            const string sql = "update base_carmodel set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = carid, isenabled = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 添加车型信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCarModel(BaseCarModelModel model)
+        {
+            const string sql = @"INSERT INTO `base_carmodel`
+                                (`innerid`,`modelname`,`modelprice`,`modelyear`,`minregyear`,`maxregyear`,`liter`,`geartype`,`dischargestandard`,`seriesid`,`isenabled`,`remark`)
+                                VALUES
+                                (@innerid,@modelname,@modelprice,@modelyear,@minregyear,@maxregyear,@liter,@geartype,@dischargestandard,@seriesid,@isenabled,@remark);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 删除车型信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteCarModel(string innerid)
+        {
+            const string sql = @"delete from base_carmodel where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        ///更新车型信息 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCarModel(BaseCarModelModel model)
+        {
+            var sql = new StringBuilder("update `base_carmodel` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        /// <summary>
+        /// 获取车型ID最大值
+        /// </summary>
+        /// <returns></returns>
+        public int GetCarModelMaxId()
+        {
+            int result;
+            const string sql = @"select max(base_carmodel.innerid) MaxId from base_carmodel;";
+            result = Helper.Execute<int>(sql);
+            return result;
+         
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="modelname"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseCarModelModel GetCarModelName(string modelname, string innerid)
+        {
+            string where = " isenabled=1 and modelname=" + modelname;
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                where += $" and innerid!='{innerid}'";
+            }
+            var sql = $"select modelname from base_carmodel where {where} ";
+            try
+            {
+                var carseriesModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
+                return carseriesModel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         #endregion
     }
 }

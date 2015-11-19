@@ -330,23 +330,62 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.UpdateCarBrand(model);
         }
+        #endregion
+        #region 车系信息
         /// <summary>
-        /// 获取品牌ID最大值
+        /// 获取车系列表
         /// </summary>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public JResult GetCarBrandMaxId()
+        public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList(BaseCarSeriesQueryModel query)
         {
-            return BusinessComponent.GetCarBrandMaxId();
+            return BusinessComponent.GetCarSeriesList(query);
         }
         /// <summary>
-        /// 
+        /// 获取车系信息
         /// </summary>
-        /// <param name="brandname"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public JResult GetCarBrandName(string brandname, string innerid)
+        public JResult GetCarSeriesById(string innerid)
         {
-            return BusinessComponent.GetCarBrandName(brandname, innerid);
+            return BusinessComponent.GetCarSeriesById(innerid);
+        }
+        /// <summary>
+        /// 更新车系状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateSeriesStatus(string carid, int status)
+        {
+            return BusinessComponent.UpdateSeriesStatus(carid, status);
+        }
+        /// <summary>
+        /// 添加车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarSeries(BaseCarSeriesModel model)
+        {
+            return BusinessComponent.AddCarSeries(model);
+        }
+        /// <summary>
+        /// 删除车系信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCarSeries(string innerid)
+        {
+            return BusinessComponent.DeleteCarSeries(innerid);
+        }
+        /// <summary>
+        /// 更新车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarSeries(BaseCarSeriesModel model)
+        {
+            return BusinessComponent.UpdateCarSeries(model);
         }
         #endregion
         #region 车型信息
@@ -405,99 +444,7 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.UpdateCarModel(model);
         }
-        /// <summary>
-        /// ID最大值
-        /// </summary>
-        /// <returns></returns>
-        public JResult GetCarModelMaxId()
-        {
-            return BusinessComponent.GetCarModelMaxId();
-        }
-      /// <summary>
-      /// 
-      /// </summary>
-      /// <param name="modelname"></param>
-      /// <param name="innerid"></param>
-      /// <returns></returns>
-        public JResult GetCarModelName(string modelname,string innerid)
-        {
-            return BusinessComponent.GetCarModelName(modelname,innerid);
-        }
         #endregion
-        #region 车系信息
-        /// <summary>
-        /// 获取车系列表
-        /// </summary>
-        /// <param name="query">查询条件</param>
-        /// <returns></returns>
-        public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList(BaseCarSeriesQueryModel query)
-        {
-            return BusinessComponent.GetCarSeriesList(query);
-        }
-        /// <summary>
-        /// 获取车系信息
-        /// </summary>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        public JResult GetCarSeriesById(string innerid)
-        {
-            return BusinessComponent.GetCarSeriesById(innerid);
-        }
-        /// <summary>
-        /// 更新车系状态
-        /// </summary>
-        /// <param name="carid"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        public JResult UpdateSeriesStatus(string carid, int status)
-        {
-            return BusinessComponent.UpdateSeriesStatus(carid, status);
-        }
-        /// <summary>
-        /// 添加车系信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public JResult AddCarSeries(BaseCarSeriesModel model)
-        {
-            return BusinessComponent.AddCarSeries(model);
-        }
-        /// <summary>
-        /// 删除车系信息
-        /// </summary>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        public JResult DeleteCarSeries(string innerid)
-        {
-            return BusinessComponent.DeleteCarSeries(innerid);
-        }
-        /// <summary>
-        /// 更新车系信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public JResult UpdateCarSeries(BaseCarSeriesModel model)
-        {
-            return BusinessComponent.UpdateCarSeries(model);
-        }
-        /// <summary>
-        /// 获取ID最大值
-        /// </summary>
-        /// <returns></returns>
-        public JResult GetCarSeriesMaxId()
-        {
-            return BusinessComponent.GetCarSeriesMaxId();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="seriesname"></param>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        public JResult GetCarSeriesName(string seriesname,string innerid)
-        {
-            return BusinessComponent.GetCarSeriesName(seriesname, innerid);
-        }
-        #endregion
+     
     }
 }
