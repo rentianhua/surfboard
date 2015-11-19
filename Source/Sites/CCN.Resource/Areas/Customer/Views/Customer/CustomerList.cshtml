@@ -27,10 +27,9 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.Custname == null ? "" : val.Custname.sub(20)) + "</td>";
             str += "<td>" + val.Mobile + "</td>";
-            str += "<td>" + (val.Email == null ? "" : val.Email) + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + (val.Status === 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
             str += "<td>" + ChangAuthStatus(val.AuthStatus) + "</td>";
-            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td><a onclick=\"getBodyHtml('mainbody', '/customer/customer/customerview?innerid=" + val.Innerid + "');\" href='javascript:;'>查看详情</a> ";
             if (val.Status === 1) {
                 str += "<a href='javascript:;' onclick=\"FrozenCust('" + val.Innerid + "');\">冻结</a> ";
@@ -133,10 +132,9 @@
                 <th>序号</th>
                 <th>昵称</th>
                 <th>手机号</th>
-                <th>Email</th>
+                <th>注册时间</th>
                 <th>状态</th>
                 <th>认证状态</th>
-                <th>注册时间</th>
                 <th>操作</th>
             </tr>
         </thead>
