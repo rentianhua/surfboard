@@ -444,6 +444,9 @@
     <Content Include="Areas\System\Views\System\BaseCodeTypeList.cshtml" />
     <Content Include="Areas\System\Views\System\BaseCodeTypeView.cshtml" />
     <Content Include="Areas\System\Views\System\BaseCodeTypeEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeList.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

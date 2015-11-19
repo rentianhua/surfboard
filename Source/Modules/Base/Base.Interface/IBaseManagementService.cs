@@ -14,6 +14,7 @@ namespace CCN.Modules.Base.Interface
     public interface IBaseManagementService
     {
         #region Code
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型列表
         /// </summary>
@@ -51,6 +52,51 @@ namespace CCN.Modules.Base.Interface
         /// <param name="model"></param>
         /// <returns></returns>
         JResult UpdateCodeType(BaseCodeTypeModel model);
+        #endregion
+
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseCodeSelectModel> GetCodeList(BaseCodeQueryModel query);
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        IEnumerable<BaseCodeTypeModel> GetCodeType(string innerid);
+        /// <summary>
+        /// 获取基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateCodeStatus(string id, int status);
+        /// <summary>
+        /// 删除基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteCode(string innerid);
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCodeById(string innerid);
+        /// <summary>
+        /// 添加基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCode(BaseCodeModel model);
+        /// <summary>
+        /// 更新基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCode(BaseCodeModel model);
 
         /// <summary>
         /// 获取代码值列表

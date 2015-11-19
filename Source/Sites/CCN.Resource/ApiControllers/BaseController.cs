@@ -36,6 +36,7 @@ namespace CCN.Resource.ApiControllers
         }
 
         #region Code
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型列表
         /// </summary>
@@ -92,11 +93,109 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.AddCodeType(model);
         }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("UpdateCodeType")]
         [HttpPost]
         public JResult UpdateCodeType([FromBody] BaseCodeTypeModel model)
         {
             return _baseservice.UpdateCodeType(model);
+        }
+        #endregion
+
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeList")]
+        [HttpPost]
+        public BasePageList<BaseCodeSelectModel> GetCodeList([FromBody] BaseCodeQueryModel query)
+        {
+            return _baseservice.GetCodeList(query);
+        }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeType")]
+        [HttpGet]
+        public JResult GetCodeType(string innerid = null)
+        {
+            var list = _baseservice.GetCodeType(innerid);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
+        }
+        /// <summary>
+        /// 获取基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateCodeStatus")]
+        [HttpPost]
+        public JResult UpdateCodeStatus(string id, int status)
+        {
+            return _baseservice.UpdateCodeStatus(id, status);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCode")]
+        [HttpPost]
+        public JResult DeleteCode(string innerid)
+        {
+            return _baseservice.DeleteCode(innerid);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeById")]
+        [HttpGet]
+        public JResult GetCodeById(string innerid)
+        {
+            return _baseservice.GetCodeById(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCode")]
+        [HttpPost]
+        public JResult AddCode([FromBody] BaseCodeModel model)
+        {
+            return _baseservice.AddCode(model);
+        }
+        /// <summary>
+        /// 更新基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCode")]
+        [HttpPost]
+        public JResult UpdateCode([FromBody] BaseCodeModel model)
+        {
+            return _baseservice.UpdateCode(model);
         }
 
         /// <summary>
