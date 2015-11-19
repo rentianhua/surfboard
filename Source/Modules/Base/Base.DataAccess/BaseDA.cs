@@ -29,6 +29,7 @@ namespace CCN.Modules.Base.DataAccess
         }
 
         #region Code
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型列表
         /// </summary>
@@ -179,6 +180,194 @@ namespace CCN.Modules.Base.DataAccess
             result = Helper.ExecuteScalar<string>(sql,new { typekey});
             return result;
         }
+        #endregion
+        #region 基础数据代码值
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeSelectModel> GetCodeList(BaseCodeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"base_code as a left join base_code_type as b on a.typekey=b.typekey ";
+            const string fields = "a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,remark,b.typename";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc,b.typename asc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            if (!string.IsNullOrWhiteSpace(query.Typekey))
+            {
+                sqlWhere.Append($" and a.typekey = '{query.Typekey}'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.CodeName))
+            {
+                sqlWhere.Append($" and codename like '%{query.CodeName}%'");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseCodeSelectModel>(model, query.Echo);
+            return list;
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseCodeTypeModel> GetCodeType(string innerid)
+        {
+            var where = " isenabled=1";
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                where += $" and innerid='{innerid}'";
+            }
+            var sql = $"select innerid,typekey,typename from base_code_type where {where} order by innerid asc , typename asc";
+            var CodeTypeList = Helper.Query<BaseCodeTypeModel>(sql);
+            return CodeTypeList;
+        }
+        /// <summary>
+        /// 更新基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateCodeStatus(string id, int status)
+        {
+            const string sql = "update base_code set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = id, isenabled = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 删除基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteCode(string innerid)
+        {
+            const string sql = @"delete from base_code where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 获得基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseCodeSelectModel GetCodeById(string innerid)
+        {
+            const string sql = @"select a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,remark,b.typename,b.innerid as typeid from base_code as a left join base_code_type as b on a.typekey=b.typekey where a.innerid=@innerid";
+            try
+            {
+                var codemodel = Helper.Query<BaseCodeSelectModel>(sql, new { innerid }).FirstOrDefault();
+                return codemodel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 添加基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCode(BaseCodeModel model)
+        {
+            const string sql = @"INSERT INTO `base_code`
+                                (`innerid`,`codevalue`,`codename`,`sort`,`typekey`,`remark`,`isenabled`)
+                                VALUES
+                                (@innerid,@codevalue,@codename,@sort,@typekey,@remark,@isenabled);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+        /// <summary>
+        /// 更新基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCode(BaseCodeModel model)
+        {
+            var sql = new StringBuilder("update `base_code` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        /// <summary>
+        /// 获取基础数据代码值key
+        /// </summary>
+        /// <param name="typekey"></param>
+        /// <param name="codename"></param>
+        /// <param name="codevalue"></param>
+        /// <returns></returns>
+        public BaseCodeModel GetCodeByTypeKey(string typekey,string codename,string codevalue)
+        {
+
+            string where = " isenabled=1 and typekey='" +typekey+"'";
+            if (!string.IsNullOrWhiteSpace(codename))
+            {
+                where += $" or codename ='{codename}'";
+            }
+            if (!string.IsNullOrWhiteSpace(codevalue))
+            {
+                where += $" or codevalue ='{codevalue}'";
+            }
+            var sql = $"select typekey,codename,codevalue from base_code  where {where} ";
+            try
+            {
+                var codeModel = Helper.Query<BaseCodeModel>(sql).FirstOrDefault();
+                return codeModel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 获取代码值列表

@@ -27,6 +27,7 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         #region Code
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型列表
         /// </summary>
@@ -121,6 +122,124 @@ namespace CCN.Modules.Base.BusinessComponent
                 errmsg = ""
             };
         }
+        #endregion
+
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeSelectModel> GetCodeList(BaseCodeQueryModel query)
+        {
+            return DataAccess.GetCodeList(query);
+        }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseCodeTypeModel> GetCodeType(string innerid)
+        {
+
+            return DataAccess.GetCodeType(innerid);
+        }
+        /// <summary>
+        /// 获取基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeStatus(string id, int status)
+        {
+            if (string.IsNullOrWhiteSpace(id) || (status != 0 && status != 1))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.UpdateCodeStatus(id, status);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 删除基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCode(string innerid)
+        {
+            if (string.IsNullOrWhiteSpace(innerid))
+            {
+                return JResult._jResult(402, "参数不完整");
+            }
+            var model = DataAccess.DeleteCode(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCodeById(string innerid)
+        {
+            var model = DataAccess.GetCodeById(innerid);
+            return JResult._jResult(model);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCode(BaseCodeModel model)
+        {
+              
+            var test = DataAccess.GetCodeByTypeKey(model.Typekey,model.CodeName,model.CodeValue);
+            if (test.Typekey == model.Typekey)
+            {
+                if (test.CodeName==model.CodeName) {
+                    return new JResult
+                    {
+                        errcode = 400,
+                        errmsg = "代码名称已存在！"
+                    };
+                }
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+            model.IsEnabled = 1;
+            model.Sort = model.CodeValue;
+            var result = DataAccess.AddCode(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCode(BaseCodeModel model)
+        {
+            var test = DataAccess.GetCodeByTypeKey(model.Typekey, model.CodeName, model.CodeValue);
+            if (test.Typekey == model.Typekey)
+            {
+                if (test.CodeName != model.CodeName&&test.CodeValue!=model.CodeValue)
+                {
+                    return new JResult
+                    {
+                        errcode = 400,
+                        errmsg = "更新信息失败！"
+                    };
+                }
+            }
+            var result = DataAccess.UpdateCode(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+
+
         /// <summary>
         /// 获取代码值列表
         /// </summary>

@@ -22,6 +22,7 @@ namespace CCN.Resource.Areas.System.Controllers
         {
             return View();
         }
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型
         /// </summary>
@@ -48,6 +49,34 @@ namespace CCN.Resource.Areas.System.Controllers
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
+        #endregion
+        #region 基础数据代码值
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult BaseCodeList() {
+            return View();
+        }
+        /// <summary>
+        /// 编辑基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult BaseCodeEdit(string innerid) {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        /// <summary>
+        /// 展示基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult BaseCodeView(string innerid) {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion
 
     }
 }

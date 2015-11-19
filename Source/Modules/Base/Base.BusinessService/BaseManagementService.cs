@@ -23,6 +23,7 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         #region Code
+        #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型列表
         /// </summary>
@@ -78,6 +79,73 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.UpdateCodeType(model);
         }
+        #endregion
+
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseCodeSelectModel> GetCodeList(BaseCodeQueryModel query)
+        {
+            return BusinessComponent.GetCodeList(query);
+        }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseCodeTypeModel> GetCodeType(string innerid)
+        {
+            return BusinessComponent.GetCodeType(innerid);
+        }
+        /// <summary>
+        /// 获取基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateCodeStatus(string id, int status)
+        {
+            return BusinessComponent.UpdateCodeStatus(id, status);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCodeById(string innerid)
+        {
+            return BusinessComponent.GetCodeById(innerid);
+        }
+        /// <summary>
+        /// 删除基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteCode(string innerid)
+        {
+            return BusinessComponent.DeleteCode(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCode(BaseCodeModel model)
+        {
+            return BusinessComponent.AddCode(model);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCode(BaseCodeModel model)
+        {
+            return BusinessComponent.UpdateCode(model);
+        }
+
 
         /// <summary>
         /// 获取代码值列表
