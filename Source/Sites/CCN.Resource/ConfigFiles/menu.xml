@@ -20,12 +20,18 @@
     <MenuGroup name="基础模块" icon="menu-icon fa fa-desktop" submenu="true">
       <MenuArray>
         <Menu name="菜单列表" url="/Customer/Customer/CustomerList" info="菜单列表" permission="" submenu="false"/>
-        <Menu name="车辆基本数据" url="" info="车辆新增" permission="" submenu="true">
+        <Menu name="车辆基本数据" url="" info="车辆基本数据" permission="" submenu="true">
           <MenuSubArr>
             <MenuSub name="品牌列表" url="/Base/Base/BaseCarBrandList" info="品牌列表" permission="" icon="menu-icon fa fa-rocket" />
             <MenuSub name="车系列表" url="/Base/Base/BaseCarSeriesList" info="车系列表" permission="" icon="menu-icon glyphicon glyphicon-stats"/>
             <MenuSub name="车型列表" url="/Base/Base/BaseCarModelList" info="车型列表" permission="" icon="menu-icon typcn typcn-location-outline"/>
           </MenuSubArr>
+        </Menu>
+        <Menu name="代码值管理" url="" info="代码值管理" permission="" submenu="true">
+          <MenuSubArr>
+            <MenuSub name="代码类型" url="/System/System/BaseCodeTypeList" info="代码类型" permission="" icon="menu-icon fa fa-align-left" />
+            <MenuSub name="代码值" url="/System/System/BaseCodeList" info="代码值" permission="" icon="menu-icon fa fa-tasks"/>
+            </MenuSubArr>
         </Menu>
       </MenuArray>
     </MenuGroup>
