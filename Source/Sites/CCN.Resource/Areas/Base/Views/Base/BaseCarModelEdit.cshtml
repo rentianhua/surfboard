@@ -6,14 +6,11 @@
 
 <script type="text/javascript">
     var id = "@ViewBag.innerid";
-    var maxid;
-    var brandId;
     $(function () {
         InitBrand();
         InitSeries();
         Init();
     });
-    //初始化品牌
     function InitBrand() {
         $("#selectbrand").empty();
         $("#selectbrand").append("<option value='0'>请选择</option>");
@@ -31,8 +28,6 @@
             }
         });
     }
-
-    //初始化车系
     function InitSeries(brandid) {
         $("#selectseries").empty();
         $("#selectseries").append("<option value='0'>请选择</option>");
@@ -107,7 +102,9 @@
     function Submit() {
         var regyear = /^(\d{4})$/;
         var regprice = /^\d*\.{0,1}\d{0,1}$/;
-        //判断下拉框
+        if (!confirm("确认修改车型信息？")) {
+            return;
+        }
         if ($("#selectbrand").val() == 0) {
             alert("品牌名称不为空！");
             return;
@@ -264,7 +261,7 @@
     <table id="carmodel" class="gridtable">
         <tbody>
             <tr>
-                <td>品牌/车系</td>
+                <td><label class="required">*</label>品牌/车系</td>
                 <td>
                     <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                         <option value="0">请选择</option>
@@ -275,35 +272,35 @@
                 </td>
             </tr>
             <tr>
-                <td>车型名称</td>
+                <td><label class="required">*</label>车型名称</td>
                 <td><input type="text" id="modelname" /></td>
             </tr>
             <tr>
-                <td>指导价</td>
+                <td><label class="required">*</label>指导价</td>
                 <td><input type="text" id="modelprice" /></td>
             </tr>
             <tr>
-                <td>年款</td>
+                <td><label class="required">*</label>年款</td>
                 <td><input type="text" id="modelyear" /></td>
             </tr>
             <tr>
-                <td>最早注册年份</td>
+                <td><label class="required">*</label>最早注册年份</td>
                 <td><input type="text" id="minregyear" /></td>
             </tr>
             <tr>
-                <td>最晚注册年份</td>
+                <td><label class="required">*</label>最晚注册年份</td>
                 <td><input type="text" id="maxregyear" /></td>
             </tr>
             <tr>
-                <td>排量</td>
+                <td><label class="required">*</label>排量</td>
                 <td><input type="text" id="liter" /></td>
             </tr>
             <tr>
-                <td>变速箱类型</td>
+                <td><label class="required">*</label>变速箱类型</td>
                 <td><input type="text" id="geartype" /></td>
             </tr>
             <tr>
-                <td>排放标准</td>
+                <td><label class="required">*</label>排放标准</td>
                 <td><input type="text" id="dischargestandard" /></td>
             </tr>
             <tr>
