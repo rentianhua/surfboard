@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/Content/cover.css" rel="stylesheet" />
 <script>
@@ -438,7 +438,7 @@
                         });
                     }
                     alert("修改成功");
-                    location.reload();
+                    goList();
                 } else {
                     alert("修改失败:" + result.errmsg);
                 }

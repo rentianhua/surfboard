@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarSeriesEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarSeriesEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -13,6 +13,7 @@
     //初始化信息
     function Init() {
         if (id === "") {//添加信息
+            $("#title").html("车系信息添加");
             $.ajax({
                 url: '/api/Base/GetCarSeriesMaxId',
                 type: 'get',
@@ -140,7 +141,7 @@
 </script>
 
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">车系编辑</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">车系信息编辑</div>
     <table id="carseries" class="gridtable">
         <tbody>
             <tr>

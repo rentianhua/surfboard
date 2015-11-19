@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarBrandEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarBrandEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -12,6 +12,7 @@
     });
     function Init() {
         if (id === "") {
+            $("#title").html("品牌信息添加");
             $.ajax({
                 url: '/api/Base/GetCarBrandMaxId',
                 type: 'get',
@@ -94,7 +95,7 @@
 </script>
 
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">品牌信息编辑</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">品牌信息编辑</div>
     <table id="carbrand" class="gridtable">
         <tbody>
             <tr>
