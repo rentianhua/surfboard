@@ -114,7 +114,7 @@
             $.post("/api/Car/DeleteCar", json, function (delres) {
                 if (delres.errcode === 0) {
                     //alert("删除成功");
-                    location.reload();
+                    getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
                 } else {
                     alert("删除失败");
                 }
