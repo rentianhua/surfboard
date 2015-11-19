@@ -800,16 +800,25 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCarModel(BaseCarModelModel model)
         {
-            if (model.Remark == null)
+
+            //验证车型信息是否同名
+            var modelmodel = DataAccess.GetCarModelName(model.Modelname, null);
+            if (modelmodel != null)
             {
-                model.Remark = "  ";
+                if (modelmodel.Modelname == model.Modelname)
+                {
+                    return new JResult
+                    {
+                        errcode = 400,
+                        errmsg = "车型名称相同"
+                    };
+                }
             }
-            //添加信息
             var result = DataAccess.UpdateCarModel(model);
             return new JResult
             {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
+                errcode = 0,
+                errmsg = result
             };
         }
         #endregion

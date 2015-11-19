@@ -199,59 +199,29 @@
                 Remark: $("#remark").val()
             };
             if (id === "") {
-                //添加验证,验证是否存在还可添加
-                $.ajax({
-                    url: '/api/Base/GetCarModelName?modelname=' + $("#modelname").val() + "&innerid=" + null,
-                    type: 'get',
-                    datetype: 'application/json',
-                    async: false,
-                    success: function (data) {
-                        var obj = data.errcode;
-                        if (obj == 0) {
-                            alert("车系名称已存在！");
-                            return;
-                        }
-                        else {
-                            json.Innerid = maxid + 1;
-                            $.post("/api/Base/AddCarModel", json, function (result) {
-                                var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                                alert(str);
-                                getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
-                            });
-                        }
-                    }
+                json.Innerid = maxid + 1;
+                $.post("/api/Base/AddCarModel", json, function (result) {
+                    var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                    alert(str);
+                    getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                 });
             }
             else {
                 json.Innerid = id;
                 $.ajax({
-                    url: '/api/Base/GetCarModelName?modelname=' + $("#modelname").val() + "&innerid=" + id,
-                    type: 'get',
-                    datetype: 'application/json',
+                    url: '/api/Base/UpdateCarModel',
+                    type: 'post',
+                    datatype: 'application/json',
+                    data: json,
                     async: false,
-                    success: function (data) {
-                        var obj = data.errcode;
-                        if (obj == 0) {
-                            alert("车系名称已存在！");
-                            return;
-                        }
-                        else {
-                            $.ajax({
-                                url: '/api/Base/UpdateCarModel',
-                                type: 'post',
-                                datatype: 'application/json',
-                                data: json,
-                                async: false,
-                                success: function (result) {
-                                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                                    alert(str);
-                                    getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
-                                }
-                            });
-                        }
+                    success: function (result) {
+                        var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                        alert(str);
+                        getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                     }
                 });
             }
+
         }
     }
 </script>
