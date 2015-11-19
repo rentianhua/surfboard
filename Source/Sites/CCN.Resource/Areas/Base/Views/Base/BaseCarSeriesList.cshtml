@@ -47,8 +47,8 @@
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + val.Remark + "</td>";
             str += "<td>" +
-                "<a href='/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-                "<a href='/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "'>详情 </a>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                 "<a href='javascript:;' onclick=\"DeleteCarSeries('" + val.Innerid + "');\">删除 </a>" +
                 "<a href='javascript:;' onclick=\"UpdateSeriesStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
@@ -98,7 +98,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                    <a href='/Base/Base/BaseCarSeriesEdit' class="btn btn-primary shiny">添加</a>
+                <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>

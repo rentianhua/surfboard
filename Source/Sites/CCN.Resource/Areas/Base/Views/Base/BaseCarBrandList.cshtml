@@ -26,8 +26,8 @@
             str += "<td>" + val.Logurl + "</td>";
             str += "<td>" + val.Hot + "</td>";
             str += "<td>" +
-               "<a href='/Base/Base/BaseCarBrandEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-               "<a href='/Base/Base/BaseCarBrandView?innerid=" + val.Innerid + "'>详情 </a>" +
+               " <a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+               "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                "<a href='javascript:;' onclick=\"DeleteCarBrand('" + val.Innerid + "');\">删除 </a>" +
                "<a href='javascript:;' onclick=\"UpdateBrandStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
@@ -66,7 +66,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a href='/Base/Base/BaseCarBrandEdit' class="btn btn-primary shiny">添加</a>
+                <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>
