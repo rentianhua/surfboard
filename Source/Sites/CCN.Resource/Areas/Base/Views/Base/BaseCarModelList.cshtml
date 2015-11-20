@@ -10,7 +10,6 @@
         InitSeries();
         QueryList();
     });
-    //初始化品牌
     function InitBrand() {
         $("#selectbrand").empty();
         $("#selectbrand").append("<option value='0'>请选择</option>");
@@ -28,8 +27,6 @@
             }
         });
     }
-
-    //初始化车系
     function InitSeries(brandid) {
         $("#selectseries").empty();
         $("#selectseries").append("<option value='0'>请选择</option>");
@@ -74,8 +71,8 @@
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + val.Remark + "</td>";
             str += "<td>" +
-                "<a href='/Base/Base/BaseCarModelEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-                "<a href='/Base/Base/BaseCarModelView?innerid=" + val.Innerid + "'>详情 </a>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarModelEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarModelView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                 "<a href='javascript:;' onclick=\"DeleteCarModel('" + val.Innerid + "');\">删除 </a>" +
                 "<a href='javascript:;' onclick=\"UpdateModelStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
@@ -94,7 +91,7 @@
         if(!confirm("确认删除！")){
         return;
         }
-        debugger
+        
         $.post("/api/base/DeleteCarModel?innerid=" + innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
             alert(str);
@@ -108,7 +105,7 @@
             <div class="col-lg-4 col-sm-4 col-xs-4">
                 <div class="form-group">
                     <span>
-                        <label for="selectbrand" class="col-sm-4 control-label no-padding-right searchLayout">品牌名称：</label>
+                        <label for="selectbrand" class="col-sm-4 control-label no-padding-right searchLayout">品牌/车系：</label>
                         <span>
                             <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                                 <option value="0">请选择</option>
@@ -131,7 +128,7 @@
 
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                    <a href='/Base/Base/BaseCarModelEdit' class="btn btn-primary shiny">添加</a>
+                <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarModelEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
         </div>
     </div>
@@ -140,48 +137,48 @@
     <table  class="table table-striped table-hover table-bordered" id="carmodellist">
             <thead>
                 <tr>
-                    <td>
+                    <th>
                         序号
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         品牌名称
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         车系名称
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         车型名称
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         指导价
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         年款
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         最早注册年份
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         最晚注册年份
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         排量
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         变速箱类型
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         排放标准
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         是否启用
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         备注
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         操作
-                    </td>
+                    </th>
                 </tr>
             </thead>
             <tbody>

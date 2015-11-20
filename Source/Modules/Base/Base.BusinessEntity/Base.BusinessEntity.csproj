@@ -50,6 +50,7 @@
     <Compile Include="BaseCarModelModel.cs" />
     <Compile Include="BaseCity.cs" />
     <Compile Include="BaseCodeModel.cs" />
+    <Compile Include="BaseCodeTypeModel.cs" />
     <Compile Include="BaseProvince.cs" />
     <Compile Include="BaseCarSeriesModel.cs" />
     <Compile Include="BaseVerification.cs" />

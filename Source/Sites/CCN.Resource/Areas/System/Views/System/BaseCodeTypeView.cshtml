@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "CarSeriesView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    $(function () {
+        Init();
+    });
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCodeTypeById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                $("#Typename").html(obj.Typename);
+                $("#Typekey").html(obj.Typekey);
+                if (obj.Isenabled === 1) {
+                    $("#Isenabled").text("启用中");
+                }
+                else {
+                    $("#Isenabled").text("禁用中");
+                }
+            }
+        });
+    }
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码类型</div>
+    <table id="codetypelist" class="gridtable">
+        <tbody>
+            <tr>
+                <td>代码类型名称</td>
+                <td id="Typename"></td>
+            </tr>
+            <tr>
+                <td>代码类型key</td>
+                <td id="Typekey"></td>
+            </tr>
+            <tr>
+                <td>是否可用</td>
+                <td id="Isenabled"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+

@@ -1,19 +1,16 @@
 ﻿
 @{
-    ViewBag.Title = "CarModelEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarModelEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
     var id = "@ViewBag.innerid";
-    var maxid;
-    var brandId;
     $(function () {
         InitBrand();
         InitSeries();
         Init();
     });
-    //初始化品牌
     function InitBrand() {
         $("#selectbrand").empty();
         $("#selectbrand").append("<option value='0'>请选择</option>");
@@ -31,8 +28,6 @@
             }
         });
     }
-
-    //初始化车系
     function InitSeries(brandid) {
         $("#selectseries").empty();
         $("#selectseries").append("<option value='0'>请选择</option>");
@@ -51,16 +46,6 @@
     }
     function Init() {
         if (id === "") {
-            $.ajax({
-                url: '/api/Base/GetCarModelMaxId',
-                type: 'get',
-                datetype: 'application/json',
-                async: false,
-                success: function (data) {
-                    var obj = data.errmsg;
-                    maxid = obj.MaxId;
-                }
-            });
             return;
         }
         $.ajax({
@@ -105,7 +90,10 @@
     }
     function Submit() {
         var regyear = /^(\d{4})$/;
-        //判断下拉框
+        var regprice = /^\d*\.{0,1}\d{0,1}$/;
+        if (!confirm("确认修改车型信息？")) {
+            return;
+        }
         if ($("#selectbrand").val() == 0) {
             alert("品牌名称不为空！");
             return;
@@ -121,6 +109,12 @@
         if (!$("#modelprice").val()) {
             alert("指导价不为空！");
             return;
+        }
+        else {
+            if (!regprice.test($("#modelprice").val())) {
+                alert("指导价格式输入不正确！");
+                return false;
+            }
         }
         if (!$("#modelyear").val()) {
             alert("年款输入不为空！");
@@ -194,69 +188,48 @@
                 Remark: $("#remark").val()
             };
             if (id === "") {
-                //添加验证,验证是否存在还可添加
-                $.ajax({
-                    url: '/api/Base/GetCarModelName?modelname=' + $("#modelname").val() + "&innerid=" + null,
-                    type: 'get',
-                    datetype: 'application/json',
-                    async: false,
-                    success: function (data) {
-                        var obj = data.errcode;
-                        if (obj == 0) {
-                            alert("车系名称已存在！");
-                            return;
-                        }
-                        else {
-                            json.Innerid = maxid + 1;
-                            $.post("/api/Base/AddCarModel", json, function (result) {
-                                var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                                alert(str);
-                                getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
-                            });
-                        }
+                $.post("/api/Base/AddCarModel", json, function (result) {
+                    var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                    if (result.errmsg != 1) {
+                        alert(result.errmsg);
                     }
+                    else {
+                        alert(str);
+                    }
+                    getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                 });
             }
             else {
                 json.Innerid = id;
                 $.ajax({
-                    url: '/api/Base/GetCarModelName?modelname=' + $("#modelname").val() + "&innerid=" + id,
-                    type: 'get',
-                    datetype: 'application/json',
+                    url: '/api/Base/UpdateCarModel',
+                    type: 'post',
+                    datatype: 'application/json',
+                    data: json,
                     async: false,
-                    success: function (data) {
-                        var obj = data.errcode;
-                        if (obj == 0) {
-                            alert("车系名称已存在！");
-                            return;
+                    success: function (result) {
+                        var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                        if (result.errmsg != 1) {
+                            alert(result.errmsg);
                         }
                         else {
-                            $.ajax({
-                                url: '/api/Base/UpdateCarModel',
-                                type: 'post',
-                                datatype: 'application/json',
-                                data: json,
-                                async: false,
-                                success: function (result) {
-                                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                                    alert(str);
-                                    getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
-                                }
-                            });
+                            alert(str);
                         }
+                        getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                     }
                 });
             }
+
         }
     }
 </script>
 
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">车型信息编辑</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">车型信息编辑</div>
     <table id="carmodel" class="gridtable">
         <tbody>
             <tr>
-                <td>品牌/车系</td>
+                <td><label class="required">*</label>品牌/车系</td>
                 <td>
                     <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                         <option value="0">请选择</option>
@@ -267,35 +240,35 @@
                 </td>
             </tr>
             <tr>
-                <td>车型名称</td>
+                <td><label class="required">*</label>车型名称</td>
                 <td><input type="text" id="modelname" /></td>
             </tr>
             <tr>
-                <td>指导价</td>
+                <td><label class="required">*</label>指导价</td>
                 <td><input type="text" id="modelprice" /></td>
             </tr>
             <tr>
-                <td>年款</td>
+                <td><label class="required">*</label>年款</td>
                 <td><input type="text" id="modelyear" /></td>
             </tr>
             <tr>
-                <td>最早注册年份</td>
+                <td><label class="required">*</label>最早注册年份</td>
                 <td><input type="text" id="minregyear" /></td>
             </tr>
             <tr>
-                <td>最晚注册年份</td>
+                <td><label class="required">*</label>最晚注册年份</td>
                 <td><input type="text" id="maxregyear" /></td>
             </tr>
             <tr>
-                <td>排量</td>
+                <td><label class="required">*</label>排量</td>
                 <td><input type="text" id="liter" /></td>
             </tr>
             <tr>
-                <td>变速箱类型</td>
+                <td><label class="required">*</label>变速箱类型</td>
                 <td><input type="text" id="geartype" /></td>
             </tr>
             <tr>
-                <td>排放标准</td>
+                <td><label class="required">*</label>排放标准</td>
                 <td><input type="text" id="dischargestandard" /></td>
             </tr>
             <tr>

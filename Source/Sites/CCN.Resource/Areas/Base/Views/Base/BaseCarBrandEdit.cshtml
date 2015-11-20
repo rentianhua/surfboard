@@ -1,17 +1,17 @@
 ﻿
 @{
-    ViewBag.Title = "CarBrandEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarBrandEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
     var id = "@ViewBag.innerid";
-    var maxid;
     $(function () {
         Init();
     });
     function Init() {
         if (id === "") {
+            $("#title").html("品牌信息添加");
             $.ajax({
                 url: '/api/Base/GetCarBrandMaxId',
                 type: 'get',
@@ -45,6 +45,9 @@
     }
 
     function Submit() {
+        if (!confirm("确认修改品牌信息？")) {
+            return;
+        }
         if (!$("#brandname").val()) {
             alert("品牌名称不为空！");
             return;
@@ -68,10 +71,13 @@
             Hot: $.trim($("#hot").val()).length === 0 ? 0 : $("#hot").val()
         };
         if (id === "") {
-            json.Innerid = maxid + 1;
             $.post("/api/Base/AddCarBrand", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                alert(str);
+                if (result.errmsg != 1) {
+                    alert(result.errmsg);
+                } else {
+                    alert(str);
+                }
                 getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
             });
         }
@@ -94,15 +100,15 @@
 </script>
 
 <div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">品牌信息编辑</div>
+    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">品牌信息编辑</div>
     <table id="carbrand" class="gridtable">
         <tbody>
             <tr>
-                <td>品牌名称</td>
+                <td><label class="required">*</label>品牌名称</td>
                 <td><input type="text" id="brandname" /></td>
             </tr>
             <tr>
-                <td>首字母</td>
+                <td><label class="required">*</label>首字母</td>
                 <td><input type="text" id="initial" /></td>
             </tr>
             <tr>

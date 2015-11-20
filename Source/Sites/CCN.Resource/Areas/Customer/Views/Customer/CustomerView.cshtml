@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CustomerView";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CustomerView";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -380,7 +380,7 @@
             <td colspan="4" style="text-align:center;">
                 <input type="button" value="审核" class="hide" id="btnAudit"/>
                 <input type="button" value="撤销审核" class="hide" id="btnCancelAudit" />
-                <input type="button" value="返回" onclick="self.location=document.referrer;" />
+                <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
             </td>
         </tr>
     </table>

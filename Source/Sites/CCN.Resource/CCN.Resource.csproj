@@ -122,14 +122,6 @@
       <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Senparc.Weixin, Version=4.3.2.28718, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Senparc.Weixin.dll</HintPath>
-    </Reference>
-    <Reference Include="Senparc.Weixin.MP, Version=13.3.1.32445, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Senparc.Weixin.MP.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -263,6 +255,7 @@
     <Compile Include="Areas\System\Controllers\SystemController.cs" />
     <Compile Include="Areas\System\SystemAreaRegistration.cs" />
     <Compile Include="Common\DefaultController.cs" />
+    <Compile Include="Common\ReadXML.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -448,12 +441,12 @@
     <Content Include="Areas\Base\Views\Base\BaseCarSeriesEdit.cshtml" />
     <Content Include="Areas\Base\Views\Base\BaseCarSeriesView.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustWeChatList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ProductList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ShopEdit.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ShopList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\SettlementList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\SettlementEdit.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\SearchCancelList.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeTypeList.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeTypeView.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeTypeEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeList.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\BaseCodeView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -541,6 +534,7 @@
     <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\LeftMenu.cshtml" />
+    <Content Include="Views\Shared\_Menu.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

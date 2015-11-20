@@ -47,8 +47,8 @@
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + val.Remark + "</td>";
             str += "<td>" +
-                "<a href='/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-                "<a href='/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "'>详情 </a>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                 "<a href='javascript:;' onclick=\"DeleteCarSeries('" + val.Innerid + "');\">删除 </a>" +
                 "<a href='javascript:;' onclick=\"UpdateSeriesStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
@@ -70,7 +70,12 @@
         }
         $.post("/api/Base/DeleteCarSeries?innerid=" + Innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
-            alert(str);
+            if (result.errmsg != 1) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
             getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
         });
     }
@@ -98,7 +103,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                    <a href='/Base/Base/BaseCarSeriesEdit' class="btn btn-primary shiny">添加</a>
+                <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>
@@ -109,27 +114,27 @@
     <table class="table table-striped table-hover table-bordered" id="carserieslist">
         <thead>
             <tr role="row">
-                <td>
+                <th>
                     序号
-                </td>
-                <td>
+                </th>
+                <th>
                     品牌名称
-                </td>
-                <td>
+                </th>
+                <th>
                     车系名称
-                </td>
-                <td>
+                </th>
+                <th>
                     车系组 进口/国产
-                </td>
-                <td>
+                </th>
+                <th>
                     是否启用
-                </td>
-                <td>
+                </th>
+                <th>
                     备注
-                </td>
-                <td>
+                </th>
+                <th>
                     操作
-                </td>
+                </th>
             </tr>
         </thead>
         <tbody>

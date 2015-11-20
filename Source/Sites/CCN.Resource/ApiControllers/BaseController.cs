@@ -36,6 +36,167 @@ namespace CCN.Resource.ApiControllers
         }
 
         #region Code
+        #region 基础数据代码类型
+        /// <summary>
+        /// 获取基础数据代码类型列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeTypeList")]
+        [HttpPost]
+        public BasePageList<BaseCodeTypeListModel> GetCodeTypeList([FromBody] BaseCodeTypeQueryModel query)
+        {
+            return _baseservice.GetCodeTypeList(query);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateCodeTypeStatus")]
+        [HttpPost]
+        public JResult UpdateCodeTypeStatus(string id, int status)
+        {
+            return _baseservice.UpdateCodeTypeStatus(id, status);
+        }
+        /// <summary>
+        /// 删除基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCodeType")]
+        [HttpPost]
+        public JResult DeleteCodeType(string innerid)
+        {
+            return _baseservice.DeleteCodeType(innerid);
+        }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeTypeById")]
+        [HttpGet]
+        public JResult GetCodeTypeById(string innerid)
+        {
+            return _baseservice.GetCodeTypeById(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCodeType")]
+        [HttpPost]
+        public JResult AddCodeType([FromBody] BaseCodeTypeModel model)
+        {
+            return _baseservice.AddCodeType(model);
+        }
+        /// <summary>
+        /// 更新基础数据代码类型
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCodeType")]
+        [HttpPost]
+        public JResult UpdateCodeType([FromBody] BaseCodeTypeModel model)
+        {
+            return _baseservice.UpdateCodeType(model);
+        }
+        #endregion
+
+        /// <summary>
+        /// 获取基础数据代码值列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeList")]
+        [HttpPost]
+        public BasePageList<BaseCodeSelectModel> GetCodeList([FromBody] BaseCodeQueryModel query)
+        {
+            return _baseservice.GetCodeList(query);
+        }
+        /// <summary>
+        /// 获取基础数据代码类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeType")]
+        [HttpGet]
+        public JResult GetCodeType(string innerid = null)
+        {
+            var list = _baseservice.GetCodeType(innerid);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
+        }
+        /// <summary>
+        /// 获取基础数据代码值状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateCodeStatus")]
+        [HttpPost]
+        public JResult UpdateCodeStatus(string id, int status)
+        {
+            return _baseservice.UpdateCodeStatus(id, status);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCode")]
+        [HttpPost]
+        public JResult DeleteCode(string innerid)
+        {
+            return _baseservice.DeleteCode(innerid);
+        }
+        /// <summary>
+        /// 获取基础数据代码值
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCodeById")]
+        [HttpGet]
+        public JResult GetCodeById(string innerid)
+        {
+            return _baseservice.GetCodeById(innerid);
+        }
+        /// <summary>
+        /// 添加基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCode")]
+        [HttpPost]
+        public JResult AddCode([FromBody] BaseCodeModel model)
+        {
+            return _baseservice.AddCode(model);
+        }
+        /// <summary>
+        /// 更新基础数据代码值
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCode")]
+        [HttpPost]
+        public JResult UpdateCode([FromBody] BaseCodeModel model)
+        {
+            return _baseservice.UpdateCode(model);
+        }
 
         /// <summary>
         /// 获取代码值列表
@@ -48,7 +209,7 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.GetCodeByTypeKey(typekey);
         }
-
+        
         #endregion
 
         #region 验证码
@@ -316,27 +477,74 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.UpdateCarBrand(model);
         }
+        #endregion
+        #region 车系
         /// <summary>
-        /// 获取品牌ID最大值
+        /// 分页查询车系
         /// </summary>
+        /// <param name="query">查询条件</param>
         /// <returns></returns>
-        [Route("GetCarBrandMaxId")]
-        [HttpGet]
-        public JResult GetCarBrandMaxId()
+        [Route("GetCarSeriesList")]
+        [HttpPost]
+        public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList([FromBody] BaseCarSeriesQueryModel query)
         {
-            return _baseservice.GetCarBrandMaxId();
+            return _baseservice.GetCarSeriesList(query);
         }
         /// <summary>
-        /// 
+        /// 获取车系信息
         /// </summary>
-        /// <param name="brandname"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        [Route("GetCarBrandName")]
+        [Route("GetCarSeriesById")]
         [HttpGet]
-        public JResult GetCarBrandName(string brandname, string innerid)
+        public JResult GetCarSeriesById(string innerid)
         {
-            return _baseservice.GetCarBrandName(brandname, innerid);
+            return _baseservice.GetCarSeriesById(innerid);
+        }
+        /// <summary>
+        /// 更新车系状态
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateSeriesStatus")]
+        [HttpPost]
+        public JResult UpdateSeriesStatus(string carid, int status)
+        {
+            return _baseservice.UpdateSeriesStatus(carid, status);
+        }
+        /// <summary>
+        /// 添加车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarSeries")]
+        [HttpPost]
+        public JResult AddCarSeries([FromBody] BaseCarSeriesModel model)
+        {
+            return _baseservice.AddCarSeries(model);
+        }
+        /// <summary>
+        /// 删除车系信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteCarSeries")]
+        [HttpPost]
+        public JResult DeleteCarSeries(string innerid)
+        {
+            return _baseservice.DeleteCarSeries(innerid);
+        }
+        /// <summary>
+        /// 更新车系信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCarSeries")]
+        [HttpPost]
+        public JResult UpdateCarSeries([FromBody] BaseCarSeriesModel model)
+        {
+            return _baseservice.UpdateCarSeries(model);
         }
         #endregion
         #region 车型
@@ -407,119 +615,8 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.UpdateCarModel(model);
         }
-        /// <summary>
-        /// ID最大值
-        /// </summary>
-        /// <returns></returns>
-        [Route("GetCarModelMaxId")]
-        [HttpGet]
-        public JResult GetCarModelMaxId()
-        {
-            return _baseservice.GetCarModelMaxId();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="modelname"></param>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        [Route("GetCarModelName")]
-        [HttpGet]
-        public JResult GetCarModelName(string modelname, string innerid)
-        {
-            return _baseservice.GetCarModelName(modelname, innerid);
-        }
         #endregion
-        #region 车系
-        /// <summary>
-        /// 分页查询车系
-        /// </summary>
-        /// <param name="query">查询条件</param>
-        /// <returns></returns>
-        [Route("GetCarSeriesList")]
-        [HttpPost]
-        public BasePageList<BaseCarSeriesListViewModel> GetCarSeriesList([FromBody] BaseCarSeriesQueryModel query)
-        {
-            return _baseservice.GetCarSeriesList(query);
-        }
-        /// <summary>
-        /// 获取车系信息
-        /// </summary>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        [Route("GetCarSeriesById")]
-        [HttpGet]
-        public JResult GetCarSeriesById(string innerid)
-        {
-            return _baseservice.GetCarSeriesById(innerid);
-        }
-        /// <summary>
-        /// 更新车系状态
-        /// </summary>
-        /// <param name="carid"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        [Route("UpdateSeriesStatus")]
-        [HttpPost]
-        public JResult UpdateSeriesStatus(string carid, int status)
-        {
-            return _baseservice.UpdateSeriesStatus(carid, status);
-        }
-        /// <summary>
-        /// 添加车系信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [Route("AddCarSeries")]
-        [HttpPost]
-        public JResult AddCarSeries([FromBody] BaseCarSeriesModel model)
-        {
-            return _baseservice.AddCarSeries(model);
-        }
-        /// <summary>
-        /// 删除车系信息
-        /// </summary>
-        /// <param name="innerid"></param>
-        /// <returns></returns>
-        [Route("DeleteCarSeries")]
-        [HttpPost]
-        public JResult DeleteCarSeries(string innerid)
-        {
-            return _baseservice.DeleteCarSeries(innerid);
-        }
-        /// <summary>
-        /// 更新车系信息
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [Route("UpdateCarSeries")]
-        [HttpPost]
-        public JResult UpdateCarSeries([FromBody] BaseCarSeriesModel model)
-        {
-            return _baseservice.UpdateCarSeries(model);
-        }
-        /// <summary>
-        /// ID最大值
-        /// </summary>
-        /// <returns></returns>
-        [Route("GetCarSeriesMaxId")]
-        [HttpGet]
-        public JResult GetCarSeriesMaxId()
-        {
-            return _baseservice.GetCarSeriesMaxId();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="seriesname"></param>
-        /// <returns></returns>
-        [Route("GetCarSeriesName")]
-        [HttpGet]
-        public JResult GetCarSeriesName(string seriesname, string innerid)
-        {
-            return _baseservice.GetCarSeriesName(seriesname, innerid);
-        }
-        #endregion
+        
         /// <summary>
         ///     上传文件
         /// </summary>
