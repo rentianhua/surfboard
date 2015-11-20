@@ -75,8 +75,9 @@
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 if (result.errmsg != 1) {
                     alert(result.errmsg);
+                } else {
+                    alert(str);
                 }
-                alert(str);
                 getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
             });
         }

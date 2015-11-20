@@ -79,7 +79,9 @@
                             if (result.errmsg != 1) {
                                 alert(result.errmsg);
                             }
-                            alert(str);
+                            else {
+                                alert(str);
+                            }
                             getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
                         });
                     }
@@ -130,7 +132,7 @@
             </tr>
             <tr>
                 <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');" /></td>
             </tr>
         </tbody>
     </table>
