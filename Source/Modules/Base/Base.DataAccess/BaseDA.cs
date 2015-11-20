@@ -176,8 +176,20 @@ namespace CCN.Modules.Base.DataAccess
         public string GetCodeTypeByTypeKey(string typekey)
         {
             string  result;
-            const string sql = "select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
+            const string sql = @"select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
             result = Helper.ExecuteScalar<string>(sql,new { typekey});
+            return result;
+        }
+        /// <summary>
+        /// 验证CodeType下是否还有Code
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public string VerifyCodeType(string innerid)
+        {
+            string result;
+            const string sql = @"select b.codename from base_code_type as a left join base_code as b on a.typekey=b.typekey where a.innerid=@innerid;";
+            result = Helper.ExecuteScalar<string>(sql, new { innerid });
             return result;
         }
         #endregion
@@ -191,7 +203,7 @@ namespace CCN.Modules.Base.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"base_code as a left join base_code_type as b on a.typekey=b.typekey ";
-            const string fields = "a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,remark,b.typename";
+            const string fields = "a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,ifnull(remark,'') remark,b.typename";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc,b.typename asc " : query.Order;
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.Typekey))
@@ -350,11 +362,11 @@ namespace CCN.Modules.Base.DataAccess
             string where = " isenabled=1 and typekey='" +typekey+"'";
             if (!string.IsNullOrWhiteSpace(codename))
             {
-                where += $" or codename ='{codename}'";
+                where += $" and codename ='{codename}'";
             }
             if (!string.IsNullOrWhiteSpace(codevalue))
             {
-                where += $" or codevalue ='{codevalue}'";
+                where += $" and codevalue !='{codevalue}'";
             }
             var sql = $"select typekey,codename,codevalue from base_code  where {where} ";
             try
