@@ -22,8 +22,8 @@
             str += "<td>" + val.Typekey + "</td>";
             str += "<td>" + (val.Isenabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" +
-               "<a href='/System/System/BaseCodeTypeEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-               "<a href='/System/System/BaseCodeTypeView?innerid=" + val.Innerid + "'>详情 </a>" +
+               " <a onclick=\"getBodyHtml('mainbody', '/System/System/BaseCodeTypeEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+               "<a onclick=\"getBodyHtml('mainbody', '/System/System/BaseCodeTypeView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                "<a href='javascript:;' onclick=\"DeleteCarBrand('" + val.Innerid + "');\">删除 </a>" +
                "<a href='javascript:;' onclick=\"UpdateCodeTypeStatus('" + val.Innerid + "'," + val.Isenabled + ");\">" + (val.Isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
