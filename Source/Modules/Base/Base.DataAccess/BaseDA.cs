@@ -683,7 +683,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="brandname"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public BaseCarModelModel GetCarBrandName(string brandname, string innerid)
+        public BaseCarBrandModel GetCarBrandName(string brandname, string innerid)
         {
             string where = " isenabled=1 and brandname='" + brandname + "'";
             if (!string.IsNullOrWhiteSpace(innerid))
@@ -693,13 +693,24 @@ namespace CCN.Modules.Base.DataAccess
             var sql = $"select brandname,innerid from base_carbrand where {where} ";
             try
             {
-                var carbrandModel = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
+                var carbrandModel = Helper.Query<BaseCarBrandModel>(sql).FirstOrDefault();
                 return carbrandModel;
             }
             catch (Exception ex)
             {
                 return null;
             }
+        }
+        /// <summary>
+        /// 验证品牌下是否还有车系
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public string VerifyCarBrand(string innerid) {
+            string result;
+            const string sql = @"select b.seriesname from base_carbrand as a left join base_carseries as b on a.innerid=b.brandid where a.innerid=@innerid;";
+            result = Helper.Execute<string>(sql,new { innerid});
+            return result;
         }
         #endregion
         #region 車系信息
@@ -877,6 +888,18 @@ namespace CCN.Modules.Base.DataAccess
             {
                 return null;
             }
+        }
+        /// <summary>
+        /// 验证车系下面还有车型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public string VerifyCarSeries(string innerid)
+        {
+            string result;
+            const string sql = @"select b.modelname from base_carseries as a left join base_carmodel as b on a.innerid=b.seriesid where a.innerid=@innerid;";
+            result = Helper.Execute<string>(sql, new { innerid });
+            return result;
         }
         #endregion
         #region 车型信息

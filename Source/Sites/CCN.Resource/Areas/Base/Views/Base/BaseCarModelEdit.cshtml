@@ -46,17 +46,6 @@
     }
     function Init() {
         if (id === "") {
-            $("#title").html("车型信息添加");
-            $.ajax({
-                url: '/api/Base/GetCarModelMaxId',
-                type: 'get',
-                datetype: 'application/json',
-                async: false,
-                success: function (data) {
-                    var obj = data.errmsg;
-                    maxid = obj.MaxId;
-                }
-            });
             return;
         }
         $.ajax({
@@ -199,10 +188,14 @@
                 Remark: $("#remark").val()
             };
             if (id === "") {
-                json.Innerid = maxid + 1;
                 $.post("/api/Base/AddCarModel", json, function (result) {
                     var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                    alert(str);
+                    if (result.errmsg != 1) {
+                        alert(result.errmsg);
+                    }
+                    else {
+                        alert(str);
+                    }
                     getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                 });
             }
@@ -216,7 +209,12 @@
                     async: false,
                     success: function (result) {
                         var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                        alert(str);
+                        if (result.errmsg != 1) {
+                            alert(result.errmsg);
+                        }
+                        else {
+                            alert(str);
+                        }
                         getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');
                     }
                 });

@@ -577,12 +577,18 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCarBrand(string innerid)
         {
-            if (string.IsNullOrWhiteSpace(innerid))
-            {
-                return JResult._jResult(402, "参数不完整");
+            var brandmodel = DataAccess.VerifyCarBrand(innerid);
+            if (brandmodel!=null) {
+                return new JResult {
+                    errcode=400,
+                    errmsg="品牌下有车系，删除失败！"
+                };
             }
             var model = DataAccess.DeleteCarBrand(innerid);
-            return JResult._jResult(model);
+            return new JResult {
+                errcode=0,
+                errmsg=model
+            };
         }
         /// <summary>
         /// 更新品牌信息
@@ -679,12 +685,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCarSeries(string innerid)
         {
-            if (string.IsNullOrWhiteSpace(innerid))
+            var seriesmodel = DataAccess.VerifyCarSeries(innerid);
+            if (seriesmodel != null)
             {
-                return JResult._jResult(402, "参数不完整");
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "车系下有车型，删除失败！"
+                };
             }
             var model = DataAccess.DeleteCarSeries(innerid);
-            return JResult._jResult(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
         }
         /// <summary>
         /// 更新车系信息
