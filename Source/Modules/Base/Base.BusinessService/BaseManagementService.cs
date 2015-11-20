@@ -445,6 +445,18 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.UpdateCarModel(model);
         }
         #endregion
-     
+
+        #region 获取系统后台基础信息
+        /// <summary>
+        /// 获取登录人信息
+        /// </summary>
+        /// <param name="loginname"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(string loginname, string password)
+        {
+            return BusinessComponent.GetUserInfo(loginname, password);
+        }
+        #endregion
     }
 }

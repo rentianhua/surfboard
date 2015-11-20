@@ -852,6 +852,21 @@ namespace CCN.Modules.Base.BusinessComponent
             };
         }
         #endregion
-      
+
+        #region 获取系统后台基础信息
+
+        /// <summary>
+        /// 获取登录人信息
+        /// </summary>
+        /// <param name="loginname"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(string loginname, string password)
+        {
+            var model = DataAccess.GetUserInfo(loginname, password);
+            return JResult._jResult(model);
+        }
+        #endregion
+
     }
 }
