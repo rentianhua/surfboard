@@ -41,4 +41,20 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// </summary>
         public IEnumerable<dynamic> value5 { get; set; }
     }
+
+    /// <summary>
+    /// 数据分析查询实体
+    /// </summary>
+    public class DataQueryModel
+    {
+        /// <summary>
+        /// 开始时间
+        /// </summary>
+        public DateTime starttime{get;set;}
+
+        /// <summary>
+        /// 结束时间
+        /// </summary>
+        public DateTime endtime { get; set; }
+    }
 }
