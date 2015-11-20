@@ -124,7 +124,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public int CanedCount { get; set; }
 
         /// <summary>
-        /// 已核销数
+        /// 总计
         /// </summary>
         public decimal TotalPrice { get; set; }
     }

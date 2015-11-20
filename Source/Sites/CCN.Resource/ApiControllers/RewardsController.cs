@@ -200,8 +200,8 @@ namespace CCN.Resource.ApiControllers
         /// <param name="model"></param>
         /// <returns></returns>
         [Route("CancelCoupon")]
-        [HttpGet]
-        public JResult CancelCoupon(CancelModel model)
+        [HttpPost]
+        public JResult CancelCoupon([FromBody]CancelModel model)
         {
             return _rewardsservice.CancelCoupon(model);
         }

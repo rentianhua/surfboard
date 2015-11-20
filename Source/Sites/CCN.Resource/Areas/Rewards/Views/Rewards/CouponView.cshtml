@@ -42,6 +42,9 @@
                 $("#title").html(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").html(obj.Amount);
+                $("#buyprice").html(obj.BuyPrice);
+                $("#costprice").html(obj.CostPrice);
+                $("#needpoint").html(obj.Needpoint);
                 $("#count").html(obj.Maxcount + "/" + obj.Count);
                 $("#codetype").html(obj.Codetype);
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
@@ -196,6 +199,14 @@
                 <td id="amount"></td>
             </tr>
             <tr>
+                <td>购买价</td>
+                <td id="buyprice"></td>
+            </tr>
+            <tr>
+                <td>成本价</td>
+                <td id="costprice"></td>
+            </tr>
+            <tr>
                 <td>有效期</td>
                 <td>
                     <div>
@@ -219,17 +230,21 @@
                     </div>
                 </td>
             </tr>
+        <tr>
+            <td>库存</td>
+            <td>
+                <label id="count"></label>
+                <a href="javascript:;" onclick="$('#controls').removeClass('hide');">增加</a>
+                <div id="controls" class="margintop hide">
+                    <input type="text" id="addcount"/>
+                    <input type="button" value="确定" onclick="AddStock();"/>
+                    <input type="button" value="取消" onclick="$('#controls').addClass('hide');"/>
+                </div>
+            </td>
+        </tr>
             <tr>
-                <td>库存</td>
-                <td>
-                    <label id="count"></label>
-                    <a href="javascript:;" onclick="$('#controls').removeClass('hide');">增加</a>
-                    <div id="controls" class="margintop hide">
-                        <input type="text" id="addcount" />
-                        <input type="button" value="确定" onclick="AddStock();" />
-                        <input type="button" value="取消" onclick="$('#controls').addClass('hide');" />
-                    </div>
-                </td>
+                <td>兑换所需积分</td>
+                <td id="needpoint"></td>
             </tr>
             <tr>
                 <td>Code展示类</td>

@@ -57,10 +57,13 @@
                 $("#title").val(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").val(obj.Amount);
+                $("#buyprice").val(obj.BuyPrice);
+                $("#costprice").val(obj.CostPrice);
                 $("#selectshop").selectVal(obj.Shopid);
 
                 $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
                 $("#codetype").val(obj.Codetype);
+                $("#needpoint").val(obj.Needpoint);
 
                 $("#vtypeTd")
                     .children().prop("disabled", true)
@@ -90,10 +93,13 @@
             Title: $("#title").val(),
             Logourl: "",
             Amount: $("#amount").val(),
+            BuyPrice: $("#buyprice").val(),
+            CostPrice: $("#costprice").val(),
             Vtype: vtype,
             Maxcount: $("#count").val(),
             Codetype: $("#codetype").val(),
-            Shopid: $("#selectshop").val()
+            Shopid: $("#selectshop").val(),
+            Needpoint: $("#needpoint").val()
         };
 
         if (vtype === "1") { //有效时间范围
@@ -144,10 +150,7 @@
             result = res;
         });
 
-        if (result === "0") {
-            alert('请上传图片');
-            return false;
-        } else if (result === "-1") {
+        if (result === "-1") {
             alert('图片格式不正确');
             return false;
         } else if (result === "-2") {
@@ -158,16 +161,26 @@
             return false;
         }
 
-        json.Logourl = result;
-
         if (id === "") {
+            if (result === "0") {
+                alert('请上传图片');
+                return false;
+            }
+
+            json.Logourl = result;
+            
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
                 location.href = "/rewards/rewards/couponlist";
             });
         } else {
-
+            if (result === "0") {
+                json.Logourl = null;
+            } else {
+                json.Logourl = result;
+            }
+            
             json.Innerid = id;
             $.ajax({
                 url: '/api/Rewards/UpdateCoupon',
@@ -229,7 +242,19 @@
             <tr>
                 <td>面值</td>
                 <td>
-                    <input type="datetime" id="amount" />
+                    <input type="datetime" id="amount"/>
+                </td>
+            </tr>
+            <tr>
+                <td>购买价</td>
+                <td>
+                    <input type="datetime" id="buyprice"/>
+                </td>
+            </tr>
+            <tr>
+                <td>成本价</td>
+                <td>
+                    <input type="datetime" id="costprice" />
                 </td>
             </tr>
             <tr>
@@ -250,10 +275,17 @@
                     </div>
                 </td>
             </tr>
+        <tr>
+            <td>最大库存</td>
+            <td>
+                <input type="text" id="count" maxlength="8"/>
+            </td>
+        </tr>
             <tr>
-                <td>最大库存</td>
+                <td>兑换所需积分</td>
                 <td>
-                    <input type="text" id="count" maxlength="8" />
+                    <input type="text" id="needpoint" maxlength="5"/>
+                    0或空表示不可兑换
                 </td>
             </tr>
             <tr>

@@ -89,6 +89,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Codetype { get; set; }
 
         /// <summary>
+        /// 兑换所需积分（0或空 为不可兑换）
+        /// </summary>
+        public int? Needpoint { get; set; }
+
+        /// <summary>
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
