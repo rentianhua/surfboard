@@ -197,13 +197,13 @@ namespace CCN.WebAPI.ApiControllers
         /// <summary>
         /// 礼券核销
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [Route("CancelCoupon")]
         [HttpGet]
-        public JResult CancelCoupon(string code)
+        public JResult CancelCoupon(CancelModel model)
         {
-            return _rewardsservice.CancelCoupon(code);
+            return _rewardsservice.CancelCoupon(model);
         }
 
         /// <summary>
@@ -257,9 +257,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("ShopLogin")]
         [HttpGet]
-        public JResult ShopLogin(string loginname, string password)
+        public JResult ShopLogin(string shopcode, string password)
         {
-            return _rewardsservice.ShopLogin(loginname, password);
+            return _rewardsservice.ShopLogin(shopcode, password);
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetSettLogPageList")]
         [HttpPost]
-        public BasePageList<SettlementLogModel> GetSettLogPageList([FromBody] SettlementLogQueryModel query)
+        public BasePageList<SettlementLogViewModel> GetSettLogPageList([FromBody] SettlementLogQueryModel query)
         {
             return _rewardsservice.GetSettLogPageList(query);
         }

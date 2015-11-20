@@ -1,0 +1,252 @@
+﻿
+@{
+    //ViewBag.Title = "SettlementEdit";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<style type="text/css">
+
+</style>
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+    var pics = "";
+
+    $(function () {
+        InitShop();
+        Init();
+    });
+
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/Rewards/GetSettLogById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function(data) {
+
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                $("#selectshop").selectVal(obj.Shopid);
+                $("#setttotal").val(obj.SettTotal);
+                $("#setttime").val(Dateformat(obj.SettTime, "yyyy-MM-dd"));
+                $("#settcyclestart").val(Dateformat(obj.SettCycleStart, "yyyy-MM-dd"));
+                $("#settcycleend").val(Dateformat(obj.SettCycleEnd, "yyyy-MM-dd"));
+                $("#settserialnum").val(obj.SettSerialNum);
+                $("#settaccount").val(obj.SettAccount);
+
+                pics = obj.Pictures;
+                if (pics !== "") {
+                    var arrPic = obj.Pictures.split(",");
+                    $.each(arrPic, function (k, v) {
+                        $("#imgList").append("<div style='vertical-align:top'><img style=\"max-width: 150px;max-height:150px;margin-top:5px\" src=\"" + getQiniuUrl(v) + "\" /><span style='cursor:pointer' onclick=\"DeletePicture('" + v + "',this)\"> X </span></div>");
+                    });
+                }
+            }
+        });
+    }
+
+    function Submit() {
+
+        var json = {
+            Shopid: $("#selectshop").val(),
+            SettTotal: $("#setttotal").val(),
+            SettTime: $("#setttime").val(),
+            SettCycleStart: $("#settcyclestart").val(),
+            SettCycleEnd: $("#settcycleend").val(),
+            SettSerialNum: $("#settserialnum").val(),
+            SettAccount: $("#settaccount").val(),
+            Pictures:""
+        };
+
+        if (json.Shopid === "0") {
+            alert('请选择商户'); return false;
+        }
+
+        if (json.SettTotal === "") {
+            alert('请填写金额'); return false;
+        }
+
+        if (json.SettTime === "") {
+            alert('请填写时间'); return false;
+        }
+
+        if (json.SettCycleStart === "") {
+            alert('请选择周期开始时间'); return false;
+        }
+        if (json.SettCycleEnd === "") {
+            alert('请选择周期结束时间'); return false;
+        }
+
+        if (json.SettSerialNum === "") {
+            alert('请填写银行交易流水号'); return false;
+        }
+
+        var keysRes;
+        uploadfile("pictures", 1024 * 2, "", "sett_pic", function (res) {
+            keysRes = res;
+        }, null, 5);
+
+        if (keysRes === "-1") {
+            alert('图片格式不正确');
+            return false;
+        } else if (keysRes === "-2") {
+            alert('上传异常');
+            return false;
+        } else if (keysRes === "-3") {
+            alert('文件大小超出');
+            return false;
+        } else if (keysRes === "-4") {
+            alert('请最多上传5张图片');
+            return false;
+        }
+
+        if (id === "") {
+
+            if (keysRes === "0") {
+                json.Pictures = "";
+            } else {
+                json.Pictures = keysRes;
+            }
+
+            $.post("/api/Rewards/AddSettLog", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(str);
+                goList();
+            });
+        } else {
+
+            if (keysRes === "0") {
+                json.Pictures = null;
+            }  else {
+                json.Pictures = pics === "" ? keysRes : (pics + "," + keysRes);
+            }
+            
+            json.Innerid = id;
+
+            $.ajax({
+                url: '/api/Rewards/UpdateSettLog',
+                type: 'put',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function(result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(str);
+                    goList();
+                }
+            });
+        }
+    }
+
+    function DeletePicture(pic, obj) {
+
+        if (!confirm("确定删除？")) {
+            return;
+        }
+
+        $.ajax({
+            url: "/api/Rewards/DeleteSettPicture?innerid=" + id + "&pic=" + pic,
+            type: 'delete',
+            datatype: 'application/json',
+            async: false,
+            success: function(data) {
+                if (data.errcode === 0) {
+                    $(obj).parent().remove();
+                }
+            }
+        });
+    }
+
+    function goList() {
+        //getBodyHtml('mainbody', "/rewards/rewards/settlementlist");
+        location.href = "/rewards/rewards/settlementlist";
+    }
+
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">结算记录编辑</div>
+    <table id="coupon" class="gridtable">
+        <tbody>
+            <tr>
+                <td>商户<label class="required">*</label></td>
+                <td>
+                    <select id="selectshop">
+                        <option value="0">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>结算时间<label class="required">*</label></td>
+                <td>
+                    <input type="text" id="setttime" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                </td>
+            </tr>
+            <tr>
+                <td>结算金额<label class="required">*</label></td>
+                <td>
+                    <input type="text" id="setttotal" />
+                </td>
+            </tr>
+            <tr>
+                <td>结算周期<label class="required">*</label></td>
+                <td>
+                    <input type="text" id="settcyclestart" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"/> -
+                    <input type="text" id="settcycleend" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                </td>
+            </tr>
+            <tr>
+                <td>银行交易流水号<label class="required">*</label></td>
+                <td>
+                    <input type="text" id="settserialnum" maxlength="50" />
+                </td>
+            </tr>
+            <tr>
+                <td>流入银行账户号</td>
+                <td>
+                    <input type="text" id="settaccount" maxlength="50" />
+                </td>
+            </tr>
+            <tr>
+                <td>上传截图</td>
+                <td>
+                    <div class="" id="imgList">
+                        <input type="file" multiple="" id="pictures" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="保存" onclick="Submit()" />
+                    <input type="button" value="返回" onclick="goList();" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+

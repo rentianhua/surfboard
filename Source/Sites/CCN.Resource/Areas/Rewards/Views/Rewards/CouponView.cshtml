@@ -38,14 +38,14 @@
 
                 var obj = data.errmsg;
                 CardModel = obj;
-                 
+
                 $("#title").html(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").html(obj.Amount);
                 $("#count").html(obj.Maxcount + "/" + obj.Count);
                 $("#codetype").html(obj.Codetype);
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
-                
+
                 if (obj.Vtype === 1) {
                     var vstart = Dateformat(obj.Vstart, "yyyy-MM-dd");
                     var vend = Dateformat(obj.Vstart, "yyyy-MM-dd");
@@ -104,7 +104,7 @@
 
             json.Vstart = vstart;
             json.Vend = vend;
-            
+
         } else {
             if ($.trim(value1).length === 0) {
                 alert("请填写开始生效时间");
@@ -173,11 +173,9 @@
                 location.reload();
             });
         }
-        
+
     }
-    function goCouponList() {
-        getBodyHtml('mainbody', "/rewards/rewards/couponlist");
-    }
+
 </script>
 <div>
     <div style="font-size:18px;font-weight:bold;text-align:center">礼券详情</div>
@@ -190,7 +188,7 @@
             <tr>
                 <td>Logo</td>
                 <td>
-                    <img id="logoimg" style="max-width: 150px;max-height:150px" src=""/>
+                    <img id="logoimg" style="max-width: 150px;max-height:150px" src="" />
                 </td>
             </tr>
             <tr>
@@ -208,15 +206,15 @@
                         固定日期
                         <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
                         <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
-                        <input type="button" value="确定" onclick="AddDelay(1);"/>
-                        <input type="button" value="取消" onclick="CancelDelay();"/>
+                        <input type="button" value="确定" onclick="AddDelay(1);" />
+                        <input type="button" value="取消" onclick="CancelDelay();" />
                     </div>
                     <div id="divv2" class="margintop hide">
                         领取后
                         <select id="selectvalue1"></select>
                         生效 ,有效天数
                         <select id="selectvalue2"></select>
-                        <input type="button" value="确定" onclick="AddDelay(2);"/>
+                        <input type="button" value="确定" onclick="AddDelay(2);" />
                         <input type="button" value="取消" onclick="CancelDelay();" />
                     </div>
                 </td>
@@ -228,7 +226,7 @@
                     <a href="javascript:;" onclick="$('#controls').removeClass('hide');">增加</a>
                     <div id="controls" class="margintop hide">
                         <input type="text" id="addcount" />
-                        <input type="button" value="确定" onclick="AddStock();"/>
+                        <input type="button" value="确定" onclick="AddStock();" />
                         <input type="button" value="取消" onclick="$('#controls').addClass('hide');" />
                     </div>
                 </td>
@@ -257,7 +255,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="button" value="返回" onclick="goCouponList();" />
+                    <input type="button" value="返回" onclick="location.href = '/rewards/rewards/couponlist';" />
                 </td>
             </tr>
         </tbody>

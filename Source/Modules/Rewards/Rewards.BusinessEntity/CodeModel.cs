@@ -55,6 +55,17 @@ namespace CCN.Modules.Rewards.BusinessEntity
     /// <summary>
     /// 
     /// </summary>
+    public class CodeCancelQueryModel : CodeModel
+    {
+        /// <summary>
+        /// 商户id
+        /// </summary>
+        public string Shopid { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class CardCancelSummaryModel
     {
         /// <summary>
@@ -137,5 +148,21 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 周期结束时间
         /// </summary>
         public DateTime? EndTime { get; set; }
+    }
+
+    /// <summary>
+    /// 核销model
+    /// </summary>
+    public class CancelModel
+    {
+        /// <summary>
+        /// 商户id
+        /// </summary>
+        public string Shopid { get; set; }
+
+        /// <summary>
+        /// 礼券code
+        /// </summary>
+        public string Code { get; set; }
     }
 }
