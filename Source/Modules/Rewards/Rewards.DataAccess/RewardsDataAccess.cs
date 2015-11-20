@@ -117,7 +117,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string sqlISent =
                 @"insert into coupon_sent(innerid, cardid, custid, isreceive, createdtime, receivetime, sourceid) values (uuid(), @cardid, @custid, 1, @createdtime, @receivetime, @sourceid);";
             const string sqlIRecord =
-                @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 100, @sourceid, @point, @remark, null, @createdtime);";
+                @"insert into point_record (innerid, custid, `type`, sourceid, `point`, remark, validtime, createdtime) values (@innerid, @custid, 2, 100, @point, @remark, null, @createdtime);";
             const string sqlIExChange =
                 @"insert into point_exchange (innerid, custid, recordid, `point`, `code`, createdtime) values (uuid(), @custid, @recordid, @point, @code, @createdtime);";
             const string sqlICode =
@@ -145,7 +145,6 @@ namespace CCN.Modules.Rewards.DataAccess
                     {
                         innerid = guid,
                         custid = model.Custid,
-                        sourceid = model.Sourceid,
                         point = model.Point,
                         createdtime = model.Createdtime,
                         remark = model.Remark
@@ -251,6 +250,25 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 获取会员统计信息
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public CustTotalModel GetCustTotalInfo(string custid)
+        {
+            const string sql =
+                @"SELECT * FROM cust_total_info where custid=@custid;";
+
+            try
+            {
+                return Helper.Query<CustTotalModel>(sql, new { custid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         #endregion
 
         #region 会员礼券
@@ -300,8 +318,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and amount<={query.MaxAmount}");
             }
 
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
-                query.PageIndex);
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CouponInfoModel>(model, query.Echo);
             return list;
         }
@@ -314,9 +331,9 @@ namespace CCN.Modules.Rewards.DataAccess
         public int AddCoupon(CouponInfoModel model)
         {
             const string sql = @"INSERT INTO coupon_card
-                                (innerid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype, createdtime, modifiedtime, isenabled)
+                                (innerid,shopid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype,needpoint, createdtime, modifiedtime, isenabled)
                                 VALUES
-                                (@innerid,@title,@titlesub,@amount,@logourl,@vtype,@vstart,@vend,@value1,@value2,@maxcount,@count,@codetype,@createdtime,@modifiedtime,@isenabled);";
+                                (@innerid,@shopid,@title,@titlesub,@amount,@logourl,@vtype,@vstart,@vend,@value1,@value2,@maxcount,@count,@codetype,@needpoint,@createdtime,@modifiedtime,@isenabled);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();

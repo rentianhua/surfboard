@@ -189,4 +189,30 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public string QrCode { get; set; }
     }
+
+    /// <summary>
+    /// 会员相关总数信息
+    /// </summary>
+    public class CustTotalModel
+    {
+        /// <summary>
+        /// 内部id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 当前积分
+        /// </summary>
+        public int Currpoint { get; set; }
+
+        /// <summary>
+        /// 当前礼券数
+        /// </summary>
+        public int Currpouponnum { get; set; }
+    }
 }

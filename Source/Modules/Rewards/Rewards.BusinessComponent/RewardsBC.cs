@@ -10,7 +10,6 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Microsoft.Practices.ObjectBuilder2;
 using Newtonsoft.Json;
-using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -83,21 +82,40 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
-            if (model == null)
+            if (string.IsNullOrWhiteSpace(model?.Custid) || string.IsNullOrWhiteSpace(model.Cardid))
             {
-                return JResult._jResult(401, "参数不正确");
+                return JResult._jResult(401, "参数不完整");
             }
-            if (string.IsNullOrWhiteSpace(model.Custid))
+
+            var couponModel = DataAccess.GetCouponById(model.Cardid);
+            if (couponModel == null)
             {
-                return JResult._jResult(402, "会员不存在");
+                return JResult._jResult(402, "礼券不存在");
             }
-            if (model.Point == 0)
+
+            if (couponModel.Needpoint == null || couponModel.Needpoint == 0)
             {
-                return JResult._jResult(403, "积分不够");
+                return JResult._jResult(403, "该礼券不可兑换");
             }
-            if (string.IsNullOrWhiteSpace(model.Cardid))
+
+            //固定时间范围
+            if (couponModel.Vtype.HasValue && couponModel.Vtype.Value == 1)
             {
-                return JResult._jResult(404, "礼券不存在");
+                if (DateTime.Now > couponModel.Vend)
+                {
+                    return JResult._jResult(404, "礼券已过期");
+                }
+            }
+
+            var custTotalInfo = DataAccess.GetCustTotalInfo(model.Custid);
+            if (custTotalInfo == null)
+            {
+                return JResult._jResult(405, "会员不存在");
+            }
+
+            if (custTotalInfo.Currpoint < couponModel.Needpoint)
+            {
+                return JResult._jResult(406, "积分不够");
             }
 
             //生成随机数
@@ -106,8 +124,8 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+            var filepath = QiniuUtility.GetFilePath(filename);
             bitmap.Save(filepath);
 
             //上传图片到七牛云
@@ -122,6 +140,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
             //开始兑换
             model.Createdtime = DateTime.Now;
+            model.Sourceid = 2; //礼券来源  兑换
             var result = DataAccess.PointExchangeCoupon(model);
             return JResult._jResult(
                 result > 0 ? 0 : 400,
@@ -372,7 +391,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var result = DataAccess.UnBindWechatProduct(cardid);
             return JResult._jResult(result);
         }
-
+        
         #endregion
 
         #region 礼券对外接口
@@ -401,7 +420,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
             {
                 return JResult._jResult(403, "会员不存在");
             }
-                        
+
             var codeList = new List<CouponCodeModel>();
 
             for (int i = 0; i < model.Number; i++)
