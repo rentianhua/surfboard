@@ -1,0 +1,136 @@
+﻿
+@{
+    //ViewBag.Title = "SearchCancelList";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var myDate = new Date();
+
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth()+1;
+        var day = myDate.getDate();
+        var start = year + "-" + month + "-" + "01";
+        $("#cyclestart").val(start);
+        $("#cycleend").val(year + "-" + month + "-" + day);
+
+        console.log(start);
+
+        var prev = new Date(start) - 1;
+        console.log(prev.getFullYear() + "-" + (prev.getMonth() + 1) + "-" + prev.getDate());
+
+        InitShop();
+        QueryList();
+    });
+
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
+
+    function QueryList() {
+        var json = { shopid: $("#selectshop").val() === "0" ? "" : $("#selectshop").val() };
+        $("#settlist").getPageList(20, "/api/Rewards/GetSettLogPageList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#settlist tbody").empty();
+
+        var str = "";
+
+        $.each(data, function(key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.Shopname + "</td>";
+            str += "<td>" + val.Orderid + "</td>";
+            str += "<td>" + Dateformat(val.SettTime, "yyyy-MM-dd") + "</td>";
+            str += "<td>" + val.SettTotal + "</td>";
+            str += "<td>" + Dateformat(val.SettCycleStart, "yyyy-MM-dd") + "~" + Dateformat(val.SettCycleEnd, "yyyy-MM-dd") + "</td>";
+            str += "<td>" +
+                "<a href='/rewards/rewards/settlementedit?innerid=" + val.Innerid + "'>修改</a> " +
+                "<a href='javascript:;' onclick=\"DeleteSettLog('" + val.Innerid + "');\">删除</a> " +
+                "</td>";
+            str += "</tr>";
+            $("#settlist tbody").append(str);
+        });
+    }
+
+    function DeleteSettLog(innerid) {
+
+        if (!confirm("确定删除？")) {
+            return;
+        }
+
+        $.ajax({
+            url: "/api/Rewards/DelSettLog?innerid=" + innerid,
+            type: 'delete',
+            datatype: 'application/json',
+            async: false,
+            success: function (result) {
+                location.reload();
+            }
+        });
+    }
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">结算记录列表</div>
+    <table style="margin: 0 auto;">
+        <tr>
+            <td>
+                所属商户：
+                <select id="selectshop" onchange="QueryList();">
+                    <option value="0">请选择</option>
+                </select>
+            </td>
+            <td>
+                周期：
+                <input type="text" id="cyclestart" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" /> -
+                <input type="text" id="cycleend" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                <input type="button" value="搜索" onclick="QueryList();" />
+            </td>
+            <td style="text-align: right">
+                <a href='/rewards/rewards/settlementedit'>添加</a>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="settlist" class="gridtable">
+
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>所属商铺</td>
+                            <td>结算单号</td>
+                            <td>结算时间</td>
+                            <td>结算金额</td>
+                            <td>结算周期</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
