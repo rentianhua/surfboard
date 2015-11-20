@@ -137,7 +137,112 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="model">购买信息</param>
         /// <returns></returns>
         JResult WholesaleCoupon(CouponBuyModel model);
-        
+
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        JResult CancelCoupon(string code);
+
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        JResult GetCoupon(CardCancelSummaryQueryModel query);
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopById(string innerid);
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        JResult ShopLogin(string loginname, string password);
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        JResult AddShop(ShopModel model);
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateShop(ShopModel model);
+
+        /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateShopStatus(string innerid, int status);
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        JResult DeleteShop(string innerid);
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query);
+
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ItemShop> GetShopList();
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddSettLog(SettlementLogModel model);
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateSettLog(SettlementLogModel model);
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DelSettLog(string innerid);
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetSettLogById(string innerid);
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query);
+
         #endregion
     }
 }

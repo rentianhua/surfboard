@@ -80,13 +80,13 @@ namespace CCN.Modules.Car.DataAccess
             //销售价大于..
             if (query.minprice.HasValue)
             {
-                sqlWhere.Append($" and a.buyprice>={query.minprice}");
+                sqlWhere.Append($" and a.price>={query.minprice}");
             }
 
             //销售价小于..
             if (query.maxprice.HasValue)
             {
-                sqlWhere.Append($" and a.buyprice<={query.maxprice}");
+                sqlWhere.Append($" and a.price<={query.maxprice}");
             }
 
             if (query.minyear.HasValue)
@@ -363,6 +363,29 @@ namespace CCN.Modules.Car.DataAccess
         {
             var sql = new StringBuilder("update `car_info` set ");
             sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+
+            //非必填字段的修改
+            if (!model.buytime.HasValue)
+            {
+                sql.Append(",buytime=null");
+            }
+            if (!model.buyprice.HasValue)
+            {
+                sql.Append(",buyprice=null");
+            }
+            if (!model.ckyear_date.HasValue)
+            {
+                sql.Append(",ckyear_date=null");
+            }
+            if (!model.tlci_date.HasValue)
+            {
+                sql.Append(",tlci_date=null");
+            }
+            if (!model.audit_date.HasValue)
+            {
+                sql.Append(",audit_date=null");
+            }
+
             sql.Append(" where innerid = @innerid");
             int result;
             try

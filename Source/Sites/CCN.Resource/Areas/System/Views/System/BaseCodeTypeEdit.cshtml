@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "CarSeriesEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    $(function () {
+        Init();
+    });
+    //初始化信息
+    function Init() {
+        if (id === "") {
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCodeTypeById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                var obj = data.errmsg;
+                $("#Typename").val(obj.Typename);
+                $("#Typekey").val(obj.Typekey);
+            }
+        });
+    }
+    //提交
+    function Submit() {
+
+        if (!$("#Typename").val()) {
+            alert("代码类型名称不为空！");
+            return;
+        }
+        if (!$("#Typekey").val()) {
+            alert("代码类型key不为空！");
+            return;
+        }
+        var json = {
+            Typename: $("#Typename").val(),
+            Typekey: $("#Typekey").val(),
+        };
+        if (id === "") {
+            $.post("/api/Base/AddCodeType", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(result.errmsg);
+                alert(str);
+                getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
+            });
+        }
+        else {
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Base/UpdateCodeType',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(result.errmsg);
+                    alert(str);
+                    getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
+                }
+            });
+        }
+    }
+</script>
+
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码类型编辑</div>
+    <table id="codetypelist" class="gridtable">
+        <tbody>
+            <tr>
+                <td>代码类型名称</td>
+                <td>
+                    <input type="text" id="Typename" />
+                </td>
+            </tr>
+            <tr>
+                <td>代码类型key</td>
+                <td><input type="text" id="Typekey" /></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="保存" onclick="Submit()" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

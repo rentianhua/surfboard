@@ -1,0 +1,140 @@
+﻿
+@{
+    //ViewBag.Title = "CarSeries";
+    //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<script type="text/javascript">
+    $(function () {
+        QueryList();
+        InitBrand();
+    });
+    //初始化品牌
+    function InitBrand() {
+        $("#selectbrand").empty();
+        $("#selectbrand").append("<option value='0'>请选择</option>");//初始化显示
+        $.ajax({
+            url: "/api/Base/GetCarBrand",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+                });
+            }
+        });
+    }
+
+    function QueryList() {
+        var json = {
+            SeriesName: $("#carseries").val(),
+            BrandId: $("#selectbrand").val() == 0 ? "" : $("#selectbrand").val()
+        };
+        $("#carserieslist").getPageList(20, "/api/Base/GetCarSeriesList", json, LoadData);
+    }
+    function LoadData(data, index) {
+        $("#carserieslist tbody").empty();
+        var str = "";
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.BrandName + "</td>";
+            str += "<td>" + (val.SeriesName == null ? "" : val.SeriesName.sub(400)) + "</td>";
+            str += "<td>" + val.SeriesGroupName + "</td>";
+            str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
+            str += "<td>" + val.Remark + "</td>";
+            str += "<td>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
+                "<a href='javascript:;' onclick=\"DeleteCarSeries('" + val.Innerid + "');\">删除 </a>" +
+                "<a href='javascript:;' onclick=\"UpdateSeriesStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                "</td>";
+            str += "</tr>";
+            $("#carserieslist tbody").append(str);
+        });
+    }
+
+    function UpdateSeriesStatus(carid, status) {
+        status = status === 1 ? 0 : 1;
+        $.post("/api/Base/UpdateSeriesStatus?carid=" + carid + "&status=" + status, null, function (result) {
+            alert(result.errmsg);
+            getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
+        });
+    }
+    function DeleteCarSeries(Innerid) {
+        if (!confirm("确认删除！")) {
+            return;
+        }
+        $.post("/api/Base/DeleteCarSeries?innerid=" + Innerid, function (result) {
+            var str = result.errcode === 0 ? "删除成功" : "删除失败";
+            alert(str);
+            getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
+        });
+    }
+</script>
+<div>
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <span>
+                        <label for="selectbrand" class="col-sm-4 control-label no-padding-right searchLayout">品牌名称：</label>
+                        <select id="selectbrand">
+                            <option value="0">请选择</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="carseries" class="col-sm-4 control-label no-padding-right searchLayout">车系名称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="carseries" placeholder="车系名称">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-striped table-hover table-bordered" id="carserieslist">
+        <thead>
+            <tr role="row">
+                <th>
+                    序号
+                </th>
+                <th>
+                    品牌名称
+                </th>
+                <th>
+                    车系名称
+                </th>
+                <th>
+                    车系组 进口/国产
+                </th>
+                <th>
+                    是否启用
+                </th>
+                <th>
+                    备注
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+
+</div>

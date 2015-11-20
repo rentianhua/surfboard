@@ -25,5 +25,33 @@ namespace CCN.WebAPI.Areas.Rewards.Controllers
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
+
+        /// <summary>
+        /// 商品id
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ProductList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 商铺列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 商铺编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
     }
 }

@@ -11,10 +11,28 @@
 
     var id = "@ViewBag.innerid";
 
-    $(function() {
+    $(function () {
+        InitShop();
         Init();
         RadioClick();
     });
+
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
 
     function Init() {
 
@@ -39,6 +57,7 @@
                 $("#title").val(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").val(obj.Amount);
+                $("#selectshop").selectVal(obj.Shopid);
 
                 $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
                 $("#codetype").val(obj.Codetype);
@@ -73,7 +92,8 @@
             Amount: $("#amount").val(),
             Vtype: vtype,
             Maxcount: $("#count").val(),
-            Codetype: $("#codetype").val()
+            Codetype: $("#codetype").val(),
+            Shopid: $("#selectshop").val()
         };
 
         if (vtype === "1") { //有效时间范围
@@ -82,6 +102,10 @@
         } else {//起效/有效天数
             json.Value1 = $("#value1").val();
             json.Value2 = $("#value2").val();
+        }
+
+        if (json.Shopid === "0") {
+            alert('请选择商户'); return false;
         }
 
         if (json.Title === "") {
@@ -181,70 +205,78 @@
     <table id="coupon" class="gridtable">
         <tbody>
             <tr>
-                <td>标题</td>
+                <td>商户</td>
                 <td id="">
-                    <input type="text" id="title" />
+                    <select id="selectshop">
+                        <option value="0">请选择</option>
+                    </select>
                 </td>
             </tr>
-            <tr>
-                <td>Logo</td>
-                <td id="">
-                    @*<input type="text" id="logo"/>*@
-                    <input type="file" id="logourl"/>
-                    <img id="logoimg" style="max-width: 150px;max-height:150px" src="" />
-                </td>
-            </tr>
-            <tr>
-                <td>面值</td>
-                <td id="">
-                    <input type="datetime" id="amount" />
-                </td>
-            </tr>
-            <tr>
-                <td>有效期</td>
-                <td id="vtypeTd">
-                    <input type="radio" name="radiotype" id="t1" value="1" />
-                    <label for="t1">有效日期</label>
-                    <input type="radio" name="radiotype" id="t2" value="2" />
-                    <label for="t2">有效天数</label>
-                    <br />
-                    <div id="radiotype1" class="margintop hide">
-                        <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
-                        <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd',  isShowToday: false })">
-                    </div>
-                    <div id="radiotype2" class="margintop hide" style="margin-top: 10px">
-                        领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
-                        <input type="number" id="value2" placeholder="" maxlength="5" />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>最大库存</td>
-                <td id="">
-                    <input type="text" id="count" maxlength="8" />
-                </td>
-            </tr>
-            <tr>
-                <td>Code展示类</td>
-                <td id="">
-                    <input type="text" id="codetype" /> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
-                    <div id="openDiv" class="margintop hide">
-                        Code展示类型，<br />
-                        "CODE_TYPE_TEXT"：文本；<br />
-                        "CODE_TYPE_BARCODE"：一维码；<br />
-                        "CODE_TYPE_QRCODE"：二维码；<br />
-                        "CODE_TYPE_ONLY_BARCODE"：一维码无code显示；<br />
-                        "CODE_TYPE_ONLY_QRCODE"：二维码无code显示；
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="保存" onclick="Submit()" />
-                    <input type="button" value="返回" onclick="self.location=document.referrer;" />
-                </td>
-            </tr>
+        <tr>
+            <td>标题</td>
+            <td id="">
+                <input type="text" id="title"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Logo</td>
+            <td id="">
+                @*<input type="text" id="logo"/>*@
+                <input type="file" id="logourl"/>
+                <img id="logoimg" style="max-width: 150px; max-height: 150px" src=""/>
+            </td>
+        </tr>
+        <tr>
+            <td>面值</td>
+            <td id="">
+                <input type="datetime" id="amount"/>
+            </td>
+        </tr>
+        <tr>
+            <td>有效期</td>
+            <td id="vtypeTd">
+                <input type="radio" name="radiotype" id="t1" value="1"/>
+                <label for="t1">有效日期</label>
+                <input type="radio" name="radiotype" id="t2" value="2"/>
+                <label for="t2">有效天数</label>
+                <br/>
+                <div id="radiotype1" class="margintop hide">
+                    <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
+                    <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
+                </div>
+                <div id="radiotype2" class="margintop hide" style="margin-top: 10px">
+                    领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3"/> 生效 ,有效天数
+                    <input type="number" id="value2" placeholder="" maxlength="5"/>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>最大库存</td>
+            <td id="">
+                <input type="text" id="count" maxlength="8"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Code展示类</td>
+            <td id="">
+                <input type="text" id="codetype"/> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
+                <div id="openDiv" class="margintop hide">
+                    Code展示类型，<br/>
+                    "CODE_TYPE_TEXT"：文本；<br/>
+                    "CODE_TYPE_BARCODE"：一维码；<br/>
+                    "CODE_TYPE_QRCODE"：二维码；<br/>
+                    "CODE_TYPE_ONLY_BARCODE"：一维码无code显示；<br/>
+                    "CODE_TYPE_ONLY_QRCODE"：二维码无code显示；
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="保存" onclick="Submit()"/>
+                <input type="button" value="返回" onclick="self.location = document.referrer;"/>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

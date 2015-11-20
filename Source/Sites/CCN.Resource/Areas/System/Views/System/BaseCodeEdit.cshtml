@@ -1,0 +1,136 @@
+﻿
+@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    $(function () {
+        InitTypeName();
+    });
+    function InitTypeName() {
+        $("#selectcode").empty();
+        $("#selectcode").append("<option value='0'>请选择</option>");
+        $.ajax({
+            url: "/api/Base/GetCodeType",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectcode").append("<option value='" + v.Typekey + "'>" + v.Typename + "</option>");
+                });
+                Init();
+            }
+        });
+    }
+    //初始化信息
+    function Init() {
+        if (id === "") {
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCodeById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                var obj = data.errmsg;
+                $("#selectcode").val(obj.Typekey);
+                $("#Codename").val(obj.CodeName);
+                $("#Codevalue").val(obj.CodeValue);
+                $("#Remark").val(obj.Remark);
+            }
+        });
+    }
+    //提交
+    function Submit() {
+        //if (!$("#Typename").val()) {
+        //    alert("代码类型名称不为空！");
+        //    return;
+        //}
+        //if (!$("#Typekey").val()) {
+        //    alert("代码类型key不为空！");
+        //    return;
+        //}
+        var json = {
+            Typekey:$("#selectcode").val(),
+            CodeName: $("#Codename").val(),
+            CodeValue: $("#Codevalue").val(),
+            Remark: $("#Remark").val(),
+        };
+        if (id === "") {
+            $.post("/api/Base/AddCode", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";  
+                if (result.errcode != 0) {
+                    alert(result.errmsg);
+                }
+                else {
+                    alert(str);
+                }
+                getBodyHtml('mainbody', '/System/System/BaseCodeList');
+            });
+        }
+        else {
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Base/UpdateCode',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    if (result.errcode != 0) {
+                        alert(result.errmsg);
+                    }
+                    else {
+                        alert(str);
+                    }
+                    getBodyHtml('mainbody', '/System/System/BaseCodeList');
+                }
+            });
+        }
+    }
+</script>
+
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码值编辑</div>
+    <table id="codetypelist" class="gridtable">
+        <tbody>
+            <tr>
+                <td><label class="required">*</label>代码类型名称</td>
+                <td>
+                    <select id="selectcode">
+                        <option value="0">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label class="required">*</label>代码名称</td>
+                <td>
+                    <input type="text" id="Codename" />
+                </td>
+            </tr>
+            <tr>
+                <td><label class="required">*</label>代码值</td>
+                <td>
+                   <input type="text" id="Codevalue" />
+                </td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td><textarea id="Remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="保存" onclick="Submit()" /></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

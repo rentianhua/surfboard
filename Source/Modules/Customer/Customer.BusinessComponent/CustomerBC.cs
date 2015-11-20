@@ -72,10 +72,13 @@ namespace CCN.Modules.Customer.BusinessComponent
                 };
             }
 
-            //生成会员名称
-            userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
-                userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
-
+            if (string.IsNullOrWhiteSpace(userInfo.Custname))
+            {
+                //生成会员名称
+                userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
+                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
+            }
+            
             if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))
             {
                 //检查openid是否被其他手机号注册
@@ -811,6 +814,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             };
         }
 
+        #endregion
+
+        #region cust_wechat
+        /// <summary>
+        /// 获取cust_wechat信息列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CustWeChatViewModel> GetCustWeChatList(CustWeChatQueryModel query)
+        {
+            return DataAccess.GetCustWeChatList(query);
+        }
         #endregion
     }
 }

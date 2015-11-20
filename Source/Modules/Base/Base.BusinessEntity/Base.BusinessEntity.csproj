@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,6 +50,7 @@
     <Compile Include="BaseCarModelModel.cs" />
     <Compile Include="BaseCity.cs" />
     <Compile Include="BaseCodeModel.cs" />
+    <Compile Include="BaseCodeTypeModel.cs" />
     <Compile Include="BaseProvince.cs" />
     <Compile Include="BaseCarSeriesModel.cs" />
     <Compile Include="BaseVerification.cs" />

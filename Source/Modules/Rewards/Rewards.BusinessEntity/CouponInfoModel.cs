@@ -14,6 +14,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
+        /// 商铺id
+        /// </summary>
+        public string Shopid { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }
@@ -26,7 +31,17 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 面额
         /// </summary>
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
+
+        /// <summary>
+        /// 购买价
+        /// </summary>
+        public decimal BuyPrice { get; set; }
+
+        /// <summary>
+        /// 成本价
+        /// </summary>
+        public decimal CostPrice { get; set; }
 
         /// <summary>
         /// 图片
@@ -143,6 +158,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 使用启用
         /// </summary>
         public int? IsEnabled { get; set; }
+
+        /// <summary>
+        /// 商铺id
+        /// </summary>
+        public string Shopid { get; set; }
 
     }
     

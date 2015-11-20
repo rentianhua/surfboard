@@ -1,0 +1,75 @@
+﻿
+@{
+//ViewBag.Title = "CarSeriesView";
+//Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    var CarSeries = null;
+    $(function () {
+        Init();
+    });
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCarSeriesById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                CarSeries = obj;
+                $("#brandname").html(obj.BrandName);
+                $("#seriesname").html(obj.SeriesName);
+                $("#seriesgroupname").html(obj.SeriesGroupName);
+                if (obj.IsEnabled === 1) {
+                    $("#isenabled").text("启用中");
+                }
+                else {
+                    $("#isenabled").text("禁用中");
+                }
+                $("#remark").html(obj.Remark);
+            }
+        });
+    }
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">车系信息详情</div>
+    <table id="carseries" class="gridtable">
+        <tbody>
+            <tr>
+                <td>品牌名称</td>
+                <td id="brandname"></td>
+            </tr>
+            <tr>
+                <td>车系名称</td>
+                <td id="seriesname"></td>
+            </tr>
+            <tr>
+                <td>车系组</td>
+                <td id="seriesgroupname"></td>
+            </tr>
+            <tr>
+                <td>是否可用</td>
+                <td id="isenabled"></td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td id="remark"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+

@@ -9,6 +9,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -444,6 +445,279 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 result > 0 ? "购买成功" : "购买失败");
         }
 
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public JResult CancelCoupon(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                return JResult._jResult(401,"code空");
+            }
+
+            var codeModel = DataAccess.GetCode(code);
+            if (codeModel == null)
+            {
+                return JResult._jResult(402, "code不存在");
+            }
+
+            if (codeModel.Gettime == null)
+            {
+                return JResult._jResult(500, "code数据异常");
+            }
+
+            if (codeModel.Usedtime != null)
+            {
+                return JResult._jResult(403, "该券已被使用");
+            }
+
+            var cardModel = DataAccess.GetCouponById(codeModel.Cardid);
+            if (cardModel == null)
+            {
+                return JResult._jResult(404, "礼券不存在");
+            }
+
+            if (cardModel.IsEnabled != 1)
+            {
+                return JResult._jResult(405, "礼券被禁用");
+            }
+
+            var nowDate = DateTime.Now;
+
+            if (cardModel.Vtype.HasValue && cardModel.Vtype.Value == 1 )
+            {
+                if (cardModel.Vstart > nowDate && cardModel.Vend < nowDate)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+            }
+            else if (cardModel.Vtype.HasValue && cardModel.Vtype.Value == 2)
+            {
+                if (cardModel.Value1 == null || cardModel.Value2 == null)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+
+                var startTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value);
+                var endTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value).AddDays(cardModel.Value2.Value);
+                if (startTime > nowDate && endTime < nowDate)
+                {
+                    return JResult._jResult(406, "不在有效期范围内");
+                }
+            }
+
+            var result = DataAccess.CancelCoupon(code);
+
+            return JResult._jResult(
+                result > 0 ? 0 : 400,
+                result > 0 ? "核销成功" : "核销失败");
+        }
+
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCoupon(CardCancelSummaryQueryModel query)
+        {
+            var list = DataAccess.GetCoupon(query).ToList();
+
+            if (!list.Any()) return JResult._jResult(0, list);
+
+            foreach (var item in list)
+            {
+                item.TotalPrice = item.CostPrice*item.CanedCount;
+            }
+
+            return JResult._jResult(0, list);
+        }
+
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopById(string innerid)
+        {
+            var model = DataAccess.GetShopById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult ShopLogin(string loginname, string password)
+        {
+            password = Encryptor.EncryptAes(password);
+            var shopModel = DataAccess.GetShopModel(loginname, password);
+
+            if (shopModel == null)
+            {
+                return JResult._jResult(400, "登录名或密码错误");
+            }
+
+            if (shopModel.Status == 2)
+            {
+                return JResult._jResult(401, "商户被禁用");
+            }
+
+            shopModel.Password = "";
+
+            return JResult._jResult(0, shopModel);
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShop(ShopModel model)
+        {
+
+            if (string.IsNullOrWhiteSpace(model?.Shopname) 
+                || string.IsNullOrWhiteSpace(model.Loginname) 
+                || string.IsNullOrWhiteSpace(model.Password))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            if (DataAccess.CheckShopName(model.Shopname) > 0)
+            {
+                return JResult._jResult(402,"商户名称重复");
+            }
+
+            if (DataAccess.CheckLoginName(model.Loginname) > 0)
+            {
+                return JResult._jResult(403, "商户登录名重复");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Status = 1;
+            model.Password = Encryptor.EncryptAes(model.Password);
+            var result = DataAccess.AddShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShop(ShopModel model)
+        {
+            model.Createdtime = null;
+            model.Modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateShopStatus(innerid, status);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShop(string innerid)
+        {
+            var result = DataAccess.DeleteShop(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
+        {
+            return DataAccess.GetShopPageList(query);
+        }
+
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            return DataAccess.GetShopList();
+        }
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSettLog(SettlementLogModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            if (!model.SettTime.HasValue)
+            {
+                model.SettTime = DateTime.Now;
+            }
+            
+            var result = DataAccess.AddSettLog(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateSettLog(SettlementLogModel model)
+        {
+            var result = DataAccess.UpdateSettLog(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelSettLog(string innerid)
+        {
+            var result = DataAccess.DelSettLog(innerid);
+            return JResult._jResult(result);
+        }
+        
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSettLogById(string innerid)
+        {
+            var model = DataAccess.GetSettLogById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        {
+            return DataAccess.GetSettLogPageList(query);
+        }
 
         #endregion
     }

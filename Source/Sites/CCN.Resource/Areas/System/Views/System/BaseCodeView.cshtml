@@ -1,0 +1,72 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    $(function () {
+        Init();
+    });
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+        $.ajax({
+            url: '/api/Base/GetCodeById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                $("#Typename").html(obj.TypeName);
+                $("#Codename").html(obj.CodeName);
+                $("#Codevalue").html(obj.CodeValue);
+                if (obj.IsEnabled === 1) {
+                    $("#Isenabled").text("启用中");
+                }
+                else {
+                    $("#Isenabled").text("禁用中");
+                }
+                $("#Remark").html(obj.Remark);
+            }
+        });
+    }
+</script>
+<div>
+    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码值详情</div>
+    <table id="codelist" class="gridtable">
+        <tbody>
+            <tr>
+                <td>代码类型名称</td>
+                <td id="Typename"></td>
+            </tr>
+            <tr>
+                <td>代码名称</td>
+                <td id="Codename"></td>
+            </tr>
+            <tr>
+                <td>代码值</td>
+                <td id="Codevalue"></td>
+            </tr>
+            <tr>
+                <td>是否启用</td>
+                <td id="Isenabled"></td>
+            </tr>
+            <tr>
+                <td>备注</td>
+                <td id="Remark"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" /></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+

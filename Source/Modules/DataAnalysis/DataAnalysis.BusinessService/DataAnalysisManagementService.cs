@@ -259,5 +259,14 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         {
             return BusinessComponent.GetDayGrowth(startTime, endTime);
         }
+
+        /// <summary>
+        /// 获取汇总数据（会员/粉丝/车辆）
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetTotal()
+        {
+            return BusinessComponent.GetTotal();
+        }
     }
 }

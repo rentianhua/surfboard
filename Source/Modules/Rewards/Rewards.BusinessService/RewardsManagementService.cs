@@ -189,6 +189,156 @@ namespace CCN.Modules.Rewards.BusinessService
             return BusinessComponent.WholesaleCoupon(model);
         }
 
+        /// <summary>
+        /// 礼券核销
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public JResult CancelCoupon(string code)
+        {
+            return BusinessComponent.CancelCoupon(code);
+        }
+
+        /// <summary>
+        /// 查询已核销的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCoupon(CardCancelSummaryQueryModel query)
+        {
+            return BusinessComponent.GetCoupon(query);
+        }
+        #endregion
+
+        #region 商户管理
+
+        /// <summary>
+        /// 根据id获取商户信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopById(string innerid)
+        {
+            return BusinessComponent.GetShopById(innerid);
+        }
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult ShopLogin(string loginname, string password)
+        {
+            return BusinessComponent.ShopLogin(loginname, password);
+        }
+
+        /// <summary>
+        /// 添加商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShop(ShopModel model)
+        {
+            return BusinessComponent.AddShop(model);
+        }
+
+        /// <summary>
+        /// 更新商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShop(ShopModel model)
+        {
+            return BusinessComponent.UpdateShop(model);
+        }
+
+        /// <summary>
+        /// 修改商户状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateShopStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 删除商户
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShop(string innerid)
+        {
+            return BusinessComponent.DeleteShop(innerid);
+        }
+
+        /// <summary>
+        /// 商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopViewModel> GetShopPageList(ShopQueryModel query)
+        {
+            return BusinessComponent.GetShopPageList(query);
+        }
+
+        /// <summary>
+        /// 获取商户list 下拉
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ItemShop> GetShopList()
+        {
+            return BusinessComponent.GetShopList();
+        }
+
+        #endregion
+
+        #region 结算记录
+
+        /// <summary>
+        /// 添加结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSettLog(SettlementLogModel model)
+        {
+            return BusinessComponent.AddSettLog(model);
+        }
+
+        /// <summary>
+        /// 修改结算记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateSettLog(SettlementLogModel model)
+        {
+            return BusinessComponent.UpdateSettLog(model);
+        }
+
+        /// <summary>
+        /// 删除结算记录
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DelSettLog(string innerid)
+        {
+            return BusinessComponent.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取结算记录信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSettLogById(string innerid)
+        {
+            return BusinessComponent.GetSettLogById(innerid);
+        }
+
+        /// <summary>
+        /// 结算记录列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        {
+            return BusinessComponent.GetSettLogPageList(query);
+        }
 
         #endregion
     }
