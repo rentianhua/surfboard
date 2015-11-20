@@ -16,14 +16,14 @@ namespace CCN.Modules.Base.DataAccess
     /// <summary>
     /// 基础模块
     /// </summary>
-    public class BaseDA  : DataAccessBase
+    public class BaseDA : DataAccessBase
     {
         //private readonly Database Helper;
 
         /// <summary>
         /// 
         /// </summary>
-        public BaseDA() 
+        public BaseDA()
         {
             //Helper = new DatabaseWrapperFactory().GetDatabase("mysqldb");
         }
@@ -46,7 +46,8 @@ namespace CCN.Modules.Base.DataAccess
             {
                 sqlWhere.Append($" and typename like '%{query.Typename}%'");
             }
-            if (!string.IsNullOrWhiteSpace(query.Typekey)) {
+            if (!string.IsNullOrWhiteSpace(query.Typekey))
+            {
                 sqlWhere.Append($" and typekey = '{query.Typekey}'");
             }
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -176,8 +177,20 @@ namespace CCN.Modules.Base.DataAccess
         public string GetCodeTypeByTypeKey(string typekey)
         {
             string  result;
-            const string sql = "select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
+            const string sql = @"select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
             result = Helper.ExecuteScalar<string>(sql,new { typekey});
+            return result;
+        }
+        /// <summary>
+        /// 验证CodeType下是否还有Code
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public string VerifyCodeType(string innerid)
+        {
+            string result;
+            const string sql = @"select b.codename from base_code_type as a left join base_code as b on a.typekey=b.typekey where a.innerid=@innerid;";
+            result = Helper.ExecuteScalar<string>(sql, new { innerid });
             return result;
         }
         #endregion
@@ -191,7 +204,7 @@ namespace CCN.Modules.Base.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"base_code as a left join base_code_type as b on a.typekey=b.typekey ";
-            const string fields = "a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,remark,b.typename";
+            const string fields = "a.innerid,codevalue,codename,sort,a.typekey,a.isenabled,ifnull(remark,'') remark,b.typename";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc,b.typename asc " : query.Order;
             var sqlWhere = new StringBuilder("1=1");
             if (!string.IsNullOrWhiteSpace(query.Typekey))
@@ -344,17 +357,17 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="codename"></param>
         /// <param name="codevalue"></param>
         /// <returns></returns>
-        public BaseCodeModel GetCodeByTypeKey(string typekey,string codename,string codevalue)
+        public BaseCodeModel GetCodeByTypeKey(string typekey, string codename, string codevalue)
         {
 
-            string where = " isenabled=1 and typekey='" +typekey+"'";
+            string where = " isenabled=1 and typekey='" + typekey + "'";
             if (!string.IsNullOrWhiteSpace(codename))
             {
-                where += $" or codename ='{codename}'";
+                where += $" and codename ='{codename}'";
             }
             if (!string.IsNullOrWhiteSpace(codevalue))
             {
-                where += $" or codevalue ='{codevalue}'";
+                where += $" and codevalue !='{codevalue}'";
             }
             var sql = $"select typekey,codename,codevalue from base_code  where {where} ";
             try
@@ -401,7 +414,7 @@ namespace CCN.Modules.Base.DataAccess
             {
                 result = 0;
             }
-            
+
             return result;
         }
 
@@ -411,10 +424,10 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="target"></param>
         /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns></returns>
-        public BaseVerification GetVerification(string target,int utype)
+        public BaseVerification GetVerification(string target, int utype)
         {
             const string sql = "select innerid, target, vcode, valid, createdtime, ttype, utype,content, result from base_verification where target=@target and utype=@utype order by createdtime desc limit 1;";
-            var m = Helper.Query<BaseVerification>(sql, new {target, utype }).FirstOrDefault();
+            var m = Helper.Query<BaseVerification>(sql, new { target, utype }).FirstOrDefault();
             return m;
         }
 
@@ -445,7 +458,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="provId">省份ID</param>
         /// <param name="initial">首字母</param>
         /// <returns></returns>
-        public IEnumerable<BaseCity> GetCityList(int provId,string initial)
+        public IEnumerable<BaseCity> GetCityList(int provId, string initial)
         {
             string where = " isenabled=1 and provid=" + provId;
             if (!string.IsNullOrWhiteSpace(initial))
@@ -706,10 +719,11 @@ namespace CCN.Modules.Base.DataAccess
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public string VerifyCarBrand(string innerid) {
+        public string VerifyCarBrand(string innerid)
+        {
             string result;
             const string sql = @"select b.seriesname from base_carbrand as a left join base_carseries as b on a.innerid=b.brandid where a.innerid=@innerid;";
-            result = Helper.Execute<string>(sql,new { innerid});
+            result = Helper.Execute<string>(sql, new { innerid });
             return result;
         }
         #endregion
@@ -858,7 +872,7 @@ namespace CCN.Modules.Base.DataAccess
         /// 获取ID最大值
         /// </summary>
         /// <returns></returns>
-        public int  GetCarSeriesMaxId()
+        public int GetCarSeriesMaxId()
         {
             int result;
             const string sql = @"select max(base_carseries.innerid) MaxId from base_carseries;";
@@ -873,7 +887,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public BaseCarSeriesModel GetCarSeriesName(string seriesname, string innerid)
         {
-            string where = " isenabled=1 and seriesname='" + seriesname+"'";
+            string where = " isenabled=1 and seriesname='" + seriesname + "'";
             if (!string.IsNullOrWhiteSpace(innerid))
             {
                 where += $" and innerid!='{innerid}'";
@@ -1057,7 +1071,7 @@ namespace CCN.Modules.Base.DataAccess
             const string sql = @"select max(base_carmodel.innerid) MaxId from base_carmodel;";
             result = Helper.Execute<int>(sql);
             return result;
-         
+
         }
         /// <summary>
         /// 
@@ -1083,6 +1097,31 @@ namespace CCN.Modules.Base.DataAccess
                 return null;
             }
         }
+        #endregion
+
+        #region 获取系统后台基础信息
+
+        /// <summary>
+        /// 获取登录人信息
+        /// </summary>
+        /// <param name="loginname">登录账号</param>
+        /// <param name="password">密码</param>
+        /// <returns></returns>
+        public BaseUserInfo GetUserInfo(string loginname, string password)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat("select * from sys_user where loginname=@loginname and password=@password", loginname, password);
+            try
+            {
+                var codemodel = Helper.Query<BaseUserInfo>(sql.ToString(), new { loginname = loginname, password = password }).FirstOrDefault();
+                return codemodel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         #endregion
     }
 }

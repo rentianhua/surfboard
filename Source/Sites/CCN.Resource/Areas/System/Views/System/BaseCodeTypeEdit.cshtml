@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarSeriesEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarSeriesEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -49,8 +49,12 @@
         if (id === "") {
             $.post("/api/Base/AddCodeType", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                alert(result.errmsg);
-                alert(str);
+                if (result.errmsg != 1) {
+                    alert(result.errmsg);
+                }
+                else {
+                    alert(str);
+                }
                 getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
             });
         }
@@ -64,8 +68,12 @@
                 async: false,
                 success: function (result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                    alert(result.errmsg);
-                    alert(str);
+                    if (result.errmsg != 1) {
+                        alert(result.errmsg);
+                    }
+                    else {
+                        alert(str);
+                    }
                     getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
                 }
             });
@@ -78,13 +86,13 @@
     <table id="codetypelist" class="gridtable">
         <tbody>
             <tr>
-                <td>代码类型名称</td>
+                <td><label class="required">*</label>代码类型名称</td>
                 <td>
                     <input type="text" id="Typename" />
                 </td>
             </tr>
             <tr>
-                <td>代码类型key</td>
+                <td><label class="required">*</label>代码类型key</td>
                 <td><input type="text" id="Typekey" /></td>
             </tr>
             <tr>

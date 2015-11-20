@@ -91,9 +91,7 @@
     function Submit() {
         var regyear = /^(\d{4})$/;
         var regprice = /^\d*\.{0,1}\d{0,1}$/;
-        if (!confirm("确认修改车型信息？")) {
-            return;
-        }
+       
         if ($("#selectbrand").val() == 0) {
             alert("品牌名称不为空！");
             return;
@@ -188,6 +186,9 @@
                 Remark: $("#remark").val()
             };
             if (id === "") {
+                if (!confirm("确认添加车型信息？")) {
+                    return;
+                }
                 $.post("/api/Base/AddCarModel", json, function (result) {
                     var str = result.errcode === 0 ? "添加成功" : "添加失败";
                     if (result.errmsg != 1) {
@@ -201,6 +202,9 @@
             }
             else {
                 json.Innerid = id;
+                if (!confirm("确认修改车型信息？")) {
+                    return;
+                }
                 $.ajax({
                     url: '/api/Base/UpdateCarModel',
                     type: 'post',
@@ -224,61 +228,131 @@
     }
 </script>
 
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">车型信息编辑</div>
-    <table id="carmodel" class="gridtable">
-        <tbody>
-            <tr>
-                <td><label class="required">*</label>品牌/车系</td>
-                <td>
-                    <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                        <option value="0">请选择</option>
-                    </select>
-                    <select id="selectseries">
-                        <option value="0">请选择</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>车型名称</td>
-                <td><input type="text" id="modelname" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>指导价</td>
-                <td><input type="text" id="modelprice" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>年款</td>
-                <td><input type="text" id="modelyear" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>最早注册年份</td>
-                <td><input type="text" id="minregyear" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>最晚注册年份</td>
-                <td><input type="text" id="maxregyear" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>排量</td>
-                <td><input type="text" id="liter" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>变速箱类型</td>
-                <td><input type="text" id="geartype" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>排放标准</td>
-                <td><input type="text" id="dischargestandard" /></td>
-            </tr>
-            <tr>
-                <td>备注</td>
-                <td><textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarModelList')" /></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车型基本信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>品牌/车系</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectseries">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车型名称</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="modelname" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>指导价</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="modelprice" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>年款</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="modelyear" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>最早注册年份</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="minregyear" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>最晚注册年份</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="maxregyear" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>排量</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="liter" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>变速箱类型</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="geartype" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>排放标准</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="dischargestandard" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>备注</label>
+                            <div class="controls col-sm-10">
+                                <textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="submit" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarModelList');" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+   
 </div>
