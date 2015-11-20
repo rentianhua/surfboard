@@ -1,6 +1,6 @@
 ﻿@{
-    ViewBag.Title = "CarBrandList";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+//ViewBag.Title = "CarBrandList";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 <script type="text/javascript">
     $(function () {
@@ -46,7 +46,12 @@
         }
         $.post("/api/Base/DeleteCodeType?innerid=" + innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
-            alert(str);
+            if (result.errmsg != 1) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
             getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
         });
     }

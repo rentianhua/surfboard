@@ -202,6 +202,7 @@
     <Folder Include="Areas\Rewards\Models\" />
     <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Areas\System\Models\" />
+    <Folder Include="Areas\System\Views\Shared\" />
     <Folder Include="Models\" />
     <Folder Include="TempFile\" />
   </ItemGroup>
@@ -428,8 +429,6 @@
     <Content Include="Content\Template\fonts\weathericons-regular-webfont.woff" />
     <Content Include="Content\Template\fonts\weathericons-regular-webfontd41d.eot" />
     <Content Include="Areas\System\Views\web.config" />
-    <Content Include="Areas\System\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\System\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\System\Views\System\MenuList.cshtml" />
     <Content Include="Areas\Base\Views\Base\BaseCarBrandList.cshtml" />
     <Content Include="Areas\Base\Views\Base\BaseCarBrandView.cshtml" />

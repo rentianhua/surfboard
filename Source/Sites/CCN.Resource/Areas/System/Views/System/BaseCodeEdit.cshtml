@@ -50,14 +50,25 @@
     }
     //提交
     function Submit() {
-        //if (!$("#Typename").val()) {
-        //    alert("代码类型名称不为空！");
-        //    return;
-        //}
-        //if (!$("#Typekey").val()) {
-        //    alert("代码类型key不为空！");
-        //    return;
-        //}
+        if (!$("#Codename").val()) {
+            alert("代码类型不为空！");
+            return;
+        }
+        if ($("#selectcode").val()==0) {
+            alert("代码类型名称不为空！");
+            return;
+        }
+        var reg = /^\+?[1-9][0-9]*$/;
+        if (!$("#Codevalue").val()) {
+            alert("代码值不为空！");
+            return;
+        }
+        else {
+            if (!reg.test($("#Codevalue").val())) {
+                alert("代码值格式输入不正确！");
+                return;
+            }
+        }
         var json = {
             Typekey:$("#selectcode").val(),
             CodeName: $("#Codename").val(),
