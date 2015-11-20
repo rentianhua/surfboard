@@ -192,11 +192,11 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <summary>
         /// 礼券核销
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public JResult CancelCoupon(string code)
+        public JResult CancelCoupon(CancelModel model)
         {
-            return BusinessComponent.CancelCoupon(code);
+            return BusinessComponent.CancelCoupon(model);
         }
 
         /// <summary>
@@ -225,9 +225,9 @@ namespace CCN.Modules.Rewards.BusinessService
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        public JResult ShopLogin(string loginname, string password)
+        public JResult ShopLogin(string shopcode, string password)
         {
-            return BusinessComponent.ShopLogin(loginname, password);
+            return BusinessComponent.ShopLogin(shopcode, password);
         }
 
         /// <summary>
@@ -322,6 +322,17 @@ namespace CCN.Modules.Rewards.BusinessService
         }
 
         /// <summary>
+        /// 删除结算记录中的一张图片
+        /// </summary>
+        /// <param name="innerid">记录id</param>
+        /// <param name="pic"></param>
+        /// <returns></returns>
+        public JResult DeleteSettPicture(string innerid, string pic)
+        {
+            return BusinessComponent.DeleteSettPicture(innerid, pic);
+        }
+
+        /// <summary>
         /// 根据id获取结算记录信息
         /// </summary>
         /// <returns></returns>
@@ -335,7 +346,7 @@ namespace CCN.Modules.Rewards.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        public BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query)
         {
             return BusinessComponent.GetSettLogPageList(query);
         }

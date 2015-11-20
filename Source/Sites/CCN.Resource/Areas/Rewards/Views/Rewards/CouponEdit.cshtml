@@ -5,16 +5,34 @@
 }
 
 <style type="text/css">
-    
+
 </style>
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
 
-    $(function() {
+    $(function () {
+        InitShop();
         Init();
         RadioClick();
     });
+
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
 
     function Init() {
 
@@ -33,10 +51,13 @@
                     alert("获取数据异常！");
                 }
 
+                console.log(data);
+
                 var obj = data.errmsg;
                 $("#title").val(obj.Title);
                 $("#logoimg").attr("src", getQiniuUrl(obj.Logourl));
                 $("#amount").val(obj.Amount);
+                $("#selectshop").selectVal(obj.Shopid);
 
                 $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
                 $("#codetype").val(obj.Codetype);
@@ -71,7 +92,8 @@
             Amount: $("#amount").val(),
             Vtype: vtype,
             Maxcount: $("#count").val(),
-            Codetype: $("#codetype").val()
+            Codetype: $("#codetype").val(),
+            Shopid: $("#selectshop").val()
         };
 
         if (vtype === "1") { //有效时间范围
@@ -80,6 +102,10 @@
         } else {//起效/有效天数
             json.Value1 = $("#value1").val();
             json.Value2 = $("#value2").val();
+        }
+
+        if (json.Shopid === "0") {
+            alert('请选择商户'); return false;
         }
 
         if (json.Title === "") {
@@ -138,7 +164,7 @@
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                goCouponList();
+                location.href = "/rewards/rewards/couponlist";
             });
         } else {
 
@@ -152,7 +178,7 @@
                 success: function(result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
                     alert(str);
-                    goCouponList();
+                    location.href = "/rewards/rewards/couponlist";
                 }
             });
         }
@@ -173,32 +199,36 @@
         });
     }
 
-    function goCouponList() {
-        getBodyHtml('mainbody',  "/rewards/rewards/couponlist");
-    }
-
 </script>
 <div>
     <div style="font-size:18px;font-weight:bold;text-align:center">礼券编辑</div>
     <table id="coupon" class="gridtable">
         <tbody>
             <tr>
+                <td>商户</td>
+                <td>
+                    <select id="selectshop">
+                        <option value="0">请选择</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>标题</td>
-                <td id="">
+                <td>
                     <input type="text" id="title" />
                 </td>
             </tr>
             <tr>
                 <td>Logo</td>
-                <td id="">
+                <td>
                     @*<input type="text" id="logo"/>*@
-                    <input type="file" id="logourl"/>
-                    <img id="logoimg" style="max-width: 150px;max-height:150px" src="" />
+                    <input type="file" id="logourl" />
+                    <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
                 </td>
             </tr>
             <tr>
                 <td>面值</td>
-                <td id="">
+                <td>
                     <input type="datetime" id="amount" />
                 </td>
             </tr>
@@ -212,7 +242,7 @@
                     <br />
                     <div id="radiotype1" class="margintop hide">
                         <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
-                        <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd',  isShowToday: false })">
+                        <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
                     </div>
                     <div id="radiotype2" class="margintop hide" style="margin-top: 10px">
                         领取后 <input type="number" id="value1" placeholder="多少天" maxlength="3" /> 生效 ,有效天数
@@ -222,13 +252,13 @@
             </tr>
             <tr>
                 <td>最大库存</td>
-                <td id="">
+                <td>
                     <input type="text" id="count" maxlength="8" />
                 </td>
             </tr>
             <tr>
                 <td>Code展示类</td>
-                <td id="">
+                <td>
                     <input type="text" id="codetype" /> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
                     <div id="openDiv" class="margintop hide">
                         Code展示类型，<br />
@@ -244,7 +274,7 @@
                 <td></td>
                 <td>
                     <input type="submit" value="保存" onclick="Submit()" />
-                    <input type="button" value="返回" onclick="self.location=document.referrer;" />
+                    <input type="button" value="返回" onclick="self.location = document.referrer;" />
                 </td>
             </tr>
         </tbody>

@@ -141,9 +141,9 @@ namespace CCN.Modules.Rewards.Interface
         /// <summary>
         /// 礼券核销
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        JResult CancelCoupon(string code);
+        JResult CancelCoupon(CancelModel model);
 
         /// <summary>
         /// 查询已核销的礼券
@@ -165,7 +165,7 @@ namespace CCN.Modules.Rewards.Interface
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        JResult ShopLogin(string loginname, string password);
+        JResult ShopLogin(string shopcode, string password);
 
         /// <summary>
         /// 添加商户
@@ -231,6 +231,14 @@ namespace CCN.Modules.Rewards.Interface
         JResult DelSettLog(string innerid);
 
         /// <summary>
+        /// 删除结算记录中的一张图片
+        /// </summary>
+        /// <param name="innerid">记录id</param>
+        /// <param name="pic"></param>
+        /// <returns></returns>
+        JResult DeleteSettPicture(string innerid, string pic);
+
+        /// <summary>
         /// 根据id获取结算记录信息
         /// </summary>
         /// <returns></returns>
@@ -241,7 +249,7 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query);
+        BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query);
 
         #endregion
     }

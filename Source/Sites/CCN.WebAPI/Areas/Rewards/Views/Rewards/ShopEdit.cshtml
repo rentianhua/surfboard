@@ -97,7 +97,7 @@
 
         var json = {
             Shopname: $("#shopname").val(),
-            Loginname: $("#loginname").val(),
+            Shopcode: $("#shopcode").val(),
             Password: $("#password").val(),
             Telephone: $("#telephone").val(),
             Email: $("#email").val(),
@@ -113,7 +113,7 @@
             return false;
         }
 
-        if (json.Loginname === "") {
+        if (json.Shopcode === "") {
             alert('请输入登录名');
             return false;
         }
@@ -165,9 +165,9 @@
                 </td>
             </tr>
             <tr>
-                <td>登录名<label class="required">*</label></td>
+                <td>商户编号<label class="required">*</label></td>
                 <td>
-                    <input type="text" id="loginname"  placeholder="登录名"/>
+                    <input type="text" id="shopcode"  placeholder="商户编号"/>
                 </td>
             </tr>
         <tr>

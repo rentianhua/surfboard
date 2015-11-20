@@ -56,6 +56,22 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 流入银行账户号
         /// </summary>
         public string SettAccount { get; set; }
+        
+        /// <summary>
+        /// 截图
+        /// </summary>
+        public string Pictures { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class SettlementLogViewModel : SettlementLogModel
+    {
+        /// <summary>
+        /// 截图
+        /// </summary>
+        public string Shopname { get; set; }
     }
 
     /// <summary>
@@ -97,5 +113,8 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 流入银行账户号
         /// </summary>
         public string SettAccount { get; set; }
+
+
+        
     }
 }

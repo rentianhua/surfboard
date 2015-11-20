@@ -122,6 +122,14 @@
       <HintPath>..\..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Senparc.Weixin, Version=4.3.2.28718, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=13.3.1.32445, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -440,6 +448,12 @@
     <Content Include="Areas\Base\Views\Base\BaseCarSeriesEdit.cshtml" />
     <Content Include="Areas\Base\Views\Base\BaseCarSeriesView.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CustWeChatList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\ProductList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\ShopEdit.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\ShopList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\SettlementList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\SettlementEdit.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\SearchCancelList.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

@@ -23,9 +23,14 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Shopname { get; set; }
 
         /// <summary>
-        /// 登录名
+        /// 商户编号
         /// </summary>
-        public string Loginname { get; set; }
+        public string Shopcode { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? Code { get; set; }
 
         /// <summary>
         /// 登录密码
@@ -111,7 +116,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 登录名
         /// </summary>
-        public string Loginname { get; set; }
+        public string Shopcode { get; set; }
         
         /// <summary>
         /// 电话号码
@@ -168,7 +173,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 登录名
         /// </summary>
-        public string Loginname { get; set; }
+        public string Shopcode { get; set; }
 
         /// <summary>
         /// 电话号码
