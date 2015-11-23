@@ -168,9 +168,12 @@ var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum
 /*
 显示body中的内容
 */
-var getBodyHtml = function (id, url) {
+var getBodyHtml = function (id, url, obj) {
     $.get(url, function (result) {
         $("#" + id).empty();
         $("#" + id).append(result);
     });
+    //显示当前页名称
+    $(".header-title").children().html($(obj).text())
+    
 }

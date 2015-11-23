@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CouponView";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+//ViewBag.Title = "CouponView";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
 <style type="text/css">
@@ -270,7 +270,7 @@
             <tr>
                 <td></td>
                 <td>
-                    <input type="button" value="返回" onclick="location.href = '/rewards/rewards/couponlist';" />
+                    <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist',this);" />
                 </td>
             </tr>
         </tbody>

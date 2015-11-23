@@ -10,6 +10,12 @@
       </MenuArray>
     </MenuGroup>
 
+    <MenuGroup name="礼券管理" icon="menu-icon glyphicon glyphicon-th-large" submenu="true">
+      <MenuArray>
+        <Menu name="礼券列表" url="/Rewards/Rewards/CouponList" info="礼券列表" permission="" icon=""/>
+      </MenuArray>
+    </MenuGroup>
+
     <MenuGroup name="车辆管理" icon="menu-icon fa fa-th" submenu="true">
       <MenuArray>
         <Menu name="车辆列表" url="/Customer/Customer/CustomerList" info="车辆列表" permission="" icon=""/>

@@ -264,6 +264,7 @@
     <Compile Include="Areas\System\Controllers\SystemController.cs" />
     <Compile Include="Areas\System\SystemAreaRegistration.cs" />
     <Compile Include="Common\DefaultController.cs" />
+    <Compile Include="Common\LoginCheckFilterAttribute.cs" />
     <Compile Include="Common\ReadXML.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
