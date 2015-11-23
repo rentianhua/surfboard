@@ -81,6 +81,7 @@
                 url: actionUrl,
                 data: formData,
                 success: function (result) {
+                    console.log(result);
                     if (result.code == 1) {
                         location.href = "@Url.Action("Index", "Home")";
                     }

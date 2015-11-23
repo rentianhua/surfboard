@@ -1,5 +1,6 @@
 ﻿using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
+using CCN.Resource.Common;
 using CCN.Resource.Main.Common;
 using Cedar.Core.IoC;
 using System;
@@ -47,6 +48,7 @@ namespace CCN.Resource.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [LoginCheckFilterAttribute(IsCheck = false)]
         public ActionResult Login()
         {
             return View();
@@ -58,6 +60,7 @@ namespace CCN.Resource.Controllers
         /// <param name="loginname">登入账号</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
+        [LoginCheckFilterAttribute(IsCheck = false)]
         public ActionResult CheckLogin(string loginname, string password)
         {
             Session.Timeout = 30;
