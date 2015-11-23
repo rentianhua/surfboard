@@ -553,8 +553,7 @@ namespace CCN.Modules.Car.BusinessComponent
             foreach (var item in picModel.MediaIdList)
             {
                 var filename = QiniuUtility.GetFileName(Picture.car_picture);
-                //var filepath = QiniuUtility.GetFilePath(filename);
-                
+
                 //下载图片写入文件流
                 var filebyte = MediaApi.Get(picModel.AccessToken, item);
                 Stream stream = new MemoryStream(filebyte);
@@ -562,23 +561,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 //上传到七牛
                 var qnKey = qinniu.Put(stream, "", filename);
                 stream.Dispose();
-
-                ////创建文件
-                //var writer = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write);
-
-                ////下载图片写入文件流
-                //MediaApi.Get(picModel.AccessToken, item, writer);
-                //writer.Close();
-                //writer.Dispose();
-
-                ////上传到七牛
-                //var qnKey = qinniu.PutFile(filepath, "", filename);
-                ////删除本地临时文件
-                //if (File.Exists(filepath))
-                //{
-                //    File.Delete(filepath);
-                //}
-
+                
                 //上传图片成功
                 if (string.IsNullOrWhiteSpace(qnKey))
                     continue;

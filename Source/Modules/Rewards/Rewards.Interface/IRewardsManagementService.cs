@@ -165,7 +165,7 @@ namespace CCN.Modules.Rewards.Interface
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        JResult ShopLogin(string shopcode, string password);
+        JResult ShopLogin(ShopLoginInfo model);
 
         /// <summary>
         /// 添加商户

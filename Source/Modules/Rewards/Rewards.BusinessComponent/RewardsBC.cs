@@ -122,22 +122,12 @@ namespace CCN.Modules.Rewards.BusinessComponent
             model.Code = RandomUtility.GetRandomCode();
             //生成二维码位图
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
-
-            //保存二维码图片到临时文件夹
             var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
-            var filepath = QiniuUtility.GetFilePath(filename);
-            bitmap.Save(filepath);
-
+            var stream = BarCodeUtility.BitmapToStream(bitmap);
             //上传图片到七牛云
             var qinniu = new QiniuUtility();
-            model.QrCode = qinniu.PutFile(filepath, "", filename);
-
-            //删除本地临时文件
-            if (File.Exists(filepath))
-            {
-                File.Delete(filepath);
-            }
-
+            model.QrCode = qinniu.Put(stream, "", filename);
+            stream.Dispose();
             //开始兑换
             model.Createdtime = DateTime.Now;
             model.Sourceid = 2; //礼券来源  兑换
@@ -423,26 +413,18 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
             var codeList = new List<CouponCodeModel>();
 
-            for (int i = 0; i < model.Number; i++)
+            for (var i = 0; i < model.Number; i++)
             {
                 //生成随机数
                 var code = RandomUtility.GetRandomCode();
                 //生成二维码位图
                 var bitmap = BarCodeUtility.CreateBarcode(code, 240, 240);
                 var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
-                var filepath = QiniuUtility.GetFilePath(filename);
-                bitmap.Save(filepath);
-
+                var stream = BarCodeUtility.BitmapToStream(bitmap);
                 //上传图片到七牛云
                 var qinniu = new QiniuUtility();
-                var qrcode = qinniu.PutFile(filepath, "", filename);
-
-                //删除本地临时文件
-                if (File.Exists(filepath))
-                {
-                    File.Delete(filepath);
-                }
-
+                var qrcode = qinniu.Put(stream, "", filename);
+                stream.Dispose();
                 codeList.Add(new CouponCodeModel
                 {
                     Code = code,
@@ -577,10 +559,10 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        public JResult ShopLogin(string shopcode, string password)
+        public JResult ShopLogin(ShopLoginInfo model)
         {
-            password = Encryptor.EncryptAes(password);
-            var shopModel = DataAccess.GetShopModel(shopcode, password);
+            model.Password = Encryptor.EncryptAes(model.Password);
+            var shopModel = DataAccess.GetShopModel(model.Shopcode, model.Password);
 
             if (shopModel == null)
             {

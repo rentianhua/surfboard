@@ -171,5 +171,29 @@ namespace Cedar.Framework.Common.BaseClasses
             };
             return writer.Write(contents);
         }
+
+        /// <summary>
+        /// 图片转换
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static Stream BitmapToStream(Bitmap bitmap)
+        {
+            Stream ms = null;
+            try
+            {
+                ms = new MemoryStream();
+                bitmap.Save(ms, ImageFormat.Bmp);
+                return ms;
+            }
+            catch (ArgumentNullException)
+            {
+                if (ms == null) return null;
+                ms.Close();
+                ms.Dispose();
+
+                return null;
+            }
+        }
     }
 }

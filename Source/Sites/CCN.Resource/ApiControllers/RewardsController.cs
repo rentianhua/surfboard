@@ -256,10 +256,10 @@ namespace CCN.Resource.ApiControllers
         /// </summary>
         /// <returns></returns>
         [Route("ShopLogin")]
-        [HttpGet]
-        public JResult ShopLogin(string shopcode, string password)
+        [HttpPost]
+        public JResult ShopLogin([FromBody] ShopLoginInfo model)
         {
-            return _rewardsservice.ShopLogin(shopcode, password);
+            return _rewardsservice.ShopLogin(model);
         }
 
         /// <summary>

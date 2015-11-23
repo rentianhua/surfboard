@@ -200,8 +200,8 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="model"></param>
         /// <returns></returns>
         [Route("CancelCoupon")]
-        [HttpGet]
-        public JResult CancelCoupon(CancelModel model)
+        [HttpPost]
+        public JResult CancelCoupon([FromBody]CancelModel model)
         {
             return _rewardsservice.CancelCoupon(model);
         }
@@ -217,7 +217,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _rewardsservice.GetCoupon(query);
         }
-        
+
         /// <summary>
         /// 获取商品列表
         /// </summary>
@@ -256,10 +256,10 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <returns></returns>
         [Route("ShopLogin")]
-        [HttpGet]
-        public JResult ShopLogin(string shopcode, string password)
+        [HttpPost]
+        public JResult ShopLogin([FromBody] ShopLoginInfo model)
         {
-            return _rewardsservice.ShopLogin(shopcode, password);
+            return _rewardsservice.ShopLogin(model);
         }
 
         /// <summary>
@@ -369,6 +369,19 @@ namespace CCN.WebAPI.ApiControllers
         public JResult DelSettLog(string innerid)
         {
             return _rewardsservice.DelSettLog(innerid);
+        }
+
+        /// <summary>
+        /// 删除结算记录中的一张图片
+        /// </summary>
+        /// <param name="innerid">记录id</param>
+        /// <param name="pic"></param>
+        /// <returns></returns>
+        [Route("DeleteSettPicture")]
+        [HttpDelete]
+        public JResult DeleteSettPicture(string innerid, string pic)
+        {
+            return _rewardsservice.DeleteSettPicture(innerid, pic);
         }
 
         /// <summary>

@@ -225,9 +225,9 @@ namespace CCN.Modules.Rewards.BusinessService
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        public JResult ShopLogin(string shopcode, string password)
+        public JResult ShopLogin(ShopLoginInfo model)
         {
-            return BusinessComponent.ShopLogin(shopcode, password);
+            return BusinessComponent.ShopLogin(model);
         }
 
         /// <summary>
