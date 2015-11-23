@@ -63,7 +63,7 @@ namespace CCN.Resource.Controllers
         [LoginCheckFilterAttribute(IsCheck = false)]
         public ActionResult CheckLogin(string loginname, string password)
         {
-            Session.Timeout = 30;
+            Session.Timeout = 300;
             var user = _baseservice.GetUserInfo(loginname, password);
             if (user.errcode == 0)
             {
