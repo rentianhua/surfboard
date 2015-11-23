@@ -21,7 +21,7 @@
 
             <li>
                 <a href="javascript:void(0);" class="@dropClass" >
-                    <i class="@group.icon glyphicon glyphicon-tasks"></i>
+                    <i class="@group.icon"></i>
                     <span class="menu-text"> @group.name </span>
                     @if (group.submenu)
                     {
@@ -44,7 +44,7 @@
                                         @foreach (var thirdMenu in secondMenu.MenuArray)
                                         {
                                             <li>
-                                                <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@thirdMenu.url');">
+                                                <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@thirdMenu.url',this);">
                                                     <i class="@thirdMenu.icon"></i>
                                                     <span class="menu-text">@thirdMenu.name</span>
                                                 </a>
@@ -54,7 +54,7 @@
                                 }
                                 else//没有子菜单
                                 {
-                                    <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@secondMenu.url');">
+                                    <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@secondMenu.url',this);">
                                         <span class="menu-text">@secondMenu.name</span>
                                     </a>
                                 }

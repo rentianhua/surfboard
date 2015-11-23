@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CouponEdit";
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+//ViewBag.Title = "CouponEdit";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
 <style type="text/css">
@@ -172,7 +172,7 @@
             $.post("/api/Rewards/AddCoupon", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
-                location.href = "/rewards/rewards/couponlist";
+                getBodyHtml('mainbody', '/rewards/rewards/couponlist');
             });
         } else {
             if (result === "0") {
@@ -191,13 +191,13 @@
                 success: function(result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
                     alert(str);
-                    location.href = "/rewards/rewards/couponlist";
+                    getBodyHtml('mainbody', '/rewards/rewards/couponlist');
                 }
             });
         }
     }
 
-    var RadioClick = function () {
+    function RadioClick () {
 
         $("input[name*='radiotype']").click(function () {
 
@@ -306,7 +306,7 @@
                 <td></td>
                 <td>
                     <input type="submit" value="保存" onclick="Submit()" />
-                    <input type="button" value="返回" onclick="self.location = document.referrer;" />
+                    <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist');" />
                 </td>
             </tr>
         </tbody>
