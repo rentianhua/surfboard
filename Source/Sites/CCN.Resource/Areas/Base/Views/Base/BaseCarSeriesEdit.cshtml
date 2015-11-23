@@ -45,16 +45,14 @@
             success: function (data) {
                 data = data.errmsg;
                 $.each(data, function (k, v) {
-                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
                 });
                 Init();
             }
         });
     }
     function Submit() {
-        if (!confirm("确认修改车系信息？")) {
-            return;
-        }
+
         if (!$("#seriesname").val()) {
             alert("车系名称不为空！");
             return;
@@ -74,64 +72,106 @@
             Remark: $("#remark").val(),
         };
         if (id === "") {
-                        $.post("/api/Base/AddCarSeries", json, function (result) {
-                            var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                            if (result.errmsg != 1) {
-                                alert(result.errmsg);
-                            }
-                            alert(str);
-                            getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
-                        });
-                    }
+            if (!confirm("确认添加车系信息？")) {
+                return;
+            }
+            $.post("/api/Base/AddCarSeries", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                if (result.errmsg != 1) {
+                    alert(result.errmsg);
+                }
+                else {
+                    alert(str);
+                }
+                getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
+            });
+        }
         else {
             json.Innerid = id;
-                        $.ajax({
-                            url: '/api/Base/UpdateCarSeries',
-                            type: 'post',
-                            datatype: 'application/json',
-                            data: json,
-                            async: false,
-                            success: function (result) {
-                                var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                                if (result.errmsg != 1) {
-                                    alert(result.errmsg);
-                                }
-                                alert(str);
-                                getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
-                            }
-                        });
+            if (!confirm("确认修改车系信息？")) {
+                return;
+            }
+            $.ajax({
+                url: '/api/Base/UpdateCarSeries',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    if (result.errmsg != 1) {
+                        alert(result.errmsg);
                     }
+                    alert(str);
+                    getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
+                }
+            });
+        }
     }
 </script>
 
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center" id="title">车系信息编辑</div>
-    <table id="carseries" class="gridtable">
-        <tbody>
-            <tr>
-                <td><label class="required">*</label>品牌名称</td>
-                <td>
-                    <select id="selectbrand">
-                        <option value="0">请选择</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>车系名称</td>
-                <td><input type="text" id="seriesname" /></td>
-            </tr>
-            <tr>
-                <td><label class="required">*</label>车系组 进口/国产</td>
-                <td><input type="text" id="seriesgroupname" /></td>
-            </tr> 
-            <tr>
-                <td>备注</td>
-                <td><textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');" /></td>
-            </tr>
-        </tbody>
-    </table>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车系基本信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>品牌名称</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectbrand">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车系名称</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="seriesname" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车系组 进口/国产</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="seriesgroupname" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
+                            <div class="controls col-sm-10">
+                                <textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="submit" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>

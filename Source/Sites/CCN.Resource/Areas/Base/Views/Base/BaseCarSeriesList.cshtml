@@ -21,7 +21,7 @@
             success: function (data) {
                 data = data.errmsg;
                 $.each(data, function (k, v) {
-                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
                 });
             }
         });
@@ -70,7 +70,12 @@
         }
         $.post("/api/Base/DeleteCarSeries?innerid=" + Innerid, function (result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
-            alert(str);
+            if (result.errmsg != 1) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
             getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');
         });
     }

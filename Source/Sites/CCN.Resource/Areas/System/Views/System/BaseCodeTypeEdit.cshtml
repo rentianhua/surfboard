@@ -1,7 +1,7 @@
 ﻿
 @{
-    ViewBag.Title = "CarSeriesEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarSeriesEdit";
+//Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <script type="text/javascript">
@@ -49,8 +49,12 @@
         if (id === "") {
             $.post("/api/Base/AddCodeType", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
-                alert(result.errmsg);
-                alert(str);
+                if (result.errmsg != 1) {
+                    alert(result.errmsg);
+                }
+                else {
+                    alert(str);
+                }
                 getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
             });
         }
@@ -64,8 +68,12 @@
                 async: false,
                 success: function (result) {
                     var str = result.errcode === 0 ? "更新成功" : "更新失败";
-                    alert(result.errmsg);
-                    alert(str);
+                    if (result.errmsg != 1) {
+                        alert(result.errmsg);
+                    }
+                    else {
+                        alert(str);
+                    }
                     getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');
                 }
             });
@@ -73,24 +81,47 @@
     }
 </script>
 
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码类型编辑</div>
-    <table id="codetypelist" class="gridtable">
-        <tbody>
-            <tr>
-                <td>代码类型名称</td>
-                <td>
-                    <input type="text" id="Typename" />
-                </td>
-            </tr>
-            <tr>
-                <td>代码类型key</td>
-                <td><input type="text" id="Typekey" /></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="保存" onclick="Submit()" /></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');" /></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">基础数据代码类型编辑</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码类型名称</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="Typename" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码类型key</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="Typekey" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="submit" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeTypeList');" />
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+            

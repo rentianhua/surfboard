@@ -307,6 +307,9 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult UpdateCarModel(BaseCarModelModel model);
         #endregion
-       
+
+        #region 获取系统后台基础信息
+        JResult GetUserInfo(string loginname, string password);
+        #endregion
     }
 }

@@ -1,0 +1,153 @@
+﻿
+@{
+    //ViewBag.Title = "SearchCancelList";
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        var myDate = new Date();
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth();
+        
+        var currmonthfirst = year + "-" + (month + 1) + "-" + "01";  //当月第一天
+        var currmonth = new Date(currmonthfirst);
+        var lastMDate = new Date();
+        lastMDate.setDate(currmonth.getDate() - 1); //当月第一天的日减1就是上月最后一天
+        var lyear = lastMDate.getFullYear();
+        var lmonth = lastMDate.getMonth()+1;
+        var lday = lastMDate.getDate();
+
+        var lastmonthfirst = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + "01";
+        var lastmonthend = lyear + "-" + (lmonth < 10 ? ("0" + lmonth) : lmonth) + "-" + (lday < 10 ? ("0" + lday) : lday);
+
+        $("#cyclestart").val(lastmonthfirst);
+        $("#cycleend").val(lastmonthend);
+
+        InitShop();
+        //QueryList();
+        LoadData([],0);
+    });
+
+    function InitShop() {
+        $("#selectshop").empty();
+        $("#selectshop").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Rewards/GetShopList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                $.each(data, function (k, v) {
+                    $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
+
+    function QueryList() {
+        var json = {
+            shopid: $("#selectshop").val() === "0" ? "" : $("#selectshop").val(),
+            starttime: $("#cyclestart").val(),
+            endtime: $("#cycleend").val()
+        };
+        if (json.shopid === "0") {
+            alert("请选择商户");
+            return;
+        }
+        if (json.starttime === "") {
+            alert("请选择开始时间");
+            return;
+        }
+        if (json.endtime === "") {
+            alert("请选择结束时间");
+            return;
+        }
+
+        $.post("/api/Rewards/GetCoupon", json, function(data) {
+            LoadData(data.errmsg, 0);
+        });
+    }
+
+    function LoadData(data, index) {
+
+        $("#cancellist tbody").empty();
+
+        var str = "";
+
+        if (data.length === 0) {
+            str += "<tr>";
+            str += "<td colspan='5' style='color:red;text-align:center;'>暂无数据</td>";
+            str += "</tr>";
+            $("#cancellist tbody").append(str);
+            return;
+        }
+        var totalnumber = 0;
+        var totalamount = 0;
+        $.each(data, function (key, val) {
+            totalnumber += val.CanedCount;
+            totalamount += val.TotalPrice;
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.Title + "</td>";            
+            str += "<td>" + val.CanedCount + "</td>";
+            str += "<td>" + val.CostPrice + "</td>";
+            str += "<td>" + val.TotalPrice + "</td>";
+            str += "</tr>";
+            $("#cancellist tbody").append(str);
+        });
+        str = "";
+        str += "<tr style='background-color:#ccc'>";
+        str += "<td>合计</td>";
+        str += "<td></td>";
+        str += "<td>" + totalnumber + "</td>";
+        str += "<td>" + "</td>";
+        str += "<td>" + totalamount + "</td>";
+        str += "</tr>";
+        $("#cancellist tbody").append(str);
+    }
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">核销结算查询</div>
+    <table style="margin: 0 auto;">
+        <tr>
+            <td>
+                所属商户：
+                <select id="selectshop">
+                    <option value="0">请选择</option>
+                </select>
+            </td>
+            <td>
+                周期：
+                <input type="text" id="cyclestart" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" /> -
+                <input type="text" id="cycleend" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" />
+                <input type="button" value="搜索" onclick="QueryList();" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="cancellist" class="gridtable">
+
+                    <thead>
+                        <tr>
+                            <td>序号</td>
+                            <td>礼券标题</td>
+                            <td>核销数量</td>
+                            <td>成本价(单位：元)</td>
+                            <td>总计(单位：元)</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+

@@ -59,12 +59,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCodeType(string innerid)
         {
-            if (string.IsNullOrWhiteSpace(innerid))
+            var codemodel = DataAccess.VerifyCodeType(innerid);
+            if (codemodel != null)
             {
-                return JResult._jResult(402, "参数不完整");
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "品牌下有车系，删除失败！"
+                };
             }
             var model = DataAccess.DeleteCodeType(innerid);
-            return JResult._jResult(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
         }
         /// <summary>
         /// 获取基础数据代码类型
@@ -188,9 +197,8 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="model"></param>
         /// <returns></returns>
         public JResult AddCode(BaseCodeModel model)
-        {
-              
-            var test = DataAccess.GetCodeByTypeKey(model.Typekey,model.CodeName,model.CodeValue);
+        {     
+            var test = DataAccess.GetCodeByTypeKey(model.Typekey,null,null);
             if (test.Typekey == model.Typekey)
             {
                 if (test.CodeName==model.CodeName) {
@@ -200,6 +208,15 @@ namespace CCN.Modules.Base.BusinessComponent
                         errmsg = "代码名称已存在！"
                     };
                 }
+                if (test.CodeValue == model.CodeValue)
+                {
+                    return new JResult
+                    {
+                        errcode = 400,
+                        errmsg = "代码值已存在！"
+                    };
+                }
+
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.IsEnabled = 1;
@@ -219,17 +236,15 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult UpdateCode(BaseCodeModel model)
         {
             var test = DataAccess.GetCodeByTypeKey(model.Typekey, model.CodeName, model.CodeValue);
-            if (test.Typekey == model.Typekey)
+            if (test != null)
             {
-                if (test.CodeName != model.CodeName&&test.CodeValue!=model.CodeValue)
+
+                return new JResult
                 {
-                    return new JResult
-                    {
-                        errcode = 400,
-                        errmsg = "更新信息失败！"
-                    };
-                }
-            }
+                    errcode = 400,
+                    errmsg = "更新信息失败！"
+                };
+          }
             var result = DataAccess.UpdateCode(model);
             return new JResult
             {
@@ -577,12 +592,18 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCarBrand(string innerid)
         {
-            if (string.IsNullOrWhiteSpace(innerid))
-            {
-                return JResult._jResult(402, "参数不完整");
+            var brandmodel = DataAccess.VerifyCarBrand(innerid);
+            if (brandmodel!=null) {
+                return new JResult {
+                    errcode=400,
+                    errmsg="品牌下有车系，删除失败！"
+                };
             }
             var model = DataAccess.DeleteCarBrand(innerid);
-            return JResult._jResult(model);
+            return new JResult {
+                errcode=0,
+                errmsg=model
+            };
         }
         /// <summary>
         /// 更新品牌信息
@@ -679,12 +700,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCarSeries(string innerid)
         {
-            if (string.IsNullOrWhiteSpace(innerid))
+            var seriesmodel = DataAccess.VerifyCarSeries(innerid);
+            if (seriesmodel != null)
             {
-                return JResult._jResult(402, "参数不完整");
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "车系下有车型，删除失败！"
+                };
             }
             var model = DataAccess.DeleteCarSeries(innerid);
-            return JResult._jResult(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
         }
         /// <summary>
         /// 更新车系信息
@@ -822,6 +852,21 @@ namespace CCN.Modules.Base.BusinessComponent
             };
         }
         #endregion
-      
+
+        #region 获取系统后台基础信息
+
+        /// <summary>
+        /// 获取登录人信息
+        /// </summary>
+        /// <param name="loginname"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(string loginname, string password)
+        {
+            var model = DataAccess.GetUserInfo(loginname, password);
+            return JResult._jResult(model);
+        }
+        #endregion
+
     }
 }

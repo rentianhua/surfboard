@@ -8,8 +8,8 @@ using CCN.Modules.Rewards.DataAccess;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Microsoft.Practices.ObjectBuilder2;
 using Newtonsoft.Json;
-using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -82,21 +82,40 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
-            if (model == null)
+            if (string.IsNullOrWhiteSpace(model?.Custid) || string.IsNullOrWhiteSpace(model.Cardid))
             {
-                return JResult._jResult(401, "参数不正确");
+                return JResult._jResult(401, "参数不完整");
             }
-            if (string.IsNullOrWhiteSpace(model.Custid))
+
+            var couponModel = DataAccess.GetCouponById(model.Cardid);
+            if (couponModel == null)
             {
-                return JResult._jResult(402, "会员不存在");
+                return JResult._jResult(402, "礼券不存在");
             }
-            if (model.Point == 0)
+
+            if (couponModel.Needpoint == null || couponModel.Needpoint == 0)
             {
-                return JResult._jResult(403, "积分不够");
+                return JResult._jResult(403, "该礼券不可兑换");
             }
-            if (string.IsNullOrWhiteSpace(model.Cardid))
+
+            //固定时间范围
+            if (couponModel.Vtype.HasValue && couponModel.Vtype.Value == 1)
             {
-                return JResult._jResult(404, "礼券不存在");
+                if (DateTime.Now > couponModel.Vend)
+                {
+                    return JResult._jResult(404, "礼券已过期");
+                }
+            }
+
+            var custTotalInfo = DataAccess.GetCustTotalInfo(model.Custid);
+            if (custTotalInfo == null)
+            {
+                return JResult._jResult(405, "会员不存在");
+            }
+
+            if (custTotalInfo.Currpoint < couponModel.Needpoint)
+            {
+                return JResult._jResult(406, "积分不够");
             }
 
             //生成随机数
@@ -105,8 +124,8 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
 
             //保存二维码图片到临时文件夹
-            var filename = string.Concat("card_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-            var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
+            var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+            var filepath = QiniuUtility.GetFilePath(filename);
             bitmap.Save(filepath);
 
             //上传图片到七牛云
@@ -121,6 +140,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
             //开始兑换
             model.Createdtime = DateTime.Now;
+            model.Sourceid = 2; //礼券来源  兑换
             var result = DataAccess.PointExchangeCoupon(model);
             return JResult._jResult(
                 result > 0 ? 0 : 400,
@@ -371,7 +391,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var result = DataAccess.UnBindWechatProduct(cardid);
             return JResult._jResult(result);
         }
-
+        
         #endregion
 
         #region 礼券对外接口
@@ -400,7 +420,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
             {
                 return JResult._jResult(403, "会员不存在");
             }
-                        
+
             var codeList = new List<CouponCodeModel>();
 
             for (int i = 0; i < model.Number; i++)
@@ -448,19 +468,24 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <summary>
         /// 礼券核销
         /// </summary>
-        /// <param name="code"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public JResult CancelCoupon(string code)
+        public JResult CancelCoupon(CancelModel model)
         {
-            if (string.IsNullOrWhiteSpace(code))
+            if (string.IsNullOrWhiteSpace(model?.Shopid) || string.IsNullOrWhiteSpace(model.Code))
             {
-                return JResult._jResult(401,"code空");
+                return JResult._jResult(401,"参数不完整");
             }
 
-            var codeModel = DataAccess.GetCode(code);
+            var codeModel = DataAccess.GetCode(model.Code);
             if (codeModel == null)
             {
                 return JResult._jResult(402, "code不存在");
+            }
+
+            if (!codeModel.Shopid.Equals(model.Shopid))
+            {
+                return JResult._jResult(403, "非本店礼券");
             }
 
             if (codeModel.Gettime == null)
@@ -470,18 +495,18 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
             if (codeModel.Usedtime != null)
             {
-                return JResult._jResult(403, "该券已被使用");
+                return JResult._jResult(404, "该券已被使用");
             }
 
             var cardModel = DataAccess.GetCouponById(codeModel.Cardid);
             if (cardModel == null)
             {
-                return JResult._jResult(404, "礼券不存在");
+                return JResult._jResult(405, "礼券不存在");
             }
 
             if (cardModel.IsEnabled != 1)
             {
-                return JResult._jResult(405, "礼券被禁用");
+                return JResult._jResult(406, "礼券被禁用");
             }
 
             var nowDate = DateTime.Now;
@@ -490,25 +515,25 @@ namespace CCN.Modules.Rewards.BusinessComponent
             {
                 if (cardModel.Vstart > nowDate && cardModel.Vend < nowDate)
                 {
-                    return JResult._jResult(406, "不在有效期范围内");
+                    return JResult._jResult(407, "不在有效期范围内");
                 }
             }
             else if (cardModel.Vtype.HasValue && cardModel.Vtype.Value == 2)
             {
                 if (cardModel.Value1 == null || cardModel.Value2 == null)
                 {
-                    return JResult._jResult(406, "不在有效期范围内");
+                    return JResult._jResult(407, "不在有效期范围内");
                 }
 
                 var startTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value);
                 var endTime = codeModel.Gettime.Value.AddDays(cardModel.Value1.Value).AddDays(cardModel.Value2.Value);
                 if (startTime > nowDate && endTime < nowDate)
                 {
-                    return JResult._jResult(406, "不在有效期范围内");
+                    return JResult._jResult(407, "不在有效期范围内");
                 }
             }
 
-            var result = DataAccess.CancelCoupon(code);
+            var result = DataAccess.CancelCoupon(model.Code);
 
             return JResult._jResult(
                 result > 0 ? 0 : 400,
@@ -552,10 +577,10 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        public JResult ShopLogin(string loginname, string password)
+        public JResult ShopLogin(string shopcode, string password)
         {
             password = Encryptor.EncryptAes(password);
-            var shopModel = DataAccess.GetShopModel(loginname, password);
+            var shopModel = DataAccess.GetShopModel(shopcode, password);
 
             if (shopModel == null)
             {
@@ -578,9 +603,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult AddShop(ShopModel model)
         {
-
             if (string.IsNullOrWhiteSpace(model?.Shopname) 
-                || string.IsNullOrWhiteSpace(model.Loginname) 
                 || string.IsNullOrWhiteSpace(model.Password))
             {
                 return JResult._jResult(401, "参数不完整");
@@ -591,9 +614,23 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 return JResult._jResult(402,"商户名称重复");
             }
 
-            if (DataAccess.CheckLoginName(model.Loginname) > 0)
+            model.Code = DataAccess.GetMaxCode() + 1;
+
+            if (model.Code < 10)
             {
-                return JResult._jResult(403, "商户登录名重复");
+                model.Shopcode = "SP000" + model.Code;
+            }
+            else if (model.Code >= 10 && model.Code < 100)
+            {
+                model.Shopcode = "SP00" + model.Code;
+            }
+            else if (model.Code >= 100 && model.Code < 1000)
+            {
+                model.Shopcode = "SP0" + model.Code;
+            }
+            else
+            {
+                model.Shopcode = "SP" + model.Code;
             }
 
             model.Innerid = Guid.NewGuid().ToString();
@@ -672,7 +709,13 @@ namespace CCN.Modules.Rewards.BusinessComponent
             {
                 model.SettTime = DateTime.Now;
             }
-            
+
+            var shopModel = DataAccess.GetShopById(model.Shopid);
+            if (shopModel == null)
+            {
+                return JResult._jResult(401, "商户不存在");
+            }
+            model.Orderid = shopModel.Shopcode + DateTime.Now.ToString("yyyyMMddHHmmss");
             var result = DataAccess.AddSettLog(model);
             return JResult._jResult(result);
         }
@@ -684,7 +727,30 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult UpdateSettLog(SettlementLogModel model)
         {
+            model.Orderid = null;
             var result = DataAccess.UpdateSettLog(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除结算记录中的一张图片
+        /// </summary>
+        /// <param name="innerid">记录id</param>
+        /// <param name="pic"></param>
+        /// <returns></returns>
+        public JResult DeleteSettPicture(string innerid, string pic)
+        {
+            var settModel = DataAccess.GetSettLogById(innerid);
+            if (settModel == null)
+            {
+                return JResult._jResult(401,"记录不存在");
+            }
+
+            var listP = settModel.Pictures.Split(',').ToList();
+            listP.Remove(pic);
+            settModel.Pictures = listP.JoinStrings(",");
+
+            var result = DataAccess.UpdateSettLogPic(innerid, settModel.Pictures);
             return JResult._jResult(result);
         }
 
@@ -714,7 +780,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<SettlementLogModel> GetSettLogPageList(SettlementLogQueryModel query)
+        public BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query)
         {
             return DataAccess.GetSettLogPageList(query);
         }

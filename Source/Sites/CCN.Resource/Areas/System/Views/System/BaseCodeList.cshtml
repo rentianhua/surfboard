@@ -1,5 +1,5 @@
 ﻿@{
-    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 <script type="text/javascript">
     $(function () {
@@ -44,8 +44,8 @@
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + val.Remark + "</td>";
             str += "<td>" +
-               "<a href='/System/System/BaseCodeEdit?innerid=" + val.Innerid + "'>修改 </a>" +
-               "<a href='/System/System/BaseCodeView?innerid=" + val.Innerid + "'>详情 </a>" +
+                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/BaseCodeEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+               "<a onclick=\"getBodyHtml('mainbody', '/System/System/BaseCodeView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
                "<a href='javascript:;' onclick=\"DeleteCode('" + val.Innerid + "');\">删除 </a>" +
                "<a href='javascript:;' onclick=\"UpdateCodeStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";

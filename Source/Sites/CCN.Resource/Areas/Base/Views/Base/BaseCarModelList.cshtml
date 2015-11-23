@@ -22,7 +22,7 @@
             success: function (data) {
                 data = data.errmsg;
                 $.each(data, function (k, v) {
-                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.BrandName + "</option>");
+                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
                 });
             }
         });
