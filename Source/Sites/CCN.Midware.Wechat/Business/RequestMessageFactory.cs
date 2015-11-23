@@ -171,17 +171,24 @@ namespace CCN.Midware.Wechat.Business
                                 if (orderresult.errcode == ReturnCode.请求成功)
                                 {
                                     var rewardsManagementService = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                                    var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()
+                                    try
                                     {
-                                        ProductId = orderresult.order.product_id,
-                                        OrderId = orderresult.order.order_id,
-                                        Accountid = AppID,
-                                        Number = orderresult.order.product_count,
-                                        Openid = orderresult.order.buyer_openid
-                                    });
-                                    var text = JsonConvert.SerializeObject(orderresult.order);
-                                    var logresult = $"MERCHANT_ORDER:{text}    result:{JsonConvert.SerializeObject(wholesaleCouponresult)}";
-                                    LoggerFactories.CreateLogger().Write(logresult, TraceEventType.Information);
+                                        var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()
+                                        {
+                                            ProductId = orderresult.order.product_id,
+                                            OrderId = orderresult.order.order_id,
+                                            Accountid = AppID,
+                                            Number = orderresult.order.product_count,
+                                            Openid = orderresult.order.buyer_openid
+                                        });
+                                        var text = JsonConvert.SerializeObject(orderresult.order);
+                                        var logresult = $"MERCHANT_ORDER:{text}    result:{JsonConvert.SerializeObject(wholesaleCouponresult)}";
+                                        LoggerFactories.CreateLogger().Write(logresult, TraceEventType.Information);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        LoggerFactories.CreateLogger().Write(e.Message, TraceEventType.Information);
+                                    }
                                 }
                                 break;
                             case "SUBMIT_MEMBERCARD_USER_INFO"://接收会员信息事件通知
