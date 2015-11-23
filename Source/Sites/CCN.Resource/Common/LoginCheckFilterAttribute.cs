@@ -16,15 +16,15 @@ namespace CCN.Resource.Common
         {
             base.OnActionExecuting(filterContext);
 
-            if (IsCheck)
-            {
-                //校验用户是否已经登录
-                if (filterContext.HttpContext.Session["UserInfo"] == null)
-                {
-                    //跳转到登陆页
-                    filterContext.HttpContext.Response.Redirect("/Home/Login");
-                }
-            }
+            //if (IsCheck)
+            //{
+            //    //校验用户是否已经登录
+            //    if (filterContext.HttpContext.Session["UserInfo"] == null)
+            //    {
+            //        //跳转到登陆页
+            //        filterContext.HttpContext.Response.Redirect("/Home/Login");
+            //    }
+            //}
         }
     }
 }
