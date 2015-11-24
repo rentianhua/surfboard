@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessEntity
 {
@@ -11,38 +12,53 @@ namespace CCN.Modules.Rewards.BusinessEntity
     /// </summary>
     public class CouponBuyModel
     {
-        /// <summary>
-        /// 商品id
-        /// </summary>
-        public string ProductId { get; set; }
+        ///// <summary>
+        ///// 商品id
+        ///// </summary>
+        //public string ProductId { get; set; }
+
+        ///// <summary>
+        ///// 订单id
+        ///// </summary>
+        //public string OrderId { get; set; }
+
+        ///// <summary>
+        ///// 购买数量
+        ///// </summary>
+        //public int Number { get; set; }
+
+        ///// <summary>
+        ///// openid
+        ///// </summary>
+        //public string Openid { get; set; }
+
+        ///// <summary>
+        ///// 公众号原始id
+        ///// </summary>
+        //public string Accountid { get; set; }
+
+        ///// <summary>
+        ///// 初始化
+        ///// </summary>
+        //public CouponBuyModel()
+        //{
+        //    Number = 1;
+        //}
 
         /// <summary>
-        /// 订单id
+        /// 订单信息
         /// </summary>
-        public string OrderId { get; set; }
+        public Order Order { get; set; }
 
         /// <summary>
-        /// 购买数量
+        /// id
         /// </summary>
-        public int Number { get; set; }
+        public string innerid { get; set; }
 
         /// <summary>
-        /// openid
+        /// 
         /// </summary>
-        public string Openid { get; set; }
-
-        /// <summary>
-        /// 公众号原始id
-        /// </summary>
-        public string Accountid { get; set; }
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        public CouponBuyModel()
-        {
-            Number = 1;
-        }
+        public int result { get; set; }
     }
 
 

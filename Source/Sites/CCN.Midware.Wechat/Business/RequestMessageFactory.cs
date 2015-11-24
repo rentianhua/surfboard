@@ -171,13 +171,15 @@ namespace CCN.Midware.Wechat.Business
                                 if (orderresult.errcode == ReturnCode.请求成功)
                                 {
                                     var rewardsManagementService = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
                                     var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()
                                     {
-                                        ProductId = orderresult.order.product_id,
-                                        OrderId = orderresult.order.order_id,
-                                        Accountid = AppID,
-                                        Number = orderresult.order.product_count,
-                                        Openid = orderresult.order.buyer_openid
+                                        //ProductId = orderresult.order.product_id,
+                                        //OrderId = orderresult.order.order_id,
+                                        //Accountid = AppID,
+                                        //Number = orderresult.order.product_count,
+                                        //Openid = orderresult.order.buyer_openid
+                                        Order = orderresult.order
                                     });
                                     var text = JsonConvert.SerializeObject(orderresult.order);
                                     var logresult = $"MERCHANT_ORDER:{text}    result:{JsonConvert.SerializeObject(wholesaleCouponresult)}";

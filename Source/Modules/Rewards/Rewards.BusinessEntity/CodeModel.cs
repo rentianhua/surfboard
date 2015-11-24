@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Rewards.BusinessEntity
 {
@@ -35,6 +36,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 获得时间
         /// </summary>
         public DateTime? Gettime { get; set; }
+
+        /// <summary>
+        /// 是否使用
+        /// </summary>
+        public short? IsUsed { get; set; }
 
         /// <summary>
         /// 使用时间
@@ -149,6 +155,90 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public DateTime? EndTime { get; set; }
     }
+
+    /// <summary>
+    /// 核销记录查询条件
+    /// </summary>
+    public class CodeQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 商户id
+        /// </summary>
+        public string Shopid { get; set; }
+
+        /// <summary>
+        /// code
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 核销开始时间
+        /// </summary>
+        public DateTime? StartTime { get; set; }
+
+        /// <summary>
+        /// 核销结束时间
+        /// </summary>
+        public DateTime? EndTime { get; set; }
+    }
+
+    /// <summary>
+    /// 核销记录列表model
+    /// </summary>
+    public class CodeViewListModel
+    {
+        /// <summary>
+        /// 商户id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// code
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 核销时间
+        /// </summary>
+        public DateTime? Usedtime { get; set; }
+
+        /// <summary>
+        /// title
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 面额
+        /// </summary>
+        public decimal? Amount { get; set; }
+
+        /// <summary>
+        /// 购买价
+        /// </summary>
+        public decimal? Buyprice { get; set; }
+
+        /// <summary>
+        /// 成本价
+        /// </summary>
+        public decimal? Costprice { get; set; }
+    }
+
+    /// <summary>
+    /// code列表汇总
+    /// </summary>
+    public class CodeListSummaryModel
+    {
+        /// <summary>
+        /// 核销总数
+        /// </summary>
+        public int TotalNumber { get; set; }
+
+        /// <summary>
+        /// 核销总价额
+        /// </summary>
+        public decimal? TotalPrice { get; set; }
+    }
+
 
     /// <summary>
     /// 核销model

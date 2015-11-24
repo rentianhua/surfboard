@@ -117,28 +117,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 try
                 {
-                    var filename = string.Concat("cust_qrcode_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
-                    var filepath = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", filename);
-                    //var website = ConfigHelper.GetAppSettings("website");
+                    //生成二维码位图
                     var bitmap = BarCodeUtility.CreateBarcode(userInfo.Mobile, 240, 240);
-
-                    //保存图片到临时文件夹
-                    bitmap.Save(filepath);
-
+                    var filename = QiniuUtility.GetFileName(Picture.cust_qrcode);
+                    var stream = BarCodeUtility.BitmapToStream(bitmap);
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
-                    var qrcodeKey = qinniu.PutFile(filepath, "", filename);
-
-                    //删除本地临时文件
-                    if (File.Exists(filepath))
-                    {
-                        File.Delete(filepath);
-                    }
-
+                    var qrcode = qinniu.Put(stream, "", filename);
+                    stream.Dispose();
                     //上传成功更新会员二维码
-                    if (!string.IsNullOrWhiteSpace(qrcodeKey))
+                    if (!string.IsNullOrWhiteSpace(qrcode))
                     {
-                        DataAccess.UpdateQrCode(innerid, qrcodeKey);
+                        DataAccess.UpdateQrCode(innerid, qrcode);
                     }
                 }
                 catch (Exception ex)
@@ -421,9 +411,6 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
 
             model.AuditPer = operid;
-
-            //设置认证状态
-            model.AuditResult = model.AuditResult == 1 ? 2 : 3;
             model.AuditTime = DateTime.Now;
 
             var result = DataAccess.AuditAuthentication(model);

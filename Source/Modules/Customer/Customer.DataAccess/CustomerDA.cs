@@ -430,7 +430,11 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sql, new { authstatus = model.AuditResult, innerid = model.Custid });
+                    conn.Execute(sql, new
+                    {
+                        authstatus = model.AuditResult == 1 ? 2 : 3,
+                        innerid = model.Custid
+                    });
                     conn.Execute(sqlau, new
                     {
                         auditper = model.AuditPer,

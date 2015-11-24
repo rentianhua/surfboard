@@ -92,6 +92,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 兑换所需积分（0或空 为不可兑换）
         /// </summary>
         public int? Needpoint { get; set; }
+        
+        /// <summary>
+        /// 使用说明
+        /// </summary>
+        public string Usedesc { get; set; }
 
         /// <summary>
         /// 添加时间
