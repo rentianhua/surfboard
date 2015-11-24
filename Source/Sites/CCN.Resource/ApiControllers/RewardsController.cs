@@ -117,6 +117,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        [Route("GetCouponByCode")]
+        [HttpGet]
+        public JResult GetCouponByCode(string code)
+        {
+            return _rewardsservice.GetCouponByCode(code);
+        }
+
+        /// <summary>
         /// 更新礼券状态
         /// </summary>
         /// <param name="cardid"></param>
@@ -177,6 +189,30 @@ namespace CCN.Resource.ApiControllers
             return _rewardsservice.UnBindWechatProduct(cardid);
         }
 
+
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecord")]
+        [HttpPost]
+        public BasePageList<CodeViewListModel> GetCodeRecord([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecord(query);
+        }
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecordTotal")]
+        [HttpPost]
+        public JResult GetCodeRecordTotal([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecordTotal(query);
+        }
         #endregion
 
         #region 礼券对外接口
@@ -329,6 +365,90 @@ namespace CCN.Resource.ApiControllers
         public IEnumerable<ItemShop> GetShopList()
         {
             return _rewardsservice.GetShopList();
+        }
+
+        #endregion
+
+        #region 商户职员管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopStaffModel")]
+        [HttpPost]
+        public JResult GetShopStaffModel([FromBody]StaffLoginInfo model)
+        {
+            return _rewardsservice.GetShopStaffModel(model);
+        }
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopStaffById")]
+        [HttpGet]
+        public JResult GetShopStaffById(string innerid)
+        {
+            return _rewardsservice.GetShopStaffById(innerid);
+        }
+
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        [Route("AddShopStaff")]
+        [HttpPost]
+        public JResult AddShopStaff([FromBody]ShopStaffModel model)
+        {
+            return _rewardsservice.AddShopStaff(model);
+        }
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateShopStaff")]
+        [HttpPut]
+        public JResult UpdateShopStaff([FromBody]ShopStaffModel model)
+        {
+            return _rewardsservice.UpdateShopStaff(model);
+        }
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateShopStaffStatus")]
+        [HttpPost]
+        public JResult UpdateShopStaffStatus(string innerid, int status)
+        {
+            return _rewardsservice.UpdateShopStaffStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        [Route("DeleteShopStaff")]
+        [HttpDelete]
+        public JResult DeleteShopStaff(string innerid)
+        {
+            return _rewardsservice.DeleteShopStaff(innerid);
+        }
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetShopStaffPageList")]
+        [HttpPost]
+        public BasePageList<ShopStaffViewModel> GetShopStaffPageList([FromBody]ShopStaffQueryModel query)
+        {
+            return _rewardsservice.GetShopStaffPageList(query);
         }
 
         #endregion

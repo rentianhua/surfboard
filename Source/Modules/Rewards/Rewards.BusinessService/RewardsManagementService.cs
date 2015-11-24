@@ -338,6 +338,76 @@ namespace CCN.Modules.Rewards.BusinessService
 
         #endregion
 
+        #region 商户职员管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopStaffModel(StaffLoginInfo model)
+        {
+            return BusinessComponent.GetShopStaffModel(model);
+        }
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopStaffById(string innerid)
+        {
+            return BusinessComponent.GetShopStaffById(innerid);
+        }
+
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShopStaff(ShopStaffModel model)
+        {
+            return BusinessComponent.AddShopStaff(model);
+        }
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShopStaff(ShopStaffModel model)
+        {
+            return BusinessComponent.UpdateShopStaff(model);
+        }
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStaffStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateShopStaffStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShopStaff(string innerid)
+        {
+            return BusinessComponent.DeleteShopStaff(innerid);
+        }
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopStaffViewModel> GetShopStaffPageList(ShopStaffQueryModel query)
+        {
+            return BusinessComponent.GetShopStaffPageList(query);
+        }
+
+        #endregion
+
         #region 结算记录
 
         /// <summary>

@@ -1087,6 +1087,206 @@ namespace CCN.Modules.Rewards.DataAccess
 
         #endregion
 
+        #region 商户职员管理
+        
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public ShopStaffInfo GetShopStaffModel(string loginname, string password)
+        {
+            const string sqlSelectStaff =
+                "select innerid,shopid, loginname, password, staffname, sex, mobile, email, status, createdtime, modifiedtime from coupon_shop_staff where loginname=@loginname and password=@password";
+
+            const string sqlSelectShop =
+                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, area, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where shopid=@shopid";
+
+            var shopStaffInfo = new ShopStaffInfo();
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    shopStaffInfo.StaffModel = conn.Query<ShopStaffModel>(sqlSelectStaff, new { loginname , password }).FirstOrDefault();
+                    if (shopStaffInfo.StaffModel != null)
+                    {
+                        shopStaffInfo.ShopModel = conn.Query<ShopModel>(sqlSelectShop, new { shopid = shopStaffInfo.StaffModel.Shopid }).FirstOrDefault();
+                    }
+                    return shopStaffInfo;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新商户异常：", TraceEventType.Error, ex);
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        public ShopStaffModel GetShopStaffById(string innerid)
+        {
+            const string sqlSelect =
+                "select innerid,shopid, loginname, staffname, sex, mobile, email, status, createdtime, modifiedtime from coupon_shop_staff where innerid=@innerid";
+
+            //更新礼券code
+            return Helper.Query<ShopStaffModel>(sqlSelect, new { innerid }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 验证商户职员名重复
+        /// </summary>
+        /// <returns></returns>
+        public int CheckShopStaffName(string staffname)
+        {
+            const string sql = "select count(1) as count from coupon_shop_staff where staffname=@staffname;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { staffname });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("验证商户职员名重复异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 验证商户职员登录名重复
+        /// </summary>
+        /// <returns></returns>
+        public int CheckShopStaffLoginName(string staffname)
+        {
+            const string sql = "select count(1) as count from coupon_shop_staff where loginname=@loginname;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { staffname });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("验证商户职员登录名重复异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        public int AddShopStaff(ShopStaffModel model)
+        {
+            const string sql = "insert into coupon_shop_staff (innerid,shopid, loginname, staffname, sex, mobile, email, status, createdtime, modifiedtime) " +
+                               "values (@innerid,@shopid, @loginname, @staffname, @sex, @mobile, @email, @status, @createdtime, @modifiedtime);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加职员异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public int UpdateShopStaff(ShopStaffModel model)
+        {
+            var sqlStr = new StringBuilder("update coupon_shop_staff set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新商户Staff异常：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateShopStaffStatus(string innerid, int status)
+        {
+            const string sql = "update coupon_shop_staff set status=@status where innerid=@innerid;";
+            var result = Helper.Execute(sql, new
+            {
+                innerid,
+                status
+            });
+            return result;
+        }
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public int DeleteShopStaff(string innerid)
+        {
+            const string sql = "delete from coupon_shop_staff where innerid=@innerid;";
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除商户Staff异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopStaffViewModel> GetShopStaffPageList(ShopStaffQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName =
+                @"coupon_shop_staff as a 
+                inner join coupon_shop as b on a.shopid=b.innerid";
+            const string fields =
+                "a.innerid,a.shopid, a.loginname, a.staffname, a.sex, a.mobile, a.email, a.status, a.createdtime, a.modifiedtime,b.shopname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Status != null
+                ? $" and a.status={query.Status}"
+                : "");
+
+            if (!string.IsNullOrWhiteSpace(query.Staffname))
+            {
+                sqlWhere.Append($" and a.staffname like '%{query.Staffname}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<ShopStaffViewModel>(model, query.Echo);
+            return list;
+        }
+
+        #endregion
+
         #region 结算记录
 
         /// <summary>

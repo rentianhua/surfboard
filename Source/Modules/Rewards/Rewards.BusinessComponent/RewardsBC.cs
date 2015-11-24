@@ -789,6 +789,129 @@ namespace CCN.Modules.Rewards.BusinessComponent
         }
         #endregion
 
+        #region 商户职员管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopStaffModel(StaffLoginInfo model)
+        {
+            model.Password = Encryptor.EncryptAes(model.Password);
+            var shopstaffModel = DataAccess.GetShopStaffModel(model.Loginname, model.Password);
+
+            if (shopstaffModel.StaffModel == null)
+            {
+                return JResult._jResult(400, "登录名或密码错误");
+            }
+
+            if (shopstaffModel.StaffModel.Status == 2)
+            {
+                return JResult._jResult(401, "该职员被禁用");
+            }
+            
+            if (shopstaffModel.ShopModel == null)
+            {
+                return JResult._jResult(402, "您职员所在商户不存在");
+            }
+            if (shopstaffModel.ShopModel.Status == 2)
+            {
+                return JResult._jResult(403, "您职员所在商户被禁用");
+            }
+
+            shopstaffModel.StaffModel.Password = "";
+            shopstaffModel.ShopModel.Password = "";
+
+            return JResult._jResult(0, shopstaffModel);
+        }
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopStaffById(string innerid)
+        {
+            var model = DataAccess.GetShopStaffById(innerid);
+            return JResult._jResult(model);
+        }
+        
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        public JResult AddShopStaff(ShopStaffModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Staffname)||
+                string.IsNullOrWhiteSpace(model.Loginname)
+                || string.IsNullOrWhiteSpace(model.Password))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            //if (DataAccess.CheckShopStaffName(model.Staffname) > 0)
+            //{
+            //    //return JResult._jResult(402, "商户职员名称重复");
+            //}
+
+            if (DataAccess.CheckShopStaffLoginName(model.Loginname) > 0)
+            {
+                return JResult._jResult(402, "商户职员登录名重复");
+            }
+            
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Status = 1;
+            model.Password = Encryptor.EncryptAes(model.Password);
+            var result = DataAccess.AddShopStaff(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateShopStaff(ShopStaffModel model)
+        {
+            model.Createdtime = null;
+            model.Modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateShopStaff(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateShopStaffStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateShopStaffStatus(innerid, status);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        public JResult DeleteShopStaff(string innerid)
+        {
+            var result = DataAccess.DeleteShopStaff(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopStaffViewModel> GetShopStaffPageList(ShopStaffQueryModel query)
+        {
+            return DataAccess.GetShopStaffPageList(query);
+        }
+
+        #endregion
+
         #region 结算记录
 
         /// <summary>
