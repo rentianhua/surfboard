@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.DataAccess;
 using Cedar.Core.Logging;
@@ -10,6 +11,7 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Microsoft.Practices.ObjectBuilder2;
 using Newtonsoft.Json;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessComponent
 {
@@ -289,6 +291,17 @@ namespace CCN.Modules.Rewards.BusinessComponent
         }
 
         /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        public JResult GetCouponByCode(string code)
+        {
+            var model = DataAccess.GetCouponByCode(code);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
         /// 更新礼券状态
         /// </summary>
         /// <param name="cardid"></param>
@@ -381,10 +394,89 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var result = DataAccess.UnBindWechatProduct(cardid);
             return JResult._jResult(result);
         }
-        
+
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CodeViewListModel> GetCodeRecord(CodeQueryModel query)
+        {
+            return DataAccess.GetCodeRecord(query);
+        }
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCodeRecordTotal(CodeQueryModel query)
+        {
+            var model = DataAccess.GetCodeRecordTotal(query);
+            return JResult._jResult(model);
+        }
         #endregion
 
         #region 礼券对外接口
+
+        /// <summary>
+        /// 根据规则发放礼券
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendCoupon(SendCouponModel model)
+        {
+            var recordList = DataAccess.GetCouponRecord(model.Custid, model.Sourceid);
+            if (recordList.Any())
+            {
+                return JResult._jResult(401, "重复奖励");
+            }
+
+            var ruleList = DataAccess.GetCouponRule().ToList();
+            if (!ruleList.Any())
+            {
+                return JResult._jResult(402, "没有规则");
+            }
+
+            var ableRuleList = ruleList.Where(x => x.Actiontype == model.ActionType);
+
+            foreach (var rModel in ableRuleList)
+            {
+                var codeList = new List<CouponCodeModel>();
+
+                for (var i = 0; i < rModel.Num; i++)
+                {
+                    //生成随机数
+                    var code = RandomUtility.GetRandomCode();
+                    //生成二维码位图
+                    var bitmap = BarCodeUtility.CreateBarcode(code, 240, 240);
+                    var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+                    var stream = BarCodeUtility.BitmapToStream(bitmap);
+                    //上传图片到七牛云
+                    var qinniu = new QiniuUtility();
+                    var qrcode = qinniu.Put(stream, "", filename);
+                    stream.Dispose();
+                    codeList.Add(new CouponCodeModel
+                    {
+                        Code = code,
+                        QrCode = qrcode
+                    });
+                }
+
+                var sendModel = new CouponSendModel
+                {
+                    Cardid = rModel.Cardid,
+                    Createdtime = DateTime.Now,
+                    Number = rModel.Num,
+                    Custid = model.Custid,
+                    Sourceid = model.Sourceid,
+                    ListCode = codeList
+                };
+
+                DataAccess.CouponToCustomer(sendModel);
+            }
+
+            return JResult._jResult(0, "发放成功");
+        }
 
         /// <summary>
         /// 批量购买礼券
@@ -394,18 +486,18 @@ namespace CCN.Modules.Rewards.BusinessComponent
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
             LoggerFactories.CreateLogger().Write("购买礼券參數：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
-            if (string.IsNullOrWhiteSpace(model?.Openid) || string.IsNullOrWhiteSpace(model.ProductId))
+            if (string.IsNullOrWhiteSpace(model.Order?.buyer_openid) || string.IsNullOrWhiteSpace(model.Order.product_id))
             {
                 return JResult._jResult(401, "参数不正确");
             }
 
-            var couponModel = DataAccess.GetCouponByProductId(model.ProductId);
+            var couponModel = DataAccess.GetCouponByProductId(model.Order.product_id);
             if (couponModel == null)
             {
                 return JResult._jResult(402, "该商品ID没有绑定礼券");
             }
 
-            var custid = DataAccess.GetCustidByOpenid(model.Openid);
+            var custid = DataAccess.GetCustidByOpenid(model.Order.buyer_openid);
             if (string.IsNullOrWhiteSpace(custid))
             {
                 return JResult._jResult(403, "会员不存在");
@@ -413,7 +505,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
 
             var codeList = new List<CouponCodeModel>();
 
-            for (var i = 0; i < model.Number; i++)
+            for (var i = 0; i < model.Order.product_count; i++)
             {
                 //生成随机数
                 var code = RandomUtility.GetRandomCode();
@@ -436,15 +528,35 @@ namespace CCN.Modules.Rewards.BusinessComponent
             {
                 Cardid = couponModel.Innerid,
                 Createdtime = DateTime.Now,
-                Number = model.Number,
+                Number = model.Order.product_count,
                 Custid = custid,
                 ListCode = codeList
             };
 
             var result = DataAccess.CouponToCustomer(sendModel);
+
+            Task.Run(() =>
+            {
+                if (result == 1)
+                {
+                    var orderResult = OrderApi.SetdeliveryOrder(ConfigHelper.GetAppSettings("APPID"), model.Order.order_id, "", "", 0);
+                }
+            });
+
             return JResult._jResult(
                 result > 0 ? 0 : 400,
                 result > 0 ? "购买成功" : "购买失败");
+        }
+
+        /// <summary>
+        /// 保存购买订单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveOrder(CouponBuyModel model)
+        {
+            model.innerid = Guid.NewGuid().ToString();
+            return DataAccess.SaveOrder(model);
         }
 
         /// <summary>

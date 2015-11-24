@@ -49,6 +49,7 @@
 
                 if (data.errcode !== 0) {
                     alert("获取数据异常！");
+                    return;
                 }
 
                 console.log(data);
@@ -82,6 +83,7 @@
                     $("#value2").val(obj.Value2);
                 }
 
+                $("#usedesc").val(obj.Usedesc);
             }
         });
     }
@@ -99,7 +101,8 @@
             Maxcount: $("#count").val(),
             Codetype: $("#codetype").val(),
             Shopid: $("#selectshop").val(),
-            Needpoint: $("#needpoint").val()
+            Needpoint: $("#needpoint").val(),
+            Usedesc: $("#usedesc").val()
         };
 
         if (vtype === "1") { //有效时间范围
@@ -288,18 +291,24 @@
                     0或空表示不可兑换
                 </td>
             </tr>
+        <tr>
+            <td>Code展示类</td>
+            <td>
+                <input type="text" id="codetype"/> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
+                <div id="openDiv" class="margintop hide">
+                    Code展示类型，<br/>
+                    "CODE_TYPE_TEXT"：文本；<br/>
+                    "CODE_TYPE_BARCODE"：一维码；<br/>
+                    "CODE_TYPE_QRCODE"：二维码；<br/>
+                    "CODE_TYPE_ONLY_BARCODE"：一维码无code显示；<br/>
+                    "CODE_TYPE_ONLY_QRCODE"：二维码无code显示；
+                </div>
+            </td>
+        </tr>
             <tr>
-                <td>Code展示类</td>
+                <td>使用规则</td>
                 <td>
-                    <input type="text" id="codetype" /> <a href="javascript:;" onclick="$('#openDiv').removeClass('hide');">说明</a>
-                    <div id="openDiv" class="margintop hide">
-                        Code展示类型，<br />
-                        "CODE_TYPE_TEXT"：文本；<br />
-                        "CODE_TYPE_BARCODE"：一维码；<br />
-                        "CODE_TYPE_QRCODE"：二维码；<br />
-                        "CODE_TYPE_ONLY_BARCODE"：一维码无code显示；<br />
-                        "CODE_TYPE_ONLY_QRCODE"：二维码无code显示；
-                    </div>
+                    <textarea id="usedesc" maxlength="200" rows="5" cols="150"></textarea>
                 </td>
             </tr>
             <tr>

@@ -241,6 +241,14 @@ namespace CCN.WebAPI.ApiControllers
                         Remark = "车辆结案送积分",
                         Sourceid = 6
                     });
+
+                    //结案送礼券
+                    //rewardsservice.SendCoupon(new SendCouponModel()
+                    //{
+                    //    Custid = custid,
+                    //    ActionType = 2,
+                    //    Sourceid = 4
+                    //});
                 });
             }
 

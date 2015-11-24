@@ -411,9 +411,6 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
 
             model.AuditPer = operid;
-
-            //设置认证状态
-            model.AuditResult = model.AuditResult == 1 ? 2 : 3;
             model.AuditTime = DateTime.Now;
 
             var result = DataAccess.AuditAuthentication(model);

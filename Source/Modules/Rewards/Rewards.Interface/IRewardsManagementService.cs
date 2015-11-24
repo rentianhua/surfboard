@@ -89,6 +89,13 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="innerid">id</param>
         /// <returns></returns>
         JResult GetCouponById(string innerid);
+        
+        /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        JResult GetCouponByCode(string code);
 
         /// <summary>
         /// 更新礼券状态
@@ -127,9 +134,30 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         JResult UnBindWechatProduct(string cardid);
 
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CodeViewListModel> GetCodeRecord(CodeQueryModel query);
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        JResult GetCodeRecordTotal(CodeQueryModel query);
         #endregion
 
         #region 礼券对外接口
+
+        /// <summary>
+        /// 根据规则发放礼券
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SendCoupon(SendCouponModel model);
+
 
         /// <summary>
         /// 批量购买礼券

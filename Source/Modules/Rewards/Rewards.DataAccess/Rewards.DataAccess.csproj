@@ -50,6 +50,9 @@
       <HintPath>..\..\..\..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Senparc.Weixin.MP">
+      <HintPath>..\..\..\..\Lib\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

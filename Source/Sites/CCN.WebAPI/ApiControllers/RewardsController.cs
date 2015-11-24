@@ -117,6 +117,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        [Route("GetCouponByCode")]
+        [HttpGet]
+        public JResult GetCouponByCode(string code)
+        {
+            return _rewardsservice.GetCouponByCode(code);
+        }
+
+        /// <summary>
         /// 更新礼券状态
         /// </summary>
         /// <param name="cardid"></param>
@@ -177,6 +189,30 @@ namespace CCN.WebAPI.ApiControllers
             return _rewardsservice.UnBindWechatProduct(cardid);
         }
 
+
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecord")]
+        [HttpPost]
+        public BasePageList<CodeViewListModel> GetCodeRecord([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecord(query);
+        }
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecordTotal")]
+        [HttpPost]
+        public JResult GetCodeRecordTotal([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecordTotal(query);
+        }
         #endregion
 
         #region 礼券对外接口

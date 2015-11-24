@@ -331,9 +331,9 @@ namespace CCN.Modules.Rewards.DataAccess
         public int AddCoupon(CouponInfoModel model)
         {
             const string sql = @"INSERT INTO coupon_card
-                                (innerid,shopid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype,needpoint, createdtime, modifiedtime, isenabled)
+                                (innerid,shopid, title, titlesub, amount, logourl, vtype, vstart, vend, value1, value2, maxcount, count, codetype,needpoint,usedesc, createdtime, modifiedtime, isenabled)
                                 VALUES
-                                (@innerid,@shopid,@title,@titlesub,@amount,@logourl,@vtype,@vstart,@vend,@value1,@value2,@maxcount,@count,@codetype,@needpoint,@createdtime,@modifiedtime,@isenabled);";
+                                (@innerid,@shopid,@title,@titlesub,@amount,@logourl,@vtype,@vstart,@vend,@value1,@value2,@maxcount,@count,@codetype,@needpoint,@usedesc,@createdtime,@modifiedtime,@isenabled);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -391,6 +391,27 @@ namespace CCN.Modules.Rewards.DataAccess
             try
             {
                 var couponModel = Helper.Query<CouponInfoModel>(sql, new {innerid}).FirstOrDefault();
+                return couponModel;
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        public CouponInfoModel GetCouponByCode(string code)
+        {
+            const string sql = "select b.* from coupon_code as a left join coupon_card as b on a.cardid=b.innerid where a.code=@code;";
+
+            try
+            {
+                var couponModel = Helper.Query<CouponInfoModel>(sql, new { code }).FirstOrDefault();
                 return couponModel;
 
             }
@@ -552,6 +573,91 @@ namespace CCN.Modules.Rewards.DataAccess
             }
         }
 
+        /// <summary>
+        /// 获取礼券奖励规则
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<CouponRuleModel> GetCouponRule()
+        {
+            const string sql = "select * from coupon_rule where isenabled=1;";
+            try
+            {
+                return Helper.Query<CouponRuleModel>(sql);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取认证获得的礼券
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <param name="sourceid"></param>
+        /// <returns></returns>
+        public IEnumerable<CouponCodeModel> GetCouponRecord(string custid,int sourceid)
+        {
+            const string sql = @"select code,qrcode from coupon_code where custid=@custid and sourceid=@sourceid;";
+
+            try
+            {
+                return Helper.Query<CouponCodeModel>(sql, new { custid, sourceid });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 保存购买订单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveOrder(CouponBuyModel model)
+        {
+            const string sql = @"INSERT INTO coupon_order
+                                (innerid, order_id, order_status, order_total_price, order_create_time, order_express_price, buyer_openid, buyer_nick, receiver_name, receiver_province, receiver_city, receiver_address, receiver_mobile, receiver_phone, product_id, product_name, product_price, product_sku, product_count, product_img, delivery_id, delivery_company, trans_id, result)
+                                VALUES
+                                (@innerid, @order_id, @order_status, @order_total_price, @order_create_time, @order_express_price, @buyer_openid, @buyer_nick, @receiver_name, @receiver_province, 
+@receiver_city,@receiver_address, @receiver_mobile, @receiver_phone, @product_id, @product_name, @product_price, @product_sku, @product_count, @product_img, @delivery_id, @delivery_company, @trans_id, @result);";
+            try
+            {
+                Helper.Execute(sql, new
+                {
+                    model.innerid,
+                    model.Order.order_id,
+                    model.Order.order_status,
+                    model.Order.order_total_price,
+                    model.Order.order_create_time,
+                    model.Order.order_express_price,
+                    model.Order.buyer_openid,
+                    model.Order.buyer_nick,
+                    model.Order.receiver_name,
+                    model.Order.receiver_province,
+                    model.Order.receiver_city,
+                    model.Order.receiver_address,
+                    model.Order.receiver_mobile,
+                    model.Order.receiver_phone,
+                    model.Order.product_id,
+                    model.Order.product_name,
+                    model.Order.product_price,
+                    model.Order.product_sku,
+                    model.Order.product_count,
+                    model.Order.product_img,
+                    model.Order.delivery_id,
+                    model.Order.delivery_company,
+                    model.Order.trans_id,
+                    model.result
+                });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
         #endregion
 
         #region 礼券Code
@@ -561,6 +667,72 @@ namespace CCN.Modules.Rewards.DataAccess
             const string sql = @"select a.*,b.shopid from coupon_code as a inner join coupon_card as b on a.cardid=b.innerid where code=@code;";
             var codeModel = Helper.Query<CodeCancelQueryModel>(sql, new { code }).FirstOrDefault();
             return codeModel;
+        }
+
+        public BasePageList<CodeViewListModel> GetCodeRecord(CodeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"coupon_code as a inner join coupon_card as b on a.cardid=b.innerid";
+            const string fields = "a.innerid, a.code, a.usedtime, b.title, b.amount, b.buyprice, b.costprice";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.gettime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("a.isused=1");
+
+            if (!string.IsNullOrWhiteSpace(query.Shopid))
+            {
+                sqlWhere.Append($" and b.shopid='{query.Shopid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Code))
+            {
+                sqlWhere.Append($" and a.code like '%{query.Code}%'");
+            }
+            
+            if (query.StartTime != null)
+            {
+                sqlWhere.Append($" and a.usedtime>={query.StartTime}");
+            }
+
+            if (query.EndTime != null)
+            {
+                sqlWhere.Append($" and a.usedtime<={query.EndTime}");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CodeViewListModel>(model, query.Echo);
+            return list;
+        }
+
+        public CodeListSummaryModel GetCodeRecordTotal(CodeQueryModel query)
+        {
+            //查询条件 
+            var sqlWhere = new StringBuilder("a.isused=1");
+
+            if (!string.IsNullOrWhiteSpace(query.Shopid))
+            {
+                sqlWhere.Append($" and b.shopid='{query.Shopid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Code))
+            {
+                sqlWhere.Append($" and a.code like '%{query.Code}%'");
+            }
+
+            if (query.StartTime != null)
+            {
+                sqlWhere.Append($" and a.usedtime>={query.StartTime}");
+            }
+
+            if (query.EndTime != null)
+            {
+                sqlWhere.Append($" and a.usedtime<={query.EndTime}");
+            }
+            
+            var sql =
+                @"select count(1) as TotalNumber,sum(b.costprice) as TotalPrice from coupon_code as a inner join coupon_card as b on a.cardid=b.innerid where " +
+                sqlWhere;
+            var summaryModel = Helper.Query<CodeListSummaryModel>(sql).FirstOrDefault();
+            return summaryModel;
         }
 
         #endregion
@@ -622,7 +794,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("购买礼券异常：", TraceEventType.Error, ex);
+                    LoggerFactories.CreateLogger().Write("批量发放礼券给会员异常：", TraceEventType.Error, ex);
                     tran.Rollback();
                     return 0;
                 }
@@ -674,23 +846,21 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public int CancelCoupon(string code)
         {
-            //const string sqlUCoupon = "update coupon_card set usedcount=usedcount+1 where innerid=@cardid;";
-            const string sqlUCode = "update coupon_code set usedtime=@usedtime where code=@code;";
+            const string sqlUCode = "update coupon_code set isused=1,usedtime=@usedtime where `code`=@code;";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
                 try
                 {
                     var nowDate = DateTime.Now;
+
                     //更新礼券code
                     conn.Execute(sqlUCode, new {usedtime = nowDate, code}, tran);
 
-                    //更新卡券库存
-                    //conn.Execute(sqlUCoupon, new { cardid = model.Cardid }, tran);
-
-                    //更新会员的积分
-                    //conn.Execute(sqlUPoint, new { custid = model.Custid, point = model.Point }, tran);
-
+                    //更新会员的礼券数
+                    var sqlUCust = "update cust_total_info set currpouponnum=currpouponnum-1 where custid=(select custid from coupon_code where `code`=@code);";
+                    conn.Execute(sqlUCust, new { code }, tran);
+                    
                     tran.Commit();
                     return 1;
                 }
@@ -717,6 +887,8 @@ namespace CCN.Modules.Rewards.DataAccess
             return Helper.Query<CardCancelSummaryModel>(sqlSelect,
                 new {starttime = query.StartTime, endtime = query.EndTime, shopid = query.Shopid});
         }
+
+
         
         #endregion
 

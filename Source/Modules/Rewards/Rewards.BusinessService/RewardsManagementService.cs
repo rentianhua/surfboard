@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessComponent;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
@@ -123,7 +124,17 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.GetCouponById(innerid);
         }
-        
+
+        /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        public JResult GetCouponByCode(string code)
+        {
+            return BusinessComponent.GetCouponByCode(code);
+        }
+
         /// <summary>
         /// 更新礼券状态
         /// </summary>
@@ -175,9 +186,39 @@ namespace CCN.Modules.Rewards.BusinessService
             return BusinessComponent.UnBindWechatProduct(cardid);
         }
 
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CodeViewListModel> GetCodeRecord(CodeQueryModel query)
+        {
+            return BusinessComponent.GetCodeRecord(query);
+        }
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetCodeRecordTotal(CodeQueryModel query)
+        {
+            return BusinessComponent.GetCodeRecordTotal(query);
+        }
         #endregion
 
         #region 礼券对外接口
+
+        /// <summary>
+        /// 根据规则发放礼券
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SendCoupon(SendCouponModel model)
+        {
+            return BusinessComponent.SendCoupon(model);
+        }
+
 
         /// <summary>
         /// 批量购买礼券
@@ -186,7 +227,15 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            return BusinessComponent.WholesaleCoupon(model);
+            var jresult = BusinessComponent.WholesaleCoupon(model);
+
+            Task.Run(() =>
+            {
+                model.result = jresult.errcode;
+                BusinessComponent.SaveOrder(model);
+            });
+
+            return jresult;
         }
 
         /// <summary>
