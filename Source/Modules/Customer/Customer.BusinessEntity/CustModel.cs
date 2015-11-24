@@ -136,7 +136,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 车辆数量
         /// </summary>
-        public int CarNum { get; set; }
+        public int? CarNum { get; set; }
     }
 
     /// <summary>

@@ -235,6 +235,55 @@ namespace CCN.Modules.Rewards.Interface
         IEnumerable<ItemShop> GetShopList();
         #endregion
 
+        #region 商户职员管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopStaffModel(StaffLoginInfo model);
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopStaffById(string innerid);
+
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        JResult AddShopStaff(ShopStaffModel model);
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateShopStaff(ShopStaffModel model);
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateShopStaffStatus(string innerid, int status);
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        JResult DeleteShopStaff(string innerid);
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<ShopStaffViewModel> GetShopStaffPageList(ShopStaffQueryModel query);
+
+        #endregion
+
         #region 结算记录
 
         /// <summary>
