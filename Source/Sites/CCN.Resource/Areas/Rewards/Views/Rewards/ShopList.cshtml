@@ -43,7 +43,7 @@
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/shopedit?innerid=" + val.Innerid + "',this);\" href='javascript:;'>修改</a> " +
                 //"<a href='/rewards/rewards/shopview?innerid=" + val.Innerid + "'>查询详情</a> " +
-                "<a href='javascript:;' onclick=\"DeleteShop('" + val.Innerid + "');\">删除</a> " + 
+                "<a href='javascript:;' onclick=\"DeleteShop('" + val.Innerid + "');\">删除</a> " +
                 btnStatus +
                 "</td>";
             str += "</tr>";
@@ -83,15 +83,13 @@
         <div class="row">
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <div class="form-group">
-                    <span>
-                        <label for="selectshop" class="col-sm-4 control-label no-padding-right searchLayout">所属商户：</label>
-                        <select id="selectshop" onchange="QueryList();">
-                            <option value="0">请选择</option>
-                        </select>
-                    </span>
+                    <label for="shopname" class="col-sm-4 control-label no-padding-right searchLayout">商户名称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="shopname" placeholder="商户名称">
+                    </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                 <a onclick="getBodyHtml('mainbody', '/rewards/rewards/shopedit', this);" href="javascript:;" class="btn btn-primary shiny">添加</a>

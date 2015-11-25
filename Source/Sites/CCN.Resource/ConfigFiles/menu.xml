@@ -22,8 +22,7 @@
 
     <MenuGroup name="车辆管理" icon="menu-icon fa fa-th" submenu="true">
       <MenuArray>
-        <Menu name="车辆列表" url="/Customer/Customer/CustomerList" info="车辆列表" permission="" icon=""/>
-        <Menu name="车辆新增" url="/Customer/Customer/CustomerList" info="车辆新增" permission="" icon=""/>
+        <Menu name="车辆列表" url="/Car/Car/CarShowList" info="车辆列表" permission="" icon=""/>
       </MenuArray>
     </MenuGroup>
 
