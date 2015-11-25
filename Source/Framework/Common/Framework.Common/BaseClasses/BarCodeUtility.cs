@@ -179,21 +179,31 @@ namespace Cedar.Framework.Common.BaseClasses
         /// <returns></returns>
         public static Stream BitmapToStream(Bitmap bitmap)
         {
-            Stream ms = null;
-            try
-            {
-                ms = new MemoryStream();
-                bitmap.Save(ms, ImageFormat.Bmp);
-                return ms;
-            }
-            catch (ArgumentNullException)
-            {
-                if (ms == null) return null;
-                ms.Close();
-                ms.Dispose();
+            //Stream ms = null;
 
-                return null;
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                var data = new byte[stream.Length];
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Read(data, 0, Convert.ToInt32(stream.Length));
+                return new MemoryStream(data);
             }
+
+            //try
+            //{
+            //    ms = new MemoryStream();
+            //    bitmap.Save(ms, ImageFormat.Bmp);
+            //    return ms;
+            //}
+            //catch (ArgumentNullException)
+            //{
+            //    if (ms == null) return null;
+            //    ms.Close();
+            //    ms.Dispose();
+
+            //    return null;
+            //}
         }
     }
 }

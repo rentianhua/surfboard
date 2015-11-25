@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -126,13 +127,20 @@ namespace CCN.Modules.Rewards.BusinessComponent
             var bitmap = BarCodeUtility.CreateBarcode(model.Code, 240, 240);
             var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
             var stream = BarCodeUtility.BitmapToStream(bitmap);
+            
             //上传图片到七牛云
             var qinniu = new QiniuUtility();
             model.QrCode = qinniu.Put(stream, "", filename);
             stream.Dispose();
+            
             //开始兑换
             model.Createdtime = DateTime.Now;
             model.Sourceid = 2; //礼券来源  兑换
+            model.Point = couponModel.Needpoint.Value;
+            model.Remark = "积分兑换";
+
+            //return JResult._jResult(10000,"测试");
+
             var result = DataAccess.PointExchangeCoupon(model);
             return JResult._jResult(
                 result > 0 ? 0 : 400,

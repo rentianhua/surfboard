@@ -53,6 +53,25 @@ namespace CCN.Resource.Areas.Rewards.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 商铺职员列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopStaffList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 商铺职员编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopStaffEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        
         #region 结算记录
 
         /// <summary>
