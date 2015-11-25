@@ -201,4 +201,15 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public DateTime? Createdtime { get; set; }
     }
+
+    /// <summary>
+    /// code 和模板的信息
+    /// </summary>
+    public class CouponCodeInfo : CouponInfoModel
+    {
+        /// <summary>
+        /// 是否使用
+        /// </summary>
+        public int IsUsed { get; set; }
+    }
 }

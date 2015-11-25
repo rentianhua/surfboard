@@ -405,13 +405,13 @@ namespace CCN.Modules.Rewards.DataAccess
         /// </summary>
         /// <param name="code">id</param>
         /// <returns></returns>
-        public CouponInfoModel GetCouponByCode(string code)
+        public CouponCodeInfo GetCouponByCode(string code)
         {
-            const string sql = "select b.* from coupon_code as a left join coupon_card as b on a.cardid=b.innerid where a.code=@code;";
+            const string sql = "select b.*,a.isused from coupon_code as a left join coupon_card as b on a.cardid=b.innerid where a.code=@code;";
 
             try
             {
-                var couponModel = Helper.Query<CouponInfoModel>(sql, new { code }).FirstOrDefault();
+                var couponModel = Helper.Query<CouponCodeInfo>(sql, new { code }).FirstOrDefault();
                 return couponModel;
 
             }
