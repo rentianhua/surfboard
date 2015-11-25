@@ -32,7 +32,7 @@ namespace CCN.Resource.Areas.Car.Controllers
             return View();
         }
 
-        public ActionResult CarEdit(string custid,string carid)
+        public ActionResult CarEdit(string custid, string carid)
         {
             if (string.IsNullOrWhiteSpace(custid))
             {
@@ -40,6 +40,26 @@ namespace CCN.Resource.Areas.Car.Controllers
             }
 
             ViewBag.custid = custid;
+            ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
+            return View();
+        }
+
+        /// <summary>
+        /// 车辆列表（没有录车功能）
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CarShowList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 车辆详情
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public ActionResult CarView(string carid)
+        {
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
             return View();
         }

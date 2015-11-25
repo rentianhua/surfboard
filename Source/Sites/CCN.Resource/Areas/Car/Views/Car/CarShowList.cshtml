@@ -1,20 +1,12 @@
 ﻿
 @{
-//ViewBag.Title = "CarList";
-//Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
 }
-
 <script type="text/javascript">
-
-    var custid = "@ViewBag.custid";
 
     $(function () {
         InitBrand();
         QueryList();
-        $("#btnAdd").click(function () {
-            getBodyHtml('mainbody', "/car/car/caredit?custid=" + custid);
-            //location.href = "/car/car/caredit?custid=" + custid;
-        });
     });
 
     //初始化品牌
@@ -58,11 +50,12 @@
 
 
     function QueryList() {
-        var json = { custid: custid, brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val() };
+        var json = { brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val() };
         $("#carlist").getPageList(20, "/api/Car/GetCarPageList", json, LoadData);
     }
 
     function LoadData(data, index) {
+
         $("#carlist tbody").empty();
 
         var str = "";
@@ -84,8 +77,7 @@
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
             str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
             str += "<td>" +
-                "<a onclick=\"getBodyHtml('mainbody', '/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
-                "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/car/car/carview?carid=" + val.Innerid + "');\" href='javascript:;'>车辆详情</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
@@ -195,4 +187,3 @@
     <input type="button" value="确定" id="delsubmit" />
     <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>
-
