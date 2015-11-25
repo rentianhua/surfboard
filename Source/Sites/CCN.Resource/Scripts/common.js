@@ -174,6 +174,36 @@ var getBodyHtml = function (id, url, obj) {
         $("#" + id).append(result);
     });
     //显示当前页名称
-    $(".header-title").children().html($(obj).text())
-    
+    $(".header-title").children().html($(obj).text());
+}
+
+/*
+点击菜单显示body中的内容
+*/
+var getBodyHtmlByMenu = function (id, url, obj) {
+    $.get(url, function (result) {
+        $("#" + id).empty();
+        $("#" + id).append(result);
+    });
+    //显示当前页名称
+    $(".header-title").children().html($(obj).text());
+    //组装面包屑
+    CreateBreadcrumb(obj);
+}
+//创建面包屑
+var CreateBreadcrumb = function (obj) {
+    $(".breadcrumb").empty();
+    var str = "";
+    var liName = "";
+    var thirdName = $(obj).parent().parent().parent().parent().parent().children().closest("a").text();
+    if ($(obj).parent().parent().parent().parent().parent().children().closest("a").text() != "")//有三级目录
+    {
+        liName += '<li><i class="fa fa-home"></i><a href="#">' + $(obj).parent().parent().parent().parent().parent().children().closest("a").text() + '</a></li>';
+        liName += '<li class="active">' + $(obj).parent().parent().parent().children().closest("a").text() + '</li>';
+    }
+    else {
+        liName += '<li><i class="fa fa-home"></i><a href="#">' + $(obj).parent().parent().parent().children().closest("a").text() + '</a></li>';
+    }
+    liName += '<li class="active">' + $(obj).text() + '</li>';
+    $(".breadcrumb").append(liName);
 }

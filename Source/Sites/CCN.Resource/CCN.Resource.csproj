@@ -461,6 +461,8 @@
     <Content Include="Areas\Rewards\Views\Rewards\SettlementList.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopEdit.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarShowList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
