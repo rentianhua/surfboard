@@ -170,16 +170,29 @@ namespace CCN.Modules.Base.DataAccess
             return result;
         }
         /// <summary>
-        /// 获取基础数据代码类型key
+        ///  获取基础数据代码类型key
         /// </summary>
         /// <param name="typekey"></param>
+        /// <param name="innerid"></param>
         /// <returns></returns>
-        public string GetCodeTypeByTypeKey(string typekey)
+        public BaseCodeTypeModel GetCodeTypeByTypeKey(string typekey,string innerid)
         {
-            string  result;
-            const string sql = @"select typekey from base_code_type where isenabled=1 and typekey=@typekey;";
-            result = Helper.ExecuteScalar<string>(sql,new { typekey});
-            return result;
+            //：：更新验证：/ 启用中的，根据typekey，查询语句，进行判断
+            string where = " isenabled=1 and typekey='" + typekey + "'";
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                where += $" and innerid !='{innerid}'";
+            }
+            var sql = $"select  typekey,innerid from base_code_type where {where} ";
+            try
+            {
+                var codeModel = Helper.Query<BaseCodeTypeModel>(sql).FirstOrDefault();
+                return codeModel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         /// <summary>
         /// 验证CodeType下是否还有Code

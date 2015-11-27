@@ -92,13 +92,16 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddCodeType(BaseCodeTypeModel model)
         {
-            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey);
-            if (test==model.Typekey) {
+            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey,null);
+            //：：判断验证：/ 查询数据为空，则可添加;不为空，则返回错误信息
+            if (test!=null) {
+            if (test.Typekey==model.Typekey) {
                 return new JResult
                 {
                     errcode = 400,
                     errmsg = "代码类型key重复！"
                 };
+            }
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.Isenabled = 1;
@@ -115,20 +118,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCodeType(BaseCodeTypeModel model)
         {
-            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey);
-            if (test== model.Typekey) {
+            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey,model.Innerid);
+            //：：条件判断：/ typekey唯一值，innerid唯一值
+            if (test!=null) {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "代码类型key重复！"
+                    errmsg = "更新信息失败！"
                 };
             }
             //添加信息
             var result = DataAccess.UpdateCodeType(model);
             return new JResult
             {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
+                errcode = 0,
+                errmsg = result
             };
         }
         #endregion
@@ -199,6 +203,8 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult AddCode(BaseCodeModel model)
         {     
             var test = DataAccess.GetCodeByTypeKey(model.Typekey,null,null);
+            //：：判断验证：/ 查询数据为空则添加，不为空则验证,返回错误详细信息
+            if (test!=null) {
             if (test.Typekey == model.Typekey)
             {
                 if (test.CodeName==model.CodeName) {
@@ -217,6 +223,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     };
                 }
 
+            }
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.IsEnabled = 1;
