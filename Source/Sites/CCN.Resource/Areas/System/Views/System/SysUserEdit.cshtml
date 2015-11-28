@@ -1,0 +1,168 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    $(function () {
+
+    });
+
+    function Submit() {
+        //判断是否填入用户名
+        if ($("#username").val() == "") {
+            alert("请输入用户名！");
+            return;
+        }
+        //判断是否填入登入名
+        if ($("#loginname").val() == "") {
+            alert("请输入登入名！");
+            return;
+        }
+        //判断两次输入密码是否一致
+        if ($("#pwd").val() != "" && $("#pwdsure").val() != "") {
+            if ($("#pwd").val() != $("#pwdsure").val()) {
+                alert("两次输入密码不一致！");
+                return;
+            }
+        }
+        else {
+            alert("请将密码信息填写完整！");
+            return;
+        }
+
+        var json = {
+            username: $("#username").val(),
+            loginname: $("#loginname").val(),
+            password: $("#pwd").val(),
+            mobile: $("#mobile").val(),
+            telephone: $("#telephone").val(),
+            email: $("#email").val(),
+            status: $("#selectstatus").val()
+        };
+
+        if (id === "") {
+            $.post("/api/Base/AddUser", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(str);
+                getBodyHtml('mainbody', '/system/system/SysUserList');
+            });
+        } else {
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Base/UpdateUser',
+                type: 'put',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(str);
+                    getBodyHtml('mainbody', '/system/system/SysUserList');
+                }
+            });
+        }
+    }
+
+</script>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">用户信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label no-padding-right">用户名：</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="username" class="form-control" placeholder="用户名" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="loginname" class="col-sm-2 control-label no-padding-right">登录名：</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="loginname" class="form-control" placeholder="登录名" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="pwd" class="col-sm-2 control-label no-padding-right">密码：</label>
+                            <div class="controls col-sm-10">
+                                <input type="password" id="pwd" class="form-control" placeholder="密码" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="pwdsure" class="col-sm-2 control-label no-padding-right">确认密码：</label>
+                            <div class="controls col-sm-10">
+                                <input type="password" id="pwdsure" class="form-control" placeholder="确认密码" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label no-padding-right">手机号：</label>
+                            <div class="controls col-sm-10">
+                                <input type="tel" id="mobile" class="form-control" placeholder="手机号" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="telphone" class="col-sm-2 control-label no-padding-right">电话号码：</label>
+                            <div class="controls col-sm-10">
+                                <input type="tel" id="telphone" class="form-control" placeholder="电话号码" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
+                            <div class="controls col-sm-10">
+                                <input type="email" id="email" class="form-control" placeholder="邮箱" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">状态：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectstatus" style="width: 100%;">
+                                    <option value="0">无效</option>
+                                    <option value="1" selected>有效</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit()" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist');" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

@@ -268,5 +268,27 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         {
             return BusinessComponent.GetTotal();
         }
+
+
+        #region 商户车辆数据统计
+        /// <summary>
+        /// 获取近12个月车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetRecent12Growth(string custid)
+        {
+            return BusinessComponent.GetRecent12Growth(custid);
+        }
+
+        /// <summary>
+        /// 获取近12个月车辆销售量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetRecent12Sell(string custid)
+        {
+            return BusinessComponent.GetRecent12Sell(custid);
+        }
+
+        #endregion
     }
 }

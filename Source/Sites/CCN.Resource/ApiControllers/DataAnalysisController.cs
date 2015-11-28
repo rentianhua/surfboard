@@ -314,5 +314,33 @@ namespace CCN.Resource.ApiControllers
             var result = _dataanalysisservice.GetTotal();
             return result;
         }
+
+
+        #region 商户车辆数据统计
+        /// <summary>
+        /// 获取近12个月车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetRecent12Growth")]
+        [HttpGet]
+        public JResult GetRecent12Growth(string custid)
+        {
+            var result = _dataanalysisservice.GetRecent12Growth(custid);
+            return result;
+        }
+
+        /// <summary>
+        /// 获取近12个月车辆销售量
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetRecent12Sell")]
+        [HttpGet]
+        public JResult GetRecent12Sell(string custid)
+        {
+            var result = _dataanalysisservice.GetRecent12Sell(custid);
+            return result;
+        }
+
+        #endregion
     }
 }

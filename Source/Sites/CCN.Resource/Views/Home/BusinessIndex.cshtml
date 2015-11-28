@@ -1,0 +1,80 @@
+﻿
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <div class="widget">
+            <div class="widget-header bordered-bottom bordered-yellow">
+                <span class="widget-caption">车辆数据统计</span>
+                <div class="widget-buttons">
+                    <a href="#" data-toggle="maximize">
+                        <i class="fa fa-expand"></i>
+                    </a>
+                    <a href="#" data-toggle="collapse">
+                        <i class="fa fa-minus"></i>
+                    </a>
+                    <a href="#" data-toggle="dispose">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="widget-body no-padding">
+                <table class="table table-bordered table-hover table-striped" id="anaiysislist">
+                    <thead class="bordered-darkorange">
+                        <tr role="row">
+                            <th>序号</th>
+                            <th>日期</th>
+                            <th>增长量</th>
+                            <th>销量</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var gridbordercolor = "#eee";
+    $(function () {
+        GetRecent12Sell();
+    });
+
+    //获取总数（增长量）
+    function GetRecent12Growth() {
+        $.get("/api/DataAnalysis/GetRecent12Growth?custid=" + "@ViewBag.UserInfo.Innerid", function (data) {
+            var arr = [];
+            var i = 1;
+            $.each(data.errmsg, function (key, val) {
+                var value = [];
+                value.push(i);
+                value.push(val.value == null ? 0 :parseFloat(val.value));
+                arr.push(value);
+                i++;
+            });
+          //  arr = [[1990, 18.9], [1991, 18.7], [1992, 18.4], [1993, 19.3], [1994, 19.5], [1995, 19.3], [1996, 19.4], [1997, 20.2], [1998, 19.8], [1999, 19.9], [2000, 20.4], [2001, 20.1], [2002, 20.0], [2003, 19.8], [2004, 20.4]];
+            InitiateFlotBarChart.init(arr, "bar-chart");
+        });
+    }
+
+    //获取总数（销售量）
+    function GetRecent12Sell() {
+        $.get("/api/DataAnalysis/GetRecent12Growth?custid=" + "@ViewBag.UserInfo.Innerid", function (data) {
+            $("#anaiysislist tbody").empty();
+            var str = "";
+            $.each(data.errmsg, function (key, val) {
+                var myDate = new Date(val.key);
+                console.log();
+
+                str = "";
+                str += "<tr>";
+                str += "<td>" + (key + 1) + "</td>";
+                str += "<td>" + Dateformat(val.key, "yyyy-MM") + "</td>";
+                str += "<td>" + (val.value == null ? 0 : parseFloat(val.value)) + "</td>";
+                str += "<td>" + (val.value2 == null ? 0 : parseFloat(val.value2)) + "</td>";
+                str += "</tr>";
+                $("#anaiysislist tbody").append(str);
+            });
+        });
+    }
+
+</script>
