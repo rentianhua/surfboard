@@ -14,9 +14,9 @@ namespace CCN.Resource.Areas.Car.Controllers
         // GET: Car/Car
         public ActionResult CarList(string custid)
         {
-            if ((CustModel)Session["UserInfo"]!=null)
+            if ((CustModel)Session["CustModel"] !=null)
             {
-                custid = ((CustModel)Session["UserInfo"]).Innerid;
+                custid = ((CustModel)Session["CustModel"]).Innerid;
             }
             if (string.IsNullOrWhiteSpace(custid))
             {
