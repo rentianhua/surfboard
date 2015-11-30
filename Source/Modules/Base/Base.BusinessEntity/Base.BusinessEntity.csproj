@@ -53,7 +53,8 @@
     <Compile Include="BaseCodeTypeModel.cs" />
     <Compile Include="BaseProvince.cs" />
     <Compile Include="BaseCarSeriesModel.cs" />
-    <Compile Include="BaseUserInfo.cs" />
+    <Compile Include="BaseRoleModel.cs" />
+    <Compile Include="BaseUserModel.cs" />
     <Compile Include="BaseVerification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

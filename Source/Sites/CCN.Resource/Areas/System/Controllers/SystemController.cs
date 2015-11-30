@@ -27,7 +27,8 @@ namespace CCN.Resource.Areas.System.Controllers
         /// 获取基础数据代码类型
         /// </summary>
         /// <returns></returns>
-        public ActionResult BaseCodeTypeList() {
+        public ActionResult BaseCodeTypeList()
+        {
             return View();
         }
         /// <summary>
@@ -35,7 +36,8 @@ namespace CCN.Resource.Areas.System.Controllers
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public ActionResult BaseCodeTypeView(string innerid) {
+        public ActionResult BaseCodeTypeView(string innerid)
+        {
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
@@ -55,7 +57,8 @@ namespace CCN.Resource.Areas.System.Controllers
         /// 获取基础数据代码值
         /// </summary>
         /// <returns></returns>
-        public ActionResult BaseCodeList() {
+        public ActionResult BaseCodeList()
+        {
             return View();
         }
         /// <summary>
@@ -63,7 +66,8 @@ namespace CCN.Resource.Areas.System.Controllers
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public ActionResult BaseCodeEdit(string innerid) {
+        public ActionResult BaseCodeEdit(string innerid)
+        {
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
@@ -72,10 +76,69 @@ namespace CCN.Resource.Areas.System.Controllers
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public ActionResult BaseCodeView(string innerid) {
+        public ActionResult BaseCodeView(string innerid)
+        {
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
+        #endregion
+
+        #region 系统管理
+
+        /// <summary>
+        /// 用户列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysUserList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 用户编辑/新增
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public ActionResult SysUserEdit(string innerid)
+        {
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                ViewBag.innerid = innerid;
+            }
+            return View();
+        }
+
+        /// <summary>
+        /// 角色列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysRoleList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 角色编辑/新增
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysRoleEdit(string innerid)
+        {
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                ViewBag.innerid = innerid;
+            }
+            return View();
+        }
+
+        /// <summary>
+        /// 权限列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysRightList()
+        {
+            return View();
+        }
+
         #endregion
 
     }

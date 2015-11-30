@@ -386,55 +386,75 @@ namespace CCN.WebAPI.ApiControllers
 
             #region 认证送积分
 
-            if (result.errcode == 0)
+            if (result.errcode != 0)
+                return result;
+            Task.Run(() =>
             {
-                Task.Run(() =>
+                if (model.AuditResult != 1)
                 {
-                    var rewardsservice =
-                        ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    return;
+                }
+                var rewardsservice =
+                    ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
 
-                    var recordList = rewardsservice.GetAuthPointRecord(model.Custid);
-                    if (recordList.Any())
-                    {
-                        return;
-                    }
+                var recordList = rewardsservice.GetAuthPointRecord(model.Custid);
+                if (recordList.Any())
+                {
+                    return;
+                }
 
-                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
-                    {
-                        Custid = model.Custid,
-                        Type = 1,
-                        Point = 1000, //认证+1000
-                        Remark = "认证送积分",
-                        Sourceid = 3
-                    });
-
-                    LoggerFactories.CreateLogger().Write("认证送积分结果：" + pointresult.errcode, TraceEventType.Information);
-
-                    var custjresult = _custservice.GetCustById(model.Custid);
-                    if (custjresult.errcode != 0)
-                    {
-                        return;
-                    }
-
-                    var custmodel = (CustModel) custjresult.errmsg;
-
-                    if (string.IsNullOrWhiteSpace(custmodel?.RecommendedId))
-                    {
-                        return;
-                    }
-                    
-                    var repointresult = rewardsservice.ChangePoint(new CustPointModel
-                    {
-                        Custid = custmodel.RecommendedId,
-                        Type = 1,
-                        Point = 1000, //认证+1000
-                        Remark = "推荐送积分，会员id" + model.Custid,
-                        Sourceid = 3
-                    });
-
-                    LoggerFactories.CreateLogger().Write("推荐送积分结果：" + repointresult.errcode, TraceEventType.Information);
+                var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                {
+                    Custid = model.Custid,
+                    Type = 1,
+                    Point = 1000, //认证+1000
+                    Remark = "认证送积分",
+                    Sourceid = 3
                 });
-            }
+
+                LoggerFactories.CreateLogger().Write("认证送积分结果：" + pointresult.errcode, TraceEventType.Information);
+
+                var custjresult = _custservice.GetCustById(model.Custid);
+                if (custjresult.errcode != 0)
+                {
+                    return;
+                }
+
+                var custmodel = (CustModel) custjresult.errmsg;
+
+                if (string.IsNullOrWhiteSpace(custmodel?.RecommendedId))
+                {
+                    return;
+                }
+                    
+                var repointresult = rewardsservice.ChangePoint(new CustPointModel
+                {
+                    Custid = custmodel.RecommendedId,
+                    Type = 1,
+                    Point = 1000, //认证+1000
+                    Remark = "推荐送积分，会员id" + model.Custid,
+                    Sourceid = 3
+                });
+
+                LoggerFactories.CreateLogger().Write("推荐送积分结果：" + repointresult.errcode, TraceEventType.Information);
+            });
+
+            //认证送礼券
+            //Task.Run(() =>
+            //{
+            //    if (model.AuditResult != 1)
+            //    {
+            //        return;
+            //    }
+            //    var rewardsservice =
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+            //    rewardsservice.SendCoupon(new SendCouponModel
+            //    {
+            //        ActionType = 1,
+            //        Custid = model.Custid,
+            //        Sourceid = 3  //认证奖励
+            //    });
+            //});
 
             #endregion
 
@@ -674,6 +694,7 @@ namespace CCN.WebAPI.ApiControllers
         #endregion
 
         #region cust_wechat
+
         /// <summary>
         /// 
         /// </summary>
@@ -686,6 +707,18 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.GetCustWeChatList(query);
         }
 
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        [Route("BindOpenid")]
+        [HttpGet]
+        public JResult BindOpenid(string custid, string openid)
+        {
+            return _custservice.BindOpenid(custid, openid);
+        }
         #endregion
     }
 }

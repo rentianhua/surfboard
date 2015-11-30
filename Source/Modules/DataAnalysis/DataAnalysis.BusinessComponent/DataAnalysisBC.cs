@@ -616,5 +616,53 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
                 errmsg = model
             };
         }
+
+        #region 商户车辆数据统计
+        /// <summary>
+        /// 获取近12个月车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetRecent12Growth(string custid)
+        {
+            var list = DataAccess.GetRecent12Growth(custid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        /// <summary>
+        /// 获取近12个月车辆销售量
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetRecent12Sell(string custid)
+        {
+            var list = DataAccess.GetRecent12Growth(custid);
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+
+        #endregion
+
     }
 }

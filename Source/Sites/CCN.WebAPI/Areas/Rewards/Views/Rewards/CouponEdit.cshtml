@@ -78,7 +78,6 @@
                     $("#value1").val(obj.Value1);
                     $("#value2").val(obj.Value2);
                 }
-
             }
         });
     }
@@ -97,8 +96,8 @@
         };
 
         if (vtype === "1") { //有效时间范围
-            json.Vstart = $("#vstart").val();
-            json.Vend = $("#vend").val();
+            json.Vstart = $("#vstart").val() + " 00:00:00";
+            json.Vend = $("#vend").val() + " 23:23:59";
         } else {//起效/有效天数
             json.Value1 = $("#value1").val();
             json.Value2 = $("#value2").val();

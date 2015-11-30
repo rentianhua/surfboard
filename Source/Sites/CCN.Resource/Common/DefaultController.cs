@@ -18,12 +18,12 @@ namespace CCN.Resource.Main.Common
         /// <summary>
         /// 初始化用户登录信息
         /// </summary>
-        public BaseUserInfo UserInfo {
+        public BaseUserModel UserInfo {
             get
             {
                 if (Session["UserInfo"] != null)
                 {
-                    return (BaseUserInfo)Session["myLogin"];
+                    return (BaseUserModel)Session["UserInfo"];
                 }
                 return null;
             }

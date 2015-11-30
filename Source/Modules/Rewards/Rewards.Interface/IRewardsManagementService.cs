@@ -67,7 +67,7 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query);
+        BasePageList<CouponViewModel> GetCouponPageList(CouponQueryModel query);
 
         /// <summary>
         /// 添加礼券
@@ -89,6 +89,13 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="innerid">id</param>
         /// <returns></returns>
         JResult GetCouponById(string innerid);
+        
+        /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        JResult GetCouponByCode(string code);
 
         /// <summary>
         /// 更新礼券状态
@@ -127,9 +134,59 @@ namespace CCN.Modules.Rewards.Interface
         /// <returns></returns>
         JResult UnBindWechatProduct(string cardid);
 
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CodeViewListModel> GetCodeRecord(CodeQueryModel query);
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        JResult GetCodeRecordTotal(CodeQueryModel query);
+        #endregion
+
+        #region 我的Code
+
+        /// <summary>
+        /// 获取我的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<MyCodeViewListModel> GetMyCodeList(MyCodeQueryModel query);
+
+        /// <summary>
+        /// 我的礼券详情
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        JResult GetCodeInfo(string code);
+
+        #endregion
+
+        #region 礼券商城
+
+        /// <summary>
+        /// 获取礼券列表（购买）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query);
+
         #endregion
 
         #region 礼券对外接口
+
+        /// <summary>
+        /// 根据规则发放礼券
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SendCoupon(SendCouponModel model);
+
 
         /// <summary>
         /// 批量购买礼券
@@ -165,7 +222,7 @@ namespace CCN.Modules.Rewards.Interface
         /// 商户登录
         /// </summary>
         /// <returns></returns>
-        JResult ShopLogin(string shopcode, string password);
+        JResult ShopLogin(ShopLoginInfo model);
 
         /// <summary>
         /// 添加商户
@@ -205,6 +262,55 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <returns></returns>
         IEnumerable<ItemShop> GetShopList();
+        #endregion
+
+        #region 商户职员管理
+
+        /// <summary>
+        /// 商户登录
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopStaffModel(StaffLoginInfo model);
+
+        /// <summary>
+        /// 根据id获取商户职员信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopStaffById(string innerid);
+
+        /// <summary>
+        /// 添加职员
+        /// </summary>
+        /// <returns></returns>
+        JResult AddShopStaff(ShopStaffModel model);
+
+        /// <summary>
+        /// 更新商户Staff
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateShopStaff(ShopStaffModel model);
+
+        /// <summary>
+        /// 修改商户Staff状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateShopStaffStatus(string innerid, int status);
+
+        /// <summary>
+        /// 删除商户Staff
+        /// </summary>
+        /// <returns></returns>
+        JResult DeleteShopStaff(string innerid);
+
+        /// <summary>
+        /// 商户职员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<ShopStaffViewModel> GetShopStaffPageList(ShopStaffQueryModel query);
+
         #endregion
 
         #region 结算记录
@@ -250,6 +356,31 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="query">查询条件</param>
         /// <returns></returns>
         BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query);
+
+        /// <summary>
+        /// 根据settid获取已结算的code列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<SettedCodeViewListModel> GetSettedCodePageList(SettedCodeQueryModel query);
+
+        #endregion
+
+        #region 商户区处理
+
+        /// <summary>
+        /// 根据城市id获取区列表
+        /// </summary>
+        /// <param name="cityid"></param>
+        /// <returns></returns>
+        JResult GetShopAreaByCityid(string cityid);
+
+        /// <summary>
+        /// 根据区获取商户列表
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        JResult GetShopByArea(string area);
 
         #endregion
     }

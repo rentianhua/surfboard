@@ -11,7 +11,7 @@
     });
 
     function QueryList() {
-        $.get("/api/rewards/GetProductList", function(data) {
+        $.get("/api/rewards/GetProductList?token=cd-u8jTQIDGYVFeGPBANpabRch5FyhzvfLCoVC_51LC5HdsnrhqUKDzQ9CsYtQKJIreqxx64ojLTrtJiMQvcW4u2KNdWJgxWNgdAi5vFZikFCOdAJAURD", function (data) {
             if (data.errcode !== 0) {
                 alert("获取商品失败");
                 console.log(data.errmsg);
@@ -33,7 +33,7 @@
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             
-            str += "<td><img style=' max-width:50px;' src='" + val.product_base.main_img + "' /></td>";
+            str += "<td><img style=' max-width:50px;' src='" + val.product_base.main_img.replace(/^\?wx_fmt=.$/g, "") + "' /></td>";
 
             var productName = val.product_base.name;
 

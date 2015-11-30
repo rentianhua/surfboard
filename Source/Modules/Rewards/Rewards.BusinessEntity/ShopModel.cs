@@ -28,7 +28,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Shopcode { get; set; }
 
         /// <summary>
-        /// 
+        /// 用于商户编号自动生成（自增长）
         /// </summary>
         public int? Code { get; set; }
 
@@ -71,6 +71,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 所在地：区/县
         /// </summary>
         public string Area { get; set; }
+
+        /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
 
         /// <summary>
         /// QQ
@@ -154,6 +159,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Area { get; set; }
 
         /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
+        
+        /// <summary>
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
@@ -204,6 +214,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 所在地：区/县
         /// </summary>
         public string Area { get; set; }
+
+        /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
     }
 
     /// <summary>
@@ -219,5 +234,21 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 商户名
         /// </summary>
         public string Text { get; set; }
+    }
+
+    /// <summary>
+    /// 商户登录信息
+    /// </summary>
+    public class ShopLoginInfo
+    {
+        /// <summary>
+        /// shop编号
+        /// </summary>
+        public string Shopcode { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        public string Password { get; set; }
     }
 }

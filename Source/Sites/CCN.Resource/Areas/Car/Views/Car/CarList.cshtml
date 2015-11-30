@@ -63,12 +63,15 @@
     }
 
     function LoadData(data, index) {
-
         $("#carlist tbody").empty();
 
         var str = "";
 
         $.each(data, function (key, val) {
+            var seecount = 0;
+            if (val.ShareModel != null && val.ShareModel.SeeCount != null) {
+                seecount = val.ShareModel.SeeCount;
+            }
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
@@ -79,7 +82,7 @@
             str += "<td>" + Dateformat(val.register_date, "yyyy-MM") + "</td>";
             str += "<td>" + val.price + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
-            str += "<td data-value='" + val.ShareModel.SeeCount + "'>" + val.ShareModel.SeeCount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
+            str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +

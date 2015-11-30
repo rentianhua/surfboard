@@ -75,7 +75,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCouponPageList")]
         [HttpPost]
-        public BasePageList<CouponInfoModel> GetCouponPageList([FromBody] CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetCouponPageList([FromBody] CouponQueryModel query)
         {
             return _rewardsservice.GetCouponPageList(query);
         }
@@ -114,6 +114,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCouponById(string innerid)
         {
             return _rewardsservice.GetCouponById(innerid);
+        }
+
+        /// <summary>
+        /// 获取礼券信息 by code
+        /// </summary>
+        /// <param name="code">id</param>
+        /// <returns></returns>
+        [Route("GetCouponByCode")]
+        [HttpGet]
+        public JResult GetCouponByCode(string code)
+        {
+            return _rewardsservice.GetCouponByCode(code);
         }
 
         /// <summary>
@@ -177,6 +189,74 @@ namespace CCN.WebAPI.ApiControllers
             return _rewardsservice.UnBindWechatProduct(cardid);
         }
 
+
+        /// <summary>
+        /// 核销记录查询列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecord")]
+        [HttpPost]
+        public BasePageList<CodeViewListModel> GetCodeRecord([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecord(query);
+        }
+
+        /// <summary>
+        /// 核销记录查询列表-汇总
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCodeRecordTotal")]
+        [HttpPost]
+        public JResult GetCodeRecordTotal([FromBody]CodeQueryModel query)
+        {
+            return _rewardsservice.GetCodeRecordTotal(query);
+        }
+        #endregion
+
+        #region 我的Code
+
+        /// <summary>
+        /// 获取我的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetMyCodeList")]
+        [HttpPost]
+        public BasePageList<MyCodeViewListModel> GetMyCodeList([FromBody]MyCodeQueryModel query)
+        {
+            return _rewardsservice.GetMyCodeList(query);
+        }
+
+        /// <summary>
+        /// 我的礼券详情
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [Route("GetCodeInfo")]
+        [HttpGet]
+        public JResult GetCodeInfo(string code)
+        {
+            return _rewardsservice.GetCodeInfo(code);
+        }
+
+        #endregion
+
+        #region 礼券商城
+
+        /// <summary>
+        /// 获取礼券列表（购买）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetCouponMallPageList")]
+        [HttpPost]
+        public BasePageList<CouponViewModel> GetCouponMallPageList([FromBody]CouponQueryModel query)
+        {
+            return _rewardsservice.GetCouponMallPageList(query);
+        }
+
         #endregion
 
         #region 礼券对外接口
@@ -200,8 +280,8 @@ namespace CCN.WebAPI.ApiControllers
         /// <param name="model"></param>
         /// <returns></returns>
         [Route("CancelCoupon")]
-        [HttpGet]
-        public JResult CancelCoupon(CancelModel model)
+        [HttpPost]
+        public JResult CancelCoupon([FromBody]CancelModel model)
         {
             return _rewardsservice.CancelCoupon(model);
         }
@@ -217,22 +297,17 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _rewardsservice.GetCoupon(query);
         }
-        
+
         /// <summary>
         /// 获取商品列表
         /// </summary>
         /// <returns></returns>
         [Route("GetProductList")]
         [HttpGet]
-        public GetByStatusResult GetProductList()
+        public GetByStatusResult GetProductList(string token = "")
         {
-            //var appid = ConfigHelper.GetAppSettings("APPID");
-            //var result = ProductApi.GetByStatus(appid, 0);
-
-            var accessToken =
-                "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
-            var result = ProductApi.GetByStatus(accessToken, 0);
-
+            var accessTokenOrAppId = string.IsNullOrWhiteSpace(token) ? ConfigHelper.GetAppSettings("APPID") : token;
+            var result = ProductApi.GetByStatus(accessTokenOrAppId, 0);
             return result;
         }
 
@@ -256,10 +331,10 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <returns></returns>
         [Route("ShopLogin")]
-        [HttpGet]
-        public JResult ShopLogin(string shopcode, string password)
+        [HttpPost]
+        public JResult ShopLogin([FromBody] ShopLoginInfo model)
         {
-            return _rewardsservice.ShopLogin(shopcode, password);
+            return _rewardsservice.ShopLogin(model);
         }
 
         /// <summary>
@@ -372,6 +447,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 删除结算记录中的一张图片
+        /// </summary>
+        /// <param name="innerid">记录id</param>
+        /// <param name="pic"></param>
+        /// <returns></returns>
+        [Route("DeleteSettPicture")]
+        [HttpDelete]
+        public JResult DeleteSettPicture(string innerid, string pic)
+        {
+            return _rewardsservice.DeleteSettPicture(innerid, pic);
+        }
+
+        /// <summary>
         /// 根据id获取结算记录信息
         /// </summary>
         /// <returns></returns>
@@ -392,6 +480,34 @@ namespace CCN.WebAPI.ApiControllers
         public BasePageList<SettlementLogViewModel> GetSettLogPageList([FromBody] SettlementLogQueryModel query)
         {
             return _rewardsservice.GetSettLogPageList(query);
+        }
+
+        #endregion
+
+        #region 商户区处理
+
+        /// <summary>
+        /// 根据城市id获取区列表
+        /// </summary>
+        /// <param name="cityid"></param>
+        /// <returns></returns>
+        [Route("GetShopAreaByCityid")]
+        [HttpGet]
+        public JResult GetShopAreaByCityid(string cityid)
+        {
+            return _rewardsservice.GetShopAreaByCityid(cityid);
+        }
+
+        /// <summary>
+        /// 根据区获取商户列表
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        [Route("GetShopByArea")]
+        [HttpGet]
+        public JResult GetShopByArea(string area)
+        {
+            return _rewardsservice.GetShopByArea(area);
         }
 
         #endregion

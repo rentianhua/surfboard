@@ -3,68 +3,90 @@
 @{
     var menuList = ReadXML.GetMenuList();
     <ul class="nav sidebar-menu">
+        @*判断是商户登入还是后台管理员登入*@
         <!--主页-->
         <li class="active">
-            <a href="/Home/Index">
+            <a href="/Home/BusinessIndex">
                 <i class="menu-icon glyphicon glyphicon-home"></i>
                 <span class="menu-text"> 主页 </span>
             </a>
         </li>
-        @foreach (var group in menuList.menugroups)
+        @if (Request.Cookies["type"].Value.ToString() == "0")
         {
-        <!--Databoxes-->
-            string dropClass = "";
-            if (group.submenu)
-            {
-                dropClass = "menu-dropdown";
-            }
-
             <li>
-                <a href="javascript:void(0);" class="@dropClass" >
-                    <i class="@group.icon glyphicon glyphicon-tasks"></i>
-                    <span class="menu-text"> @group.name </span>
-                    @if (group.submenu)
-                    {
-                        <i class='menu-expand'></i>
-                    }
+                <a href="#" class="menu-dropdown">
+                    <i class="menu-icon glyphicon glyphicon-tasks"></i>
+                    <span class="menu-text"> 车辆管理 </span>
+                    <i class="menu-expand"></i>
                 </a>
-                @if (group.submenu)
-                {
-                    <ul class="submenu">
-                        @foreach (var secondMenu in group.MenuArray)
-                        {
-                            <li>
-                                @if (secondMenu.submenu)//存在子菜单
-                                {
-                                    <a href="javascript:void(0);" class="menu-dropdown">
-                                        <span class="menu-text">@secondMenu.name</span>
-                                        <i class="menu-expand"></i>
-                                    </a>
-                                    <ul class="submenu">
-                                        @foreach (var thirdMenu in secondMenu.MenuArray)
-                                        {
-                                            <li>
-                                                <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@thirdMenu.url');">
-                                                    <i class="@thirdMenu.icon"></i>
-                                                    <span class="menu-text">@thirdMenu.name</span>
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-                                }
-                                else//没有子菜单
-                                {
-                                    <a href="javascript:void(0);" onclick="getBodyHtml('mainbody', '@secondMenu.url');">
-                                        <span class="menu-text">@secondMenu.name</span>
-                                    </a>
-                                }
-                            </li>
-                        }
-                    </ul>
-                }
-
+                <ul class="submenu">
+                    <li>
+                        <a href="javascript:void(0);" onclick="getBodyHtmlByMenu('mainbody', '/Car/Car/CarList', this);">
+                            <span class="menu-text">车辆列表</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
         }
+        else
+        {
+            foreach (var group in menuList.menugroups)
+            {
+                <!--Databoxes-->
+                string dropClass = "";
+                if (group.submenu)
+                {
+                    dropClass = "menu-dropdown";
+                }
+
+                <li>
+                    <a href="javascript:void(0);" class="@dropClass">
+                        <i class="@group.icon"></i>
+                        <span class="menu-text"> @group.name </span>
+                        @if (group.submenu)
+                    {
+                            <i class='menu-expand'></i>
+                        }
+                    </a>
+                    @if (group.submenu)
+                    {
+                        <ul class="submenu">
+                            @foreach (var secondMenu in group.MenuArray)
+                        {
+                                <li>
+                                    @if (secondMenu.submenu)//存在子菜单
+                                    {
+                                        <a href="javascript:void(0);" class="menu-dropdown">
+                                            <span class="menu-text">@secondMenu.name</span>
+                                            <i class="menu-expand"></i>
+                                        </a>
+                                        <ul class="submenu">
+                                            @foreach (var thirdMenu in secondMenu.MenuArray)
+                                            {
+                                                <li>
+                                                    <a href="javascript:void(0);" onclick="getBodyHtmlByMenu('mainbody', '@thirdMenu.url',this);">
+                                                        <i class="@thirdMenu.icon"></i>
+                                                        <span class="menu-text">@thirdMenu.name</span>
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>
+                                    }
+                                    else//没有子菜单
+                                    {
+                                        <a href="javascript:void(0);" onclick="getBodyHtmlByMenu('mainbody', '@secondMenu.url',this);">
+                                            <span class="menu-text">@secondMenu.name</span>
+                                        </a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                </li>
+            }
+        }
+
         <li>
             <a href="#">
                 <i class="menu-icon glyphicon glyphicon-fire themesecondary"></i>

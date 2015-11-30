@@ -430,7 +430,11 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sql, new { authstatus = model.AuditResult, innerid = model.Custid });
+                    conn.Execute(sql, new
+                    {
+                        authstatus = model.AuditResult == 1 ? 2 : 3,
+                        innerid = model.Custid
+                    });
                     conn.Execute(sqlau, new
                     {
                         auditper = model.AuditPer,
@@ -925,9 +929,8 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         #endregion
-
-
-        #region cust_wechat
+        
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -950,6 +953,24 @@ namespace CCN.Modules.Customer.DataAccess
             var list = Helper.ExecutePaging<CustWeChatViewModel>(model, query.Echo);
             return list;
         }
+
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public int UpdateOpenid(string custid,string openid)
+        {
+            const string sql = "update cust_wechat set openid=@openid where custid=@custid;";
+            var result = Helper.Execute(sql, new
+            {
+                custid,
+                openid
+            });
+            return result;
+        }
+        
         #endregion
     }
 }
