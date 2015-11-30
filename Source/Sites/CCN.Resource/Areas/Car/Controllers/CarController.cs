@@ -14,6 +14,10 @@ namespace CCN.Resource.Areas.Car.Controllers
         // GET: Car/Car
         public ActionResult CarList(string custid)
         {
+            if ((CustModel)Session["CustModel"] !=null)
+            {
+                custid = ((CustModel)Session["CustModel"]).Innerid;
+            }
             if (string.IsNullOrWhiteSpace(custid))
             {
                 return Redirect("/Customer/Customer/CustomerList");

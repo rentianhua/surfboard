@@ -309,7 +309,34 @@ namespace CCN.Modules.Base.Interface
         #endregion
 
         #region 获取系统后台基础信息
+        /// <summary>
+        /// 获取登录人信息
+        /// </summary>
+        /// <param name="loginname"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         JResult GetUserInfo(string loginname, string password);
+
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseUserModel> GetUserList(BaseUserQueryModel query);
+
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddUser(BaseUserModel model);
+
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query);
         #endregion
     }
 }

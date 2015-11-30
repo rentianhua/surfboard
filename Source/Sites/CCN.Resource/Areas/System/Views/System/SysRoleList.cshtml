@@ -1,0 +1,75 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+    $(function () {
+        QueryList();
+    });
+
+    function QueryList() {
+        var json = {
+
+        };
+        $("#rolelist").getPageList(20, "/api/Base/GetRoleList", json, LoadData);
+    }
+    function LoadData(data,index) {
+        $("#rolelist tbody").empty();
+
+        var str = "";
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.name + "</td>";
+           // str += "<td>" + val.mobile + "</td>";
+            str += "<td>" + (val.isenabled === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
+            str += "<td>" + val.remark + "</td>";
+            str += "<td>" +
+                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+               "<a href='javascript:;' onclick=\"DeleteCode('" + val.Innerid + "');\">删除 </a>" +
+               "<a href='javascript:;' onclick=\"UpdateCodeStatus('" + val.Innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                "</td>";
+            str += "</tr>";
+            $("#rolelist tbody").append(str);
+        });
+    }
+
+</script>
+<div>
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="loginname" class="col-sm-4 control-label no-padding-right searchLayout">角色名称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="loginname" placeholder="角色名称">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a onclick="getBodyHtml('mainbody', '/System/System/SysRoleEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped table-hover table-bordered" id="rolelist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>角色名称</th>
+                <th>状态</th>
+                <th>备注</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>

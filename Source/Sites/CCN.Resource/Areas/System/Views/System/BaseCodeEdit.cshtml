@@ -77,7 +77,8 @@
         };
         if (id === "") {
             $.post("/api/Base/AddCode", json, function (result) {
-                var str = result.errcode === 0 ? "添加成功" : "添加失败";  
+                debugger
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 if (result.errcode != 0) {
                     alert(result.errmsg);
                 }
@@ -173,7 +174,7 @@
                 </div>
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input type="submit" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" />
                     </div>
                 </div>

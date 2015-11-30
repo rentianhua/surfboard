@@ -662,5 +662,44 @@ namespace CCN.Resource.ApiControllers
                 return "-2";
             }
         }
+
+        #region 获取系统后台基础信息
+
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetUserList")]
+        [HttpPost]
+        public BasePageList<BaseUserModel> GetUserList(BaseUserQueryModel query)
+        {
+            return _baseservice.GetUserList(query);
+        }
+
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddUser")]
+        [HttpPost]
+        public JResult AddUser([FromBody]BaseUserModel model)
+        {
+            return _baseservice.AddUser(model);
+        }
+
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetRoleList")]
+        [HttpPost]
+        public BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query)
+        {
+            return _baseservice.GetRoleList(query);
+        }
+        #endregion
     }
 }

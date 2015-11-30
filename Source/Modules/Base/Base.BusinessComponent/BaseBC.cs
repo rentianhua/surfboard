@@ -21,7 +21,7 @@ namespace CCN.Modules.Base.BusinessComponent
         /// 
         /// </summary>
         /// <param name="da"></param>
-        public BaseBC(BaseDA da):base(da)
+        public BaseBC(BaseDA da) : base(da)
         {
 
         }
@@ -92,20 +92,24 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddCodeType(BaseCodeTypeModel model)
         {
-            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey);
-            if (test==model.Typekey) {
+            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey,null);
+            //：：判断验证：/ 查询数据为空，则可添加;不为空，则返回错误信息
+            if (test!=null) {
+            if (test.Typekey==model.Typekey) {
                 return new JResult
                 {
                     errcode = 400,
                     errmsg = "代码类型key重复！"
                 };
             }
+            }
             model.Innerid = Guid.NewGuid().ToString();
             model.Isenabled = 1;
             var result = DataAccess.AddCodeType(model);
-            return new JResult {
-                errcode=0,
-                errmsg=result
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
             };
         }
         /// <summary>
@@ -115,20 +119,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCodeType(BaseCodeTypeModel model)
         {
-            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey);
-            if (test== model.Typekey) {
+            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey,model.Innerid);
+            //：：条件判断：/ typekey唯一值，innerid唯一值
+            if (test!=null) {
                 return new JResult
                 {
                     errcode = 400,
-                    errmsg = "代码类型key重复！"
+                    errmsg = "更新信息失败！"
                 };
             }
             //添加信息
             var result = DataAccess.UpdateCodeType(model);
             return new JResult
             {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
+                errcode = 0,
+                errmsg = result
             };
         }
         #endregion
@@ -199,9 +204,12 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult AddCode(BaseCodeModel model)
         {     
             var test = DataAccess.GetCodeByTypeKey(model.Typekey,null,null);
+            //：：判断验证：/ 查询数据为空则添加，不为空则验证,返回错误详细信息
+            if (test!=null) {
             if (test.Typekey == model.Typekey)
             {
-                if (test.CodeName==model.CodeName) {
+                if (test.CodeName == model.CodeName)
+                {
                     return new JResult
                     {
                         errcode = 400,
@@ -217,6 +225,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     };
                 }
 
+            }
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.IsEnabled = 1;
@@ -244,7 +253,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     errcode = 400,
                     errmsg = "更新信息失败！"
                 };
-          }
+            }
             var result = DataAccess.UpdateCode(model);
             return new JResult
             {
@@ -277,7 +286,7 @@ namespace CCN.Modules.Base.BusinessComponent
                 errmsg = ""
             };
         }
-       
+
         #endregion
 
         #region 验证码
@@ -289,7 +298,7 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="vcode"></param>
         /// <param name="valid"></param>
         /// <returns></returns>
-        private static string GetVerifiByType(int utype ,string vcode,int valid)
+        private static string GetVerifiByType(int utype, string vcode, int valid)
         {
             //有效期从秒转换成分
             valid = valid / 60;
@@ -370,10 +379,10 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="vcode">验证码</param>
         /// <param name="utype">用处类型[1注册,2登录,3,其他]</param>
         /// <returns>返回结果。1.正确，0不正确,-1.验证码过期</returns>
-        public JResult CheckVerification(string target,string vcode, int utype)
+        public JResult CheckVerification(string target, string vcode, int utype)
         {
             var jResult = new JResult();
-            var m = DataAccess.GetVerification(target,utype);
+            var m = DataAccess.GetVerification(target, utype);
             //验证码不正确
             if (m == null || !m.Vcode.Equals(vcode))
             {
@@ -415,7 +424,7 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public IEnumerable<BaseCity> GetCityList(int provId, string initial)
         {
-            return DataAccess.GetCityList(provId,initial);
+            return DataAccess.GetCityList(provId, initial);
         }
 
         /// <summary>
@@ -434,15 +443,16 @@ namespace CCN.Modules.Base.BusinessComponent
                     errmsg = ""
                 };
             }
-            
+
             var listProv = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
             var listResult = (from item in listProv
-                let il = list.Where(x => x.Initial.ToUpper().Trim() == item).ToList()
-                where il.Any()
-                select new JsonGroupByModel
-                {
-                    Initial = item, ProvList = il
-                }).ToList();
+                              let il = list.Where(x => x.Initial.ToUpper().Trim() == item).ToList()
+                              where il.Any()
+                              select new JsonGroupByModel
+                              {
+                                  Initial = item,
+                                  ProvList = il
+                              }).ToList();
 
             return new JResult
             {
@@ -472,7 +482,7 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult GetCarBrandHotTop(int top)
         {
             var list = DataAccess.GetCarBrandHotTop(top);
-            return list.Any() ? JResult._jResult(0,list) : JResult._jResult(400, "");
+            return list.Any() ? JResult._jResult(0, list) : JResult._jResult(400, "");
         }
 
         /// <summary>
@@ -562,9 +572,9 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddCarBrand(BaseCarBrandModel model)
         {
-           
+
             //验证品牌信息是否同名
-            var brandmodel = DataAccess.GetCarBrandName(model.BrandName,null);
+            var brandmodel = DataAccess.GetCarBrandName(model.BrandName, null);
             if (brandmodel != null)
             {
                 if (brandmodel.BrandName == model.BrandName)
@@ -580,9 +590,10 @@ namespace CCN.Modules.Base.BusinessComponent
             model.Innerid = maxid + 1;
             model.IsEnabled = 1;
             var result = DataAccess.AddCarBrand(model);
-            return new JResult {
-                errcode=0,
-                errmsg= result
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
             };
         }
         /// <summary>
@@ -593,16 +604,19 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult DeleteCarBrand(string innerid)
         {
             var brandmodel = DataAccess.VerifyCarBrand(innerid);
-            if (brandmodel!=null) {
-                return new JResult {
-                    errcode=400,
-                    errmsg="品牌下有车系，删除失败！"
+            if (brandmodel != null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "品牌下有车系，删除失败！"
                 };
             }
             var model = DataAccess.DeleteCarBrand(innerid);
-            return new JResult {
-                errcode=0,
-                errmsg=model
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
             };
         }
         /// <summary>
@@ -613,11 +627,15 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult UpdateCarBrand(BaseCarBrandModel model)
         {
             //品牌名称验证信息是否同名
-            var brandmodel = DataAccess.GetCarBrandName(model.BrandName,model.Innerid.ToString());
-            if (brandmodel!=null) {
-                if (brandmodel.BrandName==model.BrandName) {
-                    if (brandmodel.Innerid!=model.Innerid) {
-                        return new JResult {
+            var brandmodel = DataAccess.GetCarBrandName(model.BrandName, model.Innerid.ToString());
+            if (brandmodel != null)
+            {
+                if (brandmodel.BrandName == model.BrandName)
+                {
+                    if (brandmodel.Innerid != model.Innerid)
+                    {
+                        return new JResult
+                        {
                             errcode = 400,
                             errmsg = "更新失败！"
                         };
@@ -675,10 +693,13 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult AddCarSeries(BaseCarSeriesModel model)
         {
             //验证车系信息是否同名
-            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName,null);
-            if (seriesmodel!=null) {
-                if (seriesmodel.SeriesName==model.SeriesName) {
-                    return new JResult {
+            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, null);
+            if (seriesmodel != null)
+            {
+                if (seriesmodel.SeriesName == model.SeriesName)
+                {
+                    return new JResult
+                    {
                         errcode = 400,
                         errmsg = "车系名称相同"
                     };
@@ -688,9 +709,10 @@ namespace CCN.Modules.Base.BusinessComponent
             model.Innerid = maxid + 1;
             model.IsEnabled = 1;
             var result = DataAccess.AddCarSeries(model);
-            return new JResult {
-                errcode=0,
-                errmsg=result
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
             };
         }
         /// <summary>
@@ -866,6 +888,46 @@ namespace CCN.Modules.Base.BusinessComponent
             var model = DataAccess.GetUserInfo(loginname, password);
             return JResult._jResult(model);
         }
+
+
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseUserModel> GetUserList(BaseUserQueryModel query)
+        {
+            return DataAccess.GetUserList(query);
+        }
+        
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUser(BaseUserModel model)
+        {
+            //验证用户是否存在
+            //待添加
+
+
+            var result = DataAccess.AddUser(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query)
+        {
+            return DataAccess.GetRoleList(query);
+        }
+
         #endregion
 
     }

@@ -185,5 +185,21 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <returns></returns>
         JResult GetTotal();
 
+
+        #region 商户车辆数据统计
+        /// <summary>
+        /// 获取近12个月车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        JResult GetRecent12Growth(string custid);
+
+        /// <summary>
+        /// 获取近12个月车辆销售量
+        /// </summary>
+        /// <returns></returns>
+        JResult GetRecent12Sell(string custid);
+
+        #endregion
+
     }
 }

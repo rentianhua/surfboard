@@ -465,8 +465,11 @@
     <Content Include="Areas\Car\Views\Car\CarView.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopStaffEdit.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopStaffList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\SettlementAdd.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\SettCodeRecord.cshtml" />
+    <Content Include="Areas\System\Views\System\SysUserList.cshtml" />
+    <Content Include="Areas\System\Views\System\SysRoleList.cshtml" />
+    <Content Include="Areas\System\Views\System\SysRightList.cshtml" />
+    <Content Include="Areas\System\Views\System\SysUserEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\SysRoleEdit.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -555,6 +558,8 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\LeftMenu.cshtml" />
     <Content Include="Views\Shared\_Menu.cshtml" />
+    <Content Include="Views\Home\BusinessLogin.cshtml" />
+    <Content Include="Views\Home\BusinessIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
