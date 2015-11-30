@@ -40,6 +40,11 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// 
         /// </summary>
         public IEnumerable<dynamic> value5 { get; set; }
+
+        /// <summary>
+        /// value6
+        /// </summary>
+        public decimal value6 { get; set; }
     }
 
     /// <summary>
