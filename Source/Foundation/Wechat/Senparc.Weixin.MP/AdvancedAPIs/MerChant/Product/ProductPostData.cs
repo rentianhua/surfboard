@@ -73,28 +73,48 @@ namespace Senparc.Weixin.MP.AdvancedAPIs.MerChant
 
     public class Property
     {
+        ///// <summary>
+        /////     属性id
+        ///// </summary>
+        //public int id { get; set; }
+
+        ///// <summary>
+        /////     属性值id
+        ///// </summary>
+        //public int vid { get; set; }
+
         /// <summary>
         ///     属性id
         /// </summary>
-        public int id { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         ///     属性值id
         /// </summary>
-        public int vid { get; set; }
+        public string vid { get; set; }
     }
 
     public class Sku_info
     {
+        ///// <summary>
+        /////     sku属性
+        ///// </summary>
+        //public int id { get; set; }
+
+        ///// <summary>
+        /////     sku值
+        ///// </summary>
+        //public List<int> vid { get; set; }
+
         /// <summary>
         ///     sku属性
         /// </summary>
-        public int id { get; set; }
+        public string id { get; set; }
 
         /// <summary>
         ///     sku值
         /// </summary>
-        public List<int> vid { get; set; }
+        public List<string> vid { get; set; }
     }
 
     public class Detail

@@ -75,7 +75,7 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("GetCouponPageList")]
         [HttpPost]
-        public BasePageList<CouponInfoModel> GetCouponPageList([FromBody] CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetCouponPageList([FromBody] CouponQueryModel query)
         {
             return _rewardsservice.GetCouponPageList(query);
         }
@@ -527,6 +527,17 @@ namespace CCN.Resource.ApiControllers
             return _rewardsservice.GetSettLogPageList(query);
         }
 
+        /// <summary>
+        /// 根据settid获取已结算的code列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetSettedCodePageList")]
+        [HttpPost]
+        public BasePageList<SettedCodeViewListModel> GetSettedCodePageList(SettedCodeQueryModel query)
+        {
+            return _rewardsservice.GetSettedCodePageList(query);
+        }
         #endregion
     }
 }

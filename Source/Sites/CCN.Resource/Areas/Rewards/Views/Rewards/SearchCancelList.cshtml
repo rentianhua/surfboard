@@ -7,13 +7,16 @@
 
 <script type="text/javascript">
 
-    $(function () {
+    var totalnumber = 0;
+    var totalamount = 0;
+
+    $(function() {
 
         var myDate = new Date();
         var year = myDate.getFullYear();
         var month = myDate.getMonth();
 
-        var currmonthfirst = year + "-" + (month + 1) + "-" + "01";  //当月第一天
+        var currmonthfirst = year + "-" + (month + 1) + "-" + "01"; //当月第一天
         var currmonth = new Date(currmonthfirst);
         var lastMDate = new Date();
         lastMDate.setDate(currmonth.getDate() - 1); //当月第一天的日减1就是上月最后一天
@@ -41,8 +44,8 @@
             type: 'get',
             datatype: 'application/json',
             async: false,
-            success: function (data) {
-                $.each(data, function (k, v) {
+            success: function(data) {
+                $.each(data, function(k, v) {
                     $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
                 });
             }
@@ -68,8 +71,8 @@
             return;
         }
 
-        $.post("/api/Rewards/GetCoupon", json, function (data) {
-            LoadData(data.errmsg, 0);
+        $.post("/api/Rewards/GetCoupon", json, function(data) {
+            LoadData(data.errmsg, 1);
         });
     }
 
@@ -86,9 +89,9 @@
             $("#cancellist tbody").append(str);
             return;
         }
-        var totalnumber = 0;
-        var totalamount = 0;
-        $.each(data, function (key, val) {
+        totalnumber = 0;
+        totalamount = 0;
+        $.each(data, function(key, val) {
             totalnumber += val.CanedCount;
             totalamount += val.TotalPrice;
             str = "";
@@ -110,6 +113,35 @@
         str += "<td>" + totalamount + "</td>";
         str += "</tr>";
         $("#cancellist tbody").append(str);
+    }
+
+    function DoSett() {
+        var json = {
+            shopid: $("#selectshop").val() === "0" ? "" : $("#selectshop").val(),
+            starttime: $("#cyclestart").val(),
+            endtime: $("#cycleend").val()
+        };
+        if (json.shopid === "0") {
+            alert("请选择商户");
+            return;
+        }
+        if (json.starttime === "") {
+            alert("请选择开始时间");
+            return;
+        }
+        if (json.endtime === "") {
+            alert("请选择结束时间");
+            return;
+        }
+        if (totalamount === 0) {
+            alert("没有金额需要结算");
+            return;
+        }
+
+        getBodyHtml(
+            'mainbody',
+            '/rewards/rewards/settlementadd?shopid=' + json.shopid + "&setttotal=" + totalamount + "&scstart=" + json.starttime + "&scend=" + json.endtime,
+            this);
     }
 
 </script>
@@ -140,6 +172,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a href="javascript:void(0);" class="btn btn-pale shiny" onclick="DoSett();">结算</a>
             </div>
         </div>
     </div>

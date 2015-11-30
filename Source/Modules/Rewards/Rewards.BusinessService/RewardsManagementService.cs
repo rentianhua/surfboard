@@ -90,7 +90,7 @@ namespace CCN.Modules.Rewards.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetCouponPageList(CouponQueryModel query)
         {
             return BusinessComponent.GetCouponPageList(query);
         }
@@ -205,6 +205,44 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.GetCodeRecordTotal(query);
         }
+        #endregion
+
+        #region 我的Code
+
+        /// <summary>
+        /// 获取我的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<MyCodeViewListModel> GetMyCodeList(MyCodeQueryModel query)
+        {
+            return BusinessComponent.GetMyCodeList(query);
+        }
+
+        /// <summary>
+        /// 我的礼券详情
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        public JResult GetCodeInfo(string code)
+        {
+            return BusinessComponent.GetCodeInfo(code);
+        }
+
+        #endregion
+
+        #region 礼券商城
+
+        /// <summary>
+        /// 获取礼券列表（购买）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query)
+        {
+            return BusinessComponent.GetCouponMallPageList(query);
+        }
+
         #endregion
 
         #region 礼券对外接口
@@ -468,6 +506,40 @@ namespace CCN.Modules.Rewards.BusinessService
         public BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query)
         {
             return BusinessComponent.GetSettLogPageList(query);
+        }
+
+        /// <summary>
+        /// 根据settid获取已结算的code列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<SettedCodeViewListModel> GetSettedCodePageList(SettedCodeQueryModel query)
+        {
+            return BusinessComponent.GetSettedCodePageList(query);
+        }
+        
+        #endregion
+
+        #region 商户区处理
+
+        /// <summary>
+        /// 根据城市id获取区列表
+        /// </summary>
+        /// <param name="cityid"></param>
+        /// <returns></returns>
+        public JResult GetShopAreaByCityid(string cityid)
+        {
+            return BusinessComponent.GetShopAreaByCityid(cityid);
+        }
+
+        /// <summary>
+        /// 根据区获取商户列表
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        public JResult GetShopByArea(string area)
+        {
+            return BusinessComponent.GetShopByArea(area);
         }
 
         #endregion

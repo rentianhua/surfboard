@@ -67,7 +67,7 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<CouponInfoModel> GetCouponPageList(CouponQueryModel query);
+        BasePageList<CouponViewModel> GetCouponPageList(CouponQueryModel query);
 
         /// <summary>
         /// 添加礼券
@@ -147,6 +147,35 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="query"></param>
         /// <returns></returns>
         JResult GetCodeRecordTotal(CodeQueryModel query);
+        #endregion
+
+        #region 我的Code
+
+        /// <summary>
+        /// 获取我的礼券
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<MyCodeViewListModel> GetMyCodeList(MyCodeQueryModel query);
+
+        /// <summary>
+        /// 我的礼券详情
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        JResult GetCodeInfo(string code);
+
+        #endregion
+
+        #region 礼券商城
+
+        /// <summary>
+        /// 获取礼券列表（购买）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query);
+
         #endregion
 
         #region 礼券对外接口
@@ -327,6 +356,31 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="query">查询条件</param>
         /// <returns></returns>
         BasePageList<SettlementLogViewModel> GetSettLogPageList(SettlementLogQueryModel query);
+
+        /// <summary>
+        /// 根据settid获取已结算的code列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<SettedCodeViewListModel> GetSettedCodePageList(SettedCodeQueryModel query);
+
+        #endregion
+
+        #region 商户区处理
+
+        /// <summary>
+        /// 根据城市id获取区列表
+        /// </summary>
+        /// <param name="cityid"></param>
+        /// <returns></returns>
+        JResult GetShopAreaByCityid(string cityid);
+
+        /// <summary>
+        /// 根据区获取商户列表
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns></returns>
+        JResult GetShopByArea(string area);
 
         #endregion
     }

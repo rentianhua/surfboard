@@ -102,6 +102,29 @@ namespace CCN.Resource.Areas.Rewards.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// 结算页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SettlementAdd(string shopid, string setttotal, string scstart,string scend)
+        {
+            ViewBag.shopid = string.IsNullOrWhiteSpace(shopid) ? "" : shopid;
+            ViewBag.setttotal = string.IsNullOrWhiteSpace(setttotal) ? "0" : setttotal;
+            ViewBag.scstart = string.IsNullOrWhiteSpace(scstart) ? "" : scstart;
+            ViewBag.scend = string.IsNullOrWhiteSpace(scend) ? "" : scend;
+            return View();
+        }
+
+        /// <summary>
+        /// 结算详情页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SettCodeRecord(string settid)
+        {
+            ViewBag.settid = string.IsNullOrWhiteSpace(settid) ? "" : settid;
+            return View();
+        }
         #endregion
 
     }

@@ -73,6 +73,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Area { get; set; }
 
         /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
         /// QQ
         /// </summary>
         public string QQ { get; set; }
@@ -154,6 +159,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Area { get; set; }
 
         /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
+        
+        /// <summary>
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
@@ -204,6 +214,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 所在地：区/县
         /// </summary>
         public string Area { get; set; }
+
+        /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
     }
 
     /// <summary>

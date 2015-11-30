@@ -381,6 +381,18 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.GetCustWeChatList(query);
         }
+
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult BindOpenid(string custid, string openid)
+        {
+            return BusinessComponent.BindOpenid(custid, openid);
+        }
+
         #endregion
     }
 }

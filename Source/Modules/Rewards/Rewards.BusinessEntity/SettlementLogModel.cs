@@ -48,7 +48,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public DateTime? SettCycleEnd { get; set; }
 
         /// <summary>
-        /// 银行交易流水号
+        /// 银行电子回单号
         /// </summary>
         public string SettSerialNum { get; set; }
 
@@ -85,9 +85,9 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Shopid { get; set; }
 
         /// <summary>
-        /// 结算单号
+        /// 结算单号 or 银行电子回单号
         /// </summary>
-        public string Orderid { get; set; }
+        public string OrderidOrNumber { get; set; }
 
         /// <summary>
         /// 结算金额
@@ -105,16 +105,72 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public DateTime? SettTimeEnd { get; set; }
 
         /// <summary>
-        /// 银行交易流水号
-        /// </summary>
-        public string SettSerialNum { get; set; }
-
-        /// <summary>
         /// 流入银行账户号
         /// </summary>
         public string SettAccount { get; set; }
-
-
         
+    }
+
+    /// <summary>
+    /// 已核销的code查询条件
+    /// </summary>
+    public class UsedCodeQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 卡券id
+        /// </summary>
+        public string Cardid { get; set; }
+
+        /// <summary>
+        /// code
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 核销开始时间
+        /// </summary>
+        public DateTime? StartTime { get; set; }
+
+        /// <summary>
+        /// 核销结束时间
+        /// </summary>
+        public DateTime? EndTime { get; set; }
+    }
+
+    /// <summary>
+    /// 已核销的code查询条件
+    /// </summary>
+    public class SettedCodeQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 结算记录id
+        /// </summary>
+        public string Settid { get; set; }
+    }
+
+    /// <summary>
+    /// 已核销的code查询条件
+    /// </summary>
+    public class SettedCodeViewListModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Usedtime { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Custname { get; set; }
     }
 }
