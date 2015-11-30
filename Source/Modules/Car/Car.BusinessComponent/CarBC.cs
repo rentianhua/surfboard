@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP.AdvancedAPIs;
 
@@ -48,6 +51,18 @@ namespace CCN.Modules.Car.BusinessComponent
                     item.isfriend = -1;
                 }
             }
+
+            Task.Run(() =>
+            {
+                //保存搜车条件
+                DataAccess.SaveSearchRecord(new CarSearchRecordModel
+                {
+                    Createdtime = DateTime.Now,
+                    Custid = ApplicationContext.Current.UserId,
+                    Innerid = Guid.NewGuid().ToString(),
+                    Jsonobj = JsonConvert.SerializeObject(query)
+                });
+            });
 
             return list;
         }

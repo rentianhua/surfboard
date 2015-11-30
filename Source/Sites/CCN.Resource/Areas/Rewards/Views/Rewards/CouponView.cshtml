@@ -47,11 +47,12 @@
                 $("#needpoint").html(obj.Needpoint);
                 $("#count").html(obj.Maxcount + "/" + obj.Count);
                 $("#codetype").html(obj.Codetype);
+                $("#cardtypename").html(obj.Cardtypename);
                 $("#createdtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
 
                 if (obj.Vtype === 1) {
                     var vstart = Dateformat(obj.Vstart, "yyyy-MM-dd");
-                    var vend = Dateformat(obj.Vstart, "yyyy-MM-dd");
+                    var vend = Dateformat(obj.Vend, "yyyy-MM-dd");
                     $("#vvalue").html(vstart + " 至" + vend);
                     $("#vstart").val(vstart);
                     $("#vend").val(vend);
@@ -70,6 +71,20 @@
                     $("#productid").html(obj.ProductId);
                     $("#productunbind").removeClass("hide");
                 }
+
+                $.ajax({
+                    url: "/api/Rewards/GetShopList",
+                    type: 'get',
+                    datatype: 'application/json',
+                    async: false,
+                    success: function (data) {
+                        $.each(data, function (k, v) {
+                            if (obj.Shopid === v.Value) {
+                                $("#shopname").html(v.Text);
+                            }
+                        });
+                    }
+                });
             }
         });
     }
@@ -90,8 +105,8 @@
     function AddDelay(type) {
 
         var json = { Innerid: id, Vtype: type };
-        var vstart = $("#vstart").val();
-        var vend = $("#vend").val();
+        var vstart = $("#vstart").val() + " 00:00:00";
+        var vend =   $("#vend").val() + " 23:23:59";
         var value1 = $("#selectvalue1").val();
         var value2 = $("#selectvalue2").val();
         if (type === 1) {
@@ -188,12 +203,36 @@
     <div class="widget-body">
         <div>
             <form class="form-horizontal form-bordered" role="form">
+
+                <div class="row form-group">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">商户</label>
+                            <div class="controls col-sm-10" style="padding-top:5px">
+                                <span id="shopname" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label no-padding-right">类型</label>
+                                <div class="controls col-sm-10" style="padding-top:5px">
+                                    <span id="cardtypename" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="row form-group">
 
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">标题</label>
-                            <div class="controls col-sm-10" style="padding-top:5px">
+                            <div class="controls col-sm-10" style="padding-top: 5px">
                                 <span id="title" />
                             </div>
                         </div>
@@ -203,20 +242,20 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="" class="col-sm-2 control-label no-padding-right">Logo</label>
-                                <div class="controls col-sm-10" style="padding-top:5px">
-                                    <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
+                                <div class="controls col-sm-10" style="padding-top: 5px">
+                                    <img id="logoimg" style="max-width: 150px; max-height: 150px" src=""/>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">面值</label>
-                            <div class="controls col-sm-10" style="padding-top:5px">
+                            <div class="controls col-sm-10" style="padding-top: 5px">
                                 <span id="amount" />
                             </div>
                         </div>
@@ -224,7 +263,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">购买价</label>
-                            <div class="controls col-sm-10" style="padding-top:5px">
+                            <div class="controls col-sm-10" style="padding-top: 5px">
                                 <span id="buyprice" />
                             </div>
                         </div>
@@ -235,7 +274,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">成本价</label>
-                            <div class="controls col-sm-10" style="padding-top:5px">
+                            <div class="controls col-sm-10" style="padding-top: 5px">
                                 <span id="costprice" />
                             </div>
                         </div>
@@ -249,7 +288,7 @@
                     <div class="col-lg-12">
                         <div class="form-group" id="vtypeTd">
                             <label for="txtaudit_date" class="col-sm-1 control-label no-padding-right">有效期</label>
-                            <div class="col-sm-11 rd" style="padding-top:5px;">
+                            <div class="col-sm-11 rd" style="padding-top: 5px;">
                                 <div>
                                     <label id="vvalue"></label>
                                     <a href="javascript:;" id="aDelay">延期</a>
@@ -258,16 +297,16 @@
                                     固定日期
                                     <input id="vstart" class="Wdate" type="text" placeholder="开始日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">-
                                     <input id="vend" class="Wdate" type="text" placeholder="结束日期" onclick="WdatePicker({ minDate: '%y-%M-%d', dateFmt: 'yyyy-MM-dd', isShowToday: false })">
-                                    <input type="button" value="确定" onclick="AddDelay(1);" />
-                                    <input type="button" value="取消" onclick="CancelDelay();" />
+                                    <input type="button" value="确定" onclick="AddDelay(1);"/>
+                                    <input type="button" value="取消" onclick="CancelDelay();"/>
                                 </div>
                                 <div id="divv2" class="margintop hide">
                                     领取后
                                     <select id="selectvalue1"></select>
                                     生效 ,有效天数
                                     <select id="selectvalue2"></select>
-                                    <input type="button" value="确定" onclick="AddDelay(2);" />
-                                    <input type="button" value="取消" onclick="CancelDelay();" />
+                                    <input type="button" value="确定" onclick="AddDelay(2);"/>
+                                    <input type="button" value="取消" onclick="CancelDelay();"/>
                                 </div>
                             </div>
                         </div>
@@ -278,13 +317,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="count" class="col-sm-2 control-label no-padding-right">库存</label>
-                            <div class="col-sm-10" style="padding-top:5px">
+                            <div class="col-sm-10" style="padding-top: 5px">
                                 <label id="count"></label>
                                 <a href="javascript:;" onclick="$('#controls').removeClass('hide');">增加</a>
                                 <div id="controls" class="margintop hide">
-                                    <input type="text" id="addcount" />
-                                    <input type="button" value="确定" onclick="AddStock();" />
-                                    <input type="button" value="取消" onclick="$('#controls').addClass('hide');" />
+                                    <input type="text" id="addcount"/>
+                                    <input type="button" value="确定" onclick="AddStock();"/>
+                                    <input type="button" value="取消" onclick="$('#controls').addClass('hide');"/>
                                 </div>
                             </div>
                         </div>
@@ -292,7 +331,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="needpoint" class="col-sm-2 control-label no-padding-right">兑换所需积分</label>
-                            <div class="col-sm-10" style="padding-top:5px">
+                            <div class="col-sm-10" style="padding-top: 5px">
                                 <span id="needpoint" />
                             </div>
                         </div>
@@ -303,7 +342,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="codetype" class="col-sm-2 control-label no-padding-right">Code展示类</label>
-                            <div class="col-sm-10" style="padding-top:5px">
+                            <div class="col-sm-10" style="padding-top: 5px">
                                 <span id="codetype" />
                             </div>
                         </div>
@@ -311,7 +350,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="codetype" class="col-sm-2 control-label no-padding-right">创建时间</label>
-                            <div class="col-sm-10" style="padding-top:5px">
+                            <div class="col-sm-10" style="padding-top: 5px">
                                 <span id="createdtime" />
                             </div>
                         </div>
@@ -322,14 +361,14 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="codetype" class="col-sm-2 control-label no-padding-right" title="绑定微小店中的商品id，用于我们的优惠券和微小店中优惠券对接">商品ID</label>
-                            <div class="col-sm-10" style="padding-top:5px">
+                            <div class="col-sm-10" style="padding-top: 5px">
                                 <label id="productid"></label>
                                 <a href="javascript:;" id="productbind" class="hide" onclick="$('#pcontrols').removeClass('hide');">绑定</a>
                                 <a href="javascript:;" id="productunbind" class="hide" onclick="BindProductID(0)">解除绑定</a>
                                 <div id="pcontrols" class="margintop hide">
-                                    <input type="text" id="txtproductid" />
-                                    <input type="button" value="确定" onclick="BindProductID(1);" />
-                                    <input type="button" value="取消" onclick="$('#pcontrols').addClass('hide');" />
+                                    <input type="text" id="txtproductid"/>
+                                    <input type="button" value="确定" onclick="BindProductID(1);"/>
+                                    <input type="button" value="取消" onclick="$('#pcontrols').addClass('hide');"/>
                                 </div>
                             </div>
                         </div>
@@ -338,7 +377,7 @@
 
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist',this);" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist', this);"/>
                     </div>
                 </div>
 

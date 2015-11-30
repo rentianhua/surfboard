@@ -170,9 +170,14 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public string Remark { get; set; }
 
         /// <summary>
-        /// 有效期
+        /// 有效期开始时间
         /// </summary>
-        public DateTime? Validtime { get; set; }
+        public DateTime? Vstart { get; set; }
+
+        /// <summary>
+        /// 有效期结束时间
+        /// </summary>
+        public DateTime? Vend { get; set; }
 
         /// <summary>
         /// 

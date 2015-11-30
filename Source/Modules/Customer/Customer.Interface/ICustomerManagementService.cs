@@ -267,6 +267,15 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="query"></param>
         /// <returns></returns>
         BasePageList<CustWeChatViewModel> GetCustWeChatList(CustWeChatQueryModel query);
+
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        JResult BindOpenid(string custid, string openid);
+
         #endregion
     }
 }

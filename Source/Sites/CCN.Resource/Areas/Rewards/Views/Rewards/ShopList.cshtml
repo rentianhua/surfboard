@@ -29,7 +29,7 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.Shopname == null ? "" : val.Shopname.sub(400)) + "</td>";
             str += "<td>" + val.Shopcode + "</td>";
-            str += "<td>" + val.Email + "</td>";
+            str += "<td>" + (val.Email == null ? "" : val.Email) + "</td>";
             str += "<td>" + (val.Status === 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
             str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
 

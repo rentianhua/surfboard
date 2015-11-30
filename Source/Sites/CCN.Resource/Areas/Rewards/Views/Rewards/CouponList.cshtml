@@ -43,6 +43,7 @@
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.Title == null ? "" : val.Title.sub(400)) + "</td>";
+            str += "<td>" + (val.Cardtypename == null ? "" : val.Cardtypename) + "</td>";
             str += "<td>" + val.Maxcount + "</td>";
             str += "<td>" + val.Count + "</td>";
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
@@ -103,6 +104,7 @@
             <tr role="row">
                 <th>序号</th>
                 <th>标题</th>
+                <th>类型</th>
                 <th>总库存</th>
                 <th>剩余库存</th>
                 <th>状态</th>

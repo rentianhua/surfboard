@@ -98,19 +98,4 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public List<CouponCodeModel> ListCode { get; set; }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CouponCodeModel
-    {
-        /// <summary>
-        /// code
-        /// </summary>
-        public string Code { get; set; }
-
-        /// <summary>
-        /// 二维码
-        /// </summary>
-        public string QrCode { get; set; }
-    }
 }

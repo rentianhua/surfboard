@@ -613,4 +613,30 @@ namespace CCN.Modules.Car.BusinessEntity
         public string keyword { get; set; }
 
     }
+
+    /// <summary>
+    /// 全城搜车
+    /// </summary>
+    public class CarSearchRecordModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 搜索时间
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
+
+        /// <summary>
+        /// 搜索条件
+        /// </summary>
+        public string Jsonobj { get; set; }
+    }
 }

@@ -77,10 +77,11 @@
                 var obj = data.errmsg;
                 $("#shopname").val(obj.Shopname);
                 $("#shopcode").html(obj.Shopcode);
-                $("#password").val(obj.Password).prop("disabled", true);
+                $("#password").val(obj.Password);//.prop("disabled", true);
                 $("#telephone").val(obj.Telephone);                
                 $("#email").val(obj.Email);
                 $("#area").val(obj.Area);
+                $("#address").val(obj.Address);
                 $("#qq").val(obj.QQ);
                 $("#signature").val(obj.Signature);
 
@@ -103,6 +104,7 @@
             provid: $("#selectprov").val(),
             cityid: $("#selectcity").val(),
             Area: $("#area").val(),
+            Address: $("#address").val(),
             Signature: $("#signature").val(),
             QQ: $("#qq").val()
         };
@@ -224,7 +226,8 @@
                                 <select id="selectcity">
                                     <option value="0">请选择</option>
                                 </select>
-                                <input type="text" id="area" placeholder="区" />
+                                <input type="text" id="area" placeholder="区"/>
+                                <input type="text" id="address" placeholder="详细地址" />
                             </div>
                         </div>
                     </div>

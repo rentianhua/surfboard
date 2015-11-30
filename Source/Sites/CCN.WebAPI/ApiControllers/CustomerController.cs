@@ -694,6 +694,7 @@ namespace CCN.WebAPI.ApiControllers
         #endregion
 
         #region cust_wechat
+
         /// <summary>
         /// 
         /// </summary>
@@ -706,6 +707,18 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.GetCustWeChatList(query);
         }
 
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        [Route("BindOpenid")]
+        [HttpGet]
+        public JResult BindOpenid(string custid, string openid)
+        {
+            return _custservice.BindOpenid(custid, openid);
+        }
         #endregion
     }
 }

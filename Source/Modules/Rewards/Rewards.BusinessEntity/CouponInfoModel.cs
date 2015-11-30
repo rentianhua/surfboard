@@ -84,6 +84,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public int? Count { get; set; }
 
         /// <summary>
+        /// 礼券类型 代码表
+        /// </summary>
+        public int? Cardtype { get; set; }
+        
+        /// <summary>
         /// Code展示类型，"CODE_TYPE_TEXT"，文本；"CODE_TYPE_BARCODE"，一维码 ；"CODE_TYPE_QRCODE"，二维码；"CODE_TYPE_ONLY_QRCODE",二维码无code显示；"CODE_TYPE_ONLY_BARCODE",一维码无code显示；
         /// </summary>
         public string Codetype { get; set; }
@@ -117,6 +122,27 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 绑定的微小店的产品id
         /// </summary>
         public string ProductId { get; set; }
+    }
+
+    /// <summary>
+    /// 礼券列表页面
+    /// </summary>
+    public class CouponViewModel : CouponInfoModel
+    {
+        /// <summary>
+        /// 礼券类型
+        /// </summary>
+        public string Cardtypename { get; set; }
+
+        /// <summary>
+        /// 礼券类型备注
+        /// </summary>
+        public string CardtypeRemark { get; set; }
+
+        /// <summary>
+        /// 微信商品链接
+        /// </summary>
+        public string ProductUrl { get; set; }
     }
 
     /// <summary>
@@ -160,6 +186,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public int Count { get; set; }
 
         /// <summary>
+        /// 礼券类型 代码表
+        /// </summary>
+        public int? Cardtype { get; set; }
+
+        /// <summary>
         /// Code展示类型，"CODE_TYPE_TEXT"，文本；"CODE_TYPE_BARCODE"，一维码 ；"CODE_TYPE_QRCODE"，二维码；"CODE_TYPE_ONLY_QRCODE",二维码无code显示；"CODE_TYPE_ONLY_BARCODE",一维码无code显示；
         /// </summary>
         public string Codetype { get; set; }
@@ -177,7 +208,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
     }
     
     /// <summary>
-    /// 
+    /// 礼券和微信商品绑定model
     /// </summary>
     public class CouponCardProduct
     {
@@ -211,5 +242,10 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 是否使用
         /// </summary>
         public int IsUsed { get; set; }
+
+        /// <summary>
+        /// 获得时间
+        /// </summary>
+        public DateTime? Gettime { get; set; }
     }
 }

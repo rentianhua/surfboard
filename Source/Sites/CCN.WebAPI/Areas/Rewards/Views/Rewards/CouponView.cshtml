@@ -48,7 +48,7 @@
                 
                 if (obj.Vtype === 1) {
                     var vstart = Dateformat(obj.Vstart, "yyyy-MM-dd");
-                    var vend = Dateformat(obj.Vstart, "yyyy-MM-dd");
+                    var vend = Dateformat(obj.Vend, "yyyy-MM-dd");
                     $("#vvalue").html(vstart + " 至" + vend);
                     $("#vstart").val(vstart);
                     $("#vend").val(vend);
@@ -87,8 +87,8 @@
     function AddDelay(type) {
 
         var json = { Innerid: id, Vtype: type };
-        var vstart = $("#vstart").val();
-        var vend = $("#vend").val();
+        var vstart = $("#vstart").val() + " 00:00:00";
+        var vend = $("#vend").val() + " 23:23:59";
         var value1 = $("#selectvalue1").val();
         var value2 = $("#selectvalue2").val();
         if (type === 1) {

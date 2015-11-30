@@ -115,6 +115,29 @@ namespace CCN.Modules.Car.DataAccess
             return list;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveSearchRecord(CarSearchRecordModel model)
+        {
+            const string sql = @"INSERT INTO `car_searchrecord`
+                                (innerid, custid, createdtime, jsonobj)
+                                VALUES
+                                (@innerid, @custid, @createdtime, @jsonobj);";
+            int result;
+            try
+            {
+                result = Helper.Execute(sql, model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// 获取车辆列表

@@ -174,6 +174,9 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(402, "帐户被冻结");
             }
+
+            userInfo.Password = "";
+
             return JResult._jResult(0, userInfo);
         }
 
@@ -803,7 +806,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -813,6 +816,30 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             return DataAccess.GetCustWeChatList(query);
         }
+
+        /// <summary>
+        /// 更新绑定openid
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult BindOpenid(string custid, string openid)
+        {
+            if (string.IsNullOrWhiteSpace(custid) || string.IsNullOrWhiteSpace(openid))
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
+
+            var wechat = DataAccess.CustWechatByOpenid(openid);
+            if (wechat == null)
+            {
+                return JResult._jResult(402, "没有微信信息");
+            }
+
+            var result = DataAccess.UpdateOpenid(custid, openid);
+            return JResult._jResult(result);
+        }
+
         #endregion
     }
 }

@@ -13,6 +13,7 @@
 
     $(function () {
         InitShop();
+        InitCode();
         Init();
         RadioClick();
     });
@@ -29,6 +30,25 @@
             success: function (data) {
                 $.each(data, function (k, v) {
                     $("#selectshop").append("<option value='" + v.Value + "'>" + v.Text + "</option>");
+                });
+            }
+        });
+    }
+
+    //初始化礼券类型
+    function InitCode() {
+        $("#selecttype").empty();
+        $("#selecttype").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Base/GetCodeByTypeKey?typekey=coupon_type",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selecttype").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
                 });
             }
         });
@@ -61,6 +81,7 @@
                 $("#buyprice").val(obj.BuyPrice);
                 $("#costprice").val(obj.CostPrice);
                 $("#selectshop").selectVal(obj.Shopid);
+                $("#selecttype").selectVal(obj.Cardtype);
 
                 $("#count").val(obj.Maxcount + "/" + obj.Count).prop("disabled", true).parent().prev().html("当前库存");
                 $("#codetype").val(obj.Codetype);
@@ -105,13 +126,14 @@
             Maxcount: $("#count").val(),
             Codetype: $("#codetype").val(),
             Shopid: $("#selectshop").val(),
+            Cardtype: $("#selecttype").val(),
             Needpoint: $("#needpoint").val(),
             Usedesc: $("#usedesc").val()
         };
 
         if (vtype === "1") { //有效时间范围
-            json.Vstart = $("#vstart").val();
-            json.Vend = $("#vend").val();
+            json.Vstart = $("#vstart").val() + " 00:00:00";
+            json.Vend = $("#vend").val() + " 23:23:59";
         } else {//起效/有效天数
             json.Value1 = $("#value1").val();
             json.Value2 = $("#value2").val();
@@ -119,6 +141,10 @@
 
         if (json.Shopid === "0") {
             alert('请选择商户'); return false;
+        }
+
+        if (json.Cardtype === "0") {
+            alert('请选择类型'); return false;
         }
 
         if (json.Title === "") {
@@ -241,9 +267,11 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">标题</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">类型</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="title" style="margin-top:5px" />
+                                <select id="selecttype">
+                                    <option value="0">请选择</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -252,15 +280,20 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">标题</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="title" style="margin-top:5px" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">Logo</label>
                             <div class="controls col-sm-10">
                                 <input type="file" id="logourl" />
                                 <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-6">
-
                     </div>
                 </div>
 
