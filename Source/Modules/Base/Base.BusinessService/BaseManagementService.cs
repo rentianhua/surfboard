@@ -457,6 +457,37 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.GetUserInfo(loginname, password);
         }
+
+
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseUserModel> GetUserList(BaseUserQueryModel query)
+        {
+            return BusinessComponent.GetUserList(query);
+        }
+
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUser(BaseUserModel model)
+        {
+            return BusinessComponent.AddUser(model);
+        }
+
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query)
+        {
+            return BusinessComponent.GetRoleList(query);
+        }
         #endregion
     }
 }

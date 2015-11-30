@@ -1120,19 +1120,90 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="loginname">登录账号</param>
         /// <param name="password">密码</param>
         /// <returns></returns>
-        public BaseUserInfo GetUserInfo(string loginname, string password)
+        public BaseUserModel GetUserInfo(string loginname, string password)
         {
             StringBuilder sql = new StringBuilder();
             sql.AppendFormat("select * from sys_user where loginname=@loginname and password=@password", loginname, password);
             try
             {
-                var codemodel = Helper.Query<BaseUserInfo>(sql.ToString(), new { loginname = loginname, password = password }).FirstOrDefault();
+                var codemodel = Helper.Query<BaseUserModel>(sql.ToString(), new { loginname = loginname, password = password }).FirstOrDefault();
                 return codemodel;
             }
             catch (Exception ex)
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// 获取用户列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseUserModel> GetUserList(BaseUserQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"sys_user ";
+            const string fields = "innerid, username, loginname, password, mobile, telephone, email, status, createdtime, modifiedtime";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " modifiedtime desc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            if (query.status != null)
+            {
+                sqlWhere.Append($" and status = %{query.status}%");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseUserModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddUser(BaseUserModel model)
+        {
+            const string sql = @"INSERT INTO `sys_user`
+                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`)
+                                VALUES
+                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now());";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取角色列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"sys_role ";
+            const string fields = "innerid, name, remark, isenabled";
+            //var oldField = string.IsNullOrWhiteSpace(query.Order) ? " modifiedtime desc " : query.Order;
+            var oldField = "";
+            var sqlWhere = new StringBuilder("1=1");
+            if (query.isenabled != null)
+            {
+                sqlWhere.Append($" and isenabled = %{query.isenabled}%");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseRoleViewModel>(model, query.Echo);
+            return list;
         }
 
         #endregion

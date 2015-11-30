@@ -1,5 +1,6 @@
 ﻿using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.Interface;
+using CCN.Modules.Customer.BusinessEntity;
 using CCN.Resource.Common;
 using CCN.Resource.Main.Common;
 using Cedar.Core.IoC;
@@ -26,11 +27,12 @@ namespace CCN.Resource.Controllers
         {
             _baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
         }
-
+        HttpCookie cookie = new HttpCookie("type");
         public ActionResult Index()
         {
+            var UserInfosdfd = UserInfo;
             ViewBag.Title = "苏州车信网";
-            ViewBag.UserInfo = (BaseUserInfo)Session["UserInfo"];
+            ViewBag.UserInfo = (BaseUserModel)Session["UserInfo"];
             return View();
         }
 
@@ -51,6 +53,8 @@ namespace CCN.Resource.Controllers
         [LoginCheckFilterAttribute(IsCheck = false)]
         public ActionResult Login()
         {
+            cookie.Value = "1";
+            Response.AppendCookie(cookie);
             return View();
         }
 
@@ -63,11 +67,11 @@ namespace CCN.Resource.Controllers
         [LoginCheckFilterAttribute(IsCheck = false)]
         public ActionResult CheckLogin(string loginname, string password)
         {
-            Session.Timeout = 300;
+            Session.Timeout = 120;
             var user = _baseservice.GetUserInfo(loginname, password);
             if (user.errcode == 0)
             {
-                UserInfo = (BaseUserInfo)user.errmsg;
+                UserInfo = (BaseUserModel)user.errmsg;
                 Session["UserInfo"] = user.errmsg;
                 return Json(new { code = 1, message = "登录成功" });
             }
@@ -75,6 +79,39 @@ namespace CCN.Resource.Controllers
             {
                 return Json(new { code = 0, message = "登录失败" });
             }
+        }
+
+        /// <summary>
+        /// 车商登入
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [LoginCheckFilterAttribute(IsCheck = false)]
+        public ActionResult BusinessLogin()
+        {
+            cookie.Value = "0";
+            Response.AppendCookie(cookie);
+            return View();
+        }
+
+        public ActionResult BusinessIndex()
+        {
+            ViewBag.Title = "苏州车信网";
+            ViewBag.UserInfo = (CustModel)Session["CustModel"];
+            return View();
+        }
+
+        /// <summary>
+        /// 记录车商登入信息
+        /// </summary>
+        /// <param name="customerinfo"></param>
+        /// <returns></returns>
+        [LoginCheckFilterAttribute(IsCheck = false)]
+        public ActionResult CheckBusinessLogin(CustModel customerinfo)
+        {
+            Session.Timeout = 120;
+            Session["CustModel"] = customerinfo;
+            return Json(new { code = 1, message = "登录成功" });
         }
 
         public static XmlReader CreateReader(string filename, bool ignorecomments = true)

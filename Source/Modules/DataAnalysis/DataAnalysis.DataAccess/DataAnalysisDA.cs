@@ -1086,5 +1086,55 @@ namespace CCN.Modules.DataAnalysis.DataAccess
 
         #endregion
 
+        #region 商户车辆数据统计
+        /// <summary>
+        /// 获取近12个月车辆增长量
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DataAnalysisModel> GetRecent12Growth(string custid)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_custid = custid
+                };
+
+                var args = new DynamicParameters(obj);
+                using (var result = conn.QueryMultiple("ccnsp_increaserecent1year", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    return result.Read<DataAnalysisModel>();
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// 获取近12个月车辆销售量
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<DataAnalysisModel> GetRecent12Sell(string custid)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                //参数
+                var obj = new
+                {
+                    p_custid = custid
+                };
+
+                var args = new DynamicParameters(obj);
+                using (var result = conn.QueryMultiple("ccnsp_sellrecent1year", args, commandType: CommandType.StoredProcedure))
+                {
+                    //获取结果集
+                    return result.Read<DataAnalysisModel>();
+                }
+
+            }
+        }
+        #endregion
+
     }
 }
