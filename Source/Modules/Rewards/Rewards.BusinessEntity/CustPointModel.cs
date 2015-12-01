@@ -196,6 +196,38 @@ namespace CCN.Modules.Rewards.BusinessEntity
     }
 
     /// <summary>
+    /// 积分兑换礼券 model (new)
+    /// </summary>
+    public class CustPointToCouponModel
+    {
+        /// <summary>
+        /// 礼券id
+        /// </summary>
+        public string Cardid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+        
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+        
+        /// <summary>
+        /// 礼券code
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 礼券qrcode
+        /// </summary>
+        public string QrCode { get; set; }
+    }
+
+
+    /// <summary>
     /// 会员相关总数信息
     /// </summary>
     public class CustTotalModel

@@ -196,7 +196,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(402, "帐户被冻结");
             }
-
+            userInfo.Password = "";
             return JResult._jResult(0, userInfo);
         }
 
@@ -216,6 +216,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                     errmsg = ""
                 };
             }
+            model.Password = "";
             return new JResult
             {
                 errcode = 0,
@@ -231,6 +232,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult GetCustByMobile(string mobile)
         {
             var model = DataAccess.GetCustByMobile(mobile);
+            model.Password = "";
             return JResult._jResult(model);
         }
 

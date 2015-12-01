@@ -174,7 +174,14 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query);
+        BasePageList<CouponViewModel> GetMallCouponPageList(CouponMallQuery query);
+
+        /// <summary>
+        /// 商城搜索商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<ShopMallViewList> GetMallShopPageList(ShopMallQueryModel query);
 
         #endregion
 
@@ -217,6 +224,12 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <returns></returns>
         JResult GetShopById(string innerid);
+
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopViewById(string innerid);
 
         /// <summary>
         /// 商户登录
@@ -381,6 +394,17 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="area"></param>
         /// <returns></returns>
         JResult GetShopByArea(string area);
+
+        #endregion
+
+        #region 可能存在并发问题
+
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        JResult PointToCoupon(CustPointToCouponModel model);
 
         #endregion
     }

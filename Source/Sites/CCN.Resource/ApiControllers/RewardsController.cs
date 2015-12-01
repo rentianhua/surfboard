@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
@@ -260,15 +262,20 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("GetProductList")]
         [HttpGet]
-        public GetByStatusResult GetProductList()
+        public GetByStatusResult GetProductList(string token = "")
         {
-            //var appid = ConfigHelper.GetAppSettings("APPID");
-            //var result = ProductApi.GetByStatus(appid, 0);
-
-            var accessToken =
-                "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
-            var result = ProductApi.GetByStatus(accessToken, 0);
-
+            var accessTokenOrAppId = string.IsNullOrWhiteSpace(token) ? ConfigHelper.GetAppSettings("APPID") : token;
+            GetByStatusResult result;
+            try
+            {
+                result = ProductApi.GetByStatus(accessTokenOrAppId, 0);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取商品列表：", TraceEventType.Error, ex);
+                throw;
+            }
+            
             return result;
         }
 

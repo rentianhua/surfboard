@@ -250,11 +250,23 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        [Route("GetCouponMallPageList")]
+        [Route("GetMallCouponPageList")]
         [HttpPost]
-        public BasePageList<CouponViewModel> GetCouponMallPageList([FromBody]CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetMallCouponPageList([FromBody]CouponMallQuery query)
         {
-            return _rewardsservice.GetCouponMallPageList(query);
+            return _rewardsservice.GetMallCouponPageList(query);
+        }
+
+        /// <summary>
+        /// 商城搜索商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetMallShopPageList")]
+        [HttpPost]
+        public BasePageList<ShopMallViewList> GetMallShopPageList([FromBody]ShopMallQueryModel query)
+        {
+            return _rewardsservice.GetMallShopPageList(query);
         }
 
         #endregion
@@ -268,7 +280,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("WholesaleCoupon")]
         [HttpPost]
-        //[NonAction]
+        [NonAction]
         public JResult WholesaleCoupon([FromBody]CouponBuyModel model)
         {
             return _rewardsservice.WholesaleCoupon(model);
@@ -324,6 +336,17 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetShopById(string innerid)
         {
             return _rewardsservice.GetShopById(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopViewById")]
+        [HttpGet]
+        public JResult GetShopViewById(string innerid)
+        {
+            return _rewardsservice.GetShopViewById(innerid);
         }
 
         /// <summary>
@@ -508,6 +531,22 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetShopByArea(string area)
         {
             return _rewardsservice.GetShopByArea(area);
+        }
+
+        #endregion
+
+        #region 可能存在并发问题
+
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        [Route("PointToCoupon")]
+        [HttpPost]
+        public JResult PointToCoupon([FromBody]CustPointToCouponModel model)
+        {
+            return _rewardsservice.PointToCoupon(model);
         }
 
         #endregion

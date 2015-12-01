@@ -32,8 +32,12 @@
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
-            
-            str += "<td><img style=' max-width:50px;' src='" + val.product_base.main_img + "' /></td>";
+
+            str += "<td><img style=' max-width:50px;' src='" + val.product_base.main_img
+                .replace("?wx_fmt=jpg", "?wx_fmt=jpg&tp=jpg&wxfrom=5")
+                .replace("?wx_fmt=png", "?wx_fmt=jpg&tp=jpg&wxfrom=5")
+                .replace("?wx_fmt=bmp", "?wx_fmt=jpg&tp=jpg&wxfrom=5")
+                .replace("?wx_fmt=jpeg", "?wx_fmt=jpg&tp=jpg&wxfrom=5") + "' /></td>";
 
             var productName = val.product_base.name;
 
