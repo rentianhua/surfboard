@@ -19,6 +19,15 @@ namespace CCN.Resource
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
+            //js引用
+            bundles.Add(new ScriptBundle("~/bundles/original").Include(
+                      "~/Scripts/jquery-1.10.2.js",
+                      "~/Plugins/My97DatePicker/WdatePicker.js",
+                      "~/Scripts/jquery.pagination/jquery.twbsPagination.min.js",
+                      "~/Scripts/jquery.fn.extend.js",
+                      "~/Scripts/common.js",
+                      "~/Scripts/highcharts.js",
+                      "~/Scripts/CCN_Chart.js")); 
 
             //模版js引用
             bundles.Add(new ScriptBundle("~/bundles/template").Include(
@@ -35,7 +44,7 @@ namespace CCN.Resource
                       "~/Scripts/js/charts/flot/jquery.flot.tooltip.js",
                       "~/Scripts/js/charts/flot/jquery.flot.orderBars.js"));
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+                 bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
             //模版css引用

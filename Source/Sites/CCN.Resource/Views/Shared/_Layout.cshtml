@@ -4,18 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    @*@Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")*@
     <link href="~/Content/Site.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Plugins/My97DatePicker/WdatePicker.js"></script>
-    <script src="~/Scripts/jquery.pagination/jquery.twbsPagination.min.js"></script>
-    <script src="~/Scripts/jquery.fn.extend.js"></script>
-    <script src="~/Scripts/common.js"></script>
+    @Scripts.Render("~/bundles/original")
     @Styles.Render("~/Content/template")
     <script type="text/javascript">
-
         $(function () {
+            //设置cookie值
             setCookie();
         });
 
@@ -133,9 +127,6 @@
                         <a class="sidebar-toggler" href="#">
                             <i class="fa fa-arrows-h"></i>
                         </a>
-                        @*<a class="refresh" id="refresh-toggler" href="#">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                        </a>*@
                         <a class="fullscreen" id="fullscreen-toggler" href="#">
                             <i class="glyphicon glyphicon-fullscreen"></i>
                         </a>
@@ -153,7 +144,6 @@
         </div>
     </div>
 
-    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/template")
     @RenderSection("scripts", required: false)
