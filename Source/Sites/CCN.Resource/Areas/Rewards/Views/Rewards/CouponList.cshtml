@@ -61,7 +61,7 @@
         status = status === 1 ? 0 : 1;
         $.post("/api/Rewards/UpdateStatus?cardid=" + cardid + "&status=" + status, null, function (result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/api/Rewards/CouponList');
         });
     }
 

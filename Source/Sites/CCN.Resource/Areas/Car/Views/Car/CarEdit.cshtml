@@ -263,7 +263,8 @@
     }
 
     function Submit() {
-
+        //禁用保存按钮
+        $("#submit").addClass("disabled");
         var brandid = $("#selectbrand").val();
         var seriesid = $("#selectseries").val();
         var modelid = $("#selectmodel").val();
@@ -405,6 +406,7 @@
                     $.post("/api/Car/AddCarPictureKeyList", { Carid: carid, KeyList: keysRes.split(',') }, function () {
 
                     });
+                    $("#submit").removeClass("disabled");
                     alert("添加成功");
                     goList();
                 } else {
@@ -671,7 +673,7 @@
 
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
 
                     </div>

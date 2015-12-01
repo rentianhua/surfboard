@@ -70,7 +70,8 @@
             datatype: 'application/json',
             async: false,
             success: function (result) {
-                location.reload();
+                //location.reload();
+                getBodyHtml('mainbody', '/api/Rewards/SettlementList');
             }
         });
     }

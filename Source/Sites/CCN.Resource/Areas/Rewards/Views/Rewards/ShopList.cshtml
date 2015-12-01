@@ -54,7 +54,7 @@
     function UpdateStatus(innerid, status) {
         $.post("/api/Rewards/UpdateShopStatus?innerid=" + innerid + "&status=" + status, null, function (result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/api/Rewards/ShopList');
         });
     }
 
