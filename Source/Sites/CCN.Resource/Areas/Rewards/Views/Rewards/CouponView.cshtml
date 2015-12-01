@@ -180,7 +180,7 @@
             var json = { Cardid: id, ProductId: productid };
             $.post("/api/Rewards/BindWechatProduct", json, function(result) {
                 alert(result.errmsg);
-                location.reload();
+                getBodyHtml('mainbody', '/rewards/rewards/couponedit?innerid=' + id);
             });
         } else {
             if (!confirm("确定解除绑定")) {
@@ -188,7 +188,7 @@
             }
             $.get("/api/Rewards/UnBindWechatProduct?cardid=" + id, function (result) {
                 alert(result.errmsg);
-                location.reload();
+                getBodyHtml('mainbody', '/rewards/rewards/couponedit?innerid=' + id);
             });
         }
 

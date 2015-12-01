@@ -238,11 +238,20 @@ namespace CCN.Modules.Rewards.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetMallCouponPageList(CouponMallQuery query)
         {
-            return BusinessComponent.GetCouponMallPageList(query);
+            return BusinessComponent.GetMallCouponPageList(query);
         }
 
+        /// <summary>
+        /// 商城搜索商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopMallViewList> GetMallShopPageList(ShopMallQueryModel query)
+        {
+            return BusinessComponent.GetMallShopPageList(query);
+        }
         #endregion
 
         #region 礼券对外接口
@@ -306,6 +315,15 @@ namespace CCN.Modules.Rewards.BusinessService
         public JResult GetShopById(string innerid)
         {
             return BusinessComponent.GetShopById(innerid);
+        }
+        
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopViewById(string innerid)
+        {
+            return BusinessComponent.GetShopViewById(innerid);
         }
 
         /// <summary>
@@ -540,6 +558,20 @@ namespace CCN.Modules.Rewards.BusinessService
         public JResult GetShopByArea(string area)
         {
             return BusinessComponent.GetShopByArea(area);
+        }
+
+        #endregion
+
+        #region 可能存在并发问题
+
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        public JResult PointToCoupon(CustPointToCouponModel model)
+        {
+            return BusinessComponent.PointToCoupon(model);
         }
 
         #endregion

@@ -169,6 +169,27 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public DateTime? Createdtime { get; set; }
     }
 
+    /// <summary>
+    /// 商城中对象model (基本信息+基础信息+其他信息)
+    /// </summary>
+    public class ShopInfoViewModel : ShopModel
+    {
+
+        /// <summary>
+        /// 所在地：身份
+        /// </summary>
+        public string ProvName { get; set; }
+
+        /// <summary>
+        /// 所在地：城市
+        /// </summary>
+        public string CityName { get; set; }
+
+        /// <summary>
+        /// 商户下所有卡券类型集合
+        /// </summary>
+        public string CardTypeNames { get; set; }
+    }
 
     /// <summary>
     /// 
@@ -250,5 +271,33 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 密码
         /// </summary>
         public string Password { get; set; }
+    }
+
+    /// <summary>
+    /// 商城的商户列表
+    /// </summary>
+    public class ShopMallViewList : ShopViewModel
+    {
+        /// <summary>
+        /// 已售券数量
+        /// </summary>
+        public int SoldedNum { get; set; }
+
+        /// <summary>
+        /// 商户下所有卡券类型集合
+        /// </summary>
+        public string CardTypeNames { get; set; }
+    }
+
+    /// <summary>
+    /// 商城的商户列表
+    /// </summary>
+    public class ShopMallQueryModel : ShopQueryModel
+    {
+
+        /// <summary>
+        /// 卡券类型集合【逗号隔开】
+        /// </summary>
+        public string CardTypes { get; set; }
     }
 }
