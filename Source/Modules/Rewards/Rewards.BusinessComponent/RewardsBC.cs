@@ -621,7 +621,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <returns></returns>
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            LoggerFactories.CreateLogger().Write("购买礼券參數：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("购买礼券参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(model.Order?.buyer_openid) || string.IsNullOrWhiteSpace(model.Order.product_id))
             {
                 return JResult._jResult(401, "参数不正确");
@@ -721,6 +721,75 @@ namespace CCN.Modules.Rewards.BusinessComponent
         {
             model.innerid = Guid.NewGuid().ToString();
             return DataAccess.SaveOrder(model);
+        }
+
+        /// <summary>
+        /// 修改购买订单处理结果
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateOrderResult(CouponBuyModel model)
+        {
+            return DataAccess.UpdateOrderResult(model);
+        }
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<OrderViewList> GetOrderList(OrderQuery query)
+        {
+            return DataAccess.GetOrderList(query);
+        }
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        public JResult HandlOrder(string innerid)
+        {
+            var model = DataAccess.GetOrderInfo(innerid);
+            if (model == null)
+            {
+                return  JResult._jResult(500, "订单不存在");
+            }
+
+            if (model.result == 0)
+            {
+                return JResult._jResult(501, "订单已处理");
+            }
+
+            var orderModel = new Order
+            {
+                product_count = model.product_count,
+                product_id = model.product_id,
+                buyer_openid = model.buyer_openid,
+                order_id = model.order_id
+            };
+
+            var bugModel = new CouponBuyModel
+            {
+                Order = orderModel,
+                innerid = model.innerid
+            };
+
+            var jresult = WholesaleCoupon(bugModel);
+            if (jresult.errcode == 0)
+            {
+                //处理成功
+
+                bugModel.result = 0;
+                bugModel.resultdesc = model.resultdesc + "[" + model.result + "]-->购买成功[后期处理]";
+                DataAccess.UpdateOrderResult(bugModel);
+                return JResult._jResult(0, "处理成功");
+            }
+            
+            bugModel.result = jresult.errcode;
+            bugModel.resultdesc = jresult.errmsg.ToString();
+            DataAccess.UpdateOrderResult(bugModel);
+            return JResult._jResult(jresult.errcode, jresult.errmsg);
         }
 
         /// <summary>

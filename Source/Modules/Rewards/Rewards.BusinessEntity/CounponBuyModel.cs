@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cedar.Framework.Common.BaseClasses;
 using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Rewards.BusinessEntity
@@ -59,6 +60,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 
         /// </summary>
         public int result { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string resultdesc { get; set; }
     }
 
 
@@ -98,4 +104,61 @@ namespace CCN.Modules.Rewards.BusinessEntity
         public List<CouponCodeModel> ListCode { get; set; }
     }
 
+    /// <summary>
+    /// 未成功的订单查询model
+    /// </summary>
+    public class OrderQuery:QueryModel
+    {
+        /// <summary>
+        /// 商品名称
+        /// </summary>
+        public string ProductName { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// 订单状态【1.异常订单，2.正常订单, 0全部】
+        /// </summary>
+        public int Status { get; set; }
+    }
+
+    /// <summary>
+    /// 未成功的订单列表view
+    /// </summary>
+    public class OrderViewList : Order
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string innerid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int result { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string resultdesc { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? createdtime { get; set; }
+
+        /// <summary>
+        /// 会员名
+        /// </summary>
+        public string custname { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string mobile { get; set; }
+        
+    }
 }

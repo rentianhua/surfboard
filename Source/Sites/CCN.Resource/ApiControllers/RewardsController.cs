@@ -233,6 +233,30 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetOrderList")]
+        [HttpPost]
+        public BasePageList<OrderViewList> GetOrderList([FromBody]OrderQuery query)
+        {
+            return _rewardsservice.GetOrderList(query);
+        }
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        [Route("HandlOrder")]
+        [HttpGet]
+        public JResult HandlOrder(string innerid)
+        {
+            return _rewardsservice.HandlOrder(innerid);
+        }
+
+        /// <summary>
         /// 礼券核销
         /// </summary>
         /// <param name="model"></param>

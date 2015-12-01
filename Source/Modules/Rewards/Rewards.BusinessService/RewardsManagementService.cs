@@ -279,10 +279,31 @@ namespace CCN.Modules.Rewards.BusinessService
             Task.Run(() =>
             {
                 model.result = jresult.errcode;
+                model.resultdesc = jresult.errmsg.ToString();
                 BusinessComponent.SaveOrder(model);
             });
 
             return jresult;
+        }
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<OrderViewList> GetOrderList(OrderQuery query)
+        {
+            return BusinessComponent.GetOrderList(query);
+        }
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        public JResult HandlOrder(string innerid)
+        {
+            return BusinessComponent.HandlOrder(innerid);
         }
 
         /// <summary>
