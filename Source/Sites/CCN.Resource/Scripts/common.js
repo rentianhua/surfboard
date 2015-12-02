@@ -95,7 +95,7 @@ var getQiniuUrl = function (key) {
 * @async          -{bool} 是否异步执行
 * return           -1(FileTypeError):文件格式不正确；-2(UploadError):上传异常；-3(FileSizeError)：文件大小超出
 */
-var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum) {
+var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum, minnum) {
 
     var imgTypes = new Array("gif", "jpg", "jpeg", "png", "bmp");
     if (exts) {
@@ -109,8 +109,15 @@ var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum
     }
 
     maxnum = maxnum || 0;
+    minnum = minnum || 0;
     if (maxnum !== 0) {
         if (files.length > maxnum) {
+            callback("-4"); //选中文件数超过最大数
+            return;
+        }
+    }
+    if (minnum !== 0) {
+        if (files.length < minnum) {
             callback("-4"); //选中文件数超过最大数
             return;
         }
