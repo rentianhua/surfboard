@@ -378,23 +378,28 @@
         var keysRes;
         uploadfile("picture", 1024 * 2, "", "car_picture", function (res) {
             keysRes = res;
-        }, null, 9);
+        }, null, 9,3);
 
         if (id === "") {
 
             if (keysRes === "0") {
+                $("#submit").removeClass("disabled");
                 alert('请上传图片');
                 return false;
             } else if (keysRes === "-1") {
+                $("#submit").removeClass("disabled");
                 alert('图片格式不正确');
                 return false;
             } else if (keysRes === "-2") {
+                $("#submit").removeClass("disabled");
                 alert('上传异常');
                 return false;
             } else if (keysRes === "-3") {
+                $("#submit").removeClass("disabled");
                 alert('文件大小超出');
                 return false;
             } else if (keysRes === "-4") {
+                $("#submit").removeClass("disabled");
                 alert('请上传3-9张图片');
                 return false;
             }
@@ -410,6 +415,7 @@
                     alert("添加成功");
                     goList();
                 } else {
+                    $("#submit").removeClass("disabled");
                     alert("添加失败:" + result.errmsg);
                 }
 
@@ -439,9 +445,11 @@
 
                         });
                     }
+                    $("#submit").removeClass("disabled");
                     alert("修改成功");
                     goList();
                 } else {
+                    $("#submit").removeClass("disabled");
                     alert("修改失败:" + result.errmsg);
                 }
             });
