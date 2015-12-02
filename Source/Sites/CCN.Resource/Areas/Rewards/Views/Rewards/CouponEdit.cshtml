@@ -196,12 +196,6 @@
             alert('请填写最大库存'); return false;
         }
 
-        var remax = /^[1-9]\d*$/;
-        if (!remax.test(json.Maxcount)) {
-            alert("最大库存只能输入整数！");
-            return false;
-        }
-
         if (json.Codetype === "") {
             alert('请填写Code展示类型【参考说明】'); return false;
         }
@@ -223,6 +217,13 @@
         }
 
         if (id === "") {
+
+            var remax = /^[1-9]\d*$/;
+            if (!remax.test(json.Maxcount)) {
+                alert("最大库存只能输入整数！");
+                return false;
+            }
+
             if (result === "0") {
                 alert('请上传图片');
                 return false;
@@ -430,7 +431,7 @@
                         <div class="form-group">
                             <label for="codetype" class="col-sm-1 control-label no-padding-right">使用规则</label>
                             <div class="col-sm-11">
-                                <textarea id="usedesc" maxlength="200" rows="5" cols="150"></textarea>
+                                <textarea id="usedesc" maxlength="60000" rows="5" cols="150"></textarea>
                             </div>
                         </div>
                     </div>

@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessComponent;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -13,6 +17,7 @@ namespace CCN.Modules.Rewards.BusinessService
     /// </summary>
     public class RewardsManagementService: ServiceBase<RewardsBC>,IRewardsManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// </summary>
         public RewardsManagementService(RewardsBC bc) : base(bc)
@@ -48,7 +53,24 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
-            return BusinessComponent.PointExchangeCoupon(model);
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.PointExchangeCoupon(model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("积分兑换礼券异常", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "兑换异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>
@@ -274,16 +296,33 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            var jresult = BusinessComponent.WholesaleCoupon(model);
-
-            Task.Run(() =>
+            lock (_obj)
             {
-                model.result = jresult.errcode;
-                model.resultdesc = jresult.errmsg.ToString();
-                BusinessComponent.SaveOrder(model);
-            });
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    var jresult = BusinessComponent.WholesaleCoupon(model);
 
-            return jresult;
+                    Task.Run(() =>
+                    {
+                        model.result = jresult.errcode;
+                        model.resultdesc = jresult.errmsg.ToString();
+                        BusinessComponent.SaveOrder(model);
+                    });
+
+                    return jresult;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("购买发送礼券异常", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "购买发送礼券异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessEntity;
@@ -19,7 +20,6 @@ namespace CCN.Modules.Rewards.BusinessComponent
     /// </summary>
     public class RewardsBC: BusinessComponentBase<RewardsDataAccess>
     {
-
         /// <summary>
         /// </summary>
         /// <param name="da"></param>
@@ -672,7 +672,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
                     var stream = BarCodeUtility.BitmapToStream(bitmap);
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
-                    var qrcode = qinniu.Put(stream, "", filename);
+                    var qrcode = qinniu.Put(stream, "", filename) ?? Path.GetFileName(filename);
                     stream.Dispose();
                     codeList.Add(new CouponCodeModel
                     {

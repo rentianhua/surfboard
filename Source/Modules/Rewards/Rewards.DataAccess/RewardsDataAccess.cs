@@ -283,6 +283,19 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public BasePageList<CouponViewModel> GetCouponPageList(CouponQueryModel query)
         {
+            /*
+            礼券类型多选时的SQL（后面做）
+            select 
+            a.innerid, a.title, a.titlesub, a.amount, a.logourl, a.vtype, a.vstart, a.vend, a.value1, a.value2, a.maxcount, a.count,a.codetype, a.createdtime,a.modifiedtime, a.isenabled,
+            (select group_concat(bc.codename) from base_code as bc inner join coupon_type_relation as tr on bc.codevalue=tr.cardtype and bc.typekey='coupon_type' where tr.cardid=a.innerid) as cardtypename,
+            (select group_concat(bc.remark) from base_code as bc inner join coupon_type_relation as tr on bc.codevalue=tr.cardtype and bc.typekey='coupon_type' where tr.cardid=a.innerid) as cardtyperemark
+            from
+            coupon_card as a 
+            where 1=1 
+            and innerid in (select cardid from coupon_type_relation where cardtype in(1,2))
+            order by a.createdtime desc;
+            */
+
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_card as a left join base_code as bc on a.cardtype=bc.codevalue and bc.typekey='coupon_type'";
             const string fields =
@@ -992,10 +1005,11 @@ namespace CCN.Modules.Rewards.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_card as a 
+                                        left join coupon_shop as s on a.shopid=s.innerid
                                         left join base_code as bc on a.cardtype=bc.codevalue and bc.typekey='coupon_type'
                                         left join coupon_card_product as p on a.innerid=p.cardid";
             const string fields =
-                @"a.innerid, a.title, a.titlesub, a.amount,a.buyprice, a.logourl, a.vtype, a.vstart, a.vend, a.value1, a.value2, a.maxcount, a.count,a.codetype, a.createdtime,bc.codename as cardtypename,bc.remark as cardtyperemark,p.productid as ProductUrl,
+                @"a.innerid, a.title, a.titlesub, a.amount,a.buyprice, a.logourl, a.vtype, a.vstart, a.vend, a.value1, a.value2, a.maxcount, a.count,a.codetype, a.createdtime,s.area as ShopArea, s.address as ShopAddress,s.shopname as Shopname,bc.codename as cardtypename,bc.remark as cardtyperemark,p.productid as ProductUrl,
                     (select count(1) from coupon_code where cardid=a.innerid and sourceid = 1) as SoldedNum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
@@ -1045,6 +1059,11 @@ namespace CCN.Modules.Rewards.DataAccess
             if (!string.IsNullOrWhiteSpace(query.Shopname))
             {
                 sqlWhere.Append($" and a.shopname like '%{query.Shopname}%'");
+            }
+            
+            if (!string.IsNullOrWhiteSpace(query.Area))
+            {
+                sqlWhere.Append($" and a.area='{query.Area}'");
             }
 
             if (!string.IsNullOrWhiteSpace(query.CardTypes))
