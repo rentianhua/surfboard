@@ -42,7 +42,7 @@
 
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/shopedit?innerid=" + val.Innerid + "',this);\" href='javascript:;'>修改</a> " +
-                //"<a href='/rewards/rewards/shopview?innerid=" + val.Innerid + "'>查询详情</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/shopview?innerid=" + val.Innerid + "',this);\" href='javascript:;'>查看详情</a> " +
                 "<a href='javascript:;' onclick=\"DeleteShop('" + val.Innerid + "');\">删除</a> " +
                 btnStatus +
                 "</td>";
@@ -54,7 +54,7 @@
     function UpdateStatus(innerid, status) {
         $.post("/api/Rewards/UpdateShopStatus?innerid=" + innerid + "&status=" + status, null, function (result) {
             alert(result.errmsg);
-            getBodyHtml('mainbody', '/api/Rewards/ShopList');
+            getBodyHtml('mainbody', '/Rewards/Rewards/ShopList');
         });
     }
 

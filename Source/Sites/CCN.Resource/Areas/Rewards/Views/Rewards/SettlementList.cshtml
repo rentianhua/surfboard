@@ -50,8 +50,8 @@
             str += "<td>" + val.SettTotal + "</td>";
             str += "<td>" + Dateformat(val.SettCycleStart, "yyyy-MM-dd") + "~" + Dateformat(val.SettCycleEnd, "yyyy-MM-dd") + "</td>";
             str += "<td>" +
-                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/settlementedit?innerid=" + val.Innerid + "',this);\" href='javascript:;'>修改</a> " +
-                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/settcoderecord?settid=" + val.Innerid + "',this);\" href='javascript:;'>查看详情</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/settlementedit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/settcoderecord?settid=" + val.Innerid + "');\" href='javascript:;'>查看详情</a> " +
                 "<a href='javascript:;' onclick=\"DeleteSettLog('" + val.Innerid + "');\">删除</a> " +
                 "</td>";
             str += "</tr>";
@@ -71,7 +71,6 @@
             datatype: 'application/json',
             async: false,
             success: function (result) {
-                //location.reload();
                 getBodyHtml('mainbody', '/api/Rewards/SettlementList');
             }
         });
@@ -96,7 +95,6 @@
             
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                @*<a onclick="getBodyHtml('mainbody', '/rewards/rewards/settlementedit', this);" href="javascript:;" class="btn btn-primary shiny">添加</a>*@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>

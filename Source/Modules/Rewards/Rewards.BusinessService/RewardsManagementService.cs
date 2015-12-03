@@ -401,7 +401,23 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult AddShop(ShopModel model)
         {
-            return BusinessComponent.AddShop(model);
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.AddShop(model);
+                }
+                catch (Exception)
+                {
+                    return JResult._jResult(400, "添加失败");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>
@@ -422,6 +438,17 @@ namespace CCN.Modules.Rewards.BusinessService
         public JResult UpdateShopStatus(string innerid, int status)
         {
             return BusinessComponent.UpdateShopStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult UpdateShopPassword(string innerid, string password)
+        {
+            return BusinessComponent.UpdateShopPassword(innerid, password);
         }
 
         /// <summary>

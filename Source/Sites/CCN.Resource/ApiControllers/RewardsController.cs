@@ -363,6 +363,19 @@ namespace CCN.Resource.ApiControllers
         {
             return _rewardsservice.UpdateShopStatus(innerid, status);
         }
+        
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [Route("UpdateShopPassword")]
+        [HttpPut]
+        public JResult UpdateShopPassword(string innerid, string password)
+        {
+            return _rewardsservice.UpdateShopPassword(innerid, password);
+        }
 
         /// <summary>
         /// 删除商户

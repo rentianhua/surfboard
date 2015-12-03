@@ -181,6 +181,21 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult IsCustByOpenid(string openid)
+        {
+            var userInfo = DataAccess.GetCustByOpenid(openid);
+            if (userInfo == null || userInfo.Status != 1)
+            {
+                return JResult._jResult(400, "否");
+            }
+            return JResult._jResult(0, "是");
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>

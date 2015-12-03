@@ -50,6 +50,13 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLoginByOpenid(string openid);
 
         /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        JResult IsCustByOpenid(string openid);
+
+        /// <summary>
         /// 获取会员详情
         /// </summary>
         /// <param name="innerid">会员id</param>

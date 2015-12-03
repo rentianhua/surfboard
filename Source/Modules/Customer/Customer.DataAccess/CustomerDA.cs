@@ -139,6 +139,18 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
+        /// 根据openid获取会员信息
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public CustModel GetCustByOpenid(string openid)
+        {
+            const string sql = "select b.* from cust_wechat as a inner join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
+            var custModel = Helper.Query<CustModel>(sql, new { openid }).FirstOrDefault();
+            return custModel;
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>

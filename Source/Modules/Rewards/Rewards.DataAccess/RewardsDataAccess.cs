@@ -1044,7 +1044,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_shop as a";
             const string fields =
-                @"innerid,shopname,area,address,
+                @"innerid,shopname,area,address,headportrait,
                 (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid=ccard.innerid where ccard.shopid=a.innerid and cc.sourceid=1) as SoldedNum,
                 (select group_concat(codename) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as CardTypeNames,
                 (select count(1) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as sort";
@@ -1392,6 +1392,23 @@ namespace CCN.Modules.Rewards.DataAccess
             {
                 innerid,
                 status
+            });
+            return result;
+        }
+
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public int UpdateShopPassword(string innerid, string password)
+        {
+            const string sql = "update coupon_shop set password=@password where innerid=@innerid;";
+            var result = Helper.Execute(sql, new
+            {
+                innerid,
+                password
             });
             return result;
         }

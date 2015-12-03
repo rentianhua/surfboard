@@ -473,6 +473,7 @@
     <Content Include="Areas\Rewards\Views\Rewards\SettCodeRecord.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\SettlementAdd.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\OrderList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\ShopView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
