@@ -1,0 +1,196 @@
+﻿
+@{
+
+}
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    $(function() {
+        Init();
+    });
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/Rewards/GetShopById?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function(data) {
+
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+                var obj = data.errmsg;
+                $("#shopname").html(obj.Shopname);
+                $("#shopcode").html(obj.Shopcode);
+                $("#password").html("******");
+                $("#telephone").html(obj.Telephone);
+                $("#email").html(obj.Email);
+                $("#address").html(obj.Area + " " + obj.Address);
+                $("#qq").html(obj.QQ);
+                $("#signature").val(obj.Signature);
+                $("#logoimg").attr("src", getQiniuUrl(obj.Headportrait));
+                
+                $.get("/api/Base/GetProvList", function (data) {
+                    var city = "";
+                    data = data.errmsg;
+                    $.each(data, function (k, v) {
+                        if (v.Innerid === obj.Provid) {
+                            city = v.ProvName;
+                            $.get("/api/Base/GetCityList/?provid=" + obj.Provid, function (dataCity) {
+                                dataCity = dataCity.errmsg;
+                                $.each(dataCity, function (k, v) {
+                                    if (v.Innerid === obj.Cityid) {
+                                        city += " " + v.CityName;
+                                        $("#address").html(city + " " + $("#address").html());
+                                    }
+                                });
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    function UpdatePasssword() {
+        var newpassword = $("#newpassword").val();
+        if ($.trim(newpassword).length === 0) {
+            alert("请填写新密码");
+            return;
+        }
+        $.ajax({
+            url: '/api/Rewards/UpdateShopPassword?innerid=' + id + "&password=" + newpassword,
+            type: 'put',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                alert(data.errmsg);
+                getBodyHtml('mainbody', '/rewards/rewards/shopview?innerid=' + id);
+            }
+        });
+    }
+
+    function ToList() {
+        getBodyHtml('mainbody', '/rewards/rewards/shoplist');
+    }
+
+</script>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">商户信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">商户编号:</label>
+                            <div class="controls col-sm-10" style="padding-top:5px;">
+                                <label id="shopcode">自动生成，不可修改</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>商户名称:</label>
+                            <div class="controls col-sm-10" style="padding-top:5px;">
+                                <label id="shopname"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>密码:</label>
+                            <div class="controls col-sm-10">
+                                <label id="password"></label>
+                                <a href="javascript:;" onclick="$('#controls').removeClass('hide');">修改</a>
+                                <div id="controls" class="margintop hide">
+                                    <input type="password" id="newpassword" placeholder="新密码" />
+                                    <input type="button" value="确定" onclick="UpdatePasssword();" />
+                                    <input type="button" value="取消" onclick="$('#controls').addClass('hide');" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">联系电话:</label>
+                            <div class="controls col-sm-10">
+                                <label id="telephone"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">Email:</label>
+                            <div class="controls col-sm-10">
+                                <label id="email"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">QQ:</label>
+                            <div class="controls col-sm-10">
+                                <label id="qq"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">所在地:</label>
+                            <div class="controls col-sm-11">
+                                <label id="address"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">图片</label>
+                            <div class="controls col-sm-10" style="padding-top: 5px">
+                                <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="signature" class="col-sm-1 control-label no-padding-right">个人签名:</label>
+                            <div class="col-sm-11">
+                                <label id="signature"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="ToList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
