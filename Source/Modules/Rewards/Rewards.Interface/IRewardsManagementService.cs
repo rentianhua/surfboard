@@ -193,14 +193,27 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="model"></param>
         /// <returns></returns>
         JResult SendCoupon(SendCouponModel model);
-
-
+        
         /// <summary>
         /// 批量购买礼券
         /// </summary>
         /// <param name="model">购买信息</param>
         /// <returns></returns>
         JResult WholesaleCoupon(CouponBuyModel model);
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<OrderViewList> GetOrderList(OrderQuery query);
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        JResult HandlOrder(string innerid);
 
         /// <summary>
         /// 礼券核销

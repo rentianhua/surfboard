@@ -127,5 +127,13 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         }
         #endregion
 
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult OrderList()
+        {
+            return View();
+        }
     }
 }

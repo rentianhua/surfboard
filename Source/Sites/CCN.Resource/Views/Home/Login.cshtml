@@ -68,30 +68,39 @@
     @*<script src="~/Scripts/js/beyond.js"></script>*@
 
     <!--Google Analytics::Demo Only-->
-    <script>
-        function submit() {
-            var actionUrl = "@Url.Action("CheckLogin", "Home")";
-            var formData = {};
-
-            formData.loginname = $("#LoginName").val();
-            formData.password = $("#LoginPwd").val();
-
-            $.ajax({
-                type: 'post',
-                url: actionUrl,
-                data: formData,
-                success: function (result) {
-                    console.log(result);
-                    if (result.code == 1) {
-                        location.href = "@Url.Action("Index", "Home")";
-                    }
-                    else {
-                        alert(result.message);
-                    }
-                }
-            });
+<script>
+    
+    document.onkeydown = function (e) {
+        var theEvent = window.event || e;
+        var code = theEvent.keyCode || theEvent.which;
+        if (code === 13) {
+            submit();
         }
+    }
 
-    </script>
+    function submit() {
+        var actionUrl = "@Url.Action("CheckLogin", "Home")";
+        var formData = {};
+
+        formData.loginname = $("#LoginName").val();
+        formData.password = $("#LoginPwd").val();
+
+        $.ajax({
+            type: 'post',
+            url: actionUrl,
+            data: formData,
+            success: function (result) {
+                console.log(result);
+                if (result.code == 1) {
+                    location.href = "@Url.Action("Index", "Home")";
+                }
+                else {
+                    alert(result.message);
+                }
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

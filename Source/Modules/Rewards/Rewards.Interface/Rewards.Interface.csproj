@@ -42,6 +42,10 @@
     <Reference Include="Cedar.Framework.Common">
       <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=13.3.1.28247, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

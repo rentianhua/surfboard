@@ -17,6 +17,7 @@
         <Menu name="核销列表" url="/Rewards/Rewards/SearchCancelList" info="核销列表" permission="" icon=""/>
         <Menu name="结算列表" url="/Rewards/Rewards/SettlementList" info="结算列表" permission="" icon=""/>
         <Menu name="商户列表" url="/Rewards/Rewards/ShopList" info="商户列表" permission="" icon=""/>
+        <Menu name="异常订单列表" url="/Rewards/Rewards/OrderList" info="异常订单列表" permission="" icon=""/>
       </MenuArray>
     </MenuGroup>
 

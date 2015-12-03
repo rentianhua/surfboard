@@ -629,10 +629,9 @@ namespace CCN.Modules.Rewards.DataAccess
         public int SaveOrder(CouponBuyModel model)
         {
             const string sql = @"INSERT INTO coupon_order
-                                (innerid, order_id, order_status, order_total_price, order_create_time, order_express_price, buyer_openid, buyer_nick, receiver_name, receiver_province, receiver_city, receiver_address, receiver_mobile, receiver_phone, product_id, product_name, product_price, product_sku, product_count, product_img, delivery_id, delivery_company, trans_id, result)
+                                (innerid, order_id, order_status, order_total_price, order_create_time, order_express_price, buyer_openid, buyer_nick, receiver_name, receiver_province, receiver_city, receiver_address, receiver_mobile, receiver_phone, product_id, product_name, product_price, product_sku, product_count, product_img, delivery_id, delivery_company, trans_id, result,resultdesc,createdtime)
                                 VALUES
-                                (@innerid, @order_id, @order_status, @order_total_price, @order_create_time, @order_express_price, @buyer_openid, @buyer_nick, @receiver_name, @receiver_province, 
-@receiver_city,@receiver_address, @receiver_mobile, @receiver_phone, @product_id, @product_name, @product_price, @product_sku, @product_count, @product_img, @delivery_id, @delivery_company, @trans_id, @result);";
+                                (@innerid, @order_id, @order_status, @order_total_price, @order_create_time, @order_express_price, @buyer_openid, @buyer_nick, @receiver_name, @receiver_province, @receiver_city,@receiver_address, @receiver_mobile, @receiver_phone, @product_id, @product_name, @product_price, @product_sku, @product_count, @product_img, @delivery_id, @delivery_company, @trans_id, @result,@resultdesc,@createdtime);";
             try
             {
                 Helper.Execute(sql, new
@@ -660,7 +659,9 @@ namespace CCN.Modules.Rewards.DataAccess
                     model.Order.delivery_id,
                     model.Order.delivery_company,
                     model.Order.trans_id,
-                    model.result
+                    model.result,
+                    model.resultdesc,
+                    createdtime = DateTime.Now
                 });
                 return 1;
             }
@@ -669,6 +670,94 @@ namespace CCN.Modules.Rewards.DataAccess
                 return 0;
             }
         }
+
+        /// <summary>
+        /// 修改购买订单处理结果
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public OrderViewList GetOrderInfo(string innerid)
+        {
+            const string sql = @"select * from coupon_order where innerid=@innerid;";
+            try
+            {
+                return Helper.Query<OrderViewList>(sql, new
+                {
+                    innerid
+                }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 修改购买订单处理结果
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateOrderResult(CouponBuyModel model)
+        {
+            const string sql = @"update coupon_order set result=@result,resultdesc=@resultdesc,modifiedtime=@modifiedtime where innerid=@innerid;";
+            try
+            {
+                Helper.Execute(sql, new
+                {
+                    model.innerid,
+                    model.result,
+                    model.resultdesc,
+                    modifiedtime = DateTime.Now
+                });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<OrderViewList> GetOrderList(OrderQuery query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"coupon_order as a 
+                                    left join cust_wechat as b on a.buyer_openid=b.openid 
+                                    left join cust_info as c on b.custid=c.innerid";
+            const string fields = "a.*,c.custname,c.mobile";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            switch (query.Status)
+            {
+                case 1:
+                    sqlWhere.Append(" and a.result<>0");
+                    break;
+                case 2:                    
+                    sqlWhere.Append(" and a.result=0");
+                    break;
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.ProductName))
+            {
+                sqlWhere.Append($" and a.product_name like '%{query.ProductName}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                sqlWhere.Append($" and c.mobile like '%{query.Mobile}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<OrderViewList>(model, query.Echo);
+            return list;
+        }
+
         #endregion
 
         #region 礼券Code
@@ -941,11 +1030,14 @@ namespace CCN.Modules.Rewards.DataAccess
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_shop as a";
             const string fields =
-                @"shopname,area,address,headportrait
-                (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid = ccard.innerid where ccard.shopid = a.innerid and cc.sourceid = 1) as SoldedNum,
-                (select group_concat(codename) from base_code where typekey = 'coupon_type' and codevalue in (select cardtype from coupon_card where shopid = a.innerid )) as CardTypeNames";
+                @"innerid,shopname,area,address,
+                (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid=ccard.innerid where ccard.shopid=a.innerid and cc.sourceid=1) as SoldedNum,
+                (select group_concat(codename) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as CardTypeNames,
+                (select count(1) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as sort";
 
-            query.Order = "(select count(1) from coupon_card where shopid=a.innerid) desc,a.createdtime desc";
+            //select count(1) from coupon_code where sourceid = 1 and cardid in (select innerid from coupon_card where shopid='2550607b-6c12-48b6-a72a-c1fe4ec354c5') as SoldedNum;
+
+            query.Order = "sort desc,a.createdtime desc";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("a.status=1");
