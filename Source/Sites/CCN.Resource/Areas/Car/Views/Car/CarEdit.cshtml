@@ -6,14 +6,14 @@
 <link href="~/Content/cover.css" rel="stylesheet" />
 <script>
 
-    function showloading() {
-        $('.theme-popover-mask').show();
-        $('.theme-popover').show();
-    }
-    function hideloading() {
-        $('.theme-popover-mask').hide();
-        $('.theme-popover').hide();
-    }
+    //function showloading() {
+    //    $('.theme-popover-mask').show();
+    //    $('.theme-popover').show();
+    //}
+    //function hideloading() {
+    //    $('.theme-popover-mask').hide();
+    //    $('.theme-popover').hide();
+    //}
 
 </script>
 <script type="text/javascript">
@@ -27,6 +27,14 @@
         InitCode();
         Init();
     });
+    function showloading() {
+        $('.loading-container.loading-inactive').css('display', 'block');
+        $('.loading-container.loading-inactive .loader').css('display', 'block');
+    }
+    function hideloading() {
+        $('.loading-container.loading-inactive').css('display', 'none');
+        $('.loading-container.loading-inactive .loader').css('display', 'none');
+    }
 
     //初始化品牌
     function InitBrand() {
@@ -290,26 +298,31 @@
 
         if (colorid === "0") {
             alert("请选择颜色！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtmileage).length === 0) {
             alert("请填写里程数！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
         var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!re.test(txtmileage)) {
             alert("里程数只能输入数值[最多两位小数]！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (regyear === "0") {
             alert("请选择上牌年份！");
+            $("#submit").removeClass("disabled");
             return false;
         }
         if (regmonth === "0") {
             alert("请选择上牌月份！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -331,16 +344,19 @@
 
         if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
             alert("收购价格只能输入数值[最多两位小数]！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtsoldyprice).length === 0) {
             alert("请填写待售价格！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (!re.test(txtsoldyprice)) {
             alert("待售价格只能输入数值[最多两位小数]！");
+            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -374,86 +390,93 @@
             audit_date: txtauditDate
         };
 
-        //showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        
         var keysRes;
-        uploadfile("picture", 1024 * 2, "", "car_picture", function (res) {
-            keysRes = res;
-        }, null, 9,3);
+        
+        setTimeout(function () {
+            uploadfile("picture", 1024 * 2, "", "car_picture", function (res) {
+                keysRes = res;
+                if (id === "") {
+                    if (keysRes === "0") {
+                        alert('请上传图片');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-1") {
+                        alert('图片格式不正确');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-2") {
+                        alert('上传异常');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-3") {
+                        alert('文件大小超出');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-4") {
+                        alert('请上传3-9张图片');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    }
 
-        if (id === "") {
+                    $.post("/api/Car/AddCar", json, function (result) {
+                        hideloading();
+                        if (result.errcode === 0) {
+                            var carid = result.errmsg;
+                            $.post("/api/Car/AddCarPictureKeyList", { Carid: carid, KeyList: keysRes.split(',') }, function () {
 
-            if (keysRes === "0") {
-                $("#submit").removeClass("disabled");
-                alert('请上传图片');
-                return false;
-            } else if (keysRes === "-1") {
-                $("#submit").removeClass("disabled");
-                alert('图片格式不正确');
-                return false;
-            } else if (keysRes === "-2") {
-                $("#submit").removeClass("disabled");
-                alert('上传异常');
-                return false;
-            } else if (keysRes === "-3") {
-                $("#submit").removeClass("disabled");
-                alert('文件大小超出');
-                return false;
-            } else if (keysRes === "-4") {
-                $("#submit").removeClass("disabled");
-                alert('请上传3-9张图片');
-                return false;
-            }
+                            });
+                            alert("添加成功");
+                            $("#submit").removeClass("disabled");
+                            goList();
+                        } else {
+                            alert("添加失败:" + result.errmsg);
+                            $("#submit").removeClass("disabled");
 
-            $.post("/api/Car/AddCar", json, function (result) {
-                hideloading();
-                if (result.errcode === 0) {
-                    var carid = result.errmsg;
-                    $.post("/api/Car/AddCarPictureKeyList", { Carid: carid, KeyList: keysRes.split(',') }, function () {
+                        }
 
                     });
-                    $("#submit").removeClass("disabled");
-                    alert("添加成功");
-                    goList();
                 } else {
-                    $("#submit").removeClass("disabled");
-                    alert("添加失败:" + result.errmsg);
-                }
 
-            });
-        } else {
-
-            if (keysRes === "-1") {
-                alert('图片格式不正确');
-                return false;
-            } else if (keysRes === "-2") {
-                alert('上传异常');
-                return false;
-            } else if (keysRes === "-3") {
-                alert('文件大小超出');
-                return false;
-            } else if (keysRes === "-4") {
-                alert('请上传3-9张图片');
-                return false;
-            }
-
-            json.Innerid = id;
-            $.post("/api/Car/UpdateCar", json, function(result) {
-                hideloading();
-                if (result.errcode === 0) {
-                    if (keysRes !== "0") {
-                        $.post("/api/Car/AddCarPictureKeyList", { Carid: id, KeyList: keysRes.split(',') }, function () {
-
-                        });
+                    if (keysRes === "-1") {
+                        alert('图片格式不正确');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-2") {
+                        alert('上传异常');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-3") {
+                        alert('文件大小超出');
+                        $("#submit").removeClass("disabled");
+                        return false;
+                    } else if (keysRes === "-4") {
+                        alert('请上传3-9张图片');
+                        $("#submit").removeClass("disabled");
+                        return false;
                     }
-                    $("#submit").removeClass("disabled");
-                    alert("修改成功");
-                    goList();
-                } else {
-                    $("#submit").removeClass("disabled");
-                    alert("修改失败:" + result.errmsg);
+
+                    json.Innerid = id;
+                    $.post("/api/Car/UpdateCar", json, function (result) {
+                        hideloading();
+                        if (result.errcode === 0) {
+                            if (keysRes !== "0") {
+                                $.post("/api/Car/AddCarPictureKeyList", { Carid: id, KeyList: keysRes.split(',') }, function () {
+
+                                });
+                            }
+                            alert("修改成功");
+                            $("#submit").removeClass("disabled");
+                            goList();
+                        } else {
+                            alert("修改失败:" + result.errmsg);
+                            $("#submit").removeClass("disabled");
+                        }
+                    });
                 }
-            });
-        }
+            }, null, 9, 3);
+        }, 3000);
         return false;
     }
 
