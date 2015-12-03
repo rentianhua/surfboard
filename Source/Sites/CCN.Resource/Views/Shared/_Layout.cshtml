@@ -14,6 +14,12 @@
         });
 
     </script>
+    <style>
+        .loading-container {
+            opacity: 0.5; /* 通用，其他浏览器  有效*/
+            background: #AAB1B3;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Container -->
@@ -86,7 +92,6 @@
     <div class="main-container container-fluid">
         <!-- Page Container -->
         <div class="page-container">
-
             <!-- Page Sidebar -->
             <div class="page-sidebar" id="sidebar">
                 <!-- Page Sidebar Header-->
@@ -101,7 +106,6 @@
                 <!-- 左边菜单 结束-->
             </div>
             <!-- /Page Sidebar -->
-          
             <!-- Page Content -->
             <div class="page-content">
                 <!-- Page Breadcrumb -->
@@ -135,7 +139,7 @@
                 </div>
                 <!-- /Page Header -->
                 <!-- Page Body -->
-                <div id="mainbody" class="page-body">    
+                <div id="mainbody" class="page-body">
                     @RenderBody()
                 </div>
                 <!-- /Page Body -->
@@ -143,7 +147,6 @@
             <!-- /Page Content -->
         </div>
     </div>
-
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/template")
     @RenderSection("scripts", required: false)

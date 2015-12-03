@@ -286,6 +286,7 @@
     <Content Include="Content\images\loading-bars.gif" />
     <Content Include="Content\images\loading.gif" />
     <Content Include="Content\cover.css" />
+    <Content Include="Content\images\signup.jpg" />
     <Content Include="Content\Pager.css" />
     <Content Include="Content\Template\css\4095-rtl.min.css" />
     <Content Include="Content\Template\css\4095.min.css" />
