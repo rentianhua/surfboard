@@ -102,7 +102,6 @@ namespace CCN.Resource.Areas.Rewards.Controllers
             return View();
         }
 
-
         /// <summary>
         /// 结算页面
         /// </summary>
@@ -123,6 +122,16 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         public ActionResult SettCodeRecord(string settid)
         {
             ViewBag.settid = string.IsNullOrWhiteSpace(settid) ? "" : settid;
+            return View();
+        }
+        /// <summary>
+        /// 获取礼券code列表
+        /// </summary>
+        /// <param name="couponid"></param>
+        /// <returns></returns>
+        public ActionResult CouponCodeList(string couponid)
+        {
+            ViewBag.couponid= string.IsNullOrWhiteSpace(couponid) ? "" : couponid;
             return View();
         }
         #endregion

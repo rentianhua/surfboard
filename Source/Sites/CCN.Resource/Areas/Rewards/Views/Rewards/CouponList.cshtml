@@ -57,7 +57,7 @@
             $("#couponlist tbody").append(str);
         });
     }
-
+    //"<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/CouponCodeList?couponid=" + val.Innerid + "',this);\" href='javascript:;'>修改</a> " +
     function UpdateStatus(cardid, status) {
         status = status === 1 ? 0 : 1;
         $.post("/api/Rewards/UpdateStatus?cardid=" + cardid + "&status=" + status, null, function (result) {

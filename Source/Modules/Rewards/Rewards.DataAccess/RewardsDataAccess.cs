@@ -979,6 +979,45 @@ namespace CCN.Modules.Rewards.DataAccess
             return summaryModel;
         }
 
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CouponCodeListModel> GetCouponCode(CodeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"coupon_code as a inner join cust_info as b on a.custid=b.innerid";
+            const string fields = "a.*, b.custname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.gettime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder(" 1=1 ");
+
+            //if (!string.IsNullOrWhiteSpace(query.Shopid))
+            //{
+            //    sqlWhere.Append($" and b.shopid='{query.Shopid}'");
+            //}
+
+            if (!string.IsNullOrWhiteSpace(query.Code))
+            {
+                sqlWhere.Append($" and a.cardid like '%{query.Code}%'");
+            }
+
+            //if (query.StartTime != null)
+            //{
+            //    sqlWhere.Append($" and a.usedtime>={query.StartTime}");
+            //}
+
+            //if (query.EndTime != null)
+            //{
+            //    sqlWhere.Append($" and a.usedtime<={query.EndTime}");
+            //}
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CouponCodeListModel>(model, query.Echo);
+            return list;
+        }
+
         #endregion
 
         #region 礼券商城

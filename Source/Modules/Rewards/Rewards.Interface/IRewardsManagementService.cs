@@ -420,5 +420,12 @@ namespace CCN.Modules.Rewards.Interface
         JResult PointToCoupon(CustPointToCouponModel model);
 
         #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CouponCodeListModel> GetCouponCode(CodeQueryModel query);
     }
 }
