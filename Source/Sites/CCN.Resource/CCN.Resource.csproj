@@ -208,7 +208,6 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Rewards\Models\" />
-    <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Areas\System\Models\" />
     <Folder Include="Areas\System\Views\Shared\" />
     <Folder Include="Models\" />
@@ -474,6 +473,7 @@
     <Content Include="Areas\Rewards\Views\Rewards\SettCodeRecord.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\SettlementAdd.cshtml" />
     <Content Include="Areas\Rewards\Views\Rewards\OrderList.cshtml" />
+    <Content Include="Areas\Rewards\Views\Rewards\CouponCodeList.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
