@@ -49,6 +49,7 @@
             str += "<td>" + (val.IsEnabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
             str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/CouponCodeList?innerid=" + val.Innerid + "',this);\" href='javascript:;'>明细</a> " +
                 "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/couponedit?innerid=" + val.Innerid + "',this);\" href='javascript:;'>修改</a> " +
                 "<a onclick=\"getBodyHtml('mainbody', '/rewards/rewards/couponview?innerid=" + val.Innerid + "',this);\" href='javascript:;'>查询详情 </a>" +
                 "<a href='javascript:;' onclick=\"UpdateStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用" : "启用") + "</a> " +

@@ -271,8 +271,6 @@
     }
 
     function Submit() {
-        //禁用保存按钮
-        $("#submit").addClass("disabled");
         var brandid = $("#selectbrand").val();
         var seriesid = $("#selectseries").val();
         var modelid = $("#selectmodel").val();
@@ -298,31 +296,26 @@
 
         if (colorid === "0") {
             alert("请选择颜色！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtmileage).length === 0) {
             alert("请填写里程数！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!re.test(txtmileage)) {
             alert("里程数只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (regyear === "0") {
             alert("请选择上牌年份！");
-            $("#submit").removeClass("disabled");
             return false;
         }
         if (regmonth === "0") {
             alert("请选择上牌月份！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -344,19 +337,16 @@
 
         if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
             alert("收购价格只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtsoldyprice).length === 0) {
             alert("请填写待售价格！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (!re.test(txtsoldyprice)) {
             alert("待售价格只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -400,23 +390,18 @@
                 if (id === "") {
                     if (keysRes === "0") {
                         alert('请上传图片');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-1") {
                         alert('图片格式不正确');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-2") {
                         alert('上传异常');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-3") {
                         alert('文件大小超出');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-4") {
                         alert('请上传3-9张图片');
-                        $("#submit").removeClass("disabled");
                         return false;
                     }
 
@@ -428,11 +413,9 @@
 
                             });
                             alert("添加成功");
-                            $("#submit").removeClass("disabled");
                             goList();
                         } else {
                             alert("添加失败:" + result.errmsg);
-                            $("#submit").removeClass("disabled");
 
                         }
 
@@ -441,19 +424,15 @@
 
                     if (keysRes === "-1") {
                         alert('图片格式不正确');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-2") {
                         alert('上传异常');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-3") {
                         alert('文件大小超出');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-4") {
                         alert('请上传3-9张图片');
-                        $("#submit").removeClass("disabled");
                         return false;
                     }
 
@@ -467,11 +446,9 @@
                                 });
                             }
                             alert("修改成功");
-                            $("#submit").removeClass("disabled");
                             goList();
                         } else {
                             alert("修改失败:" + result.errmsg);
-                            $("#submit").removeClass("disabled");
                         }
                     });
                 }

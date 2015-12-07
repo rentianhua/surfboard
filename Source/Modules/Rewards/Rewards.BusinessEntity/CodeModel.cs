@@ -200,6 +200,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 核销结束时间
         /// </summary>
         public DateTime? EndTime { get; set; }
+
+        /// <summary>
+        /// 礼券id
+        /// </summary>
+        public string CardId { get; set; }
     }
 
     /// <summary>

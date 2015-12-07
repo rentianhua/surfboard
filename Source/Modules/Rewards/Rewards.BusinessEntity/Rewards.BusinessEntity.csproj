@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="CounponBuyModel.cs" />
     <Compile Include="CodeModel.cs" />
-    <Compile Include="CouponCodeListModel.cs" />
+    <Compile Include="CouponCodeModel.cs" />
     <Compile Include="CouponInfoModel.cs" />
     <Compile Include="CouponRuleModel.cs" />
     <Compile Include="CustPointModel.cs" />

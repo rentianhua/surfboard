@@ -144,5 +144,16 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         {
             return View();
         }
+
+        /// <summary>
+        /// 获取礼券code列表
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult CouponCodeList(string innerid)
+        {
+            ViewBag.CardId = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
     }
 }
