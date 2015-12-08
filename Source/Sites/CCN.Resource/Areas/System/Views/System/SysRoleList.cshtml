@@ -28,6 +28,7 @@
             str += "<td>" + val.remark + "</td>";
             str += "<td>" +
                  " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                 "<a href='javascript:;' data-toggle=\"modal\" data-target=\"#myModal\">权限设置 </a>" +
                "<a href='javascript:;' onclick=\"DeleteCode('" + val.Innerid + "');\">删除 </a>" +
                "<a href='javascript:;' onclick=\"UpdateCodeStatus('" + val.Innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
@@ -72,4 +73,20 @@
             <tr></tr>
         </tbody>
     </table>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="margin-top:230px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">权限设置</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>

@@ -20,7 +20,6 @@
 
     var custid = "@ViewBag.custid";
     var id = "@ViewBag.carid";
-
     $(function () {
         InitBrand();
         InitProv();
@@ -35,7 +34,6 @@
         $('.loading-container.loading-inactive').css('display', 'none');
         $('.loading-container.loading-inactive .loader').css('display', 'none');
     }
-
     //初始化品牌
     function InitBrand() {
         $("#selectbrand").empty();
@@ -136,7 +134,7 @@
                 });
 
                 var jsid = 11;
-                $("#selectprov").selectVal(jsid);
+                $("#selectprov").selectText(getCookie("province"));
                 InitCity(jsid);
             }
         });
@@ -383,28 +381,31 @@
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
 
         var keysRes;
-
         setTimeout(function () {
             uploadfile("picture", 1024 * 2, "", "car_picture", function (res) {
                 keysRes = res;
                 if (id === "") {
                     if (keysRes === "0") {
                         alert('请上传图片');
+                        hideloading();
                         return false;
                     } else if (keysRes === "-1") {
+                        hideloading();
                         alert('图片格式不正确');
                         return false;
                     } else if (keysRes === "-2") {
+                        hideloading();
                         alert('上传异常');
                         return false;
                     } else if (keysRes === "-3") {
+                        hideloading();
                         alert('文件大小超出');
                         return false;
                     } else if (keysRes === "-4") {
+                        hideloading();
                         alert('请上传3-9张图片');
                         return false;
                     }
-
                     $.post("/api/Car/AddCar", json, function (result) {
                         hideloading();
                         if (result.errcode === 0) {
@@ -424,14 +425,18 @@
 
                     if (keysRes === "-1") {
                         alert('图片格式不正确');
+                        hideloading();
                         return false;
                     } else if (keysRes === "-2") {
                         alert('上传异常');
+                        hideloading();
                         return false;
                     } else if (keysRes === "-3") {
+                        hideloading();
                         alert('文件大小超出');
                         return false;
                     } else if (keysRes === "-4") {
+                        hideloading();
                         alert('请上传3-9张图片');
                         return false;
                     }
@@ -453,7 +458,7 @@
                     });
                 }
             }, null, 9, 3);
-        }, 3000);
+        }, 1000);
         return false;
     }
 
