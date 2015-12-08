@@ -67,6 +67,12 @@
         }
     }
 
+    //初始化角色框
+    function InitRoleBox()
+    {
+
+    }
+
 </script>
 
 <div class="widget">
@@ -113,7 +119,27 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">所属部门：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectstatus" style="width: 100%;">
+                                    <option value="0">业务部</option>
+                                    <option value="1" selected>技术部</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        @*<div class="form-group">
+                            <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
+                            <div class="controls col-sm-10">
+                                <input type="email" id="email" class="form-control" placeholder="邮箱" />
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -155,10 +181,30 @@
                     </div>
                 </div>
 
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="role" class="col-sm-2 control-label no-padding-right">角色：</label>
+                            <div class="controls col-sm-10">
+                                <div class="item-check" style="padding-top:5px;" id="rolebox">
+                                    <label>
+                                        <input type="checkbox" id="admin">
+                                        <span class="text">管理员</span>
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="salesman">
+                                        <span class="text">业务员</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
                         <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit()" />
-                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/couponlist');" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/SysUserList');" />
                     </div>
                 </div>
 
