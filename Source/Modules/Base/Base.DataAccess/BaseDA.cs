@@ -1290,13 +1290,14 @@ namespace CCN.Modules.Base.DataAccess
         public IEnumerable<BaseUserModel> GetUserInfo(BaseUserModel model)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append(@"select * from sys_user where 1=1 ;");
+            sql.Append(@"select * from sys_user where 1=1 ");
             var sqlWhere = new StringBuilder();
             //用户名
             if (!string.IsNullOrWhiteSpace(model.loginname))
             {
                 sqlWhere.AppendFormat(" and loginname ='{0}' ", model.loginname);
             }
+            sql.Append(sqlWhere.ToString());
             var menuList = Helper.Query<BaseUserModel>(sql.ToString());
             return menuList;
         }
