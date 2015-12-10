@@ -446,4 +446,16 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// </summary>
         public DateTime? Vend { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CouponCodeListModel : CodeModel
+    {
+        /// <summary>
+        /// 会员名
+        /// </summary>
+        public string CustName { get; set; }
+
+    }
 }

@@ -265,7 +265,6 @@
     <Compile Include="Areas\System\SystemAreaRegistration.cs" />
     <Compile Include="Common\DefaultController.cs" />
     <Compile Include="Common\LoginCheckFilterAttribute.cs" />
-    <Compile Include="Common\ReadXML.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -280,7 +279,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
-    <Content Include="ConfigFiles\menu.xml" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\loading-bars.gif" />
@@ -1077,7 +1075,6 @@
     <Content Include="Views\Shared\_LayoutEmpty.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\LeftMenu.cshtml" />
-    <Content Include="Views\Shared\_Menu.cshtml" />
     <Content Include="Views\Home\BusinessLogin.cshtml" />
     <Content Include="Views\Home\BusinessIndex.cshtml" />
   </ItemGroup>
