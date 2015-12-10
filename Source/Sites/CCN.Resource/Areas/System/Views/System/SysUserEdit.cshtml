@@ -135,27 +135,30 @@
 
     //获取角色信息
     function GetRole() {
-        $.ajax({
-            url: '/api/Base/GetRoleByUerid?userid=' + id,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (result) {
-                if (result.errcode !== 0) {
-                    alert("获取数据异常！");
-                }
+        if(id!="")
+        {
+            $.ajax({
+                url: '/api/Base/GetRoleByUerid?userid=' + id,
+                type: 'get',
+                datatype: 'application/json',
+                async: false,
+                success: function (result) {
+                    if (result.errcode !== 0) {
+                        alert("获取数据异常！");
+                    }
 
-                var data = result.errmsg;
-                $.each(data, function (key, val) {
-                    $("input[data-type='rolebox']").each(function () {
-                        if (this.value == val.roleid) {
-                            $(this).prop("checked", "checked");
-                        }
+                    var data = result.errmsg;
+                    $.each(data, function (key, val) {
+                        $("input[data-type='rolebox']").each(function () {
+                            if (this.value == val.roleid) {
+                                $(this).prop("checked", "checked");
+                            }
+                        });
                     });
-                });
 
-            }
-        });
+                }
+            });
+        }
     }
 
 </script>

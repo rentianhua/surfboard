@@ -45,13 +45,16 @@
             str += "<td>" + val.name + "</td>";
             str += "<td>" + (val.isenabled === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
             str += "<td>" + val.remark + "</td>";
-            str += "<td>" +
-                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
-                 "<a href='javascript:;' data-toggle=\"modal\" data-target=\"#myModal\" onclick=\"setRight('" + val.innerid + "');\" >权限设置 </a>" +
-               "<a href='javascript:;' onclick=\"UpdateRoleStatus('" + val.innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
-                "</td>";
+            str += "<td id='" + val.innerid + "'>";
+            str += " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
+                   "<a href='javascript:;' data-toggle=\"modal\" data-target=\"#myModal\" onclick=\"setRight('" + val.innerid + "');\" >权限设置 </a>" +
+                   "<a href='javascript:;' onclick=\"UpdateRoleStatus('" + val.innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                   "</td>";
             str += "</tr>";
             $("#rolelist tbody").append(str);
+            if ("@ViewBag.isadmin" != "1") {
+                $("#" + "@ViewBag.adminid").empty();
+            }
         });
     }
 
