@@ -2,15 +2,47 @@
 @{
     Layout = null;
 }
-
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
 
     $(function () {
-
+        Init();
+        InitRoleBox();
+        
     });
 
+    //初始化基本信息
+    function Init() {
+        if (id == "") {
+            return false;
+        }
+        $.ajax({
+            url: '/api/Base/GetUserInfoByID?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                var obj = data.errmsg;
+
+                $("#username").val(obj.username);
+                $("#loginname").val(obj.loginname);
+                $("#pwd").val(obj.password);
+                $("#pwdsure").val(obj.password);
+                $("#mobile").val(obj.mobile);
+                $("#telephone").val(obj.telephone);
+                $("#email").val(obj.email);
+                $("#selectstatus").selectVal(obj.status);
+                $("#selectdep").selectVal(obj.depid);
+            }
+        });
+    }
+
+    //保存基本信息
     function Submit() {
         //判断是否填入用户名
         if ($("#username").val() == "") {
@@ -41,9 +73,9 @@
             mobile: $("#mobile").val(),
             telephone: $("#telephone").val(),
             email: $("#email").val(),
-            status: $("#selectstatus").val()
+            status: $("#selectstatus").val(),
+            depid: $("#selectdep").val()
         };
-
         if (id === "") {
             $.post("/api/Base/AddUser", json, function (result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
@@ -54,7 +86,7 @@
             json.Innerid = id;
             $.ajax({
                 url: '/api/Base/UpdateUser',
-                type: 'put',
+                type: 'post',
                 datatype: 'application/json',
                 data: json,
                 async: false,
@@ -68,13 +100,67 @@
     }
 
     //初始化角色框
-    function InitRoleBox()
-    {
+    function InitRoleBox() {
+        $.post("/api/Base/GetAllRole", null, function (result) {
+            var data = result.errmsg;
+            var roleHtml = "";
+            $.each(data, function (key, val) {
+                roleHtml += "<label><input type='checkbox' data-type='rolebox' value='" + val.innerid + "'><span class='text'>" + val.name + "</span></label>&nbsp;&nbsp;";
+            });
+            $("#rolebox").append(roleHtml);
+            GetRole();
+        });
+    }
 
+    //保存选中的角色
+    function SaveRole() {
+        var strRole = "";
+        $("input[data-type='rolebox']:checked").each(function () {
+            strRole += this.value + ",";
+        });
+
+        var json = {};
+        json.userid = id;
+        json.roleid = strRole;
+        $.post("/api/Base/AddUserRole", json, function (result) {
+            var str = result.errcode === 0 ? "添加成功" : "添加失败";
+            if (result.errcode != 0) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
+        });
+    }
+
+    //获取角色信息
+    function GetRole()
+    {
+        $.ajax({
+            url: '/api/Base/GetRoleByUerid?userid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (result) {
+                if (result.errcode !== 0) {
+                    alert("获取数据异常！");
+                }
+
+                var data = result.errmsg;
+                $.each(data, function (key, val) {
+                    $("input[data-type='rolebox']").each(function () {
+                        if (this.value==val.roleid)
+                        {
+                            $(this).prop("checked","checked");
+                        }
+                    });
+                });
+
+            }
+        });
     }
 
 </script>
-
 <div class="widget">
     <div class="widget-header bordered-bottom bordered-palegreen">
         <span class="widget-caption">用户信息</span>
@@ -85,7 +171,7 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label no-padding-right">用户名：</label>
+                            <label for="username" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>用户名：</label>
                             <div class="controls col-sm-10">
                                 <input type="text" id="username" class="form-control" placeholder="用户名" />
                             </div>
@@ -93,18 +179,17 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="loginname" class="col-sm-2 control-label no-padding-right">登录名：</label>
+                            <label for="loginname" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>登录名：</label>
                             <div class="controls col-sm-10">
                                 <input type="text" id="loginname" class="form-control" placeholder="登录名" />
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="pwd" class="col-sm-2 control-label no-padding-right">密码：</label>
+                            <label for="pwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>密码：</label>
                             <div class="controls col-sm-10">
                                 <input type="password" id="pwd" class="form-control" placeholder="密码" />
                             </div>
@@ -112,7 +197,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="pwdsure" class="col-sm-2 control-label no-padding-right">确认密码：</label>
+                            <label for="pwdsure" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>确认密码：</label>
                             <div class="controls col-sm-10">
                                 <input type="password" id="pwdsure" class="form-control" placeholder="确认密码" />
                             </div>
@@ -124,20 +209,20 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">所属部门：</label>
                             <div class="controls col-sm-10">
-                                <select id="selectstatus" style="width: 100%;">
-                                    <option value="0">业务部</option>
-                                    <option value="1" selected>技术部</option>
+                                <select id="selectdep" style="width: 100%;">
+                                    <option value="5dda1700-9cb8-11e5-87ae-000c2977415d">苏州</option>
+                                    <option value="705dd54c-9cb8-11e5-87ae-000c2977415d">南京</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         @*<div class="form-group">
-                            <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
-                            <div class="controls col-sm-10">
-                                <input type="email" id="email" class="form-control" placeholder="邮箱" />
-                            </div>
-                        </div>*@
+                                <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
+                                <div class="controls col-sm-10">
+                                    <input type="email" id="email" class="form-control" placeholder="邮箱" />
+                                </div>
+                            </div>*@
                     </div>
                 </div>
                 <div class="row form-group">
@@ -158,7 +243,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -180,6 +264,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit()" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/SysUserList');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">用户信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
 
                 <div class="row form-group">
                     <div class="col-lg-6">
@@ -187,27 +288,17 @@
                             <label for="role" class="col-sm-2 control-label no-padding-right">角色：</label>
                             <div class="controls col-sm-10">
                                 <div class="item-check" style="padding-top:5px;" id="rolebox">
-                                    <label>
-                                        <input type="checkbox" id="admin">
-                                        <span class="text">管理员</span>
-                                    </label>
-                                    <label>
-                                        <input type="checkbox" id="salesman">
-                                        <span class="text">业务员</span>
-                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit()" />
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="SaveRole()" />
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/rewards/rewards/SysUserList');" />
                     </div>
                 </div>
-
             </form>
         </div>
     </div>

@@ -75,28 +75,12 @@
             str += "<td>" + Dateformat(val.register_date, "yyyy-MM") + "</td>";
             str += "<td>" + val.price + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
-            str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
+            str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;</td>";
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/carview?carid=" + val.Innerid + "');\" href='javascript:;'>车辆详情</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
-        });
-    }
-
-    /*
-    *新增浏览次数
-    */
-    function AddSeeCount(id, obj) {
-        var count = 0;
-        //获取10-20之间的随机数
-        count = Math.ceil(Math.random() * 10) + 10;
-        $.get("/api/Car/UpSeeCount?id=" + id + "&count=" + count, function (result) {
-            if (result.errcode == 0) {
-                count += parseInt($(obj).parent().attr("data-value"));
-                $(obj).parent().attr("data-value", count);
-                $(obj).parent().html(count + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + id + "',this);\">+</a></td>")
-            }
         });
     }
 

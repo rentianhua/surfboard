@@ -92,16 +92,18 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddCodeType(BaseCodeTypeModel model)
         {
-            var test=DataAccess.GetCodeTypeByTypeKey(model.Typekey,null);
+            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey, null);
             //：：判断验证：/ 查询数据为空，则可添加;不为空，则返回错误信息
-            if (test!=null) {
-            if (test.Typekey==model.Typekey) {
-                return new JResult
+            if (test != null)
+            {
+                if (test.Typekey == model.Typekey)
                 {
-                    errcode = 400,
-                    errmsg = "代码类型key重复！"
-                };
-            }
+                    return new JResult
+                    {
+                        errcode = 400,
+                        errmsg = "代码类型key重复！"
+                    };
+                }
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.Isenabled = 1;
@@ -119,9 +121,10 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCodeType(BaseCodeTypeModel model)
         {
-            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey,model.Innerid);
+            var test = DataAccess.GetCodeTypeByTypeKey(model.Typekey, model.Innerid);
             //：：条件判断：/ typekey唯一值，innerid唯一值
-            if (test!=null) {
+            if (test != null)
+            {
                 return new JResult
                 {
                     errcode = 400,
@@ -202,30 +205,31 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="model"></param>
         /// <returns></returns>
         public JResult AddCode(BaseCodeModel model)
-        {     
-            var test = DataAccess.GetCodeByTypeKey(model.Typekey,null,null);
+        {
+            var test = DataAccess.GetCodeByTypeKey(model.Typekey, null, null);
             //：：判断验证：/ 查询数据为空则添加，不为空则验证,返回错误详细信息
-            if (test!=null) {
-            if (test.Typekey == model.Typekey)
+            if (test != null)
             {
-                if (test.CodeName == model.CodeName)
+                if (test.Typekey == model.Typekey)
                 {
-                    return new JResult
+                    if (test.CodeName == model.CodeName)
                     {
-                        errcode = 400,
-                        errmsg = "代码名称已存在！"
-                    };
-                }
-                if (test.CodeValue == model.CodeValue)
-                {
-                    return new JResult
+                        return new JResult
+                        {
+                            errcode = 400,
+                            errmsg = "代码名称已存在！"
+                        };
+                    }
+                    if (test.CodeValue == model.CodeValue)
                     {
-                        errcode = 400,
-                        errmsg = "代码值已存在！"
-                    };
-                }
+                        return new JResult
+                        {
+                            errcode = 400,
+                            errmsg = "代码值已存在！"
+                        };
+                    }
 
-            }
+                }
             }
             model.Innerid = Guid.NewGuid().ToString();
             model.IsEnabled = 1;
@@ -877,6 +881,7 @@ namespace CCN.Modules.Base.BusinessComponent
 
         #region 获取系统后台基础信息
 
+        #region 用户管理
         /// <summary>
         /// 获取登录人信息
         /// </summary>
@@ -889,7 +894,6 @@ namespace CCN.Modules.Base.BusinessComponent
             return JResult._jResult(model);
         }
 
-
         /// <summary>
         /// 获取用户列表
         /// </summary>
@@ -899,7 +903,7 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             return DataAccess.GetUserList(query);
         }
-        
+
         /// <summary>
         /// 添加用户
         /// </summary>
@@ -918,6 +922,80 @@ namespace CCN.Modules.Base.BusinessComponent
                 errmsg = result
             };
         }
+
+        /// <summary>
+        /// 编辑用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateUser(BaseUserModel model)
+        {
+            //验证用户是否存在
+            //待添加
+
+
+            var result = DataAccess.UpdateUser(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+        /// <summary>
+        /// 更新用户状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateUserStatus(string innerid,int status)
+        {
+            var result = DataAccess.UpdateUserStatus(innerid, status);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetUserInfoByID(string innerid)
+        {
+            var model = DataAccess.GetUserInfoByID(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 获取用户对应权限
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetRoleByUerid(string userid)
+        {
+            var model = DataAccess.GetRoleByUerid(userid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 获取用户对应菜单
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetMenuByUerid(string userid)
+        {
+            var model = DataAccess.GetMenuByUerid(userid);
+            return JResult._jResult(model);
+        }
+
+
+        #endregion
+
+        #region 角色管理
+
         /// <summary>
         /// 获取角色列表
         /// </summary>
@@ -927,6 +1005,183 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             return DataAccess.GetRoleList(query);
         }
+
+        /// <summary>
+        /// 获取所有角色
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllRole(BaseRoleModel model)
+        {
+            var result = DataAccess.GetAllRole(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddRole(BaseRoleModel model)
+        {
+            //验证角色是否存在
+            //待添加
+
+
+            var result = DataAccess.AddRole(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+        /// <summary>
+        /// 编辑角色信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateRole(BaseRoleModel model)
+        {
+            //验证角色是否存在
+            //待添加
+
+
+            var result = DataAccess.UpdateRole(model);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+        /// <summary>
+        /// 更新用户状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="isenabled"></param>
+        /// <returns></returns>
+        public JResult UpdateRoleStatus(string innerid, int isenabled)
+        {
+            var result = DataAccess.UpdateRoleStatus(innerid, isenabled);
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = result
+            };
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetRoleInfoByID(string innerid)
+        {
+            var model = DataAccess.GetRoleInfoByID(innerid);
+            return JResult._jResult(model);
+        }
+
+        #endregion
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<MenuViewMode> GetMenuList(MenuQueryModel query)
+        {
+            return DataAccess.GetMenuList(query);
+        }
+
+        /// <summary>
+        /// 获取所有菜单
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllMenu(BaseMenuModel model)
+        {
+            var result = DataAccess.GetAllMenu(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddMenu(BaseMenuModel model)
+        {
+            var result = DataAccess.AddMenu(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新菜单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateMenu(BaseMenuModel model)
+        {
+            var result = DataAccess.UpdateMenu(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除菜单（物理删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteMenu(string innerid)
+        {
+            var result = DataAccess.DeleteMenu(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取菜单详细信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetMenuInfo(string innerid)
+        {
+            var result = DataAccess.GetMenuInfo(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 给角色赋相应的权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddRoleMenu(BaseRoleMenuModel model)
+        {
+            var result = DataAccess.AddRoleMenu(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 保存职员对应角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUserRole(BaseRoleUserModel model)
+        {
+            var result = DataAccess.AddUserRole(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取角色对应所有的菜单
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
+        public JResult GetRoleToMenu(string roleid)
+        {
+            var result = DataAccess.GetRoleToMenu(roleid);
+            return JResult._jResult(result);
+        }
+        #endregion
 
         #endregion
 

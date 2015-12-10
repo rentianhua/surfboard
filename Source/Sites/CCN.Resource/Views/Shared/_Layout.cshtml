@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -79,7 +80,7 @@
                                     </li>
                                     <!--选择主题结束-->
                                     <li class="dropdown-footer">
-                                        <a href="/home/login">
+                                        <a href="/home/login?type=1">
                                             退出
                                         </a>
                                     </li>
@@ -107,7 +108,8 @@
                 </div>
                 <!-- /Page Sidebar Header -->
                 <!-- 左边菜单 开始-->
-                @Html.Partial("_Menu")
+                                @*@Html.Partial("_Menu")*@
+                @{Html.RenderAction("LeftMenu", "Home");}
                 <!-- 左边菜单 结束-->
             </div>
             <!-- /Page Sidebar -->

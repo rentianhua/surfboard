@@ -27,12 +27,25 @@
             str += "<td>" + (val.mobile == null ? "" : val.mobile) + "</td>";
             str += "<td>" + (val.status === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
             str += "<td>" +
-                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysUserEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
-               "<a href='javascript:;' onclick=\"DeleteCode('" + val.Innerid + "');\">删除 </a>" +
-               "<a href='javascript:;' onclick=\"UpdateCodeStatus('" + val.Innerid + "'," + val.status + ");\">" + (val.status === 1 ? "禁用 " : "启用 ") + "</a>" +
+                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysUserEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a href='javascript:;' onclick=\"UpdateUserStatus('" + val.innerid + "'," + val.status + ");\">" + (val.status === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
             str += "</tr>";
             $("#userlist tbody").append(str);
+        });
+    }
+
+    //更新用户状态
+    function UpdateUserStatus(innerid, status)
+    {
+        if (!confirm("确认更新用户状态？")) {
+            return;
+        }
+        status = status === 1 ? 0 : 1;
+        $.post("/api/Base/UpdateUserStatus?innerid=" + innerid + "&status=" + status, function (result) {
+            var str = result.errcode === 0 ? "更新成功" : "更新失败";
+            alert(str);
+            getBodyHtml('mainbody', '/System/System/SysUserList');
         });
     }
 

@@ -2,10 +2,28 @@
 @{
     Layout = null;
 }
+<link href="~/Plugins/zTree_v3/css/metroStyle/metroStyle.css" rel="stylesheet" />
+<script src="~/Plugins/zTree_v3/js/jquery.ztree.core-3.5.min.js"></script>
+<script src="~/Plugins/zTree_v3/js/jquery.ztree.excheck-3.5.min.js"></script>
+<script src="~/Plugins/zTree_v3/js/jquery.ztree.exedit-3.5.min.js"></script>
 
 <script type="text/javascript">
+    var setting = {
+        check: {
+            enable: true
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        }
+    };
+    var zNodes = [];
+    var roleid = "";
+
     $(function () {
         QueryList();
+        BindingMenu();
     });
 
     function QueryList() {
@@ -14,7 +32,9 @@
         };
         $("#rolelist").getPageList(20, "/api/Base/GetRoleList", json, LoadData);
     }
-    function LoadData(data,index) {
+
+    //加载数据
+    function LoadData(data, index) {
         $("#rolelist tbody").empty();
 
         var str = "";
@@ -23,17 +43,92 @@
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + val.name + "</td>";
-           // str += "<td>" + val.mobile + "</td>";
             str += "<td>" + (val.isenabled === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
             str += "<td>" + val.remark + "</td>";
             str += "<td>" +
-                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
-                 "<a href='javascript:;' data-toggle=\"modal\" data-target=\"#myModal\">权限设置 </a>" +
-               "<a href='javascript:;' onclick=\"DeleteCode('" + val.Innerid + "');\">删除 </a>" +
-               "<a href='javascript:;' onclick=\"UpdateCodeStatus('" + val.Innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysRoleEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
+                 "<a href='javascript:;' data-toggle=\"modal\" data-target=\"#myModal\" onclick=\"setRight('" + val.innerid + "');\" >权限设置 </a>" +
+               "<a href='javascript:;' onclick=\"UpdateRoleStatus('" + val.innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
             str += "</tr>";
             $("#rolelist tbody").append(str);
+        });
+    }
+
+    //更新角色状态
+    function UpdateRoleStatus(innerid, isenabled)
+    {
+        if (!confirm("确认更新角色状态？")) {
+            return;
+        }
+        isenabled = isenabled === 1 ? 0 : 1;
+        $.post("/api/Base/UpdateRoleStatus?innerid=" + innerid + "&isenabled=" + isenabled, function (result) {
+            var str = result.errcode === 0 ? "更新成功" : "更新失败";
+            alert(str);
+            getBodyHtml('mainbody', '/System/System/SysRoleList');
+        });
+    }
+
+    //绑定菜单
+    function BindingMenu() {
+        var json = { innerid: "" };
+        $.ajax({
+            url: "/api/Base/GetAllMenu",
+            type: 'post',
+            datatype: 'application/json',
+            data: json,
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    var data = {};
+                    data.id = v.innerid;
+                    data.pId = v.parentid;
+                    data.name = v.name;
+                    data.open = true;
+                    zNodes.push(data);
+                });
+                $.fn.zTree.init($("#treeRole"), setting, zNodes);
+            }
+        });
+    }
+
+    //保存角色对应的菜单权限
+    function Submit() {
+        //获取所有选中的节点
+        var treeObj = $.fn.zTree.getZTreeObj("treeRole"),
+        nodes = treeObj.getCheckedNodes(true),
+        v = "";
+        for (var i = 0; i < nodes.length; i++) {
+            v += nodes[i].id + ",";
+        }
+        var json = {};
+        json.roleid = roleid;
+        json.menuid = v.trimRight(',');
+        $.post("/api/Base/AddRoleMenu", json, function (result) {
+            var str = result.errcode === 0 ? "添加成功" : "添加失败";
+            if (result.errcode != 0) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+                $('#myModal').modal('hide');
+                QueryList();
+            }
+        });
+    }
+
+    //设置资源权限
+    function setRight(id) {
+        roleid = id;
+        $.post("/api/Base/GetRoleToMenu?roleid=" + roleid, null, function (result) {
+            var data = result.errmsg;
+            $.each(data, function (key, val) {
+                var treeObj = $.fn.zTree.getZTreeObj("treeRole");
+                var node = treeObj.getNodeByParam("id", val.menuid);//treeObj是tree对象
+                node.checked = true;
+                treeObj.updateNode(node);
+            });
         });
     }
 
@@ -82,10 +177,17 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">权限设置</h4>
             </div>
-            <div class="modal-body" style="text-align:center">
-
+            <div class="modal-body ck" style="text-align:center">
+                <div class="zTreeDemoBackground left">
+                    <ul id="treeRole" class="ztree"></ul>
+                </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer text-center">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                    </div>
+                </div>
             </div>
         </div>
     </div>

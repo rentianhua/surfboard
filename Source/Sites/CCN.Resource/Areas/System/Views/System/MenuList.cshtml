@@ -1,131 +1,142 @@
 ﻿
 @{
-    ViewBag.Title = "MenuList";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+//ViewBag.Title = "CarSeries";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
-<table class="table table-striped table-hover table-bordered" id="editabledatatable">
-    <thead>
-        <tr role="row">
-            <th>
-                Username
-            </th>
-            <th>
-                Full Name
-            </th>
-            <th>
-                Points
-            </th>
-            <th>
-                Notes
-            </th>
-            <th>
+<script type="text/javascript">
+    $(function () {
+        QueryList();
+    });
 
-            </th>
-        </tr>
-    </thead>
+    function QueryList() {
+        var json = {
+            name: $("#menuname").val(),
+            level: $("#selectlevel").val() == 0 ? "" : $("#selectlevel").val()
+        };
+        $("#menulist").getPageList(20, "/api/Base/GetMenuList", json, LoadData);
+    }
+    function LoadData(data, index) {
+        $("#menulist tbody").empty();
+        var str = "";
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.name + "</td>";
+            str += "<td>" + val.level + "</td>";
+            str += "<td>" + val.url + "</td>";
+            str += "<td>" + (val.isenabled === 1 ? "启用中" : "<font color='red'>禁用中</font>") + "</td>";
+            str += "<td>" + val.remark + "</td>";
+            str += "<td>" +
+                "<a onclick=\"getBodyHtml('mainbody', '/System/System/SysMenuEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a href='javascript:;' onclick=\"DeleteMenu('" + val.innerid + "');\">删除 </a>" +
+                "<a href='javascript:;' onclick=\"UpdateMenuStatus('" + val.innerid + "'," + val.isenabled + ");\">" + (val.isenabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                "</td>";
+            str += "</tr>";
+            $("#menulist tbody").append(str);
+        });
+    }
 
-    <tbody>
-        <tr>
-            <td>alex</td>
-            <td>Alex Nilson</td>
-            <td>1234</td>
-            <td class="center ">power user</td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                gist124
-            </td>
-            <td>
-                Nick Roberts
-            </td>
-            <td>
-                62
-            </td>
-            <td class="center ">
-                new user
-            </td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                goldweb
-            </td>
-            <td>
-                Sergio Jackson
-            </td>
-            <td>
-                132
-            </td>
-            <td class="center ">
-                elite user
-            </td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                lisa
-            </td>
-            <td>
-                Lisa Wong
-            </td>
-            <td>
-                434
-            </td>
-            <td class="center ">
-                new user
-            </td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                nick12
-            </td>
-            <td>
-                Nick Roberts
-            </td>
-            <td>
-                232
-            </td>
-            <td class="center ">
-                power user
-            </td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                webriver
-            </td>
-            <td>
-                Antonio Sanches
-            </td>
-            <td>
-                462
-            </td>
-            <td class="center ">
-                new user
-            </td>
-            <td>
-                <a href="#" class="btn btn-info btn-xs edit"><i class="fa fa-edit"></i> Edit</a>
-                <a href="#" class="btn btn-danger btn-xs delete"><i class="fa fa-trash-o"></i> Delete</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    function UpdateMenuStatus(id, status) {
 
+        var json = {};
+        json.Innerid = id;
+        json.isenabled = status === 1 ? 0 : 1;
+
+        $.ajax({
+            url: '/api/Base/UpdateMenu',
+            type: 'post',
+            datatype: 'application/json',
+            data: json,
+            async: false,
+            success: function (result) {
+                var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                alert(str);
+                getBodyHtml('mainbody', '/system/system/MenuList');
+            }
+        });
+
+    }
+    function DeleteMenu(Innerid) {
+        if (!confirm("确认删除！")) {
+            return;
+        }
+        $.get("/api/Base/DeleteMenu?innerid=" + Innerid, function (result) {
+            var str = result.errcode === 0 ? "删除成功" : "删除失败";
+            if (result.errmsg != 1) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
+            getBodyHtml('mainbody', '/System/System/MenuList');
+        });
+    }
+</script>
+<div>
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <span>
+                        <label for="selectlevel" class="col-sm-4 control-label no-padding-right searchLayout">层级：</label>
+                        <select id="selectlevel" class="col-sm-8" style="width:65%">
+                            <option value="0">请选择</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="menuname" class="col-sm-4 control-label no-padding-right searchLayout">菜单名称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="menuname" placeholder="菜单名称">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a onclick="getBodyHtml('mainbody', '/System/System/SysMenuEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+            </div>
+        </div>
+    </div>
+
+
+    <table class="table table-striped table-hover table-bordered" id="menulist">
+        <thead>
+            <tr role="row">
+                <th>
+                    序号
+                </th>
+                <th>
+                    名称
+                </th>
+                <th>
+                    层级
+                </th>
+                <th>
+                    URL
+                </th>
+                <th>
+                    状态
+                </th>
+                <th>
+                    备注
+                </th>
+                <th>
+                    操作
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+
+</div>

@@ -53,6 +53,11 @@ namespace CCN.Modules.Base.BusinessEntity
         public int? status { get; set; }
 
         /// <summary>
+        /// 所属部门
+        /// </summary>
+        public string depid { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime createdtime { get; set; }
