@@ -127,7 +127,8 @@ namespace CCN.Resource.ApiControllers
         [HttpGet]
         public JResult GetCouponByCode(string code)
         {
-            return _rewardsservice.GetCouponByCode(code);
+            return null;
+            //return _rewardsservice.GetCouponByCode(code);
         }
 
         /// <summary>
@@ -583,5 +584,18 @@ namespace CCN.Resource.ApiControllers
             return _rewardsservice.GetSettedCodePageList(query);
         }
         #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCouponCode")]
+        [HttpPost]
+        public BasePageList<CouponCodeListModel> GetCouponCode([FromBody] CodeQueryModel query)
+        {
+            return _rewardsservice.GetCouponCode(query);
+        }
+        
     }
 }

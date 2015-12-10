@@ -55,6 +55,8 @@ Purchase: http://wrapbootstrap.com
             </div>
             <div class="loginbox-submit">
                 <input type="button" class="btn btn-primary btn-block" value="登录" onclick="submit()">
+                <br /><br />
+                <input type="checkbox" style="opacity: initial;position: initial; width: 12px;height: 12px;" id="ischecked" />一周内免登入
             </div>
             <div class="loginbox-signup">
                 <!-- Button trigger modal -->
@@ -101,8 +103,20 @@ Purchase: http://wrapbootstrap.com
         $(function () {
             setCookie();
             $('[data-toggle="popover"]').popover();
-
+            if ("@ViewBag.type" != "1") {
+                getInfo();
+            }
         });
+
+        document.onkeydown = function (e) {
+            var theEvent = window.event || e;
+            var code = theEvent.keyCode || theEvent.which;
+            if (code === 13) {
+                submit();
+            }
+        }
+
+        //提交数据
         function submit() {
             var actionUrl = "@Url.Action("CheckBusinessLogin", "Home")";
             var formData = {};
@@ -125,6 +139,11 @@ Purchase: http://wrapbootstrap.com
                             data: customerData,
                             success: function (result) {
                                 if (result.code == 1) {
+                                    if ($("#ischecked").prop("checked") == true) {
+                                        localStorage.setItem("businessname", $("#LoginName").val());
+                                        localStorage.setItem("businesspwd", $("#LoginPwd").val());
+                                        localStorage.setItem("businesstime", myDate.getTime());
+                                    }
                                     location.href = "@Url.Action("BusinessIndex", "Home")";
                                 }
                                 else {
@@ -140,6 +159,23 @@ Purchase: http://wrapbootstrap.com
             });
         }
 
+        //获取数据
+        function getInfo() {
+            //判读数据是否存在
+            if (localStorage.getItem("businesstime")) {
+                var diffDate = myDate.getTime() - (parseInt(localStorage.getItem("businesstime"), 10) + 24 * 3600 * 1000 * 7);
+                if (diffDate > 0) {
+                    localStorage.removeItem("businessname");
+                    localStorage.removeItem("businesspwd");
+                    localStorage.removeItem("businesstime");
+                }
+                else {
+                    $("#LoginName").val(localStorage.getItem("businessname"));
+                    $("#LoginPwd").val(localStorage.getItem("businesspwd"));
+                    submit();
+                }
+            }
+        }
     </script>
 </body>
 <!--Body Ends-->

@@ -200,6 +200,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 核销结束时间
         /// </summary>
         public DateTime? EndTime { get; set; }
+
+        /// <summary>
+        /// 礼券id
+        /// </summary>
+        public string CardId { get; set; }
     }
 
     /// <summary>
@@ -440,5 +445,17 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 有效期结束时间
         /// </summary>
         public DateTime? Vend { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CouponCodeListModel : CodeModel
+    {
+        /// <summary>
+        /// 会员名
+        /// </summary>
+        public string CustName { get; set; }
+
     }
 }

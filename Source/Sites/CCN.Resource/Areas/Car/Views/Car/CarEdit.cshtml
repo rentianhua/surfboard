@@ -20,7 +20,6 @@
 
     var custid = "@ViewBag.custid";
     var id = "@ViewBag.carid";
-
     $(function () {
         InitBrand();
         InitProv();
@@ -35,7 +34,6 @@
         $('.loading-container.loading-inactive').css('display', 'none');
         $('.loading-container.loading-inactive .loader').css('display', 'none');
     }
-
     //初始化品牌
     function InitBrand() {
         $("#selectbrand").empty();
@@ -136,7 +134,7 @@
                 });
 
                 var jsid = 11;
-                $("#selectprov").selectVal(jsid);
+                $("#selectprov").selectText(getCookie("province"));
                 InitCity(jsid);
             }
         });
@@ -271,8 +269,6 @@
     }
 
     function Submit() {
-        //禁用保存按钮
-        $("#submit").addClass("disabled");
         var brandid = $("#selectbrand").val();
         var seriesid = $("#selectseries").val();
         var modelid = $("#selectmodel").val();
@@ -298,31 +294,26 @@
 
         if (colorid === "0") {
             alert("请选择颜色！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtmileage).length === 0) {
             alert("请填写里程数！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
         if (!re.test(txtmileage)) {
             alert("里程数只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (regyear === "0") {
             alert("请选择上牌年份！");
-            $("#submit").removeClass("disabled");
             return false;
         }
         if (regmonth === "0") {
             alert("请选择上牌月份！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -344,19 +335,16 @@
 
         if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
             alert("收购价格只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if ($.trim(txtsoldyprice).length === 0) {
             alert("请填写待售价格！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
         if (!re.test(txtsoldyprice)) {
             alert("待售价格只能输入数值[最多两位小数]！");
-            $("#submit").removeClass("disabled");
             return false;
         }
 
@@ -391,35 +379,33 @@
         };
 
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
-        
+
         var keysRes;
-        
         setTimeout(function () {
             uploadfile("picture", 1024 * 2, "", "car_picture", function (res) {
                 keysRes = res;
                 if (id === "") {
                     if (keysRes === "0") {
                         alert('请上传图片');
-                        $("#submit").removeClass("disabled");
+                        hideloading();
                         return false;
                     } else if (keysRes === "-1") {
+                        hideloading();
                         alert('图片格式不正确');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-2") {
+                        hideloading();
                         alert('上传异常');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-3") {
+                        hideloading();
                         alert('文件大小超出');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-4") {
+                        hideloading();
                         alert('请上传3-9张图片');
-                        $("#submit").removeClass("disabled");
                         return false;
                     }
-
                     $.post("/api/Car/AddCar", json, function (result) {
                         hideloading();
                         if (result.errcode === 0) {
@@ -428,11 +414,9 @@
 
                             });
                             alert("添加成功");
-                            $("#submit").removeClass("disabled");
                             goList();
                         } else {
                             alert("添加失败:" + result.errmsg);
-                            $("#submit").removeClass("disabled");
 
                         }
 
@@ -441,19 +425,19 @@
 
                     if (keysRes === "-1") {
                         alert('图片格式不正确');
-                        $("#submit").removeClass("disabled");
+                        hideloading();
                         return false;
                     } else if (keysRes === "-2") {
                         alert('上传异常');
-                        $("#submit").removeClass("disabled");
+                        hideloading();
                         return false;
                     } else if (keysRes === "-3") {
+                        hideloading();
                         alert('文件大小超出');
-                        $("#submit").removeClass("disabled");
                         return false;
                     } else if (keysRes === "-4") {
+                        hideloading();
                         alert('请上传3-9张图片');
-                        $("#submit").removeClass("disabled");
                         return false;
                     }
 
@@ -467,16 +451,14 @@
                                 });
                             }
                             alert("修改成功");
-                            $("#submit").removeClass("disabled");
                             goList();
                         } else {
                             alert("修改失败:" + result.errmsg);
-                            $("#submit").removeClass("disabled");
                         }
                     });
                 }
             }, null, 9, 3);
-        }, 3000);
+        }, 1000);
         return false;
     }
 
@@ -518,10 +500,10 @@
         <div>
             <form class="form-horizontal form-bordered" role="form">
                 <div class="row form-group">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>选车</label>
-                            <div class="controls col-sm-10">
+                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>选车</label>
+                            <div class="controls col-sm-11">
                                 <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
                                     <option value="0">请选择</option>
                                 </select>
@@ -534,19 +516,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
-                            <div class="controls col-sm-10">
-                                <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
-                                </select>
-                                <select id="selectcity">
-                                    <option value="0">请选择</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row form-group">
@@ -554,7 +523,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
                             <div class="controls col-sm-10">
-                                <select id="selectcolor"></select>
+                                <select id="selectcolor" style="width:100%"></select>
                             </div>
                         </div>
                     </div>
@@ -576,14 +545,24 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="txtmileage" placeholder="行驶里程" /> 万公里
+                                <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectcity">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -614,15 +593,15 @@
                         <div class="form-group">
                             <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">收购日期</label>
                             <div class="col-sm-10">
-                                <input id="txtbuydate" class="Wdate" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txtbuydate" class="Wdate form-control" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">收购价格</label>
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">收购价格(万元)</label>
                             <div class="col-sm-10">
-                                <input id="txtbuyprice" type="text" placeholder="收购价格"> 万元
+                                <input id="txtbuyprice" type="text" placeholder="收购价格" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -631,9 +610,9 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>待售价格</label>
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>待售价格(万元)</label>
                             <div class="col-sm-10">
-                                <input id="txtsoldyprice" type="text" placeholder="待售价格"> 万元
+                                <input id="txtsoldyprice" type="text" placeholder="待售价格" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -641,7 +620,7 @@
                         <div class="form-group">
                             <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
                             <div class="col-sm-10">
-                                <input id="txtckyear_date" class="Wdate" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txtckyear_date" class="Wdate form-control" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
@@ -652,7 +631,7 @@
                         <div class="form-group">
                             <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
                             <div class="col-sm-10">
-                                <input id="txtaudit_date" class="Wdate" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txtaudit_date" class="Wdate form-control" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
@@ -660,7 +639,7 @@
                         <div class="form-group">
                             <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
                             <div class="col-sm-10">
-                                <input id="txttlci_date" class="Wdate" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
@@ -670,7 +649,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
-                            <div class="col-sm-10 rd">
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
                                 <input type="radio" name="radioisproblem" id="rYes" value="1" />
                                 <label for="rYes">是</label>
                                 <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
@@ -681,7 +660,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
-                            <div class="col-sm-10 rd">
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
                                 <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
                                 <label for="radioistain1">是</label>
                                 <input type="radio" name="radioistain" id="radioistain2" value="0" />
@@ -694,9 +673,9 @@
                 <div class="row form-group">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="caresc" class="col-sm-1 control-label no-padding-right">备注</label>
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right">详细信息</label>
                             <div class="col-sm-11">
-                                <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                                <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
                             </div>
                         </div>
                     </div>

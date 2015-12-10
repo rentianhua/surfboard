@@ -662,5 +662,16 @@ namespace CCN.Modules.Rewards.BusinessService
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CouponCodeListModel> GetCouponCode(CodeQueryModel query)
+        {
+            return BusinessComponent.GetCouponCode(query);
+        }
+
     }
 }

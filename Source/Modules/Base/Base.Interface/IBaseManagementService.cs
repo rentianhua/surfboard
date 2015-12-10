@@ -104,7 +104,7 @@ namespace CCN.Modules.Base.Interface
         /// <param name="typekey">代码类型key</param>
         /// <returns></returns>
         JResult GetCodeByTypeKey(string typekey);
-      
+
         #endregion
 
         #region 验证码
@@ -309,6 +309,9 @@ namespace CCN.Modules.Base.Interface
         #endregion
 
         #region 获取系统后台基础信息
+
+        #region 用户管理
+
         /// <summary>
         /// 获取登录人信息
         /// </summary>
@@ -332,11 +335,156 @@ namespace CCN.Modules.Base.Interface
         JResult AddUser(BaseUserModel model);
 
         /// <summary>
+        /// 修改用户信息 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateUser(BaseUserModel model);
+
+        /// <summary>
+        /// 更新用户状态 
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateUserStatus(string innerid, int status);
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetUserInfoByID(string innerid);
+
+        /// <summary>
+        /// 获取用户对应权限
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        JResult GetRoleByUerid(string userid);
+
+        /// <summary>
+        /// 获取用户对应菜单
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        JResult GetMenuByUerid(string userid);
+
+        #endregion
+
+        #region 角色管理
+
+        /// <summary>
         /// 获取角色列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
         BasePageList<BaseRoleViewModel> GetRoleList(BaseRoleQueryModel query);
+
+        /// <summary>
+        /// 获取所有角色
+        /// </summary>
+        /// <returns></returns>
+        JResult GetAllRole(BaseRoleModel model);
+
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddRole(BaseRoleModel model);
+
+        /// <summary>
+        /// 修改角色信息 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateRole(BaseRoleModel model);
+
+        /// <summary>
+        /// 更新用户状态 
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="isenabled"></param>
+        /// <returns></returns>
+        JResult UpdateRoleStatus(string innerid, int isenabled);
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetRoleInfoByID(string innerid);
+
         #endregion
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<MenuViewMode> GetMenuList(MenuQueryModel query);
+
+        /// <summary>
+        /// 获取所有菜单
+        /// </summary>
+        /// <returns></returns>
+        JResult GetAllMenu(BaseMenuModel model);
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddMenu(BaseMenuModel model);
+
+        /// <summary>
+        /// 更新菜单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateMenu(BaseMenuModel model);
+
+        /// <summary>
+        /// 删除菜单（物理删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteMenu(string innerid);
+
+        /// <summary>
+        /// 获取菜单详细信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetMenuInfo(string innerid);
+
+        /// <summary>
+        /// 给角色赋相应的权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddRoleMenu(BaseRoleMenuModel model);
+
+        /// <summary>
+        /// 保存职员对应角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddUserRole(BaseRoleUserModel model);
+
+        /// <summary>
+        /// 获取角色对应所有的菜单
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
+        JResult GetRoleToMenu(string roleid);
+
+        #endregion
+
+        #endregion
+
     }
 }
