@@ -986,6 +986,7 @@
     <Content Include="Plugins\zTree_v3\demo\en\asyncData\getNodes.php" />
     <Content Include="Plugins\zTree_v3\demo\en\asyncData\getNodesForBigData.php" />
     <Content Include="Plugins\zTree_v3\README.md" />
+    <Content Include="Areas\Rewards\Views\Rewards\ShopView.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

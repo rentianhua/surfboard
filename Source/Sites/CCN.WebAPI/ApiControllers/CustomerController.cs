@@ -254,6 +254,18 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLoginByOpenid(openid);
         }
+        
+        /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        [Route("IsCustByOpenid")]
+        [HttpGet]
+        public JResult IsCustByOpenid(string openid)
+        {
+            return _custservice.IsCustByOpenid(openid);
+        }
 
         /// <summary>
         /// 获取会员详情

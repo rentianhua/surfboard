@@ -148,6 +148,21 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 已售数量
         /// </summary>
         public int SoldedNum { get; set; }
+
+        /// <summary>
+        /// 商户所在区
+        /// </summary>
+        public string ShopArea { get; set; }
+
+        /// <summary>
+        /// 商户地址
+        /// </summary>
+        public string ShopAddress { get; set; }
+
+        /// <summary>
+        /// 商户名称
+        /// </summary>
+        public string Shopname { get; set; }
     }
 
     /// <summary>

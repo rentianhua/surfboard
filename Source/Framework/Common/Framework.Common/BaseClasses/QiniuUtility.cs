@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using Cedar.Core.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Qiniu.Conf;
 using Qiniu.IO;
 using Qiniu.IO.Resumable;
@@ -44,6 +48,7 @@ namespace Cedar.Framework.Common.BaseClasses
             var ret = client.Put(upToken, key, stream, extra);
             if (ret != null)
             {
+                LoggerFactories.CreateLogger().Write("上传图片:" + JsonConvert.SerializeObject(ret), TraceEventType.Warning);
                 return ret.key;
             }
             return "";

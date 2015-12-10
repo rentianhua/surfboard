@@ -27,6 +27,7 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.product_name == null ? "" : val.product_name) + "</td>";
             str += "<td>" + val.product_count + "</td>";
+            str += "<td>" + val.order_total_price + "</td>";
             str += "<td>" + (val.custname == null ? "" : val.custname) + "</td>";
             str += "<td>" + (val.mobile == null ? "" : val.mobile) + "</td>";
             str += "<td>" + val.resultdesc + "[" + val.result + "]</td>";
@@ -104,6 +105,7 @@
                 <th>序号</th>
                 <th>商品名称</th>
                 <th>购买数量</th>
+                <th>已支付金额(分)</th>
                 <th>购买会员</th>
                 <th>会员手机号</th>
                 <th>购买情况</th>

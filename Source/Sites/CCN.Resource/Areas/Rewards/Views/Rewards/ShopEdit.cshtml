@@ -77,13 +77,15 @@
                 var obj = data.errmsg;
                 $("#shopname").val(obj.Shopname);
                 $("#shopcode").html(obj.Shopcode);
-                $("#password").val(obj.Password);//.prop("disabled", true);
+                $("#password").val("******").prop("disabled", true);
                 $("#telephone").val(obj.Telephone);                
                 $("#email").val(obj.Email);
                 $("#area").val(obj.Area);
                 $("#address").val(obj.Address);
                 $("#qq").val(obj.QQ);
                 $("#signature").val(obj.Signature);
+
+                $("#logoimg").attr("src", getQiniuUrl(obj.Headportrait));
 
                 $("#selectprov").selectVal(obj.Provid);
 
@@ -106,11 +108,28 @@
             Area: $("#area").val(),
             Address: $("#address").val(),
             Signature: $("#signature").val(),
-            QQ: $("#qq").val()
+            QQ: $("#qq").val(),
+            Headportrait: ""
         };
 
         if (json.Shopname === "") {
             alert('请输入标题');
+            return false;
+        }
+
+        var result;
+        uploadfile("logourl", 1024 * 2, "", "card_logo", function (res) {
+            result = res;
+        });
+
+        if (result === "-1") {
+            alert('图片格式不正确');
+            return false;
+        } else if (result === "-2") {
+            alert('上传异常');
+            return false;
+        } else if (result === "-3") {
+            alert('文件大小超出');
             return false;
         }
 
@@ -121,13 +140,26 @@
                 return false;
             }
 
+            if (result === "0") {
+                alert('请上传图片');
+                return false;
+            }
+
+            json.Headportrait = result;
+
             $.post("/api/Rewards/AddShop", json, function(result) {
                 var str = result.errcode === 0 ? "添加成功" : "添加失败";
                 alert(str);
                 ToList();
             });
         } else {
-            json.Password = "";  //修改时不能修改密码
+
+            if (result === "0") {
+                json.Headportrait = null;
+            } else {
+                json.Headportrait = result;
+            }
+
             json.Innerid = id;
             $.ajax({
                 url: '/api/Rewards/UpdateShop',
@@ -216,7 +248,7 @@
                 </div>
 
                 <div class="row form-group">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-1 control-label no-padding-right">所在地:</label>
                             <div class="controls col-sm-11">
@@ -232,14 +264,18 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-
+                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>图片</label>
+                        <div class="controls col-sm-10">
+                            <input type="file" id="logourl" />
+                            <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
+                        </div>
                     </div>
                 </div>
 
                 <div class="row form-group">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="codetype" class="col-sm-1 control-label no-padding-right">个人签名:</label>
+                            <label for="signature" class="col-sm-1 control-label no-padding-right">个人签名:</label>
                             <div class="col-sm-11">
                                 <textarea id="signature" maxlength="200" rows="5" cols="150" placeholder="个人签名"></textarea>
                             </div>

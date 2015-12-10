@@ -80,6 +80,17 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult IsCustByOpenid(string openid)
+        {
+            return BusinessComponent.IsCustByOpenid(openid);
+        }
+
+
+        /// <summary>
         /// 获取会员详情
         /// </summary>
         /// <param name="innerid">会员id</param>

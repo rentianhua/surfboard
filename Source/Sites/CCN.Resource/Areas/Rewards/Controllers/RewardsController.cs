@@ -54,6 +54,17 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         }
 
         /// <summary>
+        /// 商铺详情
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        
+
+        /// <summary>
         /// 商铺职员列表
         /// </summary>
         /// <returns></returns>

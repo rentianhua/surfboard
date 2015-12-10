@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessEntity;
@@ -19,7 +20,6 @@ namespace CCN.Modules.Rewards.BusinessComponent
     /// </summary>
     public class RewardsBC: BusinessComponentBase<RewardsDataAccess>
     {
-
         /// <summary>
         /// </summary>
         /// <param name="da"></param>
@@ -672,7 +672,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
                     var stream = BarCodeUtility.BitmapToStream(bitmap);
                     //上传图片到七牛云
                     var qinniu = new QiniuUtility();
-                    var qrcode = qinniu.Put(stream, "", filename);
+                    var qrcode = qinniu.Put(stream, "", filename) ?? Path.GetFileName(filename);
                     stream.Dispose();
                     codeList.Add(new CouponCodeModel
                     {
@@ -697,6 +697,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 ListCode = codeList
             };
 
+            sendModel.Sourceid = 1;//购买
             var result = DataAccess.CouponToCustomer(sendModel);
 
             Task.Run(() =>
@@ -898,6 +899,10 @@ namespace CCN.Modules.Rewards.BusinessComponent
         public JResult GetShopById(string innerid)
         {
             var model = DataAccess.GetShopById(innerid);
+            if (model != null)
+            {
+                model.Password = null;
+            }
             return JResult._jResult(model);
         }
 
@@ -997,7 +1002,21 @@ namespace CCN.Modules.Rewards.BusinessComponent
         {
             model.Createdtime = null;
             model.Modifiedtime = DateTime.Now;
+            model.Password = null;
             var result = DataAccess.UpdateShop(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult UpdateShopPassword(string innerid, string password)
+        {
+            password = Encryptor.EncryptAes(password);
+            var result = DataAccess.UpdateShopPassword(innerid, password);
             return JResult._jResult(result);
         }
 

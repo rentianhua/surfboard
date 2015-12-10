@@ -337,6 +337,12 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult SendVerification(BaseVerification model)
         {
             var jResult = new JResult();
+            if (string.IsNullOrWhiteSpace(model?.Target))
+            {
+                jResult.errcode = 402;
+                jResult.errmsg = "参数不完整";
+                return jResult;
+            }
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
             model.Content = GetVerifiByType(model.UType, model.Vcode, model.Valid);

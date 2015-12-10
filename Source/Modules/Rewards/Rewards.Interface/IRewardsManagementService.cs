@@ -271,6 +271,14 @@ namespace CCN.Modules.Rewards.Interface
         JResult UpdateShopStatus(string innerid, int status);
 
         /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        JResult UpdateShopPassword(string innerid, string password);
+
+        /// <summary>
         /// 删除商户
         /// </summary>
         /// <returns></returns>

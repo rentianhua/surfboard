@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
 using Cedar.Core.ApplicationContexts;
+using Cedar.Core.EntLib.Logging;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
@@ -295,6 +298,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
+            LoggerFactories.CreateLogger().Write("添加车辆",TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
             model.createdtime = DateTime.Now;
