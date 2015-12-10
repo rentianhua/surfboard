@@ -175,7 +175,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="typekey"></param>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public BaseCodeTypeModel GetCodeTypeByTypeKey(string typekey,string innerid)
+        public BaseCodeTypeModel GetCodeTypeByTypeKey(string typekey, string innerid)
         {
             //：：更新验证：/ 启用中的，根据typekey，查询语句，进行判断
             string where = " isenabled=1 and typekey='" + typekey + "'";
@@ -1114,6 +1114,7 @@ namespace CCN.Modules.Base.DataAccess
 
         #region 获取系统后台基础信息
 
+        #region 用户管理
         /// <summary>
         /// 获取登录人信息
         /// </summary>
@@ -1157,16 +1158,16 @@ namespace CCN.Modules.Base.DataAccess
         }
 
         /// <summary>
-        /// 添加用户信息
+        /// 添加用户信息 
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         public int AddUser(BaseUserModel model)
         {
             const string sql = @"INSERT INTO `sys_user`
-                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`)
+                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid)
                                 VALUES
-                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now());";
+                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -1183,6 +1184,106 @@ namespace CCN.Modules.Base.DataAccess
                 }
             }
         }
+
+        /// <summary>
+        /// 编辑用户信息  
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateUser(BaseUserModel model)
+        {
+            var sql = new StringBuilder("update `sys_user` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 更新用户状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateUserStatus(string innerid,int status)
+        {
+            const string sql = @"update `sys_user` set status=@status where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid , status = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseUserModel GetUserInfoByID(string innerid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat("select * from sys_user where innerid=@innerid; ", innerid);
+            try
+            {
+                var usermodel = Helper.Query<BaseUserModel>(sql.ToString(), new { innerid = innerid }).FirstOrDefault();
+                return usermodel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取用户对应权限
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseRoleUserModel> GetRoleByUerid(string userid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat("select * from sys_role_user where userid='{0}';", userid);
+            var menuList = Helper.Query<BaseRoleUserModel>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 获取用户对应菜单
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseMenuModel> GetMenuByUerid(string userid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select t4.* from (select * from sys_user where innerid='{0}') as t1
+                                inner join sys_role_user as t2 on t2.userid = t1.innerid
+                                inner join sys_role_menu as t3 on t3.roleid = t2.roleid
+                                inner join sys_menu as t4 on t4.innerid = t3.menuid; ", userid);
+            var menuList = Helper.Query<BaseMenuModel>(sql.ToString());
+            return menuList;
+        }
+        #endregion
+
+        #region 角色管理
 
         /// <summary>
         /// 获取角色列表
@@ -1205,6 +1306,332 @@ namespace CCN.Modules.Base.DataAccess
             var list = Helper.ExecutePaging<BaseRoleViewModel>(model, query.Echo);
             return list;
         }
+
+        /// <summary>
+        /// 获取所有角色
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseRoleModel> GetAllRole(BaseRoleModel model)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"select * from sys_role where isenabled=1 ;");
+            var menuList = Helper.Query<BaseRoleModel>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 添加角色信息 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddRole(BaseRoleModel model)
+        {
+            const string sql = @"INSERT INTO `sys_role`
+                                (`innerid`, `name`, `remark`, `isenabled`)
+                                VALUES
+                                (uuid(), @name, @remark, 1);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 编辑角色信息  
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateRole(BaseRoleModel model)
+        {
+            var sql = new StringBuilder("update `sys_role` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 更新角色状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="isenabled"></param>
+        /// <returns></returns>
+        public int UpdateRoleStatus(string innerid, int isenabled)
+        {
+            const string sql = @"update `sys_role` set isenabled=@isenabled where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid, isenabled = isenabled }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseRoleModel GetRoleInfoByID(string innerid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat("select * from sys_role where innerid=@innerid; ", innerid);
+            try
+            {
+                var usermodel = Helper.Query<BaseRoleModel>(sql.ToString(), new { innerid = innerid }).FirstOrDefault();
+                return usermodel;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<MenuViewMode> GetMenuList(MenuQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"sys_menu ";
+            const string fields = "innerid, ifnull(code,'') as code,ifnull(name,'') as name, ifnull(url,'') as url, sort, parentid, level, openmode, isenabled, ifnull(remark,'') as remark, createdtime, modifiedtime, icon, submenu";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " level asc " : query.Order;
+            //  var groupField = string.IsNullOrWhiteSpace(query.Group) ? " parentid " : query.Group; ;
+            var sqlWhere = new StringBuilder("1=1");
+            //菜单名称
+            if (!string.IsNullOrWhiteSpace(query.name))
+            {
+                sqlWhere.AppendFormat(" and name like '%{0}%' ", query.name);
+            }
+            //层级
+            if (query.level != null)
+            {
+                sqlWhere.AppendFormat(" and level = {0} ", query.level);
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<MenuViewMode>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取所有菜单
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MenuViewMode> GetAllMenu(BaseMenuModel model)
+        {
+            StringBuilder sqlwhere = new StringBuilder();
+            //层级
+            if (model.level != null)
+            {
+                sqlwhere.AppendFormat(" and level ={0} ", model.level);
+            }
+            //innerid
+            if (!string.IsNullOrWhiteSpace(model.innerid))
+            {
+                sqlwhere.AppendFormat(" and innerid ='{0}' ", model.innerid);
+            }
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select innerid, ifnull(code,'') as code,ifnull(name,'') as name, ifnull(url,'') as url, sort, parentid, level, openmode, isenabled, ifnull(remark,'') as remark, createdtime, modifiedtime, 
+                            icon, submenu from sys_menu where isenabled=1 {0} order by modifiedtime desc ;", sqlwhere.ToString());
+
+
+            var menuList = Helper.Query<MenuViewMode>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddMenu(BaseMenuModel model)
+        {
+            const string sql = @"INSERT INTO `sys_menu`
+                                (`innerid`, `code`, `name`, `url`, `sort`, `parentid`, `level`, `openmode`, `isenabled`, `remark`, `createdtime`, `modifiedtime`, `icon`, `submenu`)
+                                VALUES
+                                (uuid(), @code, @name, @url, @sort, @parentid, @level, @openmode, 1, @remark, now(), now(), @icon, @submenu);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新菜单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateMenu(BaseMenuModel model)
+        {
+            var sql = new StringBuilder("update `sys_menu` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除菜单（物理删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteMenu(string innerid)
+        {
+            const string sql = @"delete from sys_menu where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, new { innerid = innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取菜单详细信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseMenuModel GetMenuInfo(string innerid)
+        {
+            var menuIfo = GetAllMenu(new BaseMenuModel() { innerid = innerid }).FirstOrDefault();
+            return menuIfo;
+        }
+
+        /// <summary>
+        /// 给角色赋相应的权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddRoleMenu(BaseRoleMenuModel model)
+        {
+            //删除角色对应数据
+            const string sql = @"delete from sys_role_menu where roleid=@roleid;";
+            var menuids = model.menuid.TrimEnd(',').Split(',');
+            string sqlAdd = string.Empty;
+            foreach (var menuid in menuids)
+            {
+                sqlAdd = sqlAdd + "INSERT INTO `sys_role_menu` (`innerid`,`roleid`,`menuid`) VALUES (uuid(),'" + model.roleid + "','" + menuid + "');";
+            }
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { roleid = model.roleid }, tran);
+                    conn.Execute(sqlAdd, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存职员对应角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddUserRole(BaseRoleUserModel model)
+        {
+            //删除角色对应数据
+            const string sql = @"delete from sys_role_user where userid=@userid;";
+            var roleids = model.roleid.TrimEnd(',').Split(',');
+            string sqlAdd = string.Empty;
+            foreach (var roleid in roleids)
+            {
+                sqlAdd = sqlAdd + "INSERT INTO `sys_role_user` (`innerid`,`roleid`,`userid`) VALUES (uuid(),'" + roleid + "','" + model.userid + "');";
+            }
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { userid = model.userid }, tran);
+                    conn.Execute(sqlAdd, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取角色对应所有的菜单
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseRoleMenuModel> GetRoleToMenu(string roleid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select `innerid`,`roleid`,`menuid` from sys_role_menu where roleid= '{0}';", roleid);
+
+            var menuList = Helper.Query<BaseRoleMenuModel>(sql.ToString());
+            return menuList;
+        }
+
+
+        #endregion
 
         #endregion
     }

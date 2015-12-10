@@ -29,7 +29,7 @@
 
     <MenuGroup name="基础模块" icon="menu-icon fa fa-desktop" submenu="true">
       <MenuArray>
-        <Menu name="菜单列表" url="/Customer/Customer/CustomerList" info="菜单列表" permission="" submenu="false"/>
+        <Menu name="菜单列表" url="/System/System/MenuList" info="菜单列表" permission="" submenu="false"/>
         <Menu name="系统管理" url="" info="系统管理" permission="" submenu="true">
           <MenuSubArr>
             <MenuSub name="用户列表" url="/System/System/SysUserList" info="用户列表" permission="" icon="menu-icon fa fa-rocket" />

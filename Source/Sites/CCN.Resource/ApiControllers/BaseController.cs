@@ -209,7 +209,7 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.GetCodeByTypeKey(typekey);
         }
-        
+
         #endregion
 
         #region 验证码
@@ -616,7 +616,7 @@ namespace CCN.Resource.ApiControllers
             return _baseservice.UpdateCarModel(model);
         }
         #endregion
-        
+
         /// <summary>
         ///     上传文件
         /// </summary>
@@ -634,11 +634,11 @@ namespace CCN.Resource.ApiControllers
             try
             {
                 var keys = "";
-                for (var i = 0;i < files.Count; i++)
+                for (var i = 0; i < files.Count; i++)
                 {
                     var filename = string.Concat(type + "_", DateTime.Now.ToString("yyyyMMddHHmmssfff"), ".jpg");
                     var filepath = QiniuUtility.GetFilePath(filename);
-                    
+
                     files[i].SaveAs(filepath);
 
                     //上传图片到七牛云
@@ -665,6 +665,8 @@ namespace CCN.Resource.ApiControllers
 
         #region 获取系统后台基础信息
 
+        #region 用户管理
+
         /// <summary>
         /// 获取用户列表
         /// </summary>
@@ -690,6 +692,70 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 修改用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateUser")]
+        [HttpPost]
+        public JResult UpdateUser([FromBody]BaseUserModel model)
+        {
+            return _baseservice.UpdateUser(model);
+        }
+
+        /// <summary>
+        /// 更新用户状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("UpdateUserStatus")]
+        [HttpPost]
+        public JResult UpdateUserStatus(string innerid,int status)
+        {
+            return _baseservice.UpdateUserStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetUserInfoByID")]
+        [HttpGet]
+        public JResult GetUserInfoByID(string innerid)
+        {
+            return _baseservice.GetUserInfoByID(innerid);
+        }
+
+        /// <summary>
+        /// 获取用户对应权限
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [Route("GetRoleByUerid")]
+        [HttpGet]
+        public JResult GetRoleByUerid(string userid)
+        {
+            return _baseservice.GetRoleByUerid(userid);
+        }
+
+        /// <summary>
+        /// 获取用户对应菜单
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [Route("GetMenuByUerid")]
+        [HttpGet]
+        public JResult GetMenuByUerid(string userid)
+        {
+            return _baseservice.GetMenuByUerid(userid);
+        }
+
+        #endregion
+
+        #region 角色管理
+
+        /// <summary>
         /// 获取角色列表
         /// </summary>
         /// <param name="query"></param>
@@ -700,6 +766,179 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.GetRoleList(query);
         }
+
+        /// <summary>
+        /// 获取所有角色
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetAllRole")]
+        [HttpPost]
+        public JResult GetAllRole(BaseRoleModel model)
+        {
+            return _baseservice.GetAllRole(model);
+        }
+
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddRole")]
+        [HttpPost]
+        public JResult AddRole([FromBody]BaseRoleModel model)
+        {
+            return _baseservice.AddRole(model);
+        }
+
+        /// <summary>
+        /// 修改角色信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateRole")]
+        [HttpPost]
+        public JResult UpdateRole([FromBody]BaseRoleModel model)
+        {
+            return _baseservice.UpdateRole(model);
+        }
+
+        /// <summary>
+        /// 更新角色状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("UpdateRoleStatus")]
+        [HttpPost]
+        public JResult UpdateRoleStatus(string innerid, int isenabled)
+        {
+            return _baseservice.UpdateRoleStatus(innerid, isenabled);
+        }
+
+        /// <summary>
+        /// 根据ID获取角色信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetRoleInfoByID")]
+        [HttpGet]
+        public JResult GetRoleInfoByID(string innerid)
+        {
+            return _baseservice.GetRoleInfoByID(innerid);
+        }
+
+        #endregion
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetMenuList")]
+        [HttpPost]
+        public BasePageList<MenuViewMode> GetMenuList(MenuQueryModel query)
+        {
+            return _baseservice.GetMenuList(query);
+        }
+
+        /// <summary>
+        /// 获取所有菜单
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetAllMenu")]
+        [HttpPost]
+        public JResult GetAllMenu(BaseMenuModel model)
+        {
+            return _baseservice.GetAllMenu(model);
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddMenu")]
+        [HttpPost]
+        public JResult AddMenu(BaseMenuModel model)
+        {
+            return _baseservice.AddMenu(model);
+        }
+
+        /// <summary>
+        /// 更新菜单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateMenu")]
+        [HttpPost]
+        public JResult UpdateMenu(BaseMenuModel model)
+        {
+            return _baseservice.UpdateMenu(model);
+        }
+
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteMenu")]
+        [HttpGet]
+        public JResult DeleteMenu(string innerid)
+        {
+            return _baseservice.DeleteMenu(innerid);
+        }
+
+        /// <summary>
+        /// 获取菜单详细信息(info)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("GetMenuInfo")]
+        [HttpGet]
+        public JResult GetMenuInfo(string id)
+        {
+            return _baseservice.GetMenuInfo(id);
+        }
+
+        /// <summary>
+        /// 给角色赋相应的权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddRoleMenu")]
+        [HttpPost]
+        public JResult AddRoleMenu(BaseRoleMenuModel model)
+        {
+            return _baseservice.AddRoleMenu(model);
+        }
+
+        /// <summary>
+        /// 保存职员对应角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddUserRole")]
+        [HttpPost]
+        public JResult AddUserRole(BaseRoleUserModel model)
+        {
+            return _baseservice.AddUserRole(model);
+        }
+
+        /// <summary>
+        /// 获取角色对应所有的菜单
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
+        [Route("GetRoleToMenu")]
+        [HttpPost]
+        public JResult GetRoleToMenu(string roleid)
+        {
+            return _baseservice.GetRoleToMenu(roleid);
+        }
+
+        #endregion
+
         #endregion
     }
 }
