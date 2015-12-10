@@ -208,6 +208,7 @@
     <Folder Include="Areas\Customer\Models\" />
     <Folder Include="Areas\Customer\Views\Shared\" />
     <Folder Include="Areas\Rewards\Models\" />
+    <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Areas\System\Models\" />
     <Folder Include="Areas\System\Views\Shared\" />
     <Folder Include="Models\" />
