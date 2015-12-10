@@ -9,7 +9,7 @@
     $(function () {
         Init();
         InitRoleBox();
-        
+
     });
 
     //初始化基本信息
@@ -78,7 +78,7 @@
         };
         if (id === "") {
             $.post("/api/Base/AddUser", json, function (result) {
-                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                var str = result.errcode === 0 ? "添加成功" : result.errmsg;
                 alert(str);
                 getBodyHtml('mainbody', '/system/system/SysUserList');
             });
@@ -91,7 +91,7 @@
                 data: json,
                 async: false,
                 success: function (result) {
-                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    var str = result.errcode === 0 ? "更新成功" : result.errmsg;
                     alert(str);
                     getBodyHtml('mainbody', '/system/system/SysUserList');
                 }
@@ -134,8 +134,7 @@
     }
 
     //获取角色信息
-    function GetRole()
-    {
+    function GetRole() {
         $.ajax({
             url: '/api/Base/GetRoleByUerid?userid=' + id,
             type: 'get',
@@ -149,9 +148,8 @@
                 var data = result.errmsg;
                 $.each(data, function (key, val) {
                     $("input[data-type='rolebox']").each(function () {
-                        if (this.value==val.roleid)
-                        {
-                            $(this).prop("checked","checked");
+                        if (this.value == val.roleid) {
+                            $(this).prop("checked", "checked");
                         }
                     });
                 });

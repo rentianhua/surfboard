@@ -911,9 +911,16 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult AddUser(BaseUserModel model)
         {
-            //验证用户是否存在
-            //待添加
-
+            //根据登入名（和邮箱）验证用户是否存在
+            var userinfo = DataAccess.GetUserInfoByLoginName(model.loginname);
+            if (userinfo != null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "用户名已存在，请更换用户名！"
+                };
+            }
 
             var result = DataAccess.AddUser(model);
             return new JResult
@@ -930,9 +937,16 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult UpdateUser(BaseUserModel model)
         {
-            //验证用户是否存在
-            //待添加
-
+            //根据登入名（和邮箱）验证用户是否存在
+            var userinfo = DataAccess.GetUserInfoByidname(model.innerid, model.loginname);
+            if (userinfo != null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = "用户名已存在，请更换用户名！"
+                };
+            }
 
             var result = DataAccess.UpdateUser(model);
             return new JResult
@@ -948,7 +962,7 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <param name="innerid"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public JResult UpdateUserStatus(string innerid,int status)
+        public JResult UpdateUserStatus(string innerid, int status)
         {
             var result = DataAccess.UpdateUserStatus(innerid, status);
             return new JResult

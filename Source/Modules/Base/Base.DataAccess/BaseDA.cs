@@ -1213,7 +1213,7 @@ namespace CCN.Modules.Base.DataAccess
         /// <param name="innerid"></param>
         /// <param name="status"></param>
         /// <returns></returns>
-        public int UpdateUserStatus(string innerid,int status)
+        public int UpdateUserStatus(string innerid, int status)
         {
             const string sql = @"update `sys_user` set status=@status where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
@@ -1221,7 +1221,7 @@ namespace CCN.Modules.Base.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sql, new { innerid = innerid , status = status }, tran);
+                    conn.Execute(sql, new { innerid = innerid, status = status }, tran);
                     tran.Commit();
                     return 1;
                 }
@@ -1280,6 +1280,50 @@ namespace CCN.Modules.Base.DataAccess
                                 inner join sys_menu as t4 on t4.innerid = t3.menuid; ", userid);
             var menuList = Helper.Query<BaseMenuModel>(sql.ToString());
             return menuList;
+        }
+
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseUserModel> GetUserInfo(BaseUserModel model)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"select * from sys_user where 1=1 ;");
+            var sqlWhere = new StringBuilder();
+            //用户名
+            if (!string.IsNullOrWhiteSpace(model.loginname))
+            {
+                sqlWhere.AppendFormat(" and loginname ='{0}' ", model.loginname);
+            }
+            var menuList = Helper.Query<BaseUserModel>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 根据登入名获取用户信息
+        /// </summary>
+        /// <param name="loginname"></param>
+        /// <returns></returns>
+        public BaseUserModel GetUserInfoByLoginName(string loginname)
+        {
+            var userinfo = GetUserInfo(new BaseUserModel() { loginname = loginname }).FirstOrDefault();
+            return userinfo;
+        }
+
+        /// <summary>
+        /// 根据登入名，id获取用户信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="loginname"></param>
+        /// <returns></returns>
+        public BaseUserModel GetUserInfoByidname(string id, string loginname)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select * from sys_user where 1=1 and loginname='{0}' and innerid !='{1}';", loginname, id);
+            var userinfo = Helper.Query<BaseUserModel>(sql.ToString()).FirstOrDefault();
+            return userinfo;
         }
         #endregion
 

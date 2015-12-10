@@ -1,0 +1,219 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    $(function () {
+        Init();
+    });
+
+    //获取基本信息
+    function Init()
+    {
+        if (id === "") {
+            return;
+        }
+
+        $.get("/api/Base/GetMenuInfo?id=" + id, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#menuname").val(obj.name);
+            $("#menuicon").val(obj.icon);
+            $("#menuurl").val(obj.url);
+            $("#selectlevle").selectVal(obj.level);
+            ChangeParent(obj.level);
+            $("#remark").val(obj.submenu);
+            $("#selectparents").selectVal(obj.parentid);
+            $("#selectsub").selectVal(obj.submenu);
+            
+        });
+    }
+
+    //提交
+    function Submit() {
+        //判断是否填入菜单名称
+        if ($("#menuname").val() == "") {
+            alert("请输入菜单名！");
+            return;
+        }
+
+        var json = {
+            name: $("#menuname").val(),
+            icon: $("#menuicon").val(),
+            url: $("#menuurl").val(),
+            level: $("#selectlevle").val(),
+            parentid: $("#selectparents").val(),
+            submenu: $("#selectsub").val(),
+            remark: $("#remark").val()
+        };
+        if (id === "") {
+            $.post("/api/Base/AddMenu", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                alert(str);
+                getBodyHtml('mainbody', '/system/system/MenuList');
+            });
+        } else {
+            json.Innerid = id;
+            $.ajax({
+                url: '/api/Base/UpdateMenu',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    alert(str);
+                    getBodyHtml('mainbody', '/system/system/MenuList');
+                }
+            });
+        }
+    }
+
+    //层级级别变动，下拉框联动
+    function ChangeParent(value) {
+        if ($("#selectparents").prop("disabled")) {
+            $("#selectparents").removeAttr("disabled");
+        }
+        if ($("#selectsub").prop("disabled")) {
+            $("#selectsub").removeAttr("disabled");
+        }
+
+        if (value == "1") {
+            $("#selectparents").selectVal("1");
+            $("#selectparents").attr("disabled", "disabled");
+        }
+        else {
+            if (value == "3") {
+                $("#selectsub").selectVal("0");
+                $("#selectsub").attr("disabled", "disabled");
+            }
+            BindingParent(value - 1)
+        }
+    }
+
+    //父级菜单下拉框绑定
+    function BindingParent(level) {
+        $("#selectparents").empty();
+        $("#selectparents").append("<option value='0'>请选择</option>");
+
+        var json = {
+            level: level
+        };
+        $.ajax({
+            url: "/api/Base/GetAllMenu",
+            type: 'post',
+            datatype: 'application/json',
+            data: json,
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectparents").append("<option value='" + v.innerid + "'>" + v.name + "</option>");
+                });
+            }
+        });
+    }
+
+</script>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">菜单信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="menuname" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>菜单名称：</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="menuname" class="form-control" placeholder="菜单名称" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="menuicon" class="col-sm-2 control-label no-padding-right">菜单图标样式：</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="menuicon" class="form-control" placeholder="菜单图标样式" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="menuurl" class="col-sm-2 control-label no-padding-right">URL：</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="menuurl" class="form-control" placeholder="URL" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">层级：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectlevle" style="width: 100%;" onchange="ChangeParent(this.options[this.options.selectedIndex].value)">
+                                    <option value="1" selected>1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">父级菜单：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectparents" style="width: 100%;" disabled>
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">允许添加子菜单：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectsub" style="width: 100%;">
+                                    <option value="0">否</option>
+                                    <option value="1">是</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right">备注：</label>
+                            <div class="col-sm-11">
+                                <textarea id="remark" maxlength="200" rows="5" cols="150" style="width:100%" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit()" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/system/system/MenuList');" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

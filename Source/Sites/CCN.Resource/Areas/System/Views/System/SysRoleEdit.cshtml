@@ -12,8 +12,7 @@
     });
 
     //初始化数据
-    function Init()
-    {
+    function Init() {
         if (id == "") {
             return false;
         }
@@ -31,7 +30,7 @@
                 $("#name").val(obj.name),
                 $("#remark").val(obj.remark),
                 $("#selectstatus").selectVal(obj.isenabled)
-                
+
             }
         });
     }
@@ -51,7 +50,7 @@
 
         if (id === "") {
             $.post("/api/Base/AddRole", json, function (result) {
-                var str = result.errcode === 0 ? "添加成功" : "添加失败";
+                var str = result.errcode === 0 ? "添加成功" : result.errmsg;
                 alert(str);
                 getBodyHtml('mainbody', '/system/system/SysRoleList');
             });
@@ -64,7 +63,7 @@
                 data: json,
                 async: false,
                 success: function (result) {
-                    var str = result.errcode === 0 ? "更新成功" : "更新失败";
+                    var str = result.errcode === 0 ? "更新成功" : result.errmsg;
                     alert(str);
                     getBodyHtml('mainbody', '/system/system/SysRoleList');
                 }
