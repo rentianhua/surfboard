@@ -697,6 +697,7 @@ namespace CCN.Modules.Rewards.BusinessComponent
                 ListCode = codeList
             };
 
+            sendModel.Sourceid = 1;//购买
             var result = DataAccess.CouponToCustomer(sendModel);
 
             Task.Run(() =>
