@@ -200,16 +200,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Base\Models\" />
-    <Folder Include="Areas\Base\Views\Shared\" />
-    <Folder Include="Areas\Car\Models\" />
-    <Folder Include="Areas\Car\Views\Shared\" />
-    <Folder Include="Areas\Customer\Models\" />
-    <Folder Include="Areas\Customer\Views\Shared\" />
-    <Folder Include="Areas\DataAnalysis\Models\" />
-    <Folder Include="Areas\DataAnalysis\Views\Shared\" />
-    <Folder Include="Areas\Rewards\Models\" />
-    <Folder Include="Areas\Rewards\Views\Shared\" />
+    <Folder Include="Areas\" />
     <Folder Include="Models\" />
     <Folder Include="TempFile\" />
   </ItemGroup>
@@ -224,44 +215,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
-    <Compile Include="Areas\Base\Controllers\BaseController.cs" />
-    <Compile Include="Areas\Car\CarAreaRegistration.cs" />
-    <Compile Include="Areas\Car\Controllers\CarController.cs" />
-    <Compile Include="Areas\Customer\Controllers\CustomerController.cs" />
-    <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
-    <Compile Include="Areas\DataAnalysis\Controllers\DataAnalysisController.cs" />
-    <Compile Include="Areas\DataAnalysis\DataAnalysisAreaRegistration.cs" />
-    <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
-    <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
-    <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
-    <Compile Include="Areas\HelpPage\HelpPageAreaRegistration.cs" />
-    <Compile Include="Areas\HelpPage\HelpPageConfigurationExtensions.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\CollectionModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ComplexTypeModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\DictionaryModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumTypeModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\EnumValueDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\IModelDocumentationProvider.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\KeyValuePairModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelDescriptionGenerator.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameAttribute.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ModelNameHelper.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterAnnotation.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\ParameterDescription.cs" />
-    <Compile Include="Areas\HelpPage\ModelDescriptions\SimpleTypeModelDescription.cs" />
-    <Compile Include="Areas\HelpPage\Models\HelpPageApiModel.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleGenerator.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\HelpPageSampleKey.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\ImageSample.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\InvalidSample.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\ObjectGenerator.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
-    <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
-    <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Areas\Rewards\Controllers\RewardsController.cs" />
-    <Compile Include="Areas\Rewards\RewardsAreaRegistration.cs" />
     <Compile Include="Common\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -276,7 +229,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\loading-bars.gif" />
@@ -302,27 +254,6 @@
     <Content Include="Plugins\My97DatePicker\WdatePicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Areas\HelpPage\Views\Web.config" />
-    <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\ResourceModel.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
-    <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\Index.cshtml" />
-    <Content Include="Areas\Customer\Views\web.config" />
     <Content Include="ConfigFiles\applicationContexts.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -335,7 +266,6 @@
     <Content Include="ConfigFiles\settingSource.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Base\Views\web.config" />
     <Content Include="ConfigFiles\auditTrail.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -345,34 +275,9 @@
     <Content Include="ConfigFiles\unity.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Customer\Views\Customer\CustomerList.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\CustomerView.cshtml" />
     <Content Include="ConfigFiles\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Rewards\Views\web.config" />
-    <Content Include="Areas\Rewards\Views\Rewards\CouponList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\CouponEdit.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\CouponView.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\CustomerAdd.cshtml" />
-    <Content Include="Areas\Car\Views\web.config" />
-    <Content Include="Areas\Car\Views\Car\CarList.cshtml" />
-    <Content Include="Areas\Car\Views\Car\CarEdit.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ProductList.cshtml" />
-    <Content Include="Areas\DataAnalysis\Views\web.config" />
-    <Content Include="Areas\DataAnalysis\Views\DataAnalysis\CustGrowthList.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarBrandEdit.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarBrandList.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarBrandView.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarModelEdit.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarModelList.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarModelView.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarSeriesEdit.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarSeriesList.cshtml" />
-    <Content Include="Areas\Base\Views\Base\BaseCarSeriesView.cshtml" />
-    <Content Include="Areas\Customer\Views\Customer\CustWeChatList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ShopList.cshtml" />
-    <Content Include="Areas\Rewards\Views\Rewards\ShopEdit.cshtml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\common.js" />
@@ -393,7 +298,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Resource.Areas.Car.Controllers
 {
@@ -45,6 +46,9 @@ namespace CCN.Resource.Areas.Car.Controllers
 
             ViewBag.custid = custid;
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
+
+            ViewBag.uptoken = QiniuUtility.GetToken();
+
             return View();
         }
 

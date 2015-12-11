@@ -81,6 +81,17 @@ namespace Cedar.Framework.Common.BaseClasses
         }
 
         /// <summary>
+        ///     获取token
+        /// </summary>
+        /// <returns>key</returns>
+        public static string GetToken()
+        {
+            var policy = new PutPolicy(BUCKET);
+            var upToken = policy.Token();
+            return upToken;
+        }
+
+        /// <summary>
         /// </summary>
         /// <param name="fname"></param>
         /// <param name="bucket"></param>
