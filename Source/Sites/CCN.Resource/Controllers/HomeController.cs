@@ -33,6 +33,12 @@ namespace CCN.Resource.Controllers
             var UserInfosdfd = UserInfo;
             ViewBag.Title = "苏州车信网";
             ViewBag.UserInfo = (BaseUserModel)Session["UserInfo"];
+            ViewBag.showname = UserInfo.username;
+            if (ADMIN == UserInfo.innerid)
+            {
+                ViewBag.Admin = "1";
+            }
+
             return View();
         }
 
@@ -114,6 +120,7 @@ namespace CCN.Resource.Controllers
         {
             ViewBag.Title = "苏州车信网";
             ViewBag.UserInfo = (CustModel)Session["CustModel"];
+            ViewBag.showname = ((CustModel)Session["CustModel"]).Mobile;
             return View();
         }
 

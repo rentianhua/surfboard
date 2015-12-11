@@ -66,6 +66,18 @@
             return;
         }
 
+        //手机号验证
+        if (!checkMobie($("#mobile").val())) {
+            alert("请输入正确的手机号！");
+            return;
+        }
+        //邮箱验证
+        if ($("#email").val() != "" && checkEmial($("#email").val())) {
+            alert("请输入正确的邮箱账号！");
+            return;
+        }
+
+        //
         var json = {
             username: $("#username").val(),
             loginname: $("#loginname").val(),
@@ -123,7 +135,7 @@
         json.userid = id;
         json.roleid = strRole;
         $.post("/api/Base/AddUserRole", json, function (result) {
-            var str = result.errcode === 0 ? "添加成功" : "添加失败";
+            var str = result.errcode === 0 ? "保存成功" : "保存失败";
             if (result.errcode != 0) {
                 alert(result.errmsg);
             }
@@ -135,8 +147,7 @@
 
     //获取角色信息
     function GetRole() {
-        if(id!="")
-        {
+        if (id != "") {
             $.ajax({
                 url: '/api/Base/GetRoleByUerid?userid=' + id,
                 type: 'get',
@@ -174,7 +185,7 @@
                         <div class="form-group">
                             <label for="username" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>用户名：</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="username" class="form-control" placeholder="用户名" />
+                                <input type="text" id="username" class="form-control" placeholder="用户名" maxlength="20" />
                             </div>
                         </div>
                     </div>
@@ -182,7 +193,7 @@
                         <div class="form-group">
                             <label for="loginname" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>登录名：</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="loginname" class="form-control" placeholder="登录名" />
+                                <input type="text" id="loginname" class="form-control" placeholder="登录名" maxlength="20" />
                             </div>
                         </div>
                     </div>
@@ -192,7 +203,7 @@
                         <div class="form-group">
                             <label for="pwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>密码：</label>
                             <div class="controls col-sm-10">
-                                <input type="password" id="pwd" class="form-control" placeholder="密码" />
+                                <input type="password" id="pwd" class="form-control" placeholder="密码" maxlength="20" />
                             </div>
                         </div>
                     </div>
@@ -200,7 +211,7 @@
                         <div class="form-group">
                             <label for="pwdsure" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>确认密码：</label>
                             <div class="controls col-sm-10">
-                                <input type="password" id="pwdsure" class="form-control" placeholder="确认密码" />
+                                <input type="password" id="pwdsure" class="form-control" placeholder="确认密码" maxlength="20" />
                             </div>
                         </div>
                     </div>
@@ -231,7 +242,7 @@
                         <div class="form-group">
                             <label for="mobile" class="col-sm-2 control-label no-padding-right">手机号：</label>
                             <div class="controls col-sm-10">
-                                <input type="tel" id="mobile" class="form-control" placeholder="手机号" />
+                                <input type="tel" id="mobile" class="form-control" placeholder="手机号" maxlength="11" />
                             </div>
                         </div>
                     </div>
@@ -239,7 +250,7 @@
                         <div class="form-group">
                             <label for="telphone" class="col-sm-2 control-label no-padding-right">电话号码：</label>
                             <div class="controls col-sm-10">
-                                <input type="tel" id="telphone" class="form-control" placeholder="电话号码" />
+                                <input type="tel" id="telphone" class="form-control" placeholder="电话号码" maxlength="12" />
                             </div>
                         </div>
                     </div>
@@ -249,7 +260,7 @@
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
                             <div class="controls col-sm-10">
-                                <input type="email" id="email" class="form-control" placeholder="邮箱" />
+                                <input type="email" id="email" class="form-control" placeholder="邮箱" maxlength="45" />
                             </div>
                         </div>
                     </div>
@@ -277,7 +288,7 @@
 </div>
 <div class="widget">
     <div class="widget-header bordered-bottom bordered-palegreen">
-        <span class="widget-caption">用户信息</span>
+        <span class="widget-caption">更多信息</span>
     </div>
     <div class="widget-body">
         <div>

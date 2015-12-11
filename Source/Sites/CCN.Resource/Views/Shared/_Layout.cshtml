@@ -56,7 +56,7 @@
                                 <a class="login-area dropdown-toggle" data-toggle="dropdown">
                                     <section>
                                         @*<h2><span class="profile"><span>操作人：@ViewBag.UserInfo.username <i class="fa fa-cog"></i></span></span></h2>*@
-                                        <h2><span class="profile"><span>操作人：管理员 <i class="fa fa-cog"></i></span></span></h2>
+                                        <h2><span class="profile"><span>操作人：@ViewBag.showname <i class="fa fa-cog"></i></span></span></h2>
                                     </section>
                                 </a>
                                 <!--Login Area Dropdown-->
@@ -79,7 +79,11 @@
                                         </ul>
                                     </li>
                                     <!--选择主题结束-->
+                                    <li class="edit">
+                                        <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
+                                    </li>
                                     <li class="dropdown-footer">
+                                        <br />
                                         <a href="/home/login?type=1">
                                             退出
                                         </a>
@@ -108,7 +112,7 @@
                 </div>
                 <!-- /Page Sidebar Header -->
                 <!-- 左边菜单 开始-->
-                                @*@Html.Partial("_Menu")*@
+                @*@Html.Partial("_Menu")*@
                 @{Html.RenderAction("LeftMenu", "Home");}
                 <!-- 左边菜单 结束-->
             </div>
@@ -159,3 +163,121 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<!-- Modal -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModalLabel">
+    <div class="modal-dialog" role="document" style="margin-top:230px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="changeModalLabel">修改密码</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form" id="pwdform">
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="oldpwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>原密码：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="oldpwd" class="form-control" placeholder="原密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="newpwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>新密码：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="newpwd" class="form-control" placeholder="新密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="surepwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>再次输入：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="surepwd" class="form-control" placeholder="再次输入新密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="required" id="errshow"></label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="确定" onclick="ChangePersonal('@ViewBag.UserInfo.innerid');" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function ChangePersonal(id)
+    {
+        $("#errshow").empty();
+        var oldpwd = $("#oldpwd").val();
+        var newpwd = $("#newpwd").val();
+        var surepwd = $("#surepwd").val();
+        //判断是否都有值
+        if (oldpwd == "" || newpwd == "" || surepwd == "")
+        {
+            $("#errshow").html('填入信息不全');
+            return;
+        }
+        if (newpwd != surepwd)
+        {
+            $("#errshow").html('输入的新密码不一致，请重新输入！');
+            return;
+        }
+
+        //修改密码
+        var json = {
+            innerid: id,
+            password: newpwd
+        };
+        //验证原密码是否正确
+        $.ajax({
+            url: '/api/Base/GetUserInfoByID?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    $("#errshow").html('系统错误，请重新登入！');
+                }
+                else {
+                    if (oldpwd != data.errmsg.password) {
+                        $("#errshow").html('原密码不正确，重置密码请联系管理员！');
+                    }
+                    else {
+                        $.ajax({
+                            url: '/api/Base/UpdateUser',
+                            type: 'post',
+                            datatype: 'application/json',
+                            data: json,
+                            async: false,
+                            success: function (result) {
+                                $("#errshow").html('密码修改成功！');
+                                $('#changeModal').modal('hide');
+                                //清空数据
+                                $("#oldpwd").val('');
+                                $("#newpwd").val('');
+                                $("#surepwd").val('');
+                                $("#errshow").html('');
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+</script>

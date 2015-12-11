@@ -448,7 +448,8 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         private string NumToChanrQuarter(string quarterNum)
         {
             string strReturn = string.Empty;
-            switch (quarterNum) {
+            switch (quarterNum)
+            {
                 case "1":
                     strReturn = "一季度";
                     break;
@@ -462,7 +463,7 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
                     strReturn = "四季度";
                     break;
             }
-                
+
             return strReturn;
         }
 
@@ -577,9 +578,9 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public JResult GetDayGrowth(DateTime startTime, DateTime endTime)
+        public JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
         {
-            var list = DataAccess.GetDayGrowth(startTime, endTime);
+            var list = DataAccess.GetDayGrowth(startTime, endTime, cityid);
             if (list == null)
             {
                 return new JResult
@@ -599,9 +600,9 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        public JResult GetTotal()
+        public JResult GetTotal(string cityid)
         {
-            var model = DataAccess.GetTotal();
+            var model = DataAccess.GetTotal(cityid);
             if (model == null)
             {
                 return new JResult

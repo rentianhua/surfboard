@@ -61,5 +61,10 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// 结束时间
         /// </summary>
         public DateTime endtime { get; set; }
+
+        /// <summary>
+        /// 城市ID
+        /// </summary>
+        public string cityid  { get; set; }
     }
 }
