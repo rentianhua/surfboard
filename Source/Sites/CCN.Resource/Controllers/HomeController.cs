@@ -54,7 +54,12 @@ namespace CCN.Resource.Controllers
             //model.isenabled = 1;
             //var allmenu = (IEnumerable<BaseMenuModel>)_baseservice.GetAllMenu(model).errmsg;
             //获取该用户的菜单权限
-            var usermenu = _baseservice.GetMenuByUerid(UserInfo.innerid).errmsg;
+            var userid = "";
+            if (UserInfo != null)
+            {
+                userid = UserInfo.innerid;
+            }
+            var usermenu = _baseservice.GetMenuByUerid(userid).errmsg;
             ViewBag.menu = usermenu;
             return PartialView(usermenu);
         }
