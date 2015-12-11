@@ -176,6 +176,12 @@ namespace CCN.Modules.Base.Interface
         IEnumerable<BaseCarSeriesModel> GetCarSeries(int brandId);
 
         /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCarSeriesHotTop(int top);
+
+        /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
         /// <param name="seriesId">车系id</param>

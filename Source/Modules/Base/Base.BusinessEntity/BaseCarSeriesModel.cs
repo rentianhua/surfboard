@@ -44,6 +44,12 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 备注
         /// </summary>
         public string Remark { get; set; }
+
+        /// <summary>
+        /// 车系热度
+        /// </summary>
+        public int? Hot { get; set; }
+
         /// <summary>
         /// ID最大值
         /// </summary>

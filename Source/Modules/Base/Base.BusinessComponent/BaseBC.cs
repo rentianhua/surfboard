@@ -504,7 +504,17 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             return DataAccess.GetCarSeries(brandId);
         }
-
+        
+        /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarSeriesHotTop(int top)
+        {
+            var list = DataAccess.GetCarSeriesHotTop(top);
+            return list.Any() ? JResult._jResult(0, list) : JResult._jResult(400, "");
+        }
+        
         /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
@@ -718,6 +728,7 @@ namespace CCN.Modules.Base.BusinessComponent
             var maxid = DataAccess.GetCarSeriesMaxId();
             model.Innerid = maxid + 1;
             model.IsEnabled = 1;
+            model.Hot = 0;
             var result = DataAccess.AddCarSeries(model);
             return new JResult
             {
