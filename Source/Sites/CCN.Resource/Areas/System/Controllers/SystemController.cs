@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CCN.Resource.Main.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,7 +7,7 @@ using System.Web.Mvc;
 
 namespace CCN.Resource.Areas.System.Controllers
 {
-    public class SystemController : Controller
+    public class SystemController : DefaultController
     {
         // GET: System/System
         public ActionResult Index()
@@ -83,6 +84,11 @@ namespace CCN.Resource.Areas.System.Controllers
         /// <returns></returns>
         public ActionResult SysUserList()
         {
+            if (ADMIN.ToString().ToLower()==UserInfo.innerid.ToLower())
+            {
+                ViewBag.isadmin = 1;
+            }
+            ViewBag.adminid = ADMIN;
             return View();
         }
 
@@ -106,6 +112,11 @@ namespace CCN.Resource.Areas.System.Controllers
         /// <returns></returns>
         public ActionResult SysRoleList()
         {
+            if (ADMIN.ToString().ToLower() == UserInfo.innerid.ToLower())
+            {
+                ViewBag.isadmin = 1;
+            }
+            ViewBag.adminid = ADMIN;
             return View();
         }
 

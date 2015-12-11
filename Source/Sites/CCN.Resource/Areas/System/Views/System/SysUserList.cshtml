@@ -26,18 +26,20 @@
             str += "<td>" + val.loginname + "</td>";
             str += "<td>" + (val.mobile == null ? "" : val.mobile) + "</td>";
             str += "<td>" + (val.status === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
-            str += "<td>" +
-                 " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysUserEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
-                "<a href='javascript:;' onclick=\"UpdateUserStatus('" + val.innerid + "'," + val.status + ");\">" + (val.status === 1 ? "禁用 " : "启用 ") + "</a>" +
-                "</td>";
+            str += "<td id='" + val.innerid + "'>";
+            str += " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysUserEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
+            "<a href='javascript:;' onclick=\"UpdateUserStatus('" + val.innerid + "'," + val.status + ");\">" + (val.status === 1 ? "禁用 " : "启用 ") + "</a>" +
+            "</td>";
             str += "</tr>";
             $("#userlist tbody").append(str);
+            if ("@ViewBag.isadmin"!="1") {
+                $("#" + "@ViewBag.adminid").empty();
+            }
         });
     }
 
     //更新用户状态
-    function UpdateUserStatus(innerid, status)
-    {
+    function UpdateUserStatus(innerid, status) {
         if (!confirm("确认更新用户状态？")) {
             return;
         }

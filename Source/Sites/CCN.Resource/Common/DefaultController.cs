@@ -15,6 +15,8 @@ namespace CCN.Resource.Main.Common
         {
         }
 
+        public const string ADMIN = "d0017f1b-8f4b-11e5-87ae-000c2977415d";
+
         /// <summary>
         /// 初始化用户登录信息
         /// </summary>
