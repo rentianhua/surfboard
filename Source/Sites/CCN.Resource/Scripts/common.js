@@ -222,3 +222,19 @@ function getCookie(name) {
     else
         return null;
 }
+
+//手机号验证
+function checkMobie(mobile)
+{
+    var telReg = !!mobile.match(/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+    return telReg;
+}
+
+function checkEmial(email)
+{
+    var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+    return !reg.test(email);
+}
+
+
+
