@@ -83,7 +83,9 @@ namespace CCN.Modules.Car.BusinessComponent
                     query.Order = "a.createdtime desc";
                     break;
             }
-            
+
+            query.keyword = query.keyword.ToDbValue();
+
             var list = DataAccess.SearchCarPageListEx(query);
             return list;
         }
@@ -120,6 +122,8 @@ namespace CCN.Modules.Car.BusinessComponent
                 });
             });
 
+            query.keyword = query.keyword.ToDbValue();
+
             return list;
         }
 
@@ -146,7 +150,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 if (firstOrDefault != null)
                     model.ShareModel = firstOrDefault;
             }
-
+            query.SearchField = query.SearchField.ToDbValue();
             return list;
         }
 

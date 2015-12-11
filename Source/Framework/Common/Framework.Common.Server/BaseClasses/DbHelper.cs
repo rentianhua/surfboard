@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
 using Microsoft.Practices.Unity.Utility;
@@ -269,7 +271,7 @@ namespace Cedar.Framework.Common.Server.BaseClasses
             }
             catch (Exception ex)
             {
-                // ignored
+                LoggerFactories.CreateLogger().Write("分页存储过程异常：", TraceEventType.Error, ex);
             }
 
             return baseList;
