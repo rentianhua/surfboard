@@ -123,7 +123,7 @@
         json.userid = id;
         json.roleid = strRole;
         $.post("/api/Base/AddUserRole", json, function (result) {
-            var str = result.errcode === 0 ? "添加成功" : "添加失败";
+            var str = result.errcode === 0 ? "保存成功" : "保存失败";
             if (result.errcode != 0) {
                 alert(result.errmsg);
             }

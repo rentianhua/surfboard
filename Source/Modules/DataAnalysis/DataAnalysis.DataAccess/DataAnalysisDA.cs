@@ -1043,10 +1043,24 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        public DataAnalysisModel GetTotal()
+        public DataAnalysisModel GetTotal(string cityid)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append("select * from (select count(1) as value from cust_info) as t1,(select count(1) as value2 from car_info) as t2,(select count(1) as value4 from wechat_friend) as t3; ");
+            var strCode = string.Empty;
+            var strName = string.Empty;
+            if (!string.IsNullOrWhiteSpace(cityid))
+            {
+                strCode = "and cityid =(select code from sys_department where innerid='" + cityid + "')";
+                strName = "and city =(select name from sys_department where innerid='" + cityid + "')";
+            }
+            //sql.AppendFormat(@"select * from (
+            //            select count(1) as value from cust_info where 1=1 {0}) as t1
+            //            ,(select count(1) as value2 from car_info where 1=1 {0}) as t2
+            //            ,(select count(1) as value4 from wechat_friend where 1=1 {1}) as t3; ", strCode, strName);
+            sql.AppendFormat(@"select * from (
+                        select count(1) as value from cust_info where 1=1 {0} ) as t1
+                        ,(select count(1) as value2 from car_info where 1=1 {0} ) as t2
+                        ,(select count(1) as value4 from wechat_friend where 1=1 {1} ) as t3; ", strCode, strName);
             try
             {
                 var custModel = Helper.Query<DataAnalysisModel>(sql.ToString()).FirstOrDefault();
@@ -1063,7 +1077,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取会员/车辆增长量
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime)
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
         {
             using (var conn = Helper.GetConnection())
             {
@@ -1071,14 +1085,16 @@ namespace CCN.Modules.DataAnalysis.DataAccess
                 var obj = new
                 {
                     p_startdatetime = startTime,
-                    p_enddatetime = endTime
+                    p_enddatetime = endTime,
+                    p_cityid = cityid
                 };
 
                 var args = new DynamicParameters(obj);
                 using (var result = conn.QueryMultiple("ccnsp_daygrowth", args, commandType: CommandType.StoredProcedure))
                 {
+                    var list= result.Read<DataAnalysisModel>(); 
                     //获取结果集
-                    return result.Read<DataAnalysisModel>();
+                    return list;
                 }
 
             }

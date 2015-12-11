@@ -1,4 +1,7 @@
-﻿<div class="row">
+﻿@{
+    var UserInfo = (CCN.Modules.Base.BusinessEntity.BaseUserModel)ViewBag.UserInfo;
+}
+<div class="row">
     <div class="col-xs-12 col-md-12">
         <div class="widget">
             <div class="row form-group" style="padding-top:5px;">
@@ -22,7 +25,7 @@
             <div class="widget-header bordered-bottom bordered-yellow">
                 <span class="widget-caption">汇总数据</span>
             </div>
-            
+
             <table class="table table-bordered table-hover table-striped">
                 <tbody>
                     <tr>
@@ -81,7 +84,10 @@
 </div>
 
 <script type="text/javascript">
-
+    var cityid = "";
+    if ("@ViewBag.Admin" != "1") {
+        cityid = "@UserInfo.depid";
+    }
     $(function () {
         var myDate = new Date();
 
@@ -98,7 +104,11 @@
 
     //获取总数
     function InitTotal() {
-        $.get("/api/DataAnalysis/GetTotal", function (data) {
+        var url = "/api/DataAnalysis/GetTotal";
+        if (cityid != "") {
+            url = "/api/DataAnalysis/GetTotal?cityid=" + cityid;
+        }
+        $.get(url, function (data) {
             var obj = data.errmsg;
             $("#custtotal").html(obj.value);
             $("#cartotal").html(obj.value2);
@@ -110,7 +120,8 @@
     function QueryList() {
         var json = {
             starttime: $("#starttime").val(),
-            endtime: $("#endtime").val()
+            endtime: $("#endtime").val(),
+            cityid: cityid
         };
 
         $.post("/api/DataAnalysis/GetDayGrowth", json, function (data) {
@@ -118,8 +129,6 @@
             var str = "";
             $.each(data.errmsg, function (key, val) {
                 var myDate = new Date(val.key);
-                console.log();
-
                 str = "";
                 str += "<tr>";
                 str += "<td>" + (key + 1) + "</td>";

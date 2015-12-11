@@ -299,7 +299,11 @@ namespace CCN.Resource.ApiControllers
         [HttpPost]
         public JResult GetDayGrowth(DataQueryModel query)
         {
-            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime);
+            if (string.IsNullOrWhiteSpace(query.cityid))
+            {
+                query.cityid = "";
+            }
+            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime,query.cityid);
             return result;
         }
 
@@ -309,9 +313,9 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("GetTotal")]
         [HttpGet]
-        public JResult GetTotal()
+        public JResult GetTotal(string cityid="")
         {
-            var result = _dataanalysisservice.GetTotal();
+            var result = _dataanalysisservice.GetTotal(cityid);
             return result;
         }
 
