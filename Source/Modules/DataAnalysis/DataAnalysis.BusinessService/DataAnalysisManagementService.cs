@@ -83,7 +83,7 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         {
             return BusinessComponent.GetTradeTotalByMonth();
         }
-        
+
         #endregion
 
         #region 二手车属性
@@ -255,18 +255,18 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public JResult GetDayGrowth(DateTime startTime, DateTime endTime)
+        public JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
         {
-            return BusinessComponent.GetDayGrowth(startTime, endTime);
+            return BusinessComponent.GetDayGrowth(startTime, endTime, cityid);
         }
 
         /// <summary>
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        public JResult GetTotal()
+        public JResult GetTotal(string cityid)
         {
-            return BusinessComponent.GetTotal();
+            return BusinessComponent.GetTotal(cityid);
         }
 
 
