@@ -80,5 +80,15 @@ namespace Cedar.Framework.Common.BaseClasses
         ///     数据实体列表
         /// </summary>
         public IEnumerable<T> aaData { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public BasePageList()
+        {
+            iTotalRecords = 0;
+            iTotalDisplayRecords = 0;            
+            aaData =new List<T>();
+        }
     }
 }

@@ -38,24 +38,12 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             //如果没有输入条件 返回空
             if (string.IsNullOrWhiteSpace(query.Custname) && string.IsNullOrWhiteSpace(query.Mobile) && string.IsNullOrWhiteSpace(query.Email))
             {
-                return new BasePageList<CustViewModel>
-                {
-                    aaData = null,
-                    iTotalDisplayRecords = null,
-                    iTotalRecords = null,
-                    sEcho = null
-                };
+                return new BasePageList<CustViewModel>();
             }
             //手机号小于4位不给搜索
             if (string.IsNullOrWhiteSpace(query.Mobile) || query.Mobile.Trim().Length < 4)
             {
-                return new BasePageList<CustViewModel>
-                {
-                    aaData = null,
-                    iTotalDisplayRecords = null,
-                    iTotalRecords = null,
-                    sEcho = null
-                };
+                return new BasePageList<CustViewModel>();
             }
 
             return DataAccess.GetCustPageList(query);

@@ -86,6 +86,7 @@ namespace Cedar.Framework.Common.BaseClasses
         /// <returns>key</returns>
         public static string GetToken()
         {
+            Config.Init();
             var policy = new PutPolicy(BUCKET);
             var upToken = policy.Token();
             return upToken;

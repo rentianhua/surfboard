@@ -122,6 +122,7 @@
     <Compile Include="BaseClasses\ConfigHelper.cs" />
     <Compile Include="BaseClasses\DynamicWebService.cs" />
     <Compile Include="BaseClasses\Encryptor.cs" />
+    <Compile Include="BaseClasses\ExtesionUtilty.cs" />
     <Compile Include="BaseClasses\JResult.cs" />
     <Compile Include="BaseClasses\JuheUtility.cs" />
     <Compile Include="BaseClasses\PagingModel.cs" />
