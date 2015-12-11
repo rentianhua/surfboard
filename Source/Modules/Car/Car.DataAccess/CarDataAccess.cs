@@ -28,6 +28,124 @@ namespace CCN.Modules.Car.DataAccess
         #region 车辆基本信息
 
         /// <summary>
+        /// 全城搜车(官网页面)
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.status=1"); //在售车辆
+
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //销售价大于..
+            if (query.minprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price>={query.minprice}");
+            }
+
+            //销售价小于..
+            if (query.maxprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price<={query.maxprice}");
+            }
+
+            //上牌时间 <
+            if (query.minyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date<='{date}'");
+            }
+
+            //上牌时间 >
+            if (query.maxyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date>={date}");
+            }
+
+            //行驶里程 >
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage>='{query.minmileage}'");
+            }
+
+            //行驶里程 <
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage<='{query.maxmileage}'");
+            }
+
+            //颜色
+            if (query.colorid.HasValue)
+            {
+                sqlWhere.Append($" and a.colorid={query.colorid}");
+            }
+
+            //排量
+            if (!string.IsNullOrWhiteSpace(query.liter))
+            {
+                sqlWhere.Append($" and c3.liter='{query.liter.Trim()}'");
+            }
+
+            //变速箱类型
+            if (!string.IsNullOrWhiteSpace(query.gear))
+            {
+                sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
+            }
+
+            //关键字搜索
+            if (!string.IsNullOrWhiteSpace(query.keyword))
+            {
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+            }
+
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
         /// 全城搜车列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -245,8 +363,7 @@ namespace CCN.Modules.Car.DataAccess
                 return null;
             }
         }
-
-
+        
         /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
@@ -352,6 +469,65 @@ namespace CCN.Modules.Car.DataAccess
             var result = Helper.Query<CarInfoModel>(sql, new { innerid = id }).FirstOrDefault();
             return result;
         }
+
+        #region 感兴趣
+
+        /// <summary>
+        /// 获取感兴趣的车列表(根据车系)
+        /// </summary>
+        /// <param name="carid">当前查看的车辆id</param>
+        /// <returns></returns>
+        public IEnumerable<CarInfoListViewModel> GetInterestBySeriesList(string carid)
+        {
+            var sql = "SELECT * FROM car_info where innerid<>@carid and series_id=1 order by rand() limit 4;";
+            try
+            {
+                return Helper.Query<CarInfoListViewModel>(sql,new
+                {
+                    carid                
+                });
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取感兴趣的车列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetInterestList(CarInterestQueryModel query)
+        {
+
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a
+                                        left join base_carbrand as c1 on a.brand_id = c1.innerid
+                                        left join base_carseries as c2 on a.series_id = c2.innerid
+                                        left join base_carmodel as c3 on a.model_id = c3.innerid
+                                        left join base_city as ct on a.cityid = ct.innerid
+                                        inner join car_share as b on a.innerid = b.carid";
+            const string fields =
+                "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "b.seecount" : query.Order;
+
+            #region 查询条件
+
+            var sqlWhere = new StringBuilder("a.status=1");
+
+            sqlWhere.Append(
+                $" and a.innerid <> '{query.carid}' and(a.series_id = {query.series_id} or(a.price > {query.price - 3 ?? 0} and a.price < {query.price + 5 ?? 0}) or(register_date > '{query.regdate?.AddMonths(-6) ?? DateTime.Now}' and register_date < '{query.regdate?.AddMonths(6) ?? DateTime.Now}'))");
+
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
+        #endregion
 
         /// <summary>
         /// 添加车辆

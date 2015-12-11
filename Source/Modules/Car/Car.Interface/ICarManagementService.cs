@@ -10,7 +10,14 @@ namespace CCN.Modules.Car.Interface
     public interface ICarManagementService
     {
         #region 车辆
-
+        
+        /// <summary>
+        /// 全城搜车(官网页面)
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query);
+        
         /// <summary>
         /// 全城搜车列表
         /// </summary>
@@ -38,6 +45,17 @@ namespace CCN.Modules.Car.Interface
         /// <param name="id">车辆id</param>
         /// <returns></returns>
         JResult GetCarViewById(string id);
+
+        #region 感兴趣
+
+        /// <summary>
+        /// 获取感兴趣的车列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> GetInterestList(CarInterestQueryModel query);
+
+        #endregion
 
         /// <summary>
         /// 车辆估值（根据城市，车型，时间）

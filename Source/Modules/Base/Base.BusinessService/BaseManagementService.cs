@@ -253,6 +253,15 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarSeriesHotTop(int top)
+        {
+            return BusinessComponent.GetCarSeriesHotTop(top);
+        }
+
+        /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
         /// <param name="seriesId">车系id</param>

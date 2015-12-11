@@ -499,7 +499,7 @@ namespace CCN.Modules.Base.DataAccess
             {
                 where += $" and initial='{initial.ToUpper()}'";
             }
-            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl,hot from base_carbrand where {where} order by initial asc,brandname asc";
+            var sql = $"select innerid, brandname, initial, isenabled, remark, logurl, hot from base_carbrand where {where} order by initial asc,brandname asc";
             var brandList = Helper.Query<BaseCarBrandModel>(sql);
             return brandList;
         }
@@ -522,7 +522,18 @@ namespace CCN.Modules.Base.DataAccess
         /// <returns></returns>
         public IEnumerable<BaseCarSeriesModel> GetCarSeries(int brandId)
         {
-            var sql = $"select innerid, seriesname, seriesgroupname, brandid, isenabled, remark from base_carseries where isenabled=1 and brandid={brandId}";
+            var sql = $"select innerid, seriesname, seriesgroupname, brandid, isenabled, remark, hot from base_carseries where isenabled=1 and brandid={brandId}";
+            var seriesList = Helper.Query<BaseCarSeriesModel>(sql);
+            return seriesList;
+        }
+
+        /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarSeriesModel> GetCarSeriesHotTop(int top)
+        {
+            var sql = "select innerid, seriesname, seriesgroupname, brandid, isenabled, remark, hot from base_carseries where isenabled=1 order by hot desc,seriesname asc limit " + top;
             var seriesList = Helper.Query<BaseCarSeriesModel>(sql);
             return seriesList;
         }
@@ -550,10 +561,7 @@ namespace CCN.Modules.Base.DataAccess
             var model = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
             return model;
         }
-
-
-
-
+        
         #endregion
 
         #region 品牌信息
@@ -817,9 +825,9 @@ namespace CCN.Modules.Base.DataAccess
         public int AddCarSeries(BaseCarSeriesModel model)
         {
             const string sql = @"INSERT INTO `base_carseries`
-                                (`innerid`,`seriesname`,`seriesgroupname`,`brandid`,`isenabled`,`remark`)
+                                (`innerid`,`seriesname`,`seriesgroupname`,`brandid`,`isenabled`,`remark`,hot)
                                 VALUES
-                                (@innerid,@seriesname,@seriesgroupname,@brandid,@isenabled,@remark);";
+                                (@innerid,@seriesname,@seriesgroupname,@brandid,@isenabled,@remark,@hot);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -888,7 +896,7 @@ namespace CCN.Modules.Base.DataAccess
         public int GetCarSeriesMaxId()
         {
             int result;
-            const string sql = @"select max(base_carseries.innerid) MaxId from base_carseries;";
+            const string sql = @"select max(innerid) MaxId from base_carseries;";
             result = Helper.Execute<int>(sql);
             return result;
         }

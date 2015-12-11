@@ -36,6 +36,59 @@ namespace CCN.Modules.Car.BusinessComponent
         #region 车辆
 
         /// <summary>
+        /// 全城搜车(官网页面)
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
+
+            Task.Run(() =>
+            {
+                //保存搜车条件
+                DataAccess.SaveSearchRecord(new CarSearchRecordModel
+                {
+                    Createdtime = DateTime.Now,
+                    Custid = ApplicationContext.Current.UserId,
+                    Innerid = Guid.NewGuid().ToString(),
+                    Jsonobj = "web:" + JsonConvert.SerializeObject(query)
+                });
+            });
+
+            switch (query.Order)
+            {
+                case "1":
+                    query.Order = "a.price asc";
+                    break;
+                case "-1":
+                    query.Order = "a.price desc";
+                    break;
+                case "2":
+                    query.Order = "a.register_date desc";
+                    break;
+                case "-2":
+                    query.Order = "a.register_date asc";
+                    break;
+                case "3":
+                    query.Order = "a.mileage asc";
+                    break;
+                case "-3":
+                    query.Order = "a.mileage desc";
+                    break;
+                default:
+                    query.Order = "a.createdtime desc";
+                    break;
+            }
+            
+            var list = DataAccess.SearchCarPageListEx(query);
+            return list;
+        }
+
+        /// <summary>
         /// 全城搜车列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -63,7 +116,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     Createdtime = DateTime.Now,
                     Custid = ApplicationContext.Current.UserId,
                     Innerid = Guid.NewGuid().ToString(),
-                    Jsonobj = JsonConvert.SerializeObject(query)
+                    Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
                 });
             });
 
@@ -139,6 +192,25 @@ namespace CCN.Modules.Car.BusinessComponent
             return jResult;
         }
 
+        #region 感兴趣
+
+        /// <summary>
+        /// 获取感兴趣的车列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetInterestList(CarInterestQueryModel query)
+        {
+            if (string.IsNullOrWhiteSpace(query?.carid) || query.series_id == null || query.regdate == null || query.price == null)
+            {
+                LoggerFactories.CreateLogger().Write("获取感兴趣的车列表，参数不完整", TraceEventType.Warning);
+                return new BasePageList<CarInfoListViewModel>();
+            }
+            return DataAccess.GetInterestList(query);
+        }
+
+        #endregion
+
         /// <summary>
         /// 车辆估值（根据城市，车型，时间）
         /// </summary>
@@ -207,8 +279,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return jResult;
         }
-
-
+        
         /// <summary>
         /// 车辆估值
         /// </summary>

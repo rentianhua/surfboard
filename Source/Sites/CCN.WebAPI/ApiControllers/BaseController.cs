@@ -208,6 +208,18 @@ namespace CCN.WebAPI.ApiControllers
                 errmsg = "No Data"
             };
         }
+        
+        /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetCarSeriesHotTop")]
+        [HttpGet]
+        public JResult GetCarSeriesHotTop(int top)
+        {
+            return _baseservice.GetCarSeriesHotTop(top);
+        }
+
 
         /// <summary>
         /// 根据车系ID获取车型
