@@ -288,7 +288,6 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
-
         /// <summary>
         /// 获取日增长量 
         /// </summary>
@@ -299,7 +298,11 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult GetDayGrowth(DataQueryModel query)
         {
-            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime);
+            if (string.IsNullOrWhiteSpace(query.cityid))
+            {
+                query.cityid = "";
+            }
+            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime, query.cityid);
             return result;
         }
 
@@ -309,9 +312,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetTotal")]
         [HttpGet]
-        public JResult GetTotal()
+        public JResult GetTotal(string cityid = "")
         {
-            var result = _dataanalysisservice.GetTotal();
+            var result = _dataanalysisservice.GetTotal(cityid);
             return result;
         }
     }
