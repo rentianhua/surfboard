@@ -46,7 +46,7 @@ namespace CCN.Resource.Areas.Car.Controllers
 
             ViewBag.custid = custid;
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
-
+            new QiniuUtility();
             ViewBag.uptoken = QiniuUtility.GetToken();
 
             return View();
