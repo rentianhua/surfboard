@@ -216,7 +216,7 @@ namespace CCN.WebAPI.ApiControllers
                         LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
                         return;
                     }
-                    
+
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -260,7 +260,7 @@ namespace CCN.WebAPI.ApiControllers
                     }
 
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                    
+
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -441,7 +441,7 @@ namespace CCN.WebAPI.ApiControllers
                 }
             });
 
-            return JResult._jResult(0,"");
+            return JResult._jResult(0, "");
         }
 
         [Route("AddCarPictureKeyList")]
@@ -485,6 +485,19 @@ namespace CCN.WebAPI.ApiControllers
         public JResult ExchangePictureSort([FromBody] List<CarPictureModel> listPicture)
         {
             return _carervice.ExchangePictureSort(listPicture);
+        }
+
+        /// <summary>
+        /// 获取七牛Token值
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetUpToken")]
+        [HttpGet]
+        public JResult GetUpToken()
+        {
+            new QiniuUtility();
+            var uptoken = QiniuUtility.GetToken();
+            return JResult._jResult(0, uptoken);
         }
 
         #endregion

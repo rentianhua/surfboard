@@ -127,8 +127,7 @@ namespace CCN.Resource.ApiControllers
         [HttpGet]
         public JResult GetCouponByCode(string code)
         {
-            return null;
-            //return _rewardsservice.GetCouponByCode(code);
+            return _rewardsservice.GetCouponByCode(code);
         }
 
         /// <summary>
