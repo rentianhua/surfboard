@@ -11,7 +11,7 @@ function QiniuJsSDK() {
         qiniuUploadUrl = 'http://upload.qiniu.com';
     }
 
-    this.detectIEVersion = function() {
+    this.detectIEVersion = function () {
         var v = 4,
             div = document.createElement('div'),
             all = div.getElementsByTagName('i');
@@ -24,7 +24,7 @@ function QiniuJsSDK() {
         return v > 4 ? v : false;
     };
 
-    this.isImage = function(url) {
+    this.isImage = function (url) {
         var res, suffix = "";
         var imageSuffixes = ["png", "jpg", "jpeg", "gif", "bmp"];
         var suffixMatch = /\.([a-zA-Z0-9]+)(\?|\@|$)/;
@@ -42,7 +42,7 @@ function QiniuJsSDK() {
         return false;
     };
 
-    this.getFileExtension = function(filename) {
+    this.getFileExtension = function (filename) {
         var tempArr = filename.split(".");
         var ext;
         if (tempArr.length === 1 || (tempArr[0] === "" && tempArr.length === 2)) {
@@ -53,7 +53,7 @@ function QiniuJsSDK() {
         return ext;
     };
 
-    this.utf8_encode = function(argString) {
+    this.utf8_encode = function (argString) {
         // http://kevin.vanzonneveld.net
         // +   original by: Webtoolkit.info (http://www.webtoolkit.info/)
         // +   improved by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
@@ -122,7 +122,7 @@ function QiniuJsSDK() {
         return utftext;
     };
 
-    this.base64_encode = function(data) {
+    this.base64_encode = function (data) {
         // http://kevin.vanzonneveld.net
         // +   original by: Tyler Akins (http://rumkin.com)
         // +   improved by: Bayron Guevara
@@ -180,12 +180,12 @@ function QiniuJsSDK() {
         return enc;
     };
 
-    this.URLSafeBase64Encode = function(v) {
+    this.URLSafeBase64Encode = function (v) {
         v = this.base64_encode(v);
         return v.replace(/\//g, '_').replace(/\+/g, '-');
     };
 
-    this.createAjax = function(argument) {
+    this.createAjax = function (argument) {
         var xmlhttp = {};
         if (window.XMLHttpRequest) {
             xmlhttp = new XMLHttpRequest();
@@ -195,7 +195,7 @@ function QiniuJsSDK() {
         return xmlhttp;
     };
 
-    this.parseJSON = function(data) {
+    this.parseJSON = function (data) {
         // Attempt to parse using the native JSON parser first
         if (window.JSON && window.JSON.parse) {
             return window.JSON.parse(data);
@@ -214,7 +214,7 @@ function QiniuJsSDK() {
                 // Logic borrowed from http://json.org/json2.js
                 if (/^[\],:{}\s]*$/.test(data.replace(/\\(?:["\\\/bfnrt]|u[\da-fA-F]{4})/g, "@").replace(/"[^"\\\r\n]*"|true|false|null|-?(?:\d+\.|)\d+(?:[eE][+-]?\d+|)/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) {
 
-                    return (function() {
+                    return (function () {
                         return data;
                     })();
                 }
@@ -222,7 +222,7 @@ function QiniuJsSDK() {
         }
     };
 
-    this.trim = function(text) {
+    this.trim = function (text) {
         return text === null ? "" : text.replace(/^\s+|\s+$/g, '');
     };
 
@@ -230,7 +230,7 @@ function QiniuJsSDK() {
 
     var that = this;
 
-    this.uploader = function(op) {
+    this.uploader = function (op) {
         if (!op.domain) {
             throw 'uptoken_url or domain is required!';
         }
@@ -244,8 +244,8 @@ function QiniuJsSDK() {
         var _Error_Handler = op.init && op.init.Error;
         var _FileUploaded_Handler = op.init && op.init.FileUploaded;
 
-        op.init.Error = function() {};
-        op.init.FileUploaded = function() {};
+        op.init.Error = function () { };
+        op.init.FileUploaded = function () { };
 
         that.uptoken_url = op.uptoken_url;
         that.token = '';
@@ -259,7 +259,7 @@ function QiniuJsSDK() {
             currentTime: ''
         };
 
-        var reset_chunk_size = function() {
+        var reset_chunk_size = function () {
             var ie = that.detectIEVersion();
             var BLOCK_BITS, MAX_CHUNK_SIZE, chunk_size;
             var isSpecialSafari = (mOxie.Env.browser === "Safari" && mOxie.Env.version <= 5 && mOxie.Env.os === "Windows" && mOxie.Env.osVersion === "7") || (mOxie.Env.browser === "Safari" && mOxie.Env.os === "iOS" && mOxie.Env.osVersion === "7");
@@ -304,7 +304,7 @@ function QiniuJsSDK() {
             }
         };
 
-        var getFileKey = function(up, file, func) {
+        var getFileKey = function (up, file, func) {
             var key = '',
                 unique_names = false;
             if (!op.save_key) {
@@ -335,25 +335,25 @@ function QiniuJsSDK() {
         });
         uploader.init();
 
-        uploader.bind('FilesAdded', function(up, files) {
+        uploader.bind('FilesAdded', function (up, files) {
             var auto_start = up.getOption && up.getOption('auto_start');
             auto_start = auto_start || (up.settings && up.settings.auto_start);
             if (auto_start) {
-                plupload.each(files, function(i, file) {
+                plupload.each(files, function (i, file) {
                     up.start();
                 });
             }
             up.refresh(); // Reposition Flash/Silverlight
         });
 
-        uploader.bind('BeforeUpload', function(up, file) {
+        uploader.bind('BeforeUpload', function (up, file) {
             file.speed = file.speed || 0; // add a key named speed for file obj
             ctx = '';
-            if(op.get_new_uptoken){
+            if (op.get_new_uptoken) {
                 getUpToken();
             }
 
-            var directUpload = function(up, file, func) {
+            var directUpload = function (up, file, func) {
                 speedCalInfo.startTime = new Date().getTime();
                 var multipart_params_obj;
                 if (op.save_key) {
@@ -445,7 +445,7 @@ function QiniuJsSDK() {
             }
         });
 
-        uploader.bind('UploadProgress', function(up, file) {
+        uploader.bind('UploadProgress', function (up, file) {
             // 计算速度
 
             speedCalInfo.currentTime = new Date().getTime();
@@ -457,7 +457,7 @@ function QiniuJsSDK() {
             file.speed = (fileUploaded / timeUsed * 1000).toFixed(0) || 0; // unit: byte/s
         });
 
-        uploader.bind('ChunkUploaded', function(up, file, info) {
+        uploader.bind('ChunkUploaded', function (up, file, info) {
             var res = that.parseJSON(info.response);
 
             ctx = ctx ? ctx + ',' + res.ctx : res.ctx;
@@ -478,8 +478,8 @@ function QiniuJsSDK() {
             }));
         });
 
-        uploader.bind('Error', (function(_Error_Handler) {
-            return function(up, err) {
+        uploader.bind('Error', (function (_Error_Handler) {
+            return function (up, err) {
                 var errTip = '';
                 var file = err.file;
                 if (file) {
@@ -565,15 +565,15 @@ function QiniuJsSDK() {
             };
         })(_Error_Handler));
 
-        uploader.bind('FileUploaded', (function(_FileUploaded_Handler) {
-            return function(up, file, info) {
+        uploader.bind('FileUploaded', (function (_FileUploaded_Handler) {
+            return function (up, file, info) {
 
-                var last_step = function(up, file, info) {
+                var last_step = function (up, file, info) {
                     if (op.downtoken_url) {
                         var ajax_downtoken = that.createAjax();
                         ajax_downtoken.open('POST', op.downtoken_url, true);
                         ajax_downtoken.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                        ajax_downtoken.onreadystatechange = function() {
+                        ajax_downtoken.onreadystatechange = function () {
                             if (ajax_downtoken.readyState === 4) {
                                 if (ajax_downtoken.status === 200) {
                                     var res_downtoken;
@@ -634,7 +634,7 @@ function QiniuJsSDK() {
                     ajax.open('POST', url, true);
                     ajax.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
                     ajax.setRequestHeader('Authorization', 'UpToken ' + that.token);
-                    ajax.onreadystatechange = function() {
+                    ajax.onreadystatechange = function () {
                         if (ajax.readyState === 4) {
                             localStorage.removeItem(file.name);
                             if (ajax.status === 200) {
@@ -661,7 +661,7 @@ function QiniuJsSDK() {
         return uploader;
     };
 
-    this.getUrl = function(key) {
+    this.getUrl = function (key) {
         if (!key) {
             return false;
         }
@@ -673,7 +673,7 @@ function QiniuJsSDK() {
         return domain + key;
     };
 
-    this.imageView2 = function(op, key) {
+    this.imageView2 = function (op, key) {
         var mode = op.mode || '',
             w = op.w || '',
             h = op.h || '',
@@ -698,7 +698,7 @@ function QiniuJsSDK() {
     };
 
 
-    this.imageMogr2 = function(op, key) {
+    this.imageMogr2 = function (op, key) {
         var auto_orient = op['auto-orient'] || '',
             thumbnail = op.thumbnail || '',
             strip = op.strip || '',
@@ -728,7 +728,7 @@ function QiniuJsSDK() {
         return imageUrl;
     };
 
-    this.watermark = function(op, key) {
+    this.watermark = function (op, key) {
 
         var mode = op.mode;
         if (!mode) {
@@ -777,7 +777,7 @@ function QiniuJsSDK() {
 
     };
 
-    this.imageInfo = function(key) {
+    this.imageInfo = function (key) {
         if (!key) {
             return false;
         }
@@ -786,7 +786,7 @@ function QiniuJsSDK() {
         var info;
         var that = this;
         xhr.open('GET', url, false);
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 info = that.parseJSON(xhr.responseText);
             }
@@ -796,7 +796,7 @@ function QiniuJsSDK() {
     };
 
 
-    this.exif = function(key) {
+    this.exif = function (key) {
         if (!key) {
             return false;
         }
@@ -805,7 +805,7 @@ function QiniuJsSDK() {
         var info;
         var that = this;
         xhr.open('GET', url, false);
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 info = that.parseJSON(xhr.responseText);
             }
@@ -814,7 +814,7 @@ function QiniuJsSDK() {
         return info;
     };
 
-    this.get = function(type, key) {
+    this.get = function (type, key) {
         if (!key || !type) {
             return false;
         }
@@ -827,7 +827,7 @@ function QiniuJsSDK() {
     };
 
 
-    this.pipeline = function(arr, key) {
+    this.pipeline = function (arr, key) {
 
         var isArray = Object.prototype.toString.call(arr) === '[object Array]';
         var option, errOp, imageUrl = '';

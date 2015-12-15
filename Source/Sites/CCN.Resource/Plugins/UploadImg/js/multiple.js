@@ -3,7 +3,12 @@
 /*global FileProgress */
 /*global hljs */
 
-
+/*
+id:上传按钮
+container：容器id
+uptoken:七牛token值
+autostart：是否自动上传 true自动上传
+*/
 $(function() {
     var uploader = Qiniu.uploader({
         runtimes: 'html5,flash,html4',
@@ -15,7 +20,7 @@ $(function() {
         dragdrop: true,
         chunk_size: '4mb',
         uptoken_url: "fgdggf",
-        domain: "hgfhgfh",
+        domain: "http://7xlopw.com2.z0.glb.qiniucdn.com/",
         auto_start: true,
         init: {
             'FilesAdded': function(up, files) {
@@ -57,62 +62,6 @@ $(function() {
 
     uploader.bind('FileUploaded', function() {
         console.log('hello man,a file is uploaded');
-    });
-
-    var Q2 = new QiniuJsSDK();
-    var uploader2 = Q2.uploader({
-        runtimes: 'html5,flash,html4',
-        browse_button: 'pickfiles2',
-        container: 'container2',
-        drop_element: 'container2',
-        max_file_size: '100mb',
-        flash_swf_url: 'js/plupload/Moxie.swf',
-        dragdrop: true,
-        chunk_size: '4mb',
-        //uptoken_url: $('#uptoken_url').val(),
-        uptoken: "123",
-        domain: "456",
-        auto_start: true,
-        init: {
-            'FilesAdded': function(up, files) {
-                $('table').show();
-                $('#success').hide();
-                plupload.each(files, function(file) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    progress.setStatus("等待...");
-                });
-            },
-            'BeforeUpload': function(up, file) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-                if (up.runtime === 'html5' && chunk_size) {
-                    progress.setChunkProgess(chunk_size);
-                }
-            },
-            'UploadProgress': function(up, file) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-
-                progress.setProgress(file.percent + "%", file.speed, chunk_size);
-            },
-            'UploadComplete': function() {
-                $('#success').show();
-            },
-            'FileUploaded': function(up, file, info) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                progress.setComplete(up, info);
-            },
-            'Error': function(up, err, errTip) {
-                $('table').show();
-                var progress = new FileProgress(err.file, 'fsUploadProgress');
-                progress.setError();
-                progress.setStatus(errTip);
-            }
-        }
-    });
-
-    uploader2.bind('FileUploaded', function() {
-        console.log('hello man 2,a file is uploaded');
     });
 
     $('#container').on(

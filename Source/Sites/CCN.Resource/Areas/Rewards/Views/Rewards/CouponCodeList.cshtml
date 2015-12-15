@@ -10,7 +10,8 @@
     });
 
     function QueryList() {
-        var json = { CardId: "@ViewBag.CardId" };
+        var json = { CardId: "@ViewBag.couponid" };
+        debugger
         $("#couponlist").getPageList(20, "/api/Rewards/GetCouponCode", json, LoadData);
     }
 
@@ -40,7 +41,7 @@
     //显示二维码
     function setImage(src, code) {
         $(".modal-body").empty();
-        if (getQiniuUrl(src) != "") {
+        if (src != null && src != "") {
             $(".modal-body").append("<img src=" + getQiniuUrl(src) + " style=\"width:300px;height:300px;\" />");
         }
         else {
@@ -50,7 +51,7 @@
 
     //生成二维码
     function createQrcode(code) {
-        
+
         $.get("/api/Rewards/GetCouponByCode?code=" + code, null, function (result) {
             $('#myModal').modal('hide');
             QueryList();
@@ -118,7 +119,7 @@
                 <h4 class="modal-title" id="myModalLabel">礼券二维码</h4>
             </div>
             <div class="modal-body" style="text-align:center">
-                
+
             </div>
             <div class="modal-footer">
             </div>

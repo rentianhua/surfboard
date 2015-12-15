@@ -211,7 +211,7 @@ FileProgress.prototype.setComplete = function(up, info) {
     var progressNameTd = this.fileProgressWrapper.find('.progressName');
     var imageView = '?imageView2/1/w/100/h/100';
 
-    var isImage = function(url) {
+    var isImage = function (url) {
         var res, suffix = "";
         var imageSuffixes = ["png", "jpg", "jpeg", "gif", "bmp"];
         var suffixMatch = /\.([a-zA-Z0-9]+)(\?|\@|$)/;
@@ -234,8 +234,8 @@ FileProgress.prototype.setComplete = function(up, info) {
     var Wrapper = $('<div class="Wrapper"/>');
     var imgWrapper = $('<div class="imgWrapper col-md-3"/>');
     var linkWrapper = $('<a class="linkWrapper" target="_blank"/>');
-    var showImg = $('<img src="loading.gif"/>');
-
+    //var showImg = $('<img src="loading.gif"/>');
+    var showImg = $('<img src=""/>');
     progressNameTd.append(Wrapper);
 
     if (!isImg) {
