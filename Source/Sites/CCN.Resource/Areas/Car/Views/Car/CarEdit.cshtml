@@ -317,21 +317,21 @@
             return;
         }
 
-        imgs.push(picid);
-        $(obj).parent().remove();
+        //imgs.push(picid);
+        //$(obj).parent().remove();
 
-        //$.ajax({
-        //    url: "/api/Car/DeleteCarPicture?innerid=" + picid,
-        //    type: 'delete',
-        //    datatype: 'application/json',
-        //    async: false,
-        //    success: function (data) {
-        //        if (data.errcode === 0) {
-        //            //alert("删除成功");
-        //            $(obj).parent().remove();
-        //        }
-        //    }
-        //});
+        $.ajax({
+            url: "/api/Car/DeleteCarPicture?innerid=" + picid,
+            type: 'delete',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode === 0) {
+                    //alert("删除成功");
+                    $(obj).parent().remove();
+                }
+            }
+        });
     }
 
     function Submit() {
