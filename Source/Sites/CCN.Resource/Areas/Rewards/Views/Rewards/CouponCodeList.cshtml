@@ -11,7 +11,6 @@
 
     function QueryList() {
         var json = { CardId: "@ViewBag.couponid" };
-        debugger
         $("#couponlist").getPageList(20, "/api/Rewards/GetCouponCode", json, LoadData);
     }
 

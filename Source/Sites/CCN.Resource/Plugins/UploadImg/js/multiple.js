@@ -9,19 +9,19 @@ container：容器id
 uptoken:七牛token值
 autostart：是否自动上传 true自动上传
 */
-$(function() {
+function InitQiniuUpload(option) {
     var uploader = Qiniu.uploader({
         runtimes: 'html5,flash,html4',
-        browse_button: 'pickfiles',
-        container: 'container',
-        drop_element: 'container',
+        browse_button: option.id,
+        container: option.container,
+        drop_element: option.container,
         max_file_size: '100mb',
         flash_swf_url: 'js/plupload/Moxie.swf',
         dragdrop: true,
         chunk_size: '4mb',
-        uptoken_url: "fgdggf",
+        uptoken: option.uptoken,
         domain: "http://7xlopw.com2.z0.glb.qiniucdn.com/",
-        auto_start: true,
+        auto_start: option.autostart,
         init: {
             'FilesAdded': function(up, files) {
                 $('table').show();
@@ -58,10 +58,6 @@ $(function() {
                 progress.setStatus(errTip);
             }
         }
-    });
-
-    uploader.bind('FileUploaded', function() {
-        console.log('hello man,a file is uploaded');
     });
 
     $('#container').on(
@@ -214,4 +210,6 @@ $(function() {
         return false;
     });
 
-});
+    return uploader;
+
+}

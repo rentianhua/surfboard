@@ -567,7 +567,7 @@ function QiniuJsSDK() {
 
         uploader.bind('FileUploaded', (function (_FileUploaded_Handler) {
             return function (up, file, info) {
-
+                debugger
                 var last_step = function (up, file, info) {
                     if (op.downtoken_url) {
                         var ajax_downtoken = that.createAjax();
