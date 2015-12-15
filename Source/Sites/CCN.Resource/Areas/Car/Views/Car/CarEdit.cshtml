@@ -11,7 +11,7 @@
 <script src="~/Plugins/UploadImg/js/ui.js"></script>
 <script src="~/Plugins/UploadImg/js/qiniu.js"></script>
 <script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
-@*<script src="~/Plugins/UploadImg/js/multiple.js"></script>*@
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
 <script>
 
     //function showloading() {
@@ -30,60 +30,16 @@
     var id = "@ViewBag.carid";
 
     var imgs = [];
-    
-    var Q2;
     var uploader
     $(function () {
-        Q2 = new QiniuJsSDK();
-        uploader = Q2.uploader({
-            runtimes: 'html5,flash,html4',
-            browse_button: 'pickfiles2',
-            container: 'container2',
-            drop_element: 'container2',
-            max_file_size: '100mb',
-            flash_swf_url: 'js/plupload/Moxie.swf',
-            dragdrop: true,
-            chunk_size: '4mb',
-            //uptoken_url: '/api/base/gettoken',
-            uptoken: "@ViewBag.uptoken",
-            domain: "http://7xlopw.com2.z0.glb.qiniucdn.com/",
-            auto_start: false,
-            init: {
-                'FilesAdded': function (up, files) {
-                    $('table').show();
-                    plupload.each(files, function (file) {
-                        var progress = new FileProgress(file, 'fsUploadProgress');
-                        progress.setStatus("等待...");
-                    });
-                },
-                'BeforeUpload': function (up, file) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-                    if (up.runtime === 'html5' && chunk_size) {
-                        progress.setChunkProgess(chunk_size);
-                    }
-                },
-                'UploadProgress': function (up, file) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
 
-                    progress.setProgress(file.percent + "%", file.speed, chunk_size);
-                },
-                'UploadComplete': function () {
-
-                },
-                'FileUploaded': function (up, file, info) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    progress.setComplete(up, info);
-                },
-                'Error': function (up, err, errTip) {
-                    $('table').show();
-                    var progress = new FileProgress(err.file, 'fsUploadProgress');
-                    progress.setError();
-                    progress.setStatus(errTip);
-                }
-            }
-        });
         InitBrand();
         InitProv();
         InitCode();
@@ -317,21 +273,28 @@
             return;
         }
 
-        //imgs.push(picid);
-        //$(obj).parent().remove();
-
-        $.ajax({
-            url: "/api/Car/DeleteCarPicture?innerid=" + picid,
-            type: 'delete',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                if (data.errcode === 0) {
-                    //alert("删除成功");
-                    $(obj).parent().remove();
-                }
-            }
+        var flag = 0;
+        //遍历img
+        $("img[data-type='img']").each(function () {
+            flag++;
         });
+        if (flag > 3) {
+            $.ajax({
+                url: "/api/Car/DeleteCarPicture?innerid=" + picid,
+                type: 'delete',
+                datatype: 'application/json',
+                async: false,
+                success: function (data) {
+                    if (data.errcode === 0) {
+                        //alert("删除成功");
+                        $(obj).parent().remove();
+                    }
+                }
+            });
+        }
+        else {
+            alert("图片将少于3张，不能继续删除！");
+        }
     }
 
     function Submit() {
@@ -494,7 +457,7 @@
             $("img[data-type='img']").each(function () {
                 filelength++;
             });
-            
+
             if (filelength > 9 || filelength < 3) {
                 hideloading();
                 alert('请上传3-9张图片');
@@ -504,7 +467,7 @@
                 hideloading();
                 if (result.errcode === 0) {
                     //删除图片 imgs
-                    
+
                     //上传并保存图片 Begin
                     var i = 0;
                     plupload.each(uploader.files, function (file) {
@@ -722,7 +685,7 @@
                                 <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
                                     <thead>
                                         <tr>
-                                            <th class="col-md-4">Filename</th>
+                                            <th class="col-md-4">图片名称</th>
                                         </tr>
                                     </thead>
                                     <tbody id="fsUploadProgress"></tbody>
