@@ -96,6 +96,7 @@ namespace CCN.Resource.Controllers
             {
                 UserInfo = (BaseUserModel)user.errmsg;
                 Session["UserInfo"] = user.errmsg;
+                Session["CustModel"] = null; //清除车商登录信息
                 return Json(new { code = 1, message = "登录成功" });
             }
             else

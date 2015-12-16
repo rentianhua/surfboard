@@ -264,27 +264,7 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.AddCarPicture(model);
         }
-
-        /// <summary>
-        /// 添加车辆图片
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        public JResult AddCarPictureList(WeichatPictureModel picModel)
-        {
-            return BusinessComponent.AddCarPictureList(picModel);
-        }
-
-        /// <summary>
-        /// 添加车辆图片(后台)
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        public JResult AddCarPictureList(PictureListModel picModel)
-        {
-            return BusinessComponent.AddCarPictureList(picModel);
-        }
-
+        
         /// <summary>
         /// 刪除车辆图片
         /// </summary>
@@ -313,6 +293,46 @@ namespace CCN.Modules.Car.BusinessService
         public JResult ExchangePictureSort(List<CarPictureModel> listPicture)
         {
             return BusinessComponent.ExchangePictureSort(listPicture);
+        }
+        
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        public JResult DelCarPictureList(PictureDelListModel picModel)
+        {
+            return BusinessComponent.DelCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(PictureListModel picModel)
+        {
+            return BusinessComponent.AddCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(WechatPictureModel picModel)
+        {
+            return BusinessComponent.AddCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SaveCarPicture(BatchPictureListWeichatModel model)
+        {
+            return BusinessComponent.SaveCarPicture(model);
         }
 
         #endregion
@@ -358,8 +378,6 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetCollectionList(query);
         }
-
-
         #endregion
     }
 }

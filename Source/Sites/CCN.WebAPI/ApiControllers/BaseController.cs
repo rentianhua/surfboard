@@ -514,5 +514,17 @@ namespace CCN.WebAPI.ApiControllers
                 return "-2";
             }
         }
+
+        /// <summary>
+        /// 获取七牛Token值
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetUpToken")]
+        [HttpGet]
+        public JResult GetUpToken()
+        {
+            var uptoken = QiniuUtility.GetToken();
+            return JResult._jResult(0, uptoken);
+        }
     }
 }

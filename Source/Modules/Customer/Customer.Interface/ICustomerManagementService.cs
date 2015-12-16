@@ -43,6 +43,13 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLogin(CustLoginInfo loginInfo);
 
         /// <summary>
+        /// 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        JResult GetCustLoginByMobile(string mobile);
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
@@ -98,6 +105,13 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="status"></param>
         /// <returns></returns>
         JResult UpdateCustStatus(string innerid, int status);
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult UpdateCustType(string innerid);
 
         #endregion
 

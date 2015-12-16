@@ -147,7 +147,7 @@ namespace CCN.Resource.ApiControllers
         [HttpPost]
         public JResult AddCustomer([FromBody] CustModel userInfo)
         {
-            if (string.IsNullOrWhiteSpace(userInfo.Mobile))
+            if (string.IsNullOrWhiteSpace(userInfo?.Mobile))
             {
                 return new JResult
                 {
@@ -155,7 +155,7 @@ namespace CCN.Resource.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+            userInfo.Type = 2;//后台添加用户默认是个人
             var result = _custservice.CustRegister(userInfo);
 
             #region 注册送积分
@@ -194,7 +194,32 @@ namespace CCN.Resource.ApiControllers
         [HttpPost]
         public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
-            var result = _custservice.CustLogin(loginInfo);
+            JResult result;
+            //手机号+密码
+            if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                result = _custservice.CustLogin(loginInfo);
+            }
+            //手机号+验证码
+            else if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.VCode))
+            {
+                var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+                //检查验证码
+                var cresult = baseservice.CheckVerification(loginInfo.Mobile, loginInfo.VCode, 2);
+                if (cresult.errcode != 0)
+                {
+                    //验证码错误
+                    //400 验证码错误
+                    //401 验证码过期
+                    return cresult;
+                }
+                //根据手机号获取会员信息
+                result = _custservice.GetCustByMobile(loginInfo.Mobile);
+            }
+            else
+            {
+                return JResult._jResult(500, "参数不完整");
+            }
 
             #region 登录送积分
 
@@ -223,7 +248,7 @@ namespace CCN.Resource.ApiControllers
 
             return result;
         }
-
+        
         /// <summary>
         /// 用户登录(openid登录)
         /// </summary>

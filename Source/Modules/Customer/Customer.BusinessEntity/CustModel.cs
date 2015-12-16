@@ -429,6 +429,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Password { get; set; }
 
         /// <summary>
+        /// 验证码
+        /// </summary>
+        public string VCode { get; set; }
+
+        /// <summary>
         /// 登录时间
         /// </summary>
         public DateTime? CreateTime { get; set; }

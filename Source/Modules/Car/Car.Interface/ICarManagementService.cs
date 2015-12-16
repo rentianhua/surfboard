@@ -182,21 +182,7 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆图片信息</param>
         /// <returns></returns>
         JResult AddCarPicture(CarPictureModel model);
-
-        /// <summary>
-        /// 添加车辆图片
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        JResult AddCarPictureList(WeichatPictureModel picModel);
-
-        /// <summary>
-        /// 添加车辆图片(后台)
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        JResult AddCarPictureList(PictureListModel picModel);
-
+        
         /// <summary>
         /// 添加车辆图片
         /// </summary>
@@ -217,6 +203,34 @@ namespace CCN.Modules.Car.Interface
         /// <param name="listPicture">车辆图片列表</param>
         /// <returns></returns>
         JResult ExchangePictureSort(List<CarPictureModel> listPicture);
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        JResult DelCarPictureList(PictureDelListModel picModel);
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(PictureListModel picModel);
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(WechatPictureModel picModel);
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SaveCarPicture(BatchPictureListWeichatModel model);
 
         #endregion
 
