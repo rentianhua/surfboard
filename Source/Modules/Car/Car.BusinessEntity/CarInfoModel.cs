@@ -263,6 +263,17 @@ namespace CCN.Modules.Car.BusinessEntity
     }
 
     /// <summary>
+    /// 手机号
+    /// </summary>
+    public class CarInfoFastModel : CarInfoModel
+    {
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string mobile { get; set; }
+    }
+
+    /// <summary>
     /// 车辆列表显示字段
     /// </summary>
     public class CarInfoListViewModel
@@ -338,8 +349,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车型
         /// </summary>
         public string model_name { get; set; }
-
-
+        
         /// <summary>
         /// 变速箱类型
         /// </summary>
@@ -366,6 +376,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 会员id
         /// </summary>
         public string custid { get; set; }
+
+        /// <summary>
+        /// 会员类型
+        /// </summary>
+        public int? type { get; set; }
 
         /// <summary>
         /// 0 非好友，>0已是好友 ,-1 自己的车

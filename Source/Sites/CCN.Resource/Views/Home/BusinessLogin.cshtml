@@ -140,6 +140,7 @@ Purchase: http://wrapbootstrap.com
                             success: function (result) {
                                 if (result.code == 1) {
                                     if ($("#ischecked").prop("checked") == true) {
+                                        var myDate = new Date();
                                         localStorage.setItem("businessname", $("#LoginName").val());
                                         localStorage.setItem("businesspwd", $("#LoginPwd").val());
                                         localStorage.setItem("businesstime", myDate.getTime());

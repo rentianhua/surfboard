@@ -58,7 +58,7 @@ namespace CCN.Modules.Car.BusinessEntity
     /// <summary>
     /// 
     /// </summary>
-    public class WeichatPictureModel
+    public class WechatPictureModel
     {
         /// <summary>
         /// id
@@ -77,7 +77,7 @@ namespace CCN.Modules.Car.BusinessEntity
     }
 
     /// <summary>
-    /// 
+    /// 批量添加图片model
     /// </summary>
     public class PictureListModel
     {
@@ -90,5 +90,63 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 七牛key列表
         /// </summary>
         public List<string> KeyList { get; set; }
+    }
+
+    /// <summary>
+    /// 批量删除图片model
+    /// </summary>
+    public class PictureDelListModel
+    {
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 需要删除的图片id集合
+        /// </summary>
+        public List<string> IdList { get; set; }
+    }
+
+    /// <summary>
+    /// 批量处理图片(添加+删除)(微信端使用)
+    /// </summary>
+    public class BatchPictureListWeichatModel
+    {
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 需要删除的图片id集合
+        /// </summary>
+        public List<string> IdList { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public WechatPictureModel WechatPicture { get; set; }
+    }
+
+    /// <summary>
+    /// 批量处理图片(添加+删除)
+    /// </summary>
+    public class BatchPictureListModel
+    {
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 需要删除的图片id集合
+        /// </summary>
+        public List<string> DelIds { get; set; }
+
+        /// <summary>
+        /// 添加的图片
+        /// </summary>
+        public List<string> AddPaths { get; set; }
     }
 }

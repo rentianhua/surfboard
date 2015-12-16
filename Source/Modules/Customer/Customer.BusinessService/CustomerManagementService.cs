@@ -70,6 +70,16 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult GetCustLoginByMobile(string mobile)
+        {
+            return BusinessComponent.GetCustLoginByMobile(mobile);
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
@@ -149,6 +159,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateCustStatus(string innerid, int status)
         {
             return BusinessComponent.UpdateCustStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult UpdateCustType(string innerid)
+        {
+            return BusinessComponent.UpdateCustType(innerid);
         }
 
         #endregion
