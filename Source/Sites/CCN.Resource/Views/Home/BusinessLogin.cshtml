@@ -90,7 +90,8 @@ Purchase: http://wrapbootstrap.com
         </div>
     </div>
     <!--Basic Scripts-->
-    <script src="~/Scripts/js/jquery.min.js"></script>
+    @*<script src="~/Scripts/js/jquery.min.js"></script>*@
+    <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
     <script src="~/Scripts/js/bootstrap.min.js"></script>
     <script src="~/Scripts/js/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="~/Scripts/common.js"></script>
@@ -139,6 +140,7 @@ Purchase: http://wrapbootstrap.com
                             data: customerData,
                             success: function (result) {
                                 if (result.code == 1) {
+                                    var myDate = new Date();
                                     if ($("#ischecked").prop("checked") == true) {
                                         var myDate = new Date();
                                         localStorage.setItem("businessname", $("#LoginName").val());

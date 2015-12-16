@@ -360,6 +360,39 @@
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\datepicker.css" />
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\img.gif" />
     <Content Include="Plugins\My97DatePicker\WdatePicker.js" />
+    <Content Include="Plugins\UploadImg\js\highlight\highlight.css" />
+    <Content Include="Plugins\UploadImg\js\highlight\highlight.js" />
+    <Content Include="Plugins\UploadImg\js\html5shiv.js" />
+    <Content Include="Plugins\UploadImg\js\jquery-1.9.1.min.js" />
+    <Content Include="Plugins\UploadImg\js\main.js" />
+    <Content Include="Plugins\UploadImg\js\multiple.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\i18n\zh_CN.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\css\jquery.plupload.queue.css" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\backgrounds.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\buttons-disabled.png" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\buttons.png" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\delete.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\done.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\error.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\throbber.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\img\transp50.png" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\jquery.plupload.queue.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.plupload.queue\jquery.plupload.queue.min.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.ui.plupload\css\jquery.ui.plupload.css" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.ui.plupload\img\loading.gif" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.ui.plupload\img\plupload.png" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.ui.plupload\jquery.ui.plupload.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\jquery.ui.plupload\jquery.ui.plupload.min.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\moxie.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\moxie.min.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\Moxie.swf" />
+    <Content Include="Plugins\UploadImg\js\plupload\Moxie.xap" />
+    <Content Include="Plugins\UploadImg\js\plupload\plupload.dev.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\plupload.full.min.js" />
+    <Content Include="Plugins\UploadImg\js\plupload\plupload.min.js" />
+    <Content Include="Plugins\UploadImg\js\qiniu.js" />
+    <Content Include="Plugins\UploadImg\js\Respond-1.4.2\respond.min.js" />
+    <Content Include="Plugins\UploadImg\js\ui.js" />
     <Content Include="Plugins\zTree_v3\api\apiCss\api.js" />
     <Content Include="Plugins\zTree_v3\api\apiCss\common.css" />
     <Content Include="Plugins\zTree_v3\api\apiCss\common_ie6.css" />
@@ -863,6 +896,7 @@
     <Content Include="Plugins\zTree_v3\css\awesomeStyle\awesome.less" />
     <Content Include="Plugins\zTree_v3\css\awesomeStyle\fa.less" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopView.cshtml" />
+    <Content Include="Plugins\UploadImg\js\jquery.min.map" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -934,7 +968,9 @@
     <Content Include="Scripts\jquery.pager.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

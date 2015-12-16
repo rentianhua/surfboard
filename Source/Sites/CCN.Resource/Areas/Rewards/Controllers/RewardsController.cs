@@ -138,11 +138,11 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         /// <summary>
         /// 获取礼券code列表
         /// </summary>
-        /// <param name="couponid"></param>
+        /// <param name="innerid"></param>
         /// <returns></returns>
-        public ActionResult CouponCodeList(string couponid)
+        public ActionResult CouponCodeList(string innerid)
         {
-            ViewBag.couponid= string.IsNullOrWhiteSpace(couponid) ? "" : couponid;
+            ViewBag.couponid= string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             return View();
         }
         #endregion
