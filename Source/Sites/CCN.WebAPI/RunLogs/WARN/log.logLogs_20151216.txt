@@ -1,0 +1,22 @@
+﻿
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[WARN ] [2015-12-16 15:05:10,328] -[批量删除图片异常：You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@=innerid' at line 1] 
+[WARN ] [2015-12-16 15:05:43,688] -[批量删除图片异常：You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@=innerid' at line 1] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+
+----------------------footer--------------------------

@@ -212,6 +212,21 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string custid { get; set; }
 
+        /// <summary>
+        /// 刷新时间（每次刷新将该字段重置当前时间）
+        /// </summary>
+        public long? refreshtime { get; set; }
+
+        /// <summary>
+        /// 是否置顶
+        /// </summary>
+        public short? istop { get; set; }
+
+        /// <summary>
+        /// 是否含过户费
+        /// </summary>
+        public short? istransferfee { get; set; }
+
         #region code name
 
         /// <summary>
@@ -271,6 +286,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 手机号
         /// </summary>
         public string mobile { get; set; }
+
+        /// <summary>
+        /// 联系人
+        /// </summary>
+        public string contacts { get; set; }
     }
 
     /// <summary>
@@ -740,6 +760,18 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 注册时间
         /// </summary>
         public DateTime? regdate { get; set; }
+    }
+
+    /// <summary>
+    /// 官网页面 全城搜车条件
+    /// </summary>
+    public class CarTopFillQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 置顶查询条件(补齐查询时需要 not in )
+        /// </summary>
+        public string where { get; set; }
+        
     }
 
     /// <summary>
