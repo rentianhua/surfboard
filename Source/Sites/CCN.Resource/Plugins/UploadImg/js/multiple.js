@@ -32,24 +32,24 @@ function InitQiniuUpload(option) {
                 });
             },
             'BeforeUpload': function(up, file) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-                if (up.runtime === 'html5' && chunk_size) {
-                    progress.setChunkProgess(chunk_size);
-                }
+                //var progress = new FileProgress(file, 'fsUploadProgress');
+                //var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
+                //if (up.runtime === 'html5' && chunk_size) {
+                //    progress.setChunkProgess(chunk_size);
+                //}
             },
             'UploadProgress': function(up, file) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
+                //var progress = new FileProgress(file, 'fsUploadProgress');
+                //var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
 
-                progress.setProgress(file.percent + "%", file.speed, chunk_size);
+                //progress.setProgress(file.percent + "%", file.speed, chunk_size);
             },
             'UploadComplete': function() {
                 $('#success').show();
             },
             'FileUploaded': function(up, file, info) {
-                var progress = new FileProgress(file, 'fsUploadProgress');
-                progress.setComplete(up, info);
+                //var progress = new FileProgress(file, 'fsUploadProgress');
+                //progress.setComplete(up, info);
             },
             'Error': function(up, err, errTip) {
                 $('table').show();
