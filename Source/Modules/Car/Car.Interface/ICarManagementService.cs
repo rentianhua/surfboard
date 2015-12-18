@@ -10,7 +10,16 @@ namespace CCN.Modules.Car.Interface
     public interface ICarManagementService
     {
         #region 车辆
-        
+
+        /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件
+        /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
+        /// </param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query);
+
         /// <summary>
         /// 全城搜车(官网页面)
         /// </summary>
@@ -172,6 +181,22 @@ namespace CCN.Modules.Car.Interface
         /// <param name="carid"></param>
         /// <returns></returns>
         JResult GetCarShareInfo(string carid);
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        JResult RefreshCar(string carid);
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        JResult DoTopCar(string carid, int istop);
+
         #endregion
 
         #region 车辆图片

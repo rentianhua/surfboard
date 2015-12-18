@@ -1965,7 +1965,7 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public IEnumerable<string> GetShopAreaByCityid(string cityid)
         {
-            const string sqlSelect = "select area from coupon_shop where cityid=@cityid group by area order by area desc;";
+            const string sqlSelect = "select area from coupon_shop where cityid=@cityid and status=1 group by area order by area desc;";
             return Helper.Query<string>(sqlSelect, new { cityid });
         }
 
@@ -1976,7 +1976,7 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public IEnumerable<ItemShop> GetShopByArea(string area)
         {
-            const string sqlSelect = "select innerid as Value, shopname as Text from coupon_shop where area=@area order by shopname desc;";
+            const string sqlSelect = "select innerid as Value, shopname as Text from coupon_shop where area=@area and status=1 order by shopname desc;";
             return Helper.Query<ItemShop>(sqlSelect, new { area });
         }
 

@@ -251,7 +251,11 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult GetCustByMobile(string mobile)
         {
             var model = DataAccess.GetCustByMobile(mobile);
-            model.Password = "";
+            if (model != null)
+            {
+                model.Password = "";
+            }
+            
             return JResult._jResult(model);
         }
 
@@ -272,6 +276,22 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return JResult._jResult(402, "帐户被冻结");
             }
             model.Password = "";
+            return JResult._jResult(model);
+        }
+        
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        public JResult CustInfoByCarid(string carid)
+        {
+            var model = DataAccess.CustInfoByCarid(carid);
+            if (model != null)
+            {
+                model.Password = "";
+            }
+            
             return JResult._jResult(model);
         }
 

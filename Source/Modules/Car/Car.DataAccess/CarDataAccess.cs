@@ -29,6 +29,156 @@ namespace CCN.Modules.Car.DataAccess
         #region 车辆基本信息
 
         /// <summary>
+        /// 全城搜车(官网页面)（置顶车辆补齐）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTopFill(CarTopFillQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid 
+                                    inner join cust_info as cc on cc.innerid=a.custid ";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
+
+            query.where = query.where.Replace("a.", "ia.").Replace("c1.", "ic1.").Replace("c2.", "ic2.").Replace("c3.", "ic3.");
+
+            sqlWhere.Append($@" and a.innerid not in (select ia.innerid from car_info as ia 
+                                    left join base_carbrand as ic1 on ia.brand_id = ic1.innerid
+                                    left join base_carseries as ic2 on ia.series_id = ic2.innerid
+                                    left join base_carmodel as ic3 on ia.model_id = ic3.innerid where {query.where})");
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <param name="strwhere"></param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query,out string strwhere)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid 
+                                    inner join cust_info as cc on cc.innerid=a.custid ";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1"); 
+
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //销售价大于..
+            if (query.minprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price>={query.minprice}");
+            }
+
+            //销售价小于..
+            if (query.maxprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price<={query.maxprice}");
+            }
+
+            //上牌时间 <
+            if (query.minyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date<='{date}'");
+            }
+
+            //上牌时间 >
+            if (query.maxyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date>='{date}'");
+            }
+
+            //行驶里程 >
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage>='{query.minmileage}'");
+            }
+
+            //行驶里程 <
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage<='{query.maxmileage}'");
+            }
+
+            //颜色
+            if (query.colorid.HasValue)
+            {
+                sqlWhere.Append($" and a.colorid={query.colorid}");
+            }
+
+            //排量
+            if (!string.IsNullOrWhiteSpace(query.liter))
+            {
+                sqlWhere.Append($" and c3.liter='{query.liter.Trim()}'");
+            }
+
+            //变速箱类型
+            if (!string.IsNullOrWhiteSpace(query.gear))
+            {
+                sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
+            }
+
+            //关键字搜索
+            if (!string.IsNullOrWhiteSpace(query.keyword))
+            {
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+            }
+
+            #endregion
+
+            strwhere = sqlWhere.ToString();
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
         /// 全城搜车(官网页面)
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -272,7 +422,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
 
             #region 查询条件
@@ -511,7 +661,7 @@ namespace CCN.Modules.Car.DataAccess
                                         left join base_city as ct on a.cityid = ct.innerid
                                         inner join car_share as b on a.innerid = b.carid";
             const string fields =
-                "a.innerid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+                "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "b.seecount" : query.Order;
 
             #region 查询条件
@@ -539,9 +689,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                                (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`)
+                                (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`,`refreshtime`, `istop`, `istransferfee`)
                                 VALUES
-                                (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price);";
+                                (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price,@refreshtime, @istop, @istransferfee);";
             int result;
             try
             {
@@ -839,7 +989,47 @@ namespace CCN.Modules.Car.DataAccess
             var result = Helper.Query<CarShareModel>(sql, new { carid }).FirstOrDefault();
             return result;
         }
-        
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int RefreshCar(string carid)
+        {
+            var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            string sql = $"update car_info set refreshtime={(long)ts.TotalSeconds} where innerid=@carid;";
+            try
+            {
+                Helper.Execute(sql, new { carid });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        public int DoTopCar(string carid,int istop)
+        {
+            const string sql = "update car_info set istop=@istop where innerid=@carid;";
+            try
+            {
+                Helper.Execute(sql, new { carid });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
         #region 赞不用
 
         /// <summary>
@@ -1013,7 +1203,7 @@ namespace CCN.Modules.Car.DataAccess
         [AuditTrailCallHandler("CarDataAccess.GetCarPictureMaxSort")]
         public int GetCarPictureMaxSort(string carid)
         {
-            const string sql = @"select max(sort) from car_picture where carid=@carid;";
+            const string sql = @"select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";
 
             try
             {
@@ -1096,18 +1286,19 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarPictureList(List<string> pathList,string carid)
         {
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
-            const string sqlSMaxSort = "select max(sort) from car_picture where carid=@carid;";//查询车辆所有图片的最大排序
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";                              //查询车辆所有图片的最大排序
             const string sqlIPic = @"insert into car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
+            const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
             {
                 //获取车辆图片
                 var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid }).ToList();
-                var number = picedList.Count + picedList.Count;
-                if (number <= 3 || number >= 9)
+                var number = picedList.Count + pathList.Count;
+                if (number > 9)
                 {
                     //图片数量控制在>=3 and <=9
-                    return 400;
+                    return 402;
                 }
 
                 var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { carid });
@@ -1125,7 +1316,13 @@ namespace CCN.Modules.Car.DataAccess
                             Sort = ++maxsort
                         }, tran); //插入图片
                     }
-                    
+
+                    //表示添加首批图片
+                    if (maxsort == pathList.Count)
+                    {
+                        conn.Execute(sqlUCover, new { carid }, tran);
+                    }
+
                     tran.Commit();
                     return 1;
                 }
@@ -1147,18 +1344,18 @@ namespace CCN.Modules.Car.DataAccess
         public int DelCarPictureList(List<string> idList, string carid)
         {
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
-            const string sqlDPic = @"delete from car_picture where innerid@=innerid;";
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
             const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
             {
                 //获取车辆图片
                 var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid }).ToList();
-                var number = picedList.Count + picedList.Count;
-                if (number <= 3 || number >= 9)
+                var number = picedList.Count - idList.Count;
+                if (number < 3)
                 {
                     //图片数量控制在>=3 and <=9
-                    return 400;
+                    return 402;
                 }
                 
                 var tran = conn.BeginTransaction();
@@ -1203,9 +1400,9 @@ namespace CCN.Modules.Car.DataAccess
         public int SaveCarPicture(BatchPictureListModel model)
         {
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
-            const string sqlSMaxSort = "select max(sort) from car_picture where carid=@carid;";//查询车辆所有图片的最大排序
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";//查询车辆所有图片的最大排序
             const string sqlIPic = @"insert into car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
-            const string sqlDPic = @"delete from car_picture where innerid@=innerid;";
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
             const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
@@ -1213,10 +1410,10 @@ namespace CCN.Modules.Car.DataAccess
                 //获取车辆图片
                 var picList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid = model.Carid }).ToList();
                 var number = picList.Count + model.AddPaths.Count - model.DelIds.Count;
-                if (number <= 3 || number >= 9)
+                if (number < 3 || number > 9)
                 {
                     //图片数量控制在>=3 and <=9
-                    return 400;
+                    return 402;
                 }
                 
                 var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { carid = model.Carid });
