@@ -37,6 +37,20 @@ namespace CCN.WebAPI.ApiControllers
         #region 车辆基本信息
 
         /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件
+        /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
+        /// </param>
+        /// <returns></returns>
+        [Route("SearchCarPageListTop")]
+        [HttpPost]
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop([FromBody]CarGlobalExQueryModel query)
+        {
+            return _carervice.SearchCarPageListTop(query);
+        }
+
+        /// <summary>
         /// 全城搜车(官网页面)
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -220,22 +234,29 @@ namespace CCN.WebAPI.ApiControllers
                 var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
 
                 //用手机号获取会员信息
-                var custinfo = (CustModel)custservice.GetCustByMobile(model.mobile).errmsg;
+                CustModel custinfo = null;
+                var cust = custservice.GetCustByMobile(model.mobile);
+                if (!string.IsNullOrWhiteSpace(cust.errmsg?.ToString()))
+                {
+                    custinfo = (CustModel)custservice.GetCustByMobile(model.mobile).errmsg;
+                }
+                
                 if (custinfo == null) //会员不存在
                 {
                     //自动注册
-                    custinfo = (CustModel)custservice.CustRegister(new CustModel
+                    var regResult = custservice.CustRegister(new CustModel
                     {
                         Mobile = model.mobile,
                         Password = string.Concat("ccn", model.mobile),
+                        Custname = model.contacts,
                         Type = 2 //快速录车时自动注册也默认个人
-                    }).errmsg;
+                    });
 
-                    if (custinfo == null)
+                    if (string.IsNullOrWhiteSpace(regResult.errmsg?.ToString()))
                     {
                         return JResult._jResult(500, "自动注册失败");
                     }
-                    model.custid = custinfo.Innerid;
+                    model.custid = regResult.errmsg.ToString();
                     return _carervice.AddCar(model);
                 }
 
@@ -284,10 +305,10 @@ namespace CCN.WebAPI.ApiControllers
 
             if (result.errcode == 0)
             {
+                //获取会员id
+                var custid = ApplicationContext.Current.UserId;
                 Task.Run(() =>
                 {
-                    //获取会员id
-                    var custid = ApplicationContext.Current.UserId;
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
@@ -326,10 +347,10 @@ namespace CCN.WebAPI.ApiControllers
 
             if (result.errcode == 0)
             {
+                //获取会员id
+                var custid = ApplicationContext.Current.UserId;
                 Task.Run(() =>
                 {
-                    //获取会员id
-                    var custid = ApplicationContext.Current.UserId;
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         LoggerFactories.CreateLogger().Write("车辆结案送积分:会员id空", TraceEventType.Warning);
@@ -404,11 +425,10 @@ namespace CCN.WebAPI.ApiControllers
 
             if (result.errcode == 0)
             {
+                //获取会员id
+                var custid = ApplicationContext.Current.UserId;
                 Task.Run(() =>
-                {
-                    //获取会员id
-                    var custid = ApplicationContext.Current.UserId;
-
+                {                    
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         LoggerFactories.CreateLogger().Write("分享送积分:会员id空", TraceEventType.Warning);
@@ -485,10 +505,35 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _carervice.GetCarShareInfo(carid);
         }
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [Route("RefreshCar")]
+        [HttpGet]
+        public JResult RefreshCar(string carid)
+        {
+            return _carervice.RefreshCar(carid);
+        }
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        [Route("DoTopCar")]
+        [HttpGet]
+        public JResult DoTopCar(string carid, int istop)
+        {
+            return _carervice.DoTopCar(carid, istop);
+        }
         #endregion
 
         #region 车辆图片
-        
+
         /// <summary>
         /// 添加车辆图片
         /// </summary>

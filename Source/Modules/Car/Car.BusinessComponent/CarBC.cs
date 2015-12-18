@@ -36,6 +36,62 @@ namespace CCN.Modules.Car.BusinessComponent
         #region 车辆
 
         /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件
+        /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
+        /// </param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
+        {
+            string strwhere;
+            var list = DataAccess.SearchCarPageListTop(query,out strwhere);
+
+            var fill = 0;       //标识是否需要补数据
+            var total = list.iTotalRecords ?? 0;
+
+            if (total <= 0)  //没有数据
+            {
+                fill = query.PageSize;
+            }
+            else
+            {
+                var ys = total % query.PageSize; //余数
+                if (ys > 0)
+                {
+                    var maxindex = total / query.PageSize + 1;   //最大页数
+                    if (maxindex == query.PageIndex)  //最后一页
+                    {
+                        fill = query.PageSize - ys;
+                    }
+                }
+            }
+
+            //需要补数据
+            if (fill <= 0)
+                return list;
+
+            //查询补全数据
+            var filllist = DataAccess.SearchCarPageListTopFill(new CarTopFillQueryModel
+            {
+                @where = strwhere,
+                PageIndex = query.Echo ?? 1,
+                PageSize = fill
+            });
+            
+            if (!filllist.aaData.Any())
+                return list;
+
+            //将补全数据填充到置顶数据中
+            var aaData = list.aaData.ToList();
+            aaData.AddRange(filllist.aaData);
+            list.aaData = aaData;
+            list.iTotalDisplayRecords += filllist.aaData.Count();   //补齐数据后的总记录数
+
+            return list;
+        }
+
+        /// <summary>
         /// 全城搜车(官网页面)
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -47,13 +103,14 @@ namespace CCN.Modules.Car.BusinessComponent
                 return new BasePageList<CarInfoListViewModel>();
             }
 
+            var custid = ApplicationContext.Current.UserId;
             Task.Run(() =>
             {
                 //保存搜车条件
                 DataAccess.SaveSearchRecord(new CarSearchRecordModel
                 {
                     Createdtime = DateTime.Now,
-                    Custid = ApplicationContext.Current.UserId,
+                    Custid = custid,
                     Innerid = Guid.NewGuid().ToString(),
                     Jsonobj = "web:" + JsonConvert.SerializeObject(query)
                 });
@@ -110,13 +167,14 @@ namespace CCN.Modules.Car.BusinessComponent
                 }
             }
 
+            var custid = ApplicationContext.Current.UserId;
             Task.Run(() =>
             {
                 //保存搜车条件
                 DataAccess.SaveSearchRecord(new CarSearchRecordModel
                 {
                     Createdtime = DateTime.Now,
-                    Custid = ApplicationContext.Current.UserId,
+                    Custid = custid,
                     Innerid = Guid.NewGuid().ToString(),
                     Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
                 });
@@ -381,6 +439,12 @@ namespace CCN.Modules.Car.BusinessComponent
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
             model.createdtime = DateTime.Now;
+
+            var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            model.refreshtime = (long) ts.TotalSeconds;
+
+            model.istop = 0;            ////
+
             model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
             if (result > 0)
@@ -586,6 +650,33 @@ namespace CCN.Modules.Car.BusinessComponent
                 ? JResult._jResult(400, "")
                 : JResult._jResult(0, carInfo);
         }
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RefreshCar(string carid)
+        {
+            var result = DataAccess.RefreshCar(carid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DoTopCar(string carid, int istop)
+        {
+            if (1 != istop)
+            {
+                istop = 0;
+            }
+            var result = DataAccess.DoTopCar(carid, istop);
+            return JResult._jResult(result);
+        }
         #endregion
 
         #region 车辆图片
@@ -724,10 +815,10 @@ namespace CCN.Modules.Car.BusinessComponent
             
             switch (result)
             {
-                case 400:
-                    return JResult._jResult(400, "图片数量不对");
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
                 case 0:
-                    return JResult._jResult(401, "批量删除图片失败");
+                    return JResult._jResult(400, "批量删除图片失败");
             }
 
             //异步删除七牛上的图片
@@ -764,12 +855,12 @@ namespace CCN.Modules.Car.BusinessComponent
 
             var result = DataAccess.AddCarPictureList(picModel.KeyList, picModel.Carid);
 
-            if (result == 400)
+            if (result == 402)
             {
-                return JResult._jResult(400, "图片数量不对");
+                return JResult._jResult(402, "图片数量不对");
             }
             return result == 0
-                ? JResult._jResult(401, "批量添加图片失败")
+                ? JResult._jResult(400, "批量添加图片失败")
                 : JResult._jResult(0, "批量添加图片成功");
         }
         
@@ -817,12 +908,12 @@ namespace CCN.Modules.Car.BusinessComponent
 
             var result = DataAccess.AddCarPictureList(pathList, picModel.Carid);
 
-            if (result == 400)
+            if (result == 402)
             {
-                return JResult._jResult(400, "图片数量不对");
+                return JResult._jResult(402, "图片数量不对");
             }
             return result == 0
-                ? JResult._jResult(401, "批量添加图片失败")
+                ? JResult._jResult(400, "批量添加图片失败")
                 : JResult._jResult(0, "批量添加图片成功");
         }
         
@@ -878,10 +969,10 @@ namespace CCN.Modules.Car.BusinessComponent
 
             switch (result)
             {
-                case 400:
-                    return JResult._jResult(400,"图片数量不对");
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
                 case 0:
-                    return JResult._jResult(401, "批量操作图片失败");
+                    return JResult._jResult(400, "批量删除图片失败");
             }
 
             //异步删除七牛上的图片
@@ -896,6 +987,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     qiniu.DeleteFile(item.Path);
                 }
             });
+
             return JResult._jResult(0, "批量操作图片成功");
         }
 

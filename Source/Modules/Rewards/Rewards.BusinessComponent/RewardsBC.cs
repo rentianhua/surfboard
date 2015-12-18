@@ -700,13 +700,13 @@ namespace CCN.Modules.Rewards.BusinessComponent
             sendModel.Sourceid = 1;//购买
             var result = DataAccess.CouponToCustomer(sendModel);
 
-            Task.Run(() =>
+            if (result == 1)
             {
-                if (result == 1)
+                Task.Run(() =>
                 {
                     OrderApi.SetdeliveryOrder(ConfigHelper.GetAppSettings("APPID"), model.Order.order_id, "", "", 0);
-                }
-            });
+                });
+            }
 
             return JResult._jResult(
                 result > 0 ? 0 : 400,
