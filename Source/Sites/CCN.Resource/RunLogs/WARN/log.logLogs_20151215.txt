@@ -1,0 +1,3 @@
+﻿
+----------------------header--------------------------
+[WARN ] [2015-12-15 14:31:51,186] -[上传图片:{"Hash":"FiFkxXiUpis11YpoJwjkIIjyeh-o","key":"card_qrcode_20151215143136060.jpg","StatusCode":200,"Exception":null,"Response":"{\"hash\":\"FiFkxXiUpis11YpoJwjkIIjyeh-o\",\"key\":\"card_qrcode_20151215143136060.jpg\"}","OK":true}] 
