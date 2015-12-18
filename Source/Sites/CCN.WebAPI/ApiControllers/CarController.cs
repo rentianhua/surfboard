@@ -179,6 +179,83 @@ namespace CCN.WebAPI.ApiControllers
 
             return result;
         }
+        
+        /// <summary>
+        /// 后台添加车辆
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        [Route("AddCarBack")]
+        [HttpPost]
+        public JResult AddCarBack([FromBody] CarInfoModel model)
+        {
+            var jresult = _carervice.AddCar(model);
+
+            if (jresult.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+                });
+            }
+
+            return jresult;
+        }
+
+        /// <summary>
+        /// 快速录车
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        [Route("AddCarFast")]
+        [HttpPost]
+        public JResult AddCarFast([FromBody] CarInfoFastModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.mobile))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            //判断是否登录
+            if (string.IsNullOrWhiteSpace(model.custid)) //没有登录
+            {
+                var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+
+                //用手机号获取会员信息
+                var custinfo = (CustModel)custservice.GetCustByMobile(model.mobile).errmsg;
+                if (custinfo == null) //会员不存在
+                {
+                    //自动注册
+                    custinfo = (CustModel)custservice.CustRegister(new CustModel
+                    {
+                        Mobile = model.mobile,
+                        Password = string.Concat("ccn", model.mobile),
+                        Type = 2 //快速录车时自动注册也默认个人
+                    }).errmsg;
+
+                    if (custinfo == null)
+                    {
+                        return JResult._jResult(500, "自动注册失败");
+                    }
+                    model.custid = custinfo.Innerid;
+                    return _carervice.AddCar(model);
+                }
+
+                model.custid = custinfo.Innerid;
+            }
+
+            //添加车辆
+            var jresult = _carervice.AddCar(model);
+
+            if (jresult.errcode == 0)
+            {
+                Task.Factory.StartNew(() =>
+                {
+                    var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+                    custservice.UpdateCustType(model.custid);
+                });
+            }
+
+            return jresult;
+        }
 
         /// <summary>
         /// 修改车辆
@@ -216,7 +293,7 @@ namespace CCN.WebAPI.ApiControllers
                         LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
                         return;
                     }
-
+                    
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -260,7 +337,7 @@ namespace CCN.WebAPI.ApiControllers
                     }
 
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-
+                    
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -411,7 +488,7 @@ namespace CCN.WebAPI.ApiControllers
         #endregion
 
         #region 车辆图片
-
+        
         /// <summary>
         /// 添加车辆图片
         /// </summary>
@@ -424,32 +501,33 @@ namespace CCN.WebAPI.ApiControllers
             return _carervice.AddCarPicture(model);
         }
 
-        [Route("AddCarPictureList")]
-        [HttpPost]
-        public JResult AddCarPictureList([FromBody] WeichatPictureModel picModel)
-        {
-            Task.Run(() =>
-            {
-                try
-                {
-                    var jreult = _carervice.AddCarPictureList(picModel);
-                    //LoggerFactories.CreateLogger().Write("批量添加微信图片：" + jreult.errcode, TraceEventType.Information);
-                }
-                catch (Exception ex)
-                {
-                    LoggerFactories.CreateLogger().Write("批量添加微信图片异常：" + ex.Message, TraceEventType.Information);
-                }
-            });
+        //[Route("AddCarPictureList")]
+        //[HttpPost]
+        //public JResult AddCarPictureList([FromBody] WechatPictureModel picModel)
+        //{
+        //    LoggerFactories.CreateLogger().Write("批量添加微信图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
+        //    Task.Run(() =>
+        //    {
+        //        try
+        //        {
+        //            var jreult = _carervice.AddCarPictureList(picModel);
+        //            //LoggerFactories.CreateLogger().Write("批量添加微信图片：" + jreult.errcode, TraceEventType.Information);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            LoggerFactories.CreateLogger().Write("批量添加微信图片异常：" + ex.Message, TraceEventType.Information);
+        //        }
+        //    });
 
-            return JResult._jResult(0, "");
-        }
+        //    return JResult._jResult(0,"");
+        //}
 
-        [Route("AddCarPictureKeyList")]
-        [HttpPost]
-        public JResult AddCarPictureList([FromBody] PictureListModel picModel)
-        {
-            return _carervice.AddCarPictureList(picModel);
-        }
+        //[Route("AddCarPictureKeyList")]
+        //[HttpPost]
+        //public JResult AddCarPictureList([FromBody] PictureListModel picModel)
+        //{
+        //    return _carervice.AddCarPictureList(picModel);
+        //}
 
         /// <summary>
         /// 添加车辆图片
@@ -488,18 +566,55 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
-        /// 获取七牛Token值
+        /// 批量保存图片(删除)
         /// </summary>
+        /// <param name="picModel"></param>
         /// <returns></returns>
-        [Route("GetUpToken")]
-        [HttpGet]
-        public JResult GetUpToken()
+        [Route("DelCarPictureList")]
+        [HttpPost]
+        public JResult DelCarPictureList([FromBody]PictureDelListModel picModel)
         {
-            new QiniuUtility();
-            var uptoken = QiniuUtility.GetToken();
-            return JResult._jResult(0, uptoken);
+            LoggerFactories.CreateLogger().Write("批量删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
+            return _carervice.DelCarPictureList(picModel);
         }
 
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        [Route("AddCarPictureKeyList")]
+        [HttpPost]
+        public JResult AddCarPictureList([FromBody]PictureListModel picModel)
+        {
+            return _carervice.AddCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        [Route("AddCarPictureList")]
+        [HttpPost]
+        public JResult AddCarPictureList([FromBody]WechatPictureModel picModel)
+        {
+            LoggerFactories.CreateLogger().Write("批量添加图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
+            return _carervice.AddCarPictureList(picModel);
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        [Route("SaveCarPicture")]
+        [HttpPost]
+        public JResult SaveCarPicture([FromBody] BatchPictureListWeichatModel picModel)
+        {
+            LoggerFactories.CreateLogger().Write("批量添加+删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
+            return _carervice.SaveCarPicture(picModel);
+        }
         #endregion
 
         #region 车辆收藏

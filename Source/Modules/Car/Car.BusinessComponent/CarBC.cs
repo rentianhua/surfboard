@@ -83,7 +83,9 @@ namespace CCN.Modules.Car.BusinessComponent
                     query.Order = "a.createdtime desc";
                     break;
             }
-            
+
+            query.keyword = query.keyword.ToDbValue();
+
             var list = DataAccess.SearchCarPageListEx(query);
             return list;
         }
@@ -120,6 +122,8 @@ namespace CCN.Modules.Car.BusinessComponent
                 });
             });
 
+            query.keyword = query.keyword.ToDbValue();
+
             return list;
         }
 
@@ -146,7 +150,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 if (firstOrDefault != null)
                     model.ShareModel = firstOrDefault;
             }
-
+            query.SearchField = query.SearchField.ToDbValue();
             return list;
         }
 
@@ -369,6 +373,10 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
             LoggerFactories.CreateLogger().Write("添加车辆",TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
@@ -619,95 +627,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = ""
             };
         }
-
-        /// <summary>
-        /// 添加车辆图片
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList.WeichatPictureModel")]
-        public JResult AddCarPictureList(WeichatPictureModel picModel)
-        {
-            if (picModel == null)
-            {
-                return new JResult
-                {
-                    errcode = 401,
-                    errmsg = "参数不完整"
-                };
-            }
-
-            //上传图片到七牛云
-            var qinniu = new QiniuUtility();
-
-            foreach (var item in picModel.MediaIdList)
-            {
-                var filename = QiniuUtility.GetFileName(Picture.car_picture);
-
-                //下载图片写入文件流
-                var filebyte = MediaApi.Get(picModel.AccessToken, item);
-                Stream stream = new MemoryStream(filebyte);
-
-                //上传到七牛
-                var qnKey = qinniu.Put(stream, "", filename);
-                stream.Dispose();
-                
-                //上传图片成功
-                if (string.IsNullOrWhiteSpace(qnKey))
-                    continue;
-                var pictureModel = new CarPictureModel
-                {
-                    Carid = picModel.Carid,
-                    Createdtime = DateTime.Now,
-                    Path = qnKey
-                };
-                AddCarPicture(pictureModel);
-            }
-
-            return new JResult
-            {
-                errcode = 0,
-                errmsg = ""
-            };
-        }
-
-        /// <summary>
-        /// 添加车辆图片(后台)
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList.PictureListModel")]
-        public JResult AddCarPictureList(PictureListModel picModel)
-        {
-            if (picModel == null)
-            {
-                return new JResult
-                {
-                    errcode = 401,
-                    errmsg = "参数不完整"
-                };
-            }
-
-            foreach (var item in picModel.KeyList)
-            {
-                if (string.IsNullOrWhiteSpace(item))
-                    continue;
-                var pictureModel = new CarPictureModel
-                {
-                    Carid = picModel.Carid,
-                    Createdtime = DateTime.Now,
-                    Path = item
-                };
-                AddCarPicture(pictureModel);
-            }
-
-            return new JResult
-            {
-                errcode = 0,
-                errmsg = ""
-            };
-        }
-
+        
         /// <summary>
         /// 删除车辆图片
         /// </summary>
@@ -716,18 +636,25 @@ namespace CCN.Modules.Car.BusinessComponent
         [AuditTrailCallHandler("CarBC.DeleteCarPicture")]
         public JResult DeleteCarPicture(string innerid)
         {
+            var model = DataAccess.GetCarPictureByid(innerid);
+
             var result = DataAccess.DeleteCarPicture(innerid);
-            if (result > 0)
+            switch (result)
             {
-
+                case 400: return JResult._jResult(result, "删除失败");
+                case 401: return JResult._jResult(result, "图片不存在");
+                case 402: return JResult._jResult(result, "图片不能少于三张");
             }
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
-            };
-        }
 
+            if (!string.IsNullOrWhiteSpace(model?.Path))
+            {
+                var qiniu = new QiniuUtility();
+                qiniu.DeleteFile(model.Path);
+            }
+
+            return JResult._jResult(0, "删除成功");
+        }
+        
         /// <summary>
         /// 获取车辆已有图片
         /// </summary>
@@ -776,6 +703,200 @@ namespace CCN.Modules.Car.BusinessComponent
                 errcode = result > 0 ? 0 : 400,
                 errmsg = ""
             };
+        }
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        public JResult DelCarPictureList(PictureDelListModel picModel)
+        {
+            if (picModel == null || picModel.IdList.Count == 0)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            //获取即将删除的图片
+            var picedList = DataAccess.GetCarPictureByIds(picModel.IdList).ToList();
+            
+            var result = DataAccess.DelCarPictureList(picModel.IdList, picModel.Carid);
+            
+            switch (result)
+            {
+                case 400:
+                    return JResult._jResult(400, "图片数量不对");
+                case 0:
+                    return JResult._jResult(401, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            Task.Run(() =>
+            {
+                if (!picedList.Any())
+                    return;
+
+                var qiniu = new QiniuUtility();
+                foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                {
+                    qiniu.DeleteFile(item.Path);
+                }
+            });
+
+            return JResult._jResult(0, "批量删除图片成功");
+        }
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(PictureListModel picModel)
+        {
+            if (picModel == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            var result = DataAccess.AddCarPictureList(picModel.KeyList, picModel.Carid);
+
+            if (result == 400)
+            {
+                return JResult._jResult(400, "图片数量不对");
+            }
+            return result == 0
+                ? JResult._jResult(401, "批量添加图片失败")
+                : JResult._jResult(0, "批量添加图片成功");
+        }
+        
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(WechatPictureModel picModel)
+        {
+            if (string.IsNullOrWhiteSpace(picModel?.AccessToken) || picModel.MediaIdList.Count == 0)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            var pathList = new List<string>();
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in picModel.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+
+                //下载图片写入文件流
+                var filebyte = MediaApi.Get(picModel.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
+
+                //上传到七牛
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                {
+                    continue;
+                }
+
+                pathList.Add(qnKey);
+            }
+
+            var result = DataAccess.AddCarPictureList(pathList, picModel.Carid);
+
+            if (result == 400)
+            {
+                return JResult._jResult(400, "图片数量不对");
+            }
+            return result == 0
+                ? JResult._jResult(401, "批量添加图片失败")
+                : JResult._jResult(0, "批量添加图片成功");
+        }
+        
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SaveCarPicture(BatchPictureListWeichatModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || (model.IdList.Count == 0 || model.WechatPicture == null))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var pathList = new List<string>();
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in model.WechatPicture.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+
+                //下载图片写入文件流
+                var filebyte = MediaApi.Get(model.WechatPicture.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
+
+                //上传到七牛
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                {
+                    continue;
+                }
+
+                pathList.Add(qnKey);
+            }
+
+            var saveList = new BatchPictureListModel
+            {
+                Carid = model.Carid,
+                AddPaths = pathList,
+                DelIds = model.IdList
+            };
+
+            //获取即将删除的图片
+            var picedList = DataAccess.GetCarPictureByIds(model.IdList).ToList();
+
+            var result = DataAccess.SaveCarPicture(saveList);
+
+            switch (result)
+            {
+                case 400:
+                    return JResult._jResult(400,"图片数量不对");
+                case 0:
+                    return JResult._jResult(401, "批量操作图片失败");
+            }
+
+            //异步删除七牛上的图片
+            Task.Run(() =>
+            {
+                if (!picedList.Any())
+                    return;
+
+                var qiniu = new QiniuUtility();
+                foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                {
+                    qiniu.DeleteFile(item.Path);
+                }
+            });
+            return JResult._jResult(0, "批量操作图片成功");
         }
 
         #endregion

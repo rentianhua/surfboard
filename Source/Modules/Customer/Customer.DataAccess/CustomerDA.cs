@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Core.EntLib.Logging;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -355,12 +358,46 @@ namespace CCN.Modules.Customer.DataAccess
         public int UpdateCustStatus(string innerid, int status)
         {
             const string sql = "update cust_info set status=@status where innerid=@innerid;";
-            var custModel = Helper.Execute(sql, new
+            var result = Helper.Execute(sql, new
             {
                 innerid,
                 status
             });
-            return custModel;
+            return result;
+        }
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public int UpdateCustType(string innerid)
+        {
+            const string sqlSCust = "select type from cust_info where innerid=@innerid;";
+            const string sqlSNum = "select count(1) from car_info where custid=@custid and status<>0;";
+            const string sql = "update cust_info set type=1 where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var custType = conn.Query<int>(sqlSCust, new { innerid }).FirstOrDefault();
+                var carNum = conn.Query<int>(sqlSNum, new { custid = innerid }).FirstOrDefault();
+                if (custType == 1 || carNum <= 1)
+                    return 0;
+                try
+                {
+                    conn.Execute(sql, new
+                    {
+                        innerid
+                    });
+
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("修改会员类型异常：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
         }
 
         #endregion
@@ -446,14 +483,14 @@ namespace CCN.Modules.Customer.DataAccess
                     {
                         authstatus = model.AuditResult == 1 ? 2 : 3,
                         innerid = model.Custid
-                    });
+                    }, tran);
                     conn.Execute(sqlau, new
                     {
                         auditper = model.AuditPer,
                         auditdesc = model.AuditDesc,
                         audittime = model.AuditTime,
                         custid = model.Custid
-                    });
+                    }, tran);
 
                     tran.Commit();
                     return 1;

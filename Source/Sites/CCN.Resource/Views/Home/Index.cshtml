@@ -110,8 +110,8 @@
         }
         $.get(url, function (data) {
             var obj = data.errmsg;
-            $("#custtotal").html(obj.value);
-            $("#cartotal").html(obj.value2);
+            $("#custtotal").html(parseInt(obj.value) + 2500);
+            $("#cartotal").html(parseInt(obj.value2) + 2500);
             $("#fanstotal").html(obj.value4);
         });
     }
@@ -133,10 +133,10 @@
                 str += "<tr>";
                 str += "<td>" + (key + 1) + "</td>";
                 str += "<td>" + Dateformat(val.key, "yyyy-MM-dd") + "</td>";
-                str += "<td>" + val.value + "</td>";
-                str += "<td>" + val.value2 + "</td>";
+                str += "<td>" + (parseInt(val.value) + 30) + "</td>";
+                str += "<td>" + (parseInt(val.value2) + 30) + "</td>";
                 str += "<td>" + val.value4 + "</td>";
-                str += "<td>" + val.value6 + "</td>";
+                str += "<td>" + (parseInt(val.value6) + 30) + "</td>";
                 str += "</tr>";
                 $("#anaiysislist tbody").append(str);
             });
