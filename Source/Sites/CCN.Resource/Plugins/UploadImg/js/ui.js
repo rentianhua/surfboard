@@ -21,7 +21,6 @@ function FileProgress(file, targetID) {
         var progressText = $("<td/>");
         progressText.addClass('progressName').text(file.name);
 
-
         var fileSize = plupload.formatSize(file.size).toUpperCase();
         var progressSize = $("<td/>");
         progressSize.addClass("progressFileSize").text(fileSize);
@@ -59,7 +58,89 @@ function FileProgress(file, targetID) {
         Wrappeer.append(progressSize);
         Wrappeer.append(progressBarTd);
 
-        $('#' + targetID).append(Wrappeer);
+        previewImage(file, function (imgsrc) {
+            //progressText.append('<div style="float:left" class="pic_list" id="' + file.id + '">'
+            //    + '<a href="###" class="pic_delete" data-val=' + file.id +
+            //    '>删除</a><br/>' +
+            //'<img class="listview" width="90" height="60" src="' + imgsrc + '" name="' + file.name + '" /></div>');
+            strradom=(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('.imgs').append(
+					'<div id="' + strradom + '" class="imgPreview" >\
+						<img src="' + imgsrc + '" class="loading">\
+						<div class="caidan">\
+							<div hash="' + strradom + '" class="cz_1">\
+								<div class="czl_icon"></div>\
+							</div>\
+							<div hash="' + strradom + '" class="cz_2">\
+								<div class="czl_icon"></div>\
+							</div>\
+							<div hash="' + strradom + '" class="cz_3"><div class="czl_icon"></div></div>\
+							<div hash="' + strradom + '" class="cz_4" id="' + file.id + '"><div class="czl_icon"></div></div>\
+						</div>\
+					</div>'
+
+				);
+            // 立即执行事件绑定
+            (function () {
+                // 当前方法对象
+                var fun = arguments.callee;
+                // 图片选中
+                $(".imgs .imgPreview").unbind().mousemove(function () {
+                    $(this).find(".caidan").show();
+                }).mouseout(function () {
+                    $(this).find(".caidan").hide();
+                });
+                $(".imgs .caidan").unbind().mousemove(function () {
+                    $(this).show();
+                }).mouseout(function () {
+                    $(this).hide();
+                });
+                // 图片删除
+                $(".imgs .imgPreview .cz_4").unbind().click(function () {
+                    $("#" + $(this).attr("hash")).remove();
+                    var toremove = '';
+                    var id = $(this).attr("data-val");
+                    for (var i in uploader.files) {
+                        if (uploader.files[i].id === id) {
+                            toremove = i;
+                        }
+                    }
+                    uploader.files.splice(toremove, 1);
+                });
+                // 置顶图片
+                $(".imgs .imgPreview .cz_1").unbind().click(function () {
+                    var imghtml = $("#" + $(this).attr("hash"))[0];
+                    $("#" + $(this).attr("hash")).remove();
+                    $('.imgs').prepend(imghtml);
+                    fun();
+                });
+                // 图片前移
+                $(".imgs .imgPreview .cz_2").unbind().click(function () {
+                    var id = "#" + $(this).attr("hash");
+                    var $this = $(id).prev();
+                    var imghtml = $(id)[0];
+                    if ($this.size()) {
+                        $(id).remove();
+                        $this.before(imghtml);
+                        fun();
+                    }
+                });
+                // 图片后移
+                $(".imgs .imgPreview .cz_3").unbind().click(function () {
+                    var id = "#" + $(this).attr("hash");
+                    var $this = $(id).next();
+                    var imghtml = $(id)[0];
+                    if ($this.size()) {
+                        $(id).remove();
+                        $this.after(imghtml);
+                        fun();
+                    }
+                });
+            })();
+
+        });
+
+        // $('#' + targetID).append(Wrappeer);
     } else {
         this.reset();
     }
@@ -67,22 +148,58 @@ function FileProgress(file, targetID) {
     this.height = this.fileProgressWrapper.offset().top;
     this.setTimer(null);
 }
+$(document).on('click', '.pic_list a.pic_delete', function () {
+    $(this).parent().parent().parent().remove();
+    var toremove = '';
+    var id = $(this).attr("data-val");
+    for (var i in uploader.files) {
+        if (uploader.files[i].id === id) {
+            toremove = i;
+        }
+    }
+    uploader.files.splice(toremove, 1);
+});
+//plupload中为我们提供了mOxie对象
+//有关mOxie的介绍和说明请看：https://github.com/moxiecode/moxie/wiki/API
+//如果你不想了解那么多的话，那就照抄本示例的代码来得到预览的图片吧
+function previewImage(file, callback) {//file为plupload事件监听函数参数中的file对象,callback为预览图片准备完成的回调函数
+    if (!file || !/image\//.test(file.type)) return; //确保文件是图片
+    if (file.type == 'image/gif') {//gif使用FileReader进行预览,因为mOxie.Image只支持jpg和png
+        var fr = new mOxie.FileReader();
+        fr.onload = function () {
+            callback(fr.result);
+            fr.destroy();
+            fr = null;
+        }
+        fr.readAsDataURL(file.getSource());
+    } else {
+        var preloader = new mOxie.Image();
+        preloader.onload = function () {
+            //preloader.downsize(550, 400);//先压缩一下要预览的图片,宽300，高300
+            var imgsrc = preloader.type == 'image/jpeg' ? preloader.getAsDataURL('image/jpeg', 80) : preloader.getAsDataURL(); //得到图片src,实质为一个base64编码的数据
+            callback && callback(imgsrc); //callback传入的参数为预览图片的url
+            preloader.destroy();
+            preloader = null;
+        };
+        preloader.load(file.getSource());
+    }
+}
 
-FileProgress.prototype.setTimer = function(timer) {
+FileProgress.prototype.setTimer = function (timer) {
     this.fileProgressWrapper.FP_TIMER = timer;
 };
 
-FileProgress.prototype.getTimer = function(timer) {
+FileProgress.prototype.getTimer = function (timer) {
     return this.fileProgressWrapper.FP_TIMER || null;
 };
 
-FileProgress.prototype.reset = function() {
+FileProgress.prototype.reset = function () {
     this.fileProgressWrapper.attr('class', "progressContainer");
     this.fileProgressWrapper.find('td .progress .progress-bar-info').attr('aria-valuenow', 0).width('0%').find('span').text('');
     this.appear();
 };
 
-FileProgress.prototype.setChunkProgess = function(chunk_size) {
+FileProgress.prototype.setChunkProgess = function (chunk_size) {
     var chunk_amount = Math.ceil(this.file.size / chunk_size);
     if (chunk_amount === 1) {
         return false;
@@ -116,7 +233,7 @@ FileProgress.prototype.setChunkProgess = function(chunk_size) {
         progressBarChunk.append(col);
     }
 
-    if(!this.fileProgressWrapper.find('td:eq(2) .btn-default').length){
+    if (!this.fileProgressWrapper.find('td:eq(2) .btn-default').length) {
         this.fileProgressWrapper.find('td>div').append(viewProgess);
     }
     progressBarChunkTr.hide().find('td').append(progressBarChunk);
@@ -124,7 +241,7 @@ FileProgress.prototype.setChunkProgess = function(chunk_size) {
 
 };
 
-FileProgress.prototype.setProgress = function(percentage, speed, chunk_size) {
+FileProgress.prototype.setProgress = function (percentage, speed, chunk_size) {
     this.fileProgressWrapper.attr('class', "progressContainer green");
 
     var file = this.file;
@@ -133,7 +250,7 @@ FileProgress.prototype.setProgress = function(percentage, speed, chunk_size) {
     var size = plupload.formatSize(uploaded).toUpperCase();
     var formatSpeed = plupload.formatSize(speed).toUpperCase();
     var progressbar = this.fileProgressWrapper.find('td .progress').find('.progress-bar-info');
-    if (this.fileProgressWrapper.find('.status').text() === '取消上传'){
+    if (this.fileProgressWrapper.find('.status').text() === '取消上传') {
         return;
     }
     this.fileProgressWrapper.find('.status').text("已上传: " + size + " 上传速度： " + formatSpeed + "/s");
@@ -187,7 +304,7 @@ FileProgress.prototype.setProgress = function(percentage, speed, chunk_size) {
     this.appear();
 };
 
-FileProgress.prototype.setComplete = function(up, info) {
+FileProgress.prototype.setComplete = function (up, info) {
     var td = this.fileProgressWrapper.find('td:eq(2)'),
         tdProgress = td.find('.progress');
 
@@ -256,7 +373,7 @@ FileProgress.prototype.setComplete = function(up, info) {
         $(img).attr('src', url);
 
         var height_space = 340;
-        $(img).on('load', function() {
+        $(img).on('load', function () {
             showImg.attr('src', url);
 
             linkWrapper.attr('href', url).attr('title', '查看原图');
@@ -269,7 +386,7 @@ FileProgress.prototype.setComplete = function(up, info) {
                 }
                 var newImg = new Image();
                 modalBody.find('img').attr('src', 'loading.gif');
-                newImg.onload = function() {
+                newImg.onload = function () {
                     modalBody.find('img').attr('src', url).data('key', key).data('h', height);
                     modalBody.find('.modal-body-wrapper').find('a').attr('href', url);
                 };
@@ -279,49 +396,49 @@ FileProgress.prototype.setComplete = function(up, info) {
             var infoWrapper = $('<div class="infoWrapper col-md-6"></div>');
 
 
-            var fopLink = $('<a class="fopLink"/>');
-            fopLink.attr('data-key', res.key).text('查看处理效果');
-            infoWrapper.append(fopLink);
-            fopLink.on('click', function() {
-                var key = $(this).data('key');
-                var height = parseInt($(this).parents('.Wrapper').find('.origin-height').text(), 10);
-                if (height > $(window).height() - height_space) {
-                    height = parseInt($(window).height() - height_space, 10);
-                } else {
-                    height = parseInt(height, 10) || 300;
-                    //set a default height 300 for ie9-
-                }
-                var fopArr = [];
-                fopArr.push({
-                    fop: 'imageView2',
-                    mode: 3,
-                    h: height,
-                    q: 100,
-                    format: 'png'
-                });
-                fopArr.push({
-                    fop: 'watermark',
-                    mode: 1,
-                    image: 'http://www.b1.qiniudn.com/images/logo-2.png',
-                    dissolve: 100,
-                    gravity: 'SouthEast',
-                    dx: 100,
-                    dy: 100
-                });
-                var url = Qiniu.pipeline(fopArr, key);
-                $('#myModal-img').on('hide.bs.modal', function() {
-                    $('#myModal-img').find('.btn-default').removeClass('disabled');
-                    $('#myModal-img').find('.text-warning').hide();
-                }).on('show.bs.modal', function() {
-                    $('#myModal-img').find('.imageView').find('a:eq(0)').addClass('disabled');
-                    $('#myModal-img').find('.watermark').find('a:eq(3)').addClass('disabled');
-                    $('#myModal-img').find('.text-warning').hide();
-                });
+            //var fopLink = $('<a class="fopLink"/>');
+            //fopLink.attr('data-key', res.key).text('查看处理效果');
+            //infoWrapper.append(fopLink);
+            //fopLink.on('click', function() {
+            //    var key = $(this).data('key');
+            //    var height = parseInt($(this).parents('.Wrapper').find('.origin-height').text(), 10);
+            //    if (height > $(window).height() - height_space) {
+            //        height = parseInt($(window).height() - height_space, 10);
+            //    } else {
+            //        height = parseInt(height, 10) || 300;
+            //        //set a default height 300 for ie9-
+            //    }
+            //    var fopArr = [];
+            //    fopArr.push({
+            //        fop: 'imageView2',
+            //        mode: 3,
+            //        h: height,
+            //        q: 100,
+            //        format: 'png'
+            //    });
+            //    fopArr.push({
+            //        fop: 'watermark',
+            //        mode: 1,
+            //        image: 'http://www.b1.qiniudn.com/images/logo-2.png',
+            //        dissolve: 100,
+            //        gravity: 'SouthEast',
+            //        dx: 100,
+            //        dy: 100
+            //    });
+            //    var url = Qiniu.pipeline(fopArr, key);
+            //    $('#myModal-img').on('hide.bs.modal', function() {
+            //        $('#myModal-img').find('.btn-default').removeClass('disabled');
+            //        $('#myModal-img').find('.text-warning').hide();
+            //    }).on('show.bs.modal', function() {
+            //        $('#myModal-img').find('.imageView').find('a:eq(0)').addClass('disabled');
+            //        $('#myModal-img').find('.watermark').find('a:eq(3)').addClass('disabled');
+            //        $('#myModal-img').find('.text-warning').hide();
+            //    });
 
-                initImg(url, key, height);
+            //    initImg(url, key, height);
 
-                return false;
-            });
+            //    return false;
+            //});
 
             var ie = Qiniu.detectIEVersion();
             if (!(ie && ie <= 9)) {
@@ -334,30 +451,30 @@ FileProgress.prototype.setComplete = function(up, info) {
 
                 var imageInfo = Qiniu.imageInfo(res.key);
                 var infoArea = $('<div/>');
-                var infoInner = '<div>格式：<span class="origin-format">' + imageInfo.format + '</span></div>' +
-                    '<div>宽度：<span class="orgin-width">' + imageInfo.width + 'px</span></div>' +
-                    '<div>高度：<span class="origin-height">' + imageInfo.height + 'px</span></div>';
-                infoArea.html(infoInner);
+                //var infoInner = '<div>格式：<span class="origin-format">' + imageInfo.format + '</span></div>' +
+                //    '<div>宽度：<span class="orgin-width">' + imageInfo.width + 'px</span></div>' +
+                //    '<div>高度：<span class="origin-height">' + imageInfo.height + 'px</span></div>';
+                //infoArea.html(infoInner);
 
                 infoWrapper.append(infoArea);
             }
 
             Wrapper.append(infoWrapper);
 
-        }).on('error', function() {
+        }).on('error', function () {
             showImg.attr('src', 'default.png');
             Wrapper.addClass('default');
         });
     }
 };
-FileProgress.prototype.setError = function() {
+FileProgress.prototype.setError = function () {
     this.fileProgressWrapper.find('td:eq(2)').attr('class', 'text-warning');
     this.fileProgressWrapper.find('td:eq(2) .progress').css('width', 0).hide();
     this.fileProgressWrapper.find('button').hide();
     this.fileProgressWrapper.next('.chunk-status-tr').hide();
 };
 
-FileProgress.prototype.setCancelled = function(manual) {
+FileProgress.prototype.setCancelled = function (manual) {
     var progressContainer = 'progressContainer';
     if (!manual) {
         progressContainer += ' red';
@@ -368,17 +485,17 @@ FileProgress.prototype.setCancelled = function(manual) {
     this.fileProgressWrapper.find('td:eq(2) .progressCancel').hide();
 };
 
-FileProgress.prototype.setStatus = function(status, isUploading) {
+FileProgress.prototype.setStatus = function (status, isUploading) {
     if (!isUploading) {
         this.fileProgressWrapper.find('.status').text(status).attr('class', 'status text-left');
     }
 };
 
 // 绑定取消上传事件
-FileProgress.prototype.bindUploadCancel = function(up) {
+FileProgress.prototype.bindUploadCancel = function (up) {
     var self = this;
     if (up) {
-        self.fileProgressWrapper.find('td:eq(2) .progressCancel').on('click', function(){
+        self.fileProgressWrapper.find('td:eq(2) .progressCancel').on('click', function () {
             self.setCancelled(false);
             self.setStatus("取消上传");
             self.fileProgressWrapper.find('.status').css('left', '0');
@@ -388,7 +505,7 @@ FileProgress.prototype.bindUploadCancel = function(up) {
 
 };
 
-FileProgress.prototype.appear = function() {
+FileProgress.prototype.appear = function () {
     if (this.getTimer() !== null) {
         clearTimeout(this.getTimer());
         this.setTimer(null);
