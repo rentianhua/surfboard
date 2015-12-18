@@ -364,6 +364,8 @@
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\datepicker.css" />
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\img.gif" />
     <Content Include="Plugins\My97DatePicker\WdatePicker.js" />
+    <Content Include="Plugins\UploadImg\css\uploadImg.css" />
+    <Content Include="Plugins\UploadImg\img\car_add.png" />
     <Content Include="Plugins\UploadImg\js\highlight\highlight.css" />
     <Content Include="Plugins\UploadImg\js\highlight\highlight.js" />
     <Content Include="Plugins\UploadImg\js\html5shiv.js" />
