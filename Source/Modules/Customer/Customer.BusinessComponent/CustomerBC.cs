@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 #endregion
 
@@ -869,6 +871,45 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCustomer(string mobile)
         {
+            /*
+            //图片
+            1.会员的二维码 cust_info
+            2.会员认证信息的图片 cust_authentication
+            3.会员的所有的车辆的图片 car_picture
+            4.礼券的二维码 coupon_code
+            */
+
+            var picModel = DataAccess.GetCustomerAllPicture(mobile);
+            if (picModel != null)
+            {
+                var qiniu = new QiniuUtility();
+                if (!string.IsNullOrWhiteSpace(picModel.Qrcode))
+                {
+                    qiniu.DeleteFile(picModel.Qrcode);
+                }
+                if (!string.IsNullOrWhiteSpace(picModel.AuthPic))
+                {
+                    foreach (var item in picModel.AuthPic.Split(','))
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+                if (picModel.CarPicList.Any())
+                {
+                    foreach (var item in picModel.CarPicList)
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+                if (picModel.CodeList.Any())
+                {
+                    foreach (var item in picModel.CodeList)
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+            }
+            
             var result = DataAccess.DeleteCustomer(mobile);
             return new JResult
             {

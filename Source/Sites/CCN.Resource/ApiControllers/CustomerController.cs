@@ -108,7 +108,7 @@ namespace CCN.Resource.ApiControllers
 
             if (result.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {                    
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
@@ -162,7 +162,7 @@ namespace CCN.Resource.ApiControllers
 
             if (result.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
@@ -225,7 +225,7 @@ namespace CCN.Resource.ApiControllers
 
             if (result.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
                     var custModel = (CustModel) result.errmsg;
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
@@ -235,12 +235,12 @@ namespace CCN.Resource.ApiControllers
                         Createdtime = DateTime.Now,
                         Type = 1,
                         Innerid = Guid.NewGuid().ToString(),
-                        Point = 10, //注册+10
+                        Point = 10, //登录+10
                         Remark = "",
                         Sourceid = 2,
                         Validtime = null
                     });
-                    LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
+                    LoggerFactories.CreateLogger().Write("登录奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
                 });
             }
 
