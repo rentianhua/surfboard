@@ -188,6 +188,19 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        public CustModel CustInfoByCarid(string carid)
+        {
+            const string sql =
+                "select a.* from cust_info as a inner join car_info as b on a.innerid=b.custid where b.innerid=@carid;";
+            var custModel = Helper.Query<CustModel>(sql, new {carid}).FirstOrDefault();
+            return custModel;
+        }
+
+        /// <summary>
         /// 获取微信信息
         /// </summary>
         /// <param name="openid">openid</param>

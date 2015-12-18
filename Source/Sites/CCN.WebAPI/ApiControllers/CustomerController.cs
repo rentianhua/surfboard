@@ -297,6 +297,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        [Route("CustInfoByCarid")]
+        [HttpGet]
+        public JResult CustInfoByCarid(string carid)
+        {
+            return _custservice.CustInfoByCarid(carid);
+        }
+
+        /// <summary>
         /// 获取会员列表
         /// </summary>
         /// <param name="query">查询条件</param>

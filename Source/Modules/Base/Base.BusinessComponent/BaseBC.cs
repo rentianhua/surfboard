@@ -318,6 +318,9 @@ namespace CCN.Modules.Base.BusinessComponent
                 case 3:
                     content = $"{vcode}（平台找回密码的验证码，{valid}分钟内有效）";
                     break;
+                case 4:
+                    content = $"{vcode}（平台快速录车的验证码，{valid}分钟内有效）";
+                    break;
                 case 0:
                     content = $"{vcode}（平台验证码，{valid}分钟内有效）";
                     break;
@@ -336,13 +339,21 @@ namespace CCN.Modules.Base.BusinessComponent
         /// <returns></returns>
         public JResult SendVerification(BaseVerification model)
         {
-            var jResult = new JResult();
-            if (string.IsNullOrWhiteSpace(model?.Target))
+            if (model == null)
             {
-                jResult.errcode = 402;
-                jResult.errmsg = "参数不完整";
-                return jResult;
+                return JResult._jResult(402, "参数无效：无参数");
             }
+
+            if (string.IsNullOrWhiteSpace(model.Target))
+            {
+                return JResult._jResult(402, "参数无效：Target");
+            }
+
+            if (model.Length < 4 || model.Length > 10)
+            {
+                return JResult._jResult(402, "参数无效：Length（4-10范围内）");
+            }
+            
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
             model.Content = GetVerifiByType(model.UType, model.Vcode, model.Valid);
@@ -351,9 +362,7 @@ namespace CCN.Modules.Base.BusinessComponent
             if (saveRes == 0)
             {
                 //保存失败
-                jResult.errcode = 401;
-                jResult.errmsg = "发送验证码失败";
-                return jResult;
+                return JResult._jResult(401, "发送验证码失败");
             }
 
             #region 发送验证码
@@ -377,9 +386,7 @@ namespace CCN.Modules.Base.BusinessComponent
             });
             #endregion
 
-            jResult.errcode = 0;
-            jResult.errmsg = "发送验证码成功";
-            return jResult;
+            return JResult._jResult(0, "发送验证码成功");
         }
 
         /// <summary>
