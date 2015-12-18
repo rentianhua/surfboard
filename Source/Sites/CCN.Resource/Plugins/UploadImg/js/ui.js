@@ -279,49 +279,49 @@ FileProgress.prototype.setComplete = function(up, info) {
             var infoWrapper = $('<div class="infoWrapper col-md-6"></div>');
 
 
-            var fopLink = $('<a class="fopLink"/>');
-            fopLink.attr('data-key', res.key).text('查看处理效果');
-            infoWrapper.append(fopLink);
-            fopLink.on('click', function() {
-                var key = $(this).data('key');
-                var height = parseInt($(this).parents('.Wrapper').find('.origin-height').text(), 10);
-                if (height > $(window).height() - height_space) {
-                    height = parseInt($(window).height() - height_space, 10);
-                } else {
-                    height = parseInt(height, 10) || 300;
-                    //set a default height 300 for ie9-
-                }
-                var fopArr = [];
-                fopArr.push({
-                    fop: 'imageView2',
-                    mode: 3,
-                    h: height,
-                    q: 100,
-                    format: 'png'
-                });
-                fopArr.push({
-                    fop: 'watermark',
-                    mode: 1,
-                    image: 'http://www.b1.qiniudn.com/images/logo-2.png',
-                    dissolve: 100,
-                    gravity: 'SouthEast',
-                    dx: 100,
-                    dy: 100
-                });
-                var url = Qiniu.pipeline(fopArr, key);
-                $('#myModal-img').on('hide.bs.modal', function() {
-                    $('#myModal-img').find('.btn-default').removeClass('disabled');
-                    $('#myModal-img').find('.text-warning').hide();
-                }).on('show.bs.modal', function() {
-                    $('#myModal-img').find('.imageView').find('a:eq(0)').addClass('disabled');
-                    $('#myModal-img').find('.watermark').find('a:eq(3)').addClass('disabled');
-                    $('#myModal-img').find('.text-warning').hide();
-                });
+            //var fopLink = $('<a class="fopLink"/>');
+            //fopLink.attr('data-key', res.key).text('查看处理效果');
+            //infoWrapper.append(fopLink);
+            //fopLink.on('click', function() {
+            //    var key = $(this).data('key');
+            //    var height = parseInt($(this).parents('.Wrapper').find('.origin-height').text(), 10);
+            //    if (height > $(window).height() - height_space) {
+            //        height = parseInt($(window).height() - height_space, 10);
+            //    } else {
+            //        height = parseInt(height, 10) || 300;
+            //        //set a default height 300 for ie9-
+            //    }
+            //    var fopArr = [];
+            //    fopArr.push({
+            //        fop: 'imageView2',
+            //        mode: 3,
+            //        h: height,
+            //        q: 100,
+            //        format: 'png'
+            //    });
+            //    fopArr.push({
+            //        fop: 'watermark',
+            //        mode: 1,
+            //        image: 'http://www.b1.qiniudn.com/images/logo-2.png',
+            //        dissolve: 100,
+            //        gravity: 'SouthEast',
+            //        dx: 100,
+            //        dy: 100
+            //    });
+            //    var url = Qiniu.pipeline(fopArr, key);
+            //    $('#myModal-img').on('hide.bs.modal', function() {
+            //        $('#myModal-img').find('.btn-default').removeClass('disabled');
+            //        $('#myModal-img').find('.text-warning').hide();
+            //    }).on('show.bs.modal', function() {
+            //        $('#myModal-img').find('.imageView').find('a:eq(0)').addClass('disabled');
+            //        $('#myModal-img').find('.watermark').find('a:eq(3)').addClass('disabled');
+            //        $('#myModal-img').find('.text-warning').hide();
+            //    });
 
-                initImg(url, key, height);
+            //    initImg(url, key, height);
 
-                return false;
-            });
+            //    return false;
+            //});
 
             var ie = Qiniu.detectIEVersion();
             if (!(ie && ie <= 9)) {
@@ -334,10 +334,10 @@ FileProgress.prototype.setComplete = function(up, info) {
 
                 var imageInfo = Qiniu.imageInfo(res.key);
                 var infoArea = $('<div/>');
-                var infoInner = '<div>格式：<span class="origin-format">' + imageInfo.format + '</span></div>' +
-                    '<div>宽度：<span class="orgin-width">' + imageInfo.width + 'px</span></div>' +
-                    '<div>高度：<span class="origin-height">' + imageInfo.height + 'px</span></div>';
-                infoArea.html(infoInner);
+                //var infoInner = '<div>格式：<span class="origin-format">' + imageInfo.format + '</span></div>' +
+                //    '<div>宽度：<span class="orgin-width">' + imageInfo.width + 'px</span></div>' +
+                //    '<div>高度：<span class="origin-height">' + imageInfo.height + 'px</span></div>';
+                //infoArea.html(infoInner);
 
                 infoWrapper.append(infoArea);
             }

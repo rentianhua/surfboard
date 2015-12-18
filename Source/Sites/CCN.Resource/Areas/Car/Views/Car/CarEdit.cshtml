@@ -410,12 +410,14 @@
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
 
         var filelength = 0;
+        var uploadercount = 0;
         //统计新增的图片
         if (uploader == undefined || uploader == null) {
             filelength = 0;
         }
         else {
-            filelength += uploader.files.length;
+            uploadercount = uploader.files.length;
+            filelength += uploadercount;
         }
 
         if (id === "") {
@@ -435,16 +437,19 @@
                     });
                     uploader.start();
                     var carid = result.errmsg;
+                    var m = 0;
                     uploader.bind('FileUploaded', function (up, file, info) {
                         var picInfo = JSON.parse(info.response);
                         $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
 
                         });
+                        m++;
+                        //上传并保存图片 End
+                        if (m == uploadercount) {
+                            alert("添加成功");
+                            goList();
+                        }
                     });
-                    //上传并保存图片 End
-
-                    alert("添加成功");
-                    goList();
                 } else {
                     alert("添加失败:" + result.errmsg);
 
@@ -467,24 +472,34 @@
                 hideloading();
                 if (result.errcode === 0) {
                     //删除图片 imgs
-
-                    //上传并保存图片 Begin
-                    var i = 0;
-                    plupload.each(uploader.files, function (file) {
-                        var myDate = new Date();
-                        file.name = "car_" + myDate.getTime() + i + ".jpg";
-                        i++;
-                    });
-                    uploader.start();
-                    uploader.bind('FileUploaded', function (up, file, info) {
-                        var picInfo = JSON.parse(info.response);
-                        $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function () {
-
+                    if (uploadercount > 0) {
+                        //上传并保存图片 Begin
+                        var i = 0;
+                        plupload.each(uploader.files, function (file) {
+                            var myDate = new Date();
+                            file.name = "car_" + myDate.getTime() + i + ".jpg";
+                            i++;
                         });
-                    });
-                    //上传并保存图片 End
-                    alert("修改成功");
-                    goList();
+                        uploader.start();
+                        var m = 0;
+                        uploader.bind('FileUploaded', function (up, file, info) {
+                            var picInfo = JSON.parse(info.response);
+                            $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function () {
+
+                            });
+                            m++;
+                            if (m == uploadercount) {
+                                alert("修改成功");
+                                goList();
+                            }
+                        });
+                        //上传并保存图片 End
+                    }
+                    else {
+                        alert("修改成功");
+                        goList();
+                    }
+                    
                 } else {
                     alert("修改失败:" + result.errmsg);
                 }
