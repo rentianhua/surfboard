@@ -1050,8 +1050,8 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             var strName = string.Empty;
             if (!string.IsNullOrWhiteSpace(cityid))
             {
-                strCode = "and cityid =(select code from sys_department where innerid='" + cityid + "')";
-                strName = "and city =(select name from sys_department where innerid='" + cityid + "')";
+                strCode = "and cityid =(select code from sys_department where id='" + cityid + "')";
+                strName = "and city =(select name from sys_department where id='" + cityid + "')";
             }
             //sql.AppendFormat(@"select * from (
             //            select count(1) as value from cust_info where 1=1 {0}) as t1
