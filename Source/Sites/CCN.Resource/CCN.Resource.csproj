@@ -78,6 +78,10 @@
     <Reference Include="Cedar.Core.EntLib">
       <HintPath>Y:\GitHub\surfboard\Lib\Cedar.Core.EntLib.dll</HintPath>
     </Reference>
+    <Reference Include="Cedar.Foundation.SMS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Cedar.Foundation.SMS.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>

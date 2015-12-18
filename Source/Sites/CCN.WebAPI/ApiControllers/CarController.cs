@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using CCN.Modules.Base.BusinessEntity;
+using CCN.Modules.Base.Interface;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.Interface;
 using CCN.Modules.Customer.BusinessEntity;
@@ -15,6 +17,7 @@ using CCN.Modules.Rewards.Interface;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.IoC;
 using Cedar.Core.Logging;
+using Cedar.Foundation.SMS.Common;
 using Cedar.Framework.Common.BaseClasses;
 using Newtonsoft.Json;
 using WebGrease;
@@ -206,7 +209,7 @@ namespace CCN.WebAPI.ApiControllers
 
             if (jresult.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
                     ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
                 });
@@ -243,11 +246,12 @@ namespace CCN.WebAPI.ApiControllers
                 
                 if (custinfo == null) //会员不存在
                 {
+                    var password = RandomUtility.GetRandom(6);
                     //自动注册
                     var regResult = custservice.CustRegister(new CustModel
                     {
                         Mobile = model.mobile,
-                        Password = string.Concat("ccn", model.mobile),
+                        Password = password,
                         Custname = model.contacts,
                         Type = 2 //快速录车时自动注册也默认个人
                     });
@@ -257,6 +261,29 @@ namespace CCN.WebAPI.ApiControllers
                         return JResult._jResult(500, "自动注册失败");
                     }
                     model.custid = regResult.errmsg.ToString();
+
+                    Task.Run(() =>
+                    {
+                        #region 后台注册送积分
+
+                        var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                        var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                        {
+                            Custid = regResult.errmsg.ToString(),
+                            Type = 1,
+                            Point = 500, //注册+500
+                            Remark = "自动注册送积分",
+                            Sourceid = 1
+                        });
+                        LoggerFactories.CreateLogger().Write("自动注册送积分结果：" + pointresult.errcode, TraceEventType.Information);
+
+                        #endregion
+
+                        //发送短信通知
+                        var sms = new SMSMSG();
+                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用车信网发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【车信网】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。车信网承诺不会透露用户信息。");
+                    });
+
                     return _carervice.AddCar(model);
                 }
 
@@ -268,14 +295,35 @@ namespace CCN.WebAPI.ApiControllers
 
             if (jresult.errcode == 0)
             {
-                Task.Factory.StartNew(() =>
+                Task.Run(() =>
                 {
-                    var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                    custservice.UpdateCustType(model.custid);
+                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
                 });
             }
 
             return jresult;
+        }
+
+        /// <summary>
+        /// 暂不使用
+        /// </summary>
+        /// <param name="custid"></param>
+        [NonAction]
+        public void UpdateCustTypeTest(string custid)
+        {
+            var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+            var jresult = custservice.UpdateCustType(custid);
+            if (jresult.errcode == 0)
+            {
+                var custModel = (CustModel) jresult.errmsg;
+                if (!string.IsNullOrWhiteSpace(custModel?.Mobile))
+                {
+                    ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>().SendVerification(new BaseVerification
+                    {
+                        Content = "恭喜你已经成功升级为车商，您的账户登录名"
+                    });
+                }
+            }
         }
 
         /// <summary>

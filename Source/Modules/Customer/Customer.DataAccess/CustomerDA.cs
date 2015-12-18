@@ -380,22 +380,23 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
-        /// 修改会员类型
+        /// 修改会员类型(修改成功后返回会员信息)
         /// </summary>
         /// <param name="innerid"></param>
-        /// <param name="type"></param>
         /// <returns></returns>
-        public int UpdateCustType(string innerid)
+        public CustModel UpdateCustType(string innerid)
         {
-            const string sqlSCust = "select type from cust_info where innerid=@innerid;";
+            const string sqlSCust = "select * from cust_info where innerid=@innerid;";
             const string sqlSNum = "select count(1) from car_info where custid=@custid and status<>0;";
             const string sql = "update cust_info set type=1 where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
             {
-                var custType = conn.Query<int>(sqlSCust, new { innerid }).FirstOrDefault();
+                var custModel = conn.Query<CustModel>(sqlSCust, new { innerid }).FirstOrDefault();
                 var carNum = conn.Query<int>(sqlSNum, new { custid = innerid }).FirstOrDefault();
-                if (custType == 1 || carNum <= 1)
-                    return 0;
+                if (custModel == null)
+                    return null;
+                if (custModel.Type == 1 || carNum <= 1)
+                    return null;
                 try
                 {
                     conn.Execute(sql, new
@@ -403,12 +404,12 @@ namespace CCN.Modules.Customer.DataAccess
                         innerid
                     });
 
-                    return 1;
+                    return custModel;
                 }
                 catch (Exception ex)
                 {
                     LoggerFactories.CreateLogger().Write("修改会员类型异常：", TraceEventType.Error, ex);
-                    return 0;
+                    return null;
                 }
             }
         }
@@ -989,9 +990,54 @@ namespace CCN.Modules.Customer.DataAccess
                 return args.Get<int>("p_values");
             }
         }
+        
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public DeleteCustAllPic GetCustomerAllPicture(string mobile)
+        {
+            var sqlCust = "select innerid,qrcode from cust_info where mobile=@mobile;";
+            var sqlCustAuth = "select relevantpicture from cust_authentication where custid=@custid;";
+            var sqlCarPic = "select path from car_picture where carid in (select innerid from car_info where custid=@custid);";
+            var sqlCarCode = "select qrcode from coupon_code where custid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var custModel = conn.Query<dynamic>(sqlCust, new { mobile }).FirstOrDefault();
+                if (custModel == null)
+                {
+                    return null;
+                }
+                var custid = custModel.innerid.ToString();
+
+                var model = new DeleteCustAllPic
+                {
+                    Qrcode = custModel.qrcode.ToString(),
+                    AuthPic = conn.Query<string>(sqlCustAuth, new { custid }).FirstOrDefault(),
+                    CarPicList = conn.Query<string>(sqlCarPic, new { custid }).ToList(),
+                    CodeList = conn.Query<string>(sqlCarCode, new { custid }).ToList(),
+                };
+
+                //model.qrcode = custModel.qrcode.ToString();
+
+                ////获取认证信息图片
+                //model.authPic = conn.Query<string>(sqlCustAuth, new { custid }).FirstOrDefault();
+
+                ////获取车辆图片
+                //model.carPicList = conn.Query<string>(sqlCarPic, new { custid }).ToList();
+
+                ////获取礼券二维码图片
+                //model.codeList = conn.Query<string>(sqlCarCode, new { custid }).ToList();
+
+                return model;
+            }
+            
+        }
 
         #endregion
-        
+
         #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
