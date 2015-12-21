@@ -78,10 +78,14 @@ var setCookie = function () {
     document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
 }
 
-var getQiniuUrl = function (key) {
+var QiuniuHost = function () {
     //var qiniuurl = "http://7xnwvr.com2.z0.glb.qiniucdn.com/";  //正式空间
     var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";   //测试空间
-    return qiniuurl + key;
+    return qiniuurl;
+}
+
+var getQiniuUrl = function (key) {    
+    return QiuniuHost() + key;
 }
 
 /*

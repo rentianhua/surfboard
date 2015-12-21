@@ -63,10 +63,10 @@ function FileProgress(file, targetID) {
             //    + '<a href="###" class="pic_delete" data-val=' + file.id +
             //    '>删除</a><br/>' +
             //'<img class="listview" width="90" height="60" src="' + imgsrc + '" name="' + file.name + '" /></div>');
-            strradom=(((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             $('.imgs').append(
 					'<div id="' + strradom + '" class="imgPreview" >\
-						<img src="' + imgsrc + '" class="loading">\
+						<img data-type="img" src="' + imgsrc + '" class="loading">\
 						<div class="caidan">\
 							<div hash="' + strradom + '" class="cz_1">\
 								<div class="czl_icon"></div>\

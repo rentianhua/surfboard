@@ -163,6 +163,7 @@
 
     //初始化城市
     function InitCity(provid) {
+        
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
 
@@ -430,6 +431,7 @@
         var filelength = 0;
         var uploadercount = 0;
         //统计新增的图片
+        
         if (uploader == undefined || uploader == null) {
             filelength = 0;
         }
@@ -437,9 +439,10 @@
             uploadercount = uploader.files.length;
             filelength += uploadercount;
         }
-
+       
         if (id === "") {
             if (filelength > 9 || filelength < 3) {
+                hideloading();
                 alert('请上传3-9张图片');
                 return false;
             }
@@ -668,7 +671,7 @@
                                     <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
                                         <i class="glyphicon glyphicon-plus"></i>
                                         <sapn>选择文件</sapn>
-                                    </a>
+                                    </a><label class="required">只能上传2M以下图片</label>
                                 </div>
                                 <div>
                                     <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
