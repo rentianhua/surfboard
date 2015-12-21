@@ -154,9 +154,8 @@
                     $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
                 });
 
-                var jsid = 11;
                 $("#selectprov").selectText(getCookie("province"));
-                InitCity(jsid);
+                InitCity($("#selectprov").val());
             }
         });
     }
@@ -177,7 +176,8 @@
                 $.each(data, function (k, v) {
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
-                $("#selectcity").selectVal(125);
+                $("#selectcity").selectText(getCookie("city"));
+                
             }
         });
     }
