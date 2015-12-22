@@ -665,5 +665,29 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
 
         #endregion
 
+        #region 不同地区数据统计
+        /// <summary>
+        /// 获取地区的数据
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetDataByBity()
+        {
+            var list = DataAccess.GetDataByBity();
+            if (list == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = list
+            };
+        }
+        #endregion
+
     }
 }

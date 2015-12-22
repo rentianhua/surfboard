@@ -1152,5 +1152,29 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         }
         #endregion
 
+        #region 不同地区数据统计
+        /// <summary>
+        /// 获取地区的数据
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<dynamic> GetDataByBity()
+        {
+            const string sql = @"select t1.innerid as `key`,t1.cityname as value,ifnull(t2.count,0) as value2,ifnull(t3.count,0) as value4,ifnull(t4.count,0) as value6 from base_city as t1
+                                left join(select count(1) as count,cityid from cust_info group by cityid) as t2 on t2.cityid=t1.innerid
+                                left join (select count(1) as count,cityid from car_info group by cityid) as t3 on t3.cityid=t1.innerid
+                                left join (select count(1) as count,city from cust_wechat group by city) as t4 on t4.city=t1.cityname
+                                where t2.cityid is not null or t3.cityid is not null
+                                order by t1.provid";
+            try
+            {
+                return Helper.Query<DataAnalysisModel>(sql);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        #endregion
+
     }
 }

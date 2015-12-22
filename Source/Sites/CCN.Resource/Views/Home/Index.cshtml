@@ -49,36 +49,55 @@
             </table>
             <table style="margin: 0 auto;"></table>
             <br />
-            <div class="widget-header bordered-bottom bordered-yellow">
-                <span class="widget-caption">日增长量</span>
-                <div class="widget-buttons">
-                    <a href="#" data-toggle="maximize">
-                        <i class="fa fa-expand"></i>
-                    </a>
-                    <a href="#" data-toggle="collapse">
-                        <i class="fa fa-minus"></i>
-                    </a>
-                    <a href="#" data-toggle="dispose">
-                        <i class="fa fa-times"></i>
-                    </a>
+
+            <div class="row">
+                <div class="col-xs-6 col-md-6">
+                    <div class="well with-header with-footer">
+                        <div class="header bg-blue">
+                            日增长量
+                        </div>
+                        <div style="height:400px;overflow:auto;">
+                            <table class="table table-bordered table-hover table-striped" id="anaiysislist">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th>序号</th>
+                                        <th>日期</th>
+                                        <th>会员增长数</th>
+                                        <th>车辆增长数</th>
+                                        <th>粉丝增长数</th>
+                                        <th>搜索数</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-6">
+                    <div class="well with-header with-footer">
+                        <div class="header bg-palegreen">
+                            城市数据统计
+                        </div>
+                        <div style="height:400px;overflow:auto;">
+                            <table class="table table-hover table-striped table-bordered" id="anaiysiscity">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th>序号</th>
+                                        <th>城市</th>
+                                        <th>会员数</th>
+                                        <th>车辆数</th>
+                                        <th>粉丝数</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody style="height:300px"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="widget-body no-padding">
-                <table class="table table-bordered table-hover table-striped" id="anaiysislist">
-                    <thead class="bordered-darkorange">
-                        <tr role="row">
-                            <th>序号</th>
-                            <th>日期</th>
-                            <th>会员增长数</th>
-                            <th>车辆增长数</th>
-                            <th>粉丝增长数</th>
-                            <th>搜索数</th>
-                        </tr>
-                    </thead>
 
-                    <tbody></tbody>
-                </table>
-            </div>
         </div>
     </div>
 </div>
@@ -98,8 +117,12 @@
         $("#starttime").val(start);
         $("#endtime").val(year + "-" + month + "-" + day);
 
+        //每日增长数据
         QueryList();
+        //汇总数据
         InitTotal();
+        //区域数据
+        GetDataByBity();
     });
 
     //获取总数
@@ -110,8 +133,8 @@
         }
         $.get(url, function (data) {
             var obj = data.errmsg;
-            $("#custtotal").html(parseInt(obj.value) + 2500);
-            $("#cartotal").html(parseInt(obj.value2) + 2500);
+            $("#custtotal").html(parseInt(obj.value));
+            $("#cartotal").html(parseInt(obj.value2));
             $("#fanstotal").html(obj.value4);
         });
     }
@@ -133,12 +156,34 @@
                 str += "<tr>";
                 str += "<td>" + (key + 1) + "</td>";
                 str += "<td>" + Dateformat(val.key, "yyyy-MM-dd") + "</td>";
-                str += "<td>" + (parseInt(val.value) + 30) + "</td>";
-                str += "<td>" + (parseInt(val.value2) + 30) + "</td>";
+                str += "<td>" + (parseInt(val.value)) + "</td>";
+                str += "<td>" + (parseInt(val.value2)) + "</td>";
                 str += "<td>" + val.value4 + "</td>";
-                str += "<td>" + (parseInt(val.value6) + 30) + "</td>";
+                str += "<td>" + (parseInt(val.value6)) + "</td>";
                 str += "</tr>";
                 $("#anaiysislist tbody").append(str);
+            });
+        });
+    }
+
+    //获取区域数据 GetDataByBity
+    function GetDataByBity() {
+        var url = "/api/DataAnalysis/GetDataByBity";
+        $.get(url, function (data) {
+            var obj = data.errmsg;
+            $("#anaiysiscity tbody").empty();
+            var str = "";
+            $.each(obj, function (key, val) {
+                var myDate = new Date(val.key);
+                str = "";
+                str += "<tr>";
+                str += "<td>" + (key + 1) + "</td>";
+                str += "<td>" + val.value + "</td>";
+                str += "<td>" + parseInt(val.value2) + "</td>";
+                str += "<td>" + val.value4 + "</td>";
+                str += "<td>" + parseInt(val.value6) + "</td>";
+                str += "</tr>";
+                $("#anaiysiscity tbody").append(str);
             });
         });
     }

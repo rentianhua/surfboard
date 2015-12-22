@@ -3,15 +3,46 @@
 //ViewBag.Title = "CouponEdit";
 //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
 
-<style type="text/css">
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+<style>
+    .div1 {
+        height: 150px;
+        width: 150px;
+        position: relative;
+        z-index: 1;
+    }
 
+    .div2 {
+        height: 150px;
+        width: 150px;
+        position: absolute;
+        top: 0px;
+        left: 0;
+        z-index: 2;
+    }
 </style>
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
 
+    var uploader
     $(function () {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+
         InitShop();
         InitCode();
         Init();
@@ -191,7 +222,7 @@
                 alert('请填写起效和有效天数【整数】！'); return false;
             }
         }
-       
+
         if (json.Maxcount === "") {
             alert('请填写最大库存'); return false;
         }
@@ -319,6 +350,12 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">Logo</label>
                             <div class="controls col-sm-10">
+                                @*<div id="container2"  class="text-left imgs div1">
+                                    <a class="btn btn-default btn-lg " id="pickfiles2" href="#" style="width:150px;height:150px;padding-top: 60px">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <sapn>选择文件</sapn>
+                                    </a>
+                                </div>*@
                                 <input type="file" id="logourl" />
                                 <img id="logoimg" style="max-width: 150px; max-height: 150px" src="" />
                             </div>

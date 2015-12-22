@@ -177,14 +177,13 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        JResult GetDayGrowth(DateTime startTime, DateTime endTime,string cityid);
+        JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid);
 
         /// <summary>
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
         JResult GetTotal(string cityid);
-
 
         #region 商户车辆数据统计
         /// <summary>
@@ -199,6 +198,14 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <returns></returns>
         JResult GetRecent12Sell(string custid);
 
+        #endregion
+
+        #region 不同地区数据统计
+        /// <summary>
+        /// 获取地区的数据
+        /// </summary>
+        /// <returns></returns>
+        JResult GetDataByBity();
         #endregion
 
     }
