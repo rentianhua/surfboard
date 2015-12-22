@@ -145,6 +145,13 @@ namespace CCN.Modules.Base.Interface
         IEnumerable<BaseCity> GetCityList(int provId, string initial);
 
         /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        IEnumerable<BaseCounty> GetCountyList(int cityId);
+
+        /// <summary>
         /// 获取省份
         /// </summary>
         /// <param name="initial">首字母</param>

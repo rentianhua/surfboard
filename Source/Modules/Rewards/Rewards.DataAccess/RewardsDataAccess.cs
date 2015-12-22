@@ -848,9 +848,10 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public MyCodeViewModel GetCodeInfo(string code)
         {
-            const string sql = @"select a.innerid,a.code,a.cardid,a.gettime,a.qrcode,a.vstart,a.vend,a.isused,b.shopid,b.title,b.logourl,b.amount,b.buyprice,b.isenabled,b.usedesc, c.shopname,c.area,c.address,bc.codename as cardtypename,bc.remark as cardtyperemark from coupon_code as a 
+            const string sql = @"select a.innerid,a.code,a.cardid,a.gettime,a.qrcode,a.vstart,a.vend,a.isused,b.shopid,b.title,b.logourl,b.amount,b.buyprice,b.isenabled,b.usedesc, c.shopname,cy.countyname as area,c.address,bc.codename as cardtypename,bc.remark as cardtyperemark from coupon_code as a 
                                         inner join coupon_card as b on a.cardid=b.innerid
                                         inner join coupon_shop as c on b.shopid=c.innerid
+                                        left join base_county as cy on b.countyid=cy.innerid
                                         left join base_code as bc on b.cardtype=bc.codevalue and bc.typekey='coupon_type' where a.code=@code;";
             var codeModel = Helper.Query<MyCodeViewModel>(sql, new { code }).FirstOrDefault();
             return codeModel;
@@ -1045,10 +1046,11 @@ namespace CCN.Modules.Rewards.DataAccess
             const string spName = "sp_common_pager";
             const string tableName = @"coupon_card as a 
                                         left join coupon_shop as s on a.shopid=s.innerid
+                                        left join base_county as sc on s.countyid=sc.innerid
                                         left join base_code as bc on a.cardtype=bc.codevalue and bc.typekey='coupon_type'
                                         left join coupon_card_product as p on a.innerid=p.cardid";
             const string fields =
-                @"a.innerid, a.title, a.titlesub, a.amount,a.buyprice, a.logourl, a.vtype, a.vstart, a.vend, a.value1, a.value2, a.maxcount, a.count,a.codetype, a.createdtime,s.area as ShopArea, s.address as ShopAddress,s.shopname as Shopname,bc.codename as cardtypename,bc.remark as cardtyperemark,p.productid as ProductUrl,
+                @"a.innerid, a.title, a.titlesub, a.amount,a.buyprice, a.logourl, a.vtype, a.vstart, a.vend, a.value1, a.value2, a.maxcount, a.count,a.codetype, a.createdtime,sc.countyname as ShopArea, s.address as ShopAddress,s.shopname as Shopname,bc.codename as cardtypename,bc.remark as cardtyperemark,p.productid as ProductUrl,
                     (select count(1) from coupon_code where cardid=a.innerid and sourceid = 1) as SoldedNum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
@@ -1081,9 +1083,9 @@ namespace CCN.Modules.Rewards.DataAccess
         public BasePageList<ShopMallViewList> GetMallShopPageList(ShopMallQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"coupon_shop as a";
+            const string tableName = @"coupon_shop as a left join base_county as b on a.countyid=b.innerid";
             const string fields =
-                @"innerid,shopname,area,address,headportrait,
+                @"a.innerid,a.shopname,b.countyname as CountyName,a.address,a.headportrait,
                 (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid=ccard.innerid where ccard.shopid=a.innerid and cc.sourceid=1) as SoldedNum,
                 (select group_concat(codename) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as CardTypeNames,
                 (select count(1) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as sort";
@@ -1100,9 +1102,19 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and a.shopname like '%{query.Shopname}%'");
             }
             
-            if (!string.IsNullOrWhiteSpace(query.Area))
+            if (query.Countyid != null)
             {
-                sqlWhere.Append($" and a.area='{query.Area}'");
+                sqlWhere.Append($" and a.countyid={query.Countyid}");
+            }
+
+            if (query.Cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.Cityid}");
+            }
+
+            if (query.Provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.Provid}");
             }
 
             if (!string.IsNullOrWhiteSpace(query.CardTypes))
@@ -1302,7 +1314,7 @@ namespace CCN.Modules.Rewards.DataAccess
         public ShopModel GetShopModel(string shopcode, string password)
         {
             const string sqlSelect =
-                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, area, address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where shopcode=@shopcode and password=@password";
+                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, countyid, address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where shopcode=@shopcode and password=@password";
 
             //更新礼券code
             return Helper.Query<ShopModel>(sqlSelect, new { shopcode, password }).FirstOrDefault();
@@ -1315,7 +1327,7 @@ namespace CCN.Modules.Rewards.DataAccess
         public ShopModel GetShopById(string innerid)
         {
             const string sqlSelect =
-                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, area, address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where innerid=@innerid";
+                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, countyid, address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where innerid=@innerid";
 
             //更新礼券code
             return Helper.Query<ShopModel>(sqlSelect, new { innerid }).FirstOrDefault();
@@ -1328,9 +1340,10 @@ namespace CCN.Modules.Rewards.DataAccess
         public ShopInfoViewModel GetShopViewById(string innerid)
         {
             const string sqlSelect =
-                @"select a.innerid, a.shopname, a.shopcode, a.telephone, a.email, a.headportrait, a.status, pr.provname, ct.cityname, a.area, a.address, a.qq, a.signature, a.qrcode, a.createdtime from coupon_shop as a 
+                @"select a.innerid, a.shopname, a.shopcode, a.telephone, a.email, a.headportrait, a.status, pr.provname, ct.cityname, cc.countyname, a.address, a.qq, a.signature, a.qrcode, a.createdtime from coupon_shop as a 
                 left join base_province as pr on a.provid=pr.innerid
                 left join base_city as ct on a.cityid=ct.innerid 
+                left join base_county as cc on a.countyid=cc.innerid 
                 where a.innerid=@innerid";
 
             //更新礼券code
@@ -1379,8 +1392,8 @@ namespace CCN.Modules.Rewards.DataAccess
         /// <returns></returns>
         public int AddShop(ShopModel model)
         {
-            const string sql = "insert into coupon_shop (innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, area,address, qq, signature, qrcode, createdtime, modifiedtime,code) " +
-                               "values (@innerid, @shopname, @shopcode, @password, @telephone, @email, @headportrait, @status, @provid, @cityid, @area,@address, @qq, @signature, @qrcode, @createdtime, @modifiedtime,@code);";
+            const string sql = "insert into coupon_shop (innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, countyid,address, qq, signature, qrcode, createdtime, modifiedtime,code) " +
+                               "values (@innerid, @shopname, @shopcode, @password, @telephone, @email, @headportrait, @status, @provid, @cityid, @countyid,@address, @qq, @signature, @qrcode, @createdtime, @modifiedtime,@code);";
             try
             {
                 Helper.Execute(sql, model);
@@ -1484,9 +1497,10 @@ namespace CCN.Modules.Rewards.DataAccess
             const string tableName =
                 @"coupon_shop as a 
                 left join base_province as pr on a.provid=pr.innerid
-                left join base_city as ct on a.cityid=ct.innerid ";
+                left join base_city as ct on a.cityid=ct.innerid 
+                left join base_county as cc on a.countyid=cc.innerid ";
             const string fields =
-                "a.innerid, a.shopname, a.shopcode, a.telephone, a.email, a.headportrait, a.createdtime,a.status,pr.provname,ct.cityname,a.area,a.address";
+                "a.innerid, a.shopname, a.shopcode, a.telephone, a.email, a.headportrait, a.createdtime,a.status,pr.provname,ct.cityname,cc.countyname as CountyName,a.address";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             //查询条件 
             var sqlWhere = new StringBuilder("1=1");
@@ -1533,7 +1547,7 @@ namespace CCN.Modules.Rewards.DataAccess
                 "select innerid,shopid, loginname, password, staffname, sex, mobile, email, status, createdtime, modifiedtime from coupon_shop_staff where loginname=@loginname and password=@password";
 
             const string sqlSelectShop =
-                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, area,address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where shopid=@shopid";
+                "select innerid, shopname, shopcode, password, telephone, email, headportrait, status, provid, cityid, countyid, address, qq, signature, qrcode, createdtime, modifiedtime from coupon_shop where shopid=@shopid";
 
             var shopStaffInfo = new ShopStaffInfo();
             using (var conn = Helper.GetConnection())
