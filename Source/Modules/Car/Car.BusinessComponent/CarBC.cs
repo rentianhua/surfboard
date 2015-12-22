@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 using CCN.Modules.Car.BusinessEntity;
 using CCN.Modules.Car.DataAccess;
 using Cedar.Core.ApplicationContexts;
+using Cedar.Core.EntLib.Logging;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
@@ -33,6 +36,118 @@ namespace CCN.Modules.Car.BusinessComponent
         #region 车辆
 
         /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件
+        /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
+        /// </param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
+        {
+            string strwhere;
+            var list = DataAccess.SearchCarPageListTop(query,out strwhere);
+
+            var fill = 0;       //标识是否需要补数据
+            var total = list.iTotalRecords ?? 0;
+
+            if (total <= 0)  //没有数据
+            {
+                fill = query.PageSize;
+            }
+            else
+            {
+                var ys = total % query.PageSize; //余数
+                if (ys > 0)
+                {
+                    var maxindex = total / query.PageSize + 1;   //最大页数
+                    if (maxindex == query.PageIndex)  //最后一页
+                    {
+                        fill = query.PageSize - ys;
+                    }
+                }
+            }
+
+            //需要补数据
+            if (fill <= 0)
+                return list;
+
+            //查询补全数据
+            var filllist = DataAccess.SearchCarPageListTopFill(new CarTopFillQueryModel
+            {
+                @where = strwhere,
+                PageIndex = query.Echo ?? 1,
+                PageSize = fill
+            });
+            
+            if (!filllist.aaData.Any())
+                return list;
+
+            //将补全数据填充到置顶数据中
+            var aaData = list.aaData.ToList();
+            aaData.AddRange(filllist.aaData);
+            list.aaData = aaData;
+            list.iTotalDisplayRecords += filllist.aaData.Count();   //补齐数据后的总记录数
+
+            return list;
+        }
+
+        /// <summary>
+        /// 全城搜车(官网页面)
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
+
+            var custid = ApplicationContext.Current.UserId;
+            Task.Run(() =>
+            {
+                //保存搜车条件
+                DataAccess.SaveSearchRecord(new CarSearchRecordModel
+                {
+                    Createdtime = DateTime.Now,
+                    Custid = custid,
+                    Innerid = Guid.NewGuid().ToString(),
+                    Jsonobj = "web:" + JsonConvert.SerializeObject(query)
+                });
+            });
+
+            switch (query.Order)
+            {
+                case "1":
+                    query.Order = "a.price asc";
+                    break;
+                case "-1":
+                    query.Order = "a.price desc";
+                    break;
+                case "2":
+                    query.Order = "a.register_date desc";
+                    break;
+                case "-2":
+                    query.Order = "a.register_date asc";
+                    break;
+                case "3":
+                    query.Order = "a.mileage asc";
+                    break;
+                case "-3":
+                    query.Order = "a.mileage desc";
+                    break;
+                default:
+                    query.Order = "a.createdtime desc";
+                    break;
+            }
+
+            query.keyword = query.keyword.ToDbValue();
+
+            var list = DataAccess.SearchCarPageListEx(query);
+            return list;
+        }
+
+        /// <summary>
         /// 全城搜车列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -52,17 +167,20 @@ namespace CCN.Modules.Car.BusinessComponent
                 }
             }
 
+            var custid = ApplicationContext.Current.UserId;
             Task.Run(() =>
             {
                 //保存搜车条件
                 DataAccess.SaveSearchRecord(new CarSearchRecordModel
                 {
                     Createdtime = DateTime.Now,
-                    Custid = ApplicationContext.Current.UserId,
+                    Custid = custid,
                     Innerid = Guid.NewGuid().ToString(),
-                    Jsonobj = JsonConvert.SerializeObject(query)
+                    Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
                 });
             });
+
+            query.keyword = query.keyword.ToDbValue();
 
             return list;
         }
@@ -90,7 +208,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 if (firstOrDefault != null)
                     model.ShareModel = firstOrDefault;
             }
-
+            query.SearchField = query.SearchField.ToDbValue();
             return list;
         }
 
@@ -135,6 +253,25 @@ namespace CCN.Modules.Car.BusinessComponent
             jResult.errmsg = carInfo;
             return jResult;
         }
+
+        #region 感兴趣
+
+        /// <summary>
+        /// 获取感兴趣的车列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetInterestList(CarInterestQueryModel query)
+        {
+            if (string.IsNullOrWhiteSpace(query?.carid) || query.series_id == null || query.regdate == null || query.price == null)
+            {
+                LoggerFactories.CreateLogger().Write("获取感兴趣的车列表，参数不完整", TraceEventType.Warning);
+                return new BasePageList<CarInfoListViewModel>();
+            }
+            return DataAccess.GetInterestList(query);
+        }
+
+        #endregion
 
         /// <summary>
         /// 车辆估值（根据城市，车型，时间）
@@ -204,8 +341,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return jResult;
         }
-
-
+        
         /// <summary>
         /// 车辆估值
         /// </summary>
@@ -295,9 +431,20 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
+            LoggerFactories.CreateLogger().Write("添加车辆",TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
             model.createdtime = DateTime.Now;
+
+            var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            model.refreshtime = (long) ts.TotalSeconds;
+
+            model.istop = 0;            ////
+
             model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
             if (result > 0)
@@ -503,6 +650,33 @@ namespace CCN.Modules.Car.BusinessComponent
                 ? JResult._jResult(400, "")
                 : JResult._jResult(0, carInfo);
         }
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RefreshCar(string carid)
+        {
+            var result = DataAccess.RefreshCar(carid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DoTopCar(string carid, int istop)
+        {
+            if (1 != istop)
+            {
+                istop = 0;
+            }
+            var result = DataAccess.DoTopCar(carid, istop);
+            return JResult._jResult(result);
+        }
         #endregion
 
         #region 车辆图片
@@ -544,95 +718,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = ""
             };
         }
-
-        /// <summary>
-        /// 添加车辆图片
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList.WeichatPictureModel")]
-        public JResult AddCarPictureList(WeichatPictureModel picModel)
-        {
-            if (picModel == null)
-            {
-                return new JResult
-                {
-                    errcode = 401,
-                    errmsg = "参数不完整"
-                };
-            }
-
-            //上传图片到七牛云
-            var qinniu = new QiniuUtility();
-
-            foreach (var item in picModel.MediaIdList)
-            {
-                var filename = QiniuUtility.GetFileName(Picture.car_picture);
-
-                //下载图片写入文件流
-                var filebyte = MediaApi.Get(picModel.AccessToken, item);
-                Stream stream = new MemoryStream(filebyte);
-
-                //上传到七牛
-                var qnKey = qinniu.Put(stream, "", filename);
-                stream.Dispose();
-                
-                //上传图片成功
-                if (string.IsNullOrWhiteSpace(qnKey))
-                    continue;
-                var pictureModel = new CarPictureModel
-                {
-                    Carid = picModel.Carid,
-                    Createdtime = DateTime.Now,
-                    Path = qnKey
-                };
-                AddCarPicture(pictureModel);
-            }
-
-            return new JResult
-            {
-                errcode = 0,
-                errmsg = ""
-            };
-        }
-
-        /// <summary>
-        /// 添加车辆图片(后台)
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        [AuditTrailCallHandler("CarBC.AddCarPictureList.PictureListModel")]
-        public JResult AddCarPictureList(PictureListModel picModel)
-        {
-            if (picModel == null)
-            {
-                return new JResult
-                {
-                    errcode = 401,
-                    errmsg = "参数不完整"
-                };
-            }
-
-            foreach (var item in picModel.KeyList)
-            {
-                if (string.IsNullOrWhiteSpace(item))
-                    continue;
-                var pictureModel = new CarPictureModel
-                {
-                    Carid = picModel.Carid,
-                    Createdtime = DateTime.Now,
-                    Path = item
-                };
-                AddCarPicture(pictureModel);
-            }
-
-            return new JResult
-            {
-                errcode = 0,
-                errmsg = ""
-            };
-        }
-
+        
         /// <summary>
         /// 删除车辆图片
         /// </summary>
@@ -641,18 +727,25 @@ namespace CCN.Modules.Car.BusinessComponent
         [AuditTrailCallHandler("CarBC.DeleteCarPicture")]
         public JResult DeleteCarPicture(string innerid)
         {
+            var model = DataAccess.GetCarPictureByid(innerid);
+
             var result = DataAccess.DeleteCarPicture(innerid);
-            if (result > 0)
+            switch (result)
             {
-
+                case 400: return JResult._jResult(result, "删除失败");
+                case 401: return JResult._jResult(result, "图片不存在");
+                case 402: return JResult._jResult(result, "图片不能少于三张");
             }
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
-            };
-        }
 
+            if (!string.IsNullOrWhiteSpace(model?.Path))
+            {
+                var qiniu = new QiniuUtility();
+                qiniu.DeleteFile(model.Path);
+            }
+
+            return JResult._jResult(0, "删除成功");
+        }
+        
         /// <summary>
         /// 获取车辆已有图片
         /// </summary>
@@ -701,6 +794,201 @@ namespace CCN.Modules.Car.BusinessComponent
                 errcode = result > 0 ? 0 : 400,
                 errmsg = ""
             };
+        }
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        public JResult DelCarPictureList(PictureDelListModel picModel)
+        {
+            if (picModel == null || picModel.IdList.Count == 0)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            //获取即将删除的图片
+            var picedList = DataAccess.GetCarPictureByIds(picModel.IdList).ToList();
+            
+            var result = DataAccess.DelCarPictureList(picModel.IdList, picModel.Carid);
+            
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            Task.Run(() =>
+            {
+                if (!picedList.Any())
+                    return;
+
+                var qiniu = new QiniuUtility();
+                foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                {
+                    qiniu.DeleteFile(item.Path);
+                }
+            });
+
+            return JResult._jResult(0, "批量删除图片成功");
+        }
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(PictureListModel picModel)
+        {
+            if (picModel == null)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            var result = DataAccess.AddCarPictureList(picModel.KeyList, picModel.Carid);
+
+            if (result == 402)
+            {
+                return JResult._jResult(402, "图片数量不对");
+            }
+            return result == 0
+                ? JResult._jResult(400, "批量添加图片失败")
+                : JResult._jResult(0, "批量添加图片成功");
+        }
+        
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureList(WechatPictureModel picModel)
+        {
+            if (string.IsNullOrWhiteSpace(picModel?.AccessToken) || picModel.MediaIdList.Count == 0)
+            {
+                return new JResult
+                {
+                    errcode = 401,
+                    errmsg = "参数不完整"
+                };
+            }
+
+            var pathList = new List<string>();
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in picModel.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+
+                //下载图片写入文件流
+                var filebyte = MediaApi.Get(picModel.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
+
+                //上传到七牛
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                {
+                    continue;
+                }
+
+                pathList.Add(qnKey);
+            }
+
+            var result = DataAccess.AddCarPictureList(pathList, picModel.Carid);
+
+            if (result == 402)
+            {
+                return JResult._jResult(402, "图片数量不对");
+            }
+            return result == 0
+                ? JResult._jResult(400, "批量添加图片失败")
+                : JResult._jResult(0, "批量添加图片成功");
+        }
+        
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SaveCarPicture(BatchPictureListWeichatModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || (model.IdList.Count == 0 || model.WechatPicture == null))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var pathList = new List<string>();
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in model.WechatPicture.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+
+                //下载图片写入文件流
+                var filebyte = MediaApi.Get(model.WechatPicture.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
+
+                //上传到七牛
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                {
+                    continue;
+                }
+
+                pathList.Add(qnKey);
+            }
+
+            var saveList = new BatchPictureListModel
+            {
+                Carid = model.Carid,
+                AddPaths = pathList,
+                DelIds = model.IdList
+            };
+
+            //获取即将删除的图片
+            var picedList = DataAccess.GetCarPictureByIds(model.IdList).ToList();
+
+            var result = DataAccess.SaveCarPicture(saveList);
+
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            Task.Run(() =>
+            {
+                if (!picedList.Any())
+                    return;
+
+                var qiniu = new QiniuUtility();
+                foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                {
+                    qiniu.DeleteFile(item.Path);
+                }
+            });
+
+            return JResult._jResult(0, "批量操作图片成功");
         }
 
         #endregion

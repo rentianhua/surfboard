@@ -98,7 +98,7 @@
         var json = { Innerid: id, Count: addcount };
         $.post("/api/Rewards/UpdateStock", json, function(result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/rewards/rewards/couponview?innerid=' + id);
         });
     }
 
@@ -138,7 +138,7 @@
 
         $.post("/api/Rewards/UpdateValidity", json, function (result) {
             alert(result.errmsg);
-            location.reload();
+            getBodyHtml('mainbody', '/rewards/rewards/couponview?innerid=' + id);
         });
     }
 
@@ -180,7 +180,7 @@
             var json = { Cardid: id, ProductId: productid };
             $.post("/api/Rewards/BindWechatProduct", json, function(result) {
                 alert(result.errmsg);
-                location.reload();
+                getBodyHtml('mainbody', '/rewards/rewards/couponview?innerid=' + id);
             });
         } else {
             if (!confirm("确定解除绑定")) {
@@ -188,7 +188,7 @@
             }
             $.get("/api/Rewards/UnBindWechatProduct?cardid=" + id, function (result) {
                 alert(result.errmsg);
-                location.reload();
+                getBodyHtml('mainbody', '/rewards/rewards/couponview?innerid=' + id);
             });
         }
 

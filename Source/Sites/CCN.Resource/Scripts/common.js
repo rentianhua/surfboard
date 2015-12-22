@@ -78,10 +78,14 @@ var setCookie = function () {
     document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
 }
 
-var getQiniuUrl = function (key) {
+var QiuniuHost = function () {
     //var qiniuurl = "http://7xnwvr.com2.z0.glb.qiniucdn.com/";  //正式空间
     var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";   //测试空间
-    return qiniuurl + key;
+    return qiniuurl;
+}
+
+var getQiniuUrl = function (key) {    
+    return QiuniuHost() + key;
 }
 
 /*
@@ -95,7 +99,7 @@ var getQiniuUrl = function (key) {
 * @async          -{bool} 是否异步执行
 * return           -1(FileTypeError):文件格式不正确；-2(UploadError):上传异常；-3(FileSizeError)：文件大小超出
 */
-var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum) {
+var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum, minnum) {
 
     var imgTypes = new Array("gif", "jpg", "jpeg", "png", "bmp");
     if (exts) {
@@ -109,8 +113,15 @@ var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum
     }
 
     maxnum = maxnum || 0;
+    minnum = minnum || 0;
     if (maxnum !== 0) {
         if (files.length > maxnum) {
+            callback("-4"); //选中文件数超过最大数
+            return;
+        }
+    }
+    if (minnum !== 0) {
+        if (files.length < minnum) {
             callback("-4"); //选中文件数超过最大数
             return;
         }
@@ -207,3 +218,27 @@ var CreateBreadcrumb = function (obj) {
     liName += '<li class="active">' + $(obj).text() + '</li>';
     $(".breadcrumb").append(liName);
 }
+
+function getCookie(name) {
+    var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
+}
+
+//手机号验证
+function checkMobie(mobile)
+{
+    var telReg = !!mobile.match(/^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/);
+    return telReg;
+}
+
+function checkEmial(email)
+{
+    var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+    return !reg.test(email);
+}
+
+
+

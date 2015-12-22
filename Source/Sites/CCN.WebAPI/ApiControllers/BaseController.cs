@@ -208,6 +208,18 @@ namespace CCN.WebAPI.ApiControllers
                 errmsg = "No Data"
             };
         }
+        
+        /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetCarSeriesHotTop")]
+        [HttpGet]
+        public JResult GetCarSeriesHotTop(int top)
+        {
+            return _baseservice.GetCarSeriesHotTop(top);
+        }
+
 
         /// <summary>
         /// 根据车系ID获取车型
@@ -501,6 +513,18 @@ namespace CCN.WebAPI.ApiControllers
                 LoggerFactories.CreateLogger().Write("上傳文件異常：", TraceEventType.Error, ex);
                 return "-2";
             }
+        }
+
+        /// <summary>
+        /// 获取七牛Token值
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetUpToken")]
+        [HttpGet]
+        public JResult GetUpToken()
+        {
+            var uptoken = QiniuUtility.GetToken();
+            return JResult._jResult(0, uptoken);
         }
     }
 }

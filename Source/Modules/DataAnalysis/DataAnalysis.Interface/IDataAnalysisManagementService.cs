@@ -177,13 +177,13 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        JResult GetDayGrowth(DateTime startTime, DateTime endTime);
+        JResult GetDayGrowth(DateTime startTime, DateTime endTime,string cityid);
 
         /// <summary>
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        JResult GetTotal();
+        JResult GetTotal(string cityid);
 
 
         #region 商户车辆数据统计

@@ -53,7 +53,7 @@ namespace CCN.Modules.Base.BusinessEntity
         public int VType { get; set; }
 
         /// <summary>
-        /// 用处类型[0其他，1注册，2登录，3找回密码]
+        /// 用处类型[0其他，1注册，2登录，3找回密码，4快速录车]
         /// </summary>
         public int UType { get; set; }
 

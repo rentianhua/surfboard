@@ -33,6 +33,12 @@ namespace CCN.Resource.Controllers
             var UserInfosdfd = UserInfo;
             ViewBag.Title = "苏州车信网";
             ViewBag.UserInfo = (BaseUserModel)Session["UserInfo"];
+            ViewBag.showname = UserInfo.username;
+            if (ADMIN == UserInfo.innerid)
+            {
+                ViewBag.Admin = "1";
+            }
+
             return View();
         }
 
@@ -40,9 +46,22 @@ namespace CCN.Resource.Controllers
         /// 左边菜单
         /// </summary>
         /// <returns></returns>
+        [ChildActionOnly]
         public ActionResult LeftMenu()
         {
-            return View();
+            ////获取所有菜单
+            //BaseMenuModel model = new BaseMenuModel();
+            //model.isenabled = 1;
+            //var allmenu = (IEnumerable<BaseMenuModel>)_baseservice.GetAllMenu(model).errmsg;
+            //获取该用户的菜单权限
+            var userid = "";
+            if (UserInfo != null)
+            {
+                userid = UserInfo.innerid;
+            }
+            var usermenu = _baseservice.GetMenuByUerid(userid).errmsg;
+            ViewBag.menu = usermenu;
+            return PartialView(usermenu);
         }
 
         /// <summary>
@@ -51,9 +70,13 @@ namespace CCN.Resource.Controllers
         /// <returns></returns>
         [HttpGet]
         [LoginCheckFilterAttribute(IsCheck = false)]
-        public ActionResult Login()
+        public ActionResult Login(string type)
         {
             cookie.Value = "1";
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                ViewBag.type = "1";
+            }
             Response.AppendCookie(cookie);
             return View();
         }
@@ -73,6 +96,7 @@ namespace CCN.Resource.Controllers
             {
                 UserInfo = (BaseUserModel)user.errmsg;
                 Session["UserInfo"] = user.errmsg;
+                Session["CustModel"] = null; //清除车商登录信息
                 return Json(new { code = 1, message = "登录成功" });
             }
             else
@@ -87,9 +111,13 @@ namespace CCN.Resource.Controllers
         /// <returns></returns>
         [HttpGet]
         [LoginCheckFilterAttribute(IsCheck = false)]
-        public ActionResult BusinessLogin()
+        public ActionResult BusinessLogin(string type)
         {
             cookie.Value = "0";
+            if (!string.IsNullOrWhiteSpace(type))
+            {
+                ViewBag.type = "1";
+            }
             Response.AppendCookie(cookie);
             return View();
         }
@@ -98,6 +126,7 @@ namespace CCN.Resource.Controllers
         {
             ViewBag.Title = "苏州车信网";
             ViewBag.UserInfo = (CustModel)Session["CustModel"];
+            ViewBag.showname = ((CustModel)Session["CustModel"]).Mobile;
             return View();
         }
 

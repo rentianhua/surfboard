@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Core.EntLib.Logging;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
 using MySql.Data.MySqlClient;
@@ -139,6 +142,18 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         /// <summary>
+        /// 根据openid获取会员信息
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public CustModel GetCustByOpenid(string openid)
+        {
+            const string sql = "select b.* from cust_wechat as a inner join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
+            var custModel = Helper.Query<CustModel>(sql, new { openid }).FirstOrDefault();
+            return custModel;
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
@@ -169,6 +184,19 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string sql = "select b.* from cust_wechat as a inner join cust_info as b on a.custid=b.innerid where a.openid=@openid;";
             var custModel = Helper.Query<CustModel>(sql, new { openid }).FirstOrDefault();
+            return custModel;
+        }
+
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        public CustModel CustInfoByCarid(string carid)
+        {
+            const string sql =
+                "select a.* from cust_info as a inner join car_info as b on a.innerid=b.custid where b.innerid=@carid;";
+            var custModel = Helper.Query<CustModel>(sql, new {carid}).FirstOrDefault();
             return custModel;
         }
 
@@ -343,12 +371,47 @@ namespace CCN.Modules.Customer.DataAccess
         public int UpdateCustStatus(string innerid, int status)
         {
             const string sql = "update cust_info set status=@status where innerid=@innerid;";
-            var custModel = Helper.Execute(sql, new
+            var result = Helper.Execute(sql, new
             {
                 innerid,
                 status
             });
-            return custModel;
+            return result;
+        }
+
+        /// <summary>
+        /// 修改会员类型(修改成功后返回会员信息)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CustModel UpdateCustType(string innerid)
+        {
+            const string sqlSCust = "select * from cust_info where innerid=@innerid;";
+            const string sqlSNum = "select count(1) from car_info where custid=@custid and status<>0;";
+            const string sql = "update cust_info set type=1 where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var custModel = conn.Query<CustModel>(sqlSCust, new { innerid }).FirstOrDefault();
+                var carNum = conn.Query<int>(sqlSNum, new { custid = innerid }).FirstOrDefault();
+                if (custModel == null)
+                    return null;
+                if (custModel.Type == 1 || carNum <= 1)
+                    return null;
+                try
+                {
+                    conn.Execute(sql, new
+                    {
+                        innerid
+                    });
+
+                    return custModel;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("修改会员类型异常：", TraceEventType.Error, ex);
+                    return null;
+                }
+            }
         }
 
         #endregion
@@ -434,14 +497,14 @@ namespace CCN.Modules.Customer.DataAccess
                     {
                         authstatus = model.AuditResult == 1 ? 2 : 3,
                         innerid = model.Custid
-                    });
+                    }, tran);
                     conn.Execute(sqlau, new
                     {
                         auditper = model.AuditPer,
                         auditdesc = model.AuditDesc,
                         audittime = model.AuditTime,
                         custid = model.Custid
-                    });
+                    }, tran);
 
                     tran.Commit();
                     return 1;
@@ -927,9 +990,54 @@ namespace CCN.Modules.Customer.DataAccess
                 return args.Get<int>("p_values");
             }
         }
+        
+        /// <summary>
+        /// 删除会员所有信息
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns></returns>
+        public DeleteCustAllPic GetCustomerAllPicture(string mobile)
+        {
+            var sqlCust = "select innerid,qrcode from cust_info where mobile=@mobile;";
+            var sqlCustAuth = "select relevantpicture from cust_authentication where custid=@custid;";
+            var sqlCarPic = "select path from car_picture where carid in (select innerid from car_info where custid=@custid);";
+            var sqlCarCode = "select qrcode from coupon_code where custid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var custModel = conn.Query<dynamic>(sqlCust, new { mobile }).FirstOrDefault();
+                if (custModel == null)
+                {
+                    return null;
+                }
+                var custid = custModel.innerid.ToString();
+
+                var model = new DeleteCustAllPic
+                {
+                    Qrcode = custModel.qrcode.ToString(),
+                    AuthPic = conn.Query<string>(sqlCustAuth, new { custid }).FirstOrDefault(),
+                    CarPicList = conn.Query<string>(sqlCarPic, new { custid }).ToList(),
+                    CodeList = conn.Query<string>(sqlCarCode, new { custid }).ToList(),
+                };
+
+                //model.qrcode = custModel.qrcode.ToString();
+
+                ////获取认证信息图片
+                //model.authPic = conn.Query<string>(sqlCustAuth, new { custid }).FirstOrDefault();
+
+                ////获取车辆图片
+                //model.carPicList = conn.Query<string>(sqlCarPic, new { custid }).ToList();
+
+                ////获取礼券二维码图片
+                //model.codeList = conn.Query<string>(sqlCarCode, new { custid }).ToList();
+
+                return model;
+            }
+            
+        }
 
         #endregion
-        
+
         #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表

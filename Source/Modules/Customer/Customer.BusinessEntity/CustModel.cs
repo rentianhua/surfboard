@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Customer.BusinessEntity
@@ -429,6 +430,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Password { get; set; }
 
         /// <summary>
+        /// 验证码
+        /// </summary>
+        public string VCode { get; set; }
+
+        /// <summary>
         /// 登录时间
         /// </summary>
         public DateTime? CreateTime { get; set; }
@@ -507,5 +513,31 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 会员总数信息
         /// </summary>
         public CustTotalModel TotalInfo { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class DeleteCustAllPic
+    {
+        /// <summary>
+        /// 会员二维码
+        /// </summary>
+        public string Qrcode { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AuthPic { get; set; }
+
+        /// <summary>
+        /// 图片列表
+        /// </summary>
+        public List<string> CarPicList { get; set; }
+
+        /// <summary>
+        /// code列表
+        /// </summary>
+        public List<string> CodeList { get; set; }
     }
 }

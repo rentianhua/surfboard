@@ -41,10 +41,13 @@
                 <input type="password" class="form-control" placeholder="密码" id="LoginPwd" />
             </div>
             <div class="loginbox-forgot">
-                <a href="#">Forgot Password?</a>
+                @*<a href="#">Forgot Password?</a>*@
             </div>
             <div class="loginbox-submit">
                 <input type="button" class="btn btn-primary btn-block" value="登录" onclick="submit()">
+                <br /><br />
+                <input type="checkbox" style="opacity: initial;position: initial; width: 12px;height: 12px;" id="ischecked" />一周内免登入
+
             </div>
             <div class="loginbox-signup">
                 <a href="#">Sign Up With Email</a>
@@ -55,7 +58,7 @@
                 车信网资源后台
             </div>
         </div>
-        
+
     </div>
 
     <!--Basic Scripts-->
@@ -69,6 +72,22 @@
 
     <!--Google Analytics::Demo Only-->
     <script>
+
+        $(function () {
+            if("@ViewBag.type"!="1")
+            {
+                getInfo();
+            }
+        });
+
+        document.onkeydown = function (e) {
+            var theEvent = window.event || e;
+            var code = theEvent.keyCode || theEvent.which;
+            if (code === 13) {
+                submit();
+            }
+        }
+
         function submit() {
             var actionUrl = "@Url.Action("CheckLogin", "Home")";
             var formData = {};
@@ -83,6 +102,12 @@
                 success: function (result) {
                     console.log(result);
                     if (result.code == 1) {
+                        if ($("#ischecked").prop("checked") == true) {
+                            var myDate = new Date();
+                            localStorage.setItem("loginname", $("#LoginName").val());
+                            localStorage.setItem("loginpwd", $("#LoginPwd").val());
+                            localStorage.setItem("logintime", myDate.getTime());
+                        }
                         location.href = "@Url.Action("Index", "Home")";
                     }
                     else {
@@ -91,7 +116,24 @@
                 }
             });
         }
-
+        //获取数据
+        function getInfo() {
+            //判读数据是否存在
+            if (localStorage.getItem("logintime")) {
+                var myDate = new Date();
+                var diffDate = myDate.getTime() - (parseInt(localStorage.getItem("logintime"), 10 + 24 * 3600 * 1000 * 7));
+                if (diffDate > 0) {
+                    localStorage.removeItem("loginname");
+                    localStorage.removeItem("loginpwd");
+                    localStorage.removeItem("logintime");
+                }
+                else {
+                    $("#LoginName").val(localStorage.getItem("loginname"));
+                    $("#LoginPwd").val(localStorage.getItem("loginpwd"));
+                    submit();
+                }
+            }
+        }
     </script>
 </body>
 </html>

@@ -20,7 +20,6 @@
 
         //会员基本信息
         $.get("/api/Customer/GetCustById?innerid=" + innerid, function (data) {
-            console.log(data);
 
             if (data.errcode !== 0) {
                 alert("获取会员基本信息失败！");
@@ -188,203 +187,301 @@
         }
     }
 </script>
-
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center;line-height:20px;">会员详情</div>
-    <table style="margin: 0 auto;" class="gridtable">
-        <tr>
-            <td colspan="4" style="background-color:#ccc">
-                会员基本信息
-            </td>
-        </tr>
-        <tr>
-            <td>
-                头像
-            </td>
-            <td id="headportrait"></td>
-            <td>
-                二维码
-            </td>
-            <td id="qrcode"></td>
-        </tr>
-        <tr>
-            <td>
-                会员昵称
-            </td>
-            <td id="custname"></td>
-            <td>
-                手机号
-            </td>
-            <td id="mobile"></td>
-        </tr>
-        <tr>
-            <td>
-                生日
-            </td>
-            <td id="brithday"></td>
-            <td>
-                固定电话
-            </td>
-            <td id="telephone"></td>
-        </tr>
-        <tr>
-            <td>
-                会员状态
-            </td>
-            <td id="status"></td>
-            <td>
-                当前等级
-            </td>
-            <td id="level"></td>
-
-        </tr>
-        <tr>
-            <td>
-                当前积分数
-            </td>
-            <td id="totalpoints"></td>
-            <td>
-                当前礼券数
-            </td>
-            <td id="totalcoupon"></td>
-        </tr>
-        <tr>
-            
-            <td>
-                注册时间
-            </td>
-            <td id="createdtime"></td>
-            <td>
-                QQ
-            </td>
-            <td id="qq"></td>
-        </tr>
-        <tr>
-            
-            <td>
-                所在地
-            </td>
-            <td id="location" colspan="3"></td>
-        </tr>
-        <tr>
-            <td>
-                个人签名
-            </td>
-            <td colspan="3" id="signature"></td>
-        </tr>
-        <tr>
-            <td colspan="4" style="background-color:#ccc">
-                会员认证信息
-            </td>
-        </tr>
-        <tr>
-            <td>
-                认证状态
-            </td>
-            <td colspan="3" id="authstatus"></td>
-        </tr>
-        <tr>
-            <td>
-                真实姓名
-            </td>
-            <td id="realname"></td>
-            <td>
-                身份证号
-            </td>
-            <td id="idcard"></td>
-        </tr>
-        <tr>
-            <td>
-                企业名称
-            </td>
-            <td id="enterprisename">
-
-            </td>
-            <td>工商营业执照注册号</td>
-            <td id="licencecode">
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                营业执照所在地
-            </td>
-            <td id="licencearea">
-
-            </td>
-            <td>组织机构代码号</td>
-            <td id="organizationcode">
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                税务登记证号
-            </td>
-            <td id="taxcode">
-
-            </td>
-            <td>申请时间</td>
-            <td id="applytime">
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-                认证相关图片
-            </td>
-            <td id="relevantpicture" colspan="3"></td>
-        </tr>
-
-        <!--审核操作-->
-        <tr id="audit" class="hide">
-            <td>
-                审核操作
-            </td>
-            <td colspan="3">
-                <select id="auditresult">
-                    <option value="-1">请选择...</option>
-                    <option value="1">通过</option>
-                    <option value="0">不通过</option>
-                </select><br/>
-                <textarea id="auditdesc" maxlength="200" rows="5" cols="150" placeholder="请填写审核说明"></textarea>
-            </td>
-        </tr>
-        <!--审核操作-->
-
-        <!--审核结果-->
-        <tr name="auditresult" class="hide">
-            <td>
-                审核人
-            </td>
-            <td id="auditper">
-                
-            </td>
-            <td>
-                审核时间
-            </td>
-            <td id="audittime">
-                
-            </td>
-        </tr>
-        <tr name="auditresult" class="hide">
-            <td>
-                审核说明
-            </td>
-            <td colspan="3" id="auditdescview">
-                
-            </td>
-        </tr>
-        <!--审核结果-->
-        <tr>
-            <td colspan="4" style="text-align:center;">
-                <input type="button" value="审核" class="hide" id="btnAudit"/>
-                <input type="button" value="撤销审核" class="hide" id="btnCancelAudit" />
-                <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
-            </td>
-        </tr>
-    </table>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">会员基本信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label no-padding-right">头像:</label>
+                            <div class="col-sm-10" id="headportrait">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">二维码:</label>
+                            <div class="col-sm-10" id="qrcode">
+                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="custname" class="col-sm-2 control-label no-padding-right">昵称:</label>
+                            <div class="col-sm-10">
+                                <span id="custname" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label no-padding-right">手机号:</label>
+                            <div class="col-sm-10" >
+                                <span id="mobile" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="brithday" class="col-sm-2 control-label no-padding-right">生日:</label>
+                            <div class="col-sm-10">
+                                <span id="brithday" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="telephone" class="col-sm-2 control-label no-padding-right">固定电话:</label>
+                            <div class="col-sm-10">
+                                <span id="telephone" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label no-padding-right">会员状态:</label>
+                            <div class="col-sm-10">
+                                <span id="status" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="level" class="col-sm-2 control-label no-padding-right">当前等级:</label>
+                            <div class="col-sm-10">
+                                <span id="level" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="totalpoints" class="col-sm-2 control-label no-padding-right">当前积分数:</label>
+                            <div class="col-sm-10">
+                                <span id="totalpoints" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="totalcoupon" class="col-sm-2 control-label no-padding-right">当前礼券数:</label>
+                            <div class="col-sm-10">
+                                <span id="totalcoupon" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="createdtime" class="col-sm-2 control-label no-padding-right">注册时间:</label>
+                            <div class="col-sm-10">
+                                <span id="createdtime" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="qq" class="col-sm-2 control-label no-padding-right">QQ:</label>
+                            <div class="col-sm-10">
+                                <span id="qq" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="location" class="col-sm-2 control-label no-padding-right">所在地:</label>
+                            <div class="col-sm-10">
+                                <span id="location" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="signature" class="col-sm-2 control-label no-padding-right">个人签名:</label>
+                            <div class="col-sm-10">
+                                <span id="signature" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">会员认证信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="custname" class="col-sm-1 control-label no-padding-right">认证状态:</label>
+                            <div class="col-sm-11">
+                                <span id="custname" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label no-padding-right">真实姓名:</label>
+                            <div class="col-sm-10">
+                                <span id="realname" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="idcard" class="col-sm-2 control-label no-padding-right">身份证号:</label>
+                            <div class="col-sm-10">
+                                <span id="idcard" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="enterprisename" class="col-sm-2 control-label no-padding-right">企业名称:</label>
+                            <div class="col-sm-10">
+                                <span id="enterprisename" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="licencecode" class="col-sm-2 control-label no-padding-right">工商营业执照注册号:</label>
+                            <div class="col-sm-10">
+                                <span id="licencecode" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="licencearea" class="col-sm-2 control-label no-padding-right">营业执照所在地:</label>
+                            <div class="col-sm-10">
+                                <span id="licencearea" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="organizationcode" class="col-sm-2 control-label no-padding-right">组织机构代码号:</label>
+                            <div class="col-sm-10">
+                                <span id="organizationcode" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="taxcode" class="col-sm-2 control-label no-padding-right">税务登记证号:</label>
+                            <div class="col-sm-10">
+                                <span id="taxcode" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="applytime" class="col-sm-2 control-label no-padding-right">申请时间:</label>
+                            <div class="col-sm-10">
+                                <span id="applytime" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="relevantpicture" class="col-sm-1 control-label no-padding-right">认证相关图片:</label>
+                            <div class="col-sm-11">
+                                <span id="relevantpicture" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group hide" id="audit" >
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">审核操作</label>
+                            <div class="controls col-sm-11">
+                                <select id="auditresult">
+                                    <option value="-1">请选择...</option>
+                                    <option value="1">通过</option>
+                                    <option value="0">不通过</option>
+                                </select>
+                                <br />
+                                <textarea id="auditdesc" maxlength="200" rows="5" cols="150" placeholder="请填写审核说明"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group hide" name="auditresult">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="auditper" class="col-sm-2 control-label no-padding-right">审核人:</label>
+                            <div class="col-sm-10">
+                                <span id="auditper" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="audittime" class="col-sm-2 control-label no-padding-right">审核时间:</label>
+                            <div class="col-sm-10">
+                                <span id="audittime" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group hide" name="auditresult">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="auditdescview" class="col-sm-1 control-label no-padding-right">审核说明:</label>
+                            <div class="col-sm-11">
+                                <span id="auditdescview" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="btnAudit" type="button" class="btn btn-primary shiny hide" value="审核" />
+                        <input id="btnCancelAudit" type="button" class="btn btn-primary shiny hide" value="撤销审核"  />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 

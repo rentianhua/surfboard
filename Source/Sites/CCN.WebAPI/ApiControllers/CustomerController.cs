@@ -201,7 +201,35 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
-            var result = _custservice.CustLogin(loginInfo);
+            JResult result;
+            //手机号+密码
+            if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                result = _custservice.CustLogin(loginInfo);
+            }
+            //手机号+验证码
+            else if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.VCode))
+            {
+                var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+                //检查验证码
+                var cresult = baseservice.CheckVerification(loginInfo.Mobile, loginInfo.VCode, 2);
+                if (cresult.errcode != 0)
+                {
+                    //验证码错误
+                    //400 验证码错误
+                    //401 验证码过期
+                    if (cresult.errcode == 400 || cresult.errcode == 401)
+                    {
+                        return JResult._jResult(405, "验证码错误");
+                    }
+                }
+                //根据手机号获取会员信息
+                result = _custservice.GetCustLoginByMobile(loginInfo.Mobile);
+            }
+            else
+            {
+                return JResult._jResult(500, "参数不完整");
+            }
 
             #region 登录送积分
 
@@ -209,31 +237,20 @@ namespace CCN.WebAPI.ApiControllers
             {
                 Task.Run(() =>
                 {
-                    var custModel = (CustModel) result.errmsg;
-
-                    if (custModel == null)
-                    {
-                        return;
-                    }
-
+                    var custModel = (CustModel)result.errmsg;
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-
-                    var point = rewardsservice.LoginAlgorithm(custModel.Innerid);
-                    if (point == 0)
-                    {
-                        return;
-                    }
-
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custModel.Innerid,
+                        Createdtime = DateTime.Now,
                         Type = 1,
-                        Point = point,
-                        Remark = "登录送积分",
-                        Sourceid = 2
+                        Innerid = Guid.NewGuid().ToString(),
+                        Point = 10, //登录+10
+                        Remark = "",
+                        Sourceid = 2,
+                        Validtime = null
                     });
-
-                    LoggerFactories.CreateLogger().Write("登录送积分结果：" + pointresult.errcode, TraceEventType.Information);
+                    LoggerFactories.CreateLogger().Write("登录奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
                 });
             }
 
@@ -254,6 +271,18 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLoginByOpenid(openid);
         }
+        
+        /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        [Route("IsCustByOpenid")]
+        [HttpGet]
+        public JResult IsCustByOpenid(string openid)
+        {
+            return _custservice.IsCustByOpenid(openid);
+        }
 
         /// <summary>
         /// 获取会员详情
@@ -265,6 +294,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCustById(string innerid)
         {
             return _custservice.GetCustById(innerid);
+        }
+
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        [Route("CustInfoByCarid")]
+        [HttpGet]
+        public JResult CustInfoByCarid(string carid)
+        {
+            return _custservice.CustInfoByCarid(carid);
         }
 
         /// <summary>

@@ -70,6 +70,16 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult GetCustLoginByMobile(string mobile)
+        {
+            return BusinessComponent.GetCustLoginByMobile(mobile);
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
@@ -78,6 +88,17 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.CustLoginByOpenid(openid);
         }
+
+        /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult IsCustByOpenid(string openid)
+        {
+            return BusinessComponent.IsCustByOpenid(openid);
+        }
+
 
         /// <summary>
         /// 获取会员详情
@@ -97,6 +118,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult GetCustByMobile(string mobile)
         {
             return BusinessComponent.GetCustByMobile(mobile);
+        }
+
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        public JResult CustInfoByCarid(string carid)
+        {
+            return BusinessComponent.CustInfoByCarid(carid);
         }
 
         /// <summary>
@@ -138,6 +169,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateCustStatus(string innerid, int status)
         {
             return BusinessComponent.UpdateCustStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult UpdateCustType(string innerid)
+        {
+            return BusinessComponent.UpdateCustType(innerid);
         }
 
         #endregion

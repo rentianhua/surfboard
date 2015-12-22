@@ -174,7 +174,14 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query);
+        BasePageList<CouponViewModel> GetMallCouponPageList(CouponMallQuery query);
+
+        /// <summary>
+        /// 商城搜索商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<ShopMallViewList> GetMallShopPageList(ShopMallQueryModel query);
 
         #endregion
 
@@ -186,14 +193,27 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="model"></param>
         /// <returns></returns>
         JResult SendCoupon(SendCouponModel model);
-
-
+        
         /// <summary>
         /// 批量购买礼券
         /// </summary>
         /// <param name="model">购买信息</param>
         /// <returns></returns>
         JResult WholesaleCoupon(CouponBuyModel model);
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<OrderViewList> GetOrderList(OrderQuery query);
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        JResult HandlOrder(string innerid);
 
         /// <summary>
         /// 礼券核销
@@ -217,6 +237,12 @@ namespace CCN.Modules.Rewards.Interface
         /// </summary>
         /// <returns></returns>
         JResult GetShopById(string innerid);
+
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        JResult GetShopViewById(string innerid);
 
         /// <summary>
         /// 商户登录
@@ -243,6 +269,14 @@ namespace CCN.Modules.Rewards.Interface
         /// <param name="status"></param>
         /// <returns></returns>
         JResult UpdateShopStatus(string innerid, int status);
+
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        JResult UpdateShopPassword(string innerid, string password);
 
         /// <summary>
         /// 删除商户
@@ -383,5 +417,23 @@ namespace CCN.Modules.Rewards.Interface
         JResult GetShopByArea(string area);
 
         #endregion
+
+        #region 可能存在并发问题
+
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        JResult PointToCoupon(CustPointToCouponModel model);
+
+        #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CouponCodeListModel> GetCouponCode(CodeQueryModel query);
     }
 }

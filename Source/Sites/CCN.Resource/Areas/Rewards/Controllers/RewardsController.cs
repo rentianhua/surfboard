@@ -54,6 +54,17 @@ namespace CCN.Resource.Areas.Rewards.Controllers
         }
 
         /// <summary>
+        /// 商铺详情
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ShopView(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        
+
+        /// <summary>
         /// 商铺职员列表
         /// </summary>
         /// <returns></returns>
@@ -102,7 +113,6 @@ namespace CCN.Resource.Areas.Rewards.Controllers
             return View();
         }
 
-
         /// <summary>
         /// 结算页面
         /// </summary>
@@ -125,7 +135,25 @@ namespace CCN.Resource.Areas.Rewards.Controllers
             ViewBag.settid = string.IsNullOrWhiteSpace(settid) ? "" : settid;
             return View();
         }
+        /// <summary>
+        /// 获取礼券code列表
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult CouponCodeList(string innerid)
+        {
+            ViewBag.couponid= string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
         #endregion
 
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult OrderList()
+        {
+            return View();
+        }
     }
 }

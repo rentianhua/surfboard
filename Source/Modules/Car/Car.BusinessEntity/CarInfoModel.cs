@@ -212,6 +212,21 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string custid { get; set; }
 
+        /// <summary>
+        /// 刷新时间（每次刷新将该字段重置当前时间）
+        /// </summary>
+        public long? refreshtime { get; set; }
+
+        /// <summary>
+        /// 是否置顶
+        /// </summary>
+        public short? istop { get; set; }
+
+        /// <summary>
+        /// 是否含过户费
+        /// </summary>
+        public short? istransferfee { get; set; }
+
         #region code name
 
         /// <summary>
@@ -260,6 +275,22 @@ namespace CCN.Modules.Car.BusinessEntity
         public string dischargeName { get; set; }
         
         #endregion
+    }
+
+    /// <summary>
+    /// 手机号
+    /// </summary>
+    public class CarInfoFastModel : CarInfoModel
+    {
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string mobile { get; set; }
+
+        /// <summary>
+        /// 联系人
+        /// </summary>
+        public string contacts { get; set; }
     }
 
     /// <summary>
@@ -338,8 +369,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车型
         /// </summary>
         public string model_name { get; set; }
-
-
+        
         /// <summary>
         /// 变速箱类型
         /// </summary>
@@ -366,6 +396,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 会员id
         /// </summary>
         public string custid { get; set; }
+
+        /// <summary>
+        /// 会员类型
+        /// </summary>
+        public int? type { get; set; }
 
         /// <summary>
         /// 0 非好友，>0已是好友 ,-1 自己的车
@@ -612,6 +647,131 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string keyword { get; set; }
 
+    }
+
+    /// <summary>
+    /// 官网页面 全城搜车条件
+    /// </summary>
+    public class CarGlobalExQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string custid { get; set; }
+
+        /// <summary>
+        /// 省份id
+        /// </summary>
+        public int? provid { get; set; }
+
+        /// <summary>
+        /// 城市id
+        /// </summary>
+        public int? cityid { get; set; }
+
+        /// <summary>
+        /// 品牌id
+        /// </summary>
+        public int? brand_id { get; set; }
+
+        /// <summary>
+        /// 车系id
+        /// </summary>
+        public int? series_id { get; set; }
+
+        /// <summary>
+        /// 车型id
+        /// </summary>
+        public int? model_id { get; set; }
+
+        /// <summary>
+        /// min销售价格(万元)
+        /// </summary>
+        public decimal? minprice { get; set; }
+
+        /// <summary>
+        /// max销售价格(万元)
+        /// </summary>
+        public decimal? maxprice { get; set; }
+
+        /// <summary>
+        /// min上牌年份
+        /// </summary>
+        public int? minyear { get; set; }
+
+        /// <summary>
+        /// max上牌年份
+        /// </summary>
+        public int? maxyear { get; set; }
+
+        /// <summary>
+        /// min行驶里程
+        /// </summary>
+        public decimal? minmileage { get; set; }
+
+        /// <summary>
+        /// max行驶里程
+        /// </summary>
+        public decimal? maxmileage { get; set; }
+
+        /// <summary>
+        /// 颜色
+        /// </summary>
+        public int? colorid { get; set; }
+
+        /// <summary>
+        /// 变速箱类型
+        /// </summary>
+        public string gear { get; set; }
+
+        /// <summary>
+        /// 排量
+        /// </summary>
+        public string liter { get; set; }
+
+        /// <summary>
+        /// 全局搜索字段
+        /// </summary>
+        public string keyword { get; set; }
+
+    }
+
+    /// <summary>
+    /// 官网页面 全城搜车条件
+    /// </summary>
+    public class CarInterestQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string carid { get; set; }
+
+        /// <summary>
+        /// 车系id
+        /// </summary>
+        public int? series_id { get; set; }
+        
+        /// <summary>
+        /// 销售价格(万元)
+        /// </summary>
+        public decimal? price { get; set; }
+        
+        /// <summary>
+        /// 注册时间
+        /// </summary>
+        public DateTime? regdate { get; set; }
+    }
+
+    /// <summary>
+    /// 官网页面 全城搜车条件
+    /// </summary>
+    public class CarTopFillQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 置顶查询条件(补齐查询时需要 not in )
+        /// </summary>
+        public string where { get; set; }
+        
     }
 
     /// <summary>

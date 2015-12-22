@@ -34,8 +34,8 @@
             });
 
             $("#settcycle").html(Dateformat(obj.SettCycleStart, "yyyy-MM-dd") + " 至 " + Dateformat(obj.SettCycleEnd, "yyyy-MM-dd"));
-            $("#setttotal").val(obj.SettTotal);
-            $("#setttime").val(Dateformat(obj.SettTime, "yyyy-MM-dd"));
+            $("#setttotal").html(obj.SettTotal);
+            $("#setttime").html(Dateformat(obj.SettTime, "yyyy-MM-dd HH:mm"));
 
         });
     }
@@ -74,22 +74,33 @@
                 <div class="form-group">
                     <span>
                         <label class="col-sm-4 control-label no-padding-right searchLayout">所属商户：</label>
-                        <label id="shopname"></label>
+                        <label class="searchLayout" id="shopname"></label>
                     </span>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <div class="form-group">
-                    <label class="col-sm-4 control-label no-padding-right searchLayout">结算金额：</label>
-                    <label id="selecsetttotaltshop"></label>
+                    <label class="col-sm-4 control-label no-padding-right searchLayout">结算时间：</label>
+                    <label class="searchLayout" id="setttime"></label>
                 </div>
             </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">                
-                <label class="col-sm-4 control-label no-padding-right searchLayout">结算周期：</label>
-                <label id="settcycle"></label>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right searchLayout">结算金额(元)：</label>
+                    <label class="searchLayout" id="setttotal"></label>
+                </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                <a onclick="getBodyHtml('mainbody', '/rewards/rewards/settlementlist', this);" href="javascript:;" class="btn btn-primary shiny">返回</a>
+                <label class="col-sm-4 control-label no-padding-right searchLayout">结算周期：</label>
+                <label class="searchLayout" id="settcycle"></label>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a onclick="getBodyHtml('mainbody', '/rewards/rewards/settlementlist');" href="javascript:;" class="btn btn-primary shiny">返回</a>
             </div>
         </div>
     </div>

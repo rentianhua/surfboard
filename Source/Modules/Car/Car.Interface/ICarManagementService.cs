@@ -12,6 +12,22 @@ namespace CCN.Modules.Car.Interface
         #region 车辆
 
         /// <summary>
+        /// 全城搜车(官网页面)（查询到置顶车辆）
+        /// </summary>
+        /// <param name="query">查询条件
+        /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
+        /// </param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query);
+
+        /// <summary>
+        /// 全城搜车(官网页面)
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query);
+        
+        /// <summary>
         /// 全城搜车列表
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -38,6 +54,17 @@ namespace CCN.Modules.Car.Interface
         /// <param name="id">车辆id</param>
         /// <returns></returns>
         JResult GetCarViewById(string id);
+
+        #region 感兴趣
+
+        /// <summary>
+        /// 获取感兴趣的车列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> GetInterestList(CarInterestQueryModel query);
+
+        #endregion
 
         /// <summary>
         /// 车辆估值（根据城市，车型，时间）
@@ -154,6 +181,22 @@ namespace CCN.Modules.Car.Interface
         /// <param name="carid"></param>
         /// <returns></returns>
         JResult GetCarShareInfo(string carid);
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        JResult RefreshCar(string carid);
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        JResult DoTopCar(string carid, int istop);
+
         #endregion
 
         #region 车辆图片
@@ -164,21 +207,7 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">车辆图片信息</param>
         /// <returns></returns>
         JResult AddCarPicture(CarPictureModel model);
-
-        /// <summary>
-        /// 添加车辆图片
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        JResult AddCarPictureList(WeichatPictureModel picModel);
-
-        /// <summary>
-        /// 添加车辆图片(后台)
-        /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
-        /// <returns></returns>
-        JResult AddCarPictureList(PictureListModel picModel);
-
+        
         /// <summary>
         /// 添加车辆图片
         /// </summary>
@@ -199,6 +228,34 @@ namespace CCN.Modules.Car.Interface
         /// <param name="listPicture">车辆图片列表</param>
         /// <returns></returns>
         JResult ExchangePictureSort(List<CarPictureModel> listPicture);
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="picModel"></param>
+        /// <returns></returns>
+        JResult DelCarPictureList(PictureDelListModel picModel);
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(后台)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(PictureListModel picModel);
+
+        /// <summary>
+        /// 批量添加车辆图片(添加)(微信端使用)
+        /// </summary>
+        /// <param name="picModel">车辆图片信息</param>
+        /// <returns></returns>
+        JResult AddCarPictureList(WechatPictureModel picModel);
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SaveCarPicture(BatchPictureListWeichatModel model);
 
         #endregion
 

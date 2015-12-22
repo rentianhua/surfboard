@@ -631,6 +631,18 @@ $.fn.extend({
             }
         }
     },
+    selectText: function (val) {
+        if (typeof (val) === "number") {
+            val = val.toString();
+        }
+        var count = this.get(0).options.length;
+        for (var i = 0; i < count; i++) {
+            if (this.get(0).options[i].text === val) {
+                this.get(0).options[i].selected = true;
+                break;
+            }
+        }
+    },
     selectDisabled: function () {
         this.prop("disabled", false);
     },

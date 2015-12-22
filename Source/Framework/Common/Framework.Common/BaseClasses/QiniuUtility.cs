@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using Cedar.Core.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Qiniu.Conf;
 using Qiniu.IO;
 using Qiniu.IO.Resumable;
@@ -42,7 +46,7 @@ namespace Cedar.Framework.Common.BaseClasses
             var extra = new PutExtra();
             var client = new IOClient();
             var ret = client.Put(upToken, key, stream, extra);
-            if (ret != null)
+            if (ret != null && ret.OK)
             {
                 return ret.key;
             }
@@ -68,11 +72,71 @@ namespace Cedar.Framework.Common.BaseClasses
             var extra = new PutExtra();
             var client = new IOClient();
             var ret = client.PutFile(upToken, key, fname, extra);
-            if (ret != null)
+            if (ret != null && ret.OK)
             {
                 return ret.key;
             }
             return "";
+        }
+
+        /// <summary>
+        ///     获取token
+        /// </summary>
+        /// <returns>key</returns>
+        public static string GetToken()
+        {
+            Config.Init();
+            var policy = new PutPolicy(BUCKET);
+            var upToken = policy.Token();
+            return upToken;
+        }
+
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="bucket"></param>
+        /// <returns></returns>
+        public int DeleteFile(string key,string bucket = "")
+        {
+            if (bucket == "")
+            {
+                bucket = BUCKET;
+            }
+            var client = new RSClient();
+            var ret = client.Delete(new EntryPath(bucket, key));
+            if (ret != null && ret.OK)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        /// <summary>
+        /// 批量删除文件
+        /// </summary>
+        /// <param name="keys"></param>
+        /// <param name="bucket"></param>
+        /// <returns></returns>
+        public int DeleteFile(string[] keys, string bucket = "")
+        {
+            if (bucket == "")
+            {
+                bucket = BUCKET;
+            }
+            var client = new RSClient();
+            var keyPaths = new EntryPath[keys.Length];
+            for(var i = 0; i < keys.Length; i++)
+            {
+                keyPaths[i] = new EntryPath(bucket, keys[i]);
+            }
+
+            var ret = client.BatchDelete(keyPaths);
+            if (ret != null && ret.OK)
+            {
+                return 1;
+            }
+            return 0;
         }
 
         /// <summary>

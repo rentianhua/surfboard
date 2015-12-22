@@ -26,7 +26,7 @@
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.Custname == null ? "" : val.Custname.sub(20)) + "</td>";
-            str += "<td>" + val.Mobile + "</td>";
+            str += "<td>" + val.Mobile + " (" + (val.Type === 1 ? "车商 " : "个人") + ")" + "</td>";
             str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + (val.Status === 1 ? "正常" : "<font color='red'>冻结中</font>") + "</td>";
             str += "<td>" + ChangAuthStatus(val.AuthStatus) + "</td>";

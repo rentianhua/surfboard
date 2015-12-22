@@ -143,6 +143,26 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 微信商品链接
         /// </summary>
         public string ProductUrl { get; set; }
+
+        /// <summary>
+        /// 已售数量
+        /// </summary>
+        public int SoldedNum { get; set; }
+
+        /// <summary>
+        /// 商户所在区
+        /// </summary>
+        public string ShopArea { get; set; }
+
+        /// <summary>
+        /// 商户地址
+        /// </summary>
+        public string ShopAddress { get; set; }
+
+        /// <summary>
+        /// 商户名称
+        /// </summary>
+        public string Shopname { get; set; }
     }
 
     /// <summary>
@@ -247,5 +267,27 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 获得时间
         /// </summary>
         public DateTime? Gettime { get; set; }
+    }
+
+    /// <summary>
+    /// 商城礼券查询条件
+    /// </summary>
+    public class CouponMallQuery : QueryModel
+    {
+        /// <summary>
+        /// 商户id
+        /// </summary>
+        public string Shopid { get; set; }
+
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 卡券类型集合【逗号隔开】
+        /// </summary>
+        public string CardTypes { get; set; }
+        
     }
 }

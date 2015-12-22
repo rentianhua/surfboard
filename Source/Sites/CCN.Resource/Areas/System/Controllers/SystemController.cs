@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CCN.Resource.Main.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,7 +7,7 @@ using System.Web.Mvc;
 
 namespace CCN.Resource.Areas.System.Controllers
 {
-    public class SystemController : Controller
+    public class SystemController : DefaultController
     {
         // GET: System/System
         public ActionResult Index()
@@ -14,14 +15,6 @@ namespace CCN.Resource.Areas.System.Controllers
             return View();
         }
 
-        /// <summary>
-        /// 获取菜单
-        /// </summary>
-        /// <returns></returns>
-        public ActionResult MenuList()
-        {
-            return View();
-        }
         #region 基础数据代码类型
         /// <summary>
         /// 获取基础数据代码类型
@@ -91,6 +84,11 @@ namespace CCN.Resource.Areas.System.Controllers
         /// <returns></returns>
         public ActionResult SysUserList()
         {
+            if (ADMIN.ToString().ToLower()==UserInfo.innerid.ToLower())
+            {
+                ViewBag.isadmin = 1;
+            }
+            ViewBag.adminid = ADMIN;
             return View();
         }
 
@@ -114,6 +112,11 @@ namespace CCN.Resource.Areas.System.Controllers
         /// <returns></returns>
         public ActionResult SysRoleList()
         {
+            if (ADMIN.ToString().ToLower() == UserInfo.innerid.ToLower())
+            {
+                ViewBag.isadmin = 1;
+            }
+            ViewBag.adminid = ADMIN;
             return View();
         }
 
@@ -138,6 +141,29 @@ namespace CCN.Resource.Areas.System.Controllers
         {
             return View();
         }
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MenuList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 菜单编辑/新增页面
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult SysMenuEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion
 
         #endregion
 

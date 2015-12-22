@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 #endregion
 
@@ -76,7 +78,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 //生成会员名称
                 userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
-                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
+                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6), "(个人)");
             }
             
             if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))
@@ -99,7 +101,11 @@ namespace CCN.Modules.Customer.BusinessComponent
             //密码加密
             userInfo.Password = Encryptor.EncryptAes(userInfo.Password);
 
-            userInfo.Type = 1; //这版只有车商
+            if (userInfo.Type == null)
+            {
+                userInfo.Type = 1; //这版只有车商
+            }
+            
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
             userInfo.Createdtime = DateTime.Now;
@@ -181,6 +187,21 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        public JResult IsCustByOpenid(string openid)
+        {
+            var userInfo = DataAccess.GetCustByOpenid(openid);
+            if (userInfo == null || userInfo.Status != 1)
+            {
+                return JResult._jResult(400, "否");
+            }
+            return JResult._jResult(0, "是");
+        }
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
@@ -196,7 +217,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(402, "帐户被冻结");
             }
-
+            userInfo.Password = "";
             return JResult._jResult(0, userInfo);
         }
 
@@ -216,6 +237,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                     errmsg = ""
                 };
             }
+            model.Password = "";
             return new JResult
             {
                 errcode = 0,
@@ -231,6 +253,47 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult GetCustByMobile(string mobile)
         {
             var model = DataAccess.GetCustByMobile(mobile);
+            if (model != null)
+            {
+                model.Password = "";
+            }
+            
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult GetCustLoginByMobile(string mobile)
+        {
+            var model = DataAccess.GetCustByMobile(mobile);
+            if (model == null)
+            {
+                return JResult._jResult(401, "帐户名或登录密码不正确");
+            }
+            if (model.Status == 2)
+            {
+                return JResult._jResult(402, "帐户被冻结");
+            }
+            model.Password = "";
+            return JResult._jResult(model);
+        }
+        
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        public JResult CustInfoByCarid(string carid)
+        {
+            var model = DataAccess.CustInfoByCarid(carid);
+            if (model != null)
+            {
+                model.Password = "";
+            }
+            
             return JResult._jResult(model);
         }
 
@@ -326,6 +389,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = DataAccess.UpdateCustStatus(innerid, status);
             return JResult._jResult(result);
         }
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult UpdateCustType(string innerid)
+        {
+            var result = DataAccess.UpdateCustType(innerid);
+            return JResult._jResult(result);
+        }
+
         #endregion
 
         #region 用户认证
@@ -796,6 +871,45 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCustomer(string mobile)
         {
+            /*
+            //图片
+            1.会员的二维码 cust_info
+            2.会员认证信息的图片 cust_authentication
+            3.会员的所有的车辆的图片 car_picture
+            4.礼券的二维码 coupon_code
+            */
+
+            var picModel = DataAccess.GetCustomerAllPicture(mobile);
+            if (picModel != null)
+            {
+                var qiniu = new QiniuUtility();
+                if (!string.IsNullOrWhiteSpace(picModel.Qrcode))
+                {
+                    qiniu.DeleteFile(picModel.Qrcode);
+                }
+                if (!string.IsNullOrWhiteSpace(picModel.AuthPic))
+                {
+                    foreach (var item in picModel.AuthPic.Split(','))
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+                if (picModel.CarPicList.Any())
+                {
+                    foreach (var item in picModel.CarPicList)
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+                if (picModel.CodeList.Any())
+                {
+                    foreach (var item in picModel.CodeList)
+                    {
+                        qiniu.DeleteFile(item);
+                    }
+                }
+            }
+            
             var result = DataAccess.DeleteCustomer(mobile);
             return new JResult
             {

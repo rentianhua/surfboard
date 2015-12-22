@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
@@ -231,6 +233,30 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetOrderList")]
+        [HttpPost]
+        public BasePageList<OrderViewList> GetOrderList([FromBody]OrderQuery query)
+        {
+            return _rewardsservice.GetOrderList(query);
+        }
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        [Route("HandlOrder")]
+        [HttpGet]
+        public JResult HandlOrder(string innerid)
+        {
+            return _rewardsservice.HandlOrder(innerid);
+        }
+
+        /// <summary>
         /// 礼券核销
         /// </summary>
         /// <param name="model"></param>
@@ -260,15 +286,20 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("GetProductList")]
         [HttpGet]
-        public GetByStatusResult GetProductList()
+        public GetByStatusResult GetProductList(string token = "")
         {
-            //var appid = ConfigHelper.GetAppSettings("APPID");
-            //var result = ProductApi.GetByStatus(appid, 0);
-
-            var accessToken =
-                "ezVvo70UTaiCn8e22uRW7KkP82R45QekZwTbLm7_OjPcJpZryGnD_Gap5t0stBxvnKx9jm7XKHt_QSSzKbaaWyT2lkQ6WCf8A7jIqRUco-0ZENaAJASXG";
-            var result = ProductApi.GetByStatus(accessToken, 0);
-
+            var accessTokenOrAppId = string.IsNullOrWhiteSpace(token) ? ConfigHelper.GetAppSettings("APPID") : token;
+            GetByStatusResult result;
+            try
+            {
+                result = ProductApi.GetByStatus(accessTokenOrAppId, 0);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取商品列表：", TraceEventType.Error, ex);
+                throw;
+            }
+            
             return result;
         }
 
@@ -331,6 +362,19 @@ namespace CCN.Resource.ApiControllers
         public JResult UpdateShopStatus(string innerid, int status)
         {
             return _rewardsservice.UpdateShopStatus(innerid, status);
+        }
+        
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        [Route("UpdateShopPassword")]
+        [HttpPut]
+        public JResult UpdateShopPassword(string innerid, string password)
+        {
+            return _rewardsservice.UpdateShopPassword(innerid, password);
         }
 
         /// <summary>
@@ -539,5 +583,18 @@ namespace CCN.Resource.ApiControllers
             return _rewardsservice.GetSettedCodePageList(query);
         }
         #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCouponCode")]
+        [HttpPost]
+        public BasePageList<CouponCodeListModel> GetCouponCode([FromBody] CodeQueryModel query)
+        {
+            return _rewardsservice.GetCouponCode(query);
+        }
+        
     }
 }

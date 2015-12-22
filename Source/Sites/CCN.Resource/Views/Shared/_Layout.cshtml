@@ -1,25 +1,38 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var innerid = "";
+    if (Request.Cookies["type"].Value.ToString() == "1")
+    {
+        innerid = ViewBag.UserInfo.innerid;
+    }
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    @*@Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")*@
     <link href="~/Content/Site.css" rel="stylesheet" />
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Plugins/My97DatePicker/WdatePicker.js"></script>
-    <script src="~/Scripts/jquery.pagination/jquery.twbsPagination.min.js"></script>
-    <script src="~/Scripts/jquery.fn.extend.js"></script>
-    <script src="~/Scripts/common.js"></script>
+    @Scripts.Render("~/bundles/original")
     @Styles.Render("~/Content/template")
     <script type="text/javascript">
-
         $(function () {
+            //设置cookie值
             setCookie();
         });
-
+        //定位当前城市
+        $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
+            if (remote_ip_info.ret == '1') {
+                document.cookie = "province=" + remote_ip_info.province;
+                document.cookie = "city=" + remote_ip_info.city;
+            }
+        });
     </script>
+    <style>
+        .loading-container {
+            opacity: 0.5; /* 通用，其他浏览器  有效*/
+            background: #AAB1B3;
+        }
+    </style>
 </head>
 <body>
     <!-- Loading Container -->
@@ -50,7 +63,7 @@
                                 <a class="login-area dropdown-toggle" data-toggle="dropdown">
                                     <section>
                                         @*<h2><span class="profile"><span>操作人：@ViewBag.UserInfo.username <i class="fa fa-cog"></i></span></span></h2>*@
-                                        <h2><span class="profile"><span>操作人：管理员 <i class="fa fa-cog"></i></span></span></h2>
+                                        <h2><span class="profile"><span>操作人：@ViewBag.showname <i class="fa fa-cog"></i></span></span></h2>
                                     </section>
                                 </a>
                                 <!--Login Area Dropdown-->
@@ -73,8 +86,18 @@
                                         </ul>
                                     </li>
                                     <!--选择主题结束-->
+                                    @{
+                                        if (Request.Cookies["type"].Value.ToString() == "1")
+                                        {
+                                            <li class="edit">
+                                                <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
+                                            </li>
+                                        }
+                                    }
+                                    
                                     <li class="dropdown-footer">
-                                        <a href="/home/login">
+                                        <br />
+                                        <a href="/home/login?type=1">
                                             退出
                                         </a>
                                     </li>
@@ -92,7 +115,6 @@
     <div class="main-container container-fluid">
         <!-- Page Container -->
         <div class="page-container">
-
             <!-- Page Sidebar -->
             <div class="page-sidebar" id="sidebar">
                 <!-- Page Sidebar Header-->
@@ -103,11 +125,11 @@
                 </div>
                 <!-- /Page Sidebar Header -->
                 <!-- 左边菜单 开始-->
-                @Html.Partial("_Menu")
+                @*@Html.Partial("_Menu")*@
+                @{Html.RenderAction("LeftMenu", "Home");}
                 <!-- 左边菜单 结束-->
             </div>
             <!-- /Page Sidebar -->
-          
             <!-- Page Content -->
             <div class="page-content">
                 <!-- Page Breadcrumb -->
@@ -133,9 +155,6 @@
                         <a class="sidebar-toggler" href="#">
                             <i class="fa fa-arrows-h"></i>
                         </a>
-                        @*<a class="refresh" id="refresh-toggler" href="#">
-                            <i class="glyphicon glyphicon-refresh"></i>
-                        </a>*@
                         <a class="fullscreen" id="fullscreen-toggler" href="#">
                             <i class="glyphicon glyphicon-fullscreen"></i>
                         </a>
@@ -144,7 +163,7 @@
                 </div>
                 <!-- /Page Header -->
                 <!-- Page Body -->
-                <div id="mainbody" class="page-body">    
+                <div id="mainbody" class="page-body">
                     @RenderBody()
                 </div>
                 <!-- /Page Body -->
@@ -152,10 +171,126 @@
             <!-- /Page Content -->
         </div>
     </div>
-
-    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/template")
     @RenderSection("scripts", required: false)
 </body>
 </html>
+<!-- Modal -->
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModalLabel">
+    <div class="modal-dialog" role="document" style="margin-top:230px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="changeModalLabel">修改密码</h4>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form" id="pwdform">
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="oldpwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>原密码：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="oldpwd" class="form-control" placeholder="原密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="newpwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>新密码：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="newpwd" class="form-control" placeholder="新密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="surepwd" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>再次输入：</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="password" id="surepwd" class="form-control" placeholder="再次输入新密码" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="required" id="errshow"></label>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer text-center">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="确定" onclick="ChangePersonal('@innerid');" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function ChangePersonal(id)
+    {
+        $("#errshow").empty();
+        var oldpwd = $("#oldpwd").val();
+        var newpwd = $("#newpwd").val();
+        var surepwd = $("#surepwd").val();
+        //判断是否都有值
+        if (oldpwd == "" || newpwd == "" || surepwd == "")
+        {
+            $("#errshow").html('填入信息不全');
+            return;
+        }
+        if (newpwd != surepwd)
+        {
+            $("#errshow").html('输入的新密码不一致，请重新输入！');
+            return;
+        }
+
+        //修改密码
+        var json = {
+            innerid: id,
+            password: newpwd
+        };
+        //验证原密码是否正确
+        $.ajax({
+            url: '/api/Base/GetUserInfoByID?innerid=' + id,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode !== 0) {
+                    $("#errshow").html('系统错误，请重新登入！');
+                }
+                else {
+                    if (oldpwd != data.errmsg.password) {
+                        $("#errshow").html('原密码不正确，重置密码请联系管理员！');
+                    }
+                    else {
+                        $.ajax({
+                            url: '/api/Base/UpdateUser',
+                            type: 'post',
+                            datatype: 'application/json',
+                            data: json,
+                            async: false,
+                            success: function (result) {
+                                $("#errshow").html('密码修改成功！');
+                                $('#changeModal').modal('hide');
+                                //清空数据
+                                $("#oldpwd").val('');
+                                $("#newpwd").val('');
+                                $("#surepwd").val('');
+                                $("#errshow").html('');
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+</script>

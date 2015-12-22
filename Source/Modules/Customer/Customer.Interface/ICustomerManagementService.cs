@@ -43,11 +43,25 @@ namespace CCN.Modules.Customer.Interface
         JResult CustLogin(CustLoginInfo loginInfo);
 
         /// <summary>
+        /// 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        JResult GetCustLoginByMobile(string mobile);
+
+        /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
         /// <param name="openid">openid</param>
         /// <returns>用户信息</returns>
         JResult CustLoginByOpenid(string openid);
+
+        /// <summary>
+        /// 判断是否会员
+        /// </summary>
+        /// <param name="openid">openid</param>
+        /// <returns>用户信息</returns>
+        JResult IsCustByOpenid(string openid);
 
         /// <summary>
         /// 获取会员详情
@@ -62,6 +76,13 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="mobile">会员手机号</param>
         /// <returns></returns>
         JResult GetCustByMobile(string mobile);
+
+        /// <summary>
+        /// 根据carid获取会员基本信息
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>用户信息</returns>
+        JResult CustInfoByCarid(string carid);
 
         /// <summary>
         /// 获取会员列表
@@ -91,6 +112,13 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="status"></param>
         /// <returns></returns>
         JResult UpdateCustStatus(string innerid, int status);
+
+        /// <summary>
+        /// 修改会员类型
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult UpdateCustType(string innerid);
 
         #endregion
 

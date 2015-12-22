@@ -253,6 +253,15 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         /// <summary>
+        /// 获取热门车系Top n
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCarSeriesHotTop(int top)
+        {
+            return BusinessComponent.GetCarSeriesHotTop(top);
+        }
+
+        /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
         /// <param name="seriesId">车系id</param>
@@ -447,6 +456,8 @@ namespace CCN.Modules.Base.BusinessService
         #endregion
 
         #region 获取系统后台基础信息
+
+        #region 用户管理
         /// <summary>
         /// 获取登录人信息
         /// </summary>
@@ -457,7 +468,6 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.GetUserInfo(loginname, password);
         }
-
 
         /// <summary>
         /// 获取用户列表
@@ -470,7 +480,7 @@ namespace CCN.Modules.Base.BusinessService
         }
 
         /// <summary>
-        /// 添加用户
+        /// 添加用户 
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
@@ -478,6 +488,61 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.AddUser(model);
         }
+
+        /// <summary>
+        /// 更新用户 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateUser(BaseUserModel model)
+        {
+            return BusinessComponent.UpdateUser(model);
+        }
+
+        /// <summary>
+        /// 更新用户状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateUserStatus(string innerid,int status)
+        {
+            return BusinessComponent.UpdateUserStatus(innerid,status);
+        }
+
+        /// <summary>
+        /// 根据ID获取用户信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetUserInfoByID(string innerid)
+        {
+            return BusinessComponent.GetUserInfoByID(innerid);
+        }
+
+        /// <summary>
+        /// 获取用户对应权限
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetRoleByUerid(string userid)
+        {
+            return BusinessComponent.GetRoleByUerid(userid);
+        }
+
+        /// <summary>
+        /// 获取用户对应菜单
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetMenuByUerid(string userid)
+        {
+            return BusinessComponent.GetMenuByUerid(userid);
+        }
+
+        #endregion
+
+        #region 角色管理
 
         /// <summary>
         /// 获取角色列表
@@ -488,6 +553,152 @@ namespace CCN.Modules.Base.BusinessService
         {
             return BusinessComponent.GetRoleList(query);
         }
+
+        /// <summary>
+        /// 获取所有角色
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllRole(BaseRoleModel model)
+        {
+            return BusinessComponent.GetAllRole(model);
+        }
+
+        /// <summary>
+        /// 添加角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddRole(BaseRoleModel model)
+        {
+            return BusinessComponent.AddRole(model);
+        }
+
+        /// <summary>
+        /// 更新角色 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateRole(BaseRoleModel model)
+        {
+            return BusinessComponent.UpdateRole(model);
+        }
+
+        /// <summary>
+        /// 更新角色状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="isenabled"></param>
+        /// <returns></returns>
+        public JResult UpdateRoleStatus(string innerid, int isenabled)
+        {
+            return BusinessComponent.UpdateRoleStatus(innerid, isenabled);
+        }
+
+        /// <summary>
+        /// 根据ID获取角色信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetRoleInfoByID(string innerid)
+        {
+            return BusinessComponent.GetRoleInfoByID(innerid);
+        }
+
+        #endregion
+
+        #region 菜单管理
+
+        /// <summary>
+        /// 获取菜单列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<MenuViewMode> GetMenuList(MenuQueryModel query)
+        {
+            return BusinessComponent.GetMenuList(query);
+        }
+
+        /// <summary>
+        /// 获取所有菜单
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllMenu(BaseMenuModel model)
+        {
+            return BusinessComponent.GetAllMenu(model);
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddMenu(BaseMenuModel model)
+        {
+            return BusinessComponent.AddMenu(model);
+        }
+
+        /// <summary>
+        /// 更新菜单信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateMenu(BaseMenuModel model)
+        {
+            return BusinessComponent.UpdateMenu(model);
+        }
+
+        /// <summary>
+        /// 删除菜单（物理删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteMenu(string innerid)
+        {
+            return BusinessComponent.DeleteMenu(innerid);
+        }
+
+        /// <summary>
+        /// 获取菜单详细信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetMenuInfo(string innerid)
+        {
+            return BusinessComponent.GetMenuInfo(innerid);
+        }
+
+        /// <summary>
+        /// 给角色赋相应的权限
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddRoleMenu(BaseRoleMenuModel model)
+        {
+            return BusinessComponent.AddRoleMenu(model);
+        }
+
+        /// <summary>
+        /// 保存职员对应角色
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUserRole(BaseRoleUserModel model)
+        {
+            return BusinessComponent.AddUserRole(model);
+        }
+
+        /// <summary>
+        /// 获取角色对应所有的菜单
+        /// </summary>
+        /// <param name="roleid"></param>
+        /// <returns></returns>
+        public JResult GetRoleToMenu(string roleid)
+        {
+            return BusinessComponent.GetRoleToMenu(roleid);
+        }
+
+        #endregion
+
         #endregion
     }
 }

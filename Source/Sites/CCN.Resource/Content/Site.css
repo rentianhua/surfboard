@@ -128,3 +128,10 @@ table.gridtable {
     width: 12px;
     height: 12px;
 }
+
+.ck input[type=checkbox] {
+    opacity: initial;
+    position: initial;
+    width: 12px;
+    height: 12px;
+}

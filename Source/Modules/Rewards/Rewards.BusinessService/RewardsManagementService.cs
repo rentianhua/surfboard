@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using CCN.Modules.Rewards.BusinessComponent;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -13,6 +17,7 @@ namespace CCN.Modules.Rewards.BusinessService
     /// </summary>
     public class RewardsManagementService: ServiceBase<RewardsBC>,IRewardsManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// </summary>
         public RewardsManagementService(RewardsBC bc) : base(bc)
@@ -48,7 +53,24 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult PointExchangeCoupon(CustPointExChangeCouponModel model)
         {
-            return BusinessComponent.PointExchangeCoupon(model);
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.PointExchangeCoupon(model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("积分兑换礼券异常", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "兑换异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>
@@ -238,11 +260,20 @@ namespace CCN.Modules.Rewards.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CouponViewModel> GetCouponMallPageList(CouponQueryModel query)
+        public BasePageList<CouponViewModel> GetMallCouponPageList(CouponMallQuery query)
         {
-            return BusinessComponent.GetCouponMallPageList(query);
+            return BusinessComponent.GetMallCouponPageList(query);
         }
 
+        /// <summary>
+        /// 商城搜索商户列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<ShopMallViewList> GetMallShopPageList(ShopMallQueryModel query)
+        {
+            return BusinessComponent.GetMallShopPageList(query);
+        }
         #endregion
 
         #region 礼券对外接口
@@ -265,15 +296,53 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult WholesaleCoupon(CouponBuyModel model)
         {
-            var jresult = BusinessComponent.WholesaleCoupon(model);
-
-            Task.Run(() =>
+            lock (_obj)
             {
-                model.result = jresult.errcode;
-                BusinessComponent.SaveOrder(model);
-            });
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    var jresult = BusinessComponent.WholesaleCoupon(model);
 
-            return jresult;
+                    Task.Run(() =>
+                    {
+                        model.result = jresult.errcode;
+                        model.resultdesc = jresult.errmsg.ToString();
+                        BusinessComponent.SaveOrder(model);
+                    });
+
+                    return jresult;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("购买发送礼券异常", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "购买发送礼券异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取发送礼券失败的订单
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<OrderViewList> GetOrderList(OrderQuery query)
+        {
+            return BusinessComponent.GetOrderList(query);
+        }
+
+        /// <summary>
+        /// 处理购买失败的订单
+        /// </summary>
+        /// <param name="innerid">订单内部id</param>
+        /// <returns></returns>
+        public JResult HandlOrder(string innerid)
+        {
+            return BusinessComponent.HandlOrder(innerid);
         }
 
         /// <summary>
@@ -307,6 +376,15 @@ namespace CCN.Modules.Rewards.BusinessService
         {
             return BusinessComponent.GetShopById(innerid);
         }
+        
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetShopViewById(string innerid)
+        {
+            return BusinessComponent.GetShopViewById(innerid);
+        }
 
         /// <summary>
         /// 商户登录
@@ -323,7 +401,23 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <returns></returns>
         public JResult AddShop(ShopModel model)
         {
-            return BusinessComponent.AddShop(model);
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.AddShop(model);
+                }
+                catch (Exception)
+                {
+                    return JResult._jResult(400, "添加失败");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         /// <summary>
@@ -344,6 +438,17 @@ namespace CCN.Modules.Rewards.BusinessService
         public JResult UpdateShopStatus(string innerid, int status)
         {
             return BusinessComponent.UpdateShopStatus(innerid, status);
+        }
+
+        /// <summary>
+        /// 修改商户密码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public JResult UpdateShopPassword(string innerid, string password)
+        {
+            return BusinessComponent.UpdateShopPassword(innerid, password);
         }
 
         /// <summary>
@@ -543,5 +648,30 @@ namespace CCN.Modules.Rewards.BusinessService
         }
 
         #endregion
+
+        #region 可能存在并发问题
+
+        /// <summary>
+        /// 积分兑换礼券
+        /// </summary>
+        /// <param name="model">兑换相关信息</param>
+        /// <returns></returns>
+        public JResult PointToCoupon(CustPointToCouponModel model)
+        {
+            return BusinessComponent.PointToCoupon(model);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 获取礼券实例
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CouponCodeListModel> GetCouponCode(CodeQueryModel query)
+        {
+            return BusinessComponent.GetCouponCode(query);
+        }
+
     }
 }
