@@ -15,67 +15,80 @@ function InitQiniuUpload(option) {
         browse_button: option.id,
         container: option.container,
         drop_element: option.container,
-        max_file_size: '100mb',
+        max_file_size: '2mb',
         flash_swf_url: 'js/plupload/Moxie.swf',
         dragdrop: true,
-        chunk_size: '4mb',
+        chunk_size: '1mb',
         uptoken: option.uptoken,
+        //domain: QiuniuHost(),
         domain: "http://7xlopw.com2.z0.glb.qiniucdn.com/",
         auto_start: option.autostart,
+        mime_types: [
+                        { title: "Image files", extensions: "jpg,gif,png" }
+                    ],
         init: {
-            'FilesAdded': function(up, files) {
+            'FilesAdded': function (up, files) {
                 $('table').show();
                 $('#success').hide();
-                plupload.each(files, function(file) {
-                    var progress = new FileProgress(file, 'fsUploadProgress');
-                    progress.setStatus("等待...");
+                plupload.each(files, function (file) {
+                    var filemaxsize = plupload.parseSize(up.getOption('max_file_size'));
+                    var filesize = file.size;
+                    if (filemaxsize >= filesize)
+                    {
+                        var progress = new FileProgress(file, 'fsUploadProgress');
+                        progress.setStatus("等待...");
+                    }
                 });
             },
-            'BeforeUpload': function(up, file) {
-                //var progress = new FileProgress(file, 'fsUploadProgress');
-                //var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
-                //if (up.runtime === 'html5' && chunk_size) {
-                //    progress.setChunkProgess(chunk_size);
-                //}
+            'BeforeUpload': function (up, file) {
+                var progress = new FileProgress(file, 'fsUploadProgress');
+                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
+                if (up.runtime === 'html5' && chunk_size) {
+                    progress.setChunkProgess(chunk_size);
+                }
             },
-            'UploadProgress': function(up, file) {
-                //var progress = new FileProgress(file, 'fsUploadProgress');
-                //var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
+            'UploadProgress': function (up, file) {
+                var progress = new FileProgress(file, 'fsUploadProgress');
+                var chunk_size = plupload.parseSize(this.getOption('chunk_size'));
 
-                //progress.setProgress(file.percent + "%", file.speed, chunk_size);
+                progress.setProgress(file.percent + "%", file.speed, chunk_size);
             },
-            'UploadComplete': function() {
+            'UploadComplete': function () {
                 $('#success').show();
             },
-            'FileUploaded': function(up, file, info) {
-                //var progress = new FileProgress(file, 'fsUploadProgress');
-                //progress.setComplete(up, info);
+            'FileUploaded': function (up, file, info) {
+                var progress = new FileProgress(file, 'fsUploadProgress');
+                progress.setComplete(up, info);
             },
-            'Error': function(up, err, errTip) {
-                $('table').show();
-                var progress = new FileProgress(err.file, 'fsUploadProgress');
-                progress.setError();
-                progress.setStatus(errTip);
+            'Error': function (up, err, errTip) {
+                var filemaxsize = plupload.parseSize(up.getOption('max_file_size'));
+                var filesize = err.file.size;
+                if (filemaxsize >= filesize) {
+                    $('table').show();
+                    var progress = new FileProgress(err.file, 'fsUploadProgress');
+                    progress.setError();
+                    progress.setStatus(errTip);
+                }
             }
         }
     });
 
     $('#container').on(
         'dragenter',
-        function(e) {
+        function (e) {
             e.preventDefault();
             $('#container').addClass('draging');
             e.stopPropagation();
         }
-    ).on('drop', function(e) {
+    ).on('drop', function (e) {
         e.preventDefault();
         $('#container').removeClass('draging');
         e.stopPropagation();
-    }).on('dragleave', function(e) {
+    }).on('dragleave', function (e) {
         e.preventDefault();
         $('#container').removeClass('draging');
         e.stopPropagation();
-    }).on('dragover', function(e) {
+    }).on('dragover', function (e) {
         e.preventDefault();
         $('#container').addClass('draging');
         e.stopPropagation();
@@ -83,20 +96,20 @@ function InitQiniuUpload(option) {
 
 
 
-    $('#show_code').on('click', function() {
+    $('#show_code').on('click', function () {
         $('#myModal-code').modal();
-        $('pre code').each(function(i, e) {
+        $('pre code').each(function (i, e) {
             hljs.highlightBlock(e);
         });
     });
 
 
-    $('body').on('click', 'table button.btn', function() {
+    $('body').on('click', 'table button.btn', function () {
         $(this).parents('tr').next().toggle();
     });
 
 
-    var getRotate = function(url) {
+    var getRotate = function (url) {
         if (!url) {
             return 0;
         }
@@ -109,7 +122,7 @@ function InitQiniuUpload(option) {
         return 0;
     };
 
-    $('#myModal-img .modal-body-footer').find('a').on('click', function() {
+    $('#myModal-img .modal-body-footer').find('a').on('click', function () {
         var img = $('#myModal-img').find('.modal-body img');
         var key = img.data('key');
         var oldUrl = img.attr('src');
@@ -144,7 +157,7 @@ function InitQiniuUpload(option) {
             });
         }
 
-        $('#myModal-img .modal-body-footer').find('a.disabled').each(function() {
+        $('#myModal-img .modal-body-footer').find('a.disabled').each(function () {
 
             var watermark = $(this).data('watermark');
             var imageView = $(this).data('imageview');
@@ -202,7 +215,7 @@ function InitQiniuUpload(option) {
 
         var newImg = new Image();
         img.attr('src', 'loading.gif');
-        newImg.onload = function() {
+        newImg.onload = function () {
             img.attr('src', newUrl);
             img.parent('a').attr('href', newUrl);
         };

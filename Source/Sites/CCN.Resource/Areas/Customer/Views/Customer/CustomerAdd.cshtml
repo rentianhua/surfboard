@@ -1,12 +1,12 @@
 ﻿
 @{
-    //ViewBag.Title = "CustomerEdit";
-    //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+//ViewBag.Title = "CustomerEdit";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 
 <script type="text/javascript">
 
-    $(function() {
+    $(function () {
 
     });
 
@@ -36,25 +36,25 @@
             return;
         }
 
-        $.post("/api/Customer/AddCustomer", json, function(result) {
+        $.post("/api/Customer/AddCustomer", json, function (result) {
             var str = "";
             switch (result.errcode) {
-            case 0:
-                str = "添加成功";
-                break;
-            case 402:
-                str = "手机号被其他人注册";
-                break;
-            case 403:
-                str = "openid已绑定其他手机号";
-                break;
-            case 405:
-                str = "手机号不能空";
-                break;
-            case 404:
-                str = "添加失败";
-                break;
-            default:
+                case 0:
+                    str = "添加成功";
+                    break;
+                case 402:
+                    str = "手机号被其他人注册";
+                    break;
+                case 403:
+                    str = "openid已绑定其他手机号";
+                    break;
+                case 405:
+                    str = "手机号不能空";
+                    break;
+                case 404:
+                    str = "添加失败";
+                    break;
+                default:
             }
             alert(str);
             getBodyHtml('mainbody', '/customer/customer/customerlist');
@@ -62,35 +62,52 @@
     }
 
 </script>
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">会员快速注册</div>
-    <table id="coupon" class="gridtable">
-        <tbody>
-            <tr>
-                <td>手机号</td>
-                <td>
-                    <input type="text" id="mobile" />
-                </td>
-            </tr>
-            <tr>
-                <td>密码</td>
-                <td>
-                    <input type="text" id="password" />
-                </td>
-            </tr>
-            <tr>
-                <td>昵称</td>
-                <td>
-                    <input type="text" id="custname" />
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="保存" onclick="Submit()" />
-                    <input type="button" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">会员快速注册</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>手机号:</label>
+                            <div class="col-sm-10">
+                                <input id="mobile" type="text" placeholder="手机号" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>密码:</label>
+                            <div class="col-sm-10">
+                                <input id="txtbuyprice" type="text" placeholder="密码" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="custname" class="col-sm-2 control-label no-padding-right">昵称:</label>
+                            <div class="col-sm-10">
+                                <input id="custname" type="text" placeholder="昵称" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/customerlist');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
