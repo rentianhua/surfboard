@@ -43,16 +43,27 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  //排序以后调整为 支付时间
             var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
 
-            query.where = query.where.Replace("a.", "ia.").Replace("c1.", "ic1.").Replace("c2.", "ic2.").Replace("c3.", "ic3.");
+            if (!string.IsNullOrWhiteSpace(query.where))
+            {
+                query.where = "a.status=1 and a.istop=1 " + query.where;
+                query.where =
+                    query.where
+                        .Replace("a.", "ia.")
+                        .Replace("c1.", "ic1.")
+                        .Replace("c2.", "ic2.")
+                        .Replace("c3.", "ic3.");
 
-            sqlWhere.Append($@" and a.innerid not in (select ia.innerid from car_info as ia 
+                sqlWhere.Append(
+                    $@" and a.innerid not in (select ia.innerid from car_info as ia 
                                     left join base_carbrand as ic1 on ia.brand_id = ic1.innerid
                                     left join base_carseries as ic2 on ia.series_id = ic2.innerid
-                                    left join base_carmodel as ic3 on ia.model_id = ic3.innerid where {query.where})");
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+                                    left join base_carmodel as ic3 on ia.model_id = ic3.innerid where {
+                        query.where})");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);            
             var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
             return list;
         }
@@ -73,7 +84,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.status=1 and a.istop=1"); 
@@ -172,7 +183,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #endregion
 
-            strwhere = sqlWhere.ToString();
+            strwhere = sqlWhere.ToString().Replace("a.status=1 and a.istop=1", "").Trim();   //只需要手动设置的条件
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
             return list;
@@ -193,7 +204,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.status=1"); //在售车辆
@@ -312,7 +323,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid ";
             string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname," +
                                   $" (select count(1) from cust_relations where userid='{query.custid}' and friendsid=a.custid) as isfriend";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.status=1");
@@ -1575,6 +1586,337 @@ namespace CCN.Modules.Car.DataAccess
             var list = Helper.ExecutePaging<CarCollectionViewListModel>(model, query.Echo);
             return list;
         }
+
+        #endregion
+
+        #region 精品车商
+
+        #region 公司简介
+        /// <summary>
+        /// 添加精品车商的公司简介
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddIntroduces(dynamic model)
+        {
+            const string sql = @"INSERT INTO cust_site_introduces
+                        (innerid, custid, enterprisename, logo, introduces, telephone, mobile, address, website, wechatnumber, wechatqrcode, spare1)
+                        VALUES
+                        (@innerid, @custid, @enterprisename, @logo, @introduces, @telephone, @mobile, @address, @website, @wechatnumber, @wechatqrcode, @spare1);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加精品车商的公司简介异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改精品车商的公司简介
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateIntroduces(dynamic model)
+        {
+            var sql = new StringBuilder("update cust_site_introduces set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            try
+            {
+                Helper.Execute(sql.ToString(), model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改精品车商的公司简介异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除精品车商的公司简介
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DelIntroduces(string innerid)
+        {
+            const string sql = @"delete from cust_site_introduces where innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new {innerid});
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除精品车商的公司简介异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取精品车商的公司简介
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public dynamic GetIntroducesById(string innerid)
+        {
+            const string sql = @"select * from cust_site_introduces where innerid = @innerid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { innerid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取精品车商的公司简介异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取精品车商的公司简介列表
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public dynamic GetIntroducesList(string custid)
+        {
+            const string sql = @"select * from cust_site_introduces where custid = @custid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取精品车商的公司简介列表异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+        #endregion
+
+        #region 推荐品牌
+
+        /// <summary>
+        /// 添加推荐品牌
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddRecommendBrand(dynamic model)
+        {
+            const string sql = @"INSERT INTO cust_site_recommendbrand
+                        (innerid, custid, brandid, createdtime, modifiedtime)
+                        VALUES (@innerid, @custid, @brandid, @createdtime, @modifiedtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加推荐品牌异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改推荐品牌
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateRecommendBrand(dynamic model)
+        {
+            var sql = new StringBuilder("update cust_site_recommendbrand set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            try
+            {
+                Helper.Execute(sql.ToString(), model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改推荐品牌异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除推荐品牌
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DelRecommendBrand(string innerid)
+        {
+            const string sql = @"delete from cust_site_recommendbrand where innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除推荐品牌异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取推荐品牌
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public dynamic GetRecommendBrandById(string innerid)
+        {
+            const string sql = @"select * from cust_site_recommendbrand where innerid = @innerid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { innerid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取推荐品牌异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取推荐品牌列表
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public dynamic GetRecommendBrandList(string custid)
+        {
+            const string sql = @"select * from cust_site_recommendbrand where custid = @custid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取推荐品牌列表异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+        #endregion
+
+        #region 推荐车源
+
+        /// <summary>
+        /// 添加推荐车源
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddRecommendCar(dynamic model)
+        {
+            const string sql = @"INSERT INTO cust_site_recommendcar
+                        (innerid, custid, carid, createdtime, modifiedtime)
+                        VALUES (@innerid, @custid, @carid, @createdtime, @modifiedtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加推荐车源异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改推荐车源
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateRecommendCar(dynamic model)
+        {
+            var sql = new StringBuilder("update cust_site_recommendcar set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            try
+            {
+                Helper.Execute(sql.ToString(), model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改推荐车源异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 删除推荐车源
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DelRecommendCar(string innerid)
+        {
+            const string sql = @"delete from cust_site_recommendcar where innerid = @innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new { innerid });
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除推荐车源异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取推荐车源
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public dynamic GetRecommendCarById(string innerid)
+        {
+            const string sql = @"select * from cust_site_recommendcar where innerid = @innerid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { innerid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取推荐车源异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取推荐车源列表
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public dynamic GetRecommendCarList(string custid)
+        {
+            const string sql = @"select * from cust_site_recommendcar where custid = @custid;";
+
+            try
+            {
+                return Helper.Query<dynamic>(sql, new { custid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取推荐车源列表异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+        #endregion
 
         #endregion
     }

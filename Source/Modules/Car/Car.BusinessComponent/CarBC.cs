@@ -44,8 +44,17 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
         {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
+
             string strwhere;
-            var list = DataAccess.SearchCarPageListTop(query,out strwhere);
+            var list = DataAccess.SearchCarPageListTop(query, out strwhere);
+
+            //判断是否设置条件，如果没有条件表示所有的查询所有的置顶数据，到了最后一页也不需要补齐数据
+            if (string.IsNullOrWhiteSpace(strwhere))  
+                return list;
 
             var fill = 0;       //标识是否需要补数据
             var total = list.iTotalRecords ?? 0;
@@ -75,7 +84,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var filllist = DataAccess.SearchCarPageListTopFill(new CarTopFillQueryModel
             {
                 @where = strwhere,
-                PageIndex = query.Echo ?? 1,
+                PageIndex = query.Echo ?? 1, //第几次进入最后一页，补齐的时候就代表第几页(重要字段)
                 PageSize = fill
             });
             
@@ -154,6 +163,10 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarInfoListViewModel> SearchCarPageList(CarGlobalQueryModel query)
         {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
             var list = DataAccess.SearchCarPageList(query);
 
             if (list.aaData == null)
@@ -192,6 +205,10 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query)
         {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
             var list = DataAccess.GetCarPageList(query);
             if (list.aaData == null || !list.aaData.Any())
                 return list;
