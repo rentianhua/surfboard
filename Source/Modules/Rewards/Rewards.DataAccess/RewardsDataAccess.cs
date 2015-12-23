@@ -1061,6 +1061,21 @@ namespace CCN.Modules.Rewards.DataAccess
                 sqlWhere.Append($" and a.shopid='{query.Shopid}'");
             }
 
+            if (query.Countyid != null)
+            {
+                sqlWhere.Append($" and s.countyid={query.Countyid}");
+            }
+
+            if (query.Cityid != null)
+            {
+                sqlWhere.Append($" and s.cityid={query.Cityid}");
+            }
+
+            if (query.Provid != null)
+            {
+                sqlWhere.Append($" and s.provid={query.Provid}");
+            }
+
             if (!string.IsNullOrWhiteSpace(query.CardTypes))
             {
                 sqlWhere.Append($" and a.cardtype in ({query.CardTypes})");
@@ -1984,14 +1999,14 @@ namespace CCN.Modules.Rewards.DataAccess
         }
 
         /// <summary>
-        /// 根据区获取商户列表
+        /// 根据区id获取商户列表
         /// </summary>
-        /// <param name="area"></param>
+        /// <param name="countyid"></param>
         /// <returns></returns>
-        public IEnumerable<ItemShop> GetShopByArea(string area)
+        public IEnumerable<ItemShop> GetShopByCountyid(string countyid)
         {
-            const string sqlSelect = "select innerid as Value, shopname as Text from coupon_shop where area=@area and status=1 order by shopname desc;";
-            return Helper.Query<ItemShop>(sqlSelect, new { area });
+            const string sqlSelect = "select innerid as Value, shopname as Text from coupon_shop where countyid=@countyid and status=1 order by shopname desc;";
+            return Helper.Query<ItemShop>(sqlSelect, new { countyid });
         }
 
         #endregion

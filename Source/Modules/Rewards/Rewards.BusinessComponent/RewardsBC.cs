@@ -1306,11 +1306,11 @@ namespace CCN.Modules.Rewards.BusinessComponent
         /// <summary>
         /// 根据区获取商户列表
         /// </summary>
-        /// <param name="area"></param>
+        /// <param name="countyid"></param>
         /// <returns></returns>
-        public JResult GetShopByArea(string area)
+        public JResult GetShopByCountyid(string countyid)
         {
-            var list = DataAccess.GetShopByArea(area);
+            var list = DataAccess.GetShopByCountyid(countyid);
             return JResult._jResult(0, list);
         }
 

@@ -275,6 +275,21 @@ namespace CCN.Modules.Rewards.BusinessEntity
     public class CouponMallQuery : QueryModel
     {
         /// <summary>
+        /// 所在地：身份
+        /// </summary>
+        public int? Provid { get; set; }
+
+        /// <summary>
+        /// 所在地：城市
+        /// </summary>
+        public int? Cityid { get; set; }
+
+        /// <summary>
+        /// 所在地：区/县
+        /// </summary>
+        public int? Countyid { get; set; }
+
+        /// <summary>
         /// 商户id
         /// </summary>
         public string Shopid { get; set; }
