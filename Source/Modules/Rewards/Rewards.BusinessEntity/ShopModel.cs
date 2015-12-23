@@ -70,7 +70,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 所在地：区/县
         /// </summary>
-        public string Area { get; set; }
+        public int? Countyid { get; set; }
 
         /// <summary>
         /// 详细地址
@@ -156,7 +156,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 所在地：区/县
         /// </summary>
-        public string Area { get; set; }
+        public string CountyName { get; set; }
 
         /// <summary>
         /// 详细地址
@@ -184,6 +184,11 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// 所在地：城市
         /// </summary>
         public string CityName { get; set; }
+
+        /// <summary>
+        /// 所在地：区县
+        /// </summary>
+        public string CountyName { get; set; }
 
         /// <summary>
         /// 商户下所有卡券类型集合
@@ -234,7 +239,7 @@ namespace CCN.Modules.Rewards.BusinessEntity
         /// <summary>
         /// 所在地：区/县
         /// </summary>
-        public string Area { get; set; }
+        public int? Countyid { get; set; }
 
         /// <summary>
         /// 详细地址

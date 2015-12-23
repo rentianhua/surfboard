@@ -640,11 +640,11 @@ namespace CCN.Modules.Rewards.BusinessService
         /// <summary>
         /// 根据区获取商户列表
         /// </summary>
-        /// <param name="area"></param>
+        /// <param name="countyid"></param>
         /// <returns></returns>
-        public JResult GetShopByArea(string area)
+        public JResult GetShopByCountyid(string countyid)
         {
-            return BusinessComponent.GetShopByArea(area);
+            return BusinessComponent.GetShopByCountyid(countyid);
         }
 
         #endregion

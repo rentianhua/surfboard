@@ -219,6 +219,16 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.GetCityList(provId, initial);
         }
 
+        /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        public IEnumerable<BaseCounty> GetCountyList(int cityId)
+        {
+            return BusinessComponent.GetCountyList(cityId);
+        }
+
         #endregion
 
         #region 品牌/车系/车型

@@ -412,9 +412,9 @@ namespace CCN.Modules.Rewards.Interface
         /// <summary>
         /// 根据区获取商户列表
         /// </summary>
-        /// <param name="area"></param>
+        /// <param name="countyid"></param>
         /// <returns></returns>
-        JResult GetShopByArea(string area);
+        JResult GetShopByCountyid(string countyid);
 
         #endregion
 

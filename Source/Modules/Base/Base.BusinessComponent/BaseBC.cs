@@ -445,6 +445,16 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        public IEnumerable<BaseCounty> GetCountyList(int cityId)
+        {
+            return DataAccess.GetCountyList(cityId);
+        }
+
+        /// <summary>
         /// 获取省份（扩展方法，根据首字母分类）
         /// </summary>
         /// <param name="initial">首字母</param>

@@ -317,6 +317,17 @@ namespace CCN.Resource.ApiControllers
         {
             return _rewardsservice.GetShopById(innerid);
         }
+        
+        /// <summary>
+        /// 根据id获取商户信息（包含关联信息）
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetShopViewById")]
+        [HttpGet]
+        public JResult GetShopViewById(string innerid)
+        {
+            return _rewardsservice.GetShopViewById(innerid);
+        }
 
         /// <summary>
         /// 商户登录

@@ -524,13 +524,13 @@ namespace CCN.WebAPI.ApiControllers
         /// <summary>
         /// 根据区获取商户列表
         /// </summary>
-        /// <param name="area"></param>
+        /// <param name="countyid"></param>
         /// <returns></returns>
-        [Route("GetShopByArea")]
+        [Route("GetShopByCountyid")]
         [HttpGet]
-        public JResult GetShopByArea(string area)
+        public JResult GetShopByCountyid(string countyid)
         {
-            return _rewardsservice.GetShopByArea(area);
+            return _rewardsservice.GetShopByCountyid(countyid);
         }
 
         #endregion

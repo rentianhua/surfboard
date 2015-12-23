@@ -483,6 +483,19 @@ namespace CCN.Modules.Base.DataAccess
             return cityList;
         }
 
+        /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        public IEnumerable<BaseCounty> GetCountyList(int cityId)
+        {
+            var sql =
+                $"select innerid, areacode, countyname, cityid, typename from base_county where cityid={cityId} order by innerid asc";
+            var countyList = Helper.Query<BaseCounty>(sql);
+            return countyList;
+        }
+
         #endregion
 
         #region 品牌/车系/车型

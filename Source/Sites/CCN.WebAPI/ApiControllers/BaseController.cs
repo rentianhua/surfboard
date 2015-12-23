@@ -133,6 +133,31 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        [Route("GetCountyList")]
+        [HttpGet]
+        public JResult GetCountyList(int cityId)
+        {
+            var list = _baseservice.GetCountyList(cityId);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
+        }
+
+        /// <summary>
         /// 获取省份
         /// </summary>
         /// <param name="initial"></param>
