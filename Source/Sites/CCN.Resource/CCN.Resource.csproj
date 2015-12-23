@@ -904,6 +904,7 @@
     <Content Include="Areas\Rewards\Views\Rewards\ShopView.cshtml" />
     <Content Include="Plugins\UploadImg\js\jquery.min.map" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
+    <None Include="Properties\PublishProfiles\Web.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CCN_Chart.js" />

@@ -346,5 +346,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region 不同地区数据统计
+        /// <summary>
+        /// 获取地区的数据
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetDataByBity")]
+        [HttpGet]
+        public JResult GetDataByBity()
+        {
+            return _dataanalysisservice.GetDataByBity();
+        }
+        #endregion
     }
 }
