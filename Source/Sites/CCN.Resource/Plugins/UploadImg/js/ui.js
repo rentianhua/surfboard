@@ -8,78 +8,20 @@ function FileProgress(file, targetID) {
     this.height = 0;
     this.fileProgressWrapper = $('#' + this.fileProgressID);
     if (!this.fileProgressWrapper.length) {
-        // <div class="progress">
-        //   <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-        //     <span class="sr-only">20% Complete</span>
-        //   </div>
-        // </div>
-
-        this.fileProgressWrapper = $('<tr></tr>');
-        var Wrappeer = this.fileProgressWrapper;
-        Wrappeer.attr('id', this.fileProgressID).addClass('progressContainer');
-
-        var progressText = $("<td/>");
-        progressText.addClass('progressName').text(file.name);
-
-        var fileSize = plupload.formatSize(file.size).toUpperCase();
-        var progressSize = $("<td/>");
-        progressSize.addClass("progressFileSize").text(fileSize);
-
-        var progressBarTd = $("<td/>");
-        var progressBarBox = $("<div/>");
-        progressBarBox.addClass('info');
-        var progressBarWrapper = $("<div/>");
-        progressBarWrapper.addClass("progress progress-striped");
-
-        var progressBar = $("<div/>");
-        progressBar.addClass("progress-bar progress-bar-info")
-            .attr('role', 'progressbar')
-            .attr('aria-valuemax', 100)
-            .attr('aria-valuenow', 0)
-            .attr('aria-valuein', 0)
-            .width('0%');
-
-        var progressBarPercent = $('<span class=sr-only />');
-        progressBarPercent.text(fileSize);
-
-        var progressCancel = $('<a href=javascript:; />');
-        progressCancel.show().addClass('progressCancel').text('×');
-
-        progressBar.append(progressBarPercent);
-        progressBarWrapper.append(progressBar);
-        progressBarBox.append(progressBarWrapper);
-        progressBarBox.append(progressCancel);
-
-        var progressBarStatus = $('<div class="status text-center"/>');
-        progressBarBox.append(progressBarStatus);
-        progressBarTd.append(progressBarBox);
-
-        Wrappeer.append(progressText);
-        Wrappeer.append(progressSize);
-        Wrappeer.append(progressBarTd);
-
         previewImage(file, function (imgsrc) {
-            //progressText.append('<div style="float:left" class="pic_list" id="' + file.id + '">'
-            //    + '<a href="###" class="pic_delete" data-val=' + file.id +
-            //    '>删除</a><br/>' +
-            //'<img class="listview" width="90" height="60" src="' + imgsrc + '" name="' + file.name + '" /></div>');
+            //获取随机数
             strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-            $('.imgs').append(
-					'<div id="' + strradom + '" class="imgPreview" >\
-						<img data-type="img" src="' + imgsrc + '" class="loading">\
-						<div class="caidan">\
-							<div hash="' + strradom + '" class="cz_1">\
-								<div class="czl_icon"></div>\
-							</div>\
-							<div hash="' + strradom + '" class="cz_2">\
-								<div class="czl_icon"></div>\
-							</div>\
-							<div hash="' + strradom + '" class="cz_3"><div class="czl_icon"></div></div>\
-							<div hash="' + strradom + '" class="cz_4" id="' + file.id + '"><div class="czl_icon"></div></div>\
-						</div>\
-					</div>'
 
-				);
+            var strHtml = '<div id="' + strradom + '" class="imgPreview div2" >';
+            strHtml +='<img data-type="img" src="' + imgsrc + '" class="loading">';
+            strHtml +='<div class="caidan">';
+            //strHtml += '<div hash="' + strradom + '" class="cz_1"><div class="czl_icon"></div></div>';
+            //strHtml += '<div hash="' + strradom + '" class="cz_2"><div class="czl_icon"></div></div>';
+            //strHtml += '<div hash="' + strradom + '" class="cz_3"><div class="czl_icon"></div></div>';
+            strHtml += '<div hash="' + strradom + '" class="cz_4" id="' + file.id + '"><div class="czl_icon"></div></div>';
+            strHtml += '</div></div>';
+            $('.imgs').append(strHtml);
+
             // 立即执行事件绑定
             (function () {
                 // 当前方法对象
@@ -139,14 +81,9 @@ function FileProgress(file, targetID) {
             })();
 
         });
-
-        // $('#' + targetID).append(Wrappeer);
     } else {
         this.reset();
     }
-
-    this.height = this.fileProgressWrapper.offset().top;
-    this.setTimer(null);
 }
 $(document).on('click', '.pic_list a.pic_delete', function () {
     $(this).parent().parent().parent().remove();

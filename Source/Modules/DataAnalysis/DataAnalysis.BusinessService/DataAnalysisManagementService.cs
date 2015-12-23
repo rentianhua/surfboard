@@ -269,7 +269,6 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetTotal(cityid);
         }
 
-
         #region 商户车辆数据统计
         /// <summary>
         /// 获取近12个月车辆增长量
@@ -289,6 +288,17 @@ namespace CCN.Modules.DataAnalysis.BusinessService
             return BusinessComponent.GetRecent12Sell(custid);
         }
 
+        #endregion
+
+        #region 不同地区数据统计
+        /// <summary>
+        /// 获取地区的数据
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetDataByBity()
+        {
+            return BusinessComponent.GetDataByBity();
+        }
         #endregion
     }
 }

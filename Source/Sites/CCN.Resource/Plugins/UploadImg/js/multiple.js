@@ -8,6 +8,7 @@ id:上传按钮
 container：容器id
 uptoken:七牛token值
 autostart：是否自动上传 true自动上传
+multiseleted:上传个数
 */
 function InitQiniuUpload(option) {
     var uploader = Qiniu.uploader({
