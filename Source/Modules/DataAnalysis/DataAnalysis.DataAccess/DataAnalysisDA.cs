@@ -1164,7 +1164,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
                                 left join (select count(1) as count,cityid from car_info group by cityid) as t3 on t3.cityid=t1.innerid
                                 left join (select count(1) as count,city from cust_wechat group by city) as t4 on t4.city=t1.cityname
                                 where t2.cityid is not null or t3.cityid is not null
-                                order by t1.provid";
+                                order by t3.count desc";
             try
             {
                 return Helper.Query<DataAnalysisModel>(sql);

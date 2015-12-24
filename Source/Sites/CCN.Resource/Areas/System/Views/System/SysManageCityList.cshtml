@@ -24,7 +24,7 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + val.name + "</td>";
             str += "<td>" + val.code + "</td>";
-            str += "<td>" + (val.status === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
+            //str += "<td>" + (val.status === 1 ? "启用" : "<font color='red'>禁用</font>") + "</td>";
             str += "<td id='" + val.id + "'>";
             str += " <a onclick=\"getBodyHtml('mainbody', '/System/System/SysManageCityEdit?innerid=" + val.id + "');\" href='javascript:;'>修改</a></td>";
             str += "</tr>";
@@ -60,7 +60,7 @@
                 <th>序号</th>
                 <th>城市名称</th>
                 <th>城市编号</th>
-                <th>状态</th>
+                @*<th>状态</th>*@
                 <th>操作</th>
             </tr>
         </thead>

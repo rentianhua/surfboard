@@ -4,24 +4,7 @@
 <div class="row">
     <div class="col-xs-12 col-md-12">
         <div class="widget">
-            <div class="row form-group" style="padding-top:5px;">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="starttime" class="col-sm-3 control-label no-padding-right">开始时间</label>
-                        <div class="col-sm-9">
-                            <input id="starttime" class="Wdate" type="text" placeholder="开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="endtime" class="col-sm-3 control-label no-padding-right">结束时间</label>
-                        <div class="col-sm-9">
-                            <input id="endtime" class="Wdate" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"><input type="button" value="搜索" onclick="QueryList();" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
             <div class="widget-header bordered-bottom bordered-yellow">
                 <span class="widget-caption">汇总数据</span>
             </div>
@@ -55,6 +38,25 @@
                     <div class="well with-header with-footer">
                         <div class="header bg-blue">
                             日增长量
+                        </div>
+                        <div class="row form-group" style="padding-top:5px;">
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="starttime" class="col-sm-3 control-label no-padding-right" style="padding-top: 5px;">开始时间:</label>
+                                    <div class="col-sm-9">
+                                        <input id="starttime" class="Wdate form-control" type="text" placeholder="开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label for="endtime" class="col-sm-3 control-label no-padding-right" style="padding-top: 5px;">结束时间:</label>
+                                    <div class="col-sm-9">
+                                        <input id="endtime" class="Wdate form-control" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="button" value="搜索" onclick="QueryList();" />
                         </div>
                         <div style="height:400px;overflow:auto;">
                             <table class="table table-bordered table-hover table-striped" id="anaiysislist">

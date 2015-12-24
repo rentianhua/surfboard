@@ -63,7 +63,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carmodel as ic3 on ia.model_id = ic3.innerid where {
                         query.where})");
             }
-            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);            
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
             return list;
         }
@@ -74,7 +74,7 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="query">查询条件</param>
         /// <param name="strwhere"></param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query,out string strwhere)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query, out string strwhere)
         {
             const string spName = "sp_common_pager";
             const string tableName = @"car_info as a 
@@ -87,7 +87,7 @@ namespace CCN.Modules.Car.DataAccess
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1"); 
+            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
 
             //省份
             if (query.provid != null)
@@ -433,7 +433,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
 
             #region 查询条件
@@ -526,7 +526,7 @@ namespace CCN.Modules.Car.DataAccess
                 return null;
             }
         }
-        
+
         /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
@@ -645,9 +645,9 @@ namespace CCN.Modules.Car.DataAccess
             var sql = "SELECT * FROM car_info where innerid<>@carid and series_id=1 order by rand() limit 4;";
             try
             {
-                return Helper.Query<CarInfoListViewModel>(sql,new
+                return Helper.Query<CarInfoListViewModel>(sql, new
                 {
-                    carid                
+                    carid
                 });
             }
             catch (Exception ex)
@@ -1027,12 +1027,12 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="carid">车辆id</param>
         /// <param name="istop">1.置顶 0取消置顶</param>
         /// <returns>1.操作成功</returns>
-        public int DoTopCar(string carid,int istop)
+        public int DoTopCar(string carid, int istop)
         {
             const string sql = "update car_info set istop=@istop where innerid=@carid;";
             try
             {
-                Helper.Execute(sql, new { carid });
+                Helper.Execute(sql, new { carid, istop });
             }
             catch (Exception ex)
             {
@@ -1176,7 +1176,7 @@ namespace CCN.Modules.Car.DataAccess
                 return args.Get<int>("p_values");
             }
         }
-        
+
         /// <summary>
         /// 图片调换位置
         /// </summary>
@@ -1294,7 +1294,7 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="pathList"></param>
         /// <param name="carid"></param>
         /// <returns></returns>
-        public int AddCarPictureList(List<string> pathList,string carid)
+        public int AddCarPictureList(List<string> pathList, string carid)
         {
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
             const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";                              //查询车辆所有图片的最大排序
@@ -1368,7 +1368,7 @@ namespace CCN.Modules.Car.DataAccess
                     //图片数量控制在>=3 and <=9
                     return 402;
                 }
-                
+
                 var tran = conn.BeginTransaction();
                 try
                 {
@@ -1426,7 +1426,7 @@ namespace CCN.Modules.Car.DataAccess
                     //图片数量控制在>=3 and <=9
                     return 402;
                 }
-                
+
                 var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { carid = model.Carid });
                 var tran = conn.BeginTransaction();
                 try
@@ -1453,7 +1453,7 @@ namespace CCN.Modules.Car.DataAccess
                         {
                             isUCover = true;
                         }
-                        conn.Execute(sqlDPic, new {innerid = id}, tran);
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
                     }
 
                     if (isUCover)
@@ -1467,7 +1467,7 @@ namespace CCN.Modules.Car.DataAccess
                 catch (Exception ex)
                 {
                     tran.Rollback();
-                    LoggerFactories.CreateLogger().Write("批量保存图片异常：" + ex.Message,TraceEventType.Warning);                    
+                    LoggerFactories.CreateLogger().Write("批量保存图片异常：" + ex.Message, TraceEventType.Warning);
                     return 0;
                 }
             }
@@ -1487,7 +1487,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql =
                 @"select innerid, custid, carid, remark, createdtime from car_collection where custid=@custid and carid=@carid;";
             return
-                Helper.Query<CarCollectionModel>(sql, new {custid = model.Custid, carid = model.Carid}).FirstOrDefault();
+                Helper.Query<CarCollectionModel>(sql, new { custid = model.Custid, carid = model.Carid }).FirstOrDefault();
 
         }
 
@@ -1649,7 +1649,7 @@ namespace CCN.Modules.Car.DataAccess
 
             try
             {
-                Helper.Execute(sql, new {innerid});
+                Helper.Execute(sql, new { innerid });
                 return 1;
             }
             catch (Exception ex)
