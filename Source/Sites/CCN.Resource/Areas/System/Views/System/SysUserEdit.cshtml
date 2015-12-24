@@ -2,11 +2,17 @@
 @{
     Layout = null;
 }
+
+<script src="~/Scripts/multiple-select.js"></script>
+<link href="~/Content/multiple-select.css" rel="stylesheet" />
+
 <script type="text/javascript">
 
     var id = "@ViewBag.innerid";
 
     $(function () {
+
+        InitCity();
         Init();
         InitRoleBox();
 
@@ -44,6 +50,7 @@
 
     //保存基本信息
     function Submit() {
+
         //判断是否填入用户名
         if ($("#username").val() == "") {
             alert("请输入用户名！");
@@ -143,6 +150,20 @@
                 alert(str);
             }
         });
+
+        var jsondep = {};
+        jsondep.userid = id;
+        jsondep.ids = $("#citySelect").val();
+        //保存职员对应部门
+        $.post("/api/Base/AddUserDepartment", jsondep, function (result) {
+            var str = result.errcode === 0 ? "保存成功" : "保存失败";
+            if (result.errcode != 0) {
+                alert(result.errmsg);
+            }
+            else {
+                alert(str);
+            }
+        });
     }
 
     //获取角色信息
@@ -167,6 +188,62 @@
                         });
                     });
 
+                }
+            });
+        }
+    }
+
+    //初始化城市信息
+    function InitCity() {
+        $("#citySelect").empty();
+        $.ajax({
+            url: "/api/Base/GetAllDepartment",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#citySelect").append("<option value='" + v.code + "'>" + v.name + "</option>");
+                });
+
+                //多选框
+                $('#citySelect').multipleSelect({
+                    placeholder: "请选择",
+                    selectAll: false
+                });
+
+                GetCity();
+            }
+        });
+
+    }
+
+    //获取城市信息
+    function GetCity() {
+        if (id != "") {
+            $.ajax({
+                url: '/api/Base/GetUserToDepartment?userid=' + id,
+                type: 'get',
+                datatype: 'application/json',
+                async: false,
+                success: function (result) {
+                    if (result.errcode !== 0) {
+                        alert("获取数据异常！");
+                    }
+
+                    arr = result.errmsg;
+                    $.each(arr, function (key, val) {
+                        $("option").each(function () {
+                            if (this.value == val.cityid) {
+                                $("#citySelect option[value='" + val.cityid + "']").attr("selected", "selected");
+                            }
+                        });
+                    });
+                    $('#citySelect').multipleSelect({
+                        placeholder: "请选择",
+                        selectAll: false
+                    });
                 }
             });
         }
@@ -301,6 +378,16 @@
                             <div class="controls col-sm-10">
                                 <div class="item-check" style="padding-top:5px;" id="rolebox">
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="control-label col-xs-1" for="sel_search_orderstatus5">选择城市:</label>
+                            <div class="col-xs-2 ck" style="margin-top:7px;">
+                                <select id="citySelect" style="width:150px" multiple="multiple"></select>
                             </div>
                         </div>
                     </div>

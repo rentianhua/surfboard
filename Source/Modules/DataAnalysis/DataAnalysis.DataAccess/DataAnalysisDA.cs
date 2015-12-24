@@ -1043,15 +1043,15 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        public DataAnalysisModel GetTotal(string cityid)
+        public DataAnalysisModel GetTotal(string userid)
         {
             StringBuilder sql = new StringBuilder();
             var strCode = string.Empty;
             var strName = string.Empty;
-            if (!string.IsNullOrWhiteSpace(cityid))
+            if (!string.IsNullOrWhiteSpace(userid))
             {
-                strCode = "and cityid =(select code from sys_department where id='" + cityid + "')";
-                strName = "and city =(select name from sys_department where id='" + cityid + "')";
+                strCode = "and cityid in (select GROUP_CONCAT(cityid) from sys_user_city where userid='" + userid + "')";
+                strName = "and city in (select GROUP_CONCAT(s1.name) from sys_department as s1 left join sys_user_city as s2 on s2.cityid=s1.code where s2.userid='" + userid + "')";
             }
             //sql.AppendFormat(@"select * from (
             //            select count(1) as value from cust_info where 1=1 {0}) as t1
@@ -1077,7 +1077,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取会员/车辆增长量
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime, string userid)
         {
             using (var conn = Helper.GetConnection())
             {
@@ -1086,7 +1086,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
                 {
                     p_startdatetime = startTime,
                     p_enddatetime = endTime,
-                    p_cityid = cityid
+                    p_userid = userid
                 };
 
                 var args = new DynamicParameters(obj);
