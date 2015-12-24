@@ -124,8 +124,8 @@
                 return;
             }
             else {
-                if ($("#modelyear").val() < 1900 || $("#modelyear").val() > 2015) {
-                    alert("年款不得小于1900,不得大于2015！");
+                if ($("#modelyear").val() < 1900) {
+                    alert("年款不得小于1900！");
                     return;
                 }
             }
@@ -139,8 +139,8 @@
                     return;
                 }
                 else {
-                    if ($("#minregyear").val() < 1900 || $("#minregyear").val() > 2015) {
-                        alert("最早注册年份不得小于1900,不得大于2015！");
+                    if ($("#minregyear").val() < 1900 ) {
+                        alert("最早注册年份不得小于1900！");
                         return;
                     }
                 }
@@ -155,8 +155,8 @@
                     return;
                 }
                 else {
-                    if ($("#maxregyear").val() < 1900 || $("#maxregyear").val() > 2015) {
-                        alert("最晚注册年份不得小于1900,不得大于2015！");
+                    if ($("#maxregyear").val() < 1900 ) {
+                        alert("最晚注册年份不得小于1900！");
                         return;
                     }
                 }
@@ -253,7 +253,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车型名称</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="modelname" />
+                                <input type="text" id="modelname" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -263,7 +263,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>指导价</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="modelprice" />
+                                <input type="text" id="modelprice" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -271,7 +271,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>年款</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="modelyear" />
+                                <input type="text" id="modelyear" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -281,7 +281,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>最早注册年份</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="minregyear" />
+                                <input type="text" id="minregyear" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -289,7 +289,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>最晚注册年份</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="maxregyear" />
+                                <input type="text" id="maxregyear" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -300,7 +300,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>排量</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="liter" />
+                                <input type="text" id="liter" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -308,7 +308,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>变速箱类型</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="geartype" />
+                                <input type="text" id="geartype" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -319,7 +319,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>排放标准</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="dischargestandard" />
+                                <input type="text" id="dischargestandard" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -332,9 +332,9 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>备注</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
                             <div class="controls col-sm-10">
-                                <textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea>
+                                <textarea id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>
