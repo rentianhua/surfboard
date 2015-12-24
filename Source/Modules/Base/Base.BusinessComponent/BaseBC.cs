@@ -1231,6 +1231,85 @@ namespace CCN.Modules.Base.BusinessComponent
         }
         #endregion
 
+        #region 部门管理
+
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query)
+        {
+            return DataAccess.GetManageCityList(query);
+        }
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.GetAllDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.AddDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.UpdateDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetUserToDepartment(string userid)
+        {
+            var result = DataAccess.GetUserToDepartment(userid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUserDepartment(BaseUserDepartmentAddModel model)
+        {
+            var result = DataAccess.AddUserDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetDepartmentByID(string id)
+        {
+            var result = DataAccess.GetDepartmentByID(id);
+            return JResult._jResult(result);
+        }
+
+        #endregion  
+
         #endregion
 
     }
