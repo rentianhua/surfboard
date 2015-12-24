@@ -1,8 +1,7 @@
 ﻿
-@{ 
+@{
 //Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <script type="text/javascript">
     var id = "@ViewBag.innerid";
     $(function () {
@@ -54,7 +53,7 @@
             alert("代码类型不为空！");
             return;
         }
-        if ($("#selectcode").val()==0) {
+        if ($("#selectcode").val() == 0) {
             alert("代码类型名称不为空！");
             return;
         }
@@ -70,7 +69,7 @@
             }
         }
         var json = {
-            Typekey:$("#selectcode").val(),
+            Typekey: $("#selectcode").val(),
             CodeName: $("#Codename").val(),
             CodeValue: $("#Codevalue").val(),
             Remark: $("#Remark").val(),
@@ -110,7 +109,6 @@
         }
     }
 </script>
-
 <div class="widget">
     <div class="widget-header bordered-bottom bordered-palegreen">
         <span class="widget-caption">基础数据代码值编辑</span>
@@ -130,7 +128,6 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-
                     </div>
                 </div>
                 <div class="row form-group">
@@ -138,12 +135,11 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码名称</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="Codename" />
+                                <input type="text" id="Codename" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-
                     </div>
                 </div>
                 <div class="row form-group">
@@ -151,12 +147,11 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码值</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="Codevalue" />
+                                <input type="text" id="Codevalue" class="form-control" />
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-
                     </div>
                 </div>
                 <div class="row form-group">
@@ -164,12 +159,11 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
                             <div class="controls col-sm-10">
-                                <textarea id="Remark" maxlength="200" rows="5" onclose="150" placeholder="备注"></textarea>
+                                <textarea id="Remark" maxlength="200" rows="5" onclose="150" placeholder="备注" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
-
                     </div>
                 </div>
                 <div class="row form-group text-center">
@@ -178,7 +172,7 @@
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" />
                     </div>
                 </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
