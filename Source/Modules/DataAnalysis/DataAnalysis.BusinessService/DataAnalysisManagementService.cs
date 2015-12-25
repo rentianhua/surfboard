@@ -8,6 +8,7 @@ using CCN.Modules.DataAnalysis.Interface;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using CCN.Modules.DataAnalysis.BusinessEntity;
 
 namespace CCN.Modules.DataAnalysis.BusinessService
 {
@@ -250,14 +251,13 @@ namespace CCN.Modules.DataAnalysis.BusinessService
         #endregion
 
         /// <summary>
-        /// 获取日增长量
+        ///  获取日增长量
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="query"></param>
         /// <returns></returns>
-        public JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
+        public JResult GetDayGrowth(DataQueryModel query)
         {
-            return BusinessComponent.GetDayGrowth(startTime, endTime, cityid);
+            return BusinessComponent.GetDayGrowth(query);
         }
 
         /// <summary>

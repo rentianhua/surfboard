@@ -411,7 +411,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 
         /// </summary>
         public CarShareModel ShareModel { get; set; }
-        
+
+        /// <summary>
+        /// 是否置顶
+        /// </summary>
+        public int? istop { get; set; }
+
     }
 
     /// <summary>
