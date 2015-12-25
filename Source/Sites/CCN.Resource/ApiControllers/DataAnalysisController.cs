@@ -303,7 +303,11 @@ namespace CCN.Resource.ApiControllers
             {
                 query.cityid = "";
             }
-            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime,query.cityid);
+            if (string.IsNullOrWhiteSpace(query.userid))
+            {
+                query.userid = "";
+            }
+            var result = _dataanalysisservice.GetDayGrowth(query);
             return result;
         }
 

@@ -1077,22 +1077,23 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取会员/车辆增长量
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime, string userid)
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DataQueryModel query)
         {
             using (var conn = Helper.GetConnection())
             {
                 //参数
                 var obj = new
                 {
-                    p_startdatetime = startTime,
-                    p_enddatetime = endTime,
-                    p_userid = userid
+                    p_startdatetime = query.starttime,
+                    p_enddatetime = query.endtime,
+                    p_userid = query.userid,
+                    p_cityid = query.cityid
                 };
 
                 var args = new DynamicParameters(obj);
                 using (var result = conn.QueryMultiple("ccnsp_daygrowth", args, commandType: CommandType.StoredProcedure))
                 {
-                    var list= result.Read<DataAnalysisModel>(); 
+                    var list = result.Read<DataAnalysisModel>();
                     //获取结果集
                     return list;
                 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using CCN.Modules.DataAnalysis.DataAccess;
+using CCN.Modules.DataAnalysis.BusinessEntity;
 
 namespace CCN.Modules.DataAnalysis.BusinessComponent
 {
@@ -575,12 +576,11 @@ namespace CCN.Modules.DataAnalysis.BusinessComponent
         /// <summary>
         /// 日增长量
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="query"></param>
         /// <returns></returns>
-        public JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
+        public JResult GetDayGrowth(DataQueryModel query)
         {
-            var list = DataAccess.GetDayGrowth(startTime, endTime, cityid);
+            var list = DataAccess.GetDayGrowth(query);
             if (list == null)
             {
                 return new JResult

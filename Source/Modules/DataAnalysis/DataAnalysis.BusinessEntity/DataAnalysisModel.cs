@@ -66,5 +66,10 @@ namespace CCN.Modules.DataAnalysis.BusinessEntity
         /// 城市ID
         /// </summary>
         public string cityid  { get; set; }
+
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        public string userid { get; set; }
     }
 }

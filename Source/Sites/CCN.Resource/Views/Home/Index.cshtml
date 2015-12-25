@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-xs-12 col-md-12">
         <div class="widget">
-            
+
             <div class="widget-header bordered-bottom bordered-yellow">
                 <span class="widget-caption">汇总数据</span>
             </div>
@@ -54,6 +54,17 @@
                                     <div class="col-sm-9">
                                         <input id="endtime" class="Wdate form-control" type="text" placeholder="结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 form-group hidden" id="areaselect">
+                                <label for="" class="col-sm-2 control-label no-padding-right" style="padding-top: 5px;">地区:</label>
+                                <div class="controls col-sm-10">
+                                    <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                                        <option value="0">请选择</option>
+                                    </select>
+                                    <select id="selectcity">
+                                        <option value="0">请选择</option>
+                                    </select>
                                 </div>
                             </div>
                             <input type="button" value="搜索" onclick="QueryList();" />
@@ -108,8 +119,9 @@
 
 <script type="text/javascript">
     var cityid = "";
+    var userid = "";
     if ("@ViewBag.Admin" != "1") {
-        cityid = "@UserInfo.innerid";
+        userid = "@UserInfo.innerid";
     }
     $(function () {
         var myDate = new Date();
@@ -129,15 +141,18 @@
             //区域数据
             GetDataByBity();
             $("#areadata").removeClass("hidden");
+            $("#areaselect").removeClass("hidden");
+
         }
+        InitProv();
 
     });
 
     //获取总数
     function InitTotal() {
         var url = "/api/DataAnalysis/GetTotal";
-        if (cityid != "") {
-            url = "/api/DataAnalysis/GetTotal?cityid=" + cityid;
+        if (userid != "") {
+            url = "/api/DataAnalysis/GetTotal?cityid=" + userid;
         }
         $.get(url, function (data) {
             var obj = data.errmsg;
@@ -149,10 +164,15 @@
 
     //获取列表数据
     function QueryList() {
+        debugger
+        if ($("#selectcity").val() != "0") {
+            cityid = $("#selectcity").val();
+        }
         var json = {
             starttime: $("#starttime").val(),
             endtime: $("#endtime").val(),
-            cityid: cityid
+            cityid: cityid,
+            userid: userid
         };
 
         $.post("/api/DataAnalysis/GetDayGrowth", json, function (data) {
@@ -193,6 +213,45 @@
                 str += "</tr>";
                 $("#anaiysiscity tbody").append(str);
             });
+        });
+    }
+
+    //初始化省份
+    function InitProv() {
+        $("#selectprov").empty();
+        $("#selectprov").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Base/GetProvList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+                });
+            }
+        });
+    }
+
+    //初始化城市
+    function InitCity(provid) {
+
+        $("#selectcity").empty();
+        $("#selectcity").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Base/GetCityList/?provid=" + provid,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+                });
+            }
         });
     }
 </script>
