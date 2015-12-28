@@ -196,7 +196,7 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string sql =
                 "select a.* from cust_info as a inner join car_info as b on a.innerid=b.custid where b.innerid=@carid;";
-            var custModel = Helper.Query<CustModel>(sql, new {carid}).FirstOrDefault();
+            var custModel = Helper.Query<CustModel>(sql, new { carid }).FirstOrDefault();
             return custModel;
         }
 
@@ -307,7 +307,12 @@ namespace CCN.Modules.Customer.DataAccess
             sqlWhere.Append(query.Status != null
                 ? $" and status={query.Status}"
                 : "");
-
+            //会员ID
+            if (!string.IsNullOrWhiteSpace(query.innerid))
+            {
+                sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.innerid}')");
+            }
+            //手机号
             if (!string.IsNullOrWhiteSpace(query.Mobile))
             {
                 sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
@@ -990,7 +995,7 @@ namespace CCN.Modules.Customer.DataAccess
                 return args.Get<int>("p_values");
             }
         }
-        
+
         /// <summary>
         /// 删除会员所有信息
         /// </summary>
@@ -1033,7 +1038,7 @@ namespace CCN.Modules.Customer.DataAccess
 
                 return model;
             }
-            
+
         }
 
         #endregion
@@ -1068,7 +1073,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="custid"></param>
         /// <param name="openid"></param>
         /// <returns></returns>
-        public int UpdateOpenid(string custid,string openid)
+        public int UpdateOpenid(string custid, string openid)
         {
             const string sql = "update cust_wechat set openid=@openid where custid=@custid;";
             var result = Helper.Execute(sql, new
@@ -1078,7 +1083,7 @@ namespace CCN.Modules.Customer.DataAccess
             });
             return result;
         }
-        
+
         #endregion
     }
 }

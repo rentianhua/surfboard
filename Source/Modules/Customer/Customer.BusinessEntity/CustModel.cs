@@ -146,6 +146,10 @@ namespace CCN.Modules.Customer.BusinessEntity
     public class CustQueryModel : QueryModel
     {
         /// <summary>
+        /// 会员ID
+        /// </summary>
+        public string innerid { get; set; }
+        /// <summary>
         /// 会员名
         /// </summary>
         public string Custname { get; set; }
