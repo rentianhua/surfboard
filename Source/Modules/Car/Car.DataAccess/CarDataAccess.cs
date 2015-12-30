@@ -501,6 +501,11 @@ namespace CCN.Modules.Car.DataAccess
                 //车辆添加时会将【品牌/车系】放到该字段
                 sqlWhere.Append($" and title like '%{query.SearchField}%'");
             }
+            //用户ID
+            if (!string.IsNullOrWhiteSpace(query.userid))
+            {
+                sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.userid}')");
+            }
 
             #endregion
 

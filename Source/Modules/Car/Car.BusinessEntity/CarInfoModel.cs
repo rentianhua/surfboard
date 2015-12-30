@@ -589,6 +589,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string SearchField { get; set; }
 
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        public string userid { get; set; }
+
     }
 
     /// <summary>
