@@ -289,10 +289,9 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
         /// <summary>
-        /// 获取日增长量 
+        /// 获取日增长量
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="query"></param>
         /// <returns></returns>
         [Route("GetDayGrowth")]
         [HttpPost]
@@ -302,7 +301,7 @@ namespace CCN.WebAPI.ApiControllers
             {
                 query.cityid = "";
             }
-            var result = _dataanalysisservice.GetDayGrowth(query.starttime, query.endtime, query.cityid);
+            var result = _dataanalysisservice.GetDayGrowth(query);
             return result;
         }
 

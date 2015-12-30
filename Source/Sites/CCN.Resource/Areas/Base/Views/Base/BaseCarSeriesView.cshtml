@@ -39,36 +39,81 @@
         });
     }
 </script>
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">车系信息详情</div>
-    <table id="carseries" class="gridtable">
-        <tbody>
-            <tr>
-                <td>品牌名称</td>
-                <td id="brandname"></td>
-            </tr>
-            <tr>
-                <td>车系名称</td>
-                <td id="seriesname"></td>
-            </tr>
-            <tr>
-                <td>车系组</td>
-                <td id="seriesgroupname"></td>
-            </tr>
-            <tr>
-                <td>是否可用</td>
-                <td id="isenabled"></td>
-            </tr>
-            <tr>
-                <td>备注</td>
-                <td id="remark"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');" /></td>
-            </tr>
-        </tbody>
-    </table>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车系信息详情</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>品牌名称</label>
+                            <div class="controls col-sm-10">
+                                <span id="brandname" type="text" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车系名称</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="seriesname" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车系组 进口/国产</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="seriesgroupname" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">是否可用</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="isenabled" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
+                            <div class="controls col-sm-10">
+                                <span id="remark" maxlength="200" rows="5" onclose="150" placeholder="备注" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarSeriesList');" />
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 
 

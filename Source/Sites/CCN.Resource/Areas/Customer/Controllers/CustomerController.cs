@@ -1,12 +1,13 @@
 ﻿#region
 
+using CCN.Resource.Main.Common;
 using System.Web.Mvc;
 
 #endregion
 
 namespace CCN.Resource.Areas.Customer.Controllers
 {
-    public class CustomerController : Controller
+    public class CustomerController : DefaultController
     {
         //private readonly ICustomerManagementService _service;
 
@@ -18,6 +19,10 @@ namespace CCN.Resource.Areas.Customer.Controllers
         /// <returns></returns>
         public ActionResult CustomerList()
         {
+            if (ADMIN != UserInfo.innerid)
+            {
+                ViewBag.userid = UserInfo.innerid;
+            }
             return View();
         }
 

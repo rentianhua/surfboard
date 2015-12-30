@@ -574,7 +574,7 @@ namespace CCN.Modules.Base.DataAccess
             var model = Helper.Query<BaseCarModelModel>(sql).FirstOrDefault();
             return model;
         }
-        
+
         #endregion
 
         #region 品牌信息
@@ -1698,6 +1698,157 @@ namespace CCN.Modules.Base.DataAccess
 
 
         #endregion
+
+        #region 部门管理
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"sys_department ";
+            const string fields = "`id`, `name`, `areaid`, `tel`, `email`, `sort`, `remark`, `code`";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            //菜单名称
+            if (!string.IsNullOrWhiteSpace(query.name))
+            {
+                sqlWhere.AppendFormat(" and name like '%{0}%' ", query.name);
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseDepartmentViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseDepartmentViewModel> GetAllDepartment(BaseDepartmentModel model)
+        {
+            StringBuilder sqlwhere = new StringBuilder();
+            //innerid
+            if (!string.IsNullOrWhiteSpace(model.id))
+            {
+                sqlwhere.AppendFormat(" and id ='{0}' ", model.id);
+            }
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select `id`, `name`, `areaid`, `tel`, `email`, `sort`, `remark`, `code`
+                                from sys_department where 1=1 {0} order by sort asc ;", sqlwhere.ToString());
+
+            var menuList = Helper.Query<BaseDepartmentViewModel>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddDepartment(BaseDepartmentModel model)
+        {
+            const string sql = @"INSERT INTO `sys_department`
+                                (`id`, `name`, `areaid`, `tel`, `email`, `sort`, `remark`, `code`)
+                                VALUES
+                                (uuid(), @name, @areaid, @tel, @email, @sort, @remark, @code);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateDepartment(BaseDepartmentModel model)
+        {
+            var sql = new StringBuilder("update `sys_department` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where id = @id");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public IEnumerable<BaseUserDepartmentModel> GetUserToDepartment(string userid)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(@"select `innerid`,`userid`,`cityid` from sys_user_city where userid= '{0}';", userid);
+
+            var menuList = Helper.Query<BaseUserDepartmentModel>(sql.ToString());
+            return menuList;
+        }
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddUserDepartment(BaseUserDepartmentAddModel model)
+        {
+            //删除用户对应数据
+            const string sql = @"delete from sys_user_city where userid=@userid;";
+            //var ids = model.ids.TrimEnd(',').Split(',');
+            string sqlAdd = string.Empty;
+            foreach (var cityid in model.ids)
+            {
+                sqlAdd = sqlAdd + "INSERT INTO `sys_user_city` (`innerid`,`cityid`,`userid`) VALUES (uuid()," + cityid + ",'" + model.userid + "');";
+            }
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { userid = model.userid }, tran);
+                    conn.Execute(sqlAdd, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据id获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public BaseDepartmentModel GetDepartmentByID(string id)
+        {
+            var depinfo = GetAllDepartment(new BaseDepartmentModel() { id = id }).FirstOrDefault();
+            return depinfo;
+        }
+
+        #endregion  
 
         #endregion
     }

@@ -17,7 +17,8 @@ namespace CCN.Resource
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                "~/Scripts/bootstrap-select.min.js",
+                "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
             //js引用
             bundles.Add(new ScriptBundle("~/bundles/original").Include(
@@ -27,7 +28,7 @@ namespace CCN.Resource
                       "~/Scripts/jquery.fn.extend.js",
                       "~/Scripts/common.js",
                       "~/Scripts/highcharts.js",
-                      "~/Scripts/CCN_Chart.js")); 
+                      "~/Scripts/CCN_Chart.js"));
 
             //模版js引用
             bundles.Add(new ScriptBundle("~/bundles/template").Include(
@@ -44,9 +45,11 @@ namespace CCN.Resource
                       "~/Scripts/js/charts/flot/jquery.flot.tooltip.js",
                       "~/Scripts/js/charts/flot/jquery.flot.orderBars.js"));
 
-                 bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/bootstrap-select.min.css",
+                "~/Content/bootstrap.css",
+
+                 "~/Content/site.css"));
             //模版css引用
             bundles.Add(new StyleBundle("~/Content/template").Include(
                       "~/Content/Template/css/bootstrap.min.css",

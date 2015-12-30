@@ -497,6 +497,58 @@ namespace CCN.Modules.Base.Interface
 
         #endregion
 
+        #region 部门管理
+
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query);
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        JResult GetAllDepartment(BaseDepartmentModel model);
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddDepartment(BaseDepartmentModel model);
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateDepartment(BaseDepartmentModel model);
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        JResult GetUserToDepartment(string userid);
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddUserDepartment(BaseUserDepartmentAddModel model);
+
+        /// <summary>
+        /// 根据id获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        JResult GetDepartmentByID(string id);
+
+        #endregion 
+
         #endregion
 
     }

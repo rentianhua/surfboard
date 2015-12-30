@@ -288,7 +288,9 @@
     <Content Include="Content\images\loading-bars.gif" />
     <Content Include="Content\images\loading.gif" />
     <Content Include="Content\cover.css" />
+    <Content Include="Content\images\multiple-select.png" />
     <Content Include="Content\images\signup.jpg" />
+    <Content Include="Content\multiple-select.css" />
     <Content Include="Content\Pager.css" />
     <Content Include="Content\Template\css\4095-rtl.min.css" />
     <Content Include="Content\Template\css\4095.min.css" />
@@ -903,6 +905,9 @@
     <Content Include="Plugins\zTree_v3\css\awesomeStyle\fa.less" />
     <Content Include="Areas\Rewards\Views\Rewards\ShopView.cshtml" />
     <Content Include="Plugins\UploadImg\js\jquery.min.map" />
+    <Content Include="Areas\System\Views\System\SysManageCityList.cshtml" />
+    <Content Include="Areas\System\Views\System\SysManageCityEdit.cshtml" />
+    <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
     <None Include="Properties\PublishProfiles\wwwroot.pubxml" />
@@ -973,6 +978,7 @@
     <Content Include="Scripts\js\validation\bootstrapValidator.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\jquery.pager.js" />
+    <Content Include="Scripts\multiple-select.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Web.config">

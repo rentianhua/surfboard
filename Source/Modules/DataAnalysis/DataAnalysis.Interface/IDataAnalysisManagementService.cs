@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cedar.Framework.Common.BaseClasses;
+using CCN.Modules.DataAnalysis.BusinessEntity;
 
 namespace CCN.Modules.DataAnalysis.Interface
 {
@@ -174,10 +175,9 @@ namespace CCN.Modules.DataAnalysis.Interface
         /// <summary>
         /// 获取日增长量
         /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="endTime"></param>
+        /// <param name="query"></param>
         /// <returns></returns>
-        JResult GetDayGrowth(DateTime startTime, DateTime endTime, string cityid);
+        JResult GetDayGrowth(DataQueryModel query);
 
         /// <summary>
         /// 获取汇总数据（会员/粉丝/车辆）

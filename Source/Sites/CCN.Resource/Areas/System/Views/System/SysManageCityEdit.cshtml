@@ -1,0 +1,130 @@
+﻿
+@{
+//ViewBag.Title = "CustomerEdit";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    $(function () {
+        
+        InitProv();
+        Init();
+    });
+
+    //初始化数据
+    function Init() {
+        if (id === "") {
+            return false;
+        }
+        //$.get("/api/Car/GetDepartmentByID?id=" + id, function (data) {
+        //    var obj = data.errmsg;
+
+        //});
+    }
+
+    //初始化省份
+    function InitProv() {
+        $("#selectprov").empty();
+        $("#selectprov").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Base/GetProvList",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+                });
+            }
+        });
+    }
+
+    //初始化城市
+    function InitCity(provid) {
+
+        $("#selectcity").empty();
+        $("#selectcity").append("<option value='0'>请选择</option>");
+
+        $.ajax({
+            url: "/api/Base/GetCityList/?provid=" + provid,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectcity").append("<option value='" + v.Innerid + "' data-name='" + v.CityName + "'>" + v.CityName + "</option>");
+                });
+            }
+        });
+    }
+
+    //保存数据
+    function Submit() {
+
+        var json = {
+            name: $("#selectcity").find("option:selected").attr('data-name'),
+            code: $("#selectcity").val()
+        };
+        if (id === "") {
+            $.post("/api/Base/AddDepartment", json, function (result) {
+                var str = result.errcode === 0 ? "添加成功" : result.errmsg;
+                alert(str);
+                getBodyHtml('mainbody', '/system/system/SysManageCityList');
+            });
+        } else {
+            json.id = id;
+            $.ajax({
+                url: '/api/Base/UpdateDepartment',
+                type: 'post',
+                datatype: 'application/json',
+                data: json,
+                async: false,
+                success: function (result) {
+                    var str = result.errcode === 0 ? "更新成功" : result.errmsg;
+                    alert(str);
+                    getBodyHtml('mainbody', '/system/system/SysManageCityList');
+                }
+            });
+        }
+    }
+
+</script>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">部门管理</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <span style="color:red">编辑时暂时不会显示内容</span>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="custname" class="col-sm-1 control-label no-padding-right">城市选择:</label>
+                            <div class="col-sm-11">
+                                <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectcity">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/System/System/SysManageCityList');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

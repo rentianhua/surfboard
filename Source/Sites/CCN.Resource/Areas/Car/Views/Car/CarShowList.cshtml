@@ -51,7 +51,11 @@
 
     function QueryList() {
         var json = { brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val() };
+        if ("@ViewBag.userid" != null && "@ViewBag.userid" != "") {
+            json.userid = "@ViewBag.userid";
+        }
         $("#carlist").getPageList(20, "/api/Car/GetCarPageList", json, LoadData);
+
     }
 
     function LoadData(data, index) {

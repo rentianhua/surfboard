@@ -709,6 +709,78 @@ namespace CCN.Modules.Base.BusinessService
 
         #endregion
 
+        #region 部门管理
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query)
+        {
+            return BusinessComponent.GetManageCityList(query);
+        }
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllDepartment(BaseDepartmentModel model)
+        {
+            return BusinessComponent.GetAllDepartment(model);
+        }
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddDepartment(BaseDepartmentModel model)
+        {
+            return BusinessComponent.AddDepartment(model);
+        }
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateDepartment(BaseDepartmentModel model)
+        {
+            return BusinessComponent.UpdateDepartment(model);
+        }
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetUserToDepartment(string userid)
+        {
+            return BusinessComponent.GetUserToDepartment(userid);
+        }
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUserDepartment(BaseUserDepartmentAddModel model)
+        {
+            return BusinessComponent.AddUserDepartment(model);
+        }
+
+        /// <summary>
+        /// 根据id获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetDepartmentByID(string id)
+        {
+            return BusinessComponent.GetDepartmentByID(id);
+        }
+
+        #endregion  
+
         #endregion
     }
 }
