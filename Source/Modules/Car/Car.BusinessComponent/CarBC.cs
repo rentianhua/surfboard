@@ -464,15 +464,19 @@ namespace CCN.Modules.Car.BusinessComponent
 
             model.modifiedtime = null;
             var result = DataAccess.AddCar(model);
+            if (result == -1)
+            {
+                return JResult._jResult(402, "会员不存在");
+            }
             if (result > 0)
             {
                 DataAccess.AddShareInfo(model.Innerid);
             }
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = model.Innerid
-            };
+            return JResult._jResult
+            (
+                result > 0 ? 0 : 400,
+                model.Innerid
+            );
         }
 
         /// <summary>
@@ -735,7 +739,33 @@ namespace CCN.Modules.Car.BusinessComponent
                 errmsg = ""
             };
         }
-        
+
+        /// <summary>
+        /// 添加车辆图片（单个）
+        /// </summary>
+        /// <param name="model">车辆图片信息</param>
+        /// <returns></returns>
+        public JResult AddCarPictureEx(CarPictureModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || string.IsNullOrWhiteSpace(model.Path))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            var result = DataAccess.AddCarPictureEx(model);
+
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量超过");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            return JResult._jResult(0, "保存图片成功");
+        }
+
         /// <summary>
         /// 删除车辆图片
         /// </summary>

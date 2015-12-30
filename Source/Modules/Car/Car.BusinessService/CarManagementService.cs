@@ -295,7 +295,8 @@ namespace CCN.Modules.Car.BusinessService
         /// <returns></returns>
         public JResult AddCarPicture(CarPictureModel model)
         {
-            return BusinessComponent.AddCarPicture(model);
+            //return BusinessComponent.AddCarPicture(model);
+            return BusinessComponent.AddCarPictureEx(model);
         }
         
         /// <summary>

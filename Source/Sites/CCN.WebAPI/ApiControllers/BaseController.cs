@@ -114,7 +114,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCityList")]
         [HttpGet]
-        public JResult GetCityList(int provid, string initial = null)
+        public JResult GetCityList(int provid = 0, string initial = null)
         {
             var list = _baseservice.GetCityList(provid, initial);
             if (list.Any())
@@ -139,7 +139,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCountyList")]
         [HttpGet]
-        public JResult GetCountyList(int cityId)
+        public JResult GetCountyList(int cityId = 0)
         {
             var list = _baseservice.GetCountyList(cityId);
             if (list.Any())
@@ -216,7 +216,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarSeries")]
         [HttpGet]
-        public JResult GetCarSeries(int brandId)
+        public JResult GetCarSeries(int brandId = 0)
         {
             var list = _baseservice.GetCarSeries(brandId);
             if (list.Any())
@@ -240,7 +240,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarSeriesHotTop")]
         [HttpGet]
-        public JResult GetCarSeriesHotTop(int top)
+        public JResult GetCarSeriesHotTop(int top = 10)
         {
             return _baseservice.GetCarSeriesHotTop(top);
         }
@@ -253,7 +253,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarModel")]
         [HttpGet]
-        public JResult GetCarModel(int seriesId)
+        public JResult GetCarModel(int seriesId = 0)
         {
             var list = _baseservice.GetCarModel(seriesId);
             if (list.Any())
@@ -278,7 +278,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetCarModelById")]
         [HttpGet]
-        public JResult GetCarModelById(int innerid)
+        public JResult GetCarModelById(int innerid = 0)
         {
             return _baseservice.GetCarModelById(innerid);
         }
@@ -354,6 +354,7 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.UpdateCarBrand(model);
         }
         #endregion
+
         #region 车系
         /// <summary>
         /// 分页查询车系
@@ -423,6 +424,7 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.UpdateCarSeries(model);
         }
         #endregion
+
         #region 车型
         /// <summary>
         /// 分页查询车型
@@ -492,7 +494,6 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.UpdateCarModel(model);
         }
         #endregion
-      
 
         /// <summary>
         ///     上传文件
