@@ -227,3 +227,14 @@ function InitQiniuUpload(option) {
     return uploader;
 
 }
+
+function getImgUrl(key) {
+    var imgLink = Qiniu.watermark({
+        mode: 1,  // 图片水印
+        image: getQiniuUrl('watermark_ccn.png'), // 图片水印的Url，mode = 1 时 **必需**
+        gravity: 'SouthEast',  // 水印位置，为以下参数[NorthWest、North、NorthEast、West、Center、East、SouthWest、South、SouthEast]之一
+        dx: 50,  // 横轴边距，单位:像素(px)
+        dy: 50   // 纵轴边距，单位:像素(px)
+    }, key);      // key 为非必需参数，下同
+    return imgLink;
+}
