@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarBoutiqueModel.cs" />
     <Compile Include="CarEvaluateModel.cs" />
     <Compile Include="CarInfoModel.cs" />
     <Compile Include="CarPictureModel.cs" />

@@ -84,11 +84,12 @@ namespace CCN.Modules.Customer.DataAccess
                     if (userInfo.Wechat != null)
                     {
                         const string sqlwechat =
-                            @"INSERT INTO cust_wechat(innerid,custid,openid) VALUES(uuid(),@custid,@openid);";
+                            @"INSERT INTO cust_wechat(innerid,custid,openid,createdtime) VALUES(uuid(),@custid,@openid,@createdtime);";
                         conn.Execute(sqlwechat, new
                         {
                             custid = userInfo.Innerid,
-                            openid = userInfo.Wechat.Openid
+                            openid = userInfo.Wechat.Openid,
+                            createdtime = userInfo.Createdtime
                         }, tran);
                     }
                     tran.Commit();
@@ -410,6 +411,41 @@ namespace CCN.Modules.Customer.DataAccess
                 {
                     LoggerFactories.CreateLogger().Write("修改会员类型异常：", TraceEventType.Error, ex);
                     return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 升级为精品车商
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public int UpgradeBoutique(string innerid)
+        {
+            const string sqlSCust = "select * from cust_info where innerid=@innerid;";
+            const string sql = "update cust_info set type=3 where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var custModel = conn.Query<CustModel>(sqlSCust, new { innerid }).FirstOrDefault();
+                if (custModel == null)
+                    return 0;
+                if (custModel.Type == 3)
+                {
+                    return 1;
+                }
+                try
+                {
+                    conn.Execute(sql, new
+                    {
+                        innerid
+                    });
+
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("升级为精品车商异常：", TraceEventType.Error, ex);
+                    return 0;
                 }
             }
         }
@@ -1070,13 +1106,34 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int UpdateOpenid(string custid,string openid)
         {
-            const string sql = "update cust_wechat set openid=@openid where custid=@custid;";
-            var result = Helper.Execute(sql, new
+            using (var conn = Helper.GetConnection())
             {
-                custid,
-                openid
-            });
-            return result;
+                int result;
+                const string sqlSelect = "select count(1) from cust_wechat where custid=@custid;";
+                var i = conn.Query<int>(sqlSelect,new { custid }).FirstOrDefault();
+                if (i == 0)
+                {
+                    const string sql = "INSERT INTO cust_wechat(innerid,custid,openid,createdtime) VALUES(uuid(),@custid,@openid,@createdtime);";
+                    result = Helper.Execute(sql, new
+                    {
+                        custid,
+                        openid,
+                        createdtime = DateTime.Now
+                    });
+                }
+                else
+                {
+                    const string sql = "update cust_wechat set openid=@openid,modifiedtime=@modifiedtime where custid=@custid;";
+                    result = Helper.Execute(sql, new
+                    {
+                        custid,
+                        openid,
+                        modifiedtime = DateTime.Now
+                    });
+                }
+               
+                return result;
+            }
         }
         
         #endregion

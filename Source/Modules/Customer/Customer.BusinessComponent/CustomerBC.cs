@@ -78,7 +78,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 //生成会员名称
                 userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
-                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6), "(个人)");
+                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
             }
             
             if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))

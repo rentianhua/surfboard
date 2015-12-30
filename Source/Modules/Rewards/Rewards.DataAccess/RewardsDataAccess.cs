@@ -851,7 +851,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string sql = @"select a.innerid,a.code,a.cardid,a.gettime,a.qrcode,a.vstart,a.vend,a.isused,b.shopid,b.title,b.logourl,b.amount,b.buyprice,b.isenabled,b.usedesc, c.shopname,cy.countyname as area,c.address,bc.codename as cardtypename,bc.remark as cardtyperemark from coupon_code as a 
                                         inner join coupon_card as b on a.cardid=b.innerid
                                         inner join coupon_shop as c on b.shopid=c.innerid
-                                        left join base_county as cy on b.countyid=cy.innerid
+                                        left join base_county as cy on c.countyid=cy.innerid
                                         left join base_code as bc on b.cardtype=bc.codevalue and bc.typekey='coupon_type' where a.code=@code;";
             var codeModel = Helper.Query<MyCodeViewModel>(sql, new { code }).FirstOrDefault();
             return codeModel;
@@ -1101,7 +1101,7 @@ namespace CCN.Modules.Rewards.DataAccess
             const string tableName = @"coupon_shop as a left join base_county as b on a.countyid=b.innerid";
             const string fields =
                 @"a.innerid,a.shopname,b.countyname as CountyName,a.address,a.headportrait,
-                (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid=ccard.innerid where ccard.shopid=a.innerid and cc.sourceid=1) as SoldedNum,
+                (select count(1) from coupon_code as cc inner join coupon_card as ccard on cc.cardid=ccard.innerid and ccard.isenabled=1 where ccard.shopid=a.innerid and cc.sourceid=1) as SoldedNum,
                 (select group_concat(codename) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as CardTypeNames,
                 (select count(1) from base_code where typekey='coupon_type' and codevalue in (select cardtype from coupon_card where shopid=a.innerid )) as sort";
 

@@ -703,17 +703,31 @@ namespace CCN.Modules.Car.DataAccess
                                 (`innerid`,`custid`,`carid`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`,`refreshtime`, `istop`, `istransferfee`)
                                 VALUES
                                 (@innerid,@custid,@carid,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price,@refreshtime, @istop, @istransferfee);";
-            int result;
-            try
-            {
-                result = Helper.Execute(sql, model);
-            }
-            catch (Exception ex)
-            {
-                result = 0;
-            }
 
-            return result;
+            const string sqlSelectCust = "select count(1) as count from cust_info where innerid=@custid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    var num = conn.Query<int>(sqlSelectCust, new {model.custid}).FirstOrDefault();
+                    if (0 == num)
+                    {
+                        return -1;
+                    }
+
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加车辆异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+            
         }
 
         /// <summary>
@@ -1122,6 +1136,52 @@ namespace CCN.Modules.Car.DataAccess
             catch (Exception ex)
             {
                 return 0;
+            }
+        }
+
+        /// <summary>
+        /// 单次添加图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCarPictureEx(CarPictureModel model)
+        {
+            const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort desc;";//查询车辆图片
+            const string sqlIPic = @"insert into car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
+            const string sqlUCover = @"update car_info set pic_url=@pic_url where innerid=@carid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid = model.Carid }).ToList();
+                var number = picedList.Count + 1;
+                if (number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    model.Sort = picedList[0].Sort + 1;
+                    conn.Execute(sqlIPic, model, tran); //插入图片
+
+                    //表示添加张图片
+                    if (picedList.Count == 0)
+                    {
+                        conn.Execute(sqlUCover, new {carid = model.Carid, pic_url = model.Path}, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("单次添加图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
             }
         }
 
@@ -1590,6 +1650,203 @@ namespace CCN.Modules.Car.DataAccess
         #endregion
 
         #region 精品车商
+
+
+        #region 精品店基本信息
+        
+        /// <summary>
+        /// 获取精品车商列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarBoutiqueListModel> GetBoutiquePageList(CarBoutiqueQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"boutique_info as a 
+                                    inner join cust_info as b on b.innerid=a.custid ";
+            const string fields =
+                "a.innerid,a.enterprisename,a.logo,a.telephone,a.mobile,a.address,a.tempid, a.createdtime, a.createrid, a.modifiedtime, a.modifierid";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.sort desc, a.createdtime desc" : query.Order;
+            var sqlWhere = new StringBuilder(" b.type=3 ");
+
+            //省份
+            if (query.Provid != null)
+            {
+                sqlWhere.Append($" and b.provid={query.Provid}");
+            }
+
+            //城市
+            if (query.Cityid != null)
+            {
+                sqlWhere.Append($" and b.cityid={query.Cityid}");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<CarBoutiqueListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加精品店基本信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddBoutique(CarBoutiqueModel model)
+        {
+            const string sql = @"INSERT INTO boutique_info
+                        (innerid, custid, enterprisename, logo, introduces, telephone, mobile, address, tempid, sort, expand, createdtime, createrid, modifiedtime, modifierid)
+                        VALUES
+                        (@innerid, @custid, @enterprisename, @logo, @introduces, @telephone, @mobile, @address, @tempid, @sort, @expand, @createdtime, @createrid, @modifiedtime, @modifierid);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加精品精品店基本信息异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+        
+        /// <summary>
+        /// 修改精品店基本信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateBoutique(CarBoutiqueModel model)
+        {
+            var sql = new StringBuilder("update boutique_info set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            try
+            {
+                Helper.Execute(sql.ToString(), model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改精品精品店基本信息异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取精品店基本信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CarBoutiqueModel GetBoutiqueById(string innerid)
+        {
+            const string sql = @"select * from boutique_info where innerid = @innerid;";
+
+            try
+            {
+                return Helper.Query<CarBoutiqueModel>(sql, new { innerid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取精品精品店基本信息异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region 精品店模板信息
+
+        /// <summary>
+        /// 获取模板列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarBoutiqueTempListModel> GetBoutiqueTempPageList(CarBoutiqueTempQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"boutique_template";
+            const string fields =
+                "innerid, tempname, introduces, pageurl, previewurl, createdtime, createrid, modifiedtime, modifierid";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize,
+                query.PageIndex);
+            var list = Helper.ExecutePaging<CarBoutiqueTempListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加模板基本信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddBoutiqueTemp(CarBoutiqueTempModel model)
+        {
+            const string sql = @"INSERT INTO boutique_template
+                        (innerid, tempname, introduces, pageurl, previewurl, createdtime, createrid, modifiedtime, modifierid)
+                        VALUES
+                        (@innerid, @tempname, @introduces, @pageurl, @previewurl, @createdtime, @createrid, @modifiedtime, @modifierid);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("添加模板基本信息异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 修改模板基本信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateBoutiqueTemp(CarBoutiqueTempModel model)
+        {
+            var sql = new StringBuilder("update boutique_template set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            try
+            {
+                Helper.Execute(sql.ToString(), model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改模板基本信息异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取模板基本信息
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CarBoutiqueTempModel GetBoutiqueTempById(string innerid)
+        {
+            const string sql = @"select * from boutique_template where innerid = @innerid;";
+
+            try
+            {
+                return Helper.Query<CarBoutiqueTempModel>(sql, new { innerid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取模板基本信息异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        #endregion
+
+
+
+
 
         #region 公司简介
         /// <summary>
