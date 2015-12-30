@@ -1050,8 +1050,8 @@ namespace CCN.Modules.DataAnalysis.DataAccess
             var strName = string.Empty;
             if (!string.IsNullOrWhiteSpace(userid))
             {
-                strCode = "and cityid in (select GROUP_CONCAT(cityid) from sys_user_city where userid='" + userid + "')";
-                strName = "and city in (select GROUP_CONCAT(s1.name) from sys_department as s1 left join sys_user_city as s2 on s2.cityid=s1.code where s2.userid='" + userid + "')";
+                strCode = "and cityid in (select cityid from sys_user_city where userid='" + userid + "')";
+                strName = "and city in (select s1.name from sys_department as s1 left join sys_user_city as s2 on s2.cityid=s1.code where s2.userid='" + userid + "')";
             }
             //sql.AppendFormat(@"select * from (
             //            select count(1) as value from cust_info where 1=1 {0}) as t1
