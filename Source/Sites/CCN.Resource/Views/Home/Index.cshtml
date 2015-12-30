@@ -118,7 +118,7 @@
 </div>
 
 <script type="text/javascript">
-    var cityid = "";
+    
     var userid = "";
     if ("@ViewBag.Admin" != "1") {
         userid = "@UserInfo.innerid";
@@ -164,7 +164,7 @@
 
     //获取列表数据
     function QueryList() {
-
+        var cityid = "";
         if ($("#selectcity").val() != "0") {
             cityid = $("#selectcity").val();
         }
@@ -237,21 +237,22 @@
 
     //初始化城市
     function InitCity(provid) {
-
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
-
-        $.ajax({
-            url: "/api/Base/GetCityList/?provid=" + provid,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
-                });
-            }
-        });
+        if (provid!="0")
+        {
+            $.ajax({
+                url: "/api/Base/GetCityList/?provid=" + provid,
+                type: 'get',
+                datatype: 'application/json',
+                async: false,
+                success: function (data) {
+                    data = data.errmsg;
+                    $.each(data, function (k, v) {
+                        $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+                    });
+                }
+            });
+        }
     }
 </script>
