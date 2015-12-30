@@ -448,7 +448,7 @@
                     alert('请上传3-9张图片');
                     return false;
                 }
-                $.post("/api/Car/AddCar", json, function (result) {
+                $.post("/api/Car/AddCarBack", json, function (result) {
                     if (result.errcode === 0) {
                         //上传并保存图片 Begin
                         var i = 0;
