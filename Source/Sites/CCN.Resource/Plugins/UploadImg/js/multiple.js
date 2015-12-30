@@ -22,7 +22,7 @@ function InitQiniuUpload(option) {
         chunk_size: '1mb',
         uptoken: option.uptoken,
         //domain: QiuniuHost(),
-        domain: "http://7xlopw.com2.z0.glb.qiniucdn.com/",
+        domain: "http://7xnwvr.com2.z0.glb.qiniucdn.com/",
         auto_start: option.autostart,
         mime_types: [
                         { title: "Image files", extensions: "jpg,gif,png" }
