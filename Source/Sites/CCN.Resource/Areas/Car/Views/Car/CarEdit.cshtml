@@ -162,7 +162,7 @@
 
     //初始化城市
     function InitCity(provid) {
-        
+
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
 
@@ -177,7 +177,7 @@
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
                 $("#selectcity").selectText(getCookie("city"));
-                
+
             }
         });
     }
@@ -263,7 +263,7 @@
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                     $('.imgs').append(
                             '<div id="' + strradom + '" class="imgPreview">\
-						<img data-type="img" src="' + getQiniuUrl(v.Path) + '" class="loading">\
+						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
 						<div class="caidan">\
 							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
 						</div>\
@@ -278,6 +278,7 @@
             });
         });
     }
+
 
     function DeletePicture(picid, strhash) {
 
@@ -358,7 +359,7 @@
             return false;
         }
 
-        //更多信息 
+        //更多信息
 
         var txtbuydate = $("#txtbuydate").val();
         var txtbuyprice = $("#txtbuyprice").val();
@@ -433,13 +434,13 @@
             filelength++;
         });
         if (uploader == undefined || uploader == null) {
-        //    filelength = 0;
+            //    filelength = 0;
         }
         else {
             uploadercount = uploader.files.length;
         }
-       
-        
+
+
         setTimeout(function () {
             if (id === "") {
                 if (filelength > 9 || filelength < 3) {
