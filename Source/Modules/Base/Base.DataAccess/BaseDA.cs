@@ -913,15 +913,17 @@ namespace CCN.Modules.Base.DataAccess
             result = Helper.Execute<int>(sql);
             return result;
         }
+
         /// <summary>
         ///  获取车系名称
         /// </summary>
         /// <param name="seriesname"></param>
         /// <param name="innerid"></param>
+        /// <param name="brandid"></param>
         /// <returns></returns>
-        public BaseCarSeriesModel GetCarSeriesName(string seriesname, string innerid)
+        public BaseCarSeriesModel GetCarSeriesName(string seriesname, string innerid, string brandid)
         {
-            string where = " isenabled=1 and seriesname='" + seriesname + "'";
+            string where = " isenabled=1 and seriesname='" + seriesname + "' and brandid ='" + brandid + "'";
             if (!string.IsNullOrWhiteSpace(innerid))
             {
                 where += $" and innerid!='{innerid}'";

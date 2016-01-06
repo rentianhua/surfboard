@@ -353,7 +353,7 @@ namespace CCN.Modules.Base.BusinessComponent
             {
                 return JResult._jResult(402, "参数无效：Length（4-10范围内）");
             }
-            
+
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
             model.Content = GetVerifiByType(model.UType, model.Vcode, model.Valid);
@@ -521,7 +521,7 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             return DataAccess.GetCarSeries(brandId);
         }
-        
+
         /// <summary>
         /// 获取热门车系Top n
         /// </summary>
@@ -531,7 +531,7 @@ namespace CCN.Modules.Base.BusinessComponent
             var list = DataAccess.GetCarSeriesHotTop(top);
             return list.Any() ? JResult._jResult(0, list) : JResult._jResult(400, "");
         }
-        
+
         /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
@@ -730,7 +730,7 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult AddCarSeries(BaseCarSeriesModel model)
         {
             //验证车系信息是否同名
-            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, null);
+            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, null, model.Brandid.ToString());
             if (seriesmodel != null)
             {
                 if (seriesmodel.SeriesName == model.SeriesName)
@@ -784,7 +784,7 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult UpdateCarSeries(BaseCarSeriesModel model)
         {
             //验证车系信息是否同名
-            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, model.Innerid.ToString());
+            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, model.Innerid.ToString(), model.Brandid.ToString());
             if (seriesmodel != null)
             {
                 if (seriesmodel.SeriesName == model.SeriesName)

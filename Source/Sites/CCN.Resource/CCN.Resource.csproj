@@ -216,6 +216,7 @@
     <Folder Include="Areas\System\Models\" />
     <Folder Include="Areas\System\Views\Shared\" />
     <Folder Include="Models\" />
+    <Folder Include="Plugins\RichTextbox\img\" />
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
@@ -366,6 +367,10 @@
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\datepicker.css" />
     <Content Include="Plugins\My97DatePicker\skin\whyGreen\img.gif" />
     <Content Include="Plugins\My97DatePicker\WdatePicker.js" />
+    <Content Include="Plugins\RichTextbox\css\font-awesome.css" />
+    <Content Include="Plugins\RichTextbox\css\summernote.css" />
+    <Content Include="Plugins\RichTextbox\js\summernote-zh-CN.js" />
+    <Content Include="Plugins\RichTextbox\js\summernote.js" />
     <Content Include="Plugins\UploadImg\css\uploadImg.css" />
     <Content Include="Plugins\UploadImg\img\car_add.png" />
     <Content Include="Plugins\UploadImg\js\highlight\highlight.css" />
