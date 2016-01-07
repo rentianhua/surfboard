@@ -43,7 +43,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  //排序以后调整为 支付时间
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.price desc,a.refreshtime desc" : query.Order;  //排序以后调整为 支付时间
             var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
 
             if (!string.IsNullOrWhiteSpace(query.where))
@@ -84,7 +84,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.price desc,a.refreshtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
@@ -1169,7 +1169,15 @@ namespace CCN.Modules.Car.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    model.Sort = picedList[0].Sort + 1;
+                    if (picedList.Count == 0)
+                    {
+                        model.Sort = 1;
+                    }
+                    else
+                    {
+                        model.Sort = picedList[0].Sort + 1;
+                    }
+                    
                     conn.Execute(sqlIPic, model, tran); //插入图片
 
                     //表示添加张图片

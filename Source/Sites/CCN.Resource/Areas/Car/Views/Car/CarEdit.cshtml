@@ -461,6 +461,7 @@
                         uploader.start();
                         var carid = result.errmsg;
                         var m = 0;
+                        debugger
                         uploader.bind('FileUploaded', function (up, file, info) {
                             var picInfo = JSON.parse(info.response);
                             $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
