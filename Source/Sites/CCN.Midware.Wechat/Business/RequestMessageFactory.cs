@@ -3,6 +3,8 @@ using System;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using CCN.Modules.Rewards.BusinessEntity;
@@ -53,8 +55,23 @@ namespace CCN.Midware.Wechat.Business
                 {
                     case RequestMsgType.Text:
                         requestMessage = new RequestMessageText();
-                        EntityHelper.FillEntityWithXml(requestMessage, doc);
-                        CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
+                        requestMessage.FillEntityWithXml(doc);
+
+                        /*tim update by 2016-01-07*/
+
+                        string[] strArr = { "车信网大吉", "车信网抽奖", "车信网兴旺" } ;
+                        var rMessage = (RequestMessageText) requestMessage;
+                        if (strArr.Contains(rMessage.Content))
+                        {
+                            var redirecturl = $"http://10.46.20.98:8080/api/Lottery/TakeActivity?openId={rMessage.FromUserName}&flagCode={rMessage.Content}&flag=0";
+                            var res = Senparc.Weixin.HttpUtility.RequestUtility.HttpGetAsync(redirecturl, null, null, 1000);
+                            LoggerFactories.CreateLogger().Write("参与抽奖结果：" + res.Result, TraceEventType.Information);
+                        }
+                        else
+                        {
+                            CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
+                        }
+                       
                         break;
                     case RequestMsgType.Location:
                         requestMessage = new RequestMessageLocation();
