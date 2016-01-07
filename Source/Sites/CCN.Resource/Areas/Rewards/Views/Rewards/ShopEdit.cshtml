@@ -18,7 +18,7 @@
     //初始化省份
     function InitProv() {
         $("#selectprov").empty();
-        $("#selectprov").append("<option value='0'>请选择</option>");
+        $("#selectprov").append("<option value='0'>选择省份</option>");
 
         $.ajax({
             url: "/api/Base/GetProvList",
@@ -41,10 +41,10 @@
     //初始化城市
     function InitCity(provid) {
         $("#selectcity").empty();
-        $("#selectcity").append("<option value='0'>请选择</option>");
+        $("#selectcity").append("<option value='0'>选择城市</option>");
 
         $.ajax({
-            url: "/api/Base/GetCityList/?provid=" + provid,
+            url: "/api/Base/GetCityList?provid=" + provid,
             type: 'get',
             datatype: 'application/json',
             async: false,
@@ -54,6 +54,26 @@
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
                 $("#selectcity").selectVal(125);
+                InitCounty(125);
+            }
+        });
+    }
+
+    //初始化城市
+    function InitCounty(cityid) {
+        $("#selectcounty").empty();
+        $("#selectcounty").append("<option value='0'>选择区/县</option>");
+
+        $.ajax({
+            url: "/api/Base/GetCountyList?cityid=" + cityid,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectcounty").append("<option value='" + v.Innerid + "'>" + v.Countyname + "</option>");
+                });
             }
         });
     }
@@ -80,7 +100,6 @@
                 $("#password").val("******").prop("disabled", true);
                 $("#telephone").val(obj.Telephone);                
                 $("#email").val(obj.Email);
-                $("#area").val(obj.Area);
                 $("#address").val(obj.Address);
                 $("#qq").val(obj.QQ);
                 $("#signature").val(obj.Signature);
@@ -92,6 +111,10 @@
                 InitCity(obj.Provid);
 
                 $("#selectcity").selectVal(obj.Cityid);
+
+                InitCounty(obj.Cityid);
+
+                $("#selectcounty").selectVal(obj.Countyid);
             }
         });
     }
@@ -105,7 +128,7 @@
             Email: $("#email").val(),
             provid: $("#selectprov").val(),
             cityid: $("#selectcity").val(),
-            Area: $("#area").val(),
+            countyid: $("#selectcounty").val(),
             Address: $("#address").val(),
             Signature: $("#signature").val(),
             QQ: $("#qq").val(),
@@ -250,16 +273,18 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-1 control-label no-padding-right">所在地:</label>
-                            <div class="controls col-sm-11">
+                            <label for="" class="col-sm-2 control-label no-padding-right">所在地:</label>
+                            <div class="controls col-sm-10">
                                 <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
+                                    <option value="0">选择省份</option>
                                 </select>
                                 <select id="selectcity">
-                                    <option value="0">请选择</option>
+                                    <option value="0">选择城市</option>
                                 </select>
-                                <input type="text" id="area" placeholder="区"/>
-                                <input type="text" id="address" placeholder="详细地址" />
+                                <select id="selectcounty">
+                                    <option value="0">选择区/县</option>
+                                </select>
+                                <input type="text" id="address" placeholder="详细地址" style="height: 33px;" />
                             </div>
                         </div>
                     </div>

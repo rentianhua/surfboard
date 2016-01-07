@@ -45,6 +45,7 @@ namespace CCN.Resource.Areas.System.Controllers
             return View();
         }
         #endregion
+
         #region 基础数据代码值
         /// <summary>
         /// 获取基础数据代码值
@@ -161,6 +162,31 @@ namespace CCN.Resource.Areas.System.Controllers
         public ActionResult SysMenuEdit(string innerid)
         {
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+        #endregion
+
+        #region 城市管理
+
+        /// <summary>
+        /// 城市管理列表页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysManageCityList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 城市管理编辑页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysManageCityEdit(string innerid)
+        {
+            if (!string.IsNullOrWhiteSpace(innerid))
+            {
+                ViewBag.innerid = innerid;
+            }
             return View();
         }
         #endregion

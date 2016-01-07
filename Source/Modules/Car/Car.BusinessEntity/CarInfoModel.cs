@@ -411,7 +411,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 
         /// </summary>
         public CarShareModel ShareModel { get; set; }
-        
+
+        /// <summary>
+        /// 是否置顶
+        /// </summary>
+        public int? istop { get; set; }
+
     }
 
     /// <summary>
@@ -583,6 +588,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 全局搜索字段
         /// </summary>
         public string SearchField { get; set; }
+
+        /// <summary>
+        /// 用户ID
+        /// </summary>
+        public string userid { get; set; }
 
     }
 

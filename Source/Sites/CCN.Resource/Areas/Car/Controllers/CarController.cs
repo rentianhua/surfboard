@@ -7,10 +7,11 @@ using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using CCN.Resource.Main.Common;
 
 namespace CCN.Resource.Areas.Car.Controllers
 {
-    public class CarController : Controller
+    public class CarController : DefaultController
     {
         // GET: Car/Car
         public ActionResult CarList(string custid)
@@ -33,7 +34,6 @@ namespace CCN.Resource.Areas.Car.Controllers
             }
 
             ViewBag.custid = custid;
-
             return View();
         }
 
@@ -58,6 +58,10 @@ namespace CCN.Resource.Areas.Car.Controllers
         /// <returns></returns>
         public ActionResult CarShowList()
         {
+            if (ADMIN != UserInfo.innerid)
+            {
+                ViewBag.userid = UserInfo.innerid;
+            }
             return View();
         }
 

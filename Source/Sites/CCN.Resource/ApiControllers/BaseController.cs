@@ -294,6 +294,31 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        [Route("GetCountyList")]
+        [HttpGet]
+        public JResult GetCountyList(int cityId)
+        {
+            var list = _baseservice.GetCountyList(cityId);
+            if (list.Any())
+            {
+                return new JResult
+                {
+                    errcode = 0,
+                    errmsg = list
+                };
+            }
+            return new JResult
+            {
+                errcode = 401,
+                errmsg = "No Data"
+            };
+        }
+
+        /// <summary>
         /// 获取省份
         /// </summary>
         /// <param name="initial"></param>
@@ -938,6 +963,93 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region 部门管理
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetManageCityList")]
+        [HttpPost]
+        public BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query)
+        {
+            return _baseservice.GetManageCityList(query);
+        }
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetAllDepartment")]
+        [HttpGet]
+        public JResult GetAllDepartment()
+        {
+            BaseDepartmentModel model = new BaseDepartmentModel();
+            return _baseservice.GetAllDepartment(model);
+        }
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddDepartment")]
+        [HttpPost]
+        public JResult AddDepartment(BaseDepartmentModel model)
+        {
+            return _baseservice.AddDepartment(model);
+        }
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateDepartment")]
+        [HttpPost]
+        public JResult UpdateDepartment(BaseDepartmentModel model)
+        {
+            return _baseservice.UpdateDepartment(model);
+        }
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [Route("GetUserToDepartment")]
+        [HttpGet]
+        public JResult GetUserToDepartment(string userid)
+        {
+            return _baseservice.GetUserToDepartment(userid);
+        }
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddUserDepartment")]
+        [HttpPost]
+        public JResult AddUserDepartment(BaseUserDepartmentAddModel model)
+        {
+            return _baseservice.AddUserDepartment(model);
+        }
+
+        /// <summary>
+        /// 获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("GetDepartmentByID")]
+        [HttpPost]
+        public JResult GetDepartmentByID(string id)
+        {
+            return _baseservice.GetDepartmentByID(id);
+        }
+
+        #endregion 
 
         #endregion
     }

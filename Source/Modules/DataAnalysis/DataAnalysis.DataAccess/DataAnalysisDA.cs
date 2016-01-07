@@ -1043,15 +1043,15 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取汇总数据（会员/粉丝/车辆）
         /// </summary>
         /// <returns></returns>
-        public DataAnalysisModel GetTotal(string cityid)
+        public DataAnalysisModel GetTotal(string userid)
         {
             StringBuilder sql = new StringBuilder();
             var strCode = string.Empty;
             var strName = string.Empty;
-            if (!string.IsNullOrWhiteSpace(cityid))
+            if (!string.IsNullOrWhiteSpace(userid))
             {
-                strCode = "and cityid =(select code from sys_department where id='" + cityid + "')";
-                strName = "and city =(select name from sys_department where id='" + cityid + "')";
+                strCode = "and cityid in (select cityid from sys_user_city where userid='" + userid + "')";
+                strName = "and city in (select s1.name from sys_department as s1 left join sys_user_city as s2 on s2.cityid=s1.code where s2.userid='" + userid + "')";
             }
             //sql.AppendFormat(@"select * from (
             //            select count(1) as value from cust_info where 1=1 {0}) as t1
@@ -1077,22 +1077,23 @@ namespace CCN.Modules.DataAnalysis.DataAccess
         /// 获取会员/车辆增长量
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<DataAnalysisModel> GetDayGrowth(DateTime startTime, DateTime endTime, string cityid)
+        public IEnumerable<DataAnalysisModel> GetDayGrowth(DataQueryModel query)
         {
             using (var conn = Helper.GetConnection())
             {
                 //参数
                 var obj = new
                 {
-                    p_startdatetime = startTime,
-                    p_enddatetime = endTime,
-                    p_cityid = cityid
+                    p_startdatetime = query.starttime,
+                    p_enddatetime = query.endtime,
+                    p_userid = query.userid,
+                    p_cityid = query.cityid
                 };
 
                 var args = new DynamicParameters(obj);
                 using (var result = conn.QueryMultiple("ccnsp_daygrowth", args, commandType: CommandType.StoredProcedure))
                 {
-                    var list= result.Read<DataAnalysisModel>(); 
+                    var list = result.Read<DataAnalysisModel>();
                     //获取结果集
                     return list;
                 }
@@ -1164,7 +1165,7 @@ namespace CCN.Modules.DataAnalysis.DataAccess
                                 left join (select count(1) as count,cityid from car_info group by cityid) as t3 on t3.cityid=t1.innerid
                                 left join (select count(1) as count,city from cust_wechat group by city) as t4 on t4.city=t1.cityname
                                 where t2.cityid is not null or t3.cityid is not null
-                                order by t1.provid";
+                                order by t3.count desc";
             try
             {
                 return Helper.Query<DataAnalysisModel>(sql);

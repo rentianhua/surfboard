@@ -18,7 +18,7 @@
         }
 
         $.ajax({
-            url: '/api/Rewards/GetShopById?innerid=' + id,
+            url: '/api/Rewards/GetShopViewById?innerid=' + id,
             type: 'get',
             datatype: 'application/json',
             async: false,
@@ -33,29 +33,10 @@
                 $("#password").html("******");
                 $("#telephone").html(obj.Telephone);
                 $("#email").html(obj.Email);
-                $("#address").html(obj.Area + " " + obj.Address);
+                $("#address").html(obj.ProvName + " " + obj.CityName + " " + obj.CountyName + " " + obj.Address);
                 $("#qq").html(obj.QQ);
-                $("#signature").val(obj.Signature);
-                $("#logoimg").attr("src", getQiniuUrl(obj.Headportrait));
-                
-                $.get("/api/Base/GetProvList", function (data) {
-                    var city = "";
-                    data = data.errmsg;
-                    $.each(data, function (k, v) {
-                        if (v.Innerid === obj.Provid) {
-                            city = v.ProvName;
-                            $.get("/api/Base/GetCityList/?provid=" + obj.Provid, function (dataCity) {
-                                dataCity = dataCity.errmsg;
-                                $.each(dataCity, function (k, v) {
-                                    if (v.Innerid === obj.Cityid) {
-                                        city += " " + v.CityName;
-                                        $("#address").html(city + " " + $("#address").html());
-                                    }
-                                });
-                            });
-                        }
-                    });
-                });
+                $("#signature").html(obj.Signature);
+                $("#logoimg").attr("src", getQiniuUrl(obj.Headportrait));                
             }
         });
     }
@@ -157,8 +138,8 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-1 control-label no-padding-right">所在地:</label>
-                            <div class="controls col-sm-11">
+                            <label for="" class="col-sm-2 control-label no-padding-right">所在地:</label>
+                            <div class="controls col-sm-10">
                                 <label id="address"></label>
                             </div>
                         </div>

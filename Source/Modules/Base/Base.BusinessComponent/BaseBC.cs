@@ -353,7 +353,7 @@ namespace CCN.Modules.Base.BusinessComponent
             {
                 return JResult._jResult(402, "参数无效：Length（4-10范围内）");
             }
-            
+
             model.Createdtime = DateTime.Now;
             model.Vcode = RandomUtility.GetRandom(model.Length);
             model.Content = GetVerifiByType(model.UType, model.Vcode, model.Valid);
@@ -445,6 +445,16 @@ namespace CCN.Modules.Base.BusinessComponent
         }
 
         /// <summary>
+        /// 根据省份获取区县
+        /// </summary>
+        /// <param name="cityId"> 城市ID</param>
+        /// <returns></returns>
+        public IEnumerable<BaseCounty> GetCountyList(int cityId)
+        {
+            return DataAccess.GetCountyList(cityId);
+        }
+
+        /// <summary>
         /// 获取省份（扩展方法，根据首字母分类）
         /// </summary>
         /// <param name="initial">首字母</param>
@@ -511,7 +521,7 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             return DataAccess.GetCarSeries(brandId);
         }
-        
+
         /// <summary>
         /// 获取热门车系Top n
         /// </summary>
@@ -521,7 +531,7 @@ namespace CCN.Modules.Base.BusinessComponent
             var list = DataAccess.GetCarSeriesHotTop(top);
             return list.Any() ? JResult._jResult(0, list) : JResult._jResult(400, "");
         }
-        
+
         /// <summary>
         /// 根据车系ID获取车型
         /// </summary>
@@ -720,7 +730,7 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult AddCarSeries(BaseCarSeriesModel model)
         {
             //验证车系信息是否同名
-            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, null);
+            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, null, model.Brandid.ToString());
             if (seriesmodel != null)
             {
                 if (seriesmodel.SeriesName == model.SeriesName)
@@ -774,7 +784,7 @@ namespace CCN.Modules.Base.BusinessComponent
         public JResult UpdateCarSeries(BaseCarSeriesModel model)
         {
             //验证车系信息是否同名
-            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, model.Innerid.ToString());
+            var seriesmodel = DataAccess.GetCarSeriesName(model.SeriesName, model.Innerid.ToString(), model.Brandid.ToString());
             if (seriesmodel != null)
             {
                 if (seriesmodel.SeriesName == model.SeriesName)
@@ -1220,6 +1230,85 @@ namespace CCN.Modules.Base.BusinessComponent
             return JResult._jResult(result);
         }
         #endregion
+
+        #region 部门管理
+
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseDepartmentViewModel> GetManageCityList(BaseDepartmentQueryModel query)
+        {
+            return DataAccess.GetManageCityList(query);
+        }
+
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAllDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.GetAllDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.AddDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateDepartment(BaseDepartmentModel model)
+        {
+            var result = DataAccess.UpdateDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取职员对应所有的部门
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult GetUserToDepartment(string userid)
+        {
+            var result = DataAccess.GetUserToDepartment(userid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 保存职员对应部门
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddUserDepartment(BaseUserDepartmentAddModel model)
+        {
+            var result = DataAccess.AddUserDepartment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取部门信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetDepartmentByID(string id)
+        {
+            var result = DataAccess.GetDepartmentByID(id);
+            return JResult._jResult(result);
+        }
+
+        #endregion  
 
         #endregion
 

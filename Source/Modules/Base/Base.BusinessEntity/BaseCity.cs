@@ -36,4 +36,35 @@ namespace CCN.Modules.Base.BusinessEntity
         /// </summary>
         public string Remark { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BaseCounty
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int Innerid { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        public string AreaCode { get; set; }
+
+        /// <summary>
+        /// 区县名称
+        /// </summary>
+        public string Countyname { get; set; }
+
+        /// <summary>
+        /// 城市id
+        /// </summary>
+        public int Cityid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string TypeName { get; set; }
+    }
 }

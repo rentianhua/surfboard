@@ -86,9 +86,34 @@
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
+                "<a href='javascript:;' onclick=\"RefreshCar('" + val.Innerid + "');\">刷新</a> " +
+                "<a href='javascript:;' onclick=\"DoTopCar('" + val.Innerid + "'," + val.istop + ");\">" + (val.istop == 1 ? "取消置顶" : "置顶") + "</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
+        });
+    }
+
+    //刷新车辆
+    function RefreshCar(id) {
+        $.get("/api/Car/RefreshCar?carid=" + id, function (result) {
+            if (result.errcode === 0) {
+                getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+            } else {
+                alert("操作失败");
+            }
+        });
+    }
+
+    //（取消）置顶车辆
+    function DoTopCar(id, istop) {
+        istop = istop === 1 ? 0 : 1;
+        $.get("/api/Car/DoTopCar?carid=" + id + "&istop=" + istop, function (result) {
+            if (result.errcode === 0) {
+                getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+            } else {
+                alert("操作失败");
+            }
         });
     }
 

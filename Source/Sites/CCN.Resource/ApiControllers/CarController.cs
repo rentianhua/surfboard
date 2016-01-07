@@ -185,7 +185,6 @@ namespace CCN.Resource.ApiControllers
 
                     Task.Run(() =>
                     {
-                        //var url = ConfigHelper.GetAppSettings("newcustomerurl");
                         var sms = new SMSMSG();
                         sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用车信网发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【车信网】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。车信网承诺不会透露用户信息。");
                     });
@@ -364,6 +363,31 @@ namespace CCN.Resource.ApiControllers
         public JResult GetCarShareInfo(string carid)
         {
             return _carervice.GetCarShareInfo(carid);
+        }
+
+        /// <summary>
+        /// 刷新车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [Route("RefreshCar")]
+        [HttpGet]
+        public JResult RefreshCar(string carid)
+        {
+            return _carervice.RefreshCar(carid);
+        }
+
+        /// <summary>
+        /// 置顶或取消置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <param name="istop">1.置顶 0取消置顶</param>
+        /// <returns>1.操作成功</returns>
+        [Route("DoTopCar")]
+        [HttpGet]
+        public JResult DoTopCar(string carid, int istop)
+        {
+            return _carervice.DoTopCar(carid, istop);
         }
         #endregion
 

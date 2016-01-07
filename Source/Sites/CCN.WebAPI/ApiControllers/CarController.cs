@@ -591,6 +591,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCarPicture([FromBody] CarPictureModel model)
         {
+            LoggerFactories.CreateLogger().Write("单个添加图片接口：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
             return _carervice.AddCarPicture(model);
         }
 
@@ -631,6 +632,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpDelete]
         public JResult DeleteCarPicture(string innerid)
         {
+            LoggerFactories.CreateLogger().Write("单个删除图片接口：" + innerid, TraceEventType.Information);
             return _carervice.DeleteCarPicture(innerid);
         }
 

@@ -36,36 +36,84 @@
         });
     }
 </script>
-<div>
-    <div style="font-size:18px;font-weight:bold;text-align:center">基础数据代码值详情</div>
-    <table id="codelist" class="gridtable">
-        <tbody>
-            <tr>
-                <td>代码类型名称</td>
-                <td id="Typename"></td>
-            </tr>
-            <tr>
-                <td>代码名称</td>
-                <td id="Codename"></td>
-            </tr>
-            <tr>
-                <td>代码值</td>
-                <td id="Codevalue"></td>
-            </tr>
-            <tr>
-                <td>是否启用</td>
-                <td id="Isenabled"></td>
-            </tr>
-            <tr>
-                <td>备注</td>
-                <td id="Remark"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type="button" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" /></td>
-            </tr>
-        </tbody>
-    </table>
+
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">基础数据代码值编辑</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码类型名称</label>
+                            <div class="controls col-sm-10">
+                                <span id="Typename" type="text" class="form-control" ></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码名称</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="Codename" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>代码值</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="Codevalue" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">是否启用</label>
+                            <div class="controls col-sm-10">
+                                <span type="text" id="Isenabled" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
+                            <div class="controls col-sm-10">
+                                <span id="Remark" maxlength="200" rows="5" onclose="150" placeholder="备注" class="form-control"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/System/System/BaseCodeList');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 

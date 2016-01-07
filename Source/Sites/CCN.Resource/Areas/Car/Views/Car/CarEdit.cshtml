@@ -38,6 +38,7 @@
         option.container = "container2";
         option.uptoken = "@ViewBag.uptoken";
         option.autostart = false;
+        option.domain = QiuniuHost();
         //初始化七牛上传控件
         uploader = InitQiniuUpload(option);
 
@@ -162,7 +163,7 @@
 
     //初始化城市
     function InitCity(provid) {
-        
+
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
 
@@ -177,7 +178,7 @@
                     $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
                 });
                 $("#selectcity").selectText(getCookie("city"));
-                
+
             }
         });
     }
@@ -263,7 +264,7 @@
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                     $('.imgs').append(
                             '<div id="' + strradom + '" class="imgPreview">\
-						<img data-type="img" src="' + getQiniuUrl(v.Path) + '" class="loading">\
+						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
 						<div class="caidan">\
 							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
 						</div>\
@@ -278,6 +279,7 @@
             });
         });
     }
+
 
     function DeletePicture(picid, strhash) {
 
@@ -397,6 +399,10 @@
         var txtauditDate = $("#txtaudit_date").val();
 
         var caresc = $("#caresc").val();
+        if ($.trim(caresc).length === 0) {
+            alert("请填写详细信息！");
+            return false;
+        }
 
         var json = {
             custid: custid,
@@ -424,15 +430,18 @@
         var filelength = 0;
         var uploadercount = 0;
         //统计新增的图片
-        
+        //遍历img
+        $("img[data-type='img']").each(function () {
+            filelength++;
+        });
         if (uploader == undefined || uploader == null) {
-            filelength = 0;
+            //    filelength = 0;
         }
         else {
             uploadercount = uploader.files.length;
         }
-       
-        
+
+
         setTimeout(function () {
             if (id === "") {
                 if (filelength > 9 || filelength < 3) {
@@ -440,7 +449,7 @@
                     alert('请上传3-9张图片');
                     return false;
                 }
-                $.post("/api/Car/AddCar", json, function (result) {
+                $.post("/api/Car/AddCarBack", json, function (result) {
                     if (result.errcode === 0) {
                         //上传并保存图片 Begin
                         var i = 0;
@@ -474,10 +483,6 @@
                 });
             } else {
                 json.Innerid = id;
-                //遍历img
-                $("img[data-type='img']").each(function () {
-                    filelength++;
-                });
 
                 if (filelength > 9 || filelength < 3) {
                     hideloading();
@@ -779,7 +784,7 @@
                 <div class="row form-group">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="caresc" class="col-sm-1 control-label no-padding-right">详细信息</label>
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>详细信息</label>
                             <div class="col-sm-11">
                                 <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
                             </div>

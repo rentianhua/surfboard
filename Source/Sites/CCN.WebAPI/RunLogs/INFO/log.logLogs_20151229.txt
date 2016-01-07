@@ -1,0 +1,8 @@
+﻿
+----------------------header--------------------------
+[INFO ] [2015-12-29 16:36:39,494] -[购买礼券参数：{"Order":null,"innerid":null,"result":0,"resultdesc":null}] 
+[INFO ] [2015-12-29 16:36:53,136] -[购买礼券参数：{"Order":null,"innerid":null,"result":0,"resultdesc":null}] 
+[INFO ] [2015-12-29 16:37:21,538] -[购买礼券参数：{"Order":{"order_id":null,"order_status":0,"order_total_price":0,"order_create_time":null,"order_express_price":0,"buyer_openid":"oRpPlwRd_ftOsoXTyaHzoa3yWHvo","buyer_nick":null,"receiver_name":null,"receiver_province":null,"receiver_city":null,"receiver_address":null,"receiver_mobile":null,"receiver_phone":null,"product_id":"pRpPlwezPM92poTqxX7RI9Iz5yX8","product_name":null,"product_price":0,"product_sku":null,"product_count":2,"product_img":null,"delivery_id":null,"delivery_company":null,"trans_id":null},"innerid":null,"result":0,"resultdesc":null}] 
+[INFO ] [2015-12-29 16:38:10,120] -[购买礼券参数：{"Order":{"order_id":null,"order_status":0,"order_total_price":0,"order_create_time":null,"order_express_price":0,"buyer_openid":"oRpPlwRd_ftOsoXTyaHzoa3yWHvo","buyer_nick":null,"receiver_name":null,"receiver_province":null,"receiver_city":null,"receiver_address":null,"receiver_mobile":null,"receiver_phone":null,"product_id":"pRpPlwezPM92poTqxX7RI9Iz5yX8","product_name":null,"product_price":0,"product_sku":null,"product_count":2,"product_img":null,"delivery_id":null,"delivery_company":null,"trans_id":null},"innerid":null,"result":0,"resultdesc":null}] 
+
+----------------------footer--------------------------
