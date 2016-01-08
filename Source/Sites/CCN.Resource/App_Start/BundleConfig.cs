@@ -28,7 +28,9 @@ namespace CCN.Resource
                       "~/Scripts/jquery.fn.extend.js",
                       "~/Scripts/common.js",
                       "~/Scripts/highcharts.js",
-                      "~/Scripts/CCN_Chart.js"));
+                      "~/Scripts/CCN_Chart.js",
+                      "~/Plugins/RichTextbox/js/summernote.js",
+                      "~/Plugins/RichTextbox/js/summernote-zh-CN.js"));
 
             //模版js引用
             bundles.Add(new ScriptBundle("~/bundles/template").Include(
@@ -59,7 +61,9 @@ namespace CCN.Resource
                       "~/Content/Template/css/demo.min.css",
                       "~/Content/Template/css/typicons.min.css",
                       "~/Content/Template/css/animate.min.css",
-                      "~/Content/Template/assets/img/favicon.png"));
+                      "~/Content/Template/assets/img/favicon.png",
+                      "~/Plugins/RichTextbox/css/font-awesome.css",
+                      "~/Plugins/RichTextbox/css/summernote.css"));
         }
     }
 }

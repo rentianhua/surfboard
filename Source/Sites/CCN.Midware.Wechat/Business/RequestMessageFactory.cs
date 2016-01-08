@@ -59,11 +59,12 @@ namespace CCN.Midware.Wechat.Business
 
                         /*tim update by 2016-01-07*/
 
-                        string[] strArr = { "车信网大吉", "车信网抽奖", "车信网兴旺" } ;
-                        var rMessage = (RequestMessageText) requestMessage;
+                        string[] strArr = { "车信网大吉", "车信网抽奖", "车信网兴旺" };
+                        var rMessage = (RequestMessageText)requestMessage;
                         if (strArr.Contains(rMessage.Content))
                         {
-                            var redirecturl = $"http://10.46.20.98:8080/api/Lottery/TakeActivity?openId={rMessage.FromUserName}&flagCode={rMessage.Content}&flag=0";
+                            var lotteryurl = ConfigurationManager.AppSettings["lotteryurl"];
+                            var redirecturl = $"{lotteryurl}/api/Lottery/TakeActivity?openId={rMessage.FromUserName}&flagCode={rMessage.Content}&flag=0";
                             var res = Senparc.Weixin.HttpUtility.RequestUtility.HttpGetAsync(redirecturl, null, null, 1000);
                             LoggerFactories.CreateLogger().Write("参与抽奖结果：" + res.Result, TraceEventType.Information);
                         }
@@ -71,7 +72,7 @@ namespace CCN.Midware.Wechat.Business
                         {
                             CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
                         }
-                       
+
                         break;
                     case RequestMsgType.Location:
                         requestMessage = new RequestMessageLocation();
@@ -188,7 +189,6 @@ namespace CCN.Midware.Wechat.Business
                                 if (orderresult.errcode == ReturnCode.请求成功)
                                 {
                                     var rewardsManagementService = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-
                                     var wholesaleCouponresult = rewardsManagementService.WholesaleCoupon(new CouponBuyModel()
                                     {
                                         //ProductId = orderresult.order.product_id,
