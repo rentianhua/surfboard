@@ -734,7 +734,7 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
 
         /// <summary>
         /// 
@@ -760,6 +760,91 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.BindOpenid(custid, openid);
         }
+        #endregion
+
+        #region  入驻公司
+        
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPageList")]
+        [HttpPost]
+        public BasePageList<CompanyModel> GetCompanyPageList([FromBody]CompanyQueryModel query)
+        {
+            return _custservice.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyById")]
+        [HttpGet]
+        public JResult GetCompanyById(string innerid)
+        {
+            return _custservice.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoComment")]
+        [HttpPost]
+        public JResult DoComment([FromBody]CommentModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            if (string.IsNullOrWhiteSpace(model.IP))
+            {
+                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
+            
+            return _custservice.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoPraise")]
+        [HttpPost]
+        public JResult DoPraise([FromBody]PraiseModel model)
+        {
+            return _custservice.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCommentPageList")]
+        [HttpPost]
+        public BasePageList<CommentListModel> GetCommentPageList([FromBody]CommentQueryModel query)
+        {
+            return _custservice.GetCommentPageList(query);
+        }
+
+
+        /// <summary>
+        /// 导入企业信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("ImportCompany")]
+        [HttpGet]
+        public JResult ImportCompany(string filename)
+        {
+            return _custservice.ImportCompany(filename);
+        }
+
         #endregion
     }
 }

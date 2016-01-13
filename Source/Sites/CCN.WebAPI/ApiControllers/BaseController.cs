@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -552,5 +553,6 @@ namespace CCN.WebAPI.ApiControllers
             var uptoken = QiniuUtility.GetToken();
             return JResult._jResult(0, uptoken);
         }
+        
     }
 }

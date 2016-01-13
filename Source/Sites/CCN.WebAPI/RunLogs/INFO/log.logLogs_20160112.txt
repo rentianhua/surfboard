@@ -1,0 +1,7 @@
+﻿
+----------------------header--------------------------
+[INFO ] [2016-01-12 15:17:16,195] -[导入公司数据失败：Data too long for column 'officephone' at row 1] 
+[INFO ] [2016-01-12 15:18:28,957] -[导入公司数据失败：Data too long for column 'officephone' at row 1] 
+[INFO ] [2016-01-12 15:19:30,012] -[导入公司数据失败：Data too long for column 'companyname' at row 1] 
+
+----------------------footer--------------------------

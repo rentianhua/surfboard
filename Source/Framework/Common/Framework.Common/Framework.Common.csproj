@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.0.5.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
@@ -122,6 +126,7 @@
     <Compile Include="BaseClasses\ConfigHelper.cs" />
     <Compile Include="BaseClasses\DynamicWebService.cs" />
     <Compile Include="BaseClasses\Encryptor.cs" />
+    <Compile Include="BaseClasses\ExcelHelper.cs" />
     <Compile Include="BaseClasses\ExtesionUtilty.cs" />
     <Compile Include="BaseClasses\JResult.cs" />
     <Compile Include="BaseClasses\JuheUtility.cs" />
@@ -130,6 +135,7 @@
     <Compile Include="BaseClasses\QiniuUtility.cs" />
     <Compile Include="BaseClasses\QueryModel.cs" />
     <Compile Include="BaseClasses\RandomUtility.cs" />
+    <Compile Include="BaseClasses\TxtUtility.cs" />
     <Compile Include="BaseClasses\XmlHelper.cs" />
     <Compile Include="IApplicationContextAwareObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

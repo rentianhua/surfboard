@@ -412,7 +412,7 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -432,6 +432,72 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult BindOpenid(string custid, string openid)
         {
             return BusinessComponent.BindOpenid(custid, openid);
+        }
+
+        #endregion
+
+        #region 入驻公司
+
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            return BusinessComponent.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyById(string innerid)
+        {
+            return BusinessComponent.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoComment(CommentModel model)
+        {
+            return BusinessComponent.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoPraise(PraiseModel model)
+        {
+            return BusinessComponent.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            return BusinessComponent.GetCommentPageList(query);
+        }
+
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public JResult ImportCompany(string file)
+        {
+            return BusinessComponent.ImportCompany(file);
         }
 
         #endregion

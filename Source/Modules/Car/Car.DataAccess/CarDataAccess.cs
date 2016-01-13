@@ -43,8 +43,8 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.price desc,a.refreshtime desc" : query.Order;  //排序以后调整为 支付时间
-            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.price desc,a.refreshtime desc" : query.Order;  //排序以后调整为 支付时间
+            var sqlWhere = new StringBuilder("a.status=1 and a.istop>0");
 
             if (!string.IsNullOrWhiteSpace(query.where))
             {
@@ -84,10 +84,10 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_city as ct on a.cityid=ct.innerid 
                                     inner join cust_info as cc on cc.innerid=a.custid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.price desc,a.refreshtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.price desc,a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("a.status=1 and a.istop=1");
+            var sqlWhere = new StringBuilder("a.status=1 and a.istop>0");
 
             //省份
             if (query.provid != null)
@@ -183,7 +183,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #endregion
 
-            strwhere = sqlWhere.ToString().Replace("a.status=1 and a.istop=1", "").Trim();   //只需要手动设置的条件
+            strwhere = sqlWhere.ToString().Replace("a.status=1 and a.istop>0", "").Trim();   //只需要手动设置的条件
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
             return list;
@@ -295,6 +295,12 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
             }
 
+            //车源类型
+            if (query.type.HasValue)
+            {
+                sqlWhere.Append(query.type == 2 ? " and cc.type=2" : " and cc.type<>2");
+            }
+
             //关键字搜索
             if (!string.IsNullOrWhiteSpace(query.keyword))
             {
@@ -320,8 +326,9 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
-                                    left join base_city as ct on a.cityid=ct.innerid ";
-            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname," +
+                                    left join base_city as ct on a.cityid=ct.innerid 
+                                    inner join cust_info as cc on cc.innerid=a.custid ";
+            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type," +
                                   $" (select count(1) from cust_relations where userid='{query.custid}' and friendsid=a.custid) as isfriend";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
@@ -381,6 +388,12 @@ namespace CCN.Modules.Car.DataAccess
                 var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
                 sqlWhere.Append($" and a.register_date>='{date}'");
             }
+            
+            //车源类型
+            if (query.type.HasValue)
+            {
+                sqlWhere.Append(query.type == 2 ? " and cc.type=2" : " and cc.type<>2");
+            }
 
             if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
             {
@@ -434,7 +447,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
             const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("1=1");
@@ -1034,6 +1047,26 @@ namespace CCN.Modules.Car.DataAccess
                 Helper.Execute(sql, new { carid });
             }
             catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 刷新车辆置顶
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int RefreshCarTop(string carid)
+        {
+            const string sql = @"set @num=(select max(istop) as num from car_info)+1;
+                                update car_info set istop = @num where innerid=@carid;";
+            try
+            {
+                Helper.Execute(sql, new { carid });
+            }
+            catch (Exception ex) 
             {
                 return 0;
             }

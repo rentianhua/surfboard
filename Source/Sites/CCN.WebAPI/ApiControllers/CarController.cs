@@ -682,6 +682,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCarPictureList([FromBody]PictureListModel picModel)
         {
+            LoggerFactories.CreateLogger().Write("批量添加图片参数(AddCarPictureKeyList)：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
             return _carervice.AddCarPictureList(picModel);
         }
 
