@@ -48,6 +48,7 @@
     <Compile Include="CarEvaluateModel.cs" />
     <Compile Include="CarInfoModel.cs" />
     <Compile Include="CarPictureModel.cs" />
+    <Compile Include="CarReward.cs" />
     <Compile Include="CarShareModel.cs" />
     <Compile Include="CarCollectionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
