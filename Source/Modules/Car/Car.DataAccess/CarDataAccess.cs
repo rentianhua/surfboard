@@ -2189,5 +2189,54 @@ namespace CCN.Modules.Car.DataAccess
         #endregion
 
         #endregion
+
+        #region 车辆悬赏
+
+        /// <summary>
+        /// 车辆悬赏列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarRewardViewModel> CarRewardPageList(CarRewardQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_reward as a  ";
+            const string fields = "a.* ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarRewardViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加车辆悬赏信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCarReward(CarReward model)
+        {
+            const string sql = @"INSERT INTO `car_reward`
+                                (`innerid`, `brand_id`, `series_id`, `model_id`, `mileage`, `coty`, `price`, `colorid`, `provid`, `cityid`, `status`, `username`, `usermobile`, `createdid`, `createdtime`, `modifiedtime`)
+                                VALUES
+                                (@innerid, @brand_id, @series_id, @model_id, @mileage, @coty, @price, @colorid, @provid, @cityid, @status, @username, @usermobile, @createdid, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加车辆悬赏信息异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+                return result;
+            }
+        }
+
+        #endregion
     }
 }

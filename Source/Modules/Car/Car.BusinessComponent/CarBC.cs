@@ -1113,5 +1113,31 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
+
+        #region 车辆悬赏
+
+        /// <summary>
+        /// 车辆悬赏列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarRewardViewModel> CarRewardPageList(CarRewardQueryModel query)
+        {
+            var list = DataAccess.CarRewardPageList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加车辆悬赏信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarReward(CarReward model)
+        {
+            var result = DataAccess.AddCarReward(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }
