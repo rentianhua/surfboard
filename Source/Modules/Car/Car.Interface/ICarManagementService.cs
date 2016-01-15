@@ -307,6 +307,13 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult AddCarReward(CarReward model);
 
+        /// <summary>
+        /// 车辆悬赏推荐
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> GetCarRewardPageList(CarRewardQueryModel query);
+
         #endregion
     }
 }

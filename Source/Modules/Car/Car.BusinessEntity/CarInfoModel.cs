@@ -594,6 +594,36 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string userid { get; set; }
 
+        /// <summary>
+        /// 里程区间（开始）
+        /// </summary>
+        public int minmileage { get; set; }
+
+        /// <summary>
+        /// 里程区间（截至）
+        /// </summary>
+        public int maxmileage { get; set; }
+
+        /// <summary>
+        /// 待售价格区间（万元）（开始）
+        /// </summary>
+        public decimal? minprice { get; set; }
+
+        /// <summary>
+        /// 待售价格区间（万元）（截至）
+        /// </summary>
+        public decimal? maxprice { get; set; }
+
+        /// <summary>
+        /// 车龄区间（开始）
+        /// </summary>
+        public int? mincoty { get; set; }
+
+        /// <summary>
+        /// 车龄区间（截至）
+        /// </summary>
+        public int? maxcoty { get; set; }
+
     }
 
     /// <summary>

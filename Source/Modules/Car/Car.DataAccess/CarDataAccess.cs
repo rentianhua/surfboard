@@ -439,7 +439,7 @@ namespace CCN.Modules.Car.DataAccess
             #region 查询条件
             var sqlWhere = new StringBuilder("1=1");
 
-            sqlWhere.Append(query.status != null
+            sqlWhere.Append(query.status != null 
                 ? $" and a.status={query.status}"
                 : " and a.status<>0");
 
@@ -2217,9 +2217,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarReward(CarReward model)
         {
             const string sql = @"INSERT INTO `car_reward`
-                                (`innerid`, `brand_id`, `series_id`, `model_id`, `mileage`, `coty`, `price`, `colorid`, `provid`, `cityid`, `status`, `username`, `usermobile`, `createdid`, `createdtime`, `modifiedtime`)
+                                (`innerid`, `brand_id`, `series_id`, `mileage`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`, `createdid`, `createdtime`, `modifiedtime`)
                                 VALUES
-                                (@innerid, @brand_id, @series_id, @model_id, @mileage, @coty, @price, @colorid, @provid, @cityid, @status, @username, @usermobile, @createdid, @createdtime, @modifiedtime);";
+                                (@innerid, @brand_id, @series_id, @mileage, @coty, @price, @provid, @cityid, @status, @username, @usermobile, @createdid, @createdtime, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2235,6 +2235,85 @@ namespace CCN.Modules.Car.DataAccess
                 }
                 return result;
             }
+        }
+
+        /// <summary>
+        /// 车辆悬赏推荐
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetCarRewardPageList(CarQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.status=1");
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" or a.cityid={query.cityid}");
+            }
+
+            //销售价大于..
+            if (query.minprice.HasValue)
+            {
+                sqlWhere.Append($" or ( a.price>={query.minprice}");
+            }
+
+            //销售价小于..
+            if (query.maxprice.HasValue)
+            {
+                sqlWhere.Append($" and  a.price<={query.maxprice} )");
+            }
+
+            //车龄大于
+            if (query.mincoty.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.mincoty.Value).ToShortDateString();
+                sqlWhere.Append($" or ( a.register_date<='{date}'");
+            }
+            //车龄小于
+            if (query.maxcoty.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.maxcoty.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date>='{date}' )");
+            }
+
+            //里程大于
+            if (query.mincoty.HasValue)
+            {
+                sqlWhere.Append($" or ( a.mileage<='{query.mincoty}'");
+            }
+            //里程小于
+            if (query.maxcoty.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage<='{query.maxcoty}' )");
+            }
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
         }
 
         #endregion
