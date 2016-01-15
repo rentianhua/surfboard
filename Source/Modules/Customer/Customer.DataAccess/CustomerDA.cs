@@ -318,6 +318,11 @@ namespace CCN.Modules.Customer.DataAccess
             {
                 sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
             }
+            //昵称
+            if (!string.IsNullOrWhiteSpace(query.Custname))
+            {
+                sqlWhere.Append($" and custname like '%{query.Custname}%'");
+            }
 
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CustModel>(model, query.Echo);
