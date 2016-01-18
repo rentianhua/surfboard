@@ -1,0 +1,103 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    $(function() {
+
+    });
+
+    function Send() {
+
+        var refreshnum = $("#refreshnum").val();
+        var topnum = $("#topnum").val();
+
+        if ($.trim(refreshnum).length === 0) {
+            alert("请填写刷新次数！");
+            return false;
+        }
+
+        if ($.trim(topnum).length === 0) {
+            alert("请填写置顶次数！");
+            return false;
+        }
+
+        var re = /^[1-9]\d*|0$/;
+        if (!re.test(refreshnum)) {
+            alert("刷新次数只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        if (!re.test(topnum)) {
+            alert("置顶次数只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        //更多信息
+        $.get("/api/Customer/SendWelfare?refreshnum=" + refreshnum + "&topnum=" + topnum, null, function (result) {
+
+            if (result.errcode === 0) {
+                alert("发福利成功");
+            } else {
+                alert("发福利失败:" + result.errmsg);
+            }
+
+        });
+        return false;
+    }
+
+</script>
+
+<div style="padding-bottom: 5px;">
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="well with-header with-footer">
+                <div class="header bg-blue">
+                    发福利
+                </div>
+                <div class="row form-group" style="padding-top:5px;">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="refreshnum" class="col-sm-4 control-label no-padding-right searchLayout">置顶次数：</label>
+                            <div class="col-sm-8">
+                                <input id="refreshnum" class="form-control" type="text" placeholder="" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="topnum" class="col-sm-4 control-label no-padding-right searchLayout">刷新次数：</label>
+                            <div class="col-sm-8">
+                                <input id="topnum" class="form-control" type="text" placeholder="" maxlength="3">
+                            </div>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="Send();"> 发 </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="well with-header with-footer">
+                <div class="header bg-blue">
+                    待定...
+                </div>
+                <div class="row form-group" style="padding-top:5px;">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label for="refreshnum" class="col-sm-4 control-label no-padding-right searchLayout"></label>
+                            <div class="col-sm-8">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

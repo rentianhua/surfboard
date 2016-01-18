@@ -912,6 +912,7 @@
     <Content Include="Plugins\UploadImg\js\jquery.min.map" />
     <Content Include="Areas\System\Views\System\SysManageCityList.cshtml" />
     <Content Include="Areas\System\Views\System\SysManageCityEdit.cshtml" />
+    <Content Include="Areas\System\Views\System\SysJob.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />

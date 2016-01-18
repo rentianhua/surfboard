@@ -458,6 +458,107 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public int UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            var sql = "";
+            var o = oper == 1 ? "+" : "-";
+            //刷新
+            if (type == 1)
+            {
+                sql = $"update cust_total_info set refreshnum=refreshnum{o}@count where custid=@custid;";
+            }
+            //置顶
+            else if (type == 2)
+            {
+                sql = $"update cust_total_info set topnum=topnum{o}@count where custid=@custid;";
+            }
+            //积分
+            else if (type == 3)
+            {
+                sql = $"update cust_total_info set currpoint=currpoint{o}@count where custid=@custid;";
+            }
+
+            var result = Helper.Execute(sql, new {count, custid});
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int SaveTotalRecord(CustTotalRecordModel model)
+        {
+            const string sql = "insert into cust_total_record (innerid, custid, count,type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count,@type, @remark, @spare1, @createrid, @createdtime);";
+            var result = Helper.Execute(sql, model);
+            return result;
+        }
+        
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public int SendWelfare(int refreshnum, int topnum)
+        {
+            //try
+            //{
+            //    var dddd = Convert.ToInt32("qqqqq");
+            //}
+            //catch (Exception ex)
+            //{
+            //    LoggerFactories.CreateLogger().Write("dao test", TraceEventType.Error, ex);
+            //}
+            
+            //return 1;
+            const string sql =
+                "select custid from cust_total_info where custid not in (select custid from cust_total_record where `type`=100 and date_format(createdtime,'%Y-%m')=date_format(now(),'%Y-%m'));";
+            const string u = "update cust_total_info set refreshnum=refreshnum+@refreshcount,topnum=topnum+@topcount where custid=@custid;";
+            const string i = "insert into cust_total_record (innerid, custid, count, type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count, @type, @remark, @spare1, @createrid, @createdtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var list = conn.Query<string>(sql).ToList();
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var item in list)
+                    {
+                        //更新刷新和置顶次数
+                        conn.Execute(u, new { refreshcount = refreshnum, topcount = topnum, custid = item }, tran);
+                        //保存更新记录
+                        conn.Execute(i, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            count = 0,
+                            custid = item,
+                            type = 100,
+                            remark = $"发福利记录：刷新次数增加{refreshnum}次，置顶次数增加{topnum}次",
+                            createdtime = DateTime.Now
+                        }, tran);
+                    }
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("发福利异常：" + ex.Message, TraceEventType.Information);
+                }
+            }
+
+            return 1;
+        }
+
+        #endregion
+
         #region 会员认证
 
         /// <summary>
@@ -1144,7 +1245,7 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
-        #region 入驻公司
+        #region 车信评（入驻公司）
 
         /// <summary>
         /// 导入公司
@@ -1233,7 +1334,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <param name="mobile"></param>
         /// <param name="companyid"></param>
         /// <returns></returns>
-        public int CheckComment(string mobile,string companyid)
+        public int CheckComment(long mobile,string companyid)
         {
             const string sql = @"select count(1) from settled_comment where mobile=@mobile and companyid=@companyid;";
             try

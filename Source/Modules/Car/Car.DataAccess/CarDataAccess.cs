@@ -1040,37 +1040,101 @@ namespace CCN.Modules.Car.DataAccess
         /// <returns>1.操作成功</returns>
         public int RefreshCar(string carid)
         {
-            var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            string sql = $"update car_info set refreshtime={(long)ts.TotalSeconds} where innerid=@carid;";
-            try
+            using (var conn = Helper.GetConnection())
             {
-                Helper.Execute(sql, new { carid });
+                const string sqlSelectTotal = "select b.refreshnum,b.custid from car_info as a inner join cust_total_info as b on a.custid=b.custid where a.innerid=@carid;";
+                var totalModel = conn.Query<CustomerTotalModel>(sqlSelectTotal, new {carid}).FirstOrDefault();
+                if (totalModel == null || totalModel.Refreshnum == 0)
+                {
+                    return 401;
+                }
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //更新刷新时间
+                    var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    string sql = $"update car_info set refreshtime={(long)ts.TotalSeconds} where innerid=@carid;";
+                    conn.Execute(sql, new { carid },tran);
+
+                    //更新刷新剩余次数
+                    const string sqlUt = "update cust_total_info set refreshnum=refreshnum-1 where custid=@custid;";
+                    conn.Execute(sqlUt, new { custid = totalModel.Custid }, tran);
+
+                    //保存刷新次数变更记录
+                    const string sqlIRecord = "insert into cust_total_record (innerid, custid, count, type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count, @type, @remark, @spare1, @createrid, @createdtime);";
+                    conn.Execute(sqlIRecord, new
+                    {
+                        innerid = Guid.NewGuid().ToString(),
+                        custid = totalModel.Custid,
+                        count = -1,
+                        type = 1,
+                        remark = "正常刷新：减1次",
+                        createrid= totalModel.Custid,
+                        createdtime = DateTime.Now
+                    }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("刷新车辆异常：" + ex.Message, TraceEventType.Information);
+                    return 0;
+                }
             }
-            catch (Exception ex)
-            {
-                return 0;
-            }
-            return 1;
         }
 
         /// <summary>
-        /// 刷新车辆置顶
+        /// 置顶车辆
         /// </summary>
         /// <param name="carid">车辆id</param>
         /// <returns>1.操作成功</returns>
-        public int RefreshCarTop(string carid)
+        public int PushUpCar(string carid)
         {
-            const string sql = @"set @num=(select max(istop) as num from car_info)+1;
-                                update car_info set istop = @num where innerid=@carid;";
-            try
+            using (var conn = Helper.GetConnection())
             {
-                Helper.Execute(sql, new { carid });
+                const string sqlSelectTotal = "select b.topnum,b.custid from car_info as a inner join cust_total_info as b on a.custid=b.custid where a.innerid=@carid;";
+                var totalModel = conn.Query<CustomerTotalModel>(sqlSelectTotal, new { carid }).FirstOrDefault();
+                if (totalModel == null || totalModel.Topnum == 0)
+                {
+                    return 401;
+                }
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //更新Top数值
+                    const string sql = @"set @maxtop=(select max(istop) as num from car_info where istop>1) + 1;
+                                 update car_info set istop = @maxtop where innerid=@carid;";
+                    conn.Execute(sql, new { carid }, tran);
+
+                    //更新Top剩余次数
+                    const string sqlUt = "update cust_total_info set topnum=topnum-1 where custid=@custid;";
+                    conn.Execute(sqlUt, new { custid = totalModel.Custid }, tran);
+
+                    //保存刷新次数变更记录
+                    const string sqlIRecord = "insert into cust_total_record (innerid, custid, count, type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count, @type, @remark, @spare1, @createrid, @createdtime);";
+                    conn.Execute(sqlIRecord, new
+                    {
+                        innerid = Guid.NewGuid().ToString(),
+                        custid = totalModel.Custid,
+                        count = -1,
+                        type = 2,
+                        remark = "正常置顶：减1次",
+                        createrid = totalModel.Custid,
+                        createdtime = DateTime.Now
+                    }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("顶车辆异常：" + ex.Message, TraceEventType.Information);
+                    return 0;
+                }
             }
-            catch (Exception ex) 
-            {
-                return 0;
-            }
-            return 1;
         }
 
         /// <summary>
@@ -1091,6 +1155,24 @@ namespace CCN.Modules.Car.DataAccess
                 return 0;
             }
             return 1;
+        }
+
+        /// <summary>
+        /// 获取会员的次数
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public CustomerTotalModel GetTotalByCarid(string carid)
+        {
+            const string sql = "select b.refreshnum,b.topnum from car_info as a inner join cust_total_info as b on a.custid=b.custid where a.innerid=@carid;";
+            try
+            {
+                return Helper.Query<CustomerTotalModel>(sql, new { carid }).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         #region 赞不用

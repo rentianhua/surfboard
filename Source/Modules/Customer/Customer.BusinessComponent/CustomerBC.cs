@@ -404,6 +404,68 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            var result = DataAccess.UpdateCustTotalCount(custid, type, count, oper);
+            
+            var userid = ApplicationContext.Current.UserId;
+            Task.Run(() =>
+            {
+                if (result <= 0)
+                    return;
+
+                var desc = "";
+                var o = oper == 1 ? "加" : "减";
+                switch (type)
+                {
+                    case 1:
+                        desc = $"变更刷新次数：{o}{count}";
+                        break;
+                    case 2:
+                        desc = $"变更置顶次数：{o}{count}";
+                        break;
+                    case 3:
+                        desc = $"变更可用积分：{o}{count}";
+                        break;
+                }
+
+                DataAccess.SaveTotalRecord(new CustTotalRecordModel
+                {
+                    Innerid = Guid.NewGuid().ToString(),
+                    Count = (oper == 1 ? count : -count),
+                    Type = type,
+                    Createrid = userid,
+                    Creatertime = DateTime.Now,
+                    Custid = custid,
+                    Remark = desc
+                });
+            });
+
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendWelfare(int refreshnum, int topnum)
+        {
+            var result = DataAccess.SendWelfare(refreshnum, topnum);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
         #region 用户认证
 
         /// <summary>
@@ -995,7 +1057,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return JResult._jResult(402,"不能重复评论");
             }
 
-            var custModel = DataAccess.GetCustByMobile(model.Mobile);
+            var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
             if (custModel != null)
             {
                 //设置会员头像

@@ -192,6 +192,15 @@ namespace CCN.Resource.Areas.System.Controllers
         #endregion
 
         #endregion
+        
+        /// <summary>
+        /// 用户列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult SysJob()
+        {
+            return View();
+        }
 
     }
 }

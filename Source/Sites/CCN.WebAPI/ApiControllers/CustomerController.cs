@@ -762,8 +762,8 @@ namespace CCN.WebAPI.ApiControllers
         }
         #endregion
 
-        #region  入驻公司
-        
+        #region  车信评（入驻公司）
+
         /// <summary>
         /// 公司列表
         /// </summary>
@@ -832,8 +832,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.GetCommentPageList(query);
         }
-
-
+        
         /// <summary>
         /// 导入企业信息
         /// </summary>

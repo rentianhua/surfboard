@@ -1,9 +1,13 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using CCN.Modules.Customer.BusinessComponent;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
@@ -16,6 +20,7 @@ namespace CCN.Modules.Customer.BusinessService
     /// </summary>
     public class CustomerManagementService : ServiceBase<CustomerBC>, ICustomerManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// </summary>
         public CustomerManagementService(CustomerBC bc)
@@ -179,6 +184,49 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateCustType(string innerid)
         {
             return BusinessComponent.UpdateCustType(innerid);
+        }
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            return BusinessComponent.UpdateCustTotalCount(custid, type, count, oper);            
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendWelfare(int refreshnum, int topnum)
+        {
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.SendWelfare(refreshnum, topnum);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("发福利异常BusinessService", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "发福利异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         #endregion
@@ -436,7 +484,7 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
-        #region 入驻公司
+        #region 车信评（入驻公司）
 
 
         /// <summary>

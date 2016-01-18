@@ -152,7 +152,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 评论人手机号
         /// </summary>
-        public string Mobile { get; set; }
+        public long Mobile { get; set; }
 
         /// <summary>
         /// 头像

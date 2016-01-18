@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarBoutiqueModel.cs" />
+    <Compile Include="CarCustomerModel.cs" />
     <Compile Include="CarEvaluateModel.cs" />
     <Compile Include="CarInfoModel.cs" />
     <Compile Include="CarPictureModel.cs" />

@@ -1,0 +1,66 @@
+﻿
+----------------------header--------------------------
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[ERROR] [2016-01-15 15:36:46,237] -[test] 
+[ERROR] [2016-01-15 15:38:54,304] -[test] 
+[ERROR] [2016-01-15 15:38:54,310] -[test] 
+[ERROR] [2016-01-15 15:38:54,312] -[test] 
+[ERROR] [2016-01-15 15:38:54,319] -[test] 
+[ERROR] [2016-01-15 15:38:54,322] -[test] 
+[ERROR] [2016-01-15 15:38:54,327] -[test] 
+[ERROR] [2016-01-15 15:38:54,333] -[test] 
+[ERROR] [2016-01-15 15:38:54,336] -[test] 
+[ERROR] [2016-01-15 15:38:54,341] -[test] 
+[ERROR] [2016-01-15 15:38:54,343] -[test] 
+[ERROR] [2016-01-15 15:39:30,959] -[test] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[ERROR] [2016-01-15 16:03:18,328] -[controller test] 
+[ERROR] [2016-01-15 16:03:18,336] -[dao test] 
+[ERROR] [2016-01-15 16:03:20,138] -[controller test] 
+[ERROR] [2016-01-15 16:03:20,139] -[dao test] 
+[ERROR] [2016-01-15 16:03:21,214] -[controller test] 
+[ERROR] [2016-01-15 16:03:21,215] -[dao test] 
+[ERROR] [2016-01-15 16:03:22,401] -[controller test] 
+[ERROR] [2016-01-15 16:03:22,403] -[dao test] 
+[ERROR] [2016-01-15 16:04:22,486] -[controller test] 
+[ERROR] [2016-01-15 16:04:44,419] -[dao test] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[ERROR] [2016-01-15 16:11:09,084] -[controller test] 
+[ERROR] [2016-01-15 16:11:11,913] -[dao test] 
+System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.Convert.ToInt32(String value)
+   at CCN.Modules.Customer.DataAccess.CustomerDA.SendWelfare(Int32 refreshnum, Int32 topnum) in E:\github\surfboard\Source\Modules\Customer\Customer.DataAccess\CustomerDA.cs:line 514
+[ERROR] [2016-01-15 16:12:44,684] -[controller test] 
+[ERROR] [2016-01-15 16:12:48,539] -[dao test] 
+System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.Convert.ToInt32(String value)
+   at CCN.Modules.Customer.DataAccess.CustomerDA.SendWelfare(Int32 refreshnum, Int32 topnum) in E:\github\surfboard\Source\Modules\Customer\Customer.DataAccess\CustomerDA.cs:line 514
+[ERROR] [2016-01-15 16:12:50,820] -[controller test] 
+[ERROR] [2016-01-15 16:12:50,843] -[dao test] 
+System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.Convert.ToInt32(String value)
+   at CCN.Modules.Customer.DataAccess.CustomerDA.SendWelfare(Int32 refreshnum, Int32 topnum) in E:\github\surfboard\Source\Modules\Customer\Customer.DataAccess\CustomerDA.cs:line 514
+[ERROR] [2016-01-15 16:12:52,651] -[controller test] 
+[ERROR] [2016-01-15 16:12:52,686] -[dao test] 
+System.FormatException: Input string was not in a correct format.
+   at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberFormatInfo info, Boolean parseDecimal)
+   at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+   at System.Convert.ToInt32(String value)
+   at CCN.Modules.Customer.DataAccess.CustomerDA.SendWelfare(Int32 refreshnum, Int32 topnum) in E:\github\surfboard\Source\Modules\Customer\Customer.DataAccess\CustomerDA.cs:line 514
+
+----------------------footer--------------------------

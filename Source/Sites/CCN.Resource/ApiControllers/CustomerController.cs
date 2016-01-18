@@ -352,6 +352,38 @@ namespace CCN.Resource.ApiControllers
         }
         #endregion
 
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        [Route("UpdateCustTotalCount")]
+        [HttpGet]
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            return _custservice.UpdateCustTotalCount(custid, type, count, oper);
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        [Route("SendWelfare")]
+        [HttpGet]
+        public JResult SendWelfare(int refreshnum = 0, int topnum = 0)
+        {
+            LoggerFactories.CreateLogger().Write("controller test",TraceEventType.Error);
+            //return JResult._jResult(0,"");
+            return _custservice.SendWelfare(refreshnum, topnum);
+        }
+
+        #endregion
+
         #region 用户认证
 
         /// <summary>
@@ -624,7 +656,8 @@ namespace CCN.Resource.ApiControllers
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
+
         /// <summary>
         /// 
         /// </summary>
