@@ -242,7 +242,46 @@ namespace CCN.Resource.ApiControllers
         [HttpPost]
         public JResult DealCar([FromBody] CarInfoModel model)
         {
-            return _carervice.DealCar(model);
+            var result = _carervice.DealCar(model);
+
+            #region 车辆结案送积分
+
+            if (result.errcode == 0)
+            {
+                //获取会员id
+                var custid = ApplicationContext.Current.UserId;
+                Task.Run(() =>
+                {
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        LoggerFactories.CreateLogger().Write("车辆结案送积分:会员id空", TraceEventType.Warning);
+                        return;
+                    }
+
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+
+                    rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = custid,
+                        Type = 1,
+                        Point = 1000,
+                        Remark = "车辆结案送积分",
+                        Sourceid = 6
+                    });
+
+                    //结案送礼券
+                    //rewardsservice.SendCoupon(new SendCouponModel()
+                    //{
+                    //    Custid = custid,
+                    //    ActionType = 2,
+                    //    Sourceid = 4
+                    //});
+                });
+            }
+
+            #endregion
+
+            return result;
         }
 
         /// <summary>

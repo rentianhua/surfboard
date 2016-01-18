@@ -777,5 +777,44 @@ namespace CCN.WebAPI.ApiControllers
 
 
         #endregion
+
+        #region 车辆悬赏
+
+        /// <summary>
+        /// 车辆悬赏列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("CarRewardPageList")]
+        [HttpPost]
+        public BasePageList<CarRewardViewModel> CarRewardPageList(CarRewardQueryModel query)
+        {
+            return _carervice.CarRewardPageList(query);
+        }
+
+        /// <summary>
+        /// 添加车辆悬赏信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarReward")]
+        [HttpPost]
+        public JResult AddCarReward([FromBody] CarReward model)
+        {
+            return _carervice.AddCarReward(model);
+        }
+
+        /// <summary>
+        /// 车辆悬赏推荐
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCarRewardPageList")]
+        [HttpPost]
+        public BasePageList<CarInfoListViewModel> GetCarRewardPageList(CarRewardQueryModel query)
+        {
+            return _carervice.GetCarRewardPageList(query);
+        }
+        #endregion
     }
 }

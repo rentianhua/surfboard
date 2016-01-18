@@ -58,7 +58,7 @@
 
 
     function QueryList() {
-        var json = { custid: custid, brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val() };
+        var json = { custid: custid, brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val(), status: $("#selectstatus").val() };
         $("#carlist").getPageList(20, "/api/Car/GetCarPageList", json, LoadData);
     }
 
@@ -85,6 +85,7 @@
             str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;<a href='javascript:;' onclick=\"AddSeeCount('" + val.Innerid + "',this);\">+</a></td>";
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/caredit?custid=" + custid + "&carid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a href='javascript:;' onclick=\"DealCar('" + val.Innerid + "',this);\">结案</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
                 "<a href='javascript:;' onclick=\"RefreshCar('" + val.Innerid + "');\">刷新</a> " +
                 "<a href='javascript:;' onclick=\"PushUpCar('" + val.Innerid + "');\"> 顶 </a> " +
@@ -156,15 +157,40 @@
         $(obj).after($("#deleteDiv").removeClass("hide"));
 
         $("#delsubmit").unbind("click").bind("click", function () {
-            var json = { Innerid: id, deletedesc: $("#deldesc").val() };
+            var json = { Innerid: id, dealdesc: $("#deldesc").val() };
             $.post("/api/Car/DeleteCar", json, function (delres) {
                 if (delres.errcode === 0) {
-                    //alert("删除成功");
                     getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
                 } else {
                     alert("删除失败");
                 }
             });
+        });
+    }
+
+    //车辆结案
+    function DealCar(id, obj) {
+
+        $(obj).after($("#dealDiv").removeClass("hide"));
+
+        $("#dealsubmit").unbind("click").bind("click", function () {
+            if ($.trim($("#dealprice").val()).length > 0 && !re.test($("#dealprice").val())) {
+                alert("价格只能输入数值[最多两位小数]！");
+                return false;
+            }
+            if ($("#dealdesc").val() == "" || $("#dealprice").val()=="") {
+                alert("请将价格和描述填写完整！");
+            }
+            else {
+                var json = { Innerid: id, deletedesc: $("#dealdesc").val(), dealprice: $("#dealprice").val() };
+                $.post("/api/Car/DealCar", json, function (dealres) {
+                    if (dealres.errcode === 0) {
+                        getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+                    } else {
+                        alert("结案失败");
+                    }
+                });
+            }
         });
     }
 
@@ -185,31 +211,49 @@
 </script>
 <div style="margin: 0 auto;">
     <div style="font-size: 18px; font-weight: bold; text-align: center">车辆列表 @ViewBag.custname</div>
-    <table style="margin-bottom: 5px;">
-        <tr>
-            <td>
-                品牌/车系/车型：
-                <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                    <option value="0">请选择</option>
-                </select>
-                <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
-                    <option value="0">请选择</option>
-                </select>
-                <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
-                    <option value="0">请选择</option>
-                </select>
-                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
-            </td>
-            <td style="text-align: right">
-                <div>
 
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-9 col-sm-9 col-xs-9">
+                <div class="form-group">
+                    <label for="nickname" class="col-sm-2 control-label no-padding-right searchLayout">品牌/车系/车型：</label>
+                    <div class="col-sm-8">
+                        <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                            <option value="0">请选择</option>
+                        </select>
+                        <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                            <option value="0">请选择</option>
+                        </select>
+                        <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
+                            <option value="0">请选择</option>
+                        </select>
+                    </div>
                 </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+            </div>
+        </div>
+        <div class="row" style="margin-top:5px">
+            <div class="col-lg-9 col-sm-9 col-xs-9">
+                <div class="form-group">
+                    <label for="nickname" class="col-sm-2 control-label no-padding-right searchLayout">状态：</label>
+                    <div class="col-sm-7">
+                        <select id="selectstatus" style="width:300px;">
+                            <option>请选择</option>
+                            <option value="1">在售</option>
+                            <option value="2">已售</option>
+                        </select>
+                        <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                        <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                
+            </div>
+        </div>
+    </div>
 
-                @*<a href='/customer/customer/customerlist'>返回</a>*@
-            </td>
-        </tr>
-    </table>
     <table class="table table-striped table-hover table-bordered" id="carlist">
         <thead>
             <tr role="row">
@@ -236,6 +280,14 @@
     描述:
     <input type="text" id="deldesc" maxlength="200" />
     <input type="button" value="确定" id="delsubmit" />
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
+</div>
+<div id="dealDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
+    金额:
+    <input type="text" id="dealprice" maxlength="10" />
+    描述:
+    <input type="text" id="dealdesc" maxlength="200" />
+    <input type="button" value="确定" id="dealsubmit" />
     <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>
 

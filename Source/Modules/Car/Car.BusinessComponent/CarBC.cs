@@ -53,7 +53,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var list = DataAccess.SearchCarPageListTop(query, out strwhere);
 
             //判断是否设置条件，如果没有条件表示所有的查询所有的置顶数据，到了最后一页也不需要补齐数据
-            if (string.IsNullOrWhiteSpace(strwhere))  
+            if (string.IsNullOrWhiteSpace(strwhere))
                 return list;
 
             var fill = 0;       //标识是否需要补数据
@@ -87,7 +87,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 PageIndex = query.Echo ?? 1, //第几次进入最后一页，补齐的时候就代表第几页(重要字段)
                 PageSize = fill
             });
-            
+
             if (!filllist.aaData.Any())
                 return list;
 
@@ -358,7 +358,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return jResult;
         }
-        
+
         /// <summary>
         /// 车辆估值
         /// </summary>
@@ -450,15 +450,15 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
             {
-                return JResult._jResult(401,"参数不完整");
+                return JResult._jResult(401, "参数不完整");
             }
-            LoggerFactories.CreateLogger().Write("添加车辆",TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("添加车辆", TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
             model.createdtime = DateTime.Now;
 
             var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            model.refreshtime = (long) ts.TotalSeconds;
+            model.refreshtime = (long)ts.TotalSeconds;
 
             model.istop = 0;            ////
 
@@ -807,7 +807,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return JResult._jResult(0, "删除成功");
         }
-        
+
         /// <summary>
         /// 获取车辆已有图片
         /// </summary>
@@ -872,9 +872,9 @@ namespace CCN.Modules.Car.BusinessComponent
 
             //获取即将删除的图片
             var picedList = DataAccess.GetCarPictureByIds(picModel.IdList).ToList();
-            
+
             var result = DataAccess.DelCarPictureList(picModel.IdList, picModel.Carid);
-            
+
             switch (result)
             {
                 case 402:
@@ -925,7 +925,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 ? JResult._jResult(400, "批量添加图片失败")
                 : JResult._jResult(0, "批量添加图片成功");
         }
-        
+
         /// <summary>
         /// 批量添加车辆图片(添加)(微信端使用)
         /// </summary>
@@ -978,7 +978,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 ? JResult._jResult(400, "批量添加图片失败")
                 : JResult._jResult(0, "批量添加图片成功");
         }
-        
+
         /// <summary>
         /// 批量保存图片(添加+删除)
         /// </summary>
@@ -1066,14 +1066,14 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             if (string.IsNullOrWhiteSpace(model?.Custid) || string.IsNullOrWhiteSpace(model.Carid))
             {
-                return JResult._jResult(401,"参数不完整！");
+                return JResult._jResult(401, "参数不完整！");
             }
 
             if (DataAccess.CheckCollection(model) != null)
             {
                 return JResult._jResult(402, "重复收藏！");
             }
-            
+
             model.Innerid = Guid.NewGuid().ToString();
             model.Createdtime = DateTime.Now;
             var result = DataAccess.AddCollection(model);
@@ -1123,7 +1123,74 @@ namespace CCN.Modules.Car.BusinessComponent
             {
                 item.isfriend = -1;
             }
-            
+
+            return list;
+        }
+
+        #endregion
+
+        #region 车辆悬赏
+
+        /// <summary>
+        /// 车辆悬赏列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarRewardViewModel> CarRewardPageList(CarRewardQueryModel query)
+        {
+            var list = DataAccess.CarRewardPageList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 添加车辆悬赏信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarReward(CarReward model)
+        {
+            var result = DataAccess.AddCarReward(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 车辆悬赏推荐
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetCarRewardPageList(CarRewardQueryModel query)
+        {
+            if (query == null)
+            {
+                return new BasePageList<CarInfoListViewModel>();
+            }
+            CarQueryModel model = new CarQueryModel();
+            model.brand_id = query.brand_id;
+            model.series_id = query.series_id;
+            model.provid = query.provid;
+            model.cityid = query.cityid;
+            //车龄区间
+            string[] coty = new string[2];
+            if (!string.IsNullOrWhiteSpace(query.mileage)) {
+                coty = query.mileage.Split('-');
+                model.minprice = Convert.ToInt32(coty[0]);
+                model.maxprice = Convert.ToInt32(coty[1]);
+            }
+            //里程区间
+            string[] mileage = new string[2];
+            if (!string.IsNullOrWhiteSpace(query.mileage)) {
+                model.mincoty= Convert.ToInt32(coty[0]);
+                model.maxcoty = Convert.ToInt32(coty[1]);
+            }
+            //价格区间
+            string[] price = new string[2];
+            if (!string.IsNullOrWhiteSpace(query.mileage)) {
+                price = query.mileage.Split('-');
+                model.minbuyprice = Convert.ToDecimal(coty[0]);
+                model.maxbuyprice = Convert.ToDecimal(coty[1]);
+            }
+
+            var list = DataAccess.GetCarRewardPageList(model);
             return list;
         }
 
