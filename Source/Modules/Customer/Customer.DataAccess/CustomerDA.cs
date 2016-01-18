@@ -309,10 +309,10 @@ namespace CCN.Modules.Customer.DataAccess
                 ? $" and status={query.Status}"
                 : "");
             //会员ID
-            if (!string.IsNullOrWhiteSpace(query.innerid))
-            {
-                sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.innerid}')");
-            }
+            //if (!string.IsNullOrWhiteSpace(query.innerid))
+            //{
+            //    sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.innerid}')");
+            //}
             //手机号
             if (!string.IsNullOrWhiteSpace(query.Mobile))
             {
