@@ -2217,9 +2217,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarReward(CarReward model)
         {
             const string sql = @"INSERT INTO `car_reward`
-                                (`innerid`, `brand_id`, `series_id`, `mileage`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`, `createdid`, `createdtime`, `modifiedtime`)
+                                (`innerid`, `brand_id`, `series_id`, `mileage`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`,`qrcode`, `createdid`, `createdtime`, `modifiedtime`)
                                 VALUES
-                                (@innerid, @brand_id, @series_id, @mileage, @coty, @price, @provid, @cityid, @status, @username, @usermobile, @createdid, @createdtime, @modifiedtime);";
+                                (uuid(), @brand_id, @series_id, @mileage, @coty, @price, @provid, @cityid, @status, @username, @usermobile,@qrcode, @createdid, @createdtime, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
