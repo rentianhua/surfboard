@@ -169,6 +169,18 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.GetProvListEx(initial);
         }
 
+        /// <summary>
+        /// 获取所有部门
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetAllCity")]
+        [HttpGet]
+        public JResult GetAllCity()
+        {
+            BaseDepartmentModel model = new BaseDepartmentModel();
+            return _baseservice.GetAllDepartment(model);
+        }
+
         #endregion
 
         #region 品牌/车系/车型

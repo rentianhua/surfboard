@@ -11,7 +11,7 @@
     });
 
     function QueryList() {
-        var json = { Mobile: $("#mobile").val() };
+        var json = { Mobile: $("#mobile").val(), Custname: $("#custname").val() };
         if ("@ViewBag.userid" != null && "@ViewBag.userid" != "")
         {
             json.innerid = "@ViewBag.userid";
@@ -118,11 +118,18 @@
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="custname" class="col-sm-4 control-label no-padding-right searchLayout">昵称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="custname" placeholder="昵称">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                 <a onclick="getBodyHtml('mainbody', '/customer/customer/customeradd');" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">
-            </div>
+            
             <div class="col-lg-3 col-sm-3 col-xs-3">
 
             </div>
