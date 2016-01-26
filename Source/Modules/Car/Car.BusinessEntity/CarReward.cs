@@ -78,6 +78,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public string usermobile { get; set; }
 
         /// <summary>
+        /// 图片
+        /// </summary>
+        public string qrcode { get; set; }
+
+        /// <summary>
         /// 创建人
         /// </summary>
         public string createdid { get; set; }
@@ -101,6 +106,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 备注
         /// </summary>
         public string remark { get; set; }
+
+        /// <summary>
+        /// 预留字段1
+        /// </summary>
+        public string selffield1 { get; set; }
     }
 
     /// <summary>
