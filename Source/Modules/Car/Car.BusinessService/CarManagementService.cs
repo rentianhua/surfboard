@@ -298,7 +298,7 @@ namespace CCN.Modules.Car.BusinessService
             //return BusinessComponent.AddCarPicture(model);
             return BusinessComponent.AddCarPictureEx(model);
         }
-        
+
         /// <summary>
         /// 刪除车辆图片
         /// </summary>
@@ -328,7 +328,7 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.ExchangePictureSort(listPicture);
         }
-        
+
         /// <summary>
         /// 批量保存图片(删除)
         /// </summary>
@@ -434,6 +434,17 @@ namespace CCN.Modules.Car.BusinessService
         public JResult AddCarReward(CarReward model)
         {
             return BusinessComponent.AddCarReward(model);
+        }
+
+        /// <summary>
+        /// 更新状态
+        /// </summary>
+        /// <param name="status">状态值</param>
+        /// <param name="innerid">主键</param>
+        /// <returns></returns>
+        public JResult UpdateCarRewardStatus(int status, string innerid)
+        {
+            return BusinessComponent.UpdateCarRewardStatus(status, innerid);
         }
 
         /// <summary>
