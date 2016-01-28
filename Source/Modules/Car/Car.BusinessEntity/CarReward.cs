@@ -213,5 +213,35 @@ namespace CCN.Modules.Car.BusinessEntity
     /// 车辆悬赏显示实体
     /// </summary>
     public class CarRewardViewModel : CarReward
-    { }
+    {
+        /// <summary>
+        /// 品牌名称
+        /// </summary>
+        public string brandname { get; set; }
+
+        /// <summary>
+        /// 品牌图片
+        /// </summary>
+        public string logurl { get; set; }
+
+        /// <summary>
+        /// 车系名称
+        /// </summary>
+        public string seriesname { get; set; }
+
+        /// <summary>
+        /// 车型
+        /// </summary>
+        public string modelname { get; set; }
+
+        /// <summary>
+        /// 省份名称
+        /// </summary>
+        public string provname { get; set; }
+
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string cityname { get; set; }
+    }
 }

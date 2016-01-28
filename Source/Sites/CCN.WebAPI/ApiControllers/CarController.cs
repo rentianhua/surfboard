@@ -196,7 +196,7 @@ namespace CCN.WebAPI.ApiControllers
 
             return result;
         }
-        
+
         /// <summary>
         /// 后台添加车辆
         /// </summary>
@@ -243,7 +243,7 @@ namespace CCN.WebAPI.ApiControllers
                 {
                     custinfo = (CustModel)custservice.GetCustByMobile(model.mobile).errmsg;
                 }
-                
+
                 if (custinfo == null) //会员不存在
                 {
                     var password = RandomUtility.GetRandom(6);
@@ -315,7 +315,7 @@ namespace CCN.WebAPI.ApiControllers
             var jresult = custservice.UpdateCustType(custid);
             if (jresult.errcode == 0)
             {
-                var custModel = (CustModel) jresult.errmsg;
+                var custModel = (CustModel)jresult.errmsg;
                 if (!string.IsNullOrWhiteSpace(custModel?.Mobile))
                 {
                     ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>().SendVerification(new BaseVerification
@@ -362,7 +362,7 @@ namespace CCN.WebAPI.ApiControllers
                         LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
                         return;
                     }
-                    
+
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -406,7 +406,7 @@ namespace CCN.WebAPI.ApiControllers
                     }
 
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                    
+
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -476,7 +476,7 @@ namespace CCN.WebAPI.ApiControllers
                 //获取会员id
                 var custid = ApplicationContext.Current.UserId;
                 Task.Run(() =>
-                {                    
+                {
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         LoggerFactories.CreateLogger().Write("分享送积分:会员id空", TraceEventType.Warning);
@@ -789,6 +789,19 @@ namespace CCN.WebAPI.ApiControllers
         public JResult AddCarReward([FromBody] CarReward model)
         {
             return _carervice.AddCarReward(model);
+        }
+
+        /// <summary>
+        /// 更新状态
+        /// </summary>
+        /// <param name="status">状态值</param>
+        /// <param name="innerid">主键</param>
+        /// <returns></returns>
+        [Route("UpdateCarRewardStatus")]
+        [HttpGet]
+        public JResult UpdateCarRewardStatus(int status, string innerid)
+        {
+            return _carervice.UpdateCarRewardStatus(status, innerid);
         }
 
         /// <summary>

@@ -311,7 +311,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 {"zone", carInfo.cityid.ToString()}
             };
 
-            var juhe = new JuheUtility();
+            var juhe = new Che300Utility();
             var result5 = juhe.GetUsedCarPrice(paramList);
             paramList["mile"] = "10";
             var result10 = juhe.GetUsedCarPrice(paramList);
@@ -392,7 +392,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 {"zone", carInfo.cityid.ToString()}
             };
 
-            var juhe = new JuheUtility();
+            var juhe = new Che300Utility();
             var result = juhe.GetUsedCarPrice(paramList);
 
             if (string.IsNullOrWhiteSpace(result))
@@ -1139,6 +1139,18 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         /// <summary>
+        /// 更新状态
+        /// </summary>
+        /// <param name="status">状态值</param>
+        /// <param name="innerid">主键</param>
+        /// <returns></returns>
+        public JResult UpdateCarRewardStatus(int status, string innerid)
+        {
+            var result = DataAccess.UpdateCarRewardStatus(status, innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
         /// 车辆悬赏推荐
         /// </summary>
         /// <param name="query">查询条件</param>
@@ -1156,20 +1168,23 @@ namespace CCN.Modules.Car.BusinessComponent
             model.cityid = query.cityid;
             //车龄区间
             string[] coty = new string[2];
-            if (!string.IsNullOrWhiteSpace(query.mileage)) {
+            if (!string.IsNullOrWhiteSpace(query.mileage))
+            {
                 coty = query.mileage.Split('-');
                 model.minprice = Convert.ToInt32(coty[0]);
                 model.maxprice = Convert.ToInt32(coty[1]);
             }
             //里程区间
             string[] mileage = new string[2];
-            if (!string.IsNullOrWhiteSpace(query.mileage)) {
-                model.mincoty= Convert.ToInt32(coty[0]);
+            if (!string.IsNullOrWhiteSpace(query.mileage))
+            {
+                model.mincoty = Convert.ToInt32(coty[0]);
                 model.maxcoty = Convert.ToInt32(coty[1]);
             }
             //价格区间
             string[] price = new string[2];
-            if (!string.IsNullOrWhiteSpace(query.mileage)) {
+            if (!string.IsNullOrWhiteSpace(query.mileage))
+            {
                 price = query.mileage.Split('-');
                 model.minbuyprice = Convert.ToDecimal(coty[0]);
                 model.maxbuyprice = Convert.ToDecimal(coty[1]);
