@@ -1,0 +1,132 @@
+﻿@{
+
+}
+<script type="text/javascript">
+
+    var auctionid = "@ViewBag.auctionid";
+
+    $(function () {
+        QueryList();
+        $("#btnAdd").click(function () {
+            getBodyHtml('mainbody', "/auction/auction/auctiondepositedit?auctionid=" + auctionid);
+        });
+    });
+
+    function QueryList() {
+        var radiobusiness = $("input:radio[name='radiobusiness']:checked").val();
+        var radiotype = $("input:radio[name='radiotype']:checked").val();
+        var json = { auctionid: auctionid};
+        if (radiobusiness !== "0") {
+            json.Type = radiobusiness;
+        }
+        if (radiotype !== "0") {
+            json.Payer = radiotype;
+        }
+        $("#depositlist").getPageList(20, "/api/auction/GetAuctionDepositList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#depositlist tbody").empty();
+        var str = "";
+        $.each(data, function (key, val) {
+
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + (val.Type === 1 ? "买家" : "卖家") + "</td>";
+            str += "<td>" + (val.Payer === 1 ? "收款" : "退款") + "</td>";
+            str += "<td>" + val.Contacts + "</td>";
+            str += "<td>" + val.Mobile + "</td>";
+            str += "<td>" + val.Dpsamount + "</td>";
+            str += "<td>" + val.Dpsserialnum + "</td>";
+            str += "<td>" + val.Dpsaccount + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+
+            var btn = "";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionDepositEdit?auctionid=" + auctionid + "&depid=" + val.Innerid + "');\"> 修改 </a> ";
+            btn += "<a href='javascript:;' onclick=\"DeleteDeposit('" + val.Innerid + "');\"> 删除 </a> ";
+            str += "<td>" + btn + "</td></tr>";
+            $("#depositlist tbody").append(str);
+        });
+    }
+
+    function DeleteDeposit(id) {
+
+        if (!confirm("确认删除?")) {
+            return;
+        }
+
+        $.ajax({
+            url: "/api/auction/DeleteDeposit?innerid=" + id,
+            type: 'delete',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                if (data.errcode === 0) {
+                    QueryList();
+                } else {
+                    alert("操作失败");
+                }
+            }
+        });
+    }
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">交付押金人员列表</div><br/>
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    <label for="" class="col-sm-6 control-label no-padding-right" style="text-align: right">买卖方：</label>
+                    <div class="col-sm-6 rd">
+                        <input type="radio" name="radiobusiness" id="rbusiness" value="0" checked="checked" />
+                        <label for="rbusiness">全部</label> 
+                        <input type="radio" name="radiobusiness" id="rbuy" value="1"/>
+                        <label for="rbuy">买方</label> 
+                        <input type="radio" name="radiobusiness" id="rsell" value="2"/>
+                        <label for="rsell">卖方</label> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <div class="form-group">
+                    <label for="" class="col-sm-6 control-label no-padding-right" style="text-align: right">类型：</label>
+                    <div class="col-sm-6 rd">
+                        <input type="radio" name="radiotype" id="rtype" value="0" checked="checked" />
+                        <label for="rtype">全部</label> 
+                        <input type="radio" name="radiotype" id="rcollect" value="1"/>
+                        <label for="rcollect">收款</label>  
+                        <input type="radio" name="radiotype" id="rrefund" value="2"/>
+                        <label for="rrefund">退款</label> 
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-sm-4 col-xs-4">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover table-bordered" id="depositlist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>买卖方</th>
+                <th>类型</th>
+                <th>联系人</th>
+                <th>手机号</th>
+                <th>押金金额(元)</th>
+                <th>银行电子回单号</th>
+                <th>流入银行账户号</th>
+                <th>支付时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>

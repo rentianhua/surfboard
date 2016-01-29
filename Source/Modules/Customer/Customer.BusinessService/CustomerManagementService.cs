@@ -1,9 +1,13 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using CCN.Modules.Customer.BusinessComponent;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
@@ -16,6 +20,7 @@ namespace CCN.Modules.Customer.BusinessService
     /// </summary>
     public class CustomerManagementService : ServiceBase<CustomerBC>, ICustomerManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// </summary>
         public CustomerManagementService(CustomerBC bc)
@@ -179,6 +184,49 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateCustType(string innerid)
         {
             return BusinessComponent.UpdateCustType(innerid);
+        }
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            return BusinessComponent.UpdateCustTotalCount(custid, type, count, oper);            
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendWelfare(int refreshnum, int topnum)
+        {
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.SendWelfare(refreshnum, topnum);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("发福利异常BusinessService", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "发福利异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         #endregion
@@ -412,7 +460,7 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -432,6 +480,72 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult BindOpenid(string custid, string openid)
         {
             return BusinessComponent.BindOpenid(custid, openid);
+        }
+
+        #endregion
+
+        #region 车信评（入驻公司）
+
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            return BusinessComponent.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyById(string innerid)
+        {
+            return BusinessComponent.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoComment(CommentModel model)
+        {
+            return BusinessComponent.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoPraise(PraiseModel model)
+        {
+            return BusinessComponent.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            return BusinessComponent.GetCommentPageList(query);
+        }
+
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public JResult ImportCompany(string file)
+        {
+            return BusinessComponent.ImportCompany(file);
         }
 
         #endregion

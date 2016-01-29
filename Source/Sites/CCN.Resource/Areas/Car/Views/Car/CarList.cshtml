@@ -88,7 +88,8 @@
                 "<a href='javascript:;' onclick=\"DealCar('" + val.Innerid + "',this);\">结案</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
                 "<a href='javascript:;' onclick=\"RefreshCar('" + val.Innerid + "');\">刷新</a> " +
-                "<a href='javascript:;' onclick=\"DoTopCar('" + val.Innerid + "'," + val.istop + ");\">" + (val.istop == 1 ? "取消置顶" : "置顶") + "</a> " +
+                "<a href='javascript:;' onclick=\"PushUpCar('" + val.Innerid + "');\"> 顶 </a> " +
+                //"<a href='javascript:;' onclick=\"DoTopCar('" + val.Innerid + "'," + val.istop + ");\">" + (val.istop == 1 ? "取消置顶" : "置顶") + "</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
@@ -98,7 +99,24 @@
     //刷新车辆
     function RefreshCar(id) {
         $.get("/api/Car/RefreshCar?carid=" + id, function (result) {
-            if (result.errcode === 0) {
+            if (result.errcode === 401) {
+                alert("刷新次数已经用完");
+            }
+            else if (result.errcode === 0) {
+                getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+            } else {
+                alert("操作失败");
+            }
+        });
+    }
+
+    //置顶车辆
+    function PushUpCar(id) {
+        $.get("/api/Car/PushUpCar?carid=" + id, function (result) {
+            if (result.errcode === 401) {
+                alert("置顶次数已经用完");
+            }
+            else if (result.errcode === 0) {
                 getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
             } else {
                 alert("操作失败");

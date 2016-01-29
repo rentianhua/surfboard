@@ -680,7 +680,22 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult RefreshCar(string carid)
         {
             var result = DataAccess.RefreshCar(carid);
-            return JResult._jResult(result);
+            return result == 401 
+                ? JResult._jResult(401, "刷新次数已经用完") 
+                : JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpCar(string carid)
+        {
+            var result = DataAccess.PushUpCar(carid);
+            return result == 401
+                ? JResult._jResult(401, "置顶次数已经用完")
+                : JResult._jResult(result);
         }
 
         /// <summary>

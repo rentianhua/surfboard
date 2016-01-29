@@ -209,6 +209,7 @@
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\AuctionController.cs" />
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
@@ -329,6 +330,18 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
+      <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
+      <Name>Auction.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessService\Auction.BusinessService.csproj">
+      <Project>{a8669bd9-3c5a-4a1e-b1e1-9ebcf291c5df}</Project>
+      <Name>Auction.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.Interface\Auction.Interface.csproj">
+      <Project>{d2e9e2f4-1ebd-4d3a-8e23-cbb5edf5131a}</Project>
+      <Name>Auction.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
       <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
       <Name>Base.BusinessEntity</Name>

@@ -275,6 +275,16 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpCar(string carid)
+        {
+            return BusinessComponent.PushUpCar(carid);
+        }
+
+        /// <summary>
         /// 置顶或取消置顶
         /// </summary>
         /// <param name="carid">车辆id</param>

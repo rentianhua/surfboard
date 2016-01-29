@@ -205,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Auction\Models\" />
+    <Folder Include="Areas\Auction\Views\Shared\" />
     <Folder Include="Areas\Base\Models\" />
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Car\Models\" />
@@ -220,6 +222,7 @@
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\AuctionController.cs" />
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
@@ -230,6 +233,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Auction\AuctionAreaRegistration.cs" />
+    <Compile Include="Areas\Auction\Controllers\AuctionController.cs" />
     <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
     <Compile Include="Areas\Base\Controllers\BaseController.cs" />
     <Compile Include="Areas\Car\CarAreaRegistration.cs" />
@@ -912,7 +917,14 @@
     <Content Include="Plugins\UploadImg\js\jquery.min.map" />
     <Content Include="Areas\System\Views\System\SysManageCityList.cshtml" />
     <Content Include="Areas\System\Views\System\SysManageCityEdit.cshtml" />
-    <Content Include="Areas\Base\Views\Base\LotteryMain.cshtml" />
+    <Content Include="Areas\System\Views\System\SysJob.cshtml" />
+    <Content Include="Areas\Auction\Views\web.config" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarEdit.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarView.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionParticipantList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionDepositList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionDepositEdit.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
@@ -1025,6 +1037,18 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
+      <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
+      <Name>Auction.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessService\Auction.BusinessService.csproj">
+      <Project>{a8669bd9-3c5a-4a1e-b1e1-9ebcf291c5df}</Project>
+      <Name>Auction.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.Interface\Auction.Interface.csproj">
+      <Project>{d2e9e2f4-1ebd-4d3a-8e23-cbb5edf5131a}</Project>
+      <Name>Auction.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
       <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
       <Name>Base.BusinessEntity</Name>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -398,6 +399,68 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult UpdateCustType(string innerid)
         {
             var result = DataAccess.UpdateCustType(innerid);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            var result = DataAccess.UpdateCustTotalCount(custid, type, count, oper);
+            
+            var userid = ApplicationContext.Current.UserId;
+            Task.Run(() =>
+            {
+                if (result <= 0)
+                    return;
+
+                var desc = "";
+                var o = oper == 1 ? "加" : "减";
+                switch (type)
+                {
+                    case 1:
+                        desc = $"变更刷新次数：{o}{count}";
+                        break;
+                    case 2:
+                        desc = $"变更置顶次数：{o}{count}";
+                        break;
+                    case 3:
+                        desc = $"变更可用积分：{o}{count}";
+                        break;
+                }
+
+                DataAccess.SaveTotalRecord(new CustTotalRecordModel
+                {
+                    Innerid = Guid.NewGuid().ToString(),
+                    Count = (oper == 1 ? count : -count),
+                    Type = type,
+                    Createrid = userid,
+                    Creatertime = DateTime.Now,
+                    Custid = custid,
+                    Remark = desc
+                });
+            });
+
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendWelfare(int refreshnum, int topnum)
+        {
+            var result = DataAccess.SendWelfare(refreshnum, topnum);
             return JResult._jResult(result);
         }
 
@@ -952,6 +1015,169 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             var result = DataAccess.UpdateOpenid(custid, openid);
             return JResult._jResult(result);
+        }
+
+        #endregion
+
+        #region 入驻公司
+
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            return DataAccess.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyById(string innerid)
+        {
+            var model = DataAccess.GetCompanyById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoComment(CommentModel model)
+        {
+            var chkresult = DataAccess.CheckComment(model.Mobile, model.Companyid);
+
+            if (chkresult > 0)
+            {
+                return JResult._jResult(402,"不能重复评论");
+            }
+
+            var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
+            if (custModel != null)
+            {
+                //设置会员头像
+                if (!string.IsNullOrWhiteSpace(custModel.Headportrait))
+                {
+                    model.Headportrait = custModel.Headportrait;
+                }
+                else
+                {
+                    //设置会员的微信头像
+                    if (!string.IsNullOrWhiteSpace(custModel.Wechat?.Photo))
+                    {
+                        model.Headportrait = custModel.Wechat?.Photo;
+                    }
+                }
+            }
+            if (string.IsNullOrWhiteSpace(model.Headportrait))
+            {
+                //随机头像
+                var randomNumber = new Random(Guid.NewGuid().GetHashCode()).Next(1, 278);
+                model.Headportrait = string.Concat("commentheadportrait_", randomNumber, ".jpg");
+                
+                #region 修改文件名
+
+                //var num = 1;
+                //var folder = new DirectoryInfo(string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile"));
+                //foreach (var item in folder.GetFiles())
+                //{
+                //    var file = "";
+                //    if (num < 10)
+                //    {
+                //        file = "00" + num;
+                //    }
+                //    else if (num >= 10 && num < 100)
+                //    {
+                //        file = "0" + num;
+                //    }
+                //    else
+                //    {
+                //        file = num.ToString();
+                //    }
+                //    File.Move(folder + "\\" + item.Name, folder + "\\" + "commentheadportrait_" + file + ".jpg");
+                //    num ++;
+                //}
+
+                #endregion
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.DoComment(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoPraise(PraiseModel model)
+        {
+            var chkresult = DataAccess.CheckPraise(model.IP, model.Companyid);
+
+            if (chkresult > 0)
+            {
+                return JResult._jResult(402, "不能重复点赞");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.DoPraise(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            return DataAccess.GetCommentPageList(query);
+        }
+
+        
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public JResult ImportCompany(string file)
+        {
+            file = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", file);
+            var dt = ExcelHelper.ReadExcelToDataSet(file,true)?.Tables[0];
+            var result = 0;
+            if (!(dt?.Rows.Count > 0))
+                return JResult._jResult(result);
+
+            //dt = ClearEmpty(dt);
+            result = DataAccess.ImportCompany(dt);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public DataTable ClearEmpty(DataTable dt)
+        {
+            var resultDt = new DataTable();
+            for (var i = 0; i < dt.Columns.Count; i++)
+            {
+                resultDt.Columns.Add(dt.Columns[i].ColumnName);//有重载的方法，可以加入列数据的类型
+            }
+            foreach (var dr in dt.Rows.Cast<DataRow>().Where(dr => dr["CompanyName"].ToString().Trim().Length > 0))
+            {
+                resultDt.ImportRow(dr);
+            }
+            return resultDt;
         }
 
         #endregion

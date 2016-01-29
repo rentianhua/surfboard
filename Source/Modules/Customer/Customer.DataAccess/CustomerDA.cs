@@ -7,6 +7,7 @@ using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
@@ -458,6 +459,107 @@ namespace CCN.Modules.Customer.DataAccess
                     return 0;
                 }
             }
+        }
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public int UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            var sql = "";
+            var o = oper == 1 ? "+" : "-";
+            //刷新
+            if (type == 1)
+            {
+                sql = $"update cust_total_info set refreshnum=refreshnum{o}@count where custid=@custid;";
+            }
+            //置顶
+            else if (type == 2)
+            {
+                sql = $"update cust_total_info set topnum=topnum{o}@count where custid=@custid;";
+            }
+            //积分
+            else if (type == 3)
+            {
+                sql = $"update cust_total_info set currpoint=currpoint{o}@count where custid=@custid;";
+            }
+
+            var result = Helper.Execute(sql, new {count, custid});
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int SaveTotalRecord(CustTotalRecordModel model)
+        {
+            const string sql = "insert into cust_total_record (innerid, custid, count,type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count,@type, @remark, @spare1, @createrid, @createdtime);";
+            var result = Helper.Execute(sql, model);
+            return result;
+        }
+        
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public int SendWelfare(int refreshnum, int topnum)
+        {
+            //try
+            //{
+            //    var dddd = Convert.ToInt32("qqqqq");
+            //}
+            //catch (Exception ex)
+            //{
+            //    LoggerFactories.CreateLogger().Write("dao test", TraceEventType.Error, ex);
+            //}
+            
+            //return 1;
+            const string sql =
+                "select custid from cust_total_info where custid not in (select custid from cust_total_record where `type`=100 and date_format(createdtime,'%Y-%m')=date_format(now(),'%Y-%m'));";
+            const string u = "update cust_total_info set refreshnum=refreshnum+@refreshcount,topnum=topnum+@topcount where custid=@custid;";
+            const string i = "insert into cust_total_record (innerid, custid, count, type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count, @type, @remark, @spare1, @createrid, @createdtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var list = conn.Query<string>(sql).ToList();
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var item in list)
+                    {
+                        //更新刷新和置顶次数
+                        conn.Execute(u, new { refreshcount = refreshnum, topcount = topnum, custid = item }, tran);
+                        //保存更新记录
+                        conn.Execute(i, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            count = 0,
+                            custid = item,
+                            type = 100,
+                            remark = $"发福利记录：刷新次数增加{refreshnum}次，置顶次数增加{topnum}次",
+                            createdtime = DateTime.Now
+                        }, tran);
+                    }
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("发福利异常：" + ex.Message, TraceEventType.Information);
+                }
+            }
+
+            return 1;
         }
 
         #endregion
@@ -1147,5 +1249,193 @@ namespace CCN.Modules.Customer.DataAccess
         }
 
         #endregion
+
+        #region 车信评（入驻公司）
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public int ImportCompany(DataTable dt)
+        {
+            const string sql = @"INSERT INTO settled_info
+                                (innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES (@innerid, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var model = new CompanyModel();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        model.CompanyName = row["CompanyName"].ToString();
+                        model.Address = row["Address"].ToString();
+                        model.OperName = row["OperName"].ToString();
+                        model.OriginalRegistCapi = row["OriginalRegistCapi"].ToString();
+                        model.Scope = row["Scope"].ToString();
+                        model.CompanyStatus = row["CompanyStatus"].ToString();
+                        model.OfficePhone = row["OfficePhone"].ToString();
+                        model.Innerid = Guid.NewGuid().ToString();
+                        model.Createdtime = DateTime.Now;
+                        model.Createrid = "";
+                        conn.Execute(sql, model, tran);
+                    }
+                    
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("导入公司数据失败：" + ex.Message, TraceEventType.Information);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_info ";
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and address like '%{query.Address}%'");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CompanyModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CompanyViewModel GetCompanyById(string innerid)
+        {
+            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,(select count(innerid) from settled_praiselog where companyid=settled_info.innerid) as PraiseNum,(select count(innerid) from settled_comment where companyid=settled_info.innerid) as CommentNum from settled_info where innerid=@innerid;";
+            var model = Helper.Query<CompanyViewModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 验证重复评论
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <param name="companyid"></param>
+        /// <returns></returns>
+        public int CheckComment(long mobile,string companyid)
+        {
+            const string sql = @"select count(1) from settled_comment where mobile=@mobile and companyid=@companyid;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { mobile, companyid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 验证重复点赞
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="companyid"></param>
+        /// <returns></returns>
+        public int CheckPraise(string ip, string companyid)
+        {
+            const string sql = @"select count(1) from settled_praiselog where ip=@ip and companyid=@companyid and date(createdtime)=@shortdate;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { ip, companyid, shortdate = DateTime.Now.ToShortDateString() });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int DoComment(CommentModel model)
+        {
+            const string sql = @"insert into settled_comment (innerid, companyid, mobile,headportrait, score, ip, commentdesc, createdtime) values (@innerid, @companyid, @mobile,@headportrait, @score, @ip, @commentdesc, @createdtime);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int DoPraise(PraiseModel model)
+        {
+            const string sql = @"insert into settled_praiselog (innerid, companyid, ip, address, spare1, spare2, createdtime) values (@innerid, @companyid, @ip, @address, @spare1, @spare2, @createdtime);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业点赞失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_comment ";
+            const string fields = @"innerid, companyid, mobile, headportrait, score, ip, commentdesc, createdtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.Companyid))
+            {
+                sqlWhere.Append($" and companyid='{query.Companyid}'");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CommentListModel>(model, query.Echo);
+            return list;
+        }
+
+        #endregion
+
     }
 }

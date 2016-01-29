@@ -220,7 +220,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 是否置顶
         /// </summary>
-        public short? istop { get; set; }
+        public int? istop { get; set; }
 
         /// <summary>
         /// 是否含过户费
@@ -687,6 +687,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string keyword { get; set; }
 
+        /// <summary>
+        /// 车源类型
+        /// </summary>
+        public int? type { get; set; }
     }
 
     /// <summary>
@@ -773,6 +777,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 全局搜索字段
         /// </summary>
         public string keyword { get; set; }
+
+        /// <summary>
+        /// 车源类型
+        /// </summary>
+        public int? type { get; set; }
 
     }
 

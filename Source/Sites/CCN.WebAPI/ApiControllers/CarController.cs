@@ -567,6 +567,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [Route("PushUpCar")]
+        [HttpGet]
+        public JResult PushUpCar(string carid)
+        {
+            return _carervice.PushUpCar(carid);
+        }
+
+        /// <summary>
         /// 置顶或取消置顶
         /// </summary>
         /// <param name="carid">车辆id</param>
@@ -682,6 +694,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCarPictureList([FromBody]PictureListModel picModel)
         {
+            LoggerFactories.CreateLogger().Write("批量添加图片参数(AddCarPictureKeyList)：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
             return _carervice.AddCarPictureList(picModel);
         }
 

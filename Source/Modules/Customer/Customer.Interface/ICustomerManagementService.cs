@@ -122,6 +122,26 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1);
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        JResult SendWelfare(int refreshnum, int topnum);
+
+        #endregion
+
         #region 用户认证
 
         /// <summary>
@@ -288,7 +308,7 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -303,6 +323,53 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="openid"></param>
         /// <returns></returns>
         JResult BindOpenid(string custid, string openid);
+
+        #endregion
+
+        #region 车信评（入驻公司）
+
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query);
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCompanyById(string innerid);
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult DoComment(CommentModel model);
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult DoPraise(PraiseModel model);
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query);
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        JResult ImportCompany(string file);
 
         #endregion
     }

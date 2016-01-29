@@ -190,6 +190,13 @@ namespace CCN.Modules.Car.Interface
         JResult RefreshCar(string carid);
 
         /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        JResult PushUpCar(string carid);
+
+        /// <summary>
         /// 置顶或取消置顶
         /// </summary>
         /// <param name="carid">车辆id</param>

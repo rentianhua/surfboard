@@ -495,6 +495,62 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 当前礼券数
         /// </summary>
         public int Currpouponnum { get; set; }
+
+        /// <summary>
+        /// 剩余刷新次数
+        /// </summary>
+        public int Refreshnum { get; set; }
+
+        /// <summary>
+        /// 剩余置顶次数
+        /// </summary>
+        public int Topnum { get; set; }
+    }
+
+    /// <summary>
+    /// 会员相关总数变更记录
+    /// </summary>
+    public class CustTotalRecordModel
+    {
+        /// <summary>
+        /// 内部id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// 类型：1.刷新次数，2.置顶数次，3.积分调整
+        /// </summary>
+        public int Type { get; set; }
+        
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Spare1 { get; set; }
+
+        /// <summary>
+        /// 操作人
+        /// </summary>
+        public string Createrid { get; set; }
+
+        /// <summary>
+        /// 操作时间
+        /// </summary>
+        public DateTime? Creatertime { get; set; }
     }
 
     /// <summary>

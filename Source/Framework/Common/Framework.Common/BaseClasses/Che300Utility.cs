@@ -38,9 +38,7 @@ namespace Cedar.Framework.Common.BaseClasses
         {
             var paramBase = new Dictionary<string, string>
             {
-                {"token", _appkey},
-                {"dtype", "json"},
-                {"method", "getUsedCarPrice"}
+                {"token", _appkey}
             };
 
             //合并参数
