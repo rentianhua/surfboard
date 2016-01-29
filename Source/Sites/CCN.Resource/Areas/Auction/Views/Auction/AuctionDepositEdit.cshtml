@@ -1,0 +1,234 @@
+﻿@{
+
+}
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var auctionid = "@ViewBag.auctionid";
+    var id = "@ViewBag.depid";
+
+    $(function () {
+        Init();
+    });
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        $.get("/api/Auction/GetDepositInfoById?innerid=" + id, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#txtcontacts").val(obj.Contacts);
+            $("#txtmobile").val(obj.Mobile);
+            $("#txtdpsamount").val(obj.Dpsamount);
+            $("#txtdpsserialnum").val(obj.Dpsserialnum);
+            $("#txtdpsaccount").val(obj.Dpsaccount);
+            $("#remark").val(obj.Remark);
+
+            $("input[name='radiobusiness'][value=" + obj.Type + "]").prop("checked", true);
+            $("input[name='radiotype'][value=" + obj.Payer + "]").prop("checked", true);
+
+        });
+    }
+
+    function Submit() {
+
+        var contacts = $("#txtcontacts").val();
+        var mobile = $("#txtmobile").val();
+        var dpsamount = $("#txtdpsamount").val();
+        var dpsserialnum = $("#txtdpsserialnum").val();
+        var dpsaccount = $("#txtdpsaccount").val();
+        var remark = $("#remark").val();
+
+        if ($.trim(contacts).length === 0) {
+            alert("请填写联系人！");
+            return false;
+        }
+
+        if ($.trim(mobile).length === 0) {
+            alert("请填写手机号！");
+            return false;
+        }
+
+        if ($.trim(dpsamount).length === 0) {
+            alert("请填写押金金额！");
+            return false;
+        }
+
+        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        if (!re.test(dpsamount)) {
+            alert("押金金额只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        var radiobusiness = $("input:radio[name='radiobusiness']:checked").val();
+        var radiotype = $("input:radio[name='radiotype']:checked").val();
+
+        var json = {
+
+            Auctionid:auctionid,
+            contacts: contacts,
+            mobile: mobile,
+            dpsamount: dpsamount,
+            dpsserialnum: dpsserialnum,
+            dpsaccount: dpsaccount,
+            remark: remark,
+            Type: radiobusiness,
+            Payer: radiotype
+        };
+
+        if (id === "") {
+
+            $.post("/api/Auction/AddDeposit", json, function (result) {
+
+                if (result.errcode !== 0) {
+                    alert("添加失败");
+                }
+                else {
+                    alert("添加成功");
+                    goList();
+                }
+                return false;
+            });
+
+        } else {
+            json.Innerid = id;
+
+            $.post("/api/Auction/UpdateDeposit", json, function (result) {
+
+                if (result.errcode !== 0) {
+                    alert("更新失败");
+                }
+                else{  //没有添加和删除图片
+                    alert("修改成功");
+                    goList();
+                }
+                return false;
+            });
+        }
+        return false;
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Auction/Auction/AuctionDepositList?auctionid=" + auctionid);
+    }
+
+</script>
+<div class="theme-popover-mask"></div>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">押金支付信息记录</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">支付联系人</label>
+                            <div class="col-sm-10">
+                                <input id="txtcontacts" type="text" placeholder="" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">手机号</label>
+                            <div class="col-sm-10">
+                                <input id="txtmobile" class="form-control" type="text" placeholder="手机号">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">买卖方</label>
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
+                                <input type="radio" name="radiobusiness" id="rbuy" value="1" checked="checked" />
+                                <label for="rbuy">买方</label>
+                                <input type="radio" name="radiobusiness" id="rsell" value="2" />
+                                <label for="rsell">卖方</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">类型</label>
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
+                                <input type="radio" name="radiotype" id="rcollect" value="1" checked="checked" />
+                                <label for="rcollect">收款</label>
+                                <input type="radio" name="radiotype" id="rrefund" value="2" />
+                                <label for="rrefund">退款</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">押金金额</label>
+                            <div class="col-sm-10">
+                                <input id="txtdpsamount" class="form-control" type="text" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">银行电子回单号</label>
+                            <div class="col-sm-10">
+                                <input id="txtdpsserialnum" class="form-control" type="text" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">流入银行账户号</label>
+                            <div class="col-sm-10">
+                                <input id="txtdpsaccount" class="form-control" type="text" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">详细信息</label>
+                            <div class="col-sm-11">
+                                <textarea id="remark" maxlength="200" rows="5" cols="150" placeholder=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

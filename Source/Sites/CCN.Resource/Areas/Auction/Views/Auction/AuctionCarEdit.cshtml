@@ -1,7 +1,5 @@
-﻿
-@{
-//ViewBag.Title = "CarEdit";
-//Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+
 }
 <link href="~/Content/cover.css" rel="stylesheet" />
 <link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
@@ -13,26 +11,22 @@
 <script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
 <script src="~/Plugins/UploadImg/js/multiple.js"></script>
 <link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
-<script>
 
-    //function showloading() {
-    //    $('.theme-popover-mask').show();
-    //    $('.theme-popover').show();
-    //}
-    //function hideloading() {
-    //    $('.theme-popover-mask').hide();
-    //    $('.theme-popover').hide();
-    //}
-
-</script>
 <script type="text/javascript">
 
-    var custid = "@ViewBag.custid";
     var id = "@ViewBag.carid";
 
     var imgs = [];
-    var uploader
+    var uploader;
     $(function () {
+        InitUpload();
+        InitBrand();
+        InitProv();
+        InitCode();
+        Init();
+    });
+
+    function InitUpload() {
         var option = {};
         option.id = "pickfiles2";
         option.container = "container2";
@@ -41,13 +35,8 @@
         option.domain = QiuniuHost();
         //初始化七牛上传控件
         uploader = InitQiniuUpload(option);
+    }
 
-        InitBrand();
-        InitProv();
-        InitCode();
-        Init();
-
-    });
     function showloading() {
         $('.loading-container.loading-inactive').css('display', 'block');
         $('.loading-container.loading-inactive .loader').css('display', 'block');
@@ -208,7 +197,7 @@
             return;
         }
 
-        $.get("/api/Car/GetCarInfoById?id=" + id, function (data) {
+        $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
             }
@@ -234,6 +223,8 @@
             $("#selectcolor").selectVal(obj.colorid);
 
             $("#txtmileage").val(obj.mileage);
+            $("#txtvalidtime").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#txtmobile").val(obj.mobile);
 
             GetModelInfo(obj.model_id);
 
@@ -243,10 +234,7 @@
             $("#selectregmonth").selectVal(dataArr[1]);
 
             //更多信息
-
-            $("#txtbuydate").val(Dateformat(obj.buytime, "yyyy-MM-dd"));
-            $("#txtbuyprice").val(obj.buyprice);
-            $("#txtsoldyprice").val(obj.price);
+            $("#txtlowestprice").val(obj.lowestprice);
 
             $("input[name='radioisproblem'][value=" + obj.isproblem + "]").prop("checked", true);
             $("input[name='radioistain'][value=" + obj.istain + "]").prop("checked", true);
@@ -257,58 +245,34 @@
 
             $("#caresc").val(obj.remark);
 
-            //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
-
-            $.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
-                $.each(data.errmsg, function (k, v) {
-                    var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-                    $('.imgs').append(
-                            '<div id="' + strradom + '" class="imgPreview">\
-						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
-						<div class="caidan">\
-							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
-						</div>\
-					</div>');
-                    initUploadM();
-                    //if (k === 0) {
-                    //    $("#imgList").append("<div style='vertical-align:top'><img data-type='img' style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(v.Path) + "\" />封面图 <span style='cursor:pointer' onclick=\"DeletePicture('" + v.Innerid + "',this)\"> X </span></div>");
-                    //} else {
-                    //    $("#imgList").append("<div style='vertical-align:top'><img data-type='img' style=\"max-width: 150px;max-height:150px;margin-top:5px\" src=\"" + getQiniuUrl(v.Path) + "\" /><span style='cursor:pointer' onclick=\"DeletePicture('" + v.Innerid + "',this)\"> X </span></div>");
-                    //}
-                });
-            });
-        });
-    }
-
-
-    function DeletePicture(picid, strhash) {
-
-        if (!confirm("确定删除？")) {
-            return;
-        }
-
-        var flag = 0;
-        //遍历img
-        $("img[data-type='img']").each(function () {
-            flag++;
-        });
-        if (flag > 3) {
             $.ajax({
-                url: "/api/Car/DeleteCarPicture?innerid=" + picid,
-                type: 'delete',
+                url: "/api/Auction/GetCarPictureByCarid?carid=" + id,
+                type: 'get',
                 datatype: 'application/json',
                 async: false,
                 success: function (data) {
-                    if (data.errcode === 0) {
-                        //alert("删除成功");
-                        $("#" + strhash).remove();
-                    }
+                    $.each(data.errmsg, function (k, v) {
+                        var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                        $('.imgs').append(
+                                '<div id="' + strradom + '" class="imgPreview">\
+						            <img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
+						            <div class="caidan">\
+							            <div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
+						            </div>\
+					            </div>');
+                    });
                 }
             });
-        }
-        else {
-            alert("图片将少于3张，不能继续删除！");
-        }
+            initUploadM();
+        });
+    }
+
+    var delList = [];
+    function DeletePicture(picid, strhash) {
+
+        delList.push(picid);
+        $("#" + strhash).remove();
+
     }
 
     function Submit() {
@@ -362,32 +326,9 @@
 
         //更多信息
 
-        var txtbuydate = $("#txtbuydate").val();
-        var txtbuyprice = $("#txtbuyprice").val();
-        var txtsoldyprice = $("#txtsoldyprice").val();
-
-        //if ($.trim(txtbuydate).length === 0) {
-        //    alert("请选择收购日期！");
-        //    return false;
-        //}
-
-        //if ($.trim(txtbuyprice).length === 0) {
-        //    alert("请填写收购价格！");
-        //    return false;
-        //}
-
-        if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
-            alert("收购价格只能输入数值[最多两位小数]！");
-            return false;
-        }
-
-        if ($.trim(txtsoldyprice).length === 0) {
-            alert("请填写待售价格！");
-            return false;
-        }
-
-        if (!re.test(txtsoldyprice)) {
-            alert("待售价格只能输入数值[最多两位小数]！");
+        var lowestprice = $("#txtlowestprice").val();
+        if ($.trim(lowestprice).length > 0 && !re.test(lowestprice)) {
+            alert("最低价只能输入数值[最多两位小数]！");
             return false;
         }
 
@@ -399,148 +340,152 @@
         var txtauditDate = $("#txtaudit_date").val();
 
         var caresc = $("#caresc").val();
-        if ($.trim(caresc).length === 0) {
-            alert("请填写详细信息！");
-            return false;
-        }
 
         var json = {
-            custid: custid,
+            
             brand_id: brandid,
             series_id: seriesid,
             model_id: modelid,
             provid: provid,
             cityid: cityid,
             colorid: colorid,
-            buytime: txtbuydate,
-            buyprice: txtbuyprice,
             mileage: txtmileage,
             register_date: regyear + "-" + regmonth + "-01",
-            price: txtsoldyprice,
+            lowestprice: lowestprice,
             isproblem: isproblem,
             istain: istain,
             remark: caresc,
             ckyear_date: txtckyearDate,
             tlci_date: txttlciDate,
-            audit_date: txtauditDate
+            audit_date: txtauditDate,
+            mobile: $("#txtmobile").val(),
+            validtime: $("#txtvalidtime").val()
         };
 
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        debugger;
+        var uploadercount = 0;//选择的文件
+        var filelength = $("img[data-type='img']").length; //图片总数
 
-        var filelength = 0;
-        var uploadercount = 0;
-        //统计新增的图片
-        //遍历img
-        $("img[data-type='img']").each(function () {
-            filelength++;
-        });
-        if (uploader == undefined || uploader == null) {
-            //    filelength = 0;
+        if (filelength > 9 || filelength < 3) {
+            hideloading();
+            alert('请上传3-9张图片');
+            return false;
         }
-        else {
+
+        if (uploader != undefined && uploader != null) {
             uploadercount = uploader.files.length;
         }
-        
-        
 
         setTimeout(function () {
+
             if (id === "") {
-                if (filelength > 9 || filelength < 3) {
-                    hideloading();
-                    alert('请上传3-9张图片');
-                    return false;
-                }
-                $.post("/api/Car/AddCarBack", json, function (result) {
-                    if (result.errcode === 0) {
-                        //上传并保存图片 Begin
-                        var i = 0;
-                        plupload.each(uploader.files, function (file) {
-                            var myDate = new Date();
-                            file.name = "car_" + myDate.getTime() + i + ".jpg";
-                            i++;
-                        });
-                        uploader.start();
-                        var carid = result.errmsg;
-                        var m = 0;
-                        debugger
-                        uploader.bind('FileUploaded', function (up, file, info) {
-                            var picInfo = JSON.parse(info.response);
-                            $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
 
-                            });
-                            m++;
-                            //上传并保存图片 End
-                            if (m == uploadercount) {
-                                hideloading();
-                                alert("添加成功");
-                                goList();
-                            }
-                        });
-                    } else {
+                $.post("/api/Auction/AddAuctionCar", json, function (result) {
+
+                    if (result.errcode !== 0) {
                         hideloading();
-                        alert("添加失败:" + result.errmsg);
-
+                        alert("添加失败");
+                        return false;
                     }
 
+                    var i = 0;
+                    //修改文件名
+                    plupload.each(uploader.files, function (file) {
+                        file.name = "car_" + new Date().getTime() + i + ".jpg";
+                        i++;
+                    });
+                    
+                    var addList = [];
+                    uploader.start();
+                    uploader.bind('FileUploaded', function (up, file, info) {
+                        var picInfo = JSON.parse(info.response);
+                        addList.push(picInfo.key);
+                        if (addList.length === uploadercount) {
+                            var model = { Carid: result.errmsg, AddPaths: addList, DelIds: [] };
+                            $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
+                                hideloading();
+                                if (resultPic.errcode !== 0) {
+                                    alert("添加成功,但图片保存失败！");
+                                } else {
+                                    alert("添加成功");
+                                }
+                                goList();
+                            });
+                        }
+                    });
+                    return false;
                 });
             } else {
                 json.Innerid = id;
 
-                if (filelength > 9 || filelength < 3) {
-                    hideloading();
-                    alert('请上传3-9张图片');
-                    return false;
-                }
-                $.post("/api/Car/UpdateCar", json, function (result) {
-                    if (result.errcode === 0) {
-                        //删除图片 imgs
-                        if (uploadercount > 0) {
-                            //上传并保存图片 Begin
-                            var i = 0;
-                            plupload.each(uploader.files, function (file) {
-                                var myDate = new Date();
-                                file.name = "car_" + myDate.getTime() + i + ".jpg";
-                                i++;
-                            });
-                            uploader.start();
-                            var m = 0;
-                            uploader.bind('FileUploaded', function (up, file, info) {
-                                var picInfo = JSON.parse(info.response);
-                                $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function () {
+                $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
 
-                                });
-                                m++;
-                                if (m == uploadercount) {
-                                    hideloading();
-                                    alert("修改成功");
-                                    goList();
-                                }
-                            });
-                            //上传并保存图片 End
-                        }
-                        else {
-                            hideloading();
-                            alert("修改成功");
-                            goList();
-                        }
-
-                    } else {
+                    if (result.errcode !== 0) {
                         hideloading();
-                        alert("修改失败:" + result.errmsg);
+                        alert("更新失败");
+                        return false;
                     }
+
+                    if (uploadercount === 0 && delList.length === 0) {  //没有添加和删除图片
+                        alert("修改成功");
+                        goList();
+                        return false;
+                    }
+                    else if (uploadercount === 0 && delList.length > 0) {
+                        var model = { Carid: id, AddPaths: [], DelIds: delList };
+                        $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
+                            hideloading();
+                            if (resultPic.errcode !== 0) {
+                                alert("修改成功,但图片保存失败！");
+                            } else {
+                                alert("修改成功");
+                            }
+                            goList();
+                        });
+                        return false;
+                    }
+
+                    var i = 0;
+                    //修改文件名
+                    plupload.each(uploader.files, function (file) {
+                        file.name = "car_" + new Date().getTime() + i + ".jpg";
+                        i++;
+                    });
+
+                    var addList = [];
+                    uploader.start();
+                    uploader.bind('FileUploaded', function (up, file, info) {
+                        var picInfo = JSON.parse(info.response);
+                        addList.push(picInfo.key);
+                        if (addList.length === uploadercount) {
+                            var model = { Carid: id, AddPaths: addList, DelIds: delList };
+                            $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
+                                hideloading();
+                                if (resultPic.errcode !== 0) {
+                                    alert("修改成功,但图片保存失败！");
+                                } else {
+                                    alert("修改成功");
+                                }
+                                goList();
+                            });
+                        }
+                    });
+                    
+                    return false;
                 });
             }
-        }, 1000)
+            return false;
+        }, 1000);
         return false;
     }
 
     function goList() {
-        getBodyHtml('mainbody', "/car/car/carlist?custid=" + custid);
+        hideloading();
+        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
     }
 
     function initUploadM() {
-        // 当前方法对象
-        var fun = arguments.callee;
         // 图片选中
         $(".imgs .imgPreview").unbind().mousemove(function () {
             $(this).find(".caidan").show();
@@ -556,42 +501,13 @@
         $(".imgs .imgPreview .cz_4").unbind().click(function () {
             DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
         });
-        // 置顶图片
-        $(".imgs .imgPreview .cz_1").unbind().click(function () {
-            var imghtml = $("#" + $(this).attr("hash"))[0];
-            $("#" + $(this).attr("hash")).remove();
-            $('.imgs').prepend(imghtml);
-            fun();
-        });
-        // 图片前移
-        $(".imgs .imgPreview .cz_2").unbind().click(function () {
-            var id = "#" + $(this).attr("hash");
-            var $this = $(id).prev();
-            var imghtml = $(id)[0];
-            if ($this.size()) {
-                $(id).remove();
-                $this.before(imghtml);
-                fun();
-            }
-        });
-        // 图片后移
-        $(".imgs .imgPreview .cz_3").unbind().click(function () {
-            var id = "#" + $(this).attr("hash");
-            var $this = $(id).next();
-            var imghtml = $(id)[0];
-            if ($this.size()) {
-                $(id).remove();
-                $this.after(imghtml);
-                fun();
-            }
-        });
     }
 
 </script>
 
 <div class="theme-popover">
     上传图片中...
-    <img src="~/Content/images/loading.gif" />
+    <img src="~/Content/images/loading.gif" alt=""/>
 </div>
 <div class="theme-popover-mask"></div>
 <div class="widget">
@@ -671,25 +587,17 @@
                         <div class="form-group">
                             <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
                             <div class="controls col-sm-11" id="imgList">
-                                @*<input type="file" multiple="" id="picture" />*@
                                 <div id="container2">
                                     <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
                                         <i class="glyphicon glyphicon-plus"></i>
-                                        <sapn>选择文件</sapn>
-                                    </a><label class="required">只能上传2M以下图片</label>
+                                        <span>选择文件</span>
+                                    </a>
+                                    <label class="required">只能上传2M以下图片</label>
                                 </div>
                                 <div>
                                     <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
                                     </div>
                                 </div>
-                                <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
-                                    @*<thead>
-                                            <tr>
-                                                <th class="col-md-4">图片名称</th>
-                                            </tr>
-                                        </thead>*@
-                                    <tbody id="fsUploadProgress"></tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -708,43 +616,48 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">收购日期</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">最低价</label>
                             <div class="col-sm-10">
-                                <input id="txtbuydate" class="Wdate form-control" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txtlowestprice" type="text" placeholder="最低价（万元）" class="form-control">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">收购价格(万元)</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">手机号</label>
                             <div class="col-sm-10">
-                                <input id="txtbuyprice" type="text" placeholder="收购价格" class="form-control">
+                                <input id="txtmobile" class="form-control" type="text" placeholder="手机号">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row form-group">
+
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>待售价格(万元)</label>
-                            <div class="col-sm-10">
-                                <input id="txtsoldyprice" type="text" placeholder="待售价格" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
                             <div class="col-sm-10">
                                 <input id="txtckyear_date" class="Wdate form-control" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
+                            <div class="col-sm-10">
+                                <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
+                <!--new-->
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
                             <div class="col-sm-10">
                                 <input id="txtaudit_date" class="Wdate form-control" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
@@ -752,17 +665,19 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">有效期</label>
                             <div class="col-sm-10">
-                                <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                <input id="txtvalidtime" class="Wdate form-control" type="text" placeholder="有效期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                             </div>
                         </div>
                     </div>
                 </div>
+                <!--new-->
+
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
                             <div class="col-sm-10 rd" style="padding-top:5px;">
                                 <input type="radio" name="radioisproblem" id="rYes" value="1" />
                                 <label for="rYes">是</label>
@@ -773,7 +688,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
                             <div class="col-sm-10 rd" style="padding-top:5px;">
                                 <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
                                 <label for="radioistain1">是</label>
@@ -786,7 +701,7 @@
                 <div class="row form-group">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="caresc" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>详细信息</label>
+                            <label for="" class="col-sm-1 control-label no-padding-right">详细信息</label>
                             <div class="col-sm-11">
                                 <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
                             </div>

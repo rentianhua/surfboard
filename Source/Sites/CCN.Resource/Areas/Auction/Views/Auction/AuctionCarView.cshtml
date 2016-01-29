@@ -1,0 +1,373 @@
+﻿@{
+
+}
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.carid";
+    var uploader;
+    $(function () {
+        InitUpload();
+        Init();
+    });
+
+    function InitUpload() {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = QiuniuHost();
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+    }
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        $.get("/api/Auction/GetAuctionViewById?id=" + id, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+                return;
+            }
+
+            var obj = data.errmsg;
+
+            $("#lblmodel").html(obj.model_name);
+            $("#lblcolor").html(obj.color);
+            $("#lblreg").html(Dateformat(obj.register_date, "yyyy-MM"));
+
+            $("#lblmileage").html(obj.mileage);
+            $("#lblarea").html(obj.provname + " " + obj.cityname);
+
+            $("#txtlowestprice").html(obj.lowestprice);
+            $("#txtmobile").html(obj.mobile);
+
+            $("#txtvalidtime").html(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#txtmobile").html(obj.mobile);
+
+            //更多信息
+            $("#isproblem").html(obj.isproblem === 1 ? "是" :"否");
+            $("#istain").html(obj.istain === 1 ? "是" : "否");
+
+            $("#txtckyear_date").html(Dateformat(obj.ckyear_date, "yyyy-MM-dd"));
+            $("#txttlci_date").html(Dateformat(obj.tlci_date, "yyyy-MM-dd"));
+            $("#txtaudit_date").html(Dateformat(obj.audit_date, "yyyy-MM-dd"));
+
+            $("#caresc").html(obj.remark);
+            
+            $.ajax({
+                url: "/api/Auction/GetCarPictureByCarid?carid=" + id,
+                type: 'get',
+                datatype: 'application/json',
+                async: false,
+                success: function (data) {
+                    $.each(data.errmsg, function (k, v) {
+                        var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                        $('.imgs').append(
+                                '<div id="' + strradom + '" class="imgPreview">\
+						            <img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
+					            </div>');
+                    });
+                }
+            });
+
+            if (obj.status === 3) {
+                $(".divDealed").removeClass("hide");
+                $("#txtdealedtime").html(Dateformat(obj.dealedtime, "yyyy-MM-dd HH:mm:ss"));
+                $("#txtdealedprice").html(obj.dealedprice);
+                $("#txtdealmobile").html(obj.dealmobile);
+                $("#txtdealdesc").html(obj.dealdesc);
+            }
+            else if (obj.status === 0) {
+                $(".divDeleted").removeClass("hide");
+                $("#txtdeletedtime").html(Dateformat(obj.deletedtime, "yyyy-MM-dd HH:mm:ss"));
+                $("#txtdeletedesc").html(obj.deletedesc);
+            }
+        });
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+    }
+
+</script>
+
+<div class="theme-popover-mask"></div>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车辆基本信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label no-padding-right"><label class="required">*</label>选车</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmodel"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblcolor"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>上牌时间</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblreg"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmileage"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblarea"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
+                            <div class="controls col-sm-11" id="imgList">
+                                <div id="container2">
+                                    
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">更多信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtlowestprice" class="col-sm-2 control-label no-padding-right">最低价(万元)</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtlowestprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtmobile" class="col-sm-2 control-label no-padding-right">手机号</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtmobile"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtckyear_date"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txttlci_date"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--new-->
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtaudit_date"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">有效期</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtvalidtime"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--new-->
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="isproblem"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="istain"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right">详细信息</label>
+                            <div class="col-sm-11">
+                                <label class="control-label no-padding-right" id="caresc"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="widget-header bordered-bottom bordered-palegreen hide divDealed">
+        <span class="widget-caption">成交信息</span>
+    </div>
+    <div class="widget-body hide divDealed">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtlowestprice" class="col-sm-2 control-label no-padding-right">成交时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdealedtime"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtmobile" class="col-sm-2 control-label no-padding-right">成交价格</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdealedprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">成交人手机号</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdealmobile"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">成交说明</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdealdesc"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="widget-header bordered-bottom bordered-palegreen hide divDeleted">
+        <span class="widget-caption">删除信息</span>
+    </div>
+    <div class="widget-body hide divDeleted">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtlowestprice" class="col-sm-2 control-label no-padding-right">删除时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdeletedtime"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtmobile" class="col-sm-2 control-label no-padding-right">删除备注</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="txtdeletedesc"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
