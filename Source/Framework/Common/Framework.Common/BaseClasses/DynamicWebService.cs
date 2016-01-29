@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,24 +15,31 @@ namespace Cedar.Framework.Common.BaseClasses
     /// </summary>
     public class DynamicWebService
     {
-        public static object ExeAPIMethod(string url, string type, string data, bool isjson = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="type"></param>
+        /// <param name="data"></param>
+        /// <param name="isjson"></param>
+        /// <returns></returns>
+        public static object ExeApiMethod(string url, string type, string data, bool isjson = true)
         {
             var handler = new WebRequestHandler
             {
                 AllowAutoRedirect = false,
                 UseProxy = false
             };
-            object json = null;
-            json = isjson ? JsonConvert.DeserializeObject(data) : data;
+
+            var json = isjson ? JsonConvert.DeserializeObject(data) : data;
 
             var client = new HttpClient(handler);
-            //string website = "http://wx5.smartac.co/";
-            var website = "http://op.juhe.cn/";
+            var website = ConfigurationManager.AppSettings["website"];
             client.BaseAddress = new Uri(website);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response;
             try
             {
+                HttpResponseMessage response;
                 switch (type)
                 {
                     case "get":
@@ -50,13 +58,9 @@ namespace Cedar.Framework.Common.BaseClasses
                         response = client.GetAsync(url).Result;
                         break;
                 }
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsStringAsync();
-                }
-                return null;
+                return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync() : null;
             }
-            catch (AggregateException ex)
+            catch (AggregateException)
             {
                 return "";
             }
@@ -73,12 +77,11 @@ namespace Cedar.Framework.Common.BaseClasses
         {
             if (method.ToLower() == "post")
             {
-                HttpWebRequest req = null;
                 HttpWebResponse rsp = null;
                 Stream reqStream = null;
                 try
                 {
-                    req = (HttpWebRequest) WebRequest.Create(url);
+                    var req = (HttpWebRequest) WebRequest.Create(url);
                     req.Method = method;
                     req.KeepAlive = false;
                     req.ProtocolVersion = HttpVersion.Version10;
@@ -97,10 +100,11 @@ namespace Cedar.Framework.Common.BaseClasses
                 }
                 finally
                 {
-                    if (reqStream != null) reqStream.Close();
-                    if (rsp != null) rsp.Close();
+                    reqStream?.Close();
+                    rsp?.Close();
                 }
             }
+
             //创建请求
             var request = (HttpWebRequest) WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
 
@@ -179,9 +183,9 @@ namespace Cedar.Framework.Common.BaseClasses
             finally
             {
                 // 释放资源
-                if (reader != null) reader.Close();
-                if (stream != null) stream.Close();
-                if (rsp != null) rsp.Close();
+                reader?.Close();
+                stream?.Close();
+                rsp?.Close();
             }
         }
     }
