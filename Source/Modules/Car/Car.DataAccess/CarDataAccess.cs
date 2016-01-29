@@ -2315,8 +2315,13 @@ namespace CCN.Modules.Car.DataAccess
         public BasePageList<CarRewardViewModel> CarRewardPageList(CarRewardQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"car_reward as a  ";
-            const string fields = "a.* ";
+            const string tableName = @"car_reward as a  
+                                    left join base_carbrand as b on b.innerid = a.brand_id
+                                    left join base_carseries as c on c.innerid = a.series_id
+                                    left join base_carmodel as d on d.innerid = a.model_id
+                                    left join base_province as e on d.innerid = a.provid
+                                    left join base_city as f on f.innerid = a.cityid";
+            const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  
             var sqlWhere = new StringBuilder(" 1=1 ");
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -2346,6 +2351,32 @@ namespace CCN.Modules.Car.DataAccess
                 catch (Exception ex)
                 {
                     LoggerFactories.CreateLogger().Write("添加车辆悬赏信息异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 更新状态
+        /// </summary>
+        /// <param name="status">状态值</param>
+        /// <param name="innerid">主键</param>
+        /// <returns></returns>
+        public int UpdateCarRewardStatus(int status,string innerid)
+        {
+            const string sql = @"Update `car_reward` set status = @status where `innerid`=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("车辆悬赏信息更新异常：", TraceEventType.Information, ex);
                     result = 0;
                 }
                 return result;

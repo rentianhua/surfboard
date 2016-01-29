@@ -123,6 +123,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContextAwareObject .cs" />
+    <Compile Include="BaseClasses\Che300Utility.cs" />
     <Compile Include="BaseClasses\ConfigHelper.cs" />
     <Compile Include="BaseClasses\DynamicWebService.cs" />
     <Compile Include="BaseClasses\Encryptor.cs" />
