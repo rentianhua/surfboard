@@ -24,7 +24,7 @@ namespace CCN.Resource
             bundles.Add(new ScriptBundle("~/bundles/original").Include(
                       "~/Scripts/jquery-1.10.2.js",
                       "~/Plugins/My97DatePicker/WdatePicker.js",
-                      "~/Scripts/jquery.pagination/jquery.twbsPagination.min.js",
+                      "~/Scripts/jquery.pagination/jquery.twbsPagination.js",
                       "~/Scripts/jquery.fn.extend.js",
                       "~/Scripts/common.js",
                       "~/Scripts/highcharts.js",
