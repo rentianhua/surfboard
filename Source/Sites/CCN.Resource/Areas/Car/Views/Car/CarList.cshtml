@@ -15,6 +15,12 @@
             getBodyHtml('mainbody', "/car/car/caredit?custid=" + custid);
             //location.href = "/car/car/caredit?custid=" + custid;
         });
+        if (custid != "") {
+            $("#btnBack").click(function () {
+                getBodyHtmlByMenu('mainbody', '/Customer/Customer/CustomerList', this);
+            });
+        }
+
     });
 
     //初始化品牌
@@ -178,7 +184,7 @@
                 alert("价格只能输入数值[最多两位小数]！");
                 return false;
             }
-            if ($("#dealdesc").val() == "" || $("#dealprice").val()=="") {
+            if ($("#dealdesc").val() == "" || $("#dealprice").val() == "") {
                 alert("请将价格和描述填写完整！");
             }
             else {
@@ -245,11 +251,12 @@
                         </select>
                         <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                         <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                        <a id="btnBack" href="javascript:;" class="btn btn-palegreen shiny">返回</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                
+
             </div>
         </div>
     </div>
