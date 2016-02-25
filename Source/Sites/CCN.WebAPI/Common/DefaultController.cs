@@ -5,7 +5,7 @@ using Cedar.Framework.Common.Client.MVCExtention;
 
 #endregion
 
-namespace CCN.WebAPI.Main.Common
+namespace CCN.WebAPI.Common
 {
     public class DefaultController : ExtendedController
     {

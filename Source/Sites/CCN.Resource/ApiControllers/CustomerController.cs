@@ -192,6 +192,7 @@ namespace CCN.Resource.ApiControllers
         /// <returns>用户信息</returns>
         [Route("CustLogin")]
         [HttpPost]
+        [AllowAnonymous]
         public JResult CustLogin([FromBody] CustLoginInfo loginInfo)
         {
             JResult result;
@@ -669,6 +670,169 @@ namespace CCN.Resource.ApiControllers
         {
             return _custservice.GetCustWeChatList(query);
         }
+
+        #endregion
+
+        #region  车信评（入驻公司）
+
+        /// <summary>
+        /// 获取企业列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPageList")]
+        [HttpPost]
+        public BasePageList<CompanyListModel> GetCompanyPageList([FromBody]CompanyQueryModel query)
+        {
+            return _custservice.GetCompanyPageList(query);
+        }
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyModelById")]
+        [HttpGet]
+        public JResult GetCompanyModelById(string innerid)
+        {
+            return _custservice.GetCompanyModelById(innerid);
+        }
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyById")]
+        [HttpGet]
+        public JResult GetCompanyById(string innerid)
+        {
+            return _custservice.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCompanyApplyUpdate")]
+        [HttpPost]
+        public JResult AddCompanyApplyUpdate([FromBody]CompanyApplyUpdateModel model)
+        {
+            return _custservice.AddCompanyApplyUpdate(model);
+        }
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetUpdateApplyPageList")]
+        [HttpPost]
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList([FromBody]CompanyUpdateApplyQueryModel query)
+        {
+            return _custservice.GetUpdateApplyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        [Route("GetUpdateApplyById")]
+        [HttpGet]
+        public JResult GetUpdateApplyById(string applyid)
+        {
+            return _custservice.GetUpdateApplyById(applyid);
+        }
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        [Route("HandleApply")]
+        [HttpGet]
+        public JResult HandleApply(string applyid)
+        {
+            return _custservice.HandleApply(applyid);
+        }
+        
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPictureListById")]
+        [HttpGet]
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            return _custservice.GetCompanyPictureListById(settid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoComment")]
+        [HttpPost]
+        public JResult DoComment([FromBody]CommentModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            if (string.IsNullOrWhiteSpace(model.IP))
+            {
+                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
+
+            return _custservice.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoPraise")]
+        [HttpPost]
+        public JResult DoPraise([FromBody]PraiseModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            if (string.IsNullOrWhiteSpace(model.IP))
+            {
+                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
+            return _custservice.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCommentPageList")]
+        [HttpPost]
+        public BasePageList<CommentListModel> GetCommentPageList([FromBody]CommentQueryModel query)
+        {
+            return _custservice.GetCommentPageList(query);
+        }
+
+        /// <summary>
+        /// 导入企业信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("ImportCompany")]
+        [HttpGet]
+        public JResult ImportCompany(string filename)
+        {
+            return _custservice.ImportCompany(filename);
+        }
+
 
         #endregion
     }

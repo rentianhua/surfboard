@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Base.Interface;
@@ -762,16 +763,16 @@ namespace CCN.WebAPI.ApiControllers
         }
         #endregion
 
-        #region  车信评（入驻公司）
+        #region  车信评
 
         /// <summary>
-        /// 公司列表
+        /// 获取企业列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
         [Route("GetCompanyPageList")]
         [HttpPost]
-        public BasePageList<CompanyModel> GetCompanyPageList([FromBody]CompanyQueryModel query)
+        public BasePageList<CompanyListModel> GetCompanyPageList([FromBody]CompanyQueryModel query)
         {
             return _custservice.GetCompanyPageList(query);
         }
@@ -786,6 +787,42 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCompanyById(string innerid)
         {
             return _custservice.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCompanyApplyUpdate")]
+        [HttpPost]
+        public JResult AddCompanyApplyUpdate([FromBody]CompanyApplyUpdateModel model)
+        {
+            return _custservice.AddCompanyApplyUpdate(model);
+        }
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        [Route("HandleApply")]
+        [HttpGet]
+        public JResult HandleApply(string applyid)
+        {
+            return _custservice.HandleApply(applyid);
+        }
+        
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPictureListById")]
+        [HttpGet]
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            return _custservice.GetCompanyPictureListById(settid);
         }
 
         /// <summary>
@@ -818,6 +855,14 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult DoPraise([FromBody]PraiseModel model)
         {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            if (string.IsNullOrWhiteSpace(model.IP))
+            {
+                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
             return _custservice.DoPraise(model);
         }
 
@@ -842,6 +887,28 @@ namespace CCN.WebAPI.ApiControllers
         public JResult ImportCompany(string filename)
         {
             return _custservice.ImportCompany(filename);
+        }
+
+        /// <summary>
+        /// 测试接口
+        /// </summary>
+        /// <returns></returns>
+        [Route("Test")]
+        [HttpGet]
+        public JResult Test()
+        {
+            string str = "江苏省苏州市相城县开泰路18号";
+            string pro = string.Empty;
+            string city = string.Empty;
+            string area = string.Empty;
+            Match m = Regex.Match(str, @"(?<pro>.*?)省(?<city>.*?)市(?<area>.*?)[区,县]");
+            if (m.Success)
+            {
+                pro = m.Groups["pro"].Value;
+                city = m.Groups["city"].Value;
+                area = m.Groups["area"].Value;
+            }
+            return null;
         }
 
         #endregion

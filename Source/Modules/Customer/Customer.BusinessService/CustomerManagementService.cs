@@ -492,11 +492,19 @@ namespace CCN.Modules.Customer.BusinessService
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
         {
             return BusinessComponent.GetCompanyPageList(query);
         }
-
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyModelById(string innerid)
+        {
+            return BusinessComponent.GetCompanyModelById(innerid);
+        }
         /// <summary>
         /// 获取公司详情
         /// </summary>
@@ -505,6 +513,56 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult GetCompanyById(string innerid)
         {
             return BusinessComponent.GetCompanyById(innerid);
+        }
+        
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
+        {
+            return BusinessComponent.AddCompanyApplyUpdate(model);
+        }
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
+        {
+            return BusinessComponent.GetUpdateApplyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public JResult GetUpdateApplyById(string applyid)
+        {
+            return BusinessComponent.GetUpdateApplyById(applyid);
+        }
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public JResult HandleApply(string applyid)
+        {
+            return BusinessComponent.HandleApply(applyid);
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            return BusinessComponent.GetCompanyPictureListById(settid);
         }
 
         /// <summary>

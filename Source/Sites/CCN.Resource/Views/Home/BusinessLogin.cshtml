@@ -102,7 +102,7 @@ Purchase: http://wrapbootstrap.com
     <!--Google Analytics::Demo Only-->
     <script>
         $(function () {
-            setCookie();
+            //setCookie();
             $('[data-toggle="popover"]').popover();
             if ("@ViewBag.type" != "1") {
                 getInfo();
@@ -166,6 +166,7 @@ Purchase: http://wrapbootstrap.com
         function getInfo() {
             //判读数据是否存在
             if (localStorage.getItem("businesstime")) {
+                var myDate = new Date();
                 var diffDate = myDate.getTime() - (parseInt(localStorage.getItem("businesstime"), 10) + 24 * 3600 * 1000 * 7);
                 if (diffDate > 0) {
                     localStorage.removeItem("businessname");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using CCN.WebAPI.Common;
 using Cedar.Framework.Common.Client.DelegationHandler;
 using Cedar.Framework.Common.Client.WebAPI;
 
@@ -17,6 +18,7 @@ namespace CCN.WebAPI
 
             //add ApplicationContextFilterAttribute
             config.Filters.Add(new ApplicationContextFilterAttribute());
+            //config.Filters.Add(new AuthorizeFilterAttribute());
 
             // Web API routes
             config.MapHttpAttributeRoutes();

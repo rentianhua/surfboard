@@ -118,14 +118,14 @@
 </div>
 
 <script type="text/javascript">
-    
+
     var userid = "";
-    if ("@ViewBag.Admin" != "1") {
+    if ("@ViewBag.Admin" !== "1") {
         userid = "@UserInfo.innerid";
     }
     $(function () {
-        var myDate = new Date();
 
+        var myDate = new Date();
         var year = myDate.getFullYear();
         var month = myDate.getMonth() + 1;
         var day = myDate.getDate();
@@ -137,7 +137,7 @@
         QueryList();
         //汇总数据
         InitTotal();
-        if ("@ViewBag.Admin" == "1") {
+        if ("@ViewBag.Admin" === "1") {
             //区域数据
             GetDataByBity();
             $("#areadata").removeClass("hidden");
@@ -239,8 +239,7 @@
     function InitCity(provid) {
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
-        if (provid!="0")
-        {
+        if (provid != "0") {
             $.ajax({
                 url: "/api/Base/GetCityList/?provid=" + provid,
                 type: 'get',

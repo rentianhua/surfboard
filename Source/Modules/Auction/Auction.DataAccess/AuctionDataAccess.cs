@@ -26,7 +26,7 @@ namespace CCN.Modules.Auction.DataAccess
         public BasePageList<AuctionCarInfoViewModel> GetAuctioningList(AuctionCarInfoQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"auction_info as a 
+            const string tableName = @"auction_carinfo as a 
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
@@ -78,7 +78,7 @@ namespace CCN.Modules.Auction.DataAccess
         public BasePageList<AuctionCarInfoViewModel> GetAuctionList(AuctionCarInfoQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"auction_info as a 
+            const string tableName = @"auction_carinfo as a 
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
@@ -134,7 +134,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public AuctionCarInfoModel GetAuctionInfoById(string id)
         {
-            const string sql = "select * from auction_info where innerid=@id";
+            const string sql = "select * from auction_carinfo where innerid=@id";
             var model = Helper.Query<AuctionCarInfoModel>(sql, new {id}).FirstOrDefault();
             return model;
         }
@@ -168,7 +168,7 @@ namespace CCN.Modules.Auction.DataAccess
                 cm.geartype,
                 cm.dischargestandard as dischargeName,
                 bc1.codename as color
-                from auction_info as a 
+                from auction_carinfo as a 
                 left join base_province as pr on a.provid=pr.innerid
                 left join base_city as ct on a.cityid=ct.innerid
                 left join base_carbrand as cb on a.brand_id=cb.innerid
@@ -187,7 +187,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int AddAuctionCar(AuctionCarInfoModel model)
         {
-            const string sql = @"INSERT INTO `auction_info`
+            const string sql = @"INSERT INTO `auction_carinfo`
                                 (innerid, mobile, title, pic_url, provid, cityid, brand_id, series_id, model_id, colorid, mileage, register_date, buytime, buyprice, lowestprice, isproblem, istain, istransferfee, ckyear_date, tlci_date, audit_date, remark, sellreason, masterdesc, estimateprice, dealrewards, transferrisk, remind, tips, status, createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime)
                                 VALUES
                                 (@innerid, @mobile, @title, @pic_url, @provid, @cityid, @brand_id, @series_id, @model_id, @colorid, @mileage, @register_date, @buytime, @buyprice, @lowestprice, @isproblem, @istain, @istransferfee, @ckyear_date, @tlci_date, @audit_date, @remark, @sellreason, @masterdesc, @estimateprice, @dealrewards, @transferrisk, @remind, @tips, @status, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime);";
@@ -216,7 +216,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int UpdateAuctionCar(AuctionCarInfoModel model)
         {
-            var sql = new StringBuilder("update `auction_info` set ");
+            var sql = new StringBuilder("update `auction_carinfo` set ");
             sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
 
             //非必填字段的修改
@@ -268,7 +268,7 @@ namespace CCN.Modules.Auction.DataAccess
         {
             try
             {
-                const string sql = "update auction_info set status=0,deleterid=@deleterid,deletedtime=@deletedtime,deletedesc=@deletedesc where `innerid`=@innerid;";
+                const string sql = "update auction_carinfo set status=0,deleterid=@deleterid,deletedtime=@deletedtime,deletedesc=@deletedesc where `innerid`=@innerid;";
                 Helper.Execute(sql, new {
                     innerid = model.Innerid,
                     model.deleterid,
@@ -293,7 +293,7 @@ namespace CCN.Modules.Auction.DataAccess
             try
             {
                 model.status = model.status == 1 ? 2 : 1;
-                const string sql = "update auction_info set status=@status,publisherid=@publisherid,publishedtime=@publishedtime where `innerid`=@innerid;";
+                const string sql = "update auction_carinfo set status=@status,publisherid=@publisherid,publishedtime=@publishedtime where `innerid`=@innerid;";
                 Helper.Execute(sql, new
                 {
                     innerid = model.Innerid,
@@ -319,7 +319,7 @@ namespace CCN.Modules.Auction.DataAccess
         {
             try
             {
-                const string sql = "update auction_info set status=3,dealerid=@dealerid,dealedtime=@dealedtime,dealedprice=@dealedprice,dealdesc=@dealdesc,dealmobile=@dealmobile where `innerid`=@innerid;";
+                const string sql = "update auction_carinfo set status=3,dealerid=@dealerid,dealedtime=@dealedtime,dealedprice=@dealedprice,dealdesc=@dealdesc,dealmobile=@dealmobile where `innerid`=@innerid;";
                 Helper.Execute(sql, new
                 {
                     innerid = model.Innerid,
@@ -387,7 +387,7 @@ namespace CCN.Modules.Auction.DataAccess
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from auction_car_picture where carid=@carid order by sort;";//查询车辆图片
             const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from auction_car_picture where carid=@carid;";                              //查询车辆所有图片的最大排序
             const string sqlIPic = @"insert into auction_car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
-            const string sqlUCover = @"update auction_info set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+            const string sqlUCover = @"update auction_carinfo set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -444,7 +444,7 @@ namespace CCN.Modules.Auction.DataAccess
         {
             const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from auction_car_picture where carid=@carid order by sort;";//查询车辆图片
             const string sqlDPic = @"delete from auction_car_picture where innerid=@innerid;";
-            const string sqlUCover = @"update auction_info set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+            const string sqlUCover = @"update auction_carinfo set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -501,7 +501,7 @@ namespace CCN.Modules.Auction.DataAccess
             const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from auction_car_picture where carid=@carid;";//查询车辆所有图片的最大排序
             const string sqlIPic = @"insert into auction_car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
             const string sqlDPic = @"delete from auction_car_picture where innerid=@innerid;";
-            const string sqlUCover = @"update auction_info set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+            const string sqlUCover = @"update auction_carinfo set pic_url=(select path from auction_car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
 
             using (var conn = Helper.GetConnection())
             {

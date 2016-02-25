@@ -57,5 +57,48 @@ namespace CCN.Resource.Areas.Customer.Controllers
             return View();
         }
         #endregion
+
+        #region
+
+        /// <summary>
+        /// 企业列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CompanyList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 企业修改
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CompanyEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+
+        /// <summary>
+        /// 企业修改申请列表页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CompanyUpdateList(string companyid)
+        {
+            ViewBag.companyid = string.IsNullOrWhiteSpace(companyid) ? "" : companyid;
+            return View();
+        }
+
+        /// <summary>
+        /// 企业修改申请详情查看页面
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CompanyUpdateView(string applyid)
+        {
+            ViewBag.applyid = string.IsNullOrWhiteSpace(applyid) ? "" : applyid;
+            return View();
+        }
+
+        #endregion
     }
 }
