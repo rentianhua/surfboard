@@ -1236,7 +1236,18 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             return DataAccess.GetCommentPageList(query);
         }
-        
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetScoreList(string settid)
+        {
+            var model = DataAccess.GetScoreList(settid);
+            return JResult._jResult(model);
+        }
+
         /// <summary>
         /// 导入公司
         /// </summary>

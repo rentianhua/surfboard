@@ -407,6 +407,13 @@ namespace CCN.Modules.Customer.Interface
         BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query);
 
         /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetScoreList(string settid);
+
+        /// <summary>
         /// 导入公司
         /// </summary>
         /// <param name="file"></param>

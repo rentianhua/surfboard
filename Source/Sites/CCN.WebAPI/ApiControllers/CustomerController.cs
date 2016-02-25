@@ -877,7 +877,19 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.GetCommentPageList(query);
         }
-        
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetScoreList")]
+        [HttpGet]
+        public JResult GetScoreList(string settid)
+        {
+            return _custservice.GetScoreList(settid);
+        }
+
         /// <summary>
         /// 导入企业信息
         /// </summary>
