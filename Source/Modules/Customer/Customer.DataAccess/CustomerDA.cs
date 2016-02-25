@@ -1641,17 +1641,27 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             return list;
         }
 
-        ///// <summary>
-        ///// 评论列表
-        ///// </summary>
-        ///// <param name="settid"></param>
-        ///// <returns></returns>
-        //public ScoreListModel GetScoreList(string settid)
-        //{
-        //    var sql = "select count(1) from settled_comment where companyid=@companyid;";
-        //}
-
-
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public ScoreListModel GetScoreList(string settid)
+        {
+            const string sql = @"select count(1) as count from settled_comment where companyid=@companyid and score=@num;";
+            var model = new ScoreListModel();
+            using (var conn = Helper.GetConnection())
+            {
+                model.Score1 = conn.Query<int>(sql, new {companyid = settid, num = 1}).FirstOrDefault();
+                model.Score2 = conn.Query<int>(sql, new {companyid = settid, num = 2}).FirstOrDefault();
+                model.Score3 = conn.Query<int>(sql, new {companyid = settid, num = 3}).FirstOrDefault();
+                model.Score4 = conn.Query<int>(sql, new {companyid = settid, num = 4}).FirstOrDefault();
+                model.Score5 = conn.Query<int>(sql, new {companyid = settid, num = 5}).FirstOrDefault();
+            }
+            
+            return model;
+        }
+        
         #endregion
 
     }

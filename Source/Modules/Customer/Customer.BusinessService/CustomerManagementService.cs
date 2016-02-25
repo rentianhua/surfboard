@@ -595,6 +595,15 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.GetCommentPageList(query);
         }
 
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetScoreList(string settid)
+        {
+            return BusinessComponent.GetScoreList(settid);
+        }
 
         /// <summary>
         /// 导入公司

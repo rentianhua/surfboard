@@ -354,23 +354,23 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// <summary>
         /// 
         /// </summary>
-        public float Score1 { get; set; }
+        public int Score1 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public float Score2 { get; set; }
+        public int Score2 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public float Score3 { get; set; }
+        public int Score3 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public float Score4 { get; set; }
+        public int Score4 { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public float Score5 { get; set; }
+        public int Score5 { get; set; }
     }
 
     /// <summary>
