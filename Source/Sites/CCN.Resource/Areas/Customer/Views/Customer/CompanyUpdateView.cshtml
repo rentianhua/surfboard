@@ -1,0 +1,226 @@
+﻿<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+<script type="text/javascript">
+
+    var applyid = "@ViewBag.applyid";  //会员id
+    var companyid = "";
+    var uploader;
+    $(function () {
+        InitUpload();
+        Init();
+    });
+
+    function InitUpload() {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+    }
+
+
+    function Init() {
+
+        if (applyid === "") {
+            return;
+        }
+
+        getJson("/api/Customer/GetUpdateApplyById?applyid=" + applyid, null, function (data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据失败！");
+                return;
+            }
+
+            var obj = data.errmsg;
+
+            companyid = obj.Settid;
+            $("#companyname").html(obj.CompanyName);
+            $("#address").html(obj.Address);
+            $("#opername").html(obj.OperName);
+            $("#officephone").html(obj.OfficePhone);
+            $("#originalregistcapi").html(obj.OriginalRegistCapi);
+            $("#companystatus").html(obj.CompanyStatus);
+            $("#scope").html(obj.Scope);
+            $("#companytitle").html(obj.Companytitle);
+            $("#boutiqueurl").html(obj.Boutiqueurl);
+            $("#ancestryname").html(obj.Ancestryname);
+            $("#categoryname").html(obj.Categoryname);
+            debugger
+            var arr = obj.Pictures.split(",");
+            $.each(arr, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('.imgs').append(
+                        '<div id="' + strradom + '" class="imgPreview">\
+						    <img data-type="img" src="' + getImgUrl("1450076868607.jpg") + '" class="loading" width="550px">\
+					    </div>');
+            });
+        });
+
+        $("#submit").click(function () {
+
+            getJson("/api/Customer/HandleApply?applyid=" + applyid, null, function (data) {
+
+                if (data.errcode !== 0) {
+                    alert("处理失败！");
+                    return;
+                }
+
+            });
+        });
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Customer/Customer/CompanyUpdateList?companyid=" + companyid);
+    }
+
+</script>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">企业信息申请修改详情</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">商家名称:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="companytitle"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">公司地址:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="address"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">法人:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="opername"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">联系电话:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="officephone"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">注册资金:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="originalregistcapi"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">状态:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="companystatus"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">经营范围:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="scope"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">精品车行链接:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="boutiqueurl"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">血统id集合:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="ancestryname"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">类别id集合:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="categoryname"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">图片：</label>
+                            <div class="controls col-sm-11" id="imgList">
+                                <div id="container2">
+
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding:10px 144px 0 0;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+

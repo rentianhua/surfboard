@@ -38,7 +38,7 @@
         option.container = "container2";
         option.uptoken = "@ViewBag.uptoken";
         option.autostart = false;
-        option.domain = QiuniuHost();
+        option.domain = qiniuurl;
         //初始化七牛上传控件
         uploader = InitQiniuUpload(option);
 
@@ -258,7 +258,7 @@
             $("#caresc").val(obj.remark);
 
             //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
-
+            debugger
             $.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
                 $.each(data.errmsg, function (k, v) {
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);

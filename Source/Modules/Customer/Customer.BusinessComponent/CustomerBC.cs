@@ -1019,7 +1019,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #endregion
 
-        #region 入驻公司
+        #region 车信评
 
 
         /// <summary>
@@ -1027,9 +1027,20 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
         {
             return DataAccess.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyModelById(string innerid)
+        {
+            var model = DataAccess.GetCompanyModelById(innerid);
+            return JResult._jResult(model);
         }
 
         /// <summary>
@@ -1041,6 +1052,90 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             var model = DataAccess.GetCompanyById(innerid);
             return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Settid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+            var result = DataAccess.AddCompanyApplyUpdate(model);
+            return JResult._jResult(result);
+        }
+        
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
+        {
+            return DataAccess.GetUpdateApplyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public JResult GetUpdateApplyById(string applyid)
+        {
+            var model = DataAccess.GetUpdateApplyById(applyid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public JResult HandleApply(string applyid)
+        {
+            var applyModel = DataAccess.GetApplyModel(applyid);
+            if (applyModel == null)
+            {
+                return JResult._jResult(401, "修改申请不存在");
+            }
+
+            var comModel = new CompanyModel
+            {
+                Innerid = applyModel.Settid,
+                Address = applyModel.Address,
+                Scope = applyModel.Scope,
+                Picurl = applyModel.Picurl,
+                OfficePhone = applyModel.OfficePhone,
+                Companytitle = applyModel.Companytitle,
+                Ancestryids = applyModel.Ancestryids,
+                Categoryids = applyModel.Categoryids,
+                Customdesc = applyModel.Customdesc,
+                Boutiqueurl = applyModel.Boutiqueurl,
+                Spare1 = applyModel.Spare1,
+                Spare2 = applyModel.Spare2,
+                Modifiedtime = DateTime.Now,
+                Modifierid = ApplicationContext.Current.UserId
+            };
+            var result = DataAccess.UpdateCompanyModel(comModel, applyModel.Pictures);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            var list = DataAccess.GetCompanyPictureListById(settid);
+            return list == null 
+                ? JResult._jResult(400,"") 
+                : JResult._jResult(0, list);
         }
 
         /// <summary>
@@ -1141,7 +1236,6 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             return DataAccess.GetCommentPageList(query);
         }
-
         
         /// <summary>
         /// 导入公司

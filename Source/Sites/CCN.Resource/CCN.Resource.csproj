@@ -925,6 +925,10 @@
     <Content Include="Areas\Auction\Views\Auction\AuctionParticipantList.cshtml" />
     <Content Include="Areas\Auction\Views\Auction\AuctionDepositList.cshtml" />
     <Content Include="Areas\Auction\Views\Auction\AuctionDepositEdit.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyEdit.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyUpdateView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyUpdateList.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />

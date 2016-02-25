@@ -51,6 +51,36 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 联系电话
         /// </summary>
         public string OfficePhone { get; set; }
+        
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        public string Picurl { get; set; }
+
+        /// <summary>
+        /// 商家名称
+        /// </summary>
+        public string Companytitle { get; set; }
+
+        /// <summary>
+        /// 血统id集合
+        /// </summary>
+        public string Ancestryids { get; set; }
+
+        /// <summary>
+        /// 类别id集合
+        /// </summary>
+        public string Categoryids { get; set; }
+
+        /// <summary>
+        /// 自定义属性
+        /// </summary>
+        public string Customdesc { get; set; }
+
+        /// <summary>
+        /// 精品车行url
+        /// </summary>
+        public string Boutiqueurl { get; set; }
 
         /// <summary>
         /// 备用字段
@@ -83,6 +113,8 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Modifierid { get; set; }
     }
 
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -97,7 +129,19 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 评论数
         /// </summary>
         public int CommentNum { get; set; }
+        /// <summary>
+        /// 星级分数
+        /// </summary>
+        public float ScoreNum { get; set; }
+        /// <summary>
+        /// 血统
+        /// </summary>
+        public string Ancestryname { get; set; }
 
+        /// <summary>
+        /// 类别
+        /// </summary>
+        public string Categoryname { get; set; }
     }
 
     /// <summary>
@@ -115,6 +159,20 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public int CommentNum { get; set; }
 
+        /// <summary>
+        /// 星级分数
+        /// </summary>
+        public float ScoreNum { get; set; }
+
+        /// <summary>
+        /// 血统
+        /// </summary>
+        public string Ancestryname { get; set; }
+
+        /// <summary>
+        /// 类别
+        /// </summary>
+        public string Categoryname { get; set; }
     }
 
     /// <summary>
@@ -131,9 +189,106 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 公司地址
         /// </summary>
         public string Address { get; set; }
+        
+        /// <summary>
+        /// 市
+        /// </summary>
+        public string City { get; set; }
+        
+        /// <summary>
+        /// 区/县
+        /// </summary>
+        public string County { get; set; }
+
+        /// <summary>
+        /// 血统id集合
+        /// </summary>
+        public string Ancestryids { get; set; }
+
+        /// <summary>
+        /// 类别id集合
+        /// </summary>
+        public string Categoryids { get; set; }
+    }
+
+
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CompanyApplyUpdateModel : CompanyModel
+    {
+        /// <summary>
+        /// 企业id
+        /// </summary>
+        public string Settid { get; set; }
+
+        /// <summary>
+        /// 企业修改时联系人
+        /// </summary>
+        public string ContactMobile { get; set; }
+
+        /// <summary>
+        /// 图片集合
+        /// </summary>
+        public string Pictures { get; set; }
 
     }
-    
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CompanyApplyUpdateViewModel : CompanyApplyUpdateModel
+    {
+        /// <summary>
+        /// 血统
+        /// </summary>
+        public string Ancestryname { get; set; }
+
+        /// <summary>
+        /// 类别
+        /// </summary>
+        public string Categoryname { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CompanyUpdateApplyQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 公司名
+        /// </summary>
+        public string CompanyName { get; set; }
+
+        /// <summary>
+        /// 公司地址
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string OfficePhone { get; set; }
+
+        /// <summary>
+        /// 企业id
+        /// </summary>
+        public string Settid { get; set; }
+
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CompanyUpdateApplyListModel : CompanyListModel
+    {
+        
+    }
+
+
     /// <summary>
     /// 评论model
     /// </summary>
@@ -194,6 +349,33 @@ namespace CCN.Modules.Customer.BusinessEntity
     /// <summary>
     /// 
     /// </summary>
+    public class ScoreListModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Score1 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Score2 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Score3 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Score4 { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Score5 { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class CommentQueryModel : QueryModel
     {
         /// <summary>
@@ -242,4 +424,54 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public DateTime? Createdtime { get; set; }
     }
+
+    /// <summary>
+    /// 企业图片
+    /// </summary>
+    public class CompanyPictureModel
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Settid { get; set; }
+
+        /// <summary>
+        /// 类型id code
+        /// </summary>
+        public int Typeid { get; set; }
+
+        /// <summary>
+        /// 图片路径
+        /// </summary>
+        public string Path { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int Sort { get; set; }
+
+        /// <summary>
+        /// 是否封面 1.是，0不是
+        /// </summary>
+        public int IsCover { get; set; }
+
+        /// <summary>
+        /// 添加时间
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public CompanyPictureModel()
+        {
+            Createdtime = DateTime.Now;
+        }
+    }
+
 }

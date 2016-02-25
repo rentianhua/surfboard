@@ -1300,12 +1300,17 @@ namespace CCN.Modules.Customer.DataAccess
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query)
+        public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @" settled_info ";
-            const string fields = @"innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
+            const string tableName = @" settled_info as a ";
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+(select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
+(select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
+(select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 ");
             if (!string.IsNullOrWhiteSpace(query.CompanyName))
@@ -1316,9 +1321,54 @@ namespace CCN.Modules.Customer.DataAccess
             {
                 sqlWhere.Append($" and address like '%{query.Address}%'");
             }
+
+            if (!string.IsNullOrWhiteSpace(query.City))
+            {
+                sqlWhere.Append($" and (address like '%{query.City}%' or companyname like '%{query.City}%')");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.County))
+            {
+                sqlWhere.Append($" and address like '%{query.County}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Ancestryids))
+            {
+                string str = "";
+                foreach (var item in query.Ancestryids.Split(','))
+                {
+                    str += " locate('" + item + "',ancestryids)>0 or";
+                }
+                str = str.Substring(0, str.Length - 2);
+                sqlWhere.Append(" and (" + str + ")");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Categoryids))
+            {
+                string str = "";
+                foreach (var item in query.Categoryids.Split(','))
+                {
+                    str += " locate('" + item + "',categoryids)>0 or";
+                }
+                str = str.Substring(0, str.Length - 2);
+                sqlWhere.Append(" and (" + str + ")");
+            }
+
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
-            var list = Helper.ExecutePaging<CompanyModel>(model, query.Echo);
+            var list = Helper.ExecutePaging<CompanyListModel>(model, query.Echo);
             return list;
+        }
+
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CompanyModel GetCompanyModelById(string innerid)
+        {
+            const string sql = @"select * from settled_info as a where innerid=@innerid;";
+            var model = Helper.Query<CompanyModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
         }
 
         /// <summary>
@@ -1328,9 +1378,165 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public CompanyViewModel GetCompanyById(string innerid)
         {
-            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,(select count(innerid) from settled_praiselog where companyid=settled_info.innerid) as PraiseNum,(select count(innerid) from settled_comment where companyid=settled_info.innerid) as CommentNum from settled_info where innerid=@innerid;";
+            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+(select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
+(select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
+(select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname
+from settled_info as a where innerid=@innerid;";
             var model = Helper.Query<CompanyViewModel>(sql, new { innerid }).FirstOrDefault();
             return model;
+        }
+        
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
+        {
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_info_applyupdate as a ";
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl, createrid, createdtime, modifierid, modifiedtime,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+
+            if (!string.IsNullOrWhiteSpace(query.Settid))
+            {
+                sqlWhere.Append($" and settid='{query.Settid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and address like '%{query.Address}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and officephone like '%{query.OfficePhone}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CompanyUpdateApplyListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public CompanyApplyUpdateViewModel GetUpdateApplyById(string applyid)
+        {
+            const string sqlS = @"select innerid,settid,ContactMobile,Pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+(select group_concat(codename) from base_code where typekey = 'car_ancestry' and FIND_IN_SET(codevalue, a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey = 'car_category' and FIND_IN_SET(codevalue, a.categoryids)) as categoryname
+from settled_info_applyupdate as a where innerid = @innerid; ";
+            return Helper.Query<CompanyApplyUpdateViewModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
+        }
+        
+        /// <summary>
+        /// 获取申请的信息
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public CompanyApplyUpdateModel GetApplyModel(string applyid)
+        {
+            const string sqlS = "select * from settled_info_applyupdate where innerid=@innerid;";
+            return Helper.Query<CompanyApplyUpdateModel>(sqlS, new {innerid = applyid}).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="pictures"></param>
+        /// <returns></returns>
+        public int UpdateCompanyModel(CompanyModel model, string pictures)
+        {
+            var sqlStr = new StringBuilder("update `settled_info` set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+            
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+
+                    const string delPic = "delete from settled_picture where settid=@settid;";
+                    conn.Execute(delPic, new {settid = model.Innerid}, tran);
+
+                    const string addPic = "insert into settled_picture (innerid, settid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+                    var i = 1;
+                    foreach (var item in pictures.Split(','))
+                    {
+                        conn.Execute(addPic, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            settid = model.Innerid,
+                            typeid = 0,
+                            path = item,
+                            sort = i,
+                            createdtime = DateTime.Now
+                        },tran);
+                        i ++;
+                    }
+                    
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetCompanyPictureListById(string settid)
+        {
+            const string sql = @"select path from settled_picture where settid=@settid;";
+            var list = Helper.Query<string>(sql, new { settid });
+            return list;
         }
 
         /// <summary>
@@ -1434,6 +1640,17 @@ namespace CCN.Modules.Customer.DataAccess
             var list = Helper.ExecutePaging<CommentListModel>(model, query.Echo);
             return list;
         }
+
+        ///// <summary>
+        ///// 评论列表
+        ///// </summary>
+        ///// <param name="settid"></param>
+        ///// <returns></returns>
+        //public ScoreListModel GetScoreList(string settid)
+        //{
+        //    var sql = "select count(1) from settled_comment where companyid=@companyid;";
+        //}
+
 
         #endregion
 

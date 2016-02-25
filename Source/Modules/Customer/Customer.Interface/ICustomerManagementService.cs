@@ -326,7 +326,7 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
-        #region 车信评（入驻公司）
+        #region 车信评
 
 
         /// <summary>
@@ -334,7 +334,14 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        BasePageList<CompanyModel> GetCompanyPageList(CompanyQueryModel query);
+        BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query);
+
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCompanyModelById(string innerid);
 
         /// <summary>
         /// 获取公司详情
@@ -342,6 +349,41 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult GetCompanyById(string innerid);
+        
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCompanyApplyUpdate(CompanyApplyUpdateModel model);
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query);
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        JResult GetUpdateApplyById(string applyid);
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        JResult HandleApply(string applyid);
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetCompanyPictureListById(string settid);
 
         /// <summary>
         /// 企业评论

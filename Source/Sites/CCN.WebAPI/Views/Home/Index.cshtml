@@ -26,13 +26,23 @@
     </div>
 </div>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/common.js"></script>
 <script type="text/javascript">
+
+    postJson("api/Customer/GetCompanyPageList", { pageindex: 1 }, function (data) {
+        console.log(data);
+    });
+
+
     //$.ajax({
-    //    url: '/api/Base/GetCarModel/568',
-    //    data: {},
-    //    type: 'get',
+    //    url: 'api/Customer/GetCompanyPageList',
+    //    data: {pageindex:1},
+    //    type: 'post',
     //    datatype: 'json',
     //    async: false,
+    //    beforeSend: function (xhr) {
+    //        xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
+    //    },
     //    success: function (data) {
     //        console.log(data);
     //    }
