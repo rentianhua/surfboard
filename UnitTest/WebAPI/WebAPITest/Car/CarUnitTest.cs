@@ -9,7 +9,6 @@ using CCN.Modules.Car.BusinessEntity;
 using Cedar.Framework.Common.BaseClasses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Senparc.Weixin.HttpUtility;
 
 namespace WebAPITest.Car
 {
@@ -88,8 +87,6 @@ namespace WebAPITest.Car
                 buytime = DateTime.Now,
                 buyprice = 0,
                 dealprice = 0,
-                avgprice = 0,
-                dealnumber = 0,
                 isproblem = 0,
                 sellreason = "转让原因",
                 masterdesc = "原车主信息",
@@ -147,7 +144,7 @@ namespace WebAPITest.Car
             var result = DynamicWebService.SendPost("http://api.che300.com/service/getUsedCarPrice", paramList, "GET");
 
             var jobj = JObject.Parse(result);
-            var title = jobj["title"].ToString().UrlDecode();
+            //var title = jobj["title"].ToString().UrlDecode();
 
             
 

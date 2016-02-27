@@ -1,0 +1,34 @@
+﻿
+----------------------header--------------------------
+[INFO ] [2016-02-25 15:46:44,452] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":null,"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":null}] 
+[INFO ] [2016-02-25 15:46:55,107] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":null,"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":null}] 
+[INFO ] [2016-02-25 15:47:49,450] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":["aaaa","bbbb"],"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":null}] 
+[INFO ] [2016-02-25 15:50:41,707] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":[],"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":"158624190112"}] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[INFO ] [2016-02-25 15:52:22,423] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":[],"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":"158624190112"}] 
+[INFO ] [2016-02-25 15:52:36,914] -[微信端保存图片参数：{"AccessToken":"sdsdsdsdsdsdsds","Carid":"675272b7-eeb3-40bf-b231-21ab689dd4ac","DelIds":[],"MediaIdList":["ztx5QQh","0Lbv0nvsGOJOYMD"],"Mobile":"158624190112"}] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[INFO ] [2016-02-25 16:45:13,860] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":[],"AddPaths":["ztx5QQh","0Lbv0nvsGOJOYMD"]}] 
+[INFO ] [2016-02-25 16:47:05,781] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":[],"AddPaths":["car_1450851353047.jpg","car_1450851358105.jpg","car_1450851363444.jpg","car_1450851370105.jpg","car_1450851375419.jpg","car_1450851380138.jpg"]}] 
+[INFO ] [2016-02-25 16:50:04,861] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":["e37892b2-1a7e-45a5-b312-7dc55cadcfdc","e9923e7d-06c4-45a6-8af4-c2de1976d517"],"AddPaths":["car_1450851375419bbbbbbb.jpg","car_145085138013833333333.jpg"]}] 
+[INFO ] [2016-02-25 16:50:29,243] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":["e37892b2-1a7e-45a5-b312-7dc55cadcfdc","e9923e7d-06c4-45a6-8af4-c2de1976d517"],"AddPaths":["car_1450851375419bbbbbbb.jpg","car_145085138013833333333.jpg"]}] 
+[INFO ] [2016-02-25 16:50:49,537] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":["e37892b2-1a7e-45a5-b312-7dc55cadcfdc","e9923e7d-06c4-45a6-8af4-c2de1976d517"],"AddPaths":["car_1450851375419bbbbbbb.jpg","car_145085138013833333333.jpg"]}] 
+
+----------------------footer--------------------------
+
+----------------------header--------------------------
+[INFO ] [2016-02-25 16:55:34,315] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":["e37892b2-1a7e-45a5-b312-7dc55cadcfdc","e9923e7d-06c4-45a6-8af4-c2de1976d517"],"AddPaths":["car_1450851375419bbbbbbb.jpg","car_145085138013833333333.jpg"]}] 
+[INFO ] [2016-02-25 16:57:06,911] -[批量保存图片参数：null] 
+[INFO ] [2016-02-25 16:57:29,029] -[批量保存图片参数：null] 
+[INFO ] [2016-02-25 16:57:43,708] -[批量保存图片参数：null] 
+[INFO ] [2016-02-25 16:58:09,464] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":[],"AddPaths":["car_1450851353047.jpg","car_1450851358105.jpg","car_1450851363444.jpg","car_1450851370105.jpg","car_1450851375419.jpg","car_1450851380138.jpg"]}] 
+[INFO ] [2016-02-25 16:58:48,743] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":[],"AddPaths":["car_145085135304700000000.jpg","car_145085135810566666666.jpg"]}] 
+[INFO ] [2016-02-25 16:59:35,225] -[批量保存图片参数：{"Carid":"0083987c-3e94-4296-b37a-7b160f3e65f9","DelIds":["4c247971-00eb-4b57-9102-dd36f2f958aa"],"AddPaths":["car_145085135304700000000.jpg","car_145085135810566666666.jpg"]}] 
+
+----------------------footer--------------------------

@@ -264,6 +264,19 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult SaveCarPicture(BatchPictureListWeichatModel model);
 
+        /// <summary>
+        /// 批量保存图片(wechat webapp)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult BatchSaveCarPictureWechat(WechatPictureExModel model);
+
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult BatchSaveCarPicture(BatchPictureListModel model);
         #endregion
 
         #region 车辆收藏

@@ -379,6 +379,26 @@ namespace CCN.Modules.Car.BusinessService
             return BusinessComponent.SaveCarPicture(model);
         }
 
+        /// <summary>
+        /// 批量保存图片(wechat webapp)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BatchSaveCarPictureWechat(WechatPictureExModel model)
+        {
+            return BusinessComponent.BatchSaveCarPictureWechat(model);
+        }
+
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BatchSaveCarPicture(BatchPictureListModel model)
+        {
+            return BusinessComponent.BatchSaveCarPicture(model);
+        }
+
         #endregion
 
         #region 车辆收藏

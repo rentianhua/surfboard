@@ -1053,6 +1053,188 @@ namespace CCN.Modules.Car.BusinessComponent
             return JResult._jResult(0, "批量操作图片成功");
         }
 
+        #region new
+
+        /// <summary>
+        /// 上传图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public List<string> UploadPicture(WechatPictureExModel model)
+        {
+            var pathList = new List<string>();
+
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+
+            foreach (var item in model.MediaIdList)
+            {
+                var filename = QiniuUtility.GetFileName(Picture.car_picture);
+
+                //下载图片写入文件流
+                var filebyte = MediaApi.Get(model.AccessToken, item);
+                Stream stream = new MemoryStream(filebyte);
+
+                //上传到七牛
+                var qnKey = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+
+                //上传图片成功
+                if (string.IsNullOrWhiteSpace(qnKey))
+                {
+                    continue;
+                }
+
+                pathList.Add(qnKey);
+            }
+
+            return pathList;
+        }
+
+        /// <summary>
+        /// 批量保存图片(wechat webapp)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BatchSaveCarPictureWechat(WechatPictureExModel model)
+        {
+
+            if (string.IsNullOrWhiteSpace(model?.Carid) || (model.DelIds.Count == 0 && model.MediaIdList.Count == 0))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var result = 0;
+            //获取即将删除的图片
+            List<CarPictureModel> picedList = null;
+
+            //only delete
+            if (model.DelIds.Count > 0 && model.MediaIdList.Count == 0)
+            {
+                //获取需要删除的图片
+                picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
+                result = DataAccess.DelPictureList(model.DelIds, model.Carid);
+            }
+            //only add
+            else if (model.DelIds.Count == 0 && model.MediaIdList.Count > 0)
+            {
+                var addlist = UploadPicture(model);
+                result = DataAccess.AddPictureList(addlist, model.Carid);
+            }
+            //add and delete
+            else if (model.DelIds.Count > 0 && model.MediaIdList.Count > 0)
+            {
+                var addlist = UploadPicture(model);
+                picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
+                result = DataAccess.AddAndDelPicture(new BatchPictureListModel
+                {
+                    AddPaths = addlist,
+                    DelIds = model.DelIds,
+                    Carid = model.Carid
+                });
+            }
+
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            if (picedList != null && picedList.Any())
+            {
+                Task.Run(() =>
+                {
+                    var qiniu = new QiniuUtility();
+                    foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                    {
+                        qiniu.DeleteFile(item.Path);
+                    }
+                });
+            }
+
+            //调用nodejs接口即时更新车辆列表图片
+            if (model.MediaIdList.Count > 0)
+            {
+                Task.Run(() =>
+                {
+                    var param = new Dictionary<string, string>
+                    {
+                        {"mobile", model.Mobile},
+                        {"carid", model.Carid},
+                        {"picurl", DataAccess.GetCarPicByCarid(model.Carid)}
+                    };
+
+                    var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "api/carImgSaveMsg";
+                    var nodeRes = DynamicWebService.SendPost(nodejs, param, "post");
+                    LoggerFactories.CreateLogger().Write("nodejs返回结果：" + nodeRes, TraceEventType.Information);
+                });
+            }
+
+            return JResult._jResult(0, "批量操作图片成功");
+        }
+
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult BatchSaveCarPicture(BatchPictureListModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || (model.DelIds.Count == 0 && model.AddPaths.Count == 0))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var result = 0;
+            //获取即将删除的图片
+            List<CarPictureModel> picedList = null;
+
+            //only delete
+            if (model.DelIds.Count > 0 && model.AddPaths.Count == 0)
+            {
+                picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
+                result = DataAccess.DelPictureList(model.DelIds, model.Carid);
+            }
+            //only add
+            else if (model.DelIds.Count == 0 && model.AddPaths.Count > 0)
+            {
+                result = DataAccess.AddPictureList(model.AddPaths, model.Carid);
+            }
+            //add and delete
+            else if (model.DelIds.Count > 0 && model.AddPaths.Count > 0)
+            {
+                picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
+                result = DataAccess.AddAndDelPicture(model);
+            }
+
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            if (picedList != null && picedList.Any())
+            {
+                Task.Run(() =>
+                {
+                    var qiniu = new QiniuUtility();
+                    foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                    {
+                        qiniu.DeleteFile(item.Path);
+                    }
+                });
+            }
+
+            return JResult._jResult(0, "批量操作图片成功");
+        }
+        
+        #endregion
         #endregion
 
         #region 车辆收藏

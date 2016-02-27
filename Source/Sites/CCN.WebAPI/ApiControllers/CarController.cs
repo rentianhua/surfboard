@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -723,6 +724,33 @@ namespace CCN.WebAPI.ApiControllers
             LoggerFactories.CreateLogger().Write("批量添加+删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
             return _carervice.SaveCarPicture(picModel);
         }
+
+        /// <summary>
+        /// 批量保存图片(wechat webapp)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BatchSaveCarPictureWechat")]
+        [HttpPost]
+        public JResult BatchSaveCarPictureWechat([FromBody] WechatPictureExModel model)
+        {
+            LoggerFactories.CreateLogger().Write("微信端批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPictureWechat(model);
+        }
+
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BatchSaveCarPicture")]
+        [HttpPost]
+        public JResult BatchSaveCarPicture([FromBody] BatchPictureListModel model)
+        {
+            LoggerFactories.CreateLogger().Write("批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPicture(model);
+        }
+
         #endregion
 
         #region 车辆收藏

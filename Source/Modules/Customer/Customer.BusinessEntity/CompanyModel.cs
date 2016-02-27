@@ -351,6 +351,27 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 添加时间
         /// </summary>
         public DateTime? Createdtime { get; set; }
+
+        /// <summary>
+        /// 删除时间
+        /// </summary>
+        public DateTime? Deletedtime { get; set; }
+
+        /// <summary>
+        /// 是否删除
+        /// </summary>
+        public short? Isdelete { get; set; }
+
+        /// <summary>
+        /// 删除说明
+        /// </summary>
+        public string Deletedesc { get; set; }
+
+        /// <summary>
+        /// 图片
+        /// </summary>
+        public string Pictures { get; set; }
+
     }
 
     /// <summary>
@@ -400,6 +421,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 公司id
         /// </summary>
         public string Companyid { get; set; }
+
+        /// <summary>
+        /// 只看低分
+        /// </summary>
+        public bool OnlyLow { get; set; }
     }
 
     /// <summary>

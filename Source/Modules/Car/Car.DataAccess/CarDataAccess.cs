@@ -1589,8 +1589,7 @@ namespace CCN.Modules.Car.DataAccess
                 }
             }
         }
-
-
+        
         /// <summary>
         /// 批量保存图片(添加+删除)
         /// </summary>
@@ -1660,7 +1659,226 @@ namespace CCN.Modules.Car.DataAccess
                 }
             }
         }
+        
+        #region 图片处理新接口
+        
+        /// <summary>
+        /// 获取车辆封面图片
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns></returns>
+        public string GetCarPicByCarid(string carid)
+        {
+            const string sql = @"select pic_url from car_info where innerid=@innerid;";
 
+            try
+            {
+                var str = Helper.Query<string>(sql, new { innerid = carid }).FirstOrDefault();
+                return str;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加)
+        /// </summary>
+        /// <param name="pathList"></param>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public int AddPictureList(List<string> pathList, string carid)
+        {
+            const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";                              //查询车辆所有图片的最大排序
+            const string sqlIPic = @"insert into car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
+            const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid }).ToList();
+                var number = picedList.Count + pathList.Count;
+                if (number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = 0;//conn.ExecuteScalar<int>(sqlSMaxSort, new { carid });
+                var carPictureModel = picedList.LastOrDefault();
+                if (carPictureModel != null)
+                {
+                    maxsort = carPictureModel.Sort;
+                }
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in pathList)
+                    {
+                        conn.Execute(sqlIPic, new CarPictureModel
+                        {
+                            Carid = carid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //表示添加首批图片
+                    if (maxsort == pathList.Count) //++maxsort
+                    {
+                        conn.Execute(sqlUCover, new { carid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量添加图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public int DelPictureList(List<string> idList, string carid)
+        {
+            const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
+            const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid }).ToList();
+                var number = picedList.Count - idList.Count;
+                if (number < 3)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picedList.First().Innerid;
+                    foreach (var id in idList)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { carid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量删除图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddAndDelPicture(BatchPictureListModel model)
+        {
+            const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=@carid order by sort;";//查询车辆图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from car_picture where carid=@carid;";//查询车辆所有图片的最大排序
+            const string sqlIPic = @"insert into car_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @carid, @typeid, @path, @sort, @createdtime);";
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
+            const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { carid = model.Carid }).ToList();
+                var number = picedList.Count + model.AddPaths.Count - model.DelIds.Count;
+                if (number < 3 || number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = 0;
+                var carPictureModel = picedList.LastOrDefault();
+                if (carPictureModel != null)
+                {
+                    maxsort = carPictureModel.Sort;
+                }
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in model.AddPaths)
+                    {
+                        conn.Execute(sqlIPic, new CarPictureModel
+                        {
+                            Carid = model.Carid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picedList.First().Innerid;
+                    foreach (var id in model.DelIds)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { carid = model.Carid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量保存图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
+        
         #endregion
 
         #region 车辆收藏

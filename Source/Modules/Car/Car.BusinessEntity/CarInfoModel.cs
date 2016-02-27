@@ -76,17 +76,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 成交价格（万元）
         /// </summary>
         public decimal? dealprice { get; set; }
-
-        /// <summary>
-        /// 成交均价（万元）(聚合评估)
-        /// </summary>
-        public decimal? avgprice { get; set; }
-
-        /// <summary>
-        /// 当月成交量 (结算得出)
-        /// </summary>
-        public int? dealnumber { get; set; }
-
+        
         /// <summary>
         /// 重大事故/水浸/火烧
         /// </summary>
