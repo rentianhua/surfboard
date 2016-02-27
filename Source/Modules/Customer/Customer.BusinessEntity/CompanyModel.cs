@@ -83,9 +83,9 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Boutiqueurl { get; set; }
 
         /// <summary>
-        /// 企业描述
+        /// 企业简介
         /// </summary>
-        public string Describe { get; set; }
+        public string Introduction { get; set; }
 
         /// <summary>
         /// 备用字段

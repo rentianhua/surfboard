@@ -800,18 +800,6 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.AddCompanyApplyUpdate(model);
         }
-
-        /// <summary>
-        /// 处理修改申请
-        /// </summary>
-        /// <param name="applyid"></param>
-        /// <returns></returns>
-        [Route("HandleApply")]
-        [HttpGet]
-        public JResult HandleApply(string applyid)
-        {
-            return _custservice.HandleApply(applyid);
-        }
         
         /// <summary>
         /// 获取公司图片
