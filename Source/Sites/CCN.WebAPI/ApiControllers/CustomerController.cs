@@ -834,14 +834,14 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult DoComment([FromBody]CommentModel model)
         {
-            if (model == null)
-            {
-                return JResult._jResult(401, "参数不完整");
-            }
-            if (string.IsNullOrWhiteSpace(model.IP))
-            {
-                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
-            }
+            //if (model == null)
+            //{
+            //    return JResult._jResult(401, "参数不完整");
+            //}
+            //if (string.IsNullOrWhiteSpace(model.IP))
+            //{
+            //    model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            //}
             
             return _custservice.DoComment(model);
         }

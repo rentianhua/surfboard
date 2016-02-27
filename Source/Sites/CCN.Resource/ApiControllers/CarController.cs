@@ -516,32 +516,20 @@ namespace CCN.Resource.ApiControllers
         {
             return _carervice.AddCarPictureList(picModel);
         }
-
+        
         /// <summary>
-        /// 批量添加车辆图片(添加)(微信端使用)
+        /// 批量保存图片(通用，除微信端)
         /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [Route("AddCarPictureList")]
+        [Route("BatchSaveCarPicture")]
         [HttpPost]
-        public JResult AddCarPictureList([FromBody]WechatPictureModel picModel)
+        public JResult BatchSaveCarPicture([FromBody] BatchPictureListModel model)
         {
-            LoggerFactories.CreateLogger().Write("批量添加图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
-            return _carervice.AddCarPictureList(picModel);
+            LoggerFactories.CreateLogger().Write("批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPicture(model);
         }
 
-        /// <summary>
-        /// 批量保存图片(添加+删除)
-        /// </summary>
-        /// <param name="picModel"></param>
-        /// <returns></returns>
-        [Route("SaveCarPicture")]
-        [HttpPost]
-        public JResult SaveCarPicture([FromBody] BatchPictureListWeichatModel picModel)
-        {
-            LoggerFactories.CreateLogger().Write("批量添加+删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
-            return _carervice.SaveCarPicture(picModel);
-        }
         #endregion
     }
 }

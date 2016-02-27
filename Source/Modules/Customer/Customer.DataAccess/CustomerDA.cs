@@ -1250,7 +1250,7 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
-        #region 车信评（入驻公司）
+        #region 车信评
 
         /// <summary>
         /// 导入公司
@@ -1613,7 +1613,8 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         /// <returns></returns>
         public int DoComment(CommentModel model)
         {
-            const string sql = @"insert into settled_comment (innerid, companyid, mobile,headportrait, score, ip, commentdesc, createdtime) values (@innerid, @companyid, @mobile,@headportrait, @score, @ip, @commentdesc, @createdtime);";
+            const string sql = @"insert into settled_comment (innerid, companyid, mobile, headportrait, score, ip, commentdesc, pictures, createdtime, isdelete, deletedtime, deletedesc) 
+                                values (@innerid, @companyid, @mobile, @headportrait, @score, @ip, @commentdesc, @pictures, @createdtime, @isdelete, @deletedtime, @deletedesc);";
             try
             {
                 Helper.Execute(sql, model);
@@ -1663,6 +1664,12 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             {
                 sqlWhere.Append($" and companyid='{query.Companyid}'");
             }
+
+            if (query.OnlyLow)
+            {
+                sqlWhere.Append(" and score<=2");
+            }
+
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CommentListModel>(model, query.Echo);
             return list;

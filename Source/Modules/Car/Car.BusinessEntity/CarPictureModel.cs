@@ -149,4 +149,44 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public List<string> AddPaths { get; set; }
     }
+
+    /// <summary>
+    /// 微信webapp使用
+    /// </summary>
+    public class WechatPictureExModel
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string AccessToken { get; set; }
+
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 需要删除的图片id集合
+        /// </summary>
+        public List<string> DelIds { get; set; }
+
+        /// <summary>
+        /// 添加的图片链接id
+        /// </summary>
+        public List<string> MediaIdList { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public WechatPictureExModel()
+        {
+            DelIds = new List<string>();
+            MediaIdList = new List<string>();
+        }
+    }
 }
