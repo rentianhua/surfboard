@@ -428,6 +428,14 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult ImportCompany(string file);
 
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateApplyStatus(string innerid, int status);
+
         #region 图片处理
 
         /// <summary>
