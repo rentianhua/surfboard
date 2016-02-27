@@ -1397,8 +1397,8 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
         {
-            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,describe, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
-                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@describe, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,describe,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@describe,2, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
