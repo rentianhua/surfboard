@@ -626,6 +626,17 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.ImportCompany(file);
         }
 
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateApplyStatus(string applyid, int status)
+        {
+            return BusinessComponent.UpdateApplyStatus(applyid, status);
+        }
+
         #region 图片处理
 
         /// <summary>

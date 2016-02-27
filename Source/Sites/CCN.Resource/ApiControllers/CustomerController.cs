@@ -89,9 +89,9 @@ namespace CCN.Resource.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
-            
+
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
             if (cresult.errcode != 0)
@@ -109,7 +109,7 @@ namespace CCN.Resource.ApiControllers
             if (result.errcode == 0)
             {
                 Task.Run(() =>
-                {                    
+                {
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -125,7 +125,7 @@ namespace CCN.Resource.ApiControllers
                     LoggerFactories.CreateLogger().Write("奖励积分结果：" + pointresult.errcode, TraceEventType.Information);
                 });
             }
-            
+
             #endregion
 
             return result;
@@ -228,7 +228,7 @@ namespace CCN.Resource.ApiControllers
             {
                 Task.Run(() =>
                 {
-                    var custModel = (CustModel) result.errmsg;
+                    var custModel = (CustModel)result.errmsg;
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -249,7 +249,7 @@ namespace CCN.Resource.ApiControllers
 
             return result;
         }
-        
+
         /// <summary>
         /// 用户登录(openid登录)
         /// </summary>
@@ -378,7 +378,7 @@ namespace CCN.Resource.ApiControllers
         [HttpGet]
         public JResult SendWelfare(int refreshnum = 0, int topnum = 0)
         {
-            LoggerFactories.CreateLogger().Write("controller test",TraceEventType.Error);
+            LoggerFactories.CreateLogger().Write("controller test", TraceEventType.Error);
             //return JResult._jResult(0,"");
             return _custservice.SendWelfare(refreshnum, topnum);
         }
@@ -764,11 +764,11 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("HandleApply")]
         [HttpGet]
-        public JResult HandleApply(string applyid,int status)
+        public JResult HandleApply(string applyid, int status)
         {
             return _custservice.HandleApply(applyid, status);
         }
-        
+
         /// <summary>
         /// 获取公司图片
         /// </summary>
@@ -843,6 +843,19 @@ namespace CCN.Resource.ApiControllers
         public JResult ImportCompany(string filename)
         {
             return _custservice.ImportCompany(filename);
+        }
+
+        /// <summary>
+        /// 状态修改
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateApplyStatus")]
+        [HttpGet]
+        public JResult UpdateApplyStatus(string applyid, int status)
+        {
+            return _custservice.UpdateApplyStatus(applyid, status);
         }
 
         #region 图片处理

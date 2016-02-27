@@ -1325,6 +1325,18 @@ namespace CCN.Modules.Customer.BusinessComponent
             return resultDt;
         }
 
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateApplyStatus(string applyid, int status)
+        {
+            var result = DataAccess.UpdateApplyStatus(applyid, status);
+            return JResult._jResult(result);
+        }
+
         #region 图片处理
 
         /// <summary>

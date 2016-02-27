@@ -57,13 +57,20 @@
             $("#boutiqueurl").html(obj.Boutiqueurl);
             $("#ancestryname").html(obj.Ancestryname);
             $("#categoryname").html(obj.Categoryname);
-            debugger
+
+            if (obj.Status==2)
+            {
+                $("#submit").removeClass('hidden');
+                $("#failed").removeClass('hidden');
+            }
+
             var arr = obj.Pictures.split(",");
             $.each(arr, function (k, v) {
+             
                 var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 $('.imgs').append(
                         '<div id="' + strradom + '" class="imgPreview">\
-						    <img data-type="img" src="' + getImgUrl("1450076868607.jpg") + '" class="loading" width="550px">\
+						    <img data-type="img" src="' + getImgUrl(v) + '" class="loading" width="550px">\
 					    </div>');
             });
         });
@@ -77,6 +84,10 @@
                     alert("处理失败！");
                     return;
                 }
+                else {
+                    alert("处理成功！");
+                    return;
+                }
 
             });
         });
@@ -84,10 +95,14 @@
         //不通过
         $("#failed").click(function () {
 
-            getJson("/api/Customer/HandleApply?applyid=" + applyid + "&status=" + 0, null, function (data) {
+            getJson("/api/Customer/UpdateApplyStatus?applyid=" + applyid + "&status=" + 0, null, function (data) {
 
                 if (data.errcode !== 0) {
                     alert("处理失败！");
+                    return;
+                }
+                else {
+                    alert("处理成功！");
                     return;
                 }
 
@@ -226,8 +241,8 @@
                 </div>
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="通过" />
-                        <input id="failed" type="button" class="btn btn-palegreen shiny" value="不通过" />
+                        <input id="submit" type="button" class="btn btn-palegreen shiny hidden" value="通过" />
+                        <input id="failed" type="button" class="btn btn-palegreen shiny hidden" value="不通过" />
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
                     </div>
                 </div>
