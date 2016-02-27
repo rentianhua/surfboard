@@ -710,6 +710,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCompanyModel")]
+        [HttpPost]
+        public JResult UpdateCompanyModel([FromBody]CompanyModel model)
+        {
+            return _custservice.UpdateCompanyModel(model);
+        }
+
+        /// <summary>
         /// 申请企业信息修改
         /// </summary>
         /// <param name="model"></param>
@@ -752,9 +764,9 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("HandleApply")]
         [HttpGet]
-        public JResult HandleApply(string applyid)
+        public JResult HandleApply(string applyid,int status)
         {
-            return _custservice.HandleApply(applyid);
+            return _custservice.HandleApply(applyid, status);
         }
         
         /// <summary>
@@ -833,6 +845,33 @@ namespace CCN.Resource.ApiControllers
             return _custservice.ImportCompany(filename);
         }
 
+        #region 图片处理
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPictureById")]
+        [HttpGet]
+        public JResult GetCompanyPictureById(string settid)
+        {
+            return _custservice.GetCompanyPictureById(settid);
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SaveCompanyPicture")]
+        public JResult SaveCompanyPicture([FromBody]CompanyPictureListModel model)
+        {
+            return _custservice.SaveCompanyPicture(model);
+        }
+
+        #endregion
 
         #endregion
     }

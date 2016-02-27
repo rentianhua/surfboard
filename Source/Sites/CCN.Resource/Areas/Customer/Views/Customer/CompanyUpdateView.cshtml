@@ -68,9 +68,10 @@
             });
         });
 
+        //通过
         $("#submit").click(function () {
 
-            getJson("/api/Customer/HandleApply?applyid=" + applyid, null, function (data) {
+            getJson("/api/Customer/HandleApply?applyid=" + applyid + "&status=" + 1, null, function (data) {
 
                 if (data.errcode !== 0) {
                     alert("处理失败！");
@@ -79,6 +80,20 @@
 
             });
         });
+
+        //不通过
+        $("#failed").click(function () {
+
+            getJson("/api/Customer/HandleApply?applyid=" + applyid + "&status=" + 0, null, function (data) {
+
+                if (data.errcode !== 0) {
+                    alert("处理失败！");
+                    return;
+                }
+
+            });
+        });
+
     }
 
     function goList() {
@@ -157,7 +172,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        
+
                     </div>
                 </div>
                 <div class="row form-group">
@@ -170,7 +185,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        
+
                     </div>
                 </div>
                 <div class="row form-group">
@@ -211,7 +226,8 @@
                 </div>
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" />
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="通过" />
+                        <input id="failed" type="button" class="btn btn-palegreen shiny" value="不通过" />
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
                     </div>
                 </div>

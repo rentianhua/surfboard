@@ -1,6 +1,7 @@
 ﻿#region
 
 using CCN.Resource.Main.Common;
+using Cedar.Framework.Common.BaseClasses;
 using System.Web.Mvc;
 
 #endregion
@@ -58,7 +59,7 @@ namespace CCN.Resource.Areas.Customer.Controllers
         }
         #endregion
 
-        #region
+        #region 车信评论
 
         /// <summary>
         /// 企业列表
@@ -76,6 +77,8 @@ namespace CCN.Resource.Areas.Customer.Controllers
         public ActionResult CompanyEdit(string innerid)
         {
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            new QiniuUtility();
+            ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
         }
 
@@ -96,6 +99,15 @@ namespace CCN.Resource.Areas.Customer.Controllers
         public ActionResult CompanyUpdateView(string applyid)
         {
             ViewBag.applyid = string.IsNullOrWhiteSpace(applyid) ? "" : applyid;
+            return View();
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CommentList()
+        {
             return View();
         }
 

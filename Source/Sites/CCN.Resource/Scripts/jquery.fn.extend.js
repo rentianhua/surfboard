@@ -170,7 +170,7 @@ $.fn.extend({
             }
             else {
                 pagingObj.find("tfoot").remove();
-                debugger
+                
                 $("#" + pagingid).twbsPagination({
                     totalPages: totalPages,
                     visiblePages: 5,

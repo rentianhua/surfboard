@@ -349,7 +349,14 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult GetCompanyById(string innerid);
-        
+
+        /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCompanyModel(CompanyModel model);
+
         /// <summary>
         /// 申请企业信息修改
         /// </summary>
@@ -375,8 +382,9 @@ namespace CCN.Modules.Customer.Interface
         /// 处理修改申请
         /// </summary>
         /// <param name="applyid"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
-        JResult HandleApply(string applyid);
+        JResult HandleApply(string applyid,int status);
 
         /// <summary>
         /// 获取公司图片
@@ -419,6 +427,24 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="file"></param>
         /// <returns></returns>
         JResult ImportCompany(string file);
+
+        #region 图片处理
+
+        /// <summary>
+        /// 获取企业图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetCompanyPictureById(string settid);
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SaveCompanyPicture(CompanyPictureListModel model);
+
+        #endregion
 
         #endregion
     }

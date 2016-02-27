@@ -81,7 +81,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 userInfo.Custname = string.Concat("ccn_", DateTime.Now.Year, "_",
                     userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
             }
-            
+
             if (!string.IsNullOrWhiteSpace(userInfo.Wechat?.Openid))
             {
                 //检查openid是否被其他手机号注册
@@ -106,7 +106,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 userInfo.Type = 1; //这版只有车商
             }
-            
+
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.AuthStatus = 0; //初始化认证状态[0.未提交认证]
             userInfo.Createdtime = DateTime.Now;
@@ -145,7 +145,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 }
             });
             #endregion
-            
+
             return new JResult
             {
                 errcode = result > 0 ? 0 : 404,
@@ -160,7 +160,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns>用户信息</returns>
         public JResult CustLogin(CustLoginInfo loginInfo)
         {
-            LoggerFactories.CreateLogger().Write("登录："+JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("登录：" + JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
             {
                 return JResult._jResult(403, "帐户名不能为空");
@@ -258,7 +258,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 model.Password = "";
             }
-            
+
             return JResult._jResult(model);
         }
 
@@ -281,7 +281,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             model.Password = "";
             return JResult._jResult(model);
         }
-        
+
         /// <summary>
         /// 根据carid获取会员基本信息
         /// </summary>
@@ -294,7 +294,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 model.Password = "";
             }
-            
+
             return JResult._jResult(model);
         }
 
@@ -417,7 +417,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
         {
             var result = DataAccess.UpdateCustTotalCount(custid, type, count, oper);
-            
+
             var userid = ApplicationContext.Current.UserId;
             Task.Run(() =>
             {
@@ -718,7 +718,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(400, "");
             }
-            
+
             return JResult._jResult(00, "");
         }
 
@@ -926,7 +926,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 errmsg = result > 0 ? "清除成功" : "清除失败"
             };
         }
-        
+
         /// <summary>
         /// 删除会员所有信息
         /// </summary>
@@ -972,7 +972,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                     }
                 }
             }
-            
+
             var result = DataAccess.DeleteCustomer(mobile);
             return new JResult
             {
@@ -1004,7 +1004,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             if (string.IsNullOrWhiteSpace(custid) || string.IsNullOrWhiteSpace(openid))
             {
-                return JResult._jResult(401,"参数不完整");
+                return JResult._jResult(401, "参数不完整");
             }
 
             var wechat = DataAccess.CustWechatByOpenid(openid);
@@ -1055,6 +1055,21 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCompanyModel(CompanyModel model)
+        {
+            var result = DataAccess.UpdateCompanyModel(model);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
         /// 申请企业信息修改
         /// </summary>
         /// <param name="model"></param>
@@ -1069,7 +1084,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = DataAccess.AddCompanyApplyUpdate(model);
             return JResult._jResult(result);
         }
-        
+
         /// <summary>
         /// 修改申请列表
         /// </summary>
@@ -1095,14 +1110,17 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// 处理修改申请
         /// </summary>
         /// <param name="applyid"></param>
+        /// <param name="status"></param>
         /// <returns></returns>
-        public JResult HandleApply(string applyid)
+        public JResult HandleApply(string applyid, int status)
         {
             var applyModel = DataAccess.GetApplyModel(applyid);
             if (applyModel == null)
             {
                 return JResult._jResult(401, "修改申请不存在");
             }
+            //更新申请表状态
+            var updateResult = DataAccess.UpdateApplyStatus(applyModel.Innerid, status);
 
             var comModel = new CompanyModel
             {
@@ -1133,8 +1151,8 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult GetCompanyPictureListById(string settid)
         {
             var list = DataAccess.GetCompanyPictureListById(settid);
-            return list == null 
-                ? JResult._jResult(400,"") 
+            return list == null
+                ? JResult._jResult(400, "")
                 : JResult._jResult(0, list);
         }
 
@@ -1149,7 +1167,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             if (chkresult > 0)
             {
-                return JResult._jResult(402,"不能重复评论");
+                return JResult._jResult(402, "不能重复评论");
             }
 
             var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
@@ -1174,7 +1192,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 //随机头像
                 var randomNumber = new Random(Guid.NewGuid().GetHashCode()).Next(1, 278);
                 model.Headportrait = string.Concat("commentheadportrait_", randomNumber, ".jpg");
-                
+
                 #region 修改文件名
 
                 //var num = 1;
@@ -1256,7 +1274,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult ImportCompany(string file)
         {
             file = string.Concat(AppDomain.CurrentDomain.BaseDirectory, "TempFile\\", file);
-            var dt = ExcelHelper.ReadExcelToDataSet(file,true)?.Tables[0];
+            var dt = ExcelHelper.ReadExcelToDataSet(file, true)?.Tables[0];
             var result = 0;
             if (!(dt?.Rows.Count > 0))
                 return JResult._jResult(result);
@@ -1284,6 +1302,78 @@ namespace CCN.Modules.Customer.BusinessComponent
             }
             return resultDt;
         }
+
+        #region 图片处理
+
+        /// <summary>
+        /// 获取企业已有图片
+        /// </summary>
+        /// <param name="settid">企业id</param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureById(string settid)
+        {
+            var list = DataAccess.GetCompanyPictureById(settid);
+            return JResult._jResult(list);
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SaveCompanyCarPicture(CompanyPictureListModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Settid) || (model.DelIds.Count == 0 && model.AddPaths.Count == 0))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var result = 0;
+            //获取即将删除的图片
+            List<CompanyPictureModel> picedList = null;
+
+            //only delete
+            if (model.DelIds.Count > 0 && model.AddPaths.Count == 0)
+            {
+                picedList = DataAccess.GetCompanyPictureByIds(model.DelIds).ToList();
+                result = DataAccess.DelCompanyPictureList(model.DelIds, model.Settid);
+            }
+            //only add
+            else if (model.DelIds.Count == 0 && model.AddPaths.Count > 0)
+            {
+                result = DataAccess.AddCompanyPictureList(model.AddPaths, model.Settid);
+            }
+            else if (model.DelIds.Count > 0 && model.AddPaths.Count > 0)
+            {
+                picedList = DataAccess.GetCompanyPictureByIds(model.DelIds).ToList();
+                result = DataAccess.SaveCompanyPicture(model);
+            }
+
+            switch (result)
+            {
+                case 402:
+                    return JResult._jResult(402, "图片数量不对");
+                case 0:
+                    return JResult._jResult(400, "批量删除图片失败");
+            }
+
+            //异步删除七牛上的图片
+            Task.Run(() =>
+            {
+                if (picedList == null || !picedList.Any())
+                    return;
+
+                var qiniu = new QiniuUtility();
+                foreach (var item in picedList.Where(item => !string.IsNullOrWhiteSpace(item?.Path)))
+                {
+                    qiniu.DeleteFile(item.Path);
+                }
+            });
+
+            return JResult._jResult(0, "批量操作图片成功");
+        }
+
+        #endregion
 
         #endregion
     }
