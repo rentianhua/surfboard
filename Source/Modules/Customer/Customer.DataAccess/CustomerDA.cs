@@ -1378,7 +1378,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public CompanyViewModel GetCompanyById(string innerid)
         {
-            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, describe,spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, introduction,spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
 (select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
 (select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
 (select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
@@ -1397,8 +1397,8 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
         {
-            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,describe,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
-                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@describe,2, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try

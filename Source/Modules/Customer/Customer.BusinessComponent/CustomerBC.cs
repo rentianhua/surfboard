@@ -1134,6 +1134,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 Categoryids = applyModel.Categoryids,
                 Customdesc = applyModel.Customdesc,
                 Boutiqueurl = applyModel.Boutiqueurl,
+                Introduction = applyModel.Introduction,
                 Spare1 = applyModel.Spare1,
                 Spare2 = applyModel.Spare2,
                 Modifiedtime = DateTime.Now,
