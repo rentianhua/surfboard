@@ -1163,30 +1163,45 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult DoComment(CommentModel model)
         {
-            var chkresult = DataAccess.CheckComment(model.Mobile, model.Companyid);
-
-            if (chkresult > 0)
+            if (string.IsNullOrWhiteSpace(model?.Companyid) || string.IsNullOrWhiteSpace(model.Commentdesc) ||
+                model.Score == null)
             {
-                return JResult._jResult(402, "不能重复评论");
+                return JResult._jResult(401, "参数不完整");
             }
 
-            var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
-            if (custModel != null)
+            if (!string.IsNullOrWhiteSpace(model.Pictures) && model.Pictures.Split(',').Length > 9)
             {
-                //设置会员头像
-                if (!string.IsNullOrWhiteSpace(custModel.Headportrait))
+                return JResult._jResult(402, "图片数量不能超过9张");
+            }
+
+            if (model.Mobile != 0)
+            {
+                //var chkresult = DataAccess.CheckComment(model.Mobile, model.Companyid);
+
+                //if (chkresult > 0)
+                //{
+                //    return JResult._jResult(403, "不能重复评论");
+                //}
+
+                var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
+                if (custModel != null)
                 {
-                    model.Headportrait = custModel.Headportrait;
-                }
-                else
-                {
-                    //设置会员的微信头像
-                    if (!string.IsNullOrWhiteSpace(custModel.Wechat?.Photo))
+                    //设置会员头像
+                    if (!string.IsNullOrWhiteSpace(custModel.Headportrait))
                     {
-                        model.Headportrait = custModel.Wechat?.Photo;
+                        model.Headportrait = custModel.Headportrait;
+                    }
+                    else
+                    {
+                        //设置会员的微信头像
+                        if (!string.IsNullOrWhiteSpace(custModel.Wechat?.Photo))
+                        {
+                            model.Headportrait = custModel.Wechat?.Photo;
+                        }
                     }
                 }
             }
+
             if (string.IsNullOrWhiteSpace(model.Headportrait))
             {
                 //随机头像
@@ -1221,6 +1236,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             model.Innerid = Guid.NewGuid().ToString();
             model.Createdtime = DateTime.Now;
+            model.Isdelete = 0;
             var result = DataAccess.DoComment(model);
             return JResult._jResult(result);
         }
@@ -1252,6 +1268,11 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
         {
+            string[] strs = { "score asc", "score desc", "createdtime asc", "createdtime desc" };
+            if (query == null || (!string.IsNullOrWhiteSpace(query.Order) && !strs.Contains(query.Order)))
+            {
+                return null;
+            }
             return DataAccess.GetCommentPageList(query);
         }
 
