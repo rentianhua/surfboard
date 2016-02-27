@@ -11,8 +11,8 @@
     });
 
     function QueryList() {
-        var json = { CompanyName: $("#companyName").val() };
-        $("#companylist").getPageList(20, "/api/Customer/GetCompanyPageList", json, LoadData);
+        var json = { Companyid: $("#companyName").val() };
+        $("#companylist").getPageList(20, "/api/Customer/GetCommentPageList", json, LoadData);
     }
 
     function LoadData(data, index) {
@@ -26,17 +26,12 @@
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.CompanyName == null ? "" : val.CompanyName.sub(50)) + "</td>";
-            str += "<td>" + (val.Address == null ? "" : val.Address.sub(50)) + "</td>";
-            str += "<td>" + (val.OperName == null ? "" : val.OperName.sub(50)) + "</td>";
-            str += "<td>" + (val.OriginalRegistCapi == null ? "" : val.OriginalRegistCapi.sub(50)) + "</td>";
-            str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
-            str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
-            str += "<td>";
-            str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'>查看修改申请</a> ";
-            str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>编辑</a> ";
-            str += "</td>";
+            str += "<td>" + (val.Mobile == null ? "" : val.Mobile) + "</td>";
+            str += "<td>" + (val.Score == null ? "" : val.Score) + "</td>";
+            str += "<td>" + (val.IP == null ? "" : val.IP.sub(50)) + "</td>";
+            str += "<td>" + (val.Commentdesc == null ? "" : val.Commentdesc.sub(100)) + "</td>";
             str += "</tr>";
-            $("#companylist tbody").append(str);
+            $("#companylist tbody").append(str); 
         });
     }
 
@@ -55,10 +50,10 @@
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                
+
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-               
+
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
@@ -71,12 +66,10 @@
             <tr role="row">
                 <th>序号</th>
                 <th>公司名</th>
-                <th>公司地址</th>
-                <th>法人</th>
-                <th>注册资金</th>
-                <th>公司状态</th>
-                <th>联系电话</th>
-                <th>操作</th>
+                <th>手机号</th>
+                <th>评分</th>
+                <th>IP</th>
+                <th>内容</th>
             </tr>
         </thead>
 

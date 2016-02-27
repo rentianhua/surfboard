@@ -493,7 +493,7 @@ namespace CCN.Modules.Customer.DataAccess
                 sql = $"update cust_total_info set currpoint=currpoint{o}@count where custid=@custid;";
             }
 
-            var result = Helper.Execute(sql, new {count, custid});
+            var result = Helper.Execute(sql, new { count, custid });
             return result;
         }
 
@@ -507,7 +507,7 @@ namespace CCN.Modules.Customer.DataAccess
             var result = Helper.Execute(sql, model);
             return result;
         }
-        
+
         /// <summary>
         /// 发福利
         /// </summary>
@@ -522,7 +522,7 @@ namespace CCN.Modules.Customer.DataAccess
             //{
             //    LoggerFactories.CreateLogger().Write("dao test", TraceEventType.Error, ex);
             //}
-            
+
             //return 1;
             const string sql =
                 "select custid from cust_total_info where custid not in (select custid from cust_total_record where `type`=100 and date_format(createdtime,'%Y-%m')=date_format(now(),'%Y-%m'));";
@@ -1222,7 +1222,7 @@ namespace CCN.Modules.Customer.DataAccess
             {
                 int result;
                 const string sqlSelect = "select count(1) from cust_wechat where custid=@custid;";
-                var i = conn.Query<int>(sqlSelect,new { custid }).FirstOrDefault();
+                var i = conn.Query<int>(sqlSelect, new { custid }).FirstOrDefault();
                 if (i == 0)
                 {
                     const string sql = "INSERT INTO cust_wechat(innerid,custid,openid,createdtime) VALUES(uuid(),@custid,@openid,@createdtime);";
@@ -1243,7 +1243,7 @@ namespace CCN.Modules.Customer.DataAccess
                         modifiedtime = DateTime.Now
                     });
                 }
-               
+
                 return result;
             }
         }
@@ -1282,7 +1282,7 @@ namespace CCN.Modules.Customer.DataAccess
                         model.Createrid = "";
                         conn.Execute(sql, model, tran);
                     }
-                    
+
                     tran.Commit();
                     return 1;
                 }
@@ -1378,17 +1378,18 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public CompanyViewModel GetCompanyById(string innerid)
         {
-            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, describe,spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
 (select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
 (select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
 (select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
+(select count(1) from settled_info_applyupdate where settid=a.innerid and status=2) as Status,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname
 from settled_info as a where innerid=@innerid;";
             var model = Helper.Query<CompanyViewModel>(sql, new { innerid }).FirstOrDefault();
             return model;
         }
-        
+
         /// <summary>
         /// 申请企业信息修改
         /// </summary>
@@ -1396,8 +1397,8 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
         {
-            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
-                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,describe, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@describe, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
@@ -1421,7 +1422,7 @@ from settled_info as a where innerid=@innerid;";
         {
             const string spName = "sp_common_pager";
             const string tableName = @" settled_info_applyupdate as a ";
-            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl, createrid, createdtime, modifierid, modifiedtime,
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status, createrid, createdtime, modifierid, modifiedtime,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
@@ -1454,19 +1455,32 @@ from settled_info as a where innerid=@innerid;";
         }
 
         /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateApplyStatus(string innerid, int status)
+        {
+            const string sql = @"update settled_info_applyupdate set status=@status where innerid=@innerid;";
+            var result = Helper.ExecuteScalar<int>(sql, new { status, innerid });
+            return result;
+        }
+
+        /// <summary>
         /// 获取申请的信息view
         /// </summary>
         /// <param name="applyid"></param>
         /// <returns></returns>
         public CompanyApplyUpdateViewModel GetUpdateApplyById(string applyid)
         {
-            const string sqlS = @"select innerid,settid,ContactMobile,Pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+            const string sqlS = @"select innerid,settid,ContactMobile,Pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
 (select group_concat(codename) from base_code where typekey = 'car_ancestry' and FIND_IN_SET(codevalue, a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey = 'car_category' and FIND_IN_SET(codevalue, a.categoryids)) as categoryname
 from settled_info_applyupdate as a where innerid = @innerid; ";
             return Helper.Query<CompanyApplyUpdateViewModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
         }
-        
+
         /// <summary>
         /// 获取申请的信息
         /// </summary>
@@ -1474,8 +1488,8 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         /// <returns></returns>
         public CompanyApplyUpdateModel GetApplyModel(string applyid)
         {
-            const string sqlS = "select * from settled_info_applyupdate where innerid=@innerid;";
-            return Helper.Query<CompanyApplyUpdateModel>(sqlS, new {innerid = applyid}).FirstOrDefault();
+            const string sqlS = "select * from settled_info_applyupdate where innerid=@innerid and status=2;";
+            return Helper.Query<CompanyApplyUpdateModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
         }
 
         /// <summary>
@@ -1489,7 +1503,7 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             var sqlStr = new StringBuilder("update `settled_info` set ");
             sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
             sqlStr.Append(" where innerid = @innerid");
-            
+
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -1498,7 +1512,7 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
                     conn.Execute(sqlStr.ToString(), model, tran);
 
                     const string delPic = "delete from settled_picture where settid=@settid;";
-                    conn.Execute(delPic, new {settid = model.Innerid}, tran);
+                    conn.Execute(delPic, new { settid = model.Innerid }, tran);
 
                     const string addPic = "insert into settled_picture (innerid, settid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
                     var i = 1;
@@ -1512,10 +1526,10 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
                             path = item,
                             sort = i,
                             createdtime = DateTime.Now
-                        },tran);
-                        i ++;
+                        }, tran);
+                        i++;
                     }
-                    
+
                     tran.Commit();
                     return 1;
                 }
@@ -1528,15 +1542,28 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         }
 
         /// <summary>
-        /// 获取公司图片
+        /// 更新企业信息（后台系统）
         /// </summary>
-        /// <param name="settid"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public IEnumerable<string> GetCompanyPictureListById(string settid)
+        public int UpdateCompanyModel(CompanyModel model)
         {
-            const string sql = @"select path from settled_picture where settid=@settid;";
-            var list = Helper.Query<string>(sql, new { settid });
-            return list;
+            var sqlStr = new StringBuilder("update `settled_info` set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
@@ -1545,7 +1572,7 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         /// <param name="mobile"></param>
         /// <param name="companyid"></param>
         /// <returns></returns>
-        public int CheckComment(long mobile,string companyid)
+        public int CheckComment(long mobile, string companyid)
         {
             const string sql = @"select count(1) from settled_comment where mobile=@mobile and companyid=@companyid;";
             try
@@ -1627,8 +1654,8 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @" settled_comment ";
-            const string fields = @"innerid, companyid, mobile, headportrait, score, ip, commentdesc, createdtime";
+            const string tableName = @" settled_comment as a left join settled_info as b on b.innerid =a.companyid";
+            const string fields = @"a.innerid, a.companyid, a.mobile, a.headportrait, a.score, a.ip, a.commentdesc, a.createdtime,b.companyname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 ");
@@ -1652,16 +1679,250 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             var model = new ScoreListModel();
             using (var conn = Helper.GetConnection())
             {
-                model.Score1 = conn.Query<int>(sql, new {companyid = settid, num = 1}).FirstOrDefault();
-                model.Score2 = conn.Query<int>(sql, new {companyid = settid, num = 2}).FirstOrDefault();
-                model.Score3 = conn.Query<int>(sql, new {companyid = settid, num = 3}).FirstOrDefault();
-                model.Score4 = conn.Query<int>(sql, new {companyid = settid, num = 4}).FirstOrDefault();
-                model.Score5 = conn.Query<int>(sql, new {companyid = settid, num = 5}).FirstOrDefault();
+                model.Score1 = conn.Query<int>(sql, new { companyid = settid, num = 1 }).FirstOrDefault();
+                model.Score2 = conn.Query<int>(sql, new { companyid = settid, num = 2 }).FirstOrDefault();
+                model.Score3 = conn.Query<int>(sql, new { companyid = settid, num = 3 }).FirstOrDefault();
+                model.Score4 = conn.Query<int>(sql, new { companyid = settid, num = 4 }).FirstOrDefault();
+                model.Score5 = conn.Query<int>(sql, new { companyid = settid, num = 5 }).FirstOrDefault();
             }
-            
+
             return model;
         }
-        
+
+
+        #region 图片处理
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetCompanyPictureListById(string settid)
+        {
+            const string sql = @"select path from settled_picture where settid=@settid;";
+            var list = Helper.Query<string>(sql, new { settid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public IEnumerable<CompanyPictureModel> GetCompanyPictureById(string settid)
+        {
+            const string sql = @"select path,innerid from settled_picture where settid=@settid;";
+            var list = Helper.Query<CompanyPictureModel>(sql, new { settid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取需要删除的图片列表
+        /// </summary>
+        /// <param name="idList">车辆ids</param>
+        /// <returns></returns>
+        public IEnumerable<CompanyPictureModel> GetCompanyPictureByIds(List<string> idList)
+        {
+            var ids = idList.Aggregate("", (current, it) => current + $"'{it}',").TrimEnd(',');
+            var sql = $"select innerid, settid, typeid, path, sort, createdtime from settled_picture where innerid in ({ids});";
+            try
+            {
+                var list = Helper.Query<CompanyPictureModel>(sql);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取需要删除的图片列表：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加)
+        /// </summary>
+        /// <param name="pathList"></param>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public int AddCompanyPictureList(List<string> pathList, string settid)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询企业图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from settled_picture where settid=@settid;";                              //查询企业所有图片的最大排序
+            const string sqlIPic = @"insert into settled_picture (innerid, settid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from settled_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取图片
+                var picedList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { settid }).ToList();
+                var number = picedList.Count + pathList.Count;
+                if (number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { settid });
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in pathList)
+                    {
+                        conn.Execute(sqlIPic, new CompanyPictureModel
+                        {
+                            Settid = settid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //表示添加首批图片
+                    if (maxsort == pathList.Count)
+                    {
+                        conn.Execute(sqlUCover, new { settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量添加图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public int DelCompanyPictureList(List<string> idList, string settid)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询企业图片
+            const string sqlDPic = @"delete from settled_picture where innerid=@innerid;";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from auction_car_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { settid }).ToList();
+                var number = picedList.Count - idList.Count;
+                //if (number < 3)
+                //{
+                //    //图片数量控制在>=3 and <=9
+                //    return 402;
+                //}
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picedList.First().Innerid;
+                    foreach (var id in idList)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量删除图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveCompanyPicture(CompanyPictureListModel model)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询车辆图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from settled_picture where carid=@carid;";//查询车辆所有图片的最大排序
+            const string sqlIPic = @"insert into settled_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+            const string sqlDPic = @"delete from settled_picture where innerid=@innerid;";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from settled_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { carid = model.Settid }).ToList();
+                var number = picList.Count + model.AddPaths.Count - model.DelIds.Count;
+                if (number < 3 || number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { carid = model.Settid });
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in model.AddPaths)
+                    {
+                        conn.Execute(sqlIPic, new CompanyPictureModel
+                        {
+                            Settid = model.Settid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picList.First().Innerid;
+                    foreach (var id in model.DelIds)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { carid = model.Settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量保存图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
     }

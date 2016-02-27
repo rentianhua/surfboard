@@ -12,7 +12,7 @@
     $(function () {
         getJson("/api/Customer/GetCompanyModelById?innerid=" + companyid, null, function (data) {
             companyname = data.errmsg.CompanyName;
-        },false);
+        }, false);
         QueryList();
     });
 
@@ -29,6 +29,16 @@
 
         $.each(data, function (key, val) {
             str = "";
+            var status = "";
+            if (val.Status == 0) {
+                status = "未通过";
+            }
+            else if (val.Status == 1) {
+                status = "通过";
+            }
+            else if (val.Status == 2) {
+                status = "审核中";
+            }
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.Companytitle == null ? "" : val.Companytitle.sub(50)) + "</td>";
@@ -36,6 +46,7 @@
             str += "<td>" + (val.OperName == null ? "" : val.OperName.sub(50)) + "</td>";
             str += "<td>" + (val.OriginalRegistCapi == null ? "" : val.OriginalRegistCapi.sub(50)) + "</td>";
             str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
+            str += "<td>" + status + "</td>";
             str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
             str += "<td>";
             str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateView?applyid=" + val.Innerid + "');\" href='javascript:;'>查看详情</a> ";
@@ -45,7 +56,7 @@
         });
     }
 
-    
+
 
 </script>
 
@@ -82,6 +93,7 @@
                 <th>法人</th>
                 <th>注册资金</th>
                 <th>公司状态</th>
+                <th>审核状态</th>
                 <th>联系电话</th>
                 <th>操作</th>
             </tr>

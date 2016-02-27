@@ -1,17 +1,334 @@
 ﻿
 @{
-    Layout = null;
+//ViewBag.Title = "CustomerEdit";
+//Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
 
-<!DOCTYPE html>
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CompanyEdit</title>
-</head>
-<body>
-    <div> 
+<script type="text/javascript">
+    var id = "@ViewBag.innerid";
+    var delList = [];
+
+    var uploader
+    $(function () {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+        Init();
+    });
+
+    function Init() {
+
+        $.get("/api/Customer/GetCompanyModelById?innerid=" + id, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+            var obj = data.errmsg;
+
+            $("#companyname").html(obj.CompanyName);
+
+            $("#opername").val(obj.OperName);
+
+            $("#originalregistcapi").val(obj.OriginalRegistCapi);
+
+            $("#scope").val(obj.Scope);
+
+            $("#companystatus").val(obj.CompanyStatus);
+
+            $("#officephone").val(obj.OfficePhone);
+
+            $("#companytitle").val(obj.Companytitle);
+
+            $("#address").val(obj.Address);
+
+            //获取图片
+            $.get("/api/Customer/GetCompanyPictureById?settid=" + id, function (data) {
+                console.log(data);
+                $.each(data.errmsg, function (k, v) {
+                    var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                    $('.imgs').append(
+                            '<div id="' + strradom + '" class="imgPreview">\
+						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
+						<div class="caidan">\
+							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
+						</div>\
+					</div>');
+                    initUploadM();
+                });
+            });
+        });
+    }
+
+    function initUploadM() {
+        // 当前方法对象
+        var fun = arguments.callee;
+        // 图片选中
+        $(".imgs .imgPreview").unbind().mousemove(function () {
+            $(this).find(".caidan").show();
+        }).mouseout(function () {
+            $(this).find(".caidan").hide();
+        });
+        $(".imgs .caidan").unbind().mousemove(function () {
+            $(this).show();
+        }).mouseout(function () {
+            $(this).hide();
+        });
+        // 图片删除
+        $(".imgs .imgPreview .cz_4").unbind().click(function () {
+            DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
+        });
+        // 置顶图片
+        $(".imgs .imgPreview .cz_1").unbind().click(function () {
+            var imghtml = $("#" + $(this).attr("hash"))[0];
+            $("#" + $(this).attr("hash")).remove();
+            $('.imgs').prepend(imghtml);
+            fun();
+        });
+        // 图片前移
+        $(".imgs .imgPreview .cz_2").unbind().click(function () {
+            var id = "#" + $(this).attr("hash");
+            var $this = $(id).prev();
+            var imghtml = $(id)[0];
+            if ($this.size()) {
+                $(id).remove();
+                $this.before(imghtml);
+                fun();
+            }
+        });
+        // 图片后移
+        $(".imgs .imgPreview .cz_3").unbind().click(function () {
+            var id = "#" + $(this).attr("hash");
+            var $this = $(id).next();
+            var imghtml = $(id)[0];
+            if ($this.size()) {
+                $(id).remove();
+                $this.after(imghtml);
+                fun();
+            }
+        });
+    }
+
+    //提交数据
+    function Submit() {
+
+        var json = {
+            OperName: $("#opername").val(),
+            OriginalRegistCapi: $("#originalregistcapi").val(),
+            Scope: $("#scope").val(),
+            CompanyStatus: $("#companystatus").val(),
+            OfficePhone: $("#officephone").val(),
+            Companytitle: $("#companytitle").val(),
+            Address: $("#address").val()
+        };
+        json.Innerid = id;
+        
+        var uploadercount = 0;//选择的文件
+        var filelength = $("img[data-type='img']").length; //图片总数
+
+        //if (filelength > 9 || filelength < 3) {
+        //    hideloading();
+        //    alert('请上传3-9张图片');
+        //    return false;
+        //}
+
+        if (uploader != undefined && uploader != null) {
+            uploadercount = uploader.files.length;
+        }
+
+        $.post("/api/Customer/UpdateCompanyModel", json, function (result) {
+            if (result.errcode !== 0) {
+             //   hideloading();
+                alert("更新失败");
+                return false;
+            }
+
+            if (uploadercount === 0 && delList.length === 0) {  //没有添加和删除图片
+                alert("修改成功");
+              //  goList();
+                return false;
+            }
+            else if (uploadercount === 0 && delList.length > 0) {
+                var model = { Settid: id, AddPaths: [], DelIds: delList };
+                console.log(model);
+                $.post("/api/Customer/SaveCompanyPicture", model, function (resultPic) {
+                  //  hideloading();
+                    if (resultPic.errcode !== 0) {
+                        alert("修改成功,但图片保存失败！");
+                    } else {
+                        alert("修改成功");
+                    }
+                  //  goList();
+                });
+                return false;
+            }
+
+            var i = 0;
+            //修改文件名
+            plupload.each(uploader.files, function (file) {
+                file.name = "car_" + new Date().getTime() + i + ".jpg";
+                i++;
+            });
+
+            var addList = [];
+            uploader.start();
+            uploader.bind('FileUploaded', function (up, file, info) {
+                var picInfo = JSON.parse(info.response);
+                addList.push(picInfo.key);
+                if (addList.length === uploadercount) {
+                    var model = { Settid: id, AddPaths: addList, DelIds: delList };
+                    $.post("/api/Customer/SaveCompanyPicture", model, function (resultPic) {
+                     //   hideloading();
+                        if (resultPic.errcode !== 0) {
+                            alert("修改成功,但图片保存失败！");
+                        } else {
+                            alert("修改成功");
+                        }
+                        goList();
+                    });
+                }
+            });
+
+            return false;
+        });
+
+    }
+
+    //删除图片
+    function DeletePicture(picid, strhash) {
+        delList.push(picid);
+        $("#" + strhash).remove();
+    }
+
+</script>
+
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">企业信息编辑</span>
     </div>
-</body>
-</html>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="companyname" class="col-sm-2 control-label no-padding-right">公司名:</label>
+                            <div class="col-sm-10">
+                                <span id="companyname" type="text" placeholder="公司名" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="opername" class="col-sm-2 control-label no-padding-right">法人:</label>
+                            <div class="col-sm-10">
+                                <input id="opername" type="text" placeholder="法人" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="originalregistcapi" class="col-sm-2 control-label no-padding-right">注册资金:</label>
+                            <div class="col-sm-10">
+                                <input id="originalregistcapi" type="text" placeholder="注册资金" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="scope" class="col-sm-2 control-label no-padding-right">经营范围:</label>
+                            <div class="col-sm-10">
+                                <input id="scope" type="text" placeholder="经营范围" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="companystatus" class="col-sm-2 control-label no-padding-right">公司状态:</label>
+                            <div class="col-sm-10">
+                                <input id="companystatus" type="text" placeholder="公司状态" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="officephone" class="col-sm-2 control-label no-padding-right">联系电话:</label>
+                            <div class="col-sm-10">
+                                <input id="officephone" type="text" placeholder="联系电话" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="companytitle" class="col-sm-2 control-label no-padding-right">招牌名称:</label>
+                            <div class="col-sm-10">
+                                <input id="companytitle" type="text" placeholder="招牌名称" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label no-padding-right">公司地址:</label>
+                            <div class="col-sm-10">
+                                <input id="address" type="text" placeholder="公司地址" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">企业图片</label>
+                            <div class="controls col-sm-11" id="imgList">
+                                <div id="container2">
+                                    <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <sapn>选择文件</sapn>
+                                    </a><label class="required">只能上传2M以下图片</label>
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+
+                                    <tbody id="fsUploadProgress"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="getBodyHtml('mainbody', '/customer/customer/CompanyList');" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

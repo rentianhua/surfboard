@@ -83,6 +83,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Boutiqueurl { get; set; }
 
         /// <summary>
+        /// 企业描述
+        /// </summary>
+        public string Describe { get; set; }
+
+        /// <summary>
         /// 备用字段
         /// </summary>
         public string Spare1 { get; set; }
@@ -173,6 +178,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 类别
         /// </summary>
         public string Categoryname { get; set; }
+
+        /// <summary>
+        /// 状态 0未通过 1 通过 2审核中
+        /// </summary>
+        public short Status { get; set; }
     }
 
     /// <summary>
@@ -234,6 +244,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public string Pictures { get; set; }
 
+        /// <summary>
+        /// 状态 0未通过 1 通过 2审核中
+        /// </summary>
+        public short Status { get; set; }
+
     }
 
     /// <summary>
@@ -285,7 +300,10 @@ namespace CCN.Modules.Customer.BusinessEntity
     /// </summary>
     public class CompanyUpdateApplyListModel : CompanyListModel
     {
-        
+        /// <summary>
+        /// 状态 0未通过 1 通过 2审核中
+        /// </summary>
+        public short Status { get; set; }
     }
 
 
@@ -436,7 +454,7 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
-        /// 车辆id
+        /// 企业id
         /// </summary>
         public string Settid { get; set; }
 
@@ -471,6 +489,36 @@ namespace CCN.Modules.Customer.BusinessEntity
         public CompanyPictureModel()
         {
             Createdtime = DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// 批量处理图片(添加+删除)
+    /// </summary>
+    public class CompanyPictureListModel
+    {
+        /// <summary>
+        /// 企业id
+        /// </summary>
+        public string Settid { get; set; }
+
+        /// <summary>
+        /// 删除列表(id集合)
+        /// </summary>
+        public List<string> DelIds { get; set; }
+
+        /// <summary>
+        /// 添加列表(七牛key集合)
+        /// </summary>
+        public List<string> AddPaths { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public CompanyPictureListModel()
+        {
+            DelIds = new List<string>();
+            AddPaths = new List<string>();
         }
     }
 

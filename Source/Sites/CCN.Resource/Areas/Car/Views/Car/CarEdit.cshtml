@@ -258,7 +258,7 @@
             $("#caresc").val(obj.remark);
 
             //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
-            debugger
+            
             $.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
                 $.each(data.errmsg, function (k, v) {
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -462,7 +462,7 @@
                         uploader.start();
                         var carid = result.errmsg;
                         var m = 0;
-                        debugger
+                        
                         uploader.bind('FileUploaded', function (up, file, info) {
                             var picInfo = JSON.parse(info.response);
                             $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
