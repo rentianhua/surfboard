@@ -1659,10 +1659,10 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             const string fields = @"a.innerid, a.companyid, a.mobile, a.headportrait, a.score, a.ip, a.commentdesc, a.createdtime,b.companyname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
             //查詢條件
-            var sqlWhere = new StringBuilder(" 1=1 ");
+            var sqlWhere = new StringBuilder(" 1=1 and (isdelete <>1 or isdelete is null) ");
             if (!string.IsNullOrWhiteSpace(query.Companyid))
             {
-                sqlWhere.Append($" and companyid='{query.Companyid}'");
+                sqlWhere.Append($" and companyname like %'{query.Companyid}'%");
             }
 
             if (query.OnlyLow)
@@ -1694,6 +1694,29 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             }
 
             return model;
+        }
+
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteComment(string innerid)
+        {
+            var sqlStr = new StringBuilder("update `settled_comment` set `isdelete` =1 where innerid = @innerid ");
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    Helper.ExecuteScalar<int>(sqlStr.ToString(), new { innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
 

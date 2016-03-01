@@ -20,7 +20,7 @@
         $("#companylist tbody").empty();
 
         var str = "";
-
+        //DeleteComment
         $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
@@ -30,8 +30,24 @@
             str += "<td>" + (val.Score == null ? "" : val.Score) + "</td>";
             str += "<td>" + (val.IP == null ? "" : val.IP.sub(50)) + "</td>";
             str += "<td>" + (val.Commentdesc == null ? "" : val.Commentdesc.sub(100)) + "</td>";
+            str += "<td>";
+            str += "<a href='javascript:;' onclick=\"DeleteComment('" + val.Innerid + "');\">删除</a>";
+            str += "</td>";
             str += "</tr>";
             $("#companylist tbody").append(str); 
+        });
+    }
+
+    //删除评论
+    function DeleteComment(innerid)
+    {
+        $.get("/api/Customer/DeleteComment?innerid=" + innerid, function (result) {
+            if (result.errcode == 0) {
+                QueryList();
+            }
+            else {
+                alert("删除失败！");
+            }
         });
     }
 
@@ -70,6 +86,7 @@
                 <th>评分</th>
                 <th>IP</th>
                 <th>内容</th>
+                <th>操作</th>
             </tr>
         </thead>
 
