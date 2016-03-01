@@ -858,6 +858,18 @@ namespace CCN.Resource.ApiControllers
             return _custservice.UpdateApplyStatus(applyid, status);
         }
 
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteComment")]
+        [HttpGet]
+        public JResult DeleteComment(string innerid)
+        {
+            return _custservice.DeleteComment(innerid);
+        }
+
         #region 图片处理
 
         /// <summary>

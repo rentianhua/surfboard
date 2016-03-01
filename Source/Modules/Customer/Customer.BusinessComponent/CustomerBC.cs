@@ -1337,6 +1337,17 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(result);
         }
 
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteComment(string innerid)
+        {
+            var result = DataAccess.DeleteComment(innerid);
+            return JResult._jResult(result);
+        }
+
         #region 图片处理
 
         /// <summary>
