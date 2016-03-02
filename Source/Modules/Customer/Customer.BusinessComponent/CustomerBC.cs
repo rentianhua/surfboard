@@ -1127,7 +1127,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                 Innerid = applyModel.Settid,
                 Address = applyModel.Address,
                 Scope = applyModel.Scope,
-                Picurl = applyModel.Picurl,
+                Picurl = applyModel.Pictures.Split(',')[0],
                 OfficePhone = applyModel.OfficePhone,
                 Companytitle = applyModel.Companytitle,
                 Ancestryids = applyModel.Ancestryids,

@@ -1656,7 +1656,7 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         {
             const string spName = "sp_common_pager";
             const string tableName = @" settled_comment as a left join settled_info as b on b.innerid =a.companyid";
-            const string fields = @"a.innerid, a.companyid, ifnull(a.mobile,'') as mobile, a.headportrait, a.score, a.ip, ifnull(a.commentdesc,'') as commentdesc, a.createdtime,b.companyname";
+            const string fields = @"a.innerid, a.companyid, ifnull(a.mobile,'') as mobile, a.headportrait, a.score, a.ip, ifnull(a.commentdesc,'') as commentdesc, a.createdtime,b.companyname,a.pictures";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 and (isdelete <>1 or isdelete is null) ");
