@@ -134,6 +134,12 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 评论数
         /// </summary>
         public int CommentNum { get; set; }
+
+        /// <summary>
+        /// 审核中的数目
+        /// </summary>
+        public int Setttotal { get; set; }
+
         /// <summary>
         /// 星级分数
         /// </summary>

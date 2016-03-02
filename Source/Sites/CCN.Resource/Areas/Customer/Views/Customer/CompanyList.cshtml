@@ -20,7 +20,7 @@
         $("#companylist tbody").empty();
 
         var str = "";
-
+    
         $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
@@ -32,7 +32,10 @@
             str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
             str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
             str += "<td>";
-            str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'>查看修改申请</a> ";
+            if (val.Setttotal==1)
+            {
+                str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'>查看修改申请</a> ";
+            }
             str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>编辑</a> ";
             str += "</td>";
             str += "</tr>";
