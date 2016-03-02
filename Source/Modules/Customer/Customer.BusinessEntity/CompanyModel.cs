@@ -255,6 +255,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public short Status { get; set; }
 
+        /// <summary>
+        /// 联系人电话
+        /// </summary>
+        public string ContactsPhone { get; set; }
+
     }
 
     /// <summary>
@@ -310,6 +315,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 状态 0未通过 1 通过 2审核中
         /// </summary>
         public short Status { get; set; }
+
+        /// <summary>
+        /// 联系人电话
+        /// </summary>
+        public string ContactsPhone { get; set; }
     }
 
 
@@ -427,6 +437,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 公司id
         /// </summary>
         public string Companyid { get; set; }
+
+        /// <summary>
+        /// 公司名称
+        /// </summary>
+        public string CompanyName { get; set; }
 
         /// <summary>
         /// 只看低分

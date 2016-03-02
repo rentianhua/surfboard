@@ -51,6 +51,7 @@
             str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
             str += "<td>" + status + "</td>";
             str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
+            str += "<td>" + (val.ContactsPhone == null ? "" : val.ContactsPhone.sub(50)) + "</td>";
             str += "<td>";
             str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateView?applyid=" + val.Innerid + "');\" href='javascript:;'>查看详情</a> ";
             str += "</td>";
@@ -99,6 +100,7 @@
                 <th>公司状态</th>
                 <th>审核状态</th>
                 <th>联系电话</th>
+                <th>联系人电话</th>
                 <th>操作</th>
             </tr>
         </thead>
