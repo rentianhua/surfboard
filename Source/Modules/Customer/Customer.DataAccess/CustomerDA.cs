@@ -1397,8 +1397,8 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
         {
-            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
-                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2, @spare1, @spare2, @createrid, now(), @modifierid, @modifiedtime);";
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, contactsphone,spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2,contactsphone, @spare1, @spare2, @createrid, now(), @modifierid, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
@@ -1412,7 +1412,7 @@ from settled_info as a where innerid=@innerid;";
                 }
             }
         }
-
+        
         /// <summary>
         /// 修改申请列表
         /// </summary>
@@ -1422,7 +1422,7 @@ from settled_info as a where innerid=@innerid;";
         {
             const string spName = "sp_common_pager";
             const string tableName = @" settled_info_applyupdate as a ";
-            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status, createrid, createdtime, modifierid, modifiedtime,
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status,ifnull(contactsphone,'') as contactsphone, createrid, createdtime, modifierid, modifiedtime,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
@@ -1463,8 +1463,19 @@ from settled_info as a where innerid=@innerid;";
         public int UpdateApplyStatus(string innerid, int status)
         {
             const string sql = @"update settled_info_applyupdate set status=@status where innerid=@innerid;";
-            var result = Helper.ExecuteScalar<int>(sql, new { status, innerid });
-            return result;
+           
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    Helper.ExecuteScalar<int>(sql, new { status, innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
@@ -1662,7 +1673,11 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
             var sqlWhere = new StringBuilder(" 1=1 and (isdelete <>1 or isdelete is null) ");
             if (!string.IsNullOrWhiteSpace(query.Companyid))
             {
-                sqlWhere.Append($" and companyname like '%{query.Companyid}%'");
+                sqlWhere.Append($" and companyid='{query.Companyid}'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
             }
 
             if (query.OnlyLow)
