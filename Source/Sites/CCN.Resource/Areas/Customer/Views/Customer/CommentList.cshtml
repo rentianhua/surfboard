@@ -31,6 +31,7 @@
             str += "<td>" + (val.IP == null ? "" : val.IP.sub(50)) + "</td>";
             str += "<td>" + (val.Commentdesc == null ? "" : val.Commentdesc.sub(100)) + "</td>";
             str += "<td>";
+            str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CommentView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情</a> ";
             str += "<a href='javascript:;' onclick=\"DeleteComment('" + val.Innerid + "');\">删除</a>";
             str += "</td>";
             str += "</tr>";

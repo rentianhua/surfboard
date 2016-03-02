@@ -870,6 +870,18 @@ namespace CCN.Resource.ApiControllers
             return _custservice.DeleteComment(innerid);
         }
 
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCommentViewByID")]
+        [HttpGet]
+        public JResult GetCommentViewByID(string innerid)
+        {
+            return _custservice.GetCommentViewByID(innerid);
+        }
+
         #region 图片处理
 
         /// <summary>

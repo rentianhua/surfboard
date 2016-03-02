@@ -111,6 +111,17 @@ namespace CCN.Resource.Areas.Customer.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 评论详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public ActionResult CommentView(string innerid)
+        {
+            ViewBag.Innerid= string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            return View();
+        }
+
         #endregion
     }
 }

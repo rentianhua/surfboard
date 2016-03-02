@@ -1303,14 +1303,14 @@ namespace CCN.Modules.Customer.DataAccess
         public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @" settled_info as a ";
-            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+            const string tableName = @" settled_info as a  left join (select settid,count(1) as setttotal from settled_info_applyupdate where status=2 group by settid) as b on b.settid=a.innerid";
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, ifnull(officephone,'') as officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
 (select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
 (select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
 (select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime,b.setttotal desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 ");
             if (!string.IsNullOrWhiteSpace(query.CompanyName))
@@ -1656,7 +1656,7 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         {
             const string spName = "sp_common_pager";
             const string tableName = @" settled_comment as a left join settled_info as b on b.innerid =a.companyid";
-            const string fields = @"a.innerid, a.companyid, a.mobile, a.headportrait, a.score, a.ip, a.commentdesc, a.createdtime,b.companyname";
+            const string fields = @"a.innerid, a.companyid, ifnull(a.mobile,'') as mobile, a.headportrait, a.score, a.ip, ifnull(a.commentdesc,'') as commentdesc, a.createdtime,b.companyname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
             //查詢條件
             var sqlWhere = new StringBuilder(" 1=1 and (isdelete <>1 or isdelete is null) ");
@@ -1717,6 +1717,17 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
                     return 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CommentListModel GetCommentViewByID(string innerid)
+        {
+            const string sqlS = "select a.*,b.companyname from settled_comment as a left join settled_info as b on b.innerid =a.companyid where a.innerid=@innerid;";
+            return Helper.Query<CommentListModel>(sqlS, new { innerid = innerid }).FirstOrDefault();
         }
 
 
