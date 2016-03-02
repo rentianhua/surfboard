@@ -637,6 +637,26 @@ namespace CCN.Modules.Customer.BusinessService
             return BusinessComponent.UpdateApplyStatus(applyid, status);
         }
 
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteComment(string innerid)
+        {
+            return BusinessComponent.DeleteComment(innerid);
+        }
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCommentViewByID(string innerid)
+        {
+            return BusinessComponent.GetCommentViewByID(innerid);
+        }
+
         #region 图片处理
 
         /// <summary>

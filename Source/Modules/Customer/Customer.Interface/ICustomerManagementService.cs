@@ -436,6 +436,20 @@ namespace CCN.Modules.Customer.Interface
         /// <returns></returns>
         JResult UpdateApplyStatus(string innerid, int status);
 
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteComment(string innerid);
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCommentViewByID(string innerid);
+
         #region 图片处理
 
         /// <summary>

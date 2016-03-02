@@ -1337,14 +1337,36 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(result);
         }
 
-        #region 图片处理
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteComment(string innerid)
+        {
+            var result = DataAccess.DeleteComment(innerid);
+            return JResult._jResult(result);
+        }
 
         /// <summary>
-        /// 获取企业已有图片
+        /// 根据ID获取详情
         /// </summary>
-        /// <param name="settid">企业id</param>
+        /// <param name="innerid"></param>
         /// <returns></returns>
-        public JResult GetCompanyPictureById(string settid)
+        public JResult GetCommentViewByID(string innerid)
+        {
+            var result = DataAccess.GetCommentViewByID(innerid);
+            return JResult._jResult(result);
+        }
+
+    #region 图片处理
+
+    /// <summary>
+    /// 获取企业已有图片
+    /// </summary>
+    /// <param name="settid">企业id</param>
+    /// <returns></returns>
+    public JResult GetCompanyPictureById(string settid)
         {
             var list = DataAccess.GetCompanyPictureById(settid);
             return JResult._jResult(list);
