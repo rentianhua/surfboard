@@ -930,6 +930,7 @@
     <Content Include="Areas\Customer\Views\Customer\CompanyUpdateView.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CompanyUpdateList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CommentList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CommentView.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
