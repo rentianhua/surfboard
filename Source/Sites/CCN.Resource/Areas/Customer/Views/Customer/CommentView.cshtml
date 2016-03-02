@@ -1,0 +1,160 @@
+﻿<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+<script type="text/javascript">
+
+    var innerid = "@ViewBag.Innerid";  //评论id
+    var companyid = "";
+    var uploader;
+    $(function () {
+        InitUpload();
+        Init();
+    });
+
+    function InitUpload() {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+    }
+
+
+    function Init() {
+
+        if (innerid === "") {
+            return;
+        }
+
+        getJson("/api/Customer/GetCommentViewByID?innerid=" + innerid, null, function (data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据失败！");
+                return;
+            }
+
+            var obj = data.errmsg;
+
+            $("#companytitle").html(obj.CompanyName);
+            $("#mobile").html(obj.Mobile);
+            $("#score").html(obj.Score);
+            $("#ip").html(obj.IP);
+            $("#commentdesc").html(obj.Commentdesc);
+
+            var arr = obj.Pictures.split(",");
+            $.each(arr, function (k, v) {
+
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('.imgs').append(
+                        '<div id="' + strradom + '" class="imgPreview">\
+						    <img data-type="img" src="' + getImgUrl(v) + '" class="loading" width="550px">\
+					    </div>');
+            });
+        });
+
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Customer/Customer/CommentList");
+    }
+
+</script>
+<div class="widget">
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">评论详情</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">商家名称:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="companytitle"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label no-padding-right">手机号:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="mobile"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="score" class="col-sm-2 control-label no-padding-right">评分:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="score"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="ip" class="col-sm-2 control-label no-padding-right">IP:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="ip"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">内容:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="commentdesc"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+        
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">图片：</label>
+                            <div class="controls col-sm-11" id="imgList">
+                                <div id="container2">
+
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding:10px 144px 0 0;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
