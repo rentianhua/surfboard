@@ -1109,18 +1109,19 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <summary>
         /// 处理修改申请
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public JResult HandleApply(string applyid, int status)
+        public JResult HandleApply(CompanyApplyUpdateModel model)
         {
+            var applyid = model.Innerid;
+            var status = model.Status;
             var applyModel = DataAccess.GetApplyModel(applyid);
             if (applyModel == null)
             {
                 return JResult._jResult(401, "修改申请不存在");
             }
             //更新申请表状态
-            var updateResult = DataAccess.UpdateApplyStatus(applyModel.Innerid, status);
+            var updateResult = DataAccess.UpdateApplyStatus(model);
 
             applyModel.Pictures = applyModel.Pictures.Trim().Trim(',');
             var comModel = new CompanyModel
@@ -1344,13 +1345,11 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <summary>
         /// 更新申请表状态
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
-        /// <param name="remark"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public JResult UpdateApplyStatus(string applyid, int status, string remark)
+        public JResult UpdateApplyStatus(CompanyApplyUpdateModel model)
         {
-            var result = DataAccess.UpdateApplyStatus(applyid, status, remark);
+            var result = DataAccess.UpdateApplyStatus(model);
             return JResult._jResult(result);
         }
 

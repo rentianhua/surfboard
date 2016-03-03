@@ -29,7 +29,7 @@
         $("#applylist tbody").empty();
 
         var str = "";
-
+       
         $.each(data, function (key, val) {
             str = "";
             var status = "";
@@ -52,6 +52,9 @@
             str += "<td>" + status + "</td>";
             str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
             str += "<td>" + (val.ContactsPhone == null ? "" : val.ContactsPhone.sub(50)) + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM") + "</td>";
+            str += "<td>" + Dateformat(val.Modifiedtime, "yyyy-MM") + "</td>";
+            str += "<td>" + val.Modifierid + "</td>";
             str += "<td>";
             str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateView?applyid=" + val.Innerid + "');\" href='javascript:;'>查看详情</a> ";
             str += "</td>";
@@ -101,6 +104,9 @@
                 <th>审核状态</th>
                 <th>联系电话</th>
                 <th>联系人电话</th>
+                <th>申请时间</th>
+                <th>审核时间</th>
+                <th>审核人</th>
                 <th>操作</th>
             </tr>
         </thead>

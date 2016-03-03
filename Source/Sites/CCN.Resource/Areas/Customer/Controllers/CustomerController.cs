@@ -98,6 +98,7 @@ namespace CCN.Resource.Areas.Customer.Controllers
         /// <returns></returns>
         public ActionResult CompanyUpdateView(string applyid)
         {
+            ViewBag.UserId = UserInfo.innerid;
             ViewBag.applyid = string.IsNullOrWhiteSpace(applyid) ? "" : applyid;
             return View();
         }

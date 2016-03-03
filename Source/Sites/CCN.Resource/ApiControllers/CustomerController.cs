@@ -763,10 +763,10 @@ namespace CCN.Resource.ApiControllers
         /// <param name="applyid"></param>
         /// <returns></returns>
         [Route("HandleApply")]
-        [HttpGet]
-        public JResult HandleApply(string applyid, int status)
+        [HttpPost]
+        public JResult HandleApply(CompanyApplyUpdateModel model)
         {
-            return _custservice.HandleApply(applyid, status);
+            return _custservice.HandleApply(model);
         }
 
         /// <summary>
@@ -848,14 +848,13 @@ namespace CCN.Resource.ApiControllers
         /// <summary>
         /// 状态修改
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [Route("UpdateApplyStatus")]
-        [HttpGet]
-        public JResult UpdateApplyStatus(string applyid, int status,string remark)
+        [HttpPost]
+        public JResult UpdateApplyStatus(CompanyApplyUpdateModel model)
         {
-            return _custservice.UpdateApplyStatus(applyid, status, remark);
+            return _custservice.UpdateApplyStatus(model);
         }
 
         /// <summary>

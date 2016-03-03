@@ -70,7 +70,7 @@
 
             var arr = obj.Pictures.split(",");
             $.each(arr, function (k, v) {
-             
+
                 var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 $('.imgs').append(
                         '<div id="' + strradom + '" class="imgPreview">\
@@ -81,9 +81,13 @@
 
         //通过
         $("#submit").click(function () {
+            var json = {
+                Innerid: applyid,
+                Status: 1,
+                Modifierid: '@ViewBag.UserId'
+            };
 
-            getJson("/api/Customer/HandleApply?applyid=" + applyid + "&status=" + 1, null, function (data) {
-
+            $.post("/api/Customer/HandleApply", json, function (data) {
                 if (data.errcode !== 0) {
                     alert("处理失败！");
                     return;
@@ -93,26 +97,35 @@
                     goList();
                     //return;
                 }
-
             });
         });
 
         //不通过
         $("#failed").click(function () {
+            if ($("#remark").val() != "") {
+                var json = {
+                    Innerid: applyid,
+                    Status: 0,
+                    Remark: $("#remark").val(),
+                    Modifierid: '@ViewBag.UserId'
+                };
 
-            getJson("/api/Customer/UpdateApplyStatus?applyid=" + applyid + "&status=" + 0 + "&remark=" + $("#remark").val(), null, function (data) {
+                $.post("/api/Customer/UpdateApplyStatus", json, function (data) {
+                    if (data.errcode !== 0) {
+                        alert("处理失败！");
+                        return;
+                    }
+                    else {
+                        alert("处理成功！");
+                        goList();
+                        //return;
+                    }
+                });
+            }
+            else {
+                alert("请填写备注信息！");
+            }
 
-                if (data.errcode !== 0) {
-                    alert("处理失败！");
-                    return;
-                }
-                else {
-                    alert("处理成功！");
-                    goList();
-                    //return;
-                }
-
-            });
         });
 
     }
