@@ -558,12 +558,11 @@ namespace CCN.Modules.Customer.BusinessService
         /// <summary>
         /// 处理修改申请
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
+        ///<param name="model"></param>
         /// <returns></returns>
-        public JResult HandleApply(string applyid,int status)
+        public JResult HandleApply(CompanyApplyUpdateModel model)
         {
-            return BusinessComponent.HandleApply(applyid,status);
+            return BusinessComponent.HandleApply(model);
         }
 
         /// <summary>
@@ -629,13 +628,11 @@ namespace CCN.Modules.Customer.BusinessService
         /// <summary>
         /// 更新申请表状态
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
-        /// <param name="remark"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public JResult UpdateApplyStatus(string applyid, int status,string remark)
+        public JResult UpdateApplyStatus(CompanyApplyUpdateModel model)
         {
-            return BusinessComponent.UpdateApplyStatus(applyid, status, remark);
+            return BusinessComponent.UpdateApplyStatus(model);
         }
 
         /// <summary>

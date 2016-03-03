@@ -1421,8 +1421,8 @@ from settled_info as a where innerid=@innerid;";
         public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @" settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid ";
-            const string fields = @"a.innerid, b.companyname, a.address, b.opername,  b.originalregistcapi, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status,ifnull(a.contactsphone,'') as contactsphone, a.createrid, a.createdtime, a.modifierid, a.modifiedtime,
+            const string tableName = @" settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid left join sys_user as c on c.innerid=a.modifierid ";
+            const string fields = @"a.innerid, b.companyname, a.address, b.opername,  b.originalregistcapi, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status,ifnull(a.contactsphone,'') as contactsphone, a.createrid, a.createdtime, ifnull(c.username,'') as modifierid, a.modifiedtime,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
@@ -1457,19 +1457,17 @@ from settled_info as a where innerid=@innerid;";
         /// <summary>
         /// 更新申请表状态
         /// </summary>
-        /// <param name="innerid"></param>
-        /// <param name="status"></param>
-        /// <param name="remark"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        public int UpdateApplyStatus(string innerid, int status, string remark="")
+        public int UpdateApplyStatus(CompanyApplyUpdateModel model)
         {
-            const string sql = @"update settled_info_applyupdate set status=@status,remark=@remark where innerid=@innerid;";
+            const string sql = @"update settled_info_applyupdate set status=@status,remark=@remark,modifierid=@modifierid,modifiedtime=now() where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
             {
                 try
                 {
-                    Helper.ExecuteScalar<int>(sql, new { status, remark, innerid });
+                    conn.Execute(sql, model);
                     return 1;
                 }
                 catch (Exception ex)

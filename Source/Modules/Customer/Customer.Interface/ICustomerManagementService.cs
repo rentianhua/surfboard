@@ -381,10 +381,9 @@ namespace CCN.Modules.Customer.Interface
         /// <summary>
         /// 处理修改申请
         /// </summary>
-        /// <param name="applyid"></param>
-        /// <param name="status"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        JResult HandleApply(string applyid,int status);
+        JResult HandleApply(CompanyApplyUpdateModel model);
 
         /// <summary>
         /// 获取公司图片
@@ -431,11 +430,9 @@ namespace CCN.Modules.Customer.Interface
         /// <summary>
         /// 更新申请表状态
         /// </summary>
-        /// <param name="innerid"></param>
-        /// <param name="status"></param>
-        /// <param name="remark"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        JResult UpdateApplyStatus(string innerid, int status, string remark);
+        JResult UpdateApplyStatus(CompanyApplyUpdateModel model);
 
         /// <summary>
         /// 删除评论（逻辑删除）
