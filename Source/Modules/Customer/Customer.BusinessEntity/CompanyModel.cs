@@ -260,6 +260,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public string ContactsPhone { get; set; }
 
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+
     }
 
     /// <summary>
@@ -276,6 +281,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 类别
         /// </summary>
         public string Categoryname { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 
     /// <summary>
@@ -320,6 +330,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 联系人电话
         /// </summary>
         public string ContactsPhone { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
     }
 
 

@@ -44,9 +44,8 @@
             }
 
             var obj = data.errmsg;
-
             companyid = obj.Settid;
-            $("#companyname").html(obj.CompanyName);
+            $("#companyname").html(obj.CompanyName);//所属公司
             $("#address").html(obj.Address);
             $("#opername").html(obj.OperName);
             $("#officephone").html(obj.OfficePhone);
@@ -57,6 +56,11 @@
             $("#boutiqueurl").html(obj.Boutiqueurl);
             $("#ancestryname").html(obj.Ancestryname);
             $("#categoryname").html(obj.Categoryname);
+            $("#introduction").html(obj.Introduction);
+            $("#contactsphone").html(obj.ContactsPhone);
+            $("#customdesc").html(obj.Customdesc);
+            $("#remark").html(obj.Remark);
+
 
             if (obj.Status==2)
             {
@@ -96,7 +100,7 @@
         //不通过
         $("#failed").click(function () {
 
-            getJson("/api/Customer/UpdateApplyStatus?applyid=" + applyid + "&status=" + 0, null, function (data) {
+            getJson("/api/Customer/UpdateApplyStatus?applyid=" + applyid + "&status=" + 0 + "&remark=" + $("#remark").val(), null, function (data) {
 
                 if (data.errcode !== 0) {
                     alert("处理失败！");
@@ -146,45 +150,48 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">法人:</label>
-                            <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id="opername"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">联系电话:</label>
                             <div class="col-sm-10">
                                 <label class="control-label no-padding-right" id="officephone"></label>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">注册资金:</label>
-                            <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id="originalregistcapi"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">状态:</label>
-                            <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id="companystatus"></label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
+
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">经营范围:</label>
                             <div class="col-sm-10">
                                 <label class="control-label no-padding-right" id="scope"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="companyname" class="col-sm-2 control-label no-padding-right">所属公司:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="companyname"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">负责人:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="opername"></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">公司现状:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="companystatus"></label>
                             </div>
                         </div>
                     </div>
@@ -202,23 +209,57 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">血统:</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">联系人电话:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id="ancestryname"></label>
+                                <label class="control-label no-padding-right" id="contactsphone"></label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">标签类型:</label>
+                            <div class="col-sm-3">
+                                <label class="control-label no-padding-right" id="ancestryname"></label>
+                            </div>
+                            <div class="col-sm-3">
+                                <label class="control-label no-padding-right" id="categoryname"></label>
+                            </div>
+                            <div class="col-sm-4">
+                                <label class="control-label no-padding-right" id="customdesc"></label>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">类别:</label>
                             <div class="col-sm-10">
                                 <label class="control-label no-padding-right" id="categoryname"></label>
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">公司介绍:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="introduction"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="remark" class="col-sm-1 control-label no-padding-right">备注</label>
+                            <div class="col-sm-11">
+                                <textarea id="remark" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
                             </div>
                         </div>
                     </div>
