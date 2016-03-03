@@ -1346,10 +1346,11 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="applyid"></param>
         /// <param name="status"></param>
+        /// <param name="remark"></param>
         /// <returns></returns>
-        public JResult UpdateApplyStatus(string applyid, int status)
+        public JResult UpdateApplyStatus(string applyid, int status, string remark)
         {
-            var result = DataAccess.UpdateApplyStatus(applyid, status);
+            var result = DataAccess.UpdateApplyStatus(applyid, status, remark);
             return JResult._jResult(result);
         }
 

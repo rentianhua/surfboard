@@ -1397,8 +1397,8 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
         {
-            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, contactsphone,spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
-                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2,contactsphone, @spare1, @spare2, @createrid, now(), @modifierid, @modifiedtime);";
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, contactsphone,remark,spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2,@contactsphone,@remark, @spare1, @spare2, @createrid, now(), @modifierid, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
@@ -1412,7 +1412,7 @@ from settled_info as a where innerid=@innerid;";
                 }
             }
         }
-        
+
         /// <summary>
         /// 修改申请列表
         /// </summary>
@@ -1421,8 +1421,8 @@ from settled_info as a where innerid=@innerid;";
         public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @" settled_info_applyupdate as a ";
-            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status,ifnull(contactsphone,'') as contactsphone, createrid, createdtime, modifierid, modifiedtime,
+            const string tableName = @" settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid ";
+            const string fields = @"a.innerid, b.companyname, a.address, b.opername,  b.originalregistcapi, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status,ifnull(a.contactsphone,'') as contactsphone, a.createrid, a.createdtime, a.modifierid, a.modifiedtime,
 (select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
@@ -1459,16 +1459,17 @@ from settled_info as a where innerid=@innerid;";
         /// </summary>
         /// <param name="innerid"></param>
         /// <param name="status"></param>
+        /// <param name="remark"></param>
         /// <returns></returns>
-        public int UpdateApplyStatus(string innerid, int status)
+        public int UpdateApplyStatus(string innerid, int status, string remark="")
         {
-            const string sql = @"update settled_info_applyupdate set status=@status where innerid=@innerid;";
-           
+            const string sql = @"update settled_info_applyupdate set status=@status,remark=@remark where innerid=@innerid;";
+
             using (var conn = Helper.GetConnection())
             {
                 try
                 {
-                    Helper.ExecuteScalar<int>(sql, new { status, innerid });
+                    Helper.ExecuteScalar<int>(sql, new { status, remark, innerid });
                     return 1;
                 }
                 catch (Exception ex)
@@ -1485,10 +1486,10 @@ from settled_info as a where innerid=@innerid;";
         /// <returns></returns>
         public CompanyApplyUpdateViewModel GetUpdateApplyById(string applyid)
         {
-            const string sqlS = @"select innerid,settid,ContactMobile,Pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, customdesc, boutiqueurl,status, spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+            const string sqlS = @"select a.innerid,a.settid,a.ContactMobile,a.Pictures, b.companyname, a.address, b.opername, b.originalregistcapi, b.scope, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status, a.spare1, a.spare2, a.createrid, a.createdtime, a.modifierid, a.modifiedtime,a.introduction,a.remark,
 (select group_concat(codename) from base_code where typekey = 'car_ancestry' and FIND_IN_SET(codevalue, a.ancestryids)) as ancestryname,
 (select group_concat(codename) from base_code where typekey = 'car_category' and FIND_IN_SET(codevalue, a.categoryids)) as categoryname
-from settled_info_applyupdate as a where innerid = @innerid; ";
+from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid where a.innerid = @innerid; ";
             return Helper.Query<CompanyApplyUpdateViewModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
         }
 

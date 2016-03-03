@@ -853,9 +853,9 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [Route("UpdateApplyStatus")]
         [HttpGet]
-        public JResult UpdateApplyStatus(string applyid, int status)
+        public JResult UpdateApplyStatus(string applyid, int status,string remark)
         {
-            return _custservice.UpdateApplyStatus(applyid, status);
+            return _custservice.UpdateApplyStatus(applyid, status, remark);
         }
 
         /// <summary>

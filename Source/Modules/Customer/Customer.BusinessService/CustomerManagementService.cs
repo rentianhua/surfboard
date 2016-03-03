@@ -631,10 +631,11 @@ namespace CCN.Modules.Customer.BusinessService
         /// </summary>
         /// <param name="applyid"></param>
         /// <param name="status"></param>
+        /// <param name="remark"></param>
         /// <returns></returns>
-        public JResult UpdateApplyStatus(string applyid, int status)
+        public JResult UpdateApplyStatus(string applyid, int status,string remark)
         {
-            return BusinessComponent.UpdateApplyStatus(applyid, status);
+            return BusinessComponent.UpdateApplyStatus(applyid, status, remark);
         }
 
         /// <summary>

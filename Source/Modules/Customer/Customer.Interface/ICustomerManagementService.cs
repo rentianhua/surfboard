@@ -433,8 +433,9 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="innerid"></param>
         /// <param name="status"></param>
+        /// <param name="remark"></param>
         /// <returns></returns>
-        JResult UpdateApplyStatus(string innerid, int status);
+        JResult UpdateApplyStatus(string innerid, int status, string remark);
 
         /// <summary>
         /// 删除评论（逻辑删除）
