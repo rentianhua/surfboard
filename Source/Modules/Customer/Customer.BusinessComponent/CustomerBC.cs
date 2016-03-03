@@ -1122,6 +1122,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             //更新申请表状态
             var updateResult = DataAccess.UpdateApplyStatus(applyModel.Innerid, status);
 
+            applyModel.Pictures = applyModel.Pictures.Trim().Trim(',');
             var comModel = new CompanyModel
             {
                 Innerid = applyModel.Settid,
@@ -1177,11 +1178,13 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             if (model.Mobile != 0)
             {
-                //var chkresult = DataAccess.CheckComment(model.Mobile, model.Companyid);
-
-                //if (chkresult > 0)
+                //if (!string.IsNullOrWhiteSpace(model.IP))
                 //{
-                //    return JResult._jResult(403, "不能重复评论");
+                //    var chkresult = DataAccess.CheckComment(model.IP, model.Companyid);
+                //    if (chkresult > 3)
+                //    {
+                //        return JResult._jResult(403, "不能频繁评论同一家企业");
+                //    }
                 //}
 
                 var custModel = DataAccess.GetCustByMobile(model.Mobile.ToString());
@@ -1206,8 +1209,21 @@ namespace CCN.Modules.Customer.BusinessComponent
             if (string.IsNullOrWhiteSpace(model.Headportrait))
             {
                 //随机头像
-                var randomNumber = new Random(Guid.NewGuid().GetHashCode()).Next(1, 278);
-                model.Headportrait = string.Concat("commentheadportrait_", randomNumber, ".jpg");
+                var num = new Random(Guid.NewGuid().GetHashCode()).Next(1, 278);
+                string file;
+                if (num < 10)
+                {
+                    file = "00" + num;
+                }
+                else if (num >= 10 && num < 100)
+                {
+                    file = "0" + num;
+                }
+                else
+                {
+                    file = num.ToString();
+                }
+                model.Headportrait = string.Concat("commentheadportrait_", file, ".jpg");
 
                 #region 修改文件名
 

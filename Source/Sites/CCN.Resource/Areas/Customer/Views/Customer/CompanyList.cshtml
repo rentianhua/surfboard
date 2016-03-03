@@ -32,8 +32,9 @@
             str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
             str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
             str += "<td>";
-            if (val.Setttotal==1)
-            {
+            if (val.Setttotal === 1) {
+                str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'><font color='red'>查看修改申请</font></a> ";
+            } else {
                 str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'>查看修改申请</a> ";
             }
             str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>编辑</a> ";
@@ -60,10 +61,10 @@
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 
             </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">
-               
+            <div class="col-lg-3 col-sm-3 col-xs-3" style="color: orange">
+               注：红色按钮表示有修改申请需要处理
             </div>
-            <div class="col-lg-3 col-sm-3 col-xs-3">
+            <div class="col-lg-3 col-sm-3 col-xs-3 no-padding-right">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
             </div>
         </div>
