@@ -11,7 +11,7 @@
     });
 
     function QueryList() {
-        var json = { Companyid: $("#companyName").val() };
+        var json = { CompanyName: $("#companyName").val() };
         $("#companylist").getPageList(20, "/api/Customer/GetCommentPageList", json, LoadData);
     }
 

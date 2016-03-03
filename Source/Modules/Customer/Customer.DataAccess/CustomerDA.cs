@@ -1580,15 +1580,15 @@ from settled_info_applyupdate as a where innerid = @innerid; ";
         /// <summary>
         /// 验证重复评论
         /// </summary>
-        /// <param name="mobile"></param>
+        /// <param name="ip"></param>
         /// <param name="companyid"></param>
         /// <returns></returns>
-        public int CheckComment(long mobile, string companyid)
+        public int CheckComment(string ip, string companyid)
         {
-            const string sql = @"select count(1) from settled_comment where mobile=@mobile and companyid=@companyid;";
+            const string sql = @"select count(1) from settled_comment where ip=@ip and companyid=@companyid;";
             try
             {
-                return Helper.ExecuteScalar<int>(sql, new { mobile, companyid });
+                return Helper.ExecuteScalar<int>(sql, new { ip, companyid });
             }
             catch (Exception ex)
             {
