@@ -80,7 +80,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             var model = DataAccess.GetAuctionViewById(id);
             if (model == null)
             {
-                return JResult._jResult(400,"暂无数据");
+                return JResult._jResult(400, "暂无数据");
             }
             model.mobile = null;
             return JResult._jResult(model);
@@ -115,7 +115,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 model.Innerid
             );
         }
-        
+
         /// <summary>
         /// 修改拍卖车辆
         /// </summary>
@@ -187,7 +187,7 @@ namespace CCN.Modules.Auction.BusinessComponent
         #endregion
 
         #region 图片处理
-        
+
         /// <summary>
         /// 获取车辆已有图片
         /// </summary>
@@ -198,7 +198,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             var list = DataAccess.GetCarPictureByCarid(carid);
             return JResult._jResult(list);
         }
-        
+
         /// <summary>
         /// 批量保存图片(添加+删除)
         /// </summary>
@@ -219,7 +219,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             if (model.DelIds.Count > 0 && model.AddPaths.Count == 0)
             {
                 picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
-                result = DataAccess.DelCarPictureList(model.DelIds, model.Carid);                
+                result = DataAccess.DelCarPictureList(model.DelIds, model.Carid);
             }
             //only add
             else if (model.DelIds.Count == 0 && model.AddPaths.Count > 0)
@@ -229,7 +229,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             else if (model.DelIds.Count > 0 && model.AddPaths.Count > 0)
             {
                 picedList = DataAccess.GetCarPictureByIds(model.DelIds).ToList();
-                result = DataAccess.SaveCarPicture(model);                
+                result = DataAccess.SaveCarPicture(model);
             }
 
             switch (result)
@@ -239,7 +239,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 case 0:
                     return JResult._jResult(400, "批量删除图片失败");
             }
-            
+
             //异步删除七牛上的图片
             Task.Run(() =>
             {
@@ -307,7 +307,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                     return JResult._jResult(401, "只能一人中标");
                 }
             }
-           
+
             var bidModel = new AuctionCarParticipantModel
             {
                 Innerid = model.Innerid,
@@ -397,5 +397,20 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         #endregion
+
+        #region 拍卖时间区间
+
+        /// <summary>
+        /// 获取拍卖时间列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAuctionTimeList()
+        {
+            var result = DataAccess.GetAuctionTimeList();
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
     }
 }

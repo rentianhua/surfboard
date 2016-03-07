@@ -165,5 +165,15 @@ namespace CCN.Modules.Auction.Interface
         JResult DeleteDeposit(string innerid);
 
         #endregion
+
+        #region 拍卖时间区间
+
+        /// <summary>
+        /// 获取拍卖时间列表
+        /// </summary>
+        /// <returns></returns>
+        JResult GetAuctionTimeList();
+
+        #endregion
     }
 }
