@@ -236,5 +236,18 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         #endregion
+
+        #region 拍卖时间区间
+
+        /// <summary>
+        /// 获取拍卖时间列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetAuctionTimeList()
+        {
+            return BusinessComponent.GetAuctionTimeList();
+        }
+
+        #endregion
     }
 }

@@ -48,6 +48,7 @@
     <Compile Include="AuctionCarPictureModel.cs" />
     <Compile Include="AuctionCarInfoModel.cs" />
     <Compile Include="AuctionDepositModel.cs" />
+    <Compile Include="AuctionTimeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

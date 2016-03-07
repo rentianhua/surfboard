@@ -12,7 +12,12 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 主键id
         /// </summary>
         public string Innerid { get; set; }
-        
+
+        /// <summary>
+        /// 车辆ID
+        /// </summary>
+        public string carid { get; set; }
+
         /// <summary>
         /// 会员ID
         /// </summary>
@@ -197,7 +202,7 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 发拍时间[status:2]
         /// </summary>
         public DateTime? publishedtime { get; set; }
-        
+
         /// <summary>
         /// 成交操作人
         /// </summary>
@@ -280,6 +285,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public string dischargeName { get; set; }
 
+        /// <summary>
+        /// 新车指导价
+        /// </summary>
+        public decimal? modelprice { get; set; }
+
+        /// <summary>
+        /// 原价
+        /// </summary>
+        public decimal? price { get; set; }
+
     }
 
     /// <summary>
@@ -326,6 +341,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 状态
         /// </summary>
         public int? status { get; set; }
+
+        /// <summary>
+        /// 发拍时间[status:2]
+        /// </summary>
+        public DateTime? publishedtime { get; set; }
+
+        /// <summary>
+        /// 拍卖有效期[过后status:4]
+        /// </summary>
+        public DateTime? validtime { get; set; }
 
     }
 }
