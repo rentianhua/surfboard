@@ -60,7 +60,22 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.AddParticipant(model);
         }
-        
+
+        #endregion
+
+        #region 拍卖时间 
+
+        /// <summary>
+        /// 获取拍卖时间列表 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionTimeList")]
+        public JResult GetAuctionTimeList()
+        {
+            return _auctionservice.GetAuctionTimeList();
+        }
+
         #endregion
     }
 }
