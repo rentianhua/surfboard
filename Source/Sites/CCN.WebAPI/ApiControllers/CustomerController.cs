@@ -912,5 +912,75 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region APP接口
+        
+        /// <summary>
+        /// 用户注册--app端
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns>
+        /// errcode,
+        /// 0.成功
+        /// 402 手机号被其他人注册
+        /// 403 openid已绑定其他手机号
+        /// 404 异常
+        /// 405 手机号不能空
+        /// </returns>
+        [Route("SaveCustomer")]
+        [HttpPost]
+        public JResult SaveCustomer([FromBody] CustModel userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo.Mobile))
+            {
+                return new JResult
+                {
+                    errcode = 405,
+                    errmsg = "手机号不能空"
+                };
+            }
+
+            var result = _custservice.CustRegister(userInfo);
+
+            #region 注册送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Run(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = result.errmsg.ToString(),
+                        Type = 1,
+                        Point = 500, //注册+500
+                        Remark = "注册送积分",
+                        Sourceid = 1
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// 找回密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        [Route("SaveNewPassword")]
+        [HttpPost]
+        public JResult SaveNewPassword(CustRetrievePassword mRetrievePassword)
+        {
+            if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
+            {
+                return JResult._jResult(402, "手机号不能空");
+            }
+            
+            return _custservice.UpdatePassword(mRetrievePassword);
+        }
+        #endregion
     }
 }
