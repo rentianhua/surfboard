@@ -49,6 +49,17 @@ namespace CCN.Modules.Activity.BusinessComponent
             var model = DataAccess.GetVoteViewById(id);
             return JResult._jResult(model);
         }
+        
+        /// <summary>
+        /// 获取投票活动详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetVoteInfoById(string id)
+        {
+            var model = DataAccess.GetVoteInfoById(id);
+            return JResult._jResult(model);
+        }
 
         #endregion
 
@@ -83,6 +94,17 @@ namespace CCN.Modules.Activity.BusinessComponent
         }
 
         /// <summary>
+        /// 获取投票活动的参赛人员详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetVotePerInfoById(string id)
+        {
+            var model = DataAccess.GetVotePerInfoById(id);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
         /// 参赛
         /// </summary>
         /// <param name="model"></param>
@@ -96,6 +118,8 @@ namespace CCN.Modules.Activity.BusinessComponent
             {
                 return JResult._jResult(401, "参数不完整");
             }
+
+            model.Innerid = Guid.NewGuid().ToString();
             model.Createrid = ApplicationContext.Current.UserId;
             model.Createdtime = DateTime.Now;
             model.Modifiedtime = null;
@@ -132,11 +156,13 @@ namespace CCN.Modules.Activity.BusinessComponent
         public JResult AddVoteLog(VoteLogModel model)
         {
             if (string.IsNullOrWhiteSpace(model?.Voteid)
-                || string.IsNullOrWhiteSpace(model.Perid))
+                || string.IsNullOrWhiteSpace(model.Perid) 
+                || string.IsNullOrWhiteSpace(model.Openid))
             {
                 return JResult._jResult(401, "参数不完整");
             }
 
+            model.Innerid = Guid.NewGuid().ToString();
             model.Createdtime = DateTime.Now;
             var result = DataAccess.AddVoteLog(model);
             
@@ -144,6 +170,34 @@ namespace CCN.Modules.Activity.BusinessComponent
             {
                 return JResult._jResult(402, "不在投票时间范围内");
             }
+
+            if (result == -2)
+            {
+                return JResult._jResult(403, "重复投票");
+            }
+
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 作弊投票
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public JResult AddVoteLog(VoteLogModel model, int number)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Voteid)
+                || string.IsNullOrWhiteSpace(model.Perid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.IP = "";
+            model.Openid = "";
+            var result = DataAccess.AddVoteLog(model, number);
 
             return JResult._jResult(result);
         }

@@ -38,7 +38,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("GetVoteViewById")]
         public JResult GetVoteViewById(string id)
         {
@@ -65,7 +65,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("GetVotePerViewById")]
         public JResult GetVotePerViewById(string id)
         {

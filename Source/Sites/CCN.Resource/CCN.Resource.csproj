@@ -205,6 +205,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Activity\Models\" />
+    <Folder Include="Areas\Activity\Views\Shared\" />
     <Folder Include="Areas\Auction\Models\" />
     <Folder Include="Areas\Auction\Views\Shared\" />
     <Folder Include="Areas\Base\Models\" />
@@ -222,6 +224,7 @@
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ActivityController.cs" />
     <Compile Include="ApiControllers\AuctionController.cs" />
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
@@ -233,6 +236,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Activity\ActivityAreaRegistration.cs" />
+    <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
     <Compile Include="Areas\Auction\AuctionAreaRegistration.cs" />
     <Compile Include="Areas\Auction\Controllers\AuctionController.cs" />
     <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
@@ -931,6 +936,14 @@
     <Content Include="Areas\Customer\Views\Customer\CompanyUpdateList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CommentList.cshtml" />
     <Content Include="Areas\Customer\Views\Customer\CommentView.cshtml" />
+    <Content Include="Areas\Activity\Views\web.config" />
+    <Content Include="Areas\Activity\Views\Activity\VoteList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteLogList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerView.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteView.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
@@ -1043,6 +1056,18 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessEntity\Activity.BusinessEntity.csproj">
+      <Project>{22a53eb5-f95a-486a-8ce0-249ba2a05c8b}</Project>
+      <Name>Activity.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessService\Activity.BusinessService.csproj">
+      <Project>{74b3b875-56ab-44ad-9e10-710624935c88}</Project>
+      <Name>Activity.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.Interface\Activity.Interface.csproj">
+      <Project>{077aba3a-e911-4b72-a4e9-eb8bdf119738}</Project>
+      <Name>Activity.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
       <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
       <Name>Auction.BusinessEntity</Name>

@@ -1,23 +1,22 @@
-﻿using CCN.Modules.Activity.BusinessComponent;
+﻿using System.Web.Http;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
+using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
-using Cedar.Framework.Common.Server.BaseClasses;
 
-namespace CCN.Modules.Activity.BusinessService
+namespace CCN.Resource.ApiControllers
 {
     /// <summary>
-    /// 
+    /// 基础模块
     /// </summary>
-    public class ActivityManagementService : ServiceBase<ActivityBusinessComponent>, IActivityManagementService
+    [RoutePrefix("api/Activity")]
+    public class ActivityController : ApiController
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="bc"></param>
-        public ActivityManagementService(ActivityBusinessComponent bc) : base(bc)
-        {
+        private readonly IActivityManagementService _activityservice;
 
+        public ActivityController()
+        {
+            _activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
         }
 
         #region 投票活动
@@ -27,9 +26,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<VoteListModel> GetVoteList(VoteQueryModel query)
+        [HttpPost]
+        [Route("GetVoteList")]
+        public BasePageList<VoteListModel> GetVoteList([FromBody]VoteQueryModel query)
         {
-            return BusinessComponent.GetVoteList(query);
+            return _activityservice.GetVoteList(query);
         }
 
         /// <summary>
@@ -37,9 +38,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet]
+        [Route("GetVoteViewById")]
         public JResult GetVoteViewById(string id)
         {
-            return BusinessComponent.GetVoteViewById(id);
+            return _activityservice.GetVoteViewById(id);
         }
 
         /// <summary>
@@ -47,9 +50,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet]
+        [Route("GetVoteInfoById")]
         public JResult GetVoteInfoById(string id)
         {
-            return BusinessComponent.GetVoteInfoById(id);
+            return _activityservice.GetVoteInfoById(id);
         }
 
         #endregion
@@ -60,9 +65,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<VotePerListModel> GetVotePerList(VotePerQueryModel query)
+        [HttpPost]
+        [Route("GetVotePerList")]
+        public BasePageList<VotePerListModel> GetVotePerList([FromBody]VotePerQueryModel query)
         {
-            return BusinessComponent.GetVotePerList(query);
+            return _activityservice.GetVotePerList(query);
         }
 
         /// <summary>
@@ -70,9 +77,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet]
+        [Route("GetVotePerViewById")]
         public JResult GetVotePerViewById(string id)
         {
-            return BusinessComponent.GetVotePerViewById(id);
+            return _activityservice.GetVotePerViewById(id);
         }
 
         /// <summary>
@@ -80,9 +89,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [HttpGet]
+        [Route("GetVotePerInfoById")]
         public JResult GetVotePerInfoById(string id)
         {
-            return BusinessComponent.GetVotePerInfoById(id);
+            return _activityservice.GetVotePerInfoById(id);
         }
 
         /// <summary>
@@ -90,9 +101,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public JResult AddVotePer(VotePerModel model)
+        [HttpPost]
+        [Route("AddVotePer")]
+        public JResult AddVotePer([FromBody]VotePerModel model)
         {
-            return BusinessComponent.AddVotePer(model);
+            return _activityservice.AddVotePer(model);
         }
 
         #endregion
@@ -104,29 +117,24 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<VoteLogListModel> GetVoteLogList(VoteLogQueryModel query)
+        [HttpPost]
+        [Route("GetVoteLogList")]
+        public BasePageList<VoteLogListModel> GetVoteLogList([FromBody]VoteLogQueryModel query)
         {
-            return BusinessComponent.GetVoteLogList(query);
+            return _activityservice.GetVoteLogList(query);
         }
 
         /// <summary>
         /// 投票
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
-        public JResult AddVoteLog(VoteLogModel model)
-        {
-            return BusinessComponent.AddVoteLog(model);
-        }
-        /// <summary>
-        /// 作弊投票
-        /// </summary>
-        /// <param name="model"></param>
         /// <param name="number"></param>
         /// <returns></returns>
-        public JResult AddVoteLog(VoteLogModel model, int number)
+        [HttpPost]
+        [Route("AddVoteLog")]
+        public JResult AddVoteLog([FromBody]VoteLogModel model, int number)
         {
-            return BusinessComponent.AddVoteLog(model, number);
+            return _activityservice.AddVoteLog(model,number);
         }
         #endregion
     }
