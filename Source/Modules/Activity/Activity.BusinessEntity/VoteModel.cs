@@ -106,6 +106,11 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 参赛人数
         /// </summary>
         public int Numper { get; set; }
+
+        /// <summary>
+        /// 总投票数
+        /// </summary>
+        public int Numvote { get; set; }
     }
 
     /// <summary>

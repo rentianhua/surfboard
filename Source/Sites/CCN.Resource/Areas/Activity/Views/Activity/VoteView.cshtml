@@ -1,0 +1,144 @@
+﻿@{
+
+}
+
+<script type="text/javascript">
+
+    var voteid = "@ViewBag.voteid";
+
+    $(function () {
+        Init();
+    });
+
+    function Init() {
+
+        if (voteid === "") {
+            return;
+        }
+
+        $.get("/api/Activity/GetVoteViewById?id=" + voteid, function (data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+                return;
+            }
+
+            var obj = data.errmsg;
+
+            $("#lbltitle").html(obj.Title);
+            $("#lblenrolltime").html(Dateformat(obj.Enrollstarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(obj.Enrollendtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblvotetime").html(Dateformat(obj.Votestarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(obj.Voteendtime, "yyyy-MM-dd HH:mm:ss"));
+
+            $("#lblvotemode").html(obj.Votemode);
+            $("#lblvoteflow").html(obj.Voteflow);
+            $("#lblprizedeac").html(obj.Prizedeac);
+            $("#lblattention").html(obj.Attention);
+
+        });
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Activity/Activity/VoteList");
+    }
+
+</script>
+<style type="text/css">
+    .lblleft {
+        text-align: left !important;
+    }
+</style>
+<div class="theme-popover-mask"></div>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">投票活动信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">活动主题</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lbltitle"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">报名时间</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblenrolltime"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">投票时间</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblvotetime"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">投票方式</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label lblleft" id="lblvotemode"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">投票流程</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label lblleft" id="lblvoteflow"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">奖项说明</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label lblleft" id="lblprizedeac"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">注意事项</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label lblleft" id="lblattention"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

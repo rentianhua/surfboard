@@ -27,7 +27,7 @@ namespace CCN.Modules.Activity.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"vote_info as a ";
-            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,createdtime,(select count(1) from vote_per where voteid=a.innerid) as numper";
+            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,createdtime,(select count(1) from vote_per where voteid=a.innerid) as numper,(select count(1) from vote_log where voteid=a.innerid) as numvote";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder(" 1=1 ");
@@ -51,6 +51,19 @@ namespace CCN.Modules.Activity.DataAccess
             return model;
         }
 
+        /// <summary>
+        /// 获取投票活动详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public VoteModel GetVoteInfoById(string id)
+        {
+            const string sql =
+                @"SELECT innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime, votemode, voteflow, prizedeac, attention, createrid, createdtime, modifierid, modifiedtime FROM vote_info as a where innerid=@innerid";
+            var model = Helper.Query<VoteModel>(sql, new { innerid = id }).FirstOrDefault();
+            return model;
+        }
+
         #endregion
 
         #region 投票活动参赛人员
@@ -70,7 +83,7 @@ namespace CCN.Modules.Activity.DataAccess
 
             if (!string.IsNullOrWhiteSpace(query.Mobile))
             {
-                sqlWhere.Append($" and mobile like '{query.Mobile}'");
+                sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
             }
 
             if (query.Num != null)
@@ -80,12 +93,12 @@ namespace CCN.Modules.Activity.DataAccess
 
             if (!string.IsNullOrWhiteSpace(query.Fullname))
             {
-                sqlWhere.Append($" and fullname like '{query.Fullname}'");
+                sqlWhere.Append($" and fullname like '%{query.Fullname}%'");
             }
 
             if (!string.IsNullOrWhiteSpace(query.Openid))
             {
-                sqlWhere.Append($" and openid like '{query.Openid}'");
+                sqlWhere.Append($" and openid like '%{query.Openid}%'");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -107,6 +120,19 @@ namespace CCN.Modules.Activity.DataAccess
         }
 
         /// <summary>
+        /// 获取投票活动的参赛人员详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public VotePerModel GetVotePerInfoById(string id)
+        {
+            const string sql =
+                @"SELECT innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime FROM vote_per as a where innerid=@innerid";
+            var model = Helper.Query<VotePerModel>(sql, new { innerid = id }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
         /// 参赛
         /// </summary>
         /// <param name="model"></param>
@@ -114,9 +140,9 @@ namespace CCN.Modules.Activity.DataAccess
         public int AddVotePer(VotePerModel model)
         {
             const string sql = @"INSERT INTO vote_per
-                                (innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, voteid, fullname, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @voteid, @fullname, @num, @picture, @files, @mobile, @ip, @remark, @openid, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (@innerid, @voteid, @fullname, @picture, @files, @mobile, @ip, @remark, @openid, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -261,9 +287,46 @@ namespace CCN.Modules.Activity.DataAccess
                             new {voteid = model.Voteid, openid = model.Openid}).FirstOrDefault();
                     if (n > 0)
                     {
-                        return -1;
+                        return -2;
                     }
                     result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("投票异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 作弊投票
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public int AddVoteLog(VoteLogModel model, int number)
+        {
+            const string sql = @"INSERT INTO vote_log (innerid, voteid, perid, ip, openid, createdtime) VALUES (@innerid, @voteid, @perid, @ip, @openid, @createdtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var result = 0;
+                try
+                {
+                    for (var i = 0; i < number; i++)
+                    {
+                        result = conn.Execute(sql, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            voteid = model.Voteid,
+                            perid = model.Perid,
+                            ip = model.IP,
+                            openid = model.Openid,
+                            createdtime = model.Createdtime
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

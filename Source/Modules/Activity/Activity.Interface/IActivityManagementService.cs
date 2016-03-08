@@ -24,6 +24,13 @@ namespace CCN.Modules.Activity.Interface
         /// <returns></returns>
         JResult GetVoteViewById(string id);
 
+        /// <summary>
+        /// 获取投票活动详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        JResult GetVoteInfoById(string id);
+
         #endregion
 
         #region 投票活动参赛人员
@@ -43,12 +50,26 @@ namespace CCN.Modules.Activity.Interface
         JResult GetVotePerViewById(string id);
 
         /// <summary>
+        /// 获取投票活动的参赛人员详情 info
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        JResult GetVotePerInfoById(string id);
+
+        /// <summary>
         /// 参赛
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         JResult AddVotePer(VotePerModel model);
 
+        /// <summary>
+        /// 作弊投票
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        JResult AddVoteLog(VoteLogModel model, int number);
         #endregion
 
         #region 投票日志
