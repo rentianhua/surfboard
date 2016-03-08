@@ -175,7 +175,8 @@ namespace CCN.Modules.Auction.DataAccess
                 a.deleterid,a.deletedtime,a.deletedesc,
                 a.publisherid,a.publishedtime,
                 a.dealerid, a.dealedtime, a.dealedprice, a.dealdesc, a.dealmobile,
-                a.validtime, 
+                a.validtime, a.havepurchasetax,
+                a.isoperation, a.certificatesdeliver, a.isnewcar, a.vin, a.enginenum, a.transfer, a.violationdes, a.configuredes, a.supplementdes, a.picturedes,
                 pr.provname,
                 ct.cityname,
                 cb.brandname as brand_name,
@@ -184,7 +185,8 @@ namespace CCN.Modules.Auction.DataAccess
                 cm.liter,
                 cm.geartype,
                 cm.dischargestandard as dischargeName,
-                bc1.codename as color
+                bc1.codename as color,
+                now() as currenttime
                 from auction_carinfo as a 
                 left join base_province as pr on a.provid=pr.innerid
                 left join base_city as ct on a.cityid=ct.innerid

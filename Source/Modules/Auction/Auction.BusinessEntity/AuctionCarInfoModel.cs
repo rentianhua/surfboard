@@ -157,7 +157,62 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 状态[0.已删除,1.待拍,2.在拍,3.成交,4.流拍]
         /// </summary>
         public int? status { get; set; }
-        
+
+        /// <summary>
+        /// 是否营运 0非营运 1营运
+        /// </summary>
+        public short? isoperation { get; set; }
+
+        /// <summary>
+        /// 证件手续交付
+        /// </summary>
+        public string certificatesdeliver { get; set; }
+
+        /// <summary>
+        /// 是否一手车
+        /// </summary>
+        public short? isnewcar { get; set; }
+
+        /// <summary>
+        /// 车辆VIN码
+        /// </summary>
+        public string vin { get; set; }
+
+        /// <summary>
+        /// 发动机号
+        /// </summary>
+        public string enginenum { get; set; }
+
+        /// <summary>
+        /// 过户要求
+        /// </summary>
+        public string transfer { get; set; }
+
+        /// <summary>
+        /// 违章说明
+        /// </summary>
+        public string violationdes { get; set; }
+
+        /// <summary>
+        /// 其他配置说明
+        /// </summary>
+        public string configuredes { get; set; }
+
+        /// <summary>
+        /// 补充说明
+        /// </summary>
+        public string supplementdes { get; set; }
+
+        /// <summary>
+        /// 证件图片
+        /// </summary>
+        public string picturedes { get; set; }
+
+        /// <summary>
+        /// 是否为购置税车辆
+        /// </summary>
+        public short? havepurchasetax { get; set; }
+
         /// <summary>
         /// 创建人
         /// </summary>
@@ -294,6 +349,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 原价
         /// </summary>
         public decimal? price { get; set; }
+
+        /// <summary>
+        /// 当前服务器时间
+        /// </summary>
+        public DateTime? currenttime { get; set; }
 
     }
 
