@@ -207,7 +207,7 @@ namespace CCN.Modules.Car.DataAccess
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("a.status=1"); //在售车辆
+            var sqlWhere = new StringBuilder("(a.status=1 or a.status=2)"); //在售和已售车辆
 
             //省份
             if (query.provid != null)
@@ -333,7 +333,7 @@ namespace CCN.Modules.Car.DataAccess
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("a.status=1");
+            var sqlWhere = new StringBuilder("(a.status=1 or a.status=2)");
 
             //省份
             if (query.provid != null)

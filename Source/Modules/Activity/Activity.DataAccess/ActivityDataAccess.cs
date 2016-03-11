@@ -160,6 +160,20 @@ namespace CCN.Modules.Activity.DataAccess
                         return -1;
                     }
 
+                    var n =
+                        conn.Query<int>(
+                            "select count(1) from vote_per where voteid=@voteid and openid=@openid;",new
+                            {
+                                voteid = model.Voteid,
+                                openid = model.Openid
+                            })
+                            .FirstOrDefault();
+
+                    if (n > 0)
+                    {
+                        return -2;
+                    }
+
                     result = conn.Execute(sql, model);
                 }
                 catch (Exception ex)

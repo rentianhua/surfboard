@@ -565,6 +565,17 @@ namespace CCN.WebAPI.ApiControllers
             var uptoken = QiniuUtility.GetToken();
             return JResult._jResult(0, uptoken);
         }
-        
+
+        /// <summary>
+        /// 获取七牛url
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetQiniuUrl")]
+        [HttpGet]
+        public JResult GetQiniuUrl()
+        {
+            var url = ConfigHelper.GetAppSettings("GETURL");
+            return JResult._jResult(0, url);
+        }
     }
 }

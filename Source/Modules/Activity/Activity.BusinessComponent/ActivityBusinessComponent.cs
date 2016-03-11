@@ -131,6 +131,11 @@ namespace CCN.Modules.Activity.BusinessComponent
                 return JResult._jResult(402, "不在参赛时间范围内");
             }
 
+            if (result == -2)
+            {
+                return JResult._jResult(403, "不能重复报名");
+            }
+
             return JResult._jResult(result);
         }
         

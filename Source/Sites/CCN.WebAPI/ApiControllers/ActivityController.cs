@@ -1,8 +1,14 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Web;
+using System.Web.Http;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -113,5 +119,28 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        /// <summary>
+        /// 投票
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("Test")]
+        public JResult Test([FromBody]List<QModel> model)
+        {
+            var m = HttpContext.Current.Request.Form;
+            var list =  model.ToList();
+            return null;
+        }
+    }
+
+    [Serializable]
+    public class QModel
+    {
+        /// <summary>
+        ///     页索引
+        /// </summary>
+        public int PageIndex { get; set; }
     }
 }
