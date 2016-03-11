@@ -219,6 +219,7 @@
     <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Areas\System\Models\" />
     <Folder Include="Areas\System\Views\Shared\" />
+    <Folder Include="Content\" />
     <Folder Include="Models\" />
     <Folder Include="Plugins\RichTextbox\img\" />
     <Folder Include="TempFile\" />
