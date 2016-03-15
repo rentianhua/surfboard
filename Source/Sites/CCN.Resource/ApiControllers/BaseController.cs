@@ -503,6 +503,7 @@ namespace CCN.Resource.ApiControllers
             return _baseservice.UpdateCarBrand(model);
         }
         #endregion
+
         #region 车系
         /// <summary>
         /// 分页查询车系
@@ -572,6 +573,7 @@ namespace CCN.Resource.ApiControllers
             return _baseservice.UpdateCarSeries(model);
         }
         #endregion
+
         #region 车型
         /// <summary>
         /// 分页查询车型
@@ -640,6 +642,83 @@ namespace CCN.Resource.ApiControllers
         {
             return _baseservice.UpdateCarModel(model);
         }
+        #endregion
+
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetBannerPageList")]
+        [HttpPost]
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList([FromBody]BaseBannerQueryModel query)
+        {
+            return _baseservice.GetBannerPageList(query);
+        }
+        
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateBannerStatus")]
+        [HttpGet]
+        public JResult UpdateBannerStatus(string id, int status)
+        {
+            return _baseservice.UpdateBannerStatus(id, status);
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteBannerById")]
+        [HttpDelete]
+        public JResult DeleteBannerById(string innerid)
+        {
+            return _baseservice.DeleteBannerById(innerid);
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetBannerById")]
+        [HttpGet]
+        public JResult GetBannerById(string innerid)
+        {
+            return _baseservice.GetBannerById(innerid);
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddBanner")]
+        [HttpPost]
+        public JResult AddBanner([FromBody]BaseBannerModel model)
+        {
+            return _baseservice.AddBanner(model);
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateBanner")]
+        [HttpPut]
+        public JResult UpdateBanner([FromBody]BaseBannerModel model)
+        {
+            return _baseservice.UpdateBanner(model);
+        }
+
         #endregion
 
         /// <summary>

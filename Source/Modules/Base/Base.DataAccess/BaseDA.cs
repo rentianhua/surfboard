@@ -1853,5 +1853,166 @@ namespace CCN.Modules.Base.DataAccess
         #endregion  
 
         #endregion
+
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"base_banner ";
+            const string fields = "innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, isenabled, createrid, createdtime, modifierid, modifiedtime";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            if (!string.IsNullOrWhiteSpace(query.Title))
+            {
+                sqlWhere.Append($" and title like '%{query.Title}%'");
+            }
+
+            if (query.Isenabled != null)
+            {
+                sqlWhere.Append($" and isenabled = '{query.Isenabled}'");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseBannerPageListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseBannerListModel> GetBannerList()
+        {
+            const string sql = "select innerid, title, picurl, linkurl from base_banner where isenabled=1 and autoenabletime<=now() and autodisabletime>now() order by sort asc;";
+            var list = Helper.Query<BaseBannerListModel>(sql);
+            return list;
+        }
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateBannerStatus(string id, int status)
+        {
+            const string sql = "update base_banner set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = id, isenabled = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteBannerById(string innerid)
+        {
+            const string sql = @"delete from base_banner where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new {innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseBannerModel GetBannerById(string innerid)
+        {
+            const string sql = @"select innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, remark, isenabled, createrid, createdtime, modifierid, modifiedtime from base_banner where innerid=@innerid";
+            try
+            {
+                var model = Helper.Query<BaseBannerModel>(sql, new { innerid }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddBanner(BaseBannerModel model)
+        {
+            const string sql = @"INSERT INTO `base_banner`
+                                (innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, remark, isenabled, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (@innerid, @title, @picurl, @linkurl, @autoenabletime, @autodisabletime, @sort, @remark, @isenabled, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateBanner(BaseBannerModel model)
+        {
+            var sql = new StringBuilder("update `base_banner` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        
+        #endregion
     }
 }

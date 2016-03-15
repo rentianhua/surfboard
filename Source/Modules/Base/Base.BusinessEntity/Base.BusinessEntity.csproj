@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseBannerModel.cs" />
     <Compile Include="BaseCarBrandModel.cs" />
     <Compile Include="BaseCarModelModel.cs" />
     <Compile Include="BaseCity.cs" />

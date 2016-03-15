@@ -508,6 +508,21 @@ namespace CCN.WebAPI.ApiControllers
         }
         #endregion
 
+        #region 广告管理
+        
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetBannerList")]
+        [HttpGet]
+        public JResult GetBannerList()
+        {
+            return _baseservice.GetBannerList();
+        }
+        
+        #endregion
+
         /// <summary>
         ///     上传文件
         /// </summary>
@@ -565,6 +580,17 @@ namespace CCN.WebAPI.ApiControllers
             var uptoken = QiniuUtility.GetToken();
             return JResult._jResult(0, uptoken);
         }
-        
+
+        /// <summary>
+        /// 获取七牛url
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetQiniuUrl")]
+        [HttpGet]
+        public JResult GetQiniuUrl()
+        {
+            var url = ConfigHelper.GetAppSettings("GETURL");
+            return JResult._jResult(0, url);
+        }
     }
 }

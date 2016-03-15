@@ -8,22 +8,9 @@
     var voteid = "";
 
     var imgs = [];
-    var uploader;
     $(function () {
-        InitUpload();
         Init();
     });
-
-    function InitUpload() {
-        var option = {};
-        option.id = "pickfiles2";
-        option.container = "container2";
-        option.uptoken = "@ViewBag.uptoken";
-        option.autostart = false;
-        option.domain = qiniuurl;
-        //初始化七牛上传控件
-        uploader = InitQiniuUpload(option);
-    }
 
     function Init() {
 
@@ -43,8 +30,8 @@
             voteid = obj.Voteid;
 
             $("#lblnum").html(obj.Num);
-            $("#lblfullname").html(obj.Fullname);
-            $("#lblmobile").html(obj.Mobile);
+            $("#txtfullname").val(obj.Fullname);
+            $("#txtmobile").val(obj.Mobile);
 
             $("#imgpicture").attr("src", getQiniuUrl(obj.Picture));
             $("#lblip").html(obj.IP);
@@ -53,9 +40,18 @@
             $("#lblopenid").html(obj.Openid);
 
             $("#lblcreatedtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
-            $("#lblremark").html(obj.Remark);
+            $("#txtremark").val(obj.Remark);
 
         });
+    }
+
+    var changeSize = function (obj) {
+
+        if ($(obj).css("max-width") === "100px") {
+            $(obj).css("max-width", "").css("max-height", "");
+        } else {
+            $(obj).css("max-width", "100px").css("max-height", "100px");
+        }
     }
 
     function goList() {
@@ -76,43 +72,43 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">编号</label>
-                            <div class="controls col-sm-10">
-                                <label class="control-label no-padding-right">自动生成</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">姓名</label>
                             <div class="controls col-sm-10">
                                 <input id="txtfullname" type="text" placeholder="姓名" class="form-control">
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row form-group">
-
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">手机号</label>
+                            <label class="col-sm-2 control-label no-padding-right">编号</label>
                             <div class="controls col-sm-10">
-                                <input id="txtmobile" type="text" placeholder="姓名" class="form-control">
+                                <label class="control-label no-padding-right" id="lblnum"></label>
                             </div>
                         </div>
                     </div>
+
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">成品图片</label>
                             <div class="controls col-sm-10">
-                                <img alt="" src="" id="imgpicture" style="max-width: 200px;max-height: 200px" />
+                                <img onclick="changeSize(this)" id="imgpicture" style="max-width: 100px;max-height: 100px" />
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">联系手机号</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtmobile" type="text" placeholder="联系手机号" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                   
                 </div>
                 <div class="row form-group">
-                    
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">其他文件</label>
                             <div class="controls col-sm-10" id="divfiles">
@@ -120,13 +116,41 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">ip</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblip"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">参赛时间</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblcreatedtime"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">openid</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblopenid"></label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row form-group">
 
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="" class="col-sm-1 control-label no-padding-right">备注</label>
-                            <div class="col-sm-11">
+                            <div class="controls col-sm-11">
                                 <textarea id="txtremark" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
                             </div>
                         </div>

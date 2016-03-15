@@ -131,6 +131,11 @@ namespace CCN.Modules.Activity.BusinessComponent
                 return JResult._jResult(402, "不在参赛时间范围内");
             }
 
+            if (result == -2)
+            {
+                return JResult._jResult(403, "不能重复报名");
+            }
+
             return JResult._jResult(result);
         }
         
@@ -173,7 +178,12 @@ namespace CCN.Modules.Activity.BusinessComponent
 
             if (result == -2)
             {
-                return JResult._jResult(403, "重复投票");
+                return JResult._jResult(403, "三次机会已用完");
+            }
+
+            if (result == -3)
+            {
+                return JResult._jResult(404, "不能重复投同一个人");
             }
 
             return JResult._jResult(result);

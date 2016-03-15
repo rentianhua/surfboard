@@ -29,22 +29,26 @@
 <script src="~/Scripts/common.js"></script>
 <script type="text/javascript">
 
-    postJson("api/Customer/GetCompanyPageList", { pageindex: 1 }, function (data) {
-        console.log(data);
-    });
-
-
-    //$.ajax({
-    //    url: 'api/Customer/GetCompanyPageList',
-    //    data: {pageindex:1},
-    //    type: 'post',
-    //    datatype: 'json',
-    //    async: false,
-    //    beforeSend: function (xhr) {
-    //        xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
-    //    },
-    //    success: function (data) {
-    //        console.log(data);
-    //    }
+    //postJson("api/Customer/GetCompanyPageList", { pageindex: 1 }, function (data) {
+    //    console.log(data);
     //});
+    setCookie("aaaa","bbbb");
+
+    var d = [{ PageIndex: 1 }, { PageIndex: 2 }];
+    var json = JSON.stringify(d);
+
+    $.ajax({
+        url: 'api/Activity/Test',
+        type: 'post',
+        datatype: 'json',
+        data: json,
+        contentType: 'application/json;charset=utf-8',
+        async: false,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
+        },
+        success: function (data) {
+            console.log(data);
+        }
+    });
 </script>
