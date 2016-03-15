@@ -1094,5 +1094,109 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         #endregion
+
+        #region 关注
+
+        /// <summary>
+        /// 添加关注
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddFollow(AuctionFollowModel model)
+        {
+            const string sql = @"INSERT INTO `auction_follow`
+                                (innerid, auctionid, userid, isdelete, createdtime, deletedtime)
+                                VALUES
+                                (@innerid, @auctionid, @userid, @isdelete, @createdtime, @deletedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    var recChk =
+                        conn.Query<int>(
+                            "select count(1) from auction_follow where auctionid=@auctionid and userid=@userid and isdelete=0;",
+                            new {model.Auctionid, model.Userid}).FirstOrDefault();
+
+                    if (recChk > 0)
+                    {
+                        return -1;
+                    }
+
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加关注异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 删除关注
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public int DelFollow(string auctionid, string userid)
+        {
+            const string sql = @"update auction_follow set isdelete=1 where auctionid=@auctionid and userid=@userid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, new { auctionid, userid });
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("删除关注异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 获取关注的拍卖车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<AuctionCarInfoViewModel> GetFollowPageList(AuctionFollowQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" auction_follow as f 
+                                    inner join auction_carinfo as a on f.auctionid=a.innerid
+                                    left join car_info as b on b.innerid=a.carid
+                                    left join base_carbrand as c1 on b.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on b.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on b.model_id=c3.innerid 
+                                    left join base_city as ct on b.cityid=ct.innerid
+                                    left join base_province as pr on b.provid=pr.innerid ";
+            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " f.createdtime desc " : query.Order;
+
+            var sqlWhere = new StringBuilder(" f.isdelete=0 and a.status>=2");
+
+            //用户id
+            if (query.Userid != null)
+            {
+                sqlWhere.Append($" and f.userid='{query.Userid}'");
+            }
+            
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<AuctionCarInfoViewModel>(model, query.Echo);
+            return list;
+        }
+
+
+
+        #endregion
     }
 }

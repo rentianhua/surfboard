@@ -176,5 +176,46 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 关注
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("Follow")]
+        public JResult Follow([FromBody]AuctionFollowModel model)
+        {
+            return _auctionservice.Follow(model);
+        }
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="usrid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("Unfollow")]
+        public JResult Unfollow(string auctionid, string usrid)
+        {
+            return _auctionservice.Unfollow(auctionid, usrid);
+        }
+
+        /// <summary>
+        /// 获取关注的拍卖车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetFollowPageList")]
+        public BasePageList<AuctionCarInfoViewModel> GetFollowPageList([FromBody]AuctionFollowQueryModel query)
+        {
+            return _auctionservice.GetFollowPageList(query);
+        }
+
+        #endregion
     }
 }
