@@ -320,6 +320,28 @@ namespace CCN.Modules.Auction.BusinessComponent
             return JResult._jResult(result);
         }
 
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            var result = DataAccess.GetAllAuctionParticipantList(query);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        public JResult GetPriceCount(string auctionid)
+        {
+            var result = DataAccess.GetPriceCount(auctionid);
+            return JResult._jResult(result);
+        }
+
         #endregion
 
         #region 押金
@@ -422,6 +444,79 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult AuctionCarInspectionItem()
         {
             var result = DataAccess.AuctionCarInspectionItem();
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID获取拍卖报告内容
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetAuctionCarInspectionResult(string id)
+        {
+            var result = DataAccess.GetAuctionCarInspectionResult(id);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据ID获取
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetInspectionResultForHtml(string id)
+        {
+            //获取所有
+            IEnumerable<AuctionAllCarInspection> list = DataAccess.AuctionCarInspectionItem();
+            var listHtML = list.ToList();
+            if (listHtML != null && listHtML.Count() > 0)
+            {
+                AuctionAllCarInspection model = new AuctionAllCarInspection();
+                model.name_en = "总结报告";
+                List<AuctionCarInspectionDetailShowModel> auctioncarinspectiondetail = new List<AuctionCarInspectionDetailShowModel>();
+                foreach (var item in listHtML)
+                {
+                    AuctionCarInspectionDetailShowModel detailModel = new AuctionCarInspectionDetailShowModel();
+                    detailModel.name_en = item.name_en;
+                    detailModel.name_zh = item.name_zh;
+                    detailModel.innerid = item.innerid;
+                    detailModel.inspectioncount = 0;
+                    detailModel.defaultvalue = "全部完好";
+                    detailModel.sort = -1;
+                    auctioncarinspectiondetail.Add(detailModel);
+                }
+                model.auctioncarinspectiondetail = auctioncarinspectiondetail;
+                listHtML.Add(model);
+                foreach (var item in listHtML)
+                {
+                    if (item.auctioncarinspectiondetail != null)
+                    {
+                        foreach (var detail in item.auctioncarinspectiondetail)
+                        {
+                            var listFindings = DataAccess.GetAuctionInspectionResult(id,detail.innerid);
+                            if (listFindings != null)
+                            {
+                                //认证项内容
+                                detail.defaultvalue = listFindings.result;
+                                //异常项数目
+                                detail.intactcount = listFindings.intactcount;
+                            }
+                        }
+                    }
+                }
+            }
+
+            var result = listHtML.Where(p=>p.auctioncarinspectiondetail!=null).OrderBy(s=>s.sort).ToList();
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model)
+        {
+            var result = DataAccess.AddCarInspection(model);
             return JResult._jResult(result);
         }
 

@@ -629,6 +629,57 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IEnumerable<AuctionCarParticipantViewModel> GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            var sql = new StringBuilder("select * from auction_participant as a order by createdtime desc;");
+
+            var sqlWhere = new StringBuilder("1=1");
+            if (query != null)
+            {
+                if (!string.IsNullOrWhiteSpace(query.Auctionid))
+                {
+                    sqlWhere.Append($" and a.auctionid='{query.Auctionid}'");
+                }
+
+                if (!string.IsNullOrWhiteSpace(query.Mobile))
+                {
+                    sqlWhere.Append($" and a.mobile='{query.Mobile}'");
+                }
+            }
+
+            try
+            {
+                var list = Helper.Query<AuctionCarParticipantViewModel>(sql.ToString());
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取竞拍记录：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        public int GetPriceCount(string auctionid)
+        {
+            var list = GetAllAuctionParticipantList(new AuctionCarParticipantQueryModel() { Amount = auctionid });
+            if (list != null)
+            {
+                return list.Count();
+            }
+            return 0;
+        }
+
+
+        /// <summary>
         /// 添加拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
@@ -855,7 +906,7 @@ namespace CCN.Modules.Auction.DataAccess
                         sqlDetail.AppendFormat(@"select * from auction_carinspectiondetail 
                                                 where isenabled=1 and inspectionid='{0}' 
                                                 order by sort", item.innerid);
-                        var listDetail = Helper.Query<AuctionCarInspectionDetailModel>(sqlDetail.ToString());
+                        var listDetail = Helper.Query<AuctionCarInspectionDetailShowModel>(sqlDetail.ToString());
                         if (listDetail != null && listDetail.Count() > 0)
                         {
                             item.auctioncarinspectiondetail = listDetail;
@@ -874,15 +925,37 @@ namespace CCN.Modules.Auction.DataAccess
         /// <summary>
         /// 获取车辆认证报告
         /// </summary>
-        /// <param name="carid"></param>
+        /// <param name="auctionid"></param>
         /// <returns></returns>
-        public IEnumerable<AuctionCarInspectionModel> GetAuctionCarInspectionResult(string carid)
+        public IEnumerable<AuctionCarInspectionModel> GetAuctionCarInspectionResult(string auctionid)
         {
             var sql = new StringBuilder();
-            sql.Append("select * from auction_carinspectionfindings where carid=@carid");
+            sql.Append("select * from auction_carinspectionfindings where auctionid=@auctionid");
             try
             {
-                var list = Helper.Query<AuctionCarInspectionModel>(sql.ToString());
+                var list = Helper.Query<AuctionCarInspectionModel>(sql.ToString(), new { auctionid });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取车辆认证报告：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取认证项明细信息
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="itemid"></param>
+        /// <returns></returns>
+        public AuctionCarInspectionModel GetAuctionInspectionResult(string auctionid, string itemid)
+        {
+            var sql = new StringBuilder();
+            sql.Append("select * from auction_carinspectionfindings where auctionid=@auctionid and inspectiondetailid=@itemid");
+            try
+            {
+                var list = Helper.Query<AuctionCarInspectionModel>(sql.ToString(), new { auctionid, itemid }).FirstOrDefault(); ;
                 return list;
             }
             catch (Exception ex)
@@ -900,9 +973,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddAuctionInspection(AuctionCarInspectionModel model)
         {
             const string sql = @"INSERT INTO `auction_carinspectionfindings`
-                                (innerid, carid, inspectiondetailid, intactcount, result, createdid, createdtime, modifierid, modifiedtime)
+                                (innerid, carid,auctionid, inspectiondetailid, intactcount, result, createdid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (uuid(), @carid, @inspectiondetailid, @intactcount, @result, @createdid, now(), @modifierid, now());";
+                                (uuid(), @carid,@auctionid, @inspectiondetailid, @intactcount, @result, @createdid, now(), @modifierid, now());";
 
             using (var conn = Helper.GetConnection())
             {
@@ -921,6 +994,74 @@ namespace CCN.Modules.Auction.DataAccess
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IEnumerable<AuctionAllCarInspection> GetInspectionResultForHtml(string id)
+        {
+            var sqlItem = new StringBuilder();
+            sqlItem.Append("select * from auction_carinspectionitem where isenabled=1 order by sort");
+            try
+            {
+                var listItem = Helper.Query<AuctionAllCarInspection>(sqlItem.ToString());
+                if (listItem != null && listItem.Count() > 0)
+                {
+                    foreach (var item in listItem)
+                    {
+                        var sqlDetail = new StringBuilder();
+                        sqlDetail.AppendFormat(@"select * from auction_carinspectiondetail 
+                                                where isenabled=1 and inspectionid='{0}' 
+                                                order by sort", item.innerid);
+                        var listDetail = Helper.Query<AuctionCarInspectionDetailShowModel>(sqlDetail.ToString());
+                        if (listDetail != null && listDetail.Count() > 0)
+                        {
+                            item.auctioncarinspectiondetail = listDetail;
+                        }
+                    }
+                }
+                return listItem;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取认证项：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public int AddCarInspection(List<AuctionSaveCarInspectionModel> list)
+        {
+            var sql = new StringBuilder();
+            foreach (var item in list)
+            {
+                sql.AppendFormat(@"INSERT INTO `auction_carinfo`
+                                (innerid, carid, auctionid, inspectiondetailid, intactcount, result, createdid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (uuid(), '{0}', '{1}', '{2}', {3}, '{4}', '{5}', now(), '{6}', now());",
+                                item.carid, item.auctionid, item.inspectiondetailid, item.intactcount, item.result, item.createdid, item.modifierid);
+            }
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql.ToString());
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加认证报告信息异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
 
         #endregion
     }

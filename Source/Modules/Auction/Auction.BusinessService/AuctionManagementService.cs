@@ -3,6 +3,7 @@ using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using System.Collections.Generic;
 
 namespace CCN.Modules.Auction.BusinessService
 {
@@ -181,6 +182,26 @@ namespace CCN.Modules.Auction.BusinessService
             return BusinessComponent.BidParticipant(model);
         }
 
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public JResult GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            return BusinessComponent.GetAllAuctionParticipantList(query);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        public JResult GetPriceCount(string auctionid)
+        {
+            return BusinessComponent.GetPriceCount(auctionid);
+        }
+
         #endregion
 
         #region 押金
@@ -259,6 +280,37 @@ namespace CCN.Modules.Auction.BusinessService
         {
             return BusinessComponent.AuctionCarInspectionItem();
         }
+
+        /// <summary>
+        /// 根据拍卖ID获取拍卖报告内容
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetAuctionCarInspectionResult(string id)
+        {
+            return BusinessComponent.GetAuctionCarInspectionResult(id);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID获取拍卖报告内容（前台使用）
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult GetInspectionResultForHtml(string id)
+        {
+            return BusinessComponent.GetInspectionResultForHtml(id);
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model)
+        {
+            return BusinessComponent.AddCarInspection(model);
+        }
+
         #endregion
     }
 }

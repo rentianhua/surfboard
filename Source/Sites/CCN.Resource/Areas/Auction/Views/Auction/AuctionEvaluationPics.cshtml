@@ -39,6 +39,27 @@
 
                 //$('#listitem').html(myTemplate(result));myTab11
                 $('#myBody1').append(myTemplate(result));
+
+                //获取报告
+                GetInspectionfindings();
+
+            }
+        });
+    }
+
+    //获取报告
+    function GetInspectionfindings() {
+        $.ajax({
+            url: "/api/Auction/GetAuctionCarInspectionResult?id=" + auctionid,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (result) {
+                var data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $('#' + v.inspectiondetailid + 'count').val(v.result);
+                    $('#' + v.inspectiondetailid + 'result').val(v.intactcount);
+                });
             }
         });
     }
@@ -49,15 +70,28 @@
         $("label").each(function () {
             if ($(this).attr('data-value')) {
                 var json = {};
-                var ittemid = $(this).attr('data-value');
+                var itemid = $(this).attr('data-value');
                 json.carid = carid;
-                json.inspectiondetailid = ittemid;
-                json.intactcount = $('#' + ittemid + 'count').val();
-                json.result = $('#' + ittemid + 'result').val();
+                json.auctionid = auctionid;
+                json.inspectiondetailid = itemid;
+                json.intactcount = $('#' + itemid + 'count').val();
+                json.result = $('#' + itemid + 'result').val();
                 data.push(json);
             }
         });
-        console.log(data);
+        console.log(JSON.stringify(data));
+        $.ajax({
+            type: "POST",
+            url: "/api/Auction/AddCarInspection",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(data),
+            success: function (result) {
+                alert(result);
+            }
+        });
+
+   
     }
 </script>
 <div class="widget flat radius-bordered">

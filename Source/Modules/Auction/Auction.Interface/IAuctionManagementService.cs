@@ -1,5 +1,6 @@
 ﻿using CCN.Modules.Auction.BusinessEntity;
 using Cedar.Framework.Common.BaseClasses;
+using System.Collections.Generic;
 
 namespace CCN.Modules.Auction.Interface
 {
@@ -125,6 +126,20 @@ namespace CCN.Modules.Auction.Interface
         /// <returns></returns>
         JResult BidParticipant(AuctionCarParticipantModel model);
 
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        JResult GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query);
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        JResult GetPriceCount(string auctionid);
+
         #endregion
 
         #region 押金
@@ -183,6 +198,27 @@ namespace CCN.Modules.Auction.Interface
         /// </summary>
         /// <returns></returns>
         JResult AuctionCarInspectionItem();
+
+        /// <summary>
+        /// 拍卖ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        JResult GetAuctionCarInspectionResult(string id);
+
+        /// <summary>
+        /// 获取认证报告页面(前台使用)
+        /// </summary>
+        /// <param name="id">拍卖ID</param>
+        /// <returns></returns>
+        JResult GetInspectionResultForHtml(string id);
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model);
 
         #endregion
     }
