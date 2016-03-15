@@ -93,21 +93,17 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <returns></returns>
         public JResult AddAuctionCar(AuctionCarInfoModel model)
         {
-            if (model?.model_id == null || model.colorid == null || model.register_date == null || model.cityid == null || model.mileage == null)
-            {
-                return JResult._jResult(401, "参数不完整");
-            }
 
             model.createrid = ApplicationContext.Current.UserId;
             model.createdtime = DateTime.Now;
-            model.modifierid = "";
-            model.modifiedtime = null;
-            model.publisherid = "";
-            model.publishedtime = null;
-            model.dealerid = "";
-            model.deletedtime = null;
+            //model.modifierid = "";
+            //model.modifiedtime = null;
+            //model.publisherid = "";
+            //model.publishedtime = null;
+            //model.dealerid = "";
+            //model.deletedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
-            model.status = 1;
+            //model.status = 1;
             var result = DataAccess.AddAuctionCar(model);
             return JResult._jResult
             (
@@ -123,8 +119,13 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <returns></returns>
         public JResult UpdateAuctionCar(AuctionCarInfoModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Innerid) || model.model_id == null || model.colorid == null ||
-                model.register_date == null || model.cityid == null || model.mileage == null)
+            //if (string.IsNullOrWhiteSpace(model?.Innerid) || model.model_id == null || model.colorid == null ||
+            //    model.register_date == null || model.cityid == null || model.mileage == null)
+            //{
+            //    return JResult._jResult(401, "参数不完整");
+            //}
+
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
             {
                 return JResult._jResult(401, "参数不完整");
             }
@@ -407,6 +408,20 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult GetAuctionTimeList()
         {
             var result = DataAccess.GetAuctionTimeList();
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
+        #region 认证报告
+
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        public JResult AuctionCarInspectionItem()
+        {
+            var result = DataAccess.AuctionCarInspectionItem();
             return JResult._jResult(result);
         }
 

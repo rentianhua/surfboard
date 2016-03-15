@@ -44,11 +44,47 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.GetAuctioningViewById(id);
         }
-        
+
+        /// <summary>
+        /// 添加拍卖车辆
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddAuctionCar")]
+        public JResult AddAuctionCar([FromBody] AuctionCarInfoModel model)
+        {
+            return _auctionservice.AddAuctionCar(model);
+        }
+
+        /// <summary>
+        /// 更新拍卖车辆
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateAuctionCar")]
+        public JResult UpdateAuctionCar([FromBody] AuctionCarInfoModel model)
+        {
+            return _auctionservice.UpdateAuctionCar(model);
+        }
+
+        /// <summary>
+        /// 获取拍卖车辆信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionInfoById")]
+        public JResult GetAuctionInfoById(string id)
+        {
+            return _auctionservice.GetAuctionInfoById(id);
+        }
+
         #endregion
-        
+
         #region 竞拍
-        
+
         /// <summary>
         /// 添加拍卖竞拍人员
         /// </summary>

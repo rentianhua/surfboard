@@ -1,6 +1,7 @@
 ﻿@{
 
 }
+
 <script type="text/javascript">
 
     var custid = "@ViewBag.custid";
@@ -60,29 +61,28 @@
     function LoadData(data, index) {
         $("#auctioncarlist tbody").empty();
         var str = "";
-        console.log(data);
+       // console.log(data);
         $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
             str += "<td>" + (val.cityname == null ? "" : val.cityname.sub(400)) + "</td>";
-            str += "<td>" + val.mileage + "</td>";
-            str += "<td>" + (val.lowestprice == null ? "" : val.lowestprice) + "</td>";
+            str += "<td>" + Dateformat(val.publishedtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + Dateformat(val.validtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
-            str += "<td>" + Dateformat(val.createdtime, "yyyy-MM-dd") + "</td>";
+            str += "<td>" + Dateformat(val.createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
 
-            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncarview?id=" + val.Innerid + "');\" href='javascript:;'>查看</a> ";
-            btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctionparticipantlist?auctionid=" + val.Innerid + "');\" href='javascript:;'>竞拍人员</a> ";
-            btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctiondepositlist?auctionid=" + val.Innerid + "');\" href='javascript:;'>押金列表</a> ";
+            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionCarView?id=" + val.Innerid + "');\" href='javascript:;'>查看</a> ";
+            btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?carid=" + val.carid + "&id=" + val.Innerid + "');\" href='javascript:;'>审核</a> ";
 
-            if (val.status === 1) { //待拍
+            if (false) { //待拍
                 btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?id=" + val.Innerid + "');\" href='javascript:;'>修改</a> ";
                 btn += "<a href='javascript:;' onclick=\"PublishAuctionCar('" + val.Innerid + "'," + val.status + ");\">发拍</a> ";
                 btn += "<a href='javascript:;' onclick=\"DealAuctionCar('" + val.Innerid + "',this);\">成交</a> ";
                 btn += "<a href='javascript:;' onclick=\"DeleteAuctionCar('" + val.Innerid + "',this);\">删除</a> ";
             }
-            else if (val.status === 2) {  //在拍
+            else if (false) {  //在拍
                 btn += "<a href='javascript:;' onclick=\"PublishAuctionCar('" + val.Innerid + "'," + val.status + ");\">撤拍</a> ";
                 btn += "<a href='javascript:;' onclick=\"DealAuctionCar('" + val.Innerid + "',this);\">成交</a> ";
             }
@@ -241,11 +241,11 @@
             <tr role="row">
                 <th>序号</th>
                 <th>拍卖车辆(车型)</th>
-                <th>城市</th>
-                <th>里程数(万公里)</th>
-                <th>最低价（万元）</th>
+                <th>车商</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
                 <th>状态</th>                
-                <th>添加时间</th>
+                <th>申请时间</th>
                 <th>操作</th>
             </tr>
         </thead>

@@ -219,7 +219,6 @@
     <Folder Include="Areas\Rewards\Views\Shared\" />
     <Folder Include="Areas\System\Models\" />
     <Folder Include="Areas\System\Views\Shared\" />
-    <Folder Include="Content\" />
     <Folder Include="Models\" />
     <Folder Include="Plugins\RichTextbox\img\" />
     <Folder Include="TempFile\" />
@@ -295,6 +294,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\images\jia.png" />
+    <Content Include="Content\images\loading-bars.gif" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\multiple-select.png" />
+    <Content Include="Content\images\signup.jpg" />
     <Content Include="Controllers\Content\bootstrap.css" />
     <Content Include="Controllers\Content\bootstrap.min.css" />
     <Content Include="Controllers\Content\images\loading-bars.gif" />
@@ -945,6 +949,7 @@
     <Content Include="Areas\Activity\Views\Activity\VoteLogList.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\VotePerView.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\VoteView.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionEvaluationPics.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
@@ -952,6 +957,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CCN_Chart.js" />
     <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\handlebars-1.0.0.beta.6.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
