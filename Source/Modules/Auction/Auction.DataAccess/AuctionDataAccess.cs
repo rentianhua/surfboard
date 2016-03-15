@@ -1040,11 +1040,41 @@ namespace CCN.Modules.Auction.DataAccess
             var sql = new StringBuilder();
             foreach (var item in list)
             {
-                sql.AppendFormat(@"INSERT INTO `auction_carinfo`
+                sql.AppendFormat(@"INSERT INTO `auction_carinspectionfindings`
                                 (innerid, carid, auctionid, inspectiondetailid, intactcount, result, createdid, createdtime, modifierid, modifiedtime)
                                 VALUES
                                 (uuid(), '{0}', '{1}', '{2}', {3}, '{4}', '{5}', now(), '{6}', now());",
                                 item.carid, item.auctionid, item.inspectiondetailid, item.intactcount, item.result, item.createdid, item.modifierid);
+            }
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql.ToString());
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加认证报告信息异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public int EditCarInspection(List<AuctionSaveCarInspectionModel> list)
+        {
+            var sql = new StringBuilder();
+            foreach (var item in list)
+            {
+                sql.AppendFormat(@"update `auction_carinspectionfindings` set intactcount={1},result='{2}',modifiedtime=now(),modifierid='{3}' where auctionid='{4}' and inspectiondetailid='{5}';"
+                                , item.innerid, item.intactcount, item.result, item.modifierid, item.auctionid, item.inspectiondetailid);
             }
             using (var conn = Helper.GetConnection())
             {

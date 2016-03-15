@@ -8,6 +8,7 @@
 <script type="text/javascript">
     var carid = "@ViewBag.Carid";
     var auctionid = "@ViewBag.Auctionid";
+    var status = 1;
     $(function () {
         //获取页面元素
         GetHtmlItem();
@@ -40,10 +41,26 @@
                 //$('#listitem').html(myTemplate(result));myTab11
                 $('#myBody1').append(myTemplate(result));
 
+                //获取车辆基本信息
+                GetCarInfo();
                 //获取报告
                 GetInspectionfindings();
 
+
             }
+        });
+    }
+    //获取车辆基本信息
+    function GetCarInfo() {
+        $.get("/api/Car/GetCarInfoById?id=" + carid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+            var obj = data.errmsg;
+            $('#carbrand').html(obj.brand_name);
+            $('#mileage').html(obj.mileage);
+            $('#registerdate').html(obj.register_date);
+            $('#carmodel').html(obj.model_name);
         });
     }
 
@@ -55,11 +72,17 @@
             datatype: 'application/json',
             async: false,
             success: function (result) {
-                var data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $('#' + v.inspectiondetailid + 'count').val(v.result);
-                    $('#' + v.inspectiondetailid + 'result').val(v.intactcount);
-                });
+                var data = result.errmsg;
+                if (data.length > 0) {
+                    $.each(data, function (k, v) {
+                        $('#' + v.inspectiondetailid + 'result').val(v.result);
+                        $('#' + v.inspectiondetailid + 'count').val(v.intactcount);
+                    });
+                }
+                else {
+                    status = 0;
+                }
+
             }
         });
     }
@@ -79,19 +102,49 @@
                 data.push(json);
             }
         });
-        console.log(JSON.stringify(data));
-        $.ajax({
-            type: "POST",
-            url: "/api/Auction/AddCarInspection",
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify(data),
-            success: function (result) {
-                alert(result);
-            }
-        });
+        if (status)//保存
+        {
+            $.ajax({
+                type: "POST",
+                url: "/api/Auction/EditCarInspection",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.errcode == 0) {
+                        alert("操作成功！");
+                    }
+                    else {
+                        alert("操作失败！");
+                    }
+                }
+            });
+        }
+        else//新增
+        {
+            $.ajax({
+                type: "POST",
+                url: "/api/Auction/AddCarInspection",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.errcode == 0) {
+                        alert("操作成功！");
+                    }
+                    else {
+                        alert("操作失败！");
+                    }
+                }
+            });
+        }
 
-   
+
+
+    }
+
+    function goback() {
+        getBodyHtml('mainbody', '/auction/auction/auctioncaredit?carid=' + carid + '&id=' + auctionid);
     }
 </script>
 <div class="widget flat radius-bordered">
@@ -159,7 +212,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">车辆品牌:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id=""></label>
+                                <label class="control-label no-padding-right" id="carbrand"></label>
                             </div>
                         </div>
                     </div>
@@ -167,7 +220,7 @@
                         <div class="form-group">
                             <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">上牌日期:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id=""></label>
+                                <label class="control-label no-padding-right" id="registerdate"></label>
                             </div>
                         </div>
                     </div>
@@ -177,7 +230,7 @@
                         <div class="form-group">
                             <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">表显里程:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id=""></label>
+                                <label class="control-label no-padding-right" id="mileage"></label>
                             </div>
                         </div>
                     </div>
@@ -185,7 +238,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">车型:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id=""></label>
+                                <label class="control-label no-padding-right" id="carmodel"></label>
                             </div>
                         </div>
                     </div>
@@ -193,7 +246,7 @@
                         <div class="form-group">
                             <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">车架号:</label>
                             <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id=""></label>
+                                <label class="control-label no-padding-right" id="vin"></label>
                             </div>
                         </div>
                     </div>
@@ -289,6 +342,7 @@
 <div class="row form-group text-center">
     <div class="col-lg-12">
         <input id="" type="button" class="btn btn-palegreen shiny" value="保存" onclick="submit();" />
+        <input id="" type="button" class="btn btn-primary shiny" value="返回" onclick="goback();" />
     </div>
 </div>
 

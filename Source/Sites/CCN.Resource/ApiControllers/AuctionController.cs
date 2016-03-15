@@ -349,6 +349,17 @@ namespace CCN.Resource.ApiControllers
             return _auctionservice.AddCarInspection(model);
         }
 
+        /// <summary>
+        /// 修改认证报告信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("EditCarInspection")]
+        public JResult EditCarInspection([FromBody]List<AuctionSaveCarInspectionModel> model)
+        {
+            return _auctionservice.EditCarInspection(model);
+        }
+
         #endregion
     }
 }
