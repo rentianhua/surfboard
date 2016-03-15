@@ -97,6 +97,30 @@ namespace CCN.WebAPI.ApiControllers
             return _auctionservice.AddParticipant(model);
         }
 
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAllAuctionParticipantList")]
+        public JResult GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            return _auctionservice.GetAllAuctionParticipantList(query);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetPriceCount")]
+        public JResult GetPriceCount(string auctionid)
+        {
+            return _auctionservice.GetPriceCount(auctionid);
+        }
+
         #endregion
 
         #region 拍卖时间 
@@ -110,6 +134,45 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetAuctionTimeList()
         {
             return _auctionservice.GetAuctionTimeList();
+        }
+
+        #endregion
+
+        #region 获取认证报告
+
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("AuctionCarInspectionItem")]
+        public JResult AuctionCarInspectionItem()
+        {
+            return _auctionservice.AuctionCarInspectionItem();
+        }
+
+        /// <summary>
+        /// 获取认证报告内容
+        /// </summary>
+        /// <param name="id">拍卖ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionCarInspectionResult")]
+        public JResult GetAuctionCarInspectionResult(string id)
+        {
+            return _auctionservice.GetAuctionCarInspectionResult(id);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetInspectionResultForHtml")]
+        public JResult GetInspectionResultForHtml(string id)
+        {
+            return _auctionservice.GetInspectionResultForHtml(id);
         }
 
         #endregion

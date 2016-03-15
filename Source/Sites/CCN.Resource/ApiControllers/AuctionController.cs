@@ -211,6 +211,30 @@ namespace CCN.Resource.ApiControllers
             return _auctionservice.BidParticipant(model);
         }
 
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAllAuctionParticipantList")]
+        public JResult GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            return _auctionservice.GetAllAuctionParticipantList(query);
+        }
+
+        /// <summary>
+        /// 根据拍卖ID 获取竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetPriceCount")]
+        public JResult GetPriceCount(string auctionid)
+        {
+            return _auctionservice.GetPriceCount(auctionid);
+        }
+
         #endregion
 
         #region 押金
@@ -288,6 +312,41 @@ namespace CCN.Resource.ApiControllers
         public JResult AuctionCarInspectionItem()
         {
             return _auctionservice.AuctionCarInspectionItem();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionCarInspectionResult")]
+        public JResult GetAuctionCarInspectionResult(string id)
+        {
+            return _auctionservice.GetAuctionCarInspectionResult(id);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetInspectionResultForHtml")]
+        public JResult GetInspectionResultForHtml(string id)
+        {
+            return _auctionservice.GetInspectionResultForHtml(id);
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddCarInspection")]
+        public JResult AddCarInspection([FromBody]List<AuctionSaveCarInspectionModel> model)
+        {
+            return _auctionservice.AddCarInspection(model);
         }
 
         #endregion

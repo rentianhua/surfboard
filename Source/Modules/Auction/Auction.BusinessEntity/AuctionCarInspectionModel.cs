@@ -24,6 +24,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// <summary>
         /// 
         /// </summary>
+        public string auctionid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public string inspectiondetailid { get; set; }
 
         /// <summary>
@@ -56,6 +61,62 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public DateTime modifiedtime { get; set; }
 
+    }
+
+    /// <summary>
+    /// 保存实体
+    /// </summary>
+    public sealed class AuctionSaveCarInspectionModel 
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string innerid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string carid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string auctionid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string inspectiondetailid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int intactcount { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string result { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string createdid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime createdtime { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string modifierid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime modifiedtime { get; set; }
     }
 
     /// <summary>
@@ -123,7 +184,7 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// <summary>
         /// 认证明细项
         /// </summary>
-        public IEnumerable<AuctionCarInspectionDetailModel> auctioncarinspectiondetail { get; set; }
+        public IEnumerable<AuctionCarInspectionDetailShowModel> auctioncarinspectiondetail { get; set; }
     }
 
     /// <summary>
@@ -195,5 +256,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 
         /// </summary>
         public DateTime modifiedtime { get; set; }
+    }
+
+    /// <summary>
+    /// 认证项明细显示实体
+    /// </summary>
+    public class AuctionCarInspectionDetailShowModel: AuctionCarInspectionDetailModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? intactcount { get; set; }
     }
 }
