@@ -782,5 +782,79 @@ namespace CCN.Modules.Base.BusinessService
         #endregion  
 
         #endregion
+
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query)
+        {
+            return BusinessComponent.GetBannerPageList(query);
+        }
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetBannerList()
+        {
+            return BusinessComponent.GetBannerList();
+        }
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateBannerStatus(string id, int status)
+        {
+            return BusinessComponent.UpdateBannerStatus(id, status);
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteBannerById(string innerid)
+        {
+            return BusinessComponent.DeleteBannerById(innerid);
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetBannerById(string innerid)
+        {
+            return BusinessComponent.GetBannerById(innerid);
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddBanner(BaseBannerModel model)
+        {
+            return BusinessComponent.AddBanner(model);
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateBanner(BaseBannerModel model)
+        {
+            return BusinessComponent.UpdateBanner(model);
+        }
+
+        #endregion
     }
 }

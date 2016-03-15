@@ -293,16 +293,31 @@ namespace CCN.Modules.Activity.DataAccess
                     var nowTime = DateTime.Now;
                     if (nowTime > voteModel?.Voteendtime || nowTime < voteModel?.Votestarttime)
                     {
-                        return -1;
+                        return -1;   //不在时间范围内
                     }
 
-                    var n =
-                        conn.Query<int>("select count(1) from vote_log where voteid=@voteid and openid=@openid;",
-                            new {voteid = model.Voteid, openid = model.Openid}).FirstOrDefault();
-                    if (n > 0)
+                    var loglist =
+                        conn.Query<VoteLogModel>("select perid from vote_log where voteid=@voteid and openid=@openid;",
+                            new {voteid = model.Voteid, openid = model.Openid}).ToList();
+
+                    var votenum = ConfigHelper.GetAppSettings("votenum");
+                    var num = 3;
+
+                    if (!string.IsNullOrWhiteSpace(votenum))
                     {
-                        return -2;
+                        int.TryParse(votenum, out num);
                     }
+
+                    if (loglist.Count >= num)
+                    {
+                        return -2;  //3次机会用完
+                    }
+
+                    if (loglist.Any(x => x.Perid == model.Perid))
+                    {
+                        return -3;  //不能重复投同一个人
+                    }
+
                     result = conn.Execute(sql, model);
                 }
                 catch (Exception ex)

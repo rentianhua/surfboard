@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.DataAccess;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
@@ -1312,5 +1313,102 @@ namespace CCN.Modules.Base.BusinessComponent
 
         #endregion
 
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query)
+        {
+            return DataAccess.GetBannerPageList(query);
+        }
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetBannerList()
+        {
+            var list = DataAccess.GetBannerList();
+            return JResult._jResult(0, list);
+        }
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateBannerStatus(string id, int status)
+        {
+            var result = DataAccess.UpdateBannerStatus(id, status);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteBannerById(string innerid)
+        {
+            var result = DataAccess.DeleteBannerById(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetBannerById(string innerid)
+        {
+            var model = DataAccess.GetBannerById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddBanner(BaseBannerModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Createrid = ApplicationContext.Current.UserId;
+            model.Modifiedtime = null;
+            model.Modifierid = "";
+            var result = DataAccess.UpdateBanner(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateBanner(BaseBannerModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.Createrid = "";
+            model.Createdtime = null;
+            model.Modifiedtime = DateTime.Now;
+            model.Modifierid = ApplicationContext.Current.UserId;
+            var result = DataAccess.UpdateBanner(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }

@@ -5,12 +5,12 @@
 
     var voteid = "@ViewBag.voteid";
 
-    $(function () {
+    $(function() {
         QueryList();
     });
 
     function QueryList() {
-        
+
         var json = { Voteid: voteid, Num: $("#txtnum").val(), Fullname: $("#txtfullname").val(), Mobile: $("#txtmobile").val() };
 
         if ($("#chkRanking").prop("checked")) {
@@ -26,7 +26,7 @@
 
         $("#voteperlist tbody").empty();
         var str = "";
-        $.each(data, function (key, val) {
+        $.each(data, function(key, val) {
 
             str = "";
             str += "<tr>";
@@ -34,11 +34,11 @@
             str += "<td>" + val.Num + "</td>";
             str += "<td>" + val.Fullname + "</td>";
             str += "<td>" + val.Mobile + "</td>";
-            str += "<td>" + val.Votenum + "</td>";
-            str += "<td><img onclick='changeSize(this)' alt='' src='" + getQiniuUrl(val.Picture) + "' id='imgpicture' style='max-width: 100px;max-height: 100px;cursor: pointer'/></td>";
-            
+            str += "<td id='" + val.Innerid + "'>" + val.Votenum + "</td>";
+            str += "<td><img onclick='changeSize(this)' alt='' src='" + getQiniuUrl(val.Picture) + "' id='imgpicture'  class=\"imgsmall\"/></td>";
+
             var btn = "";
-            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerEdit?perid=" + val.Innerid + "');\"> 修改 </a> ";
+            //btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerEdit?perid=" + val.Innerid + "');\"> 修改 </a> ";
             btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerView?perid=" + val.Innerid + "');\"> 查看详情 </a> ";
             btn += "<a href='javascript:;' onclick=\"addVote('" + val.Innerid + "');\"> 加票 </a> ";
             str += "<td>" + btn + "</td></tr>";
@@ -46,22 +46,29 @@
         });
     }
 
-    var changeSize = function (obj) {
-        
+    var changeSize = function(obj) {
+
         if ($(obj).css("max-width") === "100px") {
-            $("#voteperlist tbody img").css("max-width", "100px").css("max-height", "100px");
-            $(obj).css("max-width", "").css("max-height", "");
+            $("img").addClass("imgsmall");
+            $("img").removeClass("imgbig");
+            $(obj).addClass("imgbig");
+            $(obj).removeClass("imgsmall");
         } else {
-            $(obj).css("max-width", "100px").css("max-height", "100px");
+            $(obj).addClass("imgsmall");
+            $(obj).removeClass("imgbig");
         }
     }
 
     var addVote = function (perid) {
+
+        var number = 10;
         var json = { Voteid: voteid, Perid: perid };
-        postJson("/api/Activity/AddVoteLog?number=10", json, function (result) {
-            
+        postJson("/api/Activity/AddVoteLog?number=" + number, json, function (result) {
+
             if (result.errcode === 0) {
-                QueryList();
+                var td = $("#" + perid);
+                td.html(parseInt(td.html(), 10) + number);
+
             } else {
                 alert("操作失败");
             }
@@ -69,6 +76,24 @@
     }
 
 </script>
+<style type="text/css">
+    .imgbig {
+        position: relative;
+        z-index: 999;
+        max-width: 1200px;
+        max-height: 1200px;
+        cursor: pointer;
+    }
+
+    .imgsmall {
+        position: inherit;
+        z-index: 0;
+        max-width: 100px;
+        max-height: 100px;
+        cursor: pointer;
+    }
+</style>
+
 <div style="margin: 0 auto;">
     <div style="font-size: 18px; font-weight: bold; text-align: center">参赛人员列表</div><br />
     <div class="row">
@@ -100,7 +125,7 @@
         </div>
         <div class="col-lg-2 col-sm-2 col-xs-2">
             <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-            <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+            @*<a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>*@
         </div>
     </div><br/>
     <table class="table table-striped table-hover table-bordered" id="voteperlist">

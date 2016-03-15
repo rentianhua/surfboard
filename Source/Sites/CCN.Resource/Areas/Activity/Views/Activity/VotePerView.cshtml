@@ -35,7 +35,7 @@
             $("#imgpicture").attr("src", getQiniuUrl(obj.Picture));
             $("#lblip").html(obj.IP);
 
-            $("#divfiles").html("<a href='" + getQiniuUrl(obj.Files) + "'>" + obj.Files + "</a>");
+            $("#divfiles").html("<a alt='点击下载' href='" + getQiniuUrl(obj.Files) + "'>" + obj.Files + "</a>");
             $("#lblopenid").html(obj.Openid);
 
             $("#lblcreatedtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
@@ -44,12 +44,38 @@
         });
     }
 
+    var changeSize = function (obj) {
+
+        if ($(obj).css("max-width") === "100px") {
+            $(obj).addClass("imgbig");
+            $(obj).removeClass("imgsmall");
+        } else {
+            $(obj).addClass("imgsmall");
+            $(obj).removeClass("imgbig");
+        }
+    }
+
     function goList() {
         getBodyHtml('mainbody', "/Activity/Activity/VotePerList?voteid=" + voteid);
     }
 
 </script>
-
+<style type="text/css">
+    .imgbig { 
+        position: relative;
+        z-index: 999;
+        max-width: 1200px;
+        max-height: 1200px;
+        cursor: pointer;
+    } 
+    .imgsmall { 
+        position: inherit;
+        z-index: 0;
+        max-width: 100px;
+        max-height: 100px;
+        cursor: pointer;
+    }
+</style>
 <div class="theme-popover-mask"></div>
 <div class="widget">
 
@@ -62,23 +88,31 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label no-padding-right">编号</label>
-                            <div class="controls col-sm-10">
-                                <label class="control-label no-padding-right" id="lblnum"></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">姓名</label>
                             <div class="controls col-sm-10">
                                 <label class="control-label no-padding-right" id="lblfullname"></label>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">编号</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblnum"></label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row form-group">
-
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">成品图片</label>
+                            <div class="controls col-sm-10" style="position:relative">
+                                <img onclick="changeSize(this)" id="imgpicture" class="imgsmall" />
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">联系手机号</label>
@@ -87,16 +121,17 @@
                             </div>
                         </div>
                     </div>
+                    
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">成品图片</label>
-                            <div class="controls col-sm-10">
-                                <img alt="" src="" id="imgpicture" style="max-width: 200px;max-height: 200px"/>
+                            <label for="" class="col-sm-2 control-label no-padding-right">其他文件</label>
+                            <div class="controls col-sm-10" id="divfiles">
+
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">ip</label>
@@ -105,24 +140,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">其他文件</label>
-                            <div class="controls col-sm-10" id="divfiles">
-                                
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">openid</label>
-                            <div class="controls col-sm-10">
-                                <label class="control-label no-padding-right" id="lblopenid"></label>
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">参赛时间</label>
@@ -131,13 +151,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">openid</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblopenid"></label>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row form-group">
                     
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
-                            <div class="controls col-sm-10">
+                            <label for="" class="col-sm-1 control-label no-padding-right">备注</label>
+                            <div class="controls col-sm-11">
                                 <label class="control-label no-padding-right" id="lblremark"></label>
                             </div>
                         </div>
