@@ -249,5 +249,16 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         #endregion
+
+        #region 认证报告
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        public JResult AuctionCarInspectionItem()
+        {
+            return BusinessComponent.AuctionCarInspectionItem();
+        }
+        #endregion
     }
 }

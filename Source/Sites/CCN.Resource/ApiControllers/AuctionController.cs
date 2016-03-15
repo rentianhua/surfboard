@@ -3,6 +3,7 @@ using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using System.Collections.Generic;
 
 namespace CCN.Resource.ApiControllers
 {
@@ -272,6 +273,21 @@ namespace CCN.Resource.ApiControllers
         public JResult DeleteDeposit(string innerid)
         {
             return _auctionservice.DeleteDeposit(innerid);
+        }
+
+        #endregion
+
+        #region 获取认证报告
+
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("AuctionCarInspectionItem")]
+        public JResult AuctionCarInspectionItem()
+        {
+            return _auctionservice.AuctionCarInspectionItem();
         }
 
         #endregion

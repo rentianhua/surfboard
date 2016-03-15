@@ -19,124 +19,25 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string carid { get; set; }
 
         /// <summary>
+        /// 车牌号
+        /// </summary>
+        public string carno { get; set; }
+
+        /// <summary>
+        /// 拍卖序号
+        /// </summary>
+        public string no { get; set; }
+
+        /// <summary>
         /// 会员ID
         /// </summary>
         public string mobile { get; set; }
 
         /// <summary>
-        /// 车辆标题
-        /// </summary>
-        public string title { get; set; }
-
-        /// <summary>
-        /// 封面图片
-        /// </summary>
-        public string pic_url { get; set; }
-
-        /// <summary>
-        /// 省份id
-        /// </summary>
-        public int? provid { get; set; }
-
-        /// <summary>
-        /// 城市id
-        /// </summary>
-        public int? cityid { get; set; }
-
-        /// <summary>
-        /// 品牌id
-        /// </summary>
-        public int? brand_id { get; set; }
-
-        /// <summary>
-        /// 车系id
-        /// </summary>
-        public int? series_id { get; set; }
-
-        /// <summary>
-        /// 车型id
-        /// </summary>
-        public int? model_id { get; set; }
-
-        /// <summary>
-        /// 颜色
-        /// </summary>
-        public int? colorid { get; set; }
-        
-        /// <summary>
-        /// 行驶里程（万元）
-        /// </summary>
-        public decimal? mileage { get; set; }
-
-        /// <summary>
-        /// 车辆上牌日期
-        /// </summary>
-        public DateTime? register_date { get; set; }
-        
-        /// <summary>
-        /// 收购时间
-        /// </summary>
-        public DateTime? buytime { get; set; }
-
-        /// <summary>
-        /// 收购价格(万元)
-        /// </summary>
-        public decimal? buyprice { get; set; }
-
-        /// <summary>
         /// 最低价（万元）
         /// </summary>
         public decimal? lowestprice { get; set; }
-        
-        /// <summary>
-        /// 重大事故/水浸/火烧
-        /// </summary>
-        public short? isproblem { get; set; }
 
-        /// <summary>
-        /// 是否定期保养
-        /// </summary>
-        public short? istain { get; set; }
-        
-        /// <summary>
-        /// 是否含过户费
-        /// </summary>
-        public short? istransferfee { get; set; }
-
-        /// <summary>
-        /// 年检到期时间
-        /// </summary>
-        public DateTime? ckyear_date { get; set; }
-
-        /// <summary>
-        /// 交强险到期时间
-        /// </summary>
-        public DateTime? tlci_date { get; set; }
-
-        /// <summary>
-        /// 商业险到期时间
-        /// </summary>
-        public DateTime? audit_date { get; set; }
-
-        /// <summary>
-        /// 车况备注/优势
-        /// </summary>
-        public string remark { get; set; }
-
-        /// <summary>
-        /// 转让原因
-        /// </summary>
-        public string sellreason { get; set; }
-
-        /// <summary>
-        /// 原车主信息
-        /// </summary>
-        public string masterdesc { get; set; }
-
-        /// <summary>
-        /// 车源估值情况
-        /// </summary>
-        public string estimateprice { get; set; }
         /// <summary>
         /// 成交奖励
         /// </summary>
@@ -214,6 +115,26 @@ namespace CCN.Modules.Auction.BusinessEntity
         public short? havepurchasetax { get; set; }
 
         /// <summary>
+        /// 评估检测
+        /// </summary>
+        public string evaluationtest { get; set; }
+
+        /// <summary>
+        /// 买家介绍
+        /// </summary>
+        public string introduction { get; set; }
+
+        /// <summary>
+        /// 地址
+        /// </summary>
+        public string address { get; set; }
+
+        /// <summary>
+        /// 评估检测结果图片
+        /// </summary>
+        public string evaluationpics { get; set; }
+
+        /// <summary>
         /// 创建人
         /// </summary>
         public string createrid { get; set; }
@@ -247,7 +168,7 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 删除操作人
         /// </summary>
         public string deletedesc { get; set; }
-        
+
         /// <summary>
         /// 发拍操作人
         /// </summary>
@@ -282,12 +203,22 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 成交人手机号
         /// </summary>
         public string dealmobile { get; set; }
-        
+
         /// <summary>
         /// 拍卖有效期[过后status:4]
         /// </summary>
         public DateTime? validtime { get; set; }
-        
+
+        /// <summary>
+        /// 卖家姓名
+        /// </summary>
+        public string sellername { get; set; }
+
+        /// <summary>
+        /// 卖家联系方式
+        /// </summary>
+        public string sellermobile { get; set; }
+
     }
 
     /// <summary>
@@ -295,6 +226,116 @@ namespace CCN.Modules.Auction.BusinessEntity
     /// </summary>
     public class AuctionCarInfoViewModel : AuctionCarInfoModel
     {
+        /// <summary>
+        /// 车辆标题
+        /// </summary>
+        public string title { get; set; }
+
+        /// <summary>
+        /// 封面图片
+        /// </summary>
+        public string pic_url { get; set; }
+
+        /// <summary>
+        /// 省份id
+        /// </summary>
+        public int? provid { get; set; }
+
+        /// <summary>
+        /// 城市id
+        /// </summary>
+        public int? cityid { get; set; }
+
+        /// <summary>
+        /// 品牌id
+        /// </summary>
+        public int? brand_id { get; set; }
+
+        /// <summary>
+        /// 车系id
+        /// </summary>
+        public int? series_id { get; set; }
+
+        /// <summary>
+        /// 车型id
+        /// </summary>
+        public int? model_id { get; set; }
+
+        /// <summary>
+        /// 颜色
+        /// </summary>
+        public int? colorid { get; set; }
+
+        /// <summary>
+        /// 行驶里程（万元）
+        /// </summary>
+        public decimal? mileage { get; set; }
+
+        /// <summary>
+        /// 车辆上牌日期
+        /// </summary>
+        public DateTime? register_date { get; set; }
+
+        /// <summary>
+        /// 收购时间
+        /// </summary>
+        public DateTime? buytime { get; set; }
+
+        /// <summary>
+        /// 收购价格(万元)
+        /// </summary>
+        public decimal? buyprice { get; set; }
+
+        /// <summary>
+        /// 重大事故/水浸/火烧
+        /// </summary>
+        public short? isproblem { get; set; }
+
+        /// <summary>
+        /// 是否定期保养
+        /// </summary>
+        public short? istain { get; set; }
+
+        /// <summary>
+        /// 是否含过户费
+        /// </summary>
+        public short? istransferfee { get; set; }
+
+        /// <summary>
+        /// 年检到期时间
+        /// </summary>
+        public DateTime? ckyear_date { get; set; }
+
+        /// <summary>
+        /// 交强险到期时间
+        /// </summary>
+        public DateTime? tlci_date { get; set; }
+
+        /// <summary>
+        /// 商业险到期时间
+        /// </summary>
+        public DateTime? audit_date { get; set; }
+
+        /// <summary>
+        /// 车况备注/优势
+        /// </summary>
+        public string remark { get; set; }
+
+        /// <summary>
+        /// 转让原因
+        /// </summary>
+        public string sellreason { get; set; }
+
+        /// <summary>
+        /// 原车主信息
+        /// </summary>
+        public string masterdesc { get; set; }
+
+        /// <summary>
+        /// 车源估值情况
+        /// </summary>
+        public string estimateprice { get; set; }
+
         /// <summary>
         /// 省份
         /// </summary>
@@ -355,6 +396,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public DateTime? currenttime { get; set; }
 
+        /// <summary>
+        /// 叫价次数
+        /// </summary>
+        public int? count { get; set; }
+
+        /// <summary>
+        /// 审核状态
+        /// </summary>
+        public int? auditstatus { get; set; }
+
     }
 
     /// <summary>
@@ -373,7 +424,7 @@ namespace CCN.Modules.Auction.BusinessEntity
         public int? provid { get; set; }
 
         /// <summary>
-        /// 城市id
+        /// 城市id(所在地)
         /// </summary>
         public int? cityid { get; set; }
 
@@ -411,6 +462,21 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 拍卖有效期[过后status:4]
         /// </summary>
         public DateTime? validtime { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? minmileage { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? maxmileage { get; set; }
+
+        /// <summary>
+        /// 车辆上牌日期
+        /// </summary>
+        public DateTime? register_date { get; set; }
 
     }
 }

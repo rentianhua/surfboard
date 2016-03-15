@@ -33,7 +33,7 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid
                                     left join base_province as pr on b.provid=pr.innerid ";
-            const string fields = "a.innerid,a.mobile,a.lowestprice,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder(" a.status=2 ");
@@ -69,15 +69,39 @@ namespace CCN.Modules.Auction.DataAccess
             }
 
             //开始时间
-            if (query.publishedtime != null)
+            if (query.publishedtime.HasValue)
             {
-                sqlWhere.Append($" and b.publishedtime={query.publishedtime}");
+                sqlWhere.Append($" and a.publishedtime='{query.publishedtime}'");
+            }
+            else
+            {
+                sqlWhere.Append($" and a.publishedtime<='{DateTime.Now}'");
             }
 
             //结束时间
-            if (query.validtime != null)
+            if (query.validtime.HasValue)
             {
-                sqlWhere.Append($" and b.validtime={query.validtime}");
+                sqlWhere.Append($" and a.validtime='{query.validtime}'");
+            }
+            else
+            {
+                sqlWhere.Append($" and a.validtime>='{DateTime.Now}'");
+            }
+
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and b.register_date='{query.register_date}'");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -100,7 +124,7 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid 
                                     left join base_province as pr on b.provid=pr.innerid ";
-            const string fields = "a.innerid,a.mobile,a.lowestprice,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+            const string fields = "a.innerid,a.carid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.publishedtime,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
@@ -116,7 +140,7 @@ namespace CCN.Modules.Auction.DataAccess
                 sqlWhere.Append($" and b.provid={query.provid}");
             }
 
-            //城市
+            //城市（车源地）
             if (query.cityid != null)
             {
                 sqlWhere.Append($" and b.cityid={query.cityid}");
@@ -139,6 +163,21 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and b.model_id={query.model_id}");
             }
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and b.register_date='{query.register_date}'");
+            }
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarInfoViewModel>(model, query.Echo);
             return list;
@@ -151,7 +190,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public AuctionCarInfoModel GetAuctionInfoById(string id)
         {
-            const string sql = "select * from auction_carinfo where innerid=@id";
+            const string sql = "select * from auction_carinfo where carid=@id";
             var model = Helper.Query<AuctionCarInfoModel>(sql, new { id }).FirstOrDefault();
             return model;
         }
@@ -164,11 +203,11 @@ namespace CCN.Modules.Auction.DataAccess
         public AuctionCarInfoViewModel GetAuctionViewById(string id)
         {
             const string sql =
-                @"select a.innerid, a.mobile, a.title, pic_url, 
-                a.mileage, a.register_date, a.buytime, a.buyprice, 
-                a.lowestprice, a.isproblem, a.istain, a.istransferfee,
-                a.ckyear_date, a.tlci_date, a.audit_date, a.remark, 
-                a.sellreason, a.masterdesc, a.estimateprice, 
+                @"select a.innerid, a.mobile,a.carid,a.no, ci.title, ci.pic_url, 
+                ci.mileage, ci.register_date, ci.buytime, ci.buyprice, 
+                a.lowestprice, ci.isproblem, ci.istain, ci.istransferfee,
+                ci.ckyear_date, ci.tlci_date, ci.audit_date, ci.remark, 
+                ci.sellreason,ci.masterdesc, ci.estimateprice, 
                 a.dealrewards,a.transferrisk,a.remind,a.tips,
                 a.`status`, a.createrid,a.createdtime, 
                 a.modifierid,a.modifiedtime, 
@@ -176,7 +215,7 @@ namespace CCN.Modules.Auction.DataAccess
                 a.publisherid,a.publishedtime,
                 a.dealerid, a.dealedtime, a.dealedprice, a.dealdesc, a.dealmobile,
                 a.validtime, a.havepurchasetax,
-                a.isoperation, a.certificatesdeliver, a.isnewcar, a.vin, a.enginenum, a.transfer, a.violationdes, a.configuredes, a.supplementdes, a.picturedes,
+                a.isoperation, a.certificatesdeliver, a.isnewcar, a.vin, a.enginenum, a.transfer, a.violationdes, a.configuredes, a.supplementdes, a.picturedes,a.evaluationtest,a.introduction,a.sellername,a.sellermobile,
                 pr.provname,
                 ct.cityname,
                 cb.brandname as brand_name,
@@ -186,14 +225,16 @@ namespace CCN.Modules.Auction.DataAccess
                 cm.geartype,
                 cm.dischargestandard as dischargeName,
                 bc1.codename as color,
+                cm.modelprice,ci.price,
                 now() as currenttime
                 from auction_carinfo as a 
-                left join base_province as pr on a.provid=pr.innerid
-                left join base_city as ct on a.cityid=ct.innerid
-                left join base_carbrand as cb on a.brand_id=cb.innerid
-                left join base_carseries as cs on a.series_id=cs.innerid
-                left join base_carmodel as cm on a.model_id=cm.innerid
-                left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color'
+                left join car_info as ci on ci.innerid=a.carid
+                left join base_province as pr on ci.provid=pr.innerid
+                left join base_city as ct on ci.cityid=ct.innerid
+                left join base_carbrand as cb on ci.brand_id=cb.innerid
+                left join base_carseries as cs on ci.series_id=cs.innerid
+                left join base_carmodel as cm on ci.model_id=cm.innerid
+                left join base_code as bc1 on ci.colorid=bc1.codevalue and bc1.typekey='car_color'
                 where a.innerid=@innerid";
             var model = Helper.Query<AuctionCarInfoViewModel>(sql, new { innerid = id }).FirstOrDefault();
             return model;
@@ -207,9 +248,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddAuctionCar(AuctionCarInfoModel model)
         {
             const string sql = @"INSERT INTO `auction_carinfo`
-                                (innerid, mobile, title, pic_url, provid, cityid, brand_id, series_id, model_id, colorid, mileage, register_date, buytime, buyprice, lowestprice, isproblem, istain, istransferfee, ckyear_date, tlci_date, audit_date, remark, sellreason, masterdesc, estimateprice, dealrewards, transferrisk, remind, tips, status, createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime)
+                                (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile)
                                 VALUES
-                                (@innerid, @mobile, @title, @pic_url, @provid, @cityid, @brand_id, @series_id, @model_id, @colorid, @mileage, @register_date, @buytime, @buyprice, @lowestprice, @isproblem, @istain, @istransferfee, @ckyear_date, @tlci_date, @audit_date, @remark, @sellreason, @masterdesc, @estimateprice, @dealrewards, @transferrisk, @remind, @tips, @status, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime);";
+                                (uuid(), @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,sellermobile);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -237,33 +278,6 @@ namespace CCN.Modules.Auction.DataAccess
         {
             var sql = new StringBuilder("update `auction_carinfo` set ");
             sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
-
-            //非必填字段的修改
-            if (!model.lowestprice.HasValue)
-            {
-                sql.Append(",lowestprice=null");
-            }
-            if (!model.buytime.HasValue)
-            {
-                sql.Append(",buytime=null");
-            }
-            if (!model.buyprice.HasValue)
-            {
-                sql.Append(",buyprice=null");
-            }
-            if (!model.ckyear_date.HasValue)
-            {
-                sql.Append(",ckyear_date=null");
-            }
-            if (!model.tlci_date.HasValue)
-            {
-                sql.Append(",tlci_date=null");
-            }
-            if (!model.audit_date.HasValue)
-            {
-                sql.Append(",audit_date=null");
-            }
-
             sql.Append(" where innerid = @innerid");
             int result;
             try
@@ -814,9 +828,99 @@ namespace CCN.Modules.Auction.DataAccess
                 @"select innerid, no, type, beginhour, endhour, beginmin, endmin, modifiedtime, createdtime,now() as currenttime from auction_timerange 
                          where beginhour<=@currentTime and endhour>@currentTime or (`no`=
                          (select `no`+1 from auction_timerange where beginhour<=@currentTime and endhour>@currentTime)) order by no asc;";
-            var list = Helper.Query<AuctionTimeViewModel>(sql, new {  currentTime });
+            var list = Helper.Query<AuctionTimeViewModel>(sql, new { currentTime });
             return list;
         }
+
+        #endregion
+
+        #region 认证报告
+
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<AuctionAllCarInspection> AuctionCarInspectionItem()
+        {
+            var sqlItem = new StringBuilder();
+            sqlItem.Append("select * from auction_carinspectionitem where isenabled=1 order by sort");
+            try
+            {
+                var listItem = Helper.Query<AuctionAllCarInspection>(sqlItem.ToString());
+                if (listItem != null && listItem.Count() > 0)
+                {
+                    foreach (var item in listItem)
+                    {
+                        var sqlDetail = new StringBuilder();
+                        sqlDetail.AppendFormat(@"select * from auction_carinspectiondetail 
+                                                where isenabled=1 and inspectionid='{0}' 
+                                                order by sort", item.innerid);
+                        var listDetail = Helper.Query<AuctionCarInspectionDetailModel>(sqlDetail.ToString());
+                        if (listDetail != null && listDetail.Count() > 0)
+                        {
+                            item.auctioncarinspectiondetail = listDetail;
+                        }
+                    }
+                }
+                return listItem;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取认证项：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取车辆认证报告
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public IEnumerable<AuctionCarInspectionModel> GetAuctionCarInspectionResult(string carid)
+        {
+            var sql = new StringBuilder();
+            sql.Append("select * from auction_carinspectionfindings where carid=@carid");
+            try
+            {
+                var list = Helper.Query<AuctionCarInspectionModel>(sql.ToString());
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取车辆认证报告：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 添加认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddAuctionInspection(AuctionCarInspectionModel model)
+        {
+            const string sql = @"INSERT INTO `auction_carinspectionfindings`
+                                (innerid, carid, inspectiondetailid, intactcount, result, createdid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (uuid(), @carid, @inspectiondetailid, @intactcount, @result, @createdid, now(), @modifierid, now());";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加拍卖车辆异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
 
         #endregion
     }

@@ -3,7 +3,6 @@
 }
 <link href="~/Content/cover.css" rel="stylesheet" />
 <link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
-
 <script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
 <script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
 <script src="~/Plugins/UploadImg/js/ui.js"></script>
@@ -11,19 +10,19 @@
 <script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
 <script src="~/Plugins/UploadImg/js/multiple.js"></script>
 <link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
-
 <script type="text/javascript">
 
     var id = "@ViewBag.carid";
 
     var imgs = [];
+
     var uploader;
     $(function () {
         InitUpload();
         InitBrand();
         InitProv();
         InitCode();
-        Init();
+        InitCarInfo();
     });
 
     function InitUpload() {
@@ -191,13 +190,14 @@
         });
     }
 
-    function Init() {
+    //初始化车辆基本信息
+    function InitCarInfo() {
 
         if (id === "") {
             return;
         }
 
-        $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
+        $.get("/api/Car/GetCarInfoById?id=" + id, function (data) {
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
             }
@@ -224,7 +224,6 @@
 
             $("#txtmileage").val(obj.mileage);
             $("#txtvalidtime").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));
-            $("#txtmobile").val(obj.mobile);
 
             GetModelInfo(obj.model_id);
 
@@ -234,7 +233,6 @@
             $("#selectregmonth").selectVal(dataArr[1]);
 
             //更多信息
-            $("#txtlowestprice").val(obj.lowestprice);
 
             $("input[name='radioisproblem'][value=" + obj.isproblem + "]").prop("checked", true);
             $("input[name='radioistain'][value=" + obj.istain + "]").prop("checked", true);
@@ -246,14 +244,14 @@
             $("#caresc").val(obj.remark);
 
             $.ajax({
-                url: "/api/Auction/GetCarPictureByCarid?carid=" + id,
+                url: "/api/Car/GetCarPictureByCarid?carid=" + id,
                 type: 'get',
                 datatype: 'application/json',
                 async: false,
                 success: function (data) {
                     $.each(data.errmsg, function (k, v) {
                         var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-                        $('.imgs').append(
+                        $('#imgs').append(
                                 '<div id="' + strradom + '" class="imgPreview">\
 						            <img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
 						            <div class="caidan">\
@@ -342,7 +340,7 @@
         var caresc = $("#caresc").val();
 
         var json = {
-            
+
             brand_id: brandid,
             series_id: seriesid,
             model_id: modelid,
@@ -395,7 +393,7 @@
                         file.name = "car_" + new Date().getTime() + i + ".jpg";
                         i++;
                     });
-                    
+
                     var addList = [];
                     uploader.start();
                     uploader.bind('FileUploaded', function (up, file, info) {
@@ -419,7 +417,7 @@
             } else {
                 json.Innerid = id;
 
-                $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+                $.post("/api/Car/UpdateCar", json, function (result) {
 
                     if (result.errcode !== 0) {
                         hideloading();
@@ -471,7 +469,7 @@
                             });
                         }
                     });
-                    
+
                     return false;
                 });
             }
@@ -503,218 +501,531 @@
         });
     }
 
+
+    function goAcctionPics() {
+        getBodyHtml('mainbody', '/auction/auction/AuctionEvaluationPics?carid=@ViewBag.carid');
+    }
+
+    //初始化拍卖概要信息
+    function InitAuctionInfo() {
+        if (id === "") {
+            return;
+        }
+
+        $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+            var sellname = "";
+            var sellermobile = "";
+            if (sellname == null) {
+                sellname = obj.sellername;
+            }
+            if (sellermobile == null) {
+                sellermobile = obj.sellermobile;
+            }
+
+            $("#txtsellername").val(sellname);//卖家
+            $("#txtsellermobile").val(sellermobile);//卖家联系方式
+            $("input[name='isoperation'][value=" + obj.isoperation + "]").prop("checked", true);//是否营运车辆
+            $("#enginenum").val(obj.enginenum);//发动机号
+            $("input[name='isnewcar'][value=" + obj.isnewcar + "]").prop("checked", true);//是否一手车
+            $("#vin").val(obj.vin);//VIN号
+            $("input[name='havepurchasetax'][value=" + obj.havepurchasetax + "]").prop("checked", true);//是否有购置税
+            $("#carno").val(obj.carno);//车牌号
+            $("#violationdes").val(obj.violationdes);//违章说明
+            $("#supplementdes").val(obj.supplementdes);//补充说明
+            $("#configuredes").val(obj.configuredes);//其他配置
+            var picturedes = JSON.parse(obj.picturedes)
+            //证件照片类型
+            var pics = ["行驶证正本正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单上部", "交强险上部"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgss').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgForCar"  data-id="">\
+            			            <img data-type="img" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgss";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+           
+            $.each(picturedes, function (k, v) {
+                if (v != null) {
+                    $("div .imgForCar").each(function () {
+                        if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
+                            $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                        }
+                    });
+                }
+            });
+            initUploadM();
+        });
+    }
+
+    //初始化七牛控件
+    function InitQiniuForAuction(option) {
+        Qiniu.uploader({
+            runtimes: 'html5,flash,html4', //上传模式,依次退化
+            flash_swf_url: '/common/plupload/Moxie.swf',
+            browse_button: option.id, //上传选择的点选按钮，**必需**
+            container: option.container, //上传区域DOM ID，默认是browser_button的父元素，
+            max_file_size: '2mb', //最大文件体积限制
+            dragdrop: true, //开启可拖曳上传
+            chunk_size: '2mb', //分块上传时，每片的体积
+            uptoken: option.uptoken,
+            domain: option.domain, //cket 域名，下载资源时用到，**必需**
+            auto_start: option.autostart, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+            filters: [{
+                title: "Image files",
+                extensions: "jpg,png"
+            }],
+            init: {
+                // 文件添加进队列后,处理相关的事情
+                'FilesAdded': function (up, files) {
+                    // 最多上传1张图
+                    if (up.files.length > 1) {
+                        up.splice(3, 999);
+                    }
+                    var i = 0;
+                    plupload.each(files, function (file) {
+                        var myDate = new Date();
+                        file.name = "car_" + myDate.getTime() + i + ".jpg";
+                        i++;
+                    });
+                    up.start();
+                },
+                // 每个文件上传前,处理相关的事情
+                'BeforeUpload': function (up, file) {
+                },
+                // 每个文件上传成功后,处理相关的事情
+                'FileUploaded': function (up, file, info) {
+                    var json = {};
+                    json.imgsrc = JSON.parse(info).key;
+                    json.title = $("#" + option.id).attr("data-val");
+
+                    $("#" + option.id).css("line-height", "120px");
+                    $("#" + option.id + " img").attr("src", option.domain + JSON.parse(info).key).css("margin-top", "0px");
+                    $("#" + option.id).attr("data-id", JSON.parse(info).key).css("margin-top", "0px");
+                }
+            }
+        });
+    }
+
+    //保存拍卖概要信息
+    function SaveAuctionInfo(status) {
+        var json = {};
+
+        json.innerid = "@ViewBag.id";
+        json.isoperation = $("input:radio[name='isoperation']:checked").val();
+        json.enginenum = $("#enginenum").val();
+        json.isnewcar = $("input:radio[name='isnewcar']:checked").val();
+        json.vin = $("#vin").val();
+        json.havepurchasetax = $("input:radio[name='havepurchasetax']:checked").val();
+        json.carno = $("#carno").val();
+        json.violationdes = $("#violationdes").val();
+        json.supplementdes = $("#supplementdes").val();
+        json.configuredes = $("#configuredes").val();
+        json.status = status;
+        //获取图片信息
+        var imgmessage = [];
+        $('div .imgForCar').each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            imgmessage.push(json);
+        });
+        console.log(imgmessage);
+        json.picturedes = JSON.stringify(imgmessage);
+
+        $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+
+            if (result.errcode !== 0) {
+                alert("更新失败");
+                return false;
+            }
+            alert("更新成功！");
+        });
+    }
+
 </script>
 
 <div class="theme-popover">
     上传图片中...
-    <img src="~/Content/images/loading.gif" alt=""/>
+    <img src="~/Content/images/loading.gif" alt="" />
 </div>
 <div class="theme-popover-mask"></div>
 <div class="widget">
-
-    <div class="widget-header bordered-bottom bordered-palegreen">
-        <span class="widget-caption">车辆基本信息</span>
-    </div>
-    <div class="widget-body">
-        <div>
-            <form class="form-horizontal form-bordered" role="form">
-                <div class="row form-group">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>选车</label>
-                            <div class="controls col-sm-11">
-                                <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
-                                </select>
-                                <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
-                                </select>
-                                <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+    <div class="tabbable" id="myBody1">
+        <ul class="nav nav-tabs tabs-flat" id="myTab11">
+            <li class="active">
+                <a data-toggle="tab" href="#home11">
+                    车辆基础资料
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#second" onclick="InitAuctionInfo();">
+                    更多信息
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content tabs-flat" id="myBody">
+            <div id="home11" class="tab-pane in active">
+                <div class="widget-header bordered-bottom bordered-palegreen">
+                    <span class="widget-caption">车辆基本信息</span>
                 </div>
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
-                            <div class="controls col-sm-10">
-                                <select id="selectcolor" style="width:100%"></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>上牌时间</label>
-                            <div class="controls col-sm-10">
-                                <select id="selectregyear">
-                                    <option value="0">年份</option>
-                                </select>
-                                <select id="selectregmonth">
-                                    <option value="0">月份</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
-                            <div class="controls col-sm-10">
-                                <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
-                            <div class="controls col-sm-10">
-                                <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
-                                    <option value="0">请选择</option>
-                                </select>
-                                <select id="selectcity">
-                                    <option value="0">请选择</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
-                            <div class="controls col-sm-11" id="imgList">
-                                <div id="container2">
-                                    <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
-                                        <i class="glyphicon glyphicon-plus"></i>
-                                        <span>选择文件</span>
-                                    </a>
-                                    <label class="required">只能上传2M以下图片</label>
-                                </div>
-                                <div>
-                                    <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form">
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>选车</label>
+                                        <div class="controls col-sm-11">
+                                            <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                            <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                            <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="widget-header bordered-bottom bordered-palegreen">
-        <span class="widget-caption">更多信息</span>
-    </div>
-    <div class="widget-body">
-        <div>
-            <form class="form-horizontal form-bordered" role="form">
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">最低价</label>
-                            <div class="col-sm-10">
-                                <input id="txtlowestprice" type="text" placeholder="最低价（万元）" class="form-control">
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
+                                        <div class="controls col-sm-10">
+                                            <select id="selectcolor" style="width:100%"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>上牌时间</label>
+                                        <div class="controls col-sm-10">
+                                            <select id="selectregyear">
+                                                <option value="0">年份</option>
+                                            </select>
+                                            <select id="selectregmonth">
+                                                <option value="0">月份</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">手机号</label>
-                            <div class="col-sm-10">
-                                <input id="txtmobile" class="form-control" type="text" placeholder="手机号">
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
+                                        <div class="controls col-sm-10">
+                                            <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
+                                        <div class="controls col-sm-10">
+                                            <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                            <select id="selectcity">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
+                                        <div class="controls col-sm-11" id="imgList">
+                                            <div id="container2">
+                                                <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                    <span>选择文件</span>
+                                                </a>
+                                                <label class="required">只能上传2M以下图片</label>
+                                            </div>
+                                            <div>
+                                                <div id="imgs" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                </div>
+                            </div>
 
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
-                            <div class="col-sm-10">
-                                <input id="txtckyear_date" class="Wdate form-control" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
-                            <div class="col-sm-10">
-                                <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtckyear_date" class="Wdate form-control" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtaudit_date" class="Wdate form-control" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">有效期</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtvalidtime" class="Wdate form-control" type="text" placeholder="有效期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
+                                        <div class="col-sm-10 rd" style="padding-top:5px;">
+                                            <input type="radio" name="radioisproblem" id="rYes" value="1" />
+                                            <label for="rYes">是</label>
+                                            <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
+                                            <label for="rNo">否</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
+                                        <div class="col-sm-10 rd" style="padding-top:5px;">
+                                            <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
+                                            <label for="radioistain1">是</label>
+                                            <input type="radio" name="radioistain" id="radioistain2" value="0" />
+                                            <label for="radioistain2">否</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right">详细信息</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group text-center">
+                                <div class="col-lg-12">
+                                    <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="second" class="tab-pane">
+                <div class="widget-header bordered-bottom bordered-palegreen">
+                    <span class="widget-caption">更多信息</span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form">
+                            @*最低价 手机号*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">卖家</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtsellername" type="text" placeholder="卖家" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">手机号</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtsellermobile" class="form-control" type="text" placeholder="手机号">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*是否为营运车辆 发动机号*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>是否为营运车辆</label>
+                                        <div class="col-sm-10 rd" style="padding-top:5px;">
+                                            <input type="radio" name="isoperation" id="optYes" value="1" />
+                                            <label for="optYes">是</label>
+                                            <input type="radio" name="isoperation" id="optNo" value="0" checked="checked" />
+                                            <label for="optNo">否</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>发动机号</label>
+                                        <div class="col-sm-10">
+                                            <input id="enginenum" class="form-control" type="text" placeholder="发动机号">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*是否一手车 VIN号*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>是否一手车</label>
+                                        <div class="col-sm-10 rd" style="padding-top:5px;">
+                                            <input type="radio" name="isnewcar" id="nwYes" value="1" />
+                                            <label for="nwYes">是</label>
+                                            <input type="radio" name="isnewcar" id="nwNo" value="0" checked="checked" />
+                                            <label for="nwNo">否</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>VIN号</label>
+                                        <div class="col-sm-10">
+                                            <input id="vin" class="form-control" type="text" placeholder="VIN号">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*是否有购置税 车牌号*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>是否有购置税</label>
+                                        <div class="col-sm-10 rd" style="padding-top:5px;">
+                                            <input type="radio" name="havepurchasetax" id="taxYes" value="1" />
+                                            <label for="taxYes">是</label>
+                                            <input type="radio" name="havepurchasetax" id="taxNo" value="0" checked="checked" />
+                                            <label for="taxNo">否</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车牌号</label>
+                                        <div class="col-sm-10">
+                                            <input id="carno" class="form-control" type="text" placeholder="车牌号">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*违章说明*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>违章说明</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="violationdes" maxlength="200" rows="5" cols="150" placeholder="违章说明"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*补充说明*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>补充说明</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="supplementdes" maxlength="200" rows="5" cols="150" placeholder="补充说明"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*其他配置*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>其他配置</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="configuredes" maxlength="200" rows="5" cols="150" placeholder="其他配置"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!--new-->
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
-                            <div class="col-sm-10">
-                                <input id="txtaudit_date" class="Wdate form-control" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">有效期</label>
-                            <div class="col-sm-10">
-                                <input id="txtvalidtime" class="Wdate form-control" type="text" placeholder="有效期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--new-->
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>证件照</label>
+                                        <div class="controls col-sm-11" id="">
+                                            <div id="imgss" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
 
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
-                            <div class="col-sm-10 rd" style="padding-top:5px;">
-                                <input type="radio" name="radioisproblem" id="rYes" value="1" />
-                                <label for="rYes">是</label>
-                                <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
-                                <label for="rNo">否</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
-                            <div class="col-sm-10 rd" style="padding-top:5px;">
-                                <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
-                                <label for="radioistain1">是</label>
-                                <input type="radio" name="radioistain" id="radioistain2" value="0" />
-                                <label for="radioistain2">否</label>
+
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>评估检测报告</label>
+                                        <div class="controls col-sm-11" id="">
+                                            <label class="control-label no-padding-right" id=""><a onclick="goAcctionPics();" href='javascript:;'>填写认证报告</a></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                </div>
                             </div>
-                        </div>
+
+                            <div class="row form-group text-center">
+                                <div class="col-lg-12">
+                                    <input id="" type="button" class="btn btn-palegreen shiny" value="保存" onclick="SaveAuctionInfo(5);" />
+                                    <input id="" type="button" class="btn btn-palegreen shiny" value="通过" onclick="SaveAuctionInfo(3);" />
+                                    <input id="" type="button" class="btn btn-palegreen shiny" value="不通过" onclick="SaveAuctionInfo(4);" />
+                                    <input id="" type="button" class="btn btn-palegreen shiny" value="成交" onclick="SaveAuctionInfo(2);" />
+                                    <input type="button" class="btn btn-primary shiny" value="返回" />
+                                </div>
+                            </div>
+
+                        </form>
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-lg-12">
-                        <div class="form-group">
-                            <label for="" class="col-sm-1 control-label no-padding-right">详细信息</label>
-                            <div class="col-sm-11">
-                                <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group text-center">
-                    <div class="col-lg-12">
-                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
-                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
+
+
+
+

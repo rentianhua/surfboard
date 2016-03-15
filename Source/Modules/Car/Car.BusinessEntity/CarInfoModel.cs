@@ -407,6 +407,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? istop { get; set; }
 
+        /// <summary>
+        /// 拍卖状态
+        /// </summary>
+        public int? auditstatus { get; set; }
+
     }
 
     /// <summary>

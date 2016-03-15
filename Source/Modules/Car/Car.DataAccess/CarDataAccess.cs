@@ -442,11 +442,12 @@ namespace CCN.Modules.Car.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"car_info as a 
+                                    left join auction_carinfo as b on b.carid=a.innerid
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,b.status as auditstatus";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件

@@ -15,9 +15,10 @@ namespace CCN.Resource.Areas.Auction.Controllers
             return View();
         }
 
-        public ActionResult AuctionCarEdit(string id)
+        public ActionResult AuctionCarEdit(string carid,string id)
         {
-            ViewBag.carid = string.IsNullOrWhiteSpace(id) ? "" : id;
+            ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
+            ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
             ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
         }
@@ -46,6 +47,19 @@ namespace CCN.Resource.Areas.Auction.Controllers
         {
             ViewBag.auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid;
             ViewBag.depid = string.IsNullOrWhiteSpace(depid) ? "" : depid;
+            return View();
+        }
+
+        /// <summary>
+        /// 检测报告页面
+        /// </summary>
+        /// <param name="carid">车辆ID</param>
+        /// <param name="auctionid">拍卖ID</param>
+        /// <returns></returns>
+        public ActionResult AuctionEvaluationPics(string carid,string auctionid)
+        {
+            ViewBag.Carid = string.IsNullOrWhiteSpace(carid) ? "" : carid; ;
+            ViewBag.Auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid; ;
             return View();
         }
     }

@@ -175,5 +175,15 @@ namespace CCN.Modules.Auction.Interface
         JResult GetAuctionTimeList();
 
         #endregion
+
+        #region 认证报告
+
+        /// <summary>
+        /// 获取认证项
+        /// </summary>
+        /// <returns></returns>
+        JResult AuctionCarInspectionItem();
+
+        #endregion
     }
 }
