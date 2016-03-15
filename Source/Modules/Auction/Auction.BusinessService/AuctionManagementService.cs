@@ -312,5 +312,40 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         #endregion
+
+        #region 关注
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult Follow(AuctionFollowModel model)
+        {
+            return BusinessComponent.Follow(model);
+        }
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult Unfollow(string auctionid, string userid)
+        {
+            return BusinessComponent.Unfollow(auctionid, userid);
+        }
+
+        /// <summary>
+        /// 获取关注的拍卖车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<AuctionCarInfoViewModel> GetFollowPageList(AuctionFollowQueryModel query)
+        {
+            return BusinessComponent.GetFollowPageList(query);
+        }
+        
+        #endregion
     }
 }

@@ -221,5 +221,31 @@ namespace CCN.Modules.Auction.Interface
         JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model);
 
         #endregion
+
+        #region 关注
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult Follow(AuctionFollowModel model);
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        JResult Unfollow(string auctionid, string userid);
+
+        /// <summary>
+        /// 获取关注的拍卖车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<AuctionCarInfoViewModel> GetFollowPageList(AuctionFollowQueryModel query);
+        
+        #endregion
     }
 }

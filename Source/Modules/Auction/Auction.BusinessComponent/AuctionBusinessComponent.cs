@@ -522,5 +522,62 @@ namespace CCN.Modules.Auction.BusinessComponent
 
         #endregion
 
+        #region 关注
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult Follow(AuctionFollowModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Auctionid) || string.IsNullOrWhiteSpace(model.Userid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Isdelete = 0;
+            model.Deletedtime = null;
+            var result = DataAccess.AddFollow(model);
+
+            return result == -1 ? JResult._jResult(402, "重复关注") : JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult Unfollow(string auctionid, string userid)
+        {
+            if (string.IsNullOrWhiteSpace(auctionid) || string.IsNullOrWhiteSpace(userid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.DelFollow(auctionid, userid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取关注的拍卖车辆列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<AuctionCarInfoViewModel> GetFollowPageList(AuctionFollowQueryModel query)
+        {
+            if (string.IsNullOrWhiteSpace(query?.Userid))
+            {
+                return new BasePageList<AuctionCarInfoViewModel>();
+            }
+
+            return DataAccess.GetFollowPageList(query);
+        }
+
+
+
+        #endregion
     }
 }
