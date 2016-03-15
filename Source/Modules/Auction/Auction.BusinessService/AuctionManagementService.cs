@@ -311,6 +311,16 @@ namespace CCN.Modules.Auction.BusinessService
             return BusinessComponent.AddCarInspection(model);
         }
 
+        /// <summary>
+        /// 修改认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult EditCarInspection(List<AuctionSaveCarInspectionModel> model)
+        {
+            return BusinessComponent.EditCarInspection(model);
+        }
+
         #endregion
     }
 }

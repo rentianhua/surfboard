@@ -220,6 +220,13 @@ namespace CCN.Modules.Auction.Interface
         /// <returns></returns>
         JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model);
 
+        /// <summary>
+        /// 修改认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult EditCarInspection(List<AuctionSaveCarInspectionModel> model);
+
         #endregion
     }
 }
