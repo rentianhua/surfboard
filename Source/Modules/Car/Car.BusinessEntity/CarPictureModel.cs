@@ -148,6 +148,15 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 添加的图片
         /// </summary>
         public List<string> AddPaths { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public BatchPictureListModel()
+        {
+            DelIds = new List<string>();
+            AddPaths = new List<string>();
+        }
     }
 
     /// <summary>

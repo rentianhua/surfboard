@@ -467,5 +467,74 @@ namespace CCN.Modules.Customer.Interface
         #endregion
 
         #endregion
+
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+
+        JResult UserRegister(UserModel userInfo);
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        JResult UserLogin(UserLoginInfo loginInfo);
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        JResult GetUserInfoById(string innerid);
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        JResult GetUserInfoByMobile(string mobile);
+
+        /// <summary>
+        /// C用户 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        JResult UserLoginByMobile(string mobile);
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<UserListModel> GetUserPageList(UserQueryModel query);
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        JResult UpdateUserPassword(UserRetrievePassword mRetrievePassword);
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateUserInfo(UserModel model);
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateUserStatus(string innerid, int status);
+
+        #endregion
     }
 }

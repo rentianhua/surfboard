@@ -619,18 +619,42 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="id">车辆id</param>
         /// <returns></returns>
-        public CarInfoModel GetCarViewById(string id)
+        public CarViewModel GetCarViewById(string id)
         {
             const string sql =
-                @"select a.innerid, a.custid, a.carid, a.title, pic_url, 
-                a.mileage, a.register_date, a.buytime, a.buyprice, 
-                a.price, a.dealprice, a.isproblem, 
-                a.remark, a.ckyear_date, a.tlci_date, a.audit_date, a.istain, 
-                sellreason, a.masterdesc, a.dealdesc, a.deletedesc, a.estimateprice, 
-                a.`status`, a.createdtime, a.modifiedtime, 
+                @"select 
+                a.innerid, 
+                a.custid, 
+                a.carid, 
+                a.title, 
+                a.pic_url, 
+                a.mileage, 
+                a.register_date, 
+                a.buytime, 
+                a.buyprice, 
+                a.price, 
+                a.dealprice, 
+                a.isproblem, 
+                a.remark, 
+                a.ckyear_date, 
+                a.tlci_date, 
+                a.audit_date, 
+                a.istain, 
+                sellreason, 
+                a.masterdesc, 
+                a.dealdesc, 
+                a.deletedesc, 
+                a.estimateprice, 
+                a.`status`, 
+                a.createdtime, 
+                a.modifiedtime, 
                 a.seller_type,
-                a.post_time, a.audit_time, a.sold_time, a.closecasetime, 
-                a.eval_price, a.next_year_eval_price, 
+                a.post_time, 
+                a.audit_time, 
+                a.sold_time, 
+                a.closecasetime, 
+                a.eval_price, 
+                a.next_year_eval_price, 
                 pr.provname,
                 ct.cityname,
                 cb.brandname as brand_name,
@@ -648,7 +672,7 @@ namespace CCN.Modules.Car.DataAccess
                 left join base_carmodel as cm on a.model_id=cm.innerid
                 left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color'
                 where a.innerid=@innerid";
-            var result = Helper.Query<CarInfoModel>(sql, new { innerid = id }).FirstOrDefault();
+            var result = Helper.Query<CarViewModel>(sql, new { innerid = id }).FirstOrDefault();
             return result;
         }
 
@@ -750,7 +774,7 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
-        /// 添加车辆
+        /// 修改车辆
         /// </summary>
         /// <param name="model">车辆信息</param>
         /// <returns></returns>
@@ -789,6 +813,7 @@ namespace CCN.Modules.Car.DataAccess
             }
             catch (Exception ex)
             {
+                LoggerFactories.CreateLogger().Write("车辆修改：", TraceEventType.Error, ex);
                 result = 0;
             }
             return result;

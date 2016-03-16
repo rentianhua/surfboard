@@ -1448,5 +1448,254 @@ namespace CCN.Modules.Customer.BusinessComponent
         #endregion
 
         #endregion
+
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+
+        public JResult UserRegister(UserModel userInfo)
+        {
+            LoggerFactories.CreateLogger().Write("注册：" + JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            var chk = DataAccess.UserCheckMobile(userInfo.Mobile);
+            if (chk > 0)
+            {
+                return JResult._jResult(402, "手机号被其他人注册");
+            }
+
+            if (string.IsNullOrWhiteSpace(userInfo.Nickname))
+            {
+                //生成会员名称
+                userInfo.Nickname = string.Concat("ccn_", DateTime.Now.Year, "_",
+                    userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
+            }
+            
+            //密码加密
+            userInfo.Password = Encryptor.EncryptAes(userInfo.Password);
+            
+            userInfo.Status = 1; //初始化状态[1.正常]
+            userInfo.Createdtime = DateTime.Now;
+            userInfo.Totalpoints = 0;
+
+            var innerid = Guid.NewGuid().ToString();
+            userInfo.Innerid = innerid;
+
+            var result = DataAccess.AddUser(userInfo);
+
+            #region 生成二维码
+
+            Task.Run(() =>
+            {
+                try
+                {
+                    //生成二维码位图
+                    var bitmap = BarCodeUtility.CreateBarcode(userInfo.Mobile, 240, 240);
+                    var filename = QiniuUtility.GetFileName(Picture.cust_qrcode);
+                    var stream = BarCodeUtility.BitmapToStream(bitmap);
+                    //上传图片到七牛云
+                    var qinniu = new QiniuUtility();
+                    var qrcode = qinniu.Put(stream, "", filename);
+                    stream.Dispose();
+                    //上传成功更新会员二维码
+                    if (!string.IsNullOrWhiteSpace(qrcode))
+                    {
+                        DataAccess.UpdateUserQrCode(innerid, qrcode);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // ignored
+                    LoggerFactories.CreateLogger().Write("UserRegister接口异常", TraceEventType.Error, ex);
+                }
+            });
+            #endregion
+
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 404,
+                errmsg = result > 0 ? innerid : ""
+            };
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        public JResult UserLogin(UserLoginInfo loginInfo)
+        {
+            LoggerFactories.CreateLogger().Write("c用户登录：" + JsonConvert.SerializeObject(loginInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            if (string.IsNullOrWhiteSpace(loginInfo.Mobile))
+            {
+                return JResult._jResult(403, "帐户名不能为空");
+            }
+            if (string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                return JResult._jResult(404, "密码不能为空");
+            }
+
+            loginInfo.Password = Encryptor.EncryptAes(loginInfo.Password);
+
+            var userInfo = DataAccess.UserLogin(loginInfo);
+            if (userInfo == null)
+            {
+                return JResult._jResult(401, "帐户名或登录密码不正确");
+            }
+            if (userInfo.Status == 2)
+            {
+                return JResult._jResult(402, "帐户被冻结");
+            }
+
+            userInfo.Password = "";
+
+            return JResult._jResult(0, userInfo);
+        }
+        
+        /// <summary>
+        /// C用户 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult UserLoginByMobile(string mobile)
+        {
+            var model = DataAccess.GetUserInfoByMobile(mobile);
+            if (model == null)
+            {
+                return JResult._jResult(401, "帐户名或登录密码不正确");
+            }
+            if (model.Status == 2)
+            {
+                return JResult._jResult(402, "帐户被冻结");
+            }
+            model.Password = "";
+            return JResult._jResult(model);
+        }
+
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public JResult GetUserInfoById(string innerid)
+        {
+            var model = DataAccess.GetUserInfoById(innerid);
+            if (model == null)
+            {
+                return new JResult
+                {
+                    errcode = 400,
+                    errmsg = ""
+                };
+            }
+            model.Password = "";
+            return new JResult
+            {
+                errcode = 0,
+                errmsg = model
+            };
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public JResult GetUserInfoByMobile(string mobile)
+        {
+            var model = DataAccess.GetUserInfoByMobile(mobile);
+            if (model != null)
+            {
+                model.Password = "";
+            }
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<UserListModel> GetUserPageList(UserQueryModel query)
+        {
+            return DataAccess.GetUserPageList(query);
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public JResult UpdateUserPassword(UserRetrievePassword mRetrievePassword)
+        {
+            var model = DataAccess.GetUserInfoByMobile(mRetrievePassword.Mobile);
+            if (model == null)
+            {
+                return JResult._jResult(403, "账户不存在");
+            }
+
+            if (model.Status == 2)
+            {
+                return JResult._jResult(404, "账户被冻结");
+            }
+
+            //密码加密
+            mRetrievePassword.NewPassword = Encryptor.EncryptAes(mRetrievePassword.NewPassword);
+            var result = DataAccess.UpdateUserPassword(mRetrievePassword);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 405,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateUserInfo(UserModel model)
+        {
+            var newModel = new UserModel
+            {
+                Innerid = model.Innerid,
+                Nickname = model.Nickname,
+                Telephone = model.Telephone,
+                Email = model.Email,
+                Realname = model.Realname,
+                Headportrait = model.Headportrait,
+                Provid = model.Provid,
+                Cityid = model.Cityid,
+                Countyid = model.Countyid,
+                Sex = model.Sex,
+                Brithday = model.Brithday,
+                QQ = model.QQ,
+                Signature = model.Signature
+            };
+
+            var result = DataAccess.UpdateUserInfo(newModel);
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 400,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateUserStatus(string innerid, int status)
+        {
+            var result = DataAccess.UpdateUserStatus(innerid, status);
+            return JResult._jResult(result);
+        }
+        
+        #endregion
     }
 }

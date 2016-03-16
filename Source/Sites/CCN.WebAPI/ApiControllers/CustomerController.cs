@@ -913,8 +913,168 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
-        #region APP接口
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        [Route("UserRegister")]
+        [HttpPost]
+        public JResult UserRegister([FromBody]UserRegModel userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo?.Mobile))
+            {
+                return JResult._jResult(405, "手机号不能空");
+            }
+
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            //检查验证码
+            var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
+            if (cresult.errcode != 0)
+            {
+                //验证码错误
+                //400 验证码错误
+                //401 验证码过期
+                return cresult;
+            }
+            return _custservice.UserRegister(userInfo);
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        [Route("UserLogin")]
+        [HttpPost]
+        public JResult UserLogin([FromBody]UserLoginInfo loginInfo)
+        {
+            JResult result;
+            //手机号+密码
+            if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                result = _custservice.UserLogin(loginInfo);
+            }
+            //手机号+验证码
+            else if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.VCode))
+            {
+                var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+                //检查验证码
+                var cresult = baseservice.CheckVerification(loginInfo.Mobile, loginInfo.VCode, 2);
+                if (cresult.errcode != 0)
+                {
+                    //验证码错误
+                    //400 验证码错误
+                    //401 验证码过期
+                    if (cresult.errcode == 400 || cresult.errcode == 401)
+                    {
+                        return JResult._jResult(405, "验证码错误");
+                    }
+                }
+                //根据手机号获取会员信息
+                result = _custservice.UserLoginByMobile(loginInfo.Mobile);
+            }
+            else
+            {
+                result = JResult._jResult(500, "参数不完整");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        [Route("GetUserInfoById")]
+        [HttpGet]
+        public JResult GetUserInfoById(string innerid)
+        {
+            return _custservice.GetUserInfoById(innerid);
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        [Route("GetUserInfoByMobile")]
+        [HttpGet]
+        public JResult GetUserInfoByMobile(string mobile)
+        {
+            return _custservice.GetUserInfoByMobile(mobile);
+        }
         
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetUserPageList")]
+        [HttpPost]
+        public BasePageList<UserListModel> GetUserPageList([FromBody]UserQueryModel query)
+        {
+            return _custservice.GetUserPageList(query);
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        [Route("UpdateUserPassword")]
+        [HttpPost]
+        public JResult UpdateUserPassword([FromBody]UserRetrievePassword mRetrievePassword)
+        {
+            if (string.IsNullOrWhiteSpace(mRetrievePassword?.Mobile))
+            {
+                return JResult._jResult(402, "手机号不能空");
+            }
+
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            //检查验证码
+            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode, 3);
+            if (cresult.errcode != 0)
+            {
+                //验证码错误
+                //400验证码错误
+                //401验证码过期
+                return cresult;
+            }
+            return _custservice.UpdateUserPassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateUserInfo")]
+        [HttpPost]
+        public JResult UpdateUserInfo([FromBody]UserModel model)
+        {
+            return _custservice.UpdateUserInfo(model);
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateUserStatus")]
+        [HttpPost]
+        public JResult UpdateUserStatus(string innerid, int status)
+        {
+            return _custservice.UpdateUserStatus(innerid, status);
+        }
+
+        #endregion
+
+        #region APP接口
+
         /// <summary>
         /// 用户注册--app端
         /// </summary>

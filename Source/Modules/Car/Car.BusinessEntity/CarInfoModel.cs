@@ -268,6 +268,17 @@ namespace CCN.Modules.Car.BusinessEntity
     }
 
     /// <summary>
+    /// 车辆详情model
+    /// </summary>
+    public class CarViewModel : CarInfoModel
+    {
+        /// <summary>
+        /// 是否收藏 1是 0否
+        /// </summary>
+        public int IsCollection { get; set; }
+    }
+
+    /// <summary>
     /// 手机号
     /// </summary>
     public class CarInfoFastModel : CarInfoModel
