@@ -257,18 +257,29 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult GetCarViewById(string id)
         {
-            var jResult = new JResult();
-            var carInfo = DataAccess.GetCarViewById(id);
-            if (carInfo == null)
+            var model = DataAccess.GetCarViewById(id);
+
+            if (model == null)
             {
-                jResult.errcode = 400;
-                jResult.errmsg = "";
-                return jResult;
+                return JResult._jResult(null);
             }
 
-            jResult.errcode = 0;
-            jResult.errmsg = carInfo;
-            return jResult;
+            var custid = ApplicationContext.Current.UserId;
+            if (string.IsNullOrWhiteSpace(custid))
+                return JResult._jResult(model);
+
+            var col = DataAccess.CheckCollection(new CarCollectionModel
+            {
+                Custid = custid,
+                Carid = model.Innerid
+            });
+
+            if (col != null)
+            {
+                model.IsCollection = 1;
+            }
+
+            return JResult._jResult(model);
         }
 
         #region 感兴趣
@@ -486,17 +497,33 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCar(CarInfoModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            LoggerFactories.CreateLogger().Write("车辆修改：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+
             model.createdtime = null;
             model.status = null;
             model.custid = null;
 
+            model.brand_name = null;
+            model.series_name = null;
+            model.cityname = null;
+            model.provname = null;
+            model.model_name = null;
+            model.color = null;
+
+            model.geartype = null;
+            model.liter = null;
+            model.dischargeName = null;
+
+            model.refreshtime = null;
+            model.istop = null;
+
             model.modifiedtime = DateTime.Now;
             var result = DataAccess.UpdateCar(model);
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = ""
-            };
+            return JResult._jResult(result);
         }
 
         /// <summary>
@@ -1183,7 +1210,15 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult BatchSaveCarPicture(BatchPictureListModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Carid) || (model.DelIds.Count == 0 && model.AddPaths.Count == 0))
+            if (string.IsNullOrWhiteSpace(model?.Carid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.DelIds = model.DelIds ?? new List<string>();
+            model.AddPaths = model.AddPaths ?? new List<string>();
+
+            if (model.DelIds.Count == 0 && model.AddPaths.Count == 0)
             {
                 return JResult._jResult(401, "参数不完整");
             }

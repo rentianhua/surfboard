@@ -1980,5 +1980,230 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
         #endregion
 
+
+        #region C用户管理
+        
+        /// <summary>
+        /// 会员注册检查手机号是否被注册
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns>0：未被注册，非0：被注册</returns>
+        public int UserCheckMobile(string mobile)
+        {
+            const string sql = @"select count(1) from user_info where mobile=@mobile;";
+            var result = Helper.ExecuteScalar<int>(sql, new { mobile });
+            return result;
+        }
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        public int AddUser(UserModel userInfo)
+        {
+            //插入账户基本信息
+            const string sql = @"INSERT INTO user_info(innerid, username, password, nickname, mobile, telephone, email,headportrait, realname, status, provid, cityid, countyid, sex, brithday, qq, signature, totalpoints, qrcode, createrid, createdtime, modifierid, modifiedtime)
+                        VALUES (@innerid, @username, @password, @nickname, @mobile, @telephone, @email,@headportrait, @realname, @status, @provid, @cityid, @countyid, @sex, @brithday, @qq, @signature, @totalpoints, @qrcode, @createrid, @createdtime,@modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, userInfo);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户注册：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        public UserViewModel UserLogin(UserLoginInfo loginInfo)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.mobile=@mobile and a.password=@password;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new {
+                    mobile = loginInfo.Mobile,
+                    password = loginInfo.Password
+                }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情1：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public UserViewModel GetUserInfoByMobile(string mobile)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.mobile=@mobile;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new { mobile }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情2：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public UserViewModel GetUserInfoById(string innerid)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.innerid=@innerid;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new { innerid }).FirstOrDefault();                
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+        
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<UserListModel> GetUserPageList(UserQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"user_info";
+            const string fields = "innerid, nickname, mobile, email, headportrait, status, sex, brithday, qq, createdtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Status != null
+                ? $" and status={query.Status}"
+                : "");
+
+            //手机号
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
+            }
+            //昵称
+            if (!string.IsNullOrWhiteSpace(query.Nickname))
+            {
+                sqlWhere.Append($" and nickname like '%{query.Nickname}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<UserListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public int UpdateUserPassword(UserRetrievePassword mRetrievePassword)
+        {
+            const string sql = "update user_info set password=@password where mobile=@mobile;";
+            var custModel = Helper.Execute(sql, new
+            {
+                password = mRetrievePassword.NewPassword,
+                mobile = mRetrievePassword.Mobile
+            });
+            return custModel;
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateUserInfo(UserModel model)
+        {
+            var sqlStr = new StringBuilder("update user_info set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateUserStatus(string innerid, int status)
+        {
+            const string sql = "update user_info set status=@status where innerid=@innerid;";
+            var result = Helper.Execute(sql, new
+            {
+                innerid,
+                status
+            });
+            return result;
+        }
+        
+        /// <summary>
+        /// C用户 更新会员二维码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="qrcode"></param>
+        /// <returns>用户信息</returns>
+        public int UpdateUserQrCode(string innerid, string qrcode)
+        {
+            const string sql = "update user_info set qrcode=@qrcode where innerid=@innerid;";
+            var result = Helper.Execute(sql, new { qrcode, innerid });
+            return result;
+        }
+
+        #endregion
     }
 }
