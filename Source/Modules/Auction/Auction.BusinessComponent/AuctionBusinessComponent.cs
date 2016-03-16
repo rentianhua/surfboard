@@ -339,7 +339,12 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult GetPriceCount(string auctionid)
         {
             var result = DataAccess.GetPriceCount(auctionid);
-            return JResult._jResult(result);
+            var jResult = new JResult();
+
+            jResult.errcode = 0;
+            jResult.errmsg = result;
+
+            return jResult;
         }
 
         #endregion
@@ -517,6 +522,17 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult AddCarInspection(List<AuctionSaveCarInspectionModel> model)
         {
             var result = DataAccess.AddCarInspection(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改认证报告信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult EditCarInspection(List<AuctionSaveCarInspectionModel> model)
+        {
+            var result = DataAccess.EditCarInspection(model);
             return JResult._jResult(result);
         }
 
