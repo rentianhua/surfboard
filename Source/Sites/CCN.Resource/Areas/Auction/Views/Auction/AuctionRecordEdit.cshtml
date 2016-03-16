@@ -1,0 +1,141 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script>
+    //竞价ID
+    var participantid = "@ViewBag.participantid";
+    $(function () {
+        Init();
+    });
+
+    //
+    function Init() {
+
+        if (participantid === "") {
+            return;
+        }
+
+        $.get("/api/Auction/GetAuctionParticipantByID?innerid=" + participantid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#lblno").html(obj.auctionno);
+            $("#lblcurrentstatus").html(obj.status);
+            $("#lbllowprice").html(obj.lowestprice);
+            $("#lbldealprice").html(obj.amount);
+            $("#lblmodelname").html(obj.model_name);
+            $("#lblauctiontime").html(Dateformat(obj.createdtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblusername").val(obj.username);
+            $("#lblmobile").val(obj.mobile);
+
+        });
+    }
+</script>
+
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">竞价信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">拍品编号</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblno"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">当前状态</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblcurrentstatus"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">底价（万元）</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lbllowprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">出价（万元）</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lbldealprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">车型</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmodelname"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">竞拍时间</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblauctiontime"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">联系人</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblusername"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">联系电话</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmobile"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>备注</label>
+                            <div class="col-sm-11">
+                                <textarea id="caresc" maxlength="500" rows="5" cols="150" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

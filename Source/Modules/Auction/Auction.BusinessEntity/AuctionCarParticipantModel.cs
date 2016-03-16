@@ -19,6 +19,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string Auctionid { get; set; }
 
         /// <summary>
+        /// 竞拍人
+        /// </summary>
+        public string username { get; set; }
+
+        /// <summary>
         /// 手机号
         /// </summary>
         public string Mobile { get; set; }
@@ -29,9 +34,9 @@ namespace CCN.Modules.Auction.BusinessEntity
         public decimal? Amount { get; set; }
 
         /// <summary>
-        /// 是否中标
+        /// 状态
         /// </summary>
-        public int Isbid { get; set; }
+        public int status { get; set; }
 
         /// <summary>
         /// 备注
@@ -72,7 +77,20 @@ namespace CCN.Modules.Auction.BusinessEntity
     /// </summary>
     public class AuctionCarParticipantViewModel: AuctionCarParticipantModel
     {
+        /// <summary>
+        /// 拍品编号
+        /// </summary>
+        public string auctionno { get; set; }
 
+        /// <summary>
+        /// 车型
+        /// </summary>
+        public string model_name { get; set; }
+
+        /// <summary>
+        /// 出价
+        /// </summary>
+        public decimal? lowestprice { get; set; }
     }
 
     /// <summary>

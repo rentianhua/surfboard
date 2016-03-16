@@ -59,7 +59,29 @@ namespace CCN.Resource.Areas.Auction.Controllers
         public ActionResult AuctionEvaluationPics(string carid,string auctionid)
         {
             ViewBag.Carid = string.IsNullOrWhiteSpace(carid) ? "" : carid; ;
-            ViewBag.Auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid; ;
+            ViewBag.Auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid; 
+            return View();
+        }
+
+        /// <summary>
+        /// 竞拍记录
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <returns></returns>
+        public ActionResult AuctionRecordList(string auctionid)
+        {
+            ViewBag.Auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid;
+            return View();
+        }
+
+        /// <summary>
+        /// 竞拍记录详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult AuctionRecordEdit(string id)
+        {
+            ViewBag.participantid= string.IsNullOrWhiteSpace(id) ? "" : id;
             return View();
         }
     }

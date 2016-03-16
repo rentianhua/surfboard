@@ -607,8 +607,11 @@ namespace CCN.Modules.Auction.DataAccess
         public BasePageList<AuctionCarParticipantViewModel> GetAuctionParticipantList(AuctionCarParticipantQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"auction_participant as a";
-            const string fields = "a.innerid,a.auctionid,a.mobile,a.amount,a.isbid,a.createrid,a.createdtime";
+            const string tableName = @"auction_participant as a
+                                       left join auction_carinfo as b on b.innerid=a.auctionid
+                                       left join car_info as c on c.innerid=b.carid
+                                       left join base_carmodel as c1 on c.model_id=c1.innerid  ";
+            const string fields = "a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
@@ -664,6 +667,31 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public AuctionCarParticipantViewModel GetAuctionParticipantByID(string innerid)
+        {
+            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,
+                        a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name from auction_participant as a
+                                       left join auction_carinfo as b on b.innerid = a.auctionid
+                                       left join car_info as c on c.innerid = b.carid
+                                       left join base_carmodel as c1 on c.model_id = c1.innerid where a.innerid=@innerid;");
+
+            try
+            {
+                var model = Helper.Query<AuctionCarParticipantViewModel>(sql.ToString(), new { innerid }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取竞拍记录：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 根据拍卖ID 获取竞拍记录
         /// </summary>
         /// <param name="auctionid"></param>
@@ -678,7 +706,6 @@ namespace CCN.Modules.Auction.DataAccess
             return 0;
         }
 
-
         /// <summary>
         /// 添加拍卖竞拍人员
         /// </summary>
@@ -687,9 +714,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddParticipant(AuctionCarParticipantModel model)
         {
             const string sql = @"INSERT INTO `auction_participant`
-                                (innerid, auctionid, mobile, amount, isbid, remark, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, auctionid, mobile, amount,username, status, remark, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @auctionid, @mobile, @amount, @isbid, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (@innerid, @auctionid, @mobile, @amount,@username, @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {

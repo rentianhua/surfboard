@@ -120,6 +120,13 @@ namespace CCN.Modules.Auction.Interface
         JResult AddParticipant(AuctionCarParticipantModel model);
 
         /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetAuctionParticipantByID(string innerid);
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>

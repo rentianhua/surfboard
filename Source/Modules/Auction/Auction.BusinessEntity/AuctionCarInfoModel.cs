@@ -39,6 +39,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public decimal? lowestprice { get; set; }
 
         /// <summary>
+        /// 成交价（万元）
+        /// </summary>
+        public decimal? dealprice { get; set; }
+
+        /// <summary>
         /// 成交奖励
         /// </summary>
         public string dealrewards { get; set; }
@@ -218,6 +223,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 卖家联系方式
         /// </summary>
         public string sellermobile { get; set; }
+
+        /// <summary>
+        /// 审核备注
+        /// </summary>
+        public string auditremark { get; set; }
 
     }
 
