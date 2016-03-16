@@ -75,6 +75,7 @@
 
             var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionCarView?id=" + val.Innerid + "');\" href='javascript:;'>查看</a> ";
             btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?carid=" + val.carid + "&id=" + val.Innerid + "');\" href='javascript:;'>审核</a> ";
+            btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordList?auctionid=" + val.Innerid + "');\" href='javascript:;'>竞价记录</a> ";
 
             if (false) { //待拍
                 btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?id=" + val.Innerid + "');\" href='javascript:;'>修改</a> ";

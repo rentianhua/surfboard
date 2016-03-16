@@ -173,6 +173,16 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetAuctionParticipantByID(string innerid)
+        {
+            return BusinessComponent.GetAuctionParticipantByID(innerid);
+        }
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>

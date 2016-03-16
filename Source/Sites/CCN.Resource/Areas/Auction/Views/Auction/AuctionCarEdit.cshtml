@@ -511,11 +511,14 @@
         if (id === "") {
             return;
         }
-
+        
+        $('#imgss').empty();
+        $('#imgfindings').empty();
         $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
             }
+
 
             var obj = data.errmsg;
             var sellname = "";
@@ -527,6 +530,24 @@
                 sellermobile = obj.sellermobile;
             }
 
+            var status = obj.status;
+            if(status==2)//待审核
+            {
+                $("#startaudit").removeClass("hidden");
+                $("#access").removeClass("hidden");
+                $("#accessnot").removeClass("hidden");
+            }
+            else if (status == 3) {
+                $("#save").removeClass("hidden");
+                $("#access").removeClass("hidden");
+                $("#accessnot").removeClass("hidden");
+            }
+            else if(status==8)
+            {
+                $("#deal").removeClass("hidden");
+            }
+            $("#lblactionno").html(obj.no);//拍品编号 
+            $("#lblauctionstatus").html(GetStatusName(obj.status));//卖家
             $("#txtsellername").val(sellname);//卖家
             $("#txtsellermobile").val(sellermobile);//卖家联系方式
             $("input[name='isoperation'][value=" + obj.isoperation + "]").prop("checked", true);//是否营运车辆
@@ -538,6 +559,13 @@
             $("#violationdes").val(obj.violationdes);//违章说明
             $("#supplementdes").val(obj.supplementdes);//补充说明
             $("#configuredes").val(obj.configuredes);//其他配置
+            $("#txtstartdate").val(Dateformat(obj.publishedtime, "yyyy-MM-dd HH:mm:ss"));//开始时间  
+            $("#txtenddate").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));//结束时间 
+            $("#lowestprice").val(obj.lowestprice);//底价
+            $("#dealprice").val(obj.dealprice);//成交价
+            $("#auditremark").val(obj.auditremark);//审核备注
+            
+             
             var picturedes = JSON.parse(obj.picturedes)
             //证件照片类型
             var pics = ["行驶证正本正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单上部", "交强险上部"];
@@ -560,7 +588,7 @@
                 //初始化七牛上传控件
                 uploader = InitQiniuForAuction(option);
             });
-           
+
             $.each(picturedes, function (k, v) {
                 if (v != null) {
                     $("div .imgForCar").each(function () {
@@ -571,6 +599,18 @@
                 }
             });
             initUploadM();
+
+            //认证图片 imgfindings
+            if (JSON.parse(obj.evaluationpics)!=null)
+            {
+                $.each(JSON.parse(obj.evaluationpics), function (k, v) {
+                    $('#imgfindings').append(
+                            '<div data-val="' + v.title + '" class="imgPreview imgForCar"  data-id="">\
+            			            <img data-type="img" src="' + getImgUrl(v.imgsrc) + '"  class="loading" width="550px">\
+            		            </div>');
+                });
+            }
+
         });
     }
 
@@ -637,7 +677,13 @@
         json.violationdes = $("#violationdes").val();
         json.supplementdes = $("#supplementdes").val();
         json.configuredes = $("#configuredes").val();
-        json.status = status;
+        json.lowestprice = $("#lowestprice").val();
+        json.dealprice = $("#dealprice").val();
+        json.publishedtime = $("#txtstartdate").val();
+        json.validtime = $("#txtenddate").val();
+        json.auditremark = $("#auditremark").val();
+         
+        //json.status = status;
         //获取图片信息
         var imgmessage = [];
         $('div .imgForCar').each(function () {
@@ -657,6 +703,50 @@
             }
             alert("更新成功！");
         });
+    }
+
+    function ChangeStatus(status)
+    {
+        var json = {};
+
+        json.innerid = "@ViewBag.id";
+        json.status = status;
+
+        $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+            if (result.errcode !== 0) {
+                alert("更新失败");
+                return false;
+            }
+            alert("更新成功！");
+            InitAuctionInfo();
+        });
+    }
+
+    function GetStatusName(status)
+    {
+        switch (status) {
+            case 0:
+                return "已删除";
+            case 1:
+                return "草稿";
+            case 2:
+                return "待审核";
+            case 3:
+                return "审核中";
+            case 4:
+                return "审核失败";
+            case 5:
+                return "等待拍卖";
+            case 6:
+                return "正在拍卖";
+            case 7:
+                return "成交";
+            case 8:
+                return "拍卖结束";
+            default:
+
+        }
+        return "";
     }
 
 </script>
@@ -863,7 +953,26 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
-                            @*最低价 手机号*@
+                            @*拍品编号 拍卖状态*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">拍品编号</label>
+                                        <div class="col-sm-10">
+                                            <label id="lblactionno" class="control-label no-padding-right" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">拍卖状态</label>
+                                        <div class="col-sm-10">
+                                            <label id="lblauctionstatus" class="control-label no-padding-right" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*卖家 手机号*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -994,11 +1103,72 @@
                                     </div>
                                 </div>
                             </div>
-
+                            @*低价 成交价*@  
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">底价（万元）</label>
+                                        <div class="col-sm-10">
+                                            <input id="lowestprice" type="text" placeholder="底价（万元）" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">成交价（万元）</label>
+                                        <div class="col-sm-10">
+                                            <input id="dealprice" type="text" placeholder="成交价（万元）" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*开始时间  结束时间*@ 
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="txtstartdate" class="col-sm-2 control-label no-padding-right">拍卖开始时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtstartdate" class="Wdate form-control" type="text" placeholder="拍卖开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="txtenddate" class="col-sm-2 control-label no-padding-right">拍卖结束时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="txtenddate" class="Wdate form-control" type="text" placeholder="拍卖结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd HH:mm:ss' })">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*备注*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right">备注</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="auditremark" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*认证报告*@
                             <div class="row form-group">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>评估检测报告</label>
+                                        <div class="controls col-sm-11" id="">
+                                            <div id="imgfindings" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"></label>
                                         <div class="controls col-sm-11" id="">
                                             <label class="control-label no-padding-right" id=""><a onclick="goAcctionPics();" href='javascript:;'>填写认证报告</a></label>
                                         </div>
@@ -1008,12 +1178,14 @@
                                 </div>
                             </div>
 
+                            @*按钮*@
                             <div class="row form-group text-center">
                                 <div class="col-lg-12">
-                                    <input id="" type="button" class="btn btn-palegreen shiny" value="保存" onclick="SaveAuctionInfo(5);" />
-                                    <input id="" type="button" class="btn btn-palegreen shiny" value="通过" onclick="SaveAuctionInfo(3);" />
-                                    <input id="" type="button" class="btn btn-palegreen shiny" value="不通过" onclick="SaveAuctionInfo(4);" />
-                                    <input id="" type="button" class="btn btn-palegreen shiny" value="成交" onclick="SaveAuctionInfo(2);" />
+                                    <input id="save" type="button" class="btn btn-palegreen shiny hidden" value="保存" onclick="SaveAuctionInfo();" />
+                                    <input id="startaudit" type="button" class="btn btn-palegreen shiny hidden" value="开始审核" onclick="ChangeStatus(3);" />
+                                    <input id="access" type="button" class="btn btn-palegreen shiny hidden" value="通过" onclick="ChangeStatus(5);" />
+                                    <input id="accessnot" type="button" class="btn btn-palegreen shiny hidden" value="不通过" onclick="ChangeStatus(4);" />
+                                    <input id="deal" type="button" class="btn btn-palegreen shiny hidden" value="成交" onclick="ChangeStatus(7);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" />
                                 </div>
                             </div>

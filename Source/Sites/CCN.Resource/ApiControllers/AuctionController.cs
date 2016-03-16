@@ -212,6 +212,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionParticipantByID")]
+        public JResult GetAuctionParticipantByID(string innerid)
+        {
+            return _auctionservice.GetAuctionParticipantByID(innerid);
+        }
+
+        /// <summary>
         ///  获取所有竞拍记录
         /// </summary>
         /// <param name="query"></param>

@@ -950,6 +950,8 @@
     <Content Include="Areas\Activity\Views\Activity\VotePerView.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\VoteView.cshtml" />
     <Content Include="Areas\Auction\Views\Auction\AuctionEvaluationPics.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionRecordList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionRecordEdit.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
