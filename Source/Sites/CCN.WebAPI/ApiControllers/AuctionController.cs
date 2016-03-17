@@ -205,6 +205,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("IsFollow")]
+        public JResult IsFollow(string auctionid, string userid)
+        {
+            return _auctionservice.IsFollow(auctionid, userid);
+        }
+
+        /// <summary>
         /// 获取关注的拍卖车辆列表
         /// </summary>
         /// <param name="query"></param>

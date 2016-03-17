@@ -590,6 +590,22 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult IsFollow(string auctionid, string userid)
+        {
+            if (string.IsNullOrWhiteSpace(auctionid) || string.IsNullOrWhiteSpace(userid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.IsFollow(auctionid, userid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
         /// 获取关注的拍卖车辆列表
         /// </summary>
         /// <param name="query"></param>

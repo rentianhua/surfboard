@@ -32,8 +32,9 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_carseries as c2 on b.series_id=c2.innerid 
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid
-                                    left join base_province as pr on b.provid=pr.innerid ";
-            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+                                    left join base_province as pr on b.provid=pr.innerid 
+                                    left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid";
+            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder(" a.status=2 ");
@@ -625,8 +626,13 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and a.mobile='{query.Mobile}'");
             }
+            if (!string.IsNullOrWhiteSpace(query.userid))
+            {
+                sqlWhere.Append($" and a.userid='{query.userid}'");
+            }
+            
 
-            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+           var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarParticipantViewModel>(model, query.Echo);
             return list;
         }
@@ -714,9 +720,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddParticipant(AuctionCarParticipantModel model)
         {
             const string sql = @"INSERT INTO `auction_participant`
-                                (innerid, auctionid, mobile, amount,username, status, remark, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, auctionid, mobile, amount,username,userid, status, remark, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @auctionid, @mobile, @amount,@username, @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (uuid(), @auctionid, @mobile, @amount,@username,@userid @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -1144,7 +1150,7 @@ namespace CCN.Modules.Auction.DataAccess
                     var recChk =
                         conn.Query<int>(
                             "select count(1) from auction_follow where auctionid=@auctionid and userid=@userid and isdelete=0;",
-                            new {model.Auctionid, model.Userid}).FirstOrDefault();
+                            new { model.Auctionid, model.Userid }).FirstOrDefault();
 
                     if (recChk > 0)
                     {
@@ -1191,6 +1197,41 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public int IsFollow(string auctionid, string userid)
+        {
+            const string sql = @"select * from auction_follow where auctionid=@auctionid and userid=@userid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    var list = Helper.Query<AuctionFollowModel>(sql.ToString(), new { auctionid, userid });
+                    if (list != null)
+                    {
+                        result = list.Count();
+                    }
+                    else
+                    {
+                        result = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("判断是否关注异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
         /// 获取关注的拍卖车辆列表
         /// </summary>
         /// <param name="query"></param>
@@ -1216,7 +1257,7 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and f.userid='{query.Userid}'");
             }
-            
+
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarInfoViewModel>(model, query.Echo);
             return list;

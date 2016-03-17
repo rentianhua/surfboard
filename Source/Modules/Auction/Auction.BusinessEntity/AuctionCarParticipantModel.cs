@@ -24,6 +24,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string username { get; set; }
 
         /// <summary>
+        /// 竞拍人ID
+        /// </summary>
+        public string userid { get; set; }
+
+        /// <summary>
         /// 手机号
         /// </summary>
         public string Mobile { get; set; }
@@ -107,6 +112,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 手机号
         /// </summary>
         public string Mobile { get; set; }
+
+        /// <summary>
+        /// 出价人ID
+        /// </summary>
+        public string userid { get; set; }
 
         /// <summary>
         /// 报价

@@ -49,21 +49,15 @@
 
 </script>
 <div style="margin: 0 auto;">
-    <div style="font-size: 18px; font-weight: bold; text-align: center">拍卖车辆列表</div>
+    <div style="font-size: 18px; font-weight: bold; text-align: center">竞价列表</div>
 
     <div style="padding-bottom:5px">
         <div class="row">
             <div class="col-lg-9 col-sm-9 col-xs-9">
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">品牌/车系/车型：</label>
+                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">类型：</label>
                     <div class="col-sm-8">
                         <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
-                        <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
-                        <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
                             <option value="0">请选择</option>
                         </select>
                     </div>
