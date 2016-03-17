@@ -855,6 +855,18 @@ namespace CCN.Resource.ApiControllers
             return _baseservice.GetMenuByUerid(userid);
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("GetUserInfo")]
+        [HttpPost]
+        public JResult GetUserInfo(BaseUserModel model)
+        {
+            return _baseservice.GetUserInfo(model);
+        }
+
         #endregion
 
         #region 角色管理

@@ -120,6 +120,20 @@ namespace CCN.Modules.Auction.Interface
         JResult AddParticipant(AuctionCarParticipantModel model);
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateParticipant(AuctionCarParticipantModel model);
+
+        /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetAuctionParticipantByID(string innerid);
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
@@ -245,6 +259,14 @@ namespace CCN.Modules.Auction.Interface
         /// <param name="userid"></param>
         /// <returns></returns>
         JResult Unfollow(string auctionid, string userid);
+
+        /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        JResult IsFollow(string auctionid, string userid);
 
         /// <summary>
         /// 获取关注的拍卖车辆列表

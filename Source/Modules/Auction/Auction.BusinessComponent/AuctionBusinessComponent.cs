@@ -294,27 +294,50 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateParticipant(AuctionCarParticipantModel model)
+        {
+            var result = DataAccess.UpdateParticipant(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetAuctionParticipantByID(string innerid)
+        {
+            var result = DataAccess.GetAuctionParticipantByID(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         public JResult BidParticipant(AuctionCarParticipantModel model)
         {
-            if (model.Isbid == 1)
-            {
-                var chkRes = DataAccess.CheckBidParticipant(model.Auctionid);
-                if (chkRes > 0)
-                {
-                    return JResult._jResult(401, "只能一人中标");
-                }
-            }
+            //if (model.Isbid == 1)
+            //{
+            //    var chkRes = DataAccess.CheckBidParticipant(model.Auctionid);
+            //    if (chkRes > 0)
+            //    {
+            //        return JResult._jResult(401, "只能一人中标");
+            //    }
+            //}
 
             var bidModel = new AuctionCarParticipantModel
             {
                 Innerid = model.Innerid,
                 Modifierid = ApplicationContext.Current.UserId,
-                Modifiedtime = DateTime.Now,
-                Isbid = model.Isbid
+                Modifiedtime = DateTime.Now
+                //,
+                //Isbid = model.Isbid
             };
             var result = DataAccess.BidParticipant(bidModel);
             return JResult._jResult(result);
@@ -574,6 +597,22 @@ namespace CCN.Modules.Auction.BusinessComponent
                 return JResult._jResult(401, "参数不完整");
             }
             var result = DataAccess.DelFollow(auctionid, userid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult IsFollow(string auctionid, string userid)
+        {
+            if (string.IsNullOrWhiteSpace(auctionid) || string.IsNullOrWhiteSpace(userid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.IsFollow(auctionid, userid);
             return JResult._jResult(result);
         }
 

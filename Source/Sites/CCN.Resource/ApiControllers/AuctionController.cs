@@ -200,6 +200,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateParticipant")]
+        public JResult UpdateParticipant([FromBody]AuctionCarParticipantModel model)
+        {
+            return _auctionservice.UpdateParticipant(model);
+        }
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
@@ -209,6 +221,18 @@ namespace CCN.Resource.ApiControllers
         public JResult BidParticipant([FromBody]AuctionCarParticipantModel model)
         {
             return _auctionservice.BidParticipant(model);
+        }
+
+        /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAuctionParticipantByID")]
+        public JResult GetAuctionParticipantByID(string innerid)
+        {
+            return _auctionservice.GetAuctionParticipantByID(innerid);
         }
 
         /// <summary>

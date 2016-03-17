@@ -173,6 +173,26 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateParticipant(AuctionCarParticipantModel model)
+        {
+            return BusinessComponent.UpdateParticipant(model);
+        }
+
+        /// <summary>
+        /// 根据ID获取出价详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetAuctionParticipantByID(string innerid)
+        {
+            return BusinessComponent.GetAuctionParticipantByID(innerid);
+        }
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
@@ -344,6 +364,17 @@ namespace CCN.Modules.Auction.BusinessService
         public JResult Unfollow(string auctionid, string userid)
         {
             return BusinessComponent.Unfollow(auctionid, userid);
+        }
+
+        /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        public JResult IsFollow(string auctionid, string userid)
+        {
+            return BusinessComponent.IsFollow(auctionid, userid);
         }
 
         /// <summary>

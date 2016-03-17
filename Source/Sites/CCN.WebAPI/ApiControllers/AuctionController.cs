@@ -199,9 +199,22 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [HttpGet]
         [Route("Unfollow")]
-        public JResult Unfollow(string auctionid, string usrid)
+        public JResult Unfollow(string auctionid, string userid)
         {
-            return _auctionservice.Unfollow(auctionid, usrid);
+            return _auctionservice.Unfollow(auctionid, userid);
+        }
+
+        /// <summary>
+        /// 判断用户是否关注了该拍卖车辆
+        /// </summary>
+        /// <param name="auctionid"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("IsFollow")]
+        public JResult IsFollow(string auctionid, string userid)
+        {
+            return _auctionservice.IsFollow(auctionid, userid);
         }
 
         /// <summary>

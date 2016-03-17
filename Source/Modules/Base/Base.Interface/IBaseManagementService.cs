@@ -383,6 +383,13 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult GetMenuByUerid(string userid);
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult GetUserInfo(BaseUserModel model);
+
         #endregion
 
         #region 角色管理

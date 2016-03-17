@@ -1,0 +1,248 @@
+﻿
+@{
+    Layout = null;
+}
+
+<script>
+    //竞价ID
+    var participantid = "@ViewBag.participantid";
+    var auctionid = "@ViewBag.auctionid";
+    var username = "@ViewBag.UserName";
+    var userno = "@ViewBag.UserNo";
+    $(function () {
+        Init();
+    });
+
+    //
+    function Init() {
+
+        if (participantid === "") {
+            return;
+        }
+
+        $.get("/api/Auction/GetAuctionParticipantByID?innerid=" + participantid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+            if (obj.status == 1) {
+                $("#waitpay").removeClass("hidden");
+            }
+            else if (obj.status == 2) {
+                $("#pay").removeClass("hidden");
+            }
+            else if (obj.status == 3) {
+                $("#waitdeal").removeClass("hidden");
+            }
+            else if (obj.status == 4) {
+                $("#deal").removeClass("hidden");
+            }
+            else if (obj.status == 5) {
+                $("#refuse").addClass("hidden");
+            }
+            
+            $("#lblno").html(obj.auctionno);
+            $("#lblcurrentstatus").html(ChangeStatusName(obj.status));
+            $("#lbllowprice").html(obj.lowestprice);
+            $("#lbldealprice").html(obj.Amount);
+            $("#lblmodelname").html(obj.model_name);
+            $("#lblauctiontime").html(Dateformat(obj.createdtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblusername").val(obj.username);
+            $("#lblmobile").val(obj.mobile);
+            $("#caresc").val(obj.Remark)
+            $("#record").val(obj.recordlist);
+            //recordlist
+        });
+    }
+
+    //保存数据
+    function Submit(status) {
+        if ($("#caresc").val() == "") {
+            alert("请填写备注信息！");
+            return false;
+        }
+        var json = {};
+        json.remark = $("#caresc").val();
+        json.innerid = participantid;
+        var myDate = new Date();
+        var record = "";
+        if (status) {
+            record = username + "(" + userno + "):" + myDate.toLocaleString() + "执行了" + ChangeStatusName(status) + "操作；";
+            json.recordlist = $("#record").val() + record;
+            json.status = status;
+        }
+        
+        $.post("/api/Auction/UpdateParticipant", json, function (result) {
+
+            if (result.errcode !== 0) {
+                alert("更新失败");
+                return false;
+            }
+            alert("更新成功！");
+            goList();
+        });
+    }
+
+    function ChangeStatusName(status) {
+        switch (status) {
+            case 1:
+                return "待跟进";
+            case 2:
+                return "代付款";
+            case 3:
+                return "已付款";
+            case 4:
+                return "已看车";
+            case 5:
+                return "已成交";
+            case 6:
+                return "已拒绝";
+            default:
+        }
+        return "";
+    }
+
+    function goList()
+    {
+        getBodyHtml('mainbody', "/Auction/Auction/AuctionRecordList?auctionid=" + auctionid);
+    }
+</script>
+
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">竞价信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">拍品编号：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblno"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">当前状态：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblcurrentstatus"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">底价（万元）：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lbllowprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">出价（万元）：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lbldealprice"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">车型：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmodelname"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">竞拍时间：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblauctiontime"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">联系人：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblusername"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">联系电话：</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmobile"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row form-group">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">状态：</label>
+                                <div class="col-sm-10">
+                                    <select id="selectstatus" style="width:100%">
+                                        <option>请选择</option>
+                                        <option value="1">待跟进</option>
+                                        <option value="2">代付款</option>
+                                        <option value="3">已付款</option>
+                                        <option value="4">已看车</option>
+                                        <option value="5">已成交</option>
+                                        <option value="6">已拒绝</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+
+                        </div>
+                    </div>*@
+
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>备注：</label>
+                            <div class="col-sm-11">
+                                <textarea id="caresc" maxlength="500" rows="5" cols="150" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right">修改记录：</label>
+                            <div class="col-sm-11">
+                                <textarea id="record" rows="5" cols="150" placeholder="修改记录" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input id="waitpay" type="button" class="btn btn-palegreen shiny hidden" value="待付款" onclick="Submit(2);" />
+                        <input id="pay" type="button" class="btn btn-palegreen shiny hidden" value="付款" onclick="Submit(3);" />
+                        <input id="waitdeal" type="button" class="btn btn-palegreen shiny hidden" value="看车" onclick="Submit(4);" />
+                        <input id="deal" type="button" class="btn btn-palegreen shiny hidden" value="成交" onclick="Submit(5);" />
+                        <input id="refuse" type="button" class="btn btn-palegreen shiny" value="拒绝" onclick="Submit(6);" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

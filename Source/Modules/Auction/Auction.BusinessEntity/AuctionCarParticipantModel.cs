@@ -19,6 +19,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string Auctionid { get; set; }
 
         /// <summary>
+        /// 竞拍人
+        /// </summary>
+        public string username { get; set; }
+
+        /// <summary>
+        /// 竞拍人ID
+        /// </summary>
+        public string userid { get; set; }
+
+        /// <summary>
         /// 手机号
         /// </summary>
         public string Mobile { get; set; }
@@ -29,9 +39,9 @@ namespace CCN.Modules.Auction.BusinessEntity
         public decimal? Amount { get; set; }
 
         /// <summary>
-        /// 是否中标
+        /// 状态
         /// </summary>
-        public int Isbid { get; set; }
+        public int? status { get; set; }
 
         /// <summary>
         /// 备注
@@ -57,7 +67,12 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 修改时间
         /// </summary>
         public DateTime? Modifiedtime { get; set; }
-        
+
+        /// <summary>
+        /// 竞价修改记录
+        /// </summary>
+        public string recordlist { get; set; }
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -72,7 +87,20 @@ namespace CCN.Modules.Auction.BusinessEntity
     /// </summary>
     public class AuctionCarParticipantViewModel: AuctionCarParticipantModel
     {
+        /// <summary>
+        /// 拍品编号
+        /// </summary>
+        public string auctionno { get; set; }
 
+        /// <summary>
+        /// 车型
+        /// </summary>
+        public string model_name { get; set; }
+
+        /// <summary>
+        /// 出价
+        /// </summary>
+        public decimal? lowestprice { get; set; }
     }
 
     /// <summary>
@@ -91,8 +119,33 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string Mobile { get; set; }
 
         /// <summary>
+        /// 出价人ID
+        /// </summary>
+        public string userid { get; set; }
+
+        /// <summary>
         /// 报价
         /// </summary>
         public string Amount { get; set; }
+
+        /// <summary>
+        /// 拍品编号
+        /// </summary>
+        public string auctionno { get; set; }
+
+        /// <summary>
+        /// 员工编号
+        /// </summary>
+        public string userno { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public int? status { get; set; }
+
+        /// <summary>
+        /// 业务员ID
+        /// </summary>
+        public string operatedid { get; set; }
     }
 }
