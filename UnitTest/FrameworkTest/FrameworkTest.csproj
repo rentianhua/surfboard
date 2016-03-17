@@ -82,10 +82,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Cedar.Framwork.Caching.dll</HintPath>
     </Reference>
-    <Reference Include="Cedar.Framwork.Caching.Interception, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Cedar.Framwork.Caching.Interception.dll</HintPath>
-    </Reference>
     <Reference Include="dotMemory.Unit, Version=103.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>..\..\packages\JetBrains.dotMemoryUnit.2.1.20150828.125449\Lib\dotMemory.Unit.dll</HintPath>
       <Private>True</Private>
@@ -143,6 +139,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <Choose>
@@ -211,7 +209,32 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Source\Foundation\Wechat\WxPay\WxPay.Business\WxPay.Business.csproj">
+      <Project>{64594b45-e803-4c99-b786-ebbfeec21aaf}</Project>
+      <Name>WxPay.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Foundation\Wechat\WxPay\WxPay.Lib\WxPay.Lib.csproj">
+      <Project>{8298e86d-2303-44f4-b7cf-46c08b777e8a}</Project>
+      <Name>WxPay.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail.Interception\AuditTrail.Interception.csproj">
+      <Project>{7d7edb88-c49d-417e-bce2-8a7b5c8e0093}</Project>
+      <Name>AuditTrail.Interception</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\AuditTrail\AuditTrail\AuditTrail.csproj">
+      <Project>{7ca048fa-fa26-46e9-9919-ec0c22f3097e}</Project>
+      <Name>AuditTrail</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\Caching\Caching.Interception\Caching.Interception.csproj">
+      <Project>{cfc68f4d-2269-4faf-8b9c-1d7b6ebc1b51}</Project>
+      <Name>Caching.Interception</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Source\Framework\Caching\Caching\Caching.csproj">
+      <Project>{d49ddb53-041b-4122-9cce-aa9c0e6ab8da}</Project>
+      <Name>Caching</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

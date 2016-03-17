@@ -1465,6 +1465,10 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(402, "手机号被其他人注册");
             }
+            if (string.IsNullOrWhiteSpace(userInfo.Password))
+            {
+                return JResult._jResult(404, "密码不能为空");
+            }
 
             if (string.IsNullOrWhiteSpace(userInfo.Nickname))
             {
@@ -1539,19 +1543,23 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             loginInfo.Password = Encryptor.EncryptAes(loginInfo.Password);
 
-            var userInfo = DataAccess.UserLogin(loginInfo);
-            if (userInfo == null)
+            var model = DataAccess.GetUserInfoByMobile(loginInfo.Mobile);
+            if (model == null)
             {
-                return JResult._jResult(401, "帐户名或登录密码不正确");
+                return JResult._jResult(400, "账户不存在");
             }
-            if (userInfo.Status == 2)
+            if (!model.Password.Equals(loginInfo.Password))
             {
-                return JResult._jResult(402, "帐户被冻结");
+                return JResult._jResult(401, "登录错误");
+            }
+            if (model.Status == 2)
+            {
+                return JResult._jResult(402, "账户被冻结");
             }
 
-            userInfo.Password = "";
+            model.Password = "";
 
-            return JResult._jResult(0, userInfo);
+            return JResult._jResult(0, model);
         }
         
         /// <summary>
@@ -1564,17 +1572,16 @@ namespace CCN.Modules.Customer.BusinessComponent
             var model = DataAccess.GetUserInfoByMobile(mobile);
             if (model == null)
             {
-                return JResult._jResult(401, "帐户名或登录密码不正确");
+                return JResult._jResult(401, "账户不存在");
             }
             if (model.Status == 2)
             {
-                return JResult._jResult(402, "帐户被冻结");
+                return JResult._jResult(402, "账户被冻结");
             }
             model.Password = "";
             return JResult._jResult(model);
         }
-
-
+        
         /// <summary>
         /// C用户 获取会员详情
         /// </summary>

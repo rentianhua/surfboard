@@ -5,6 +5,9 @@ using Cedar.Core.IoC;
 using Cedar.Foundation.WeChat.DataAccess;
 using Cedar.Foundation.WeChat.Entities.WeChat;
 using Cedar.Foundation.WeChat.Interface;
+using Cedar.Foundation.WeChat.WxPay.Business;
+using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
+using Cedar.Framework.Common.BaseClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Senparc.Weixin.MP.CommonAPIs;
 
@@ -199,6 +202,30 @@ namespace FrameworkTest.Wechat
             var isWechatFriendExistsresult = da.IsWechatFriendExists(APPID, openid);
             Assert.AreEqual(result.errcode, 0);
             Assert.IsTrue(isWechatFriendExistsresult);
+        }
+
+        [TestMethod]
+        public void WxPayQrCodeTest()
+        {
+            NativePayData data = new NativePayData();
+            data.Body="ccntest";//商品描述
+            data.Attach ="ccntest";//附加数据
+            data.TotalFee = 1;//总金额
+            data.ProductId="123456789";//商品ID
+
+            NativePay nativePay = new NativePay();
+            string url2 = nativePay.GetPayUrl(data);
+
+            var bitmap = BarCodeUtility.CreateBarcode(url2, 240, 240);
+
+            var ran = new Random(Guid.NewGuid().GetHashCode());
+            var key = string.Concat("wxpay", DateTime.Now.ToString("yyyyMMddHHmmss"), ran.Next(999));
+
+            var stream = BarCodeUtility.BitmapToStream(bitmap);
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+            var qrcode = qinniu.Put(stream,"", key);
+            stream.Dispose();
         }
     }
 }
