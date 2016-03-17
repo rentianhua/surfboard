@@ -12,6 +12,9 @@ namespace CCN.Resource.Areas.Auction.Controllers
     {
         public ActionResult AuctionCarList()
         {
+            ViewBag.UserLevel = UserInfo.level;
+            ViewBag.DepId = UserInfo.depid;
+            ViewBag.UserId = UserInfo.innerid;
             return View();
         }
 
@@ -71,6 +74,8 @@ namespace CCN.Resource.Areas.Auction.Controllers
         public ActionResult AuctionRecordList(string auctionid)
         {
             ViewBag.Auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid;
+            ViewBag.UserLevel = UserInfo.level;
+            ViewBag.UserId = UserInfo.innerid;
             return View();
         }
 
@@ -78,10 +83,14 @@ namespace CCN.Resource.Areas.Auction.Controllers
         /// 竞拍记录详情
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="auctionid"></param>
         /// <returns></returns>
-        public ActionResult AuctionRecordEdit(string id)
+        public ActionResult AuctionRecordEdit(string id,string auctionid)
         {
             ViewBag.participantid= string.IsNullOrWhiteSpace(id) ? "" : id;
+            ViewBag.auctionid = string.IsNullOrWhiteSpace(auctionid) ? "" : auctionid;
+            ViewBag.UserName = UserInfo.username;
+            ViewBag.UserNo = UserInfo.no;
             return View();
         }
     }

@@ -199,9 +199,9 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [HttpGet]
         [Route("Unfollow")]
-        public JResult Unfollow(string auctionid, string usrid)
+        public JResult Unfollow(string auctionid, string userid)
         {
-            return _auctionservice.Unfollow(auctionid, usrid);
+            return _auctionservice.Unfollow(auctionid, userid);
         }
 
         /// <summary>

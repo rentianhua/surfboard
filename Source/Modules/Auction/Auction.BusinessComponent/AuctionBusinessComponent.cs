@@ -294,6 +294,17 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateParticipant(AuctionCarParticipantModel model)
+        {
+            var result = DataAccess.UpdateParticipant(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
         /// 根据ID获取出价详情
         /// </summary>
         /// <param name="innerid"></param>

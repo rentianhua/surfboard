@@ -200,6 +200,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateParticipant")]
+        public JResult UpdateParticipant([FromBody]AuctionCarParticipantModel model)
+        {
+            return _auctionservice.UpdateParticipant(model);
+        }
+
+        /// <summary>
         /// 中标拍卖竞拍人员
         /// </summary>
         /// <param name="model"></param>
