@@ -1,5 +1,6 @@
 ﻿using Cedar.AuditTrail.Interception;
-using Cedar.Framwork.Caching.Interception;
+using Cedar.Framework.AuditTrail.Interception;
+using Cedar.Framework.Caching.Interception;
 
 namespace FrameworkTest.TestService
 {

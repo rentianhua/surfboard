@@ -7,6 +7,8 @@ using System.Web.Http;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
 using Cedar.Core.IoC;
+using Cedar.Foundation.WeChat.WxPay.Business;
+using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Framework.Common.BaseClasses;
 using Newtonsoft.Json.Linq;
 
@@ -132,6 +134,27 @@ namespace CCN.WebAPI.ApiControllers
             var m = HttpContext.Current.Request.Form;
             var list =  model.ToList();
             return null;
+        }
+        
+        [HttpPost]
+        [Route("TestPay")]
+        public JResult TestPay()
+        {
+            var ran = new Random();
+            var outTradeNo = $"{"WXPAY"}{DateTime.Now.ToString("yyyyMMddHHmmss")}{ran.Next(999)}";
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信看车费",//商品描述
+                Attach = "ccntest",//附加数据
+                TotalFee = 1,//总金额
+                ProductId = "productid",//商品ID
+                OutTradeNo = outTradeNo,
+                GoodsTag = ""
+            };
+            
+            var qrcode = WxPayAPIs.GetNativePayQrCode(data);
+            return JResult._jResult(0, qrcode);
         }
     }
 

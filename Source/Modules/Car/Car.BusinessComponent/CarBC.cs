@@ -1316,7 +1316,12 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult DeleteCollectionByCarid(string carid)
         {
-            var result = DataAccess.DeleteCollectionByCarid(carid);
+            var custid = ApplicationContext.Current.UserId;
+            if (string.IsNullOrWhiteSpace(custid))
+            {
+                return JResult._jResult(401, "userid空");
+            }
+            var result = DataAccess.DeleteCollectionByCarid(carid, custid);
             return JResult._jResult(result);
         }
 

@@ -628,6 +628,12 @@ namespace CCN.Modules.Car.DataAccess
                 a.carid, 
                 a.title, 
                 a.pic_url, 
+                a.provid,
+                a.cityid,
+                a.brand_id,
+                a.series_id,
+                a.model_id,
+                a.colorid,
                 a.mileage, 
                 a.register_date, 
                 a.buytime, 
@@ -640,7 +646,7 @@ namespace CCN.Modules.Car.DataAccess
                 a.tlci_date, 
                 a.audit_date, 
                 a.istain, 
-                sellreason, 
+                a.sellreason, 
                 a.masterdesc, 
                 a.dealdesc, 
                 a.deletedesc, 
@@ -1972,15 +1978,16 @@ namespace CCN.Modules.Car.DataAccess
         /// 删除收藏 by carid
         /// </summary>
         /// <param name="carid">车辆id</param>
+        /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public int DeleteCollectionByCarid(string carid)
+        public int DeleteCollectionByCarid(string carid,string custid)
         {
-            const string sql = "delete from car_collection where carid=@carid;";
+            const string sql = "delete from car_collection where carid=@carid and custid=@custid;";
 
             try
             {
-                Helper.Execute(sql, new { carid });
-                return 1;
+                var i = Helper.Execute(sql, new {carid, custid});
+                return i > 0 ? 1 : 0;
             }
             catch (Exception ex)
             {
