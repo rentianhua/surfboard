@@ -1188,9 +1188,9 @@ namespace CCN.Modules.Base.DataAccess
         public int AddUser(BaseUserModel model)
         {
             const string sql = @"INSERT INTO `sys_user`
-                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid)
+                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid,`level`)
                                 VALUES
-                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid);";
+                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid,@level);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -1319,6 +1319,16 @@ namespace CCN.Modules.Base.DataAccess
             if (!string.IsNullOrWhiteSpace(model.loginname))
             {
                 sqlWhere.AppendFormat(" and loginname ='{0}' ", model.loginname);
+            }
+            //部门
+            if (!string.IsNullOrWhiteSpace(model.depid))
+            {
+                sqlWhere.AppendFormat(" and depid ='{0}' ", model.depid);
+            }
+            //等级
+            if (model.level.HasValue)
+            {
+                sqlWhere.AppendFormat(" and level ={0} ", model.level);
             }
             sql.Append(sqlWhere.ToString());
             var menuList = Helper.Query<BaseUserModel>(sql.ToString());

@@ -124,12 +124,14 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_carseries as c2 on b.series_id=c2.innerid 
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid 
-                                    left join base_province as pr on b.provid=pr.innerid ";
-            const string fields = "a.innerid,a.carid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.publishedtime,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+                                    left join base_province as pr on b.provid=pr.innerid 
+                                    left join sys_user as su on su.innerid=a.operatedid";
+            const string fields = "a.innerid,a.no,a.carid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,a.status,b.price,b.mileage,b.register_date,a.publishedtime,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,su.username";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
 
+            //车商手机号
             if (!string.IsNullOrWhiteSpace(query.mobile))
             {
                 sqlWhere.Append($" and a.mobile like '%{query.mobile}%'");
@@ -179,6 +181,27 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and b.register_date='{query.register_date}'");
             }
+            //状态
+            if (query.status.HasValue)
+            {
+                sqlWhere.Append($" and a.status='{query.status}'");
+            }
+            //员工编号
+            if (query.userno != null)
+            {
+                sqlWhere.Append($" and su.no='{query.userno}'");
+            }
+            //拍品编号
+            if (query.auctionno != null)
+            {
+                sqlWhere.Append($" and a.no='{query.auctionno}'");
+            }
+            //业务员Id operatedid
+            if (query.operatedid != null)
+            {
+                sqlWhere.Append($" and a.operatedid='{query.operatedid}'");
+            }
+
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarInfoViewModel>(model, query.Echo);
             return list;
@@ -611,28 +634,50 @@ namespace CCN.Modules.Auction.DataAccess
             const string tableName = @"auction_participant as a
                                        left join auction_carinfo as b on b.innerid=a.auctionid
                                        left join car_info as c on c.innerid=b.carid
-                                       left join base_carmodel as c1 on c.model_id=c1.innerid  ";
+                                       left join base_carmodel as c1 on c.model_id=c1.innerid
+                                       left join sys_user as su on su.innerid=b.operatedid";
             const string fields = "a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
 
+            //拍卖ID
             if (!string.IsNullOrWhiteSpace(query.Auctionid))
             {
                 sqlWhere.Append($" and a.auctionid='{query.Auctionid}'");
             }
-
+            //手机号
             if (!string.IsNullOrWhiteSpace(query.Mobile))
             {
                 sqlWhere.Append($" and a.mobile='{query.Mobile}'");
             }
+            //用户ID
             if (!string.IsNullOrWhiteSpace(query.userid))
             {
                 sqlWhere.Append($" and a.userid='{query.userid}'");
             }
-            
+            //员工编号
+            if (!string.IsNullOrWhiteSpace(query.userno))
+            {
+                sqlWhere.Append($" and su.no='{query.userno}'");
+            }
+            //拍卖编号
+            if (!string.IsNullOrWhiteSpace(query.auctionno))
+            {
+                sqlWhere.Append($" and b.no='{query.auctionno}'");
+            }
+            //状态
+            if (query.status.HasValue)
+            {
+                sqlWhere.Append($" and a.status={query.status}");
+            }
+            //业务员
+            if (!string.IsNullOrWhiteSpace(query.operatedid))
+            {
+                sqlWhere.Append($" and b.operatedid='{query.operatedid}'");
+            }
 
-           var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarParticipantViewModel>(model, query.Echo);
             return list;
         }
@@ -679,7 +724,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public AuctionCarParticipantViewModel GetAuctionParticipantByID(string innerid)
         {
-            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,
+            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.recordlist,a.remark,
                         a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name from auction_participant as a
                                        left join auction_carinfo as b on b.innerid = a.auctionid
                                        left join car_info as c on c.innerid = b.carid
@@ -739,6 +784,29 @@ namespace CCN.Modules.Auction.DataAccess
 
                 return result;
             }
+        }
+
+        /// <summary>
+        /// 更新竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateParticipant(AuctionCarParticipantModel model)
+        {
+            var sql = new StringBuilder("update `auction_participant` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                LoggerFactories.CreateLogger().Write("更新竞价信息异常：", TraceEventType.Information, ex);
+            }
+            return result;
         }
 
         /// <summary>
@@ -1140,7 +1208,7 @@ namespace CCN.Modules.Auction.DataAccess
             const string sql = @"INSERT INTO `auction_follow`
                                 (innerid, auctionid, userid, isdelete, createdtime, deletedtime)
                                 VALUES
-                                (@innerid, @auctionid, @userid, @isdelete, @createdtime, @deletedtime);";
+                                (@innerid, @auctionid, @userid, 0, @createdtime, @deletedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -1204,7 +1272,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int IsFollow(string auctionid, string userid)
         {
-            const string sql = @"select * from auction_follow where auctionid=@auctionid and userid=@userid;";
+            const string sql = @"select * from auction_follow where auctionid=@auctionid and userid=@userid and isdelete=0;";
 
             using (var conn = Helper.GetConnection())
             {

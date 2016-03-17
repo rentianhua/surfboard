@@ -229,6 +229,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public string auditremark { get; set; }
 
+        /// <summary>
+        /// 业务员
+        /// </summary>
+        public string operatedid { get; set; }
+
     }
 
     /// <summary>
@@ -416,6 +421,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public int? auditstatus { get; set; }
 
+        /// <summary>
+        /// 业务员名称
+        /// </summary>
+        public string username { get; set; }
+
     }
 
     /// <summary>
@@ -487,6 +497,21 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 车辆上牌日期
         /// </summary>
         public DateTime? register_date { get; set; }
+
+        /// <summary>
+        /// 拍品编号
+        /// </summary>
+        public string auctionno { get; set; }
+
+        /// <summary>
+        /// 员工编号
+        /// </summary>
+        public string userno { get; set; }
+
+        /// <summary>
+        /// 业务员Id
+        /// </summary>
+        public string operatedid { get; set; }
 
     }
 }

@@ -5,6 +5,10 @@
 <script type="text/javascript">
 
     var custid = "@ViewBag.custid";
+    var userlevel = "@ViewBag.UserLevel";
+    var depid = "@ViewBag.DepId";
+    var userid = "@ViewBag.UserId";
+    var auctionid = "";
 
     $(function () {
         InitBrand();
@@ -12,114 +16,51 @@
         $("#btnAdd").click(function () {
             getBodyHtml('mainbody', "/auction/auction/auctioncaredit?custid=" + custid);
         });
+        GetUserInfo();
     });
 
-    //初始化品牌
-    function InitBrand() {
-        $("#selectbrand").empty();
-        $("#selectbrand").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarBrand", function (data) {
-
-            data = data.errmsg;
-            $.each(data, function (k, v) {
-                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
-            });
-        });
-    }
-
-    //初始化车系
-    function InitSeries(brandid) {
-        $("#selectseries").empty();
-        $("#selectseries").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarSeries?brandId=" + brandid, function (data) {
-
-            data = data.errmsg;
-            $.each(data, function (k, v) {
-                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
-            });
-        });
-    }
-
-    //初始化车型
-    function InitModel(seriesid) {
-        $("#selectmodel").empty();
-        $("#selectmodel").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarModel?seriesId=" + seriesid, function (data) {
-
-            data = data.errmsg;
-            $.each(data, function (k, v) {
-                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
-            });
-        });
-    }
-
     function QueryList() {
-        var json = { custid: custid, brand_id: $("#selectbrand").val(), series_id: $("#selectseries").val(), model_id: $("#selectmodel").val(), status: $("#selectstatus").val() };
+        var json = {
+            mobile: $("#mobile").val(),
+            userno: $("#userno").val(),
+            auctionno: $("#auctionno").val(),
+            status: $("#selectstatus").val()
+        };
+        if (userlevel == 2)
+        {
+            json.operatedid = userid;
+        }
         $("#auctioncarlist").getPageList(20, "/api/auction/GetAuctionList", json, LoadData);
     }
 
     function LoadData(data, index) {
         $("#auctioncarlist tbody").empty();
         var str = "";
-       // console.log(data);
+
         $.each(data, function (key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + (val.no == null ? "" : val.no.sub(400)) + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
             str += "<td>" + (val.cityname == null ? "" : val.cityname.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.publishedtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + Dateformat(val.validtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
+            str += "<td>" + (val.username == null ? "" : val.username.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
 
-            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionCarView?id=" + val.Innerid + "');\" href='javascript:;'>查看</a> ";
+            var btn = "";
+            //btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionCarView?id=" + val.Innerid + "');\" href='javascript:;'>查看</a> ";
             btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?carid=" + val.carid + "&id=" + val.Innerid + "');\" href='javascript:;'>审核</a> ";
             btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordList?auctionid=" + val.Innerid + "');\" href='javascript:;'>竞价记录</a> ";
 
-            if (false) { //待拍
-                btn += "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/auctioncaredit?id=" + val.Innerid + "');\" href='javascript:;'>修改</a> ";
-                btn += "<a href='javascript:;' onclick=\"PublishAuctionCar('" + val.Innerid + "'," + val.status + ");\">发拍</a> ";
-                btn += "<a href='javascript:;' onclick=\"DealAuctionCar('" + val.Innerid + "',this);\">成交</a> ";
-                btn += "<a href='javascript:;' onclick=\"DeleteAuctionCar('" + val.Innerid + "',this);\">删除</a> ";
+            if (userlevel == 1) {
+                btn += "<a  data-toggle=\"modal\" data-target=\".bs-example-modal-lg\" href='javascript:;' onclick=\"setUser('" + val.Innerid + "');\">分配</a>";
             }
-            else if (false) {  //在拍
-                btn += "<a href='javascript:;' onclick=\"PublishAuctionCar('" + val.Innerid + "'," + val.status + ");\">撤拍</a> ";
-                btn += "<a href='javascript:;' onclick=\"DealAuctionCar('" + val.Innerid + "',this);\">成交</a> ";
-            }
+
             str += "<td>" + btn + "</td></tr>";
             $("#auctioncarlist tbody").append(str);
-        });
-    }
-
-    function PublishAuctionCar(id, status) {
-
-        if (!confirm("确认" + (status === 1 ? "发拍" : "撤拍") + "?")) {
-            return;
-        }
-
-        var json = { Innerid: id, status: status };
-        $.post("/api/auction/PublishAuctionCar", json, function (delres) {
-            if (delres.errcode === 0) {
-                QueryList();
-            } else {
-                alert("操作失败");
-            }
-        });
-    }
-
-    function DeleteAuctionCar(id, obj) {
-
-        $(obj).after($("#deleteDiv").removeClass("hide"));
-        $("#delsubmit").unbind("click").bind("click", function () {
-            var json = { Innerid: id, deletedesc: $("#deletedesc").val() };
-            $.post("/api/auction/DeleteAuctionCar", json, function (delres) {
-                if (delres.errcode === 0) {
-                    QueryList();
-                } else {
-                    alert("操作失败");
-                }
-            });
         });
     }
 
@@ -132,9 +73,9 @@
 
             var dealedprice = $("#dealedprice").val();
             var dealedtime = $("#dealedtime").val();
-            var dealmobile = $("#dealmobile").val();            
+            var dealmobile = $("#dealmobile").val();
             var dealdesc = $("#dealdesc").val();
-            
+
             if ($.trim(dealedprice).length === 0) {
                 alert("请填写成交价格！");
                 return false;
@@ -174,17 +115,61 @@
             case 0:
                 return "已删除";
             case 1:
-                return "待拍";
+                return "草稿";
             case 2:
-                return "在拍";
+                return "待审核";
             case 3:
-                return "成交";
+                return "审核中";
             case 4:
-                return "流拍";
+                return "审核失败";
+            case 5:
+                return "等待拍卖";
+            case 6:
+                return "正在拍卖";
+            case 7:
+                return "成交";
+            case 8:
+                return "拍卖结束";
             default:
 
         }
         return "";
+    }
+
+    //分配业务员
+    function SureUser() {
+        var json = {};
+
+        json.innerid = auctionid;
+        json.operatedid = $("#selectuser").val();
+
+        $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+            if (result.errcode !== 0) {
+                alert("更新失败");
+                return false;
+            }
+            alert("更新成功！");
+            $('#myModal').modal('hide');
+        });
+    }
+
+    //获取业务员信息
+    function GetUserInfo() {
+        var json = {};
+
+        json.depid = depid;
+        json.level = 2;
+
+        $.post("/api/Base/GetUserInfo", json, function (data) {
+            $.each(data.errmsg, function (k, v) {
+                $("#selectuser").append("<option value='" + v.innerid + "'>" + v.no + v.username + "</option>");
+            });
+        });
+    }
+
+    function setUser(innerid)
+    {
+        auctionid = innerid;
     }
 
 </script>
@@ -193,27 +178,37 @@
 
     <div style="padding-bottom:5px">
         <div class="row">
-            <div class="col-lg-9 col-sm-9 col-xs-9">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">类型：</label>
+                    <label for="mobile" class="col-sm-4 control-label no-padding-right searchLayout">车商手机号：</label>
                     <div class="col-sm-8">
-                        <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
+                        <input type="text" class="form-control" id="mobile" placeholder="车商手机号">
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-4 control-label no-padding-right searchLayout">拍品编号：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="auctionno" placeholder="拍品编号">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="custname" class="col-sm-4 control-label no-padding-right searchLayout">员工编号：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="userno" placeholder="员工编号">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row" style="margin-top:5px">
-            <div class="col-lg-9 col-sm-9 col-xs-9">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">状态：</label>
-                    <div class="col-sm-7">
-                        <select id="selectstatus" style="width:300px;">
+                    <label for="" class="col-sm-4 control-label no-padding-right searchLayout">状态：</label>
+                    <div class="col-sm-8">
+                        <select id="selectstatus" style="width:100%">
                             <option>请选择</option>
                             <option value="1">草稿</option>
                             <option value="2">待审核</option>
@@ -225,12 +220,16 @@
                             <option value="8">拍卖结束</option>
                             <option value="0">已删除</option>
                         </select>
-                        
+
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                
+
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </div>
         </div>
     </div>
@@ -239,11 +238,13 @@
         <thead>
             <tr role="row">
                 <th>序号</th>
+                <th>拍品编号</th>
                 <th>拍卖车辆(车型)</th>
                 <th>车商</th>
                 <th>开始时间</th>
                 <th>结束时间</th>
-                <th>状态</th>                
+                <th>状态</th>
+                <th>业务员</th>
                 <th>申请时间</th>
                 <th>操作</th>
             </tr>
@@ -253,6 +254,7 @@
         </tbody>
     </table>
 </div>
+
 <div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
     描述:
     <input type="text" id="deletedesc" maxlength="200" />
@@ -261,13 +263,46 @@
 </div>
 <div id="dealDiv" class="hide" style="background-color: #ccc; margin-top: 8px; padding: 5px">
     成交价格:
-    <input type="text" id="dealedprice" maxlength="10"/><br/>
+    <input type="text" id="dealedprice" maxlength="10" /><br />
     成交时间:
-    <input type="text" id="dealedtime" maxlength="10" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })"/><br />
+    <input type="text" id="dealedtime" maxlength="10" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" /><br />
     成交人手机号:
     <input type="text" id="dealmobile" maxlength="11" /><br />
     成交说明:
     <input type="text" id="dealdesc" maxlength="200" /><br />
     <input type="button" value="确定" id="dealsubmit" />
     <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
+</div>
+
+<div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myLargeModalLabel">分配业务员</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">状态：</label>
+                            <div class="col-sm-10">
+                                <select id="selectuser" style="width:100%">
+                                    <option>请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="确定" onclick="SureUser();" />
+                    </div>
+                </div>
+                @*<div class="row form-group text-center">
+                        <div class="col-lg-12">
+                            </div>
+                    </div>*@
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>

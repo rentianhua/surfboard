@@ -1040,6 +1040,17 @@ namespace CCN.Modules.Base.BusinessComponent
             return JResult._jResult(model);
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(BaseUserModel model)
+        {
+            var list = DataAccess.GetUserInfo(model);
+            return JResult._jResult(list);
+        }
+
 
         #endregion
 

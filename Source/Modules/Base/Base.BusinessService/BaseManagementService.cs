@@ -550,6 +550,16 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.GetMenuByUerid(userid);
         }
 
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(BaseUserModel model)
+        {
+            return BusinessComponent.GetUserInfo(model);
+        }
+
         #endregion
 
         #region 角色管理
