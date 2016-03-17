@@ -195,15 +195,9 @@
         <div class="row">
             <div class="col-lg-9 col-sm-9 col-xs-9">
                 <div class="form-group">
-                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">品牌/车系/车型：</label>
+                    <label for="" class="col-sm-2 control-label no-padding-right searchLayout">类型：</label>
                     <div class="col-sm-8">
                         <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
-                        <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
-                            <option value="0">请选择</option>
-                        </select>
-                        <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
                             <option value="0">请选择</option>
                         </select>
                     </div>
@@ -221,10 +215,14 @@
                     <div class="col-sm-7">
                         <select id="selectstatus" style="width:300px;">
                             <option>请选择</option>
-                            <option value="1">待拍</option>
-                            <option value="2">在拍</option>
-                            <option value="3">成交</option>
-                            <option value="4">流拍</option>
+                            <option value="1">草稿</option>
+                            <option value="2">待审核</option>
+                            <option value="3">审核中</option>
+                            <option value="4">审核失败</option>
+                            <option value="5">等待拍卖</option>
+                            <option value="6">正在拍卖</option>
+                            <option value="7">成交</option>
+                            <option value="8">拍卖结束</option>
                             <option value="0">已删除</option>
                         </select>
                         
