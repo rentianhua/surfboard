@@ -39,8 +39,8 @@ namespace CCN.Modules.Auction.DataAccess
 
             if (!string.IsNullOrWhiteSpace(query.userid))
             {
-                tableName += " left join (select count(1) as follow, auctionid from auction_follow where userid = '" + query.userid + "' and auction = '" + query.auctionid + "') e on e.auctionid = a.innerid";
-                fields += " e.follow ";
+                tableName += " left join (select count(1) as follow, auctionid from auction_follow where userid = '" + query.userid + "' group by auctionid ) e on e.auctionid = a.innerid";
+                fields += " ,ifnull(e.follow,0) as follow ";
             }
 
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
