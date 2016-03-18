@@ -26,18 +26,26 @@ namespace CCN.Modules.Auction.DataAccess
         public BasePageList<AuctionCarInfoViewModel> GetAuctioningList(AuctionCarInfoQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"auction_carinfo as a 
+            string tableName = @"auction_carinfo as a 
                                     left join car_info as b on b.innerid=a.carid
                                     left join base_carbrand as c1 on b.brand_id=c1.innerid 
                                     left join base_carseries as c2 on b.series_id=c2.innerid 
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid
                                     left join base_province as pr on b.provid=pr.innerid 
-                                    left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid";
-            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
+                                    left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid ";
+            
+            string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
+
+            if (!string.IsNullOrWhiteSpace(query.userid))
+            {
+                tableName += " left join (select count(1) as follow, auctionid from auction_follow where userid = '" + query.userid + "' and auction = '" + query.auctionid + "') e on e.auctionid = a.innerid";
+                fields += " e.follow ";
+            }
+
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
-            var sqlWhere = new StringBuilder(" a.status=2 ");
+            var sqlWhere = new StringBuilder(" a.status=6 ");
 
             //省份
             if (query.provid != null)
@@ -675,6 +683,26 @@ namespace CCN.Modules.Auction.DataAccess
             if (!string.IsNullOrWhiteSpace(query.operatedid))
             {
                 sqlWhere.Append($" and b.operatedid='{query.operatedid}'");
+            }
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and c.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and c.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and c.register_date='{query.register_date}'");
+            }
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and c.cityid={query.cityid}");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -1324,6 +1352,26 @@ namespace CCN.Modules.Auction.DataAccess
             if (query.Userid != null)
             {
                 sqlWhere.Append($" and f.userid='{query.Userid}'");
+            }
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and b.register_date='{query.register_date}'");
+            }
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and b.cityid={query.cityid}");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);

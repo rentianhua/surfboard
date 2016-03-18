@@ -147,5 +147,25 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 业务员ID
         /// </summary>
         public string operatedid { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? minmileage { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? maxmileage { get; set; }
+
+        /// <summary>
+        /// 车辆上牌日期
+        /// </summary>
+        public DateTime? register_date { get; set; }
+
+        /// <summary>
+        /// 城市id(所在地)
+        /// </summary>
+        public int? cityid { get; set; }
     }
 }
