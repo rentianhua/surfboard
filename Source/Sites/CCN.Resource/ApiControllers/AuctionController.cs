@@ -4,6 +4,7 @@ using CCN.Modules.Auction.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using System.Collections.Generic;
+using System;
 
 namespace CCN.Resource.ApiControllers
 {
@@ -385,5 +386,6 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
     }
 }

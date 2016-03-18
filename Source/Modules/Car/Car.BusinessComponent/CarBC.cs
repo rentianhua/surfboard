@@ -474,6 +474,7 @@ namespace CCN.Modules.Car.BusinessComponent
             model.istop = 0;            ////
 
             model.modifiedtime = null;
+            model.carno = "CAR" + GetNumber();
             var result = DataAccess.AddCar(model);
             if (result == -1)
             {
@@ -707,8 +708,8 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult RefreshCar(string carid)
         {
             var result = DataAccess.RefreshCar(carid);
-            return result == 401 
-                ? JResult._jResult(401, "刷新次数已经用完") 
+            return result == 401
+                ? JResult._jResult(401, "刷新次数已经用完")
                 : JResult._jResult(result);
         }
 
@@ -1268,7 +1269,7 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return JResult._jResult(0, "批量操作图片成功");
         }
-        
+
         #endregion
         #endregion
 
@@ -1429,6 +1430,45 @@ namespace CCN.Modules.Car.BusinessComponent
 
             var list = DataAccess.GetCarRewardPageList(model);
             return list;
+        }
+
+        #endregion
+
+        #region 公共方法
+
+        /// <summary>
+        /// 获取订单号
+        /// </summary>
+        /// <returns></returns>
+        public string GetNumber()
+        {
+            string Number = DateTime.Now.ToString("yyMMddHHmmss");//yyyyMMddHHmmssms
+            return Number + Next(1000, 1).ToString();
+        }
+
+        /// <summary>
+        /// 产生随机数
+        /// </summary>
+        /// <param name="numSeeds"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private static int Next(int numSeeds, int length)
+        {
+            // Create a byte array to hold the random value.  
+            byte[] buffer = new byte[length];
+            // Create a new instance of the RNGCryptoServiceProvider.  
+            System.Security.Cryptography.RNGCryptoServiceProvider Gen = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            // Fill the array with a random value.  
+            Gen.GetBytes(buffer);
+            // Convert the byte to an uint value to make the modulus operation easier.  
+            uint randomResult = 0x0;//这里用uint作为生成的随机数  
+            for (int i = 0; i < length; i++)
+            {
+                randomResult |= ((uint)buffer[i] << ((length - 1 - i) * 8));
+            }
+            // Return the random number mod the number  
+            // of sides. The possible values are zero-based  
+            return (int)(randomResult % numSeeds);
         }
 
         #endregion

@@ -23,6 +23,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public int? Carid { get; set; }
 
         /// <summary>
+        /// 车辆编号
+        /// </summary>
+        public string carno { get; set; }
+
+        /// <summary>
         /// 车辆标题
         /// </summary>
         public string title { get; set; }
