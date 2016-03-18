@@ -110,6 +110,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAuctionParticipantList")]
+        public BasePageList<AuctionCarParticipantViewModel> GetAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            return _auctionservice.GetAuctionParticipantList(query);
+        }
+        
+
+        /// <summary>
         /// 根据拍卖ID 获取竞拍记录
         /// </summary>
         /// <param name="auctionid"></param>

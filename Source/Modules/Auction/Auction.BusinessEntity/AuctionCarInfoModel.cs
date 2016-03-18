@@ -426,6 +426,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// </summary>
         public string username { get; set; }
 
+        /// <summary>
+        /// 是否关注
+        /// </summary>
+        public int? follow { get; set; }
+
     }
 
     /// <summary>
@@ -512,6 +517,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 业务员Id
         /// </summary>
         public string operatedid { get; set; }
+
+        /// <summary>
+        /// C端用户Id
+        /// </summary>
+        public string userid { get; set; }
+
+        /// <summary>
+        /// 拍卖ID
+        /// </summary>
+        public string auctionid { get; set; }
 
     }
 }
