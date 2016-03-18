@@ -6,6 +6,10 @@ using Cedar.Framework.Common.BaseClasses;
 using System;
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Foundation.WeChat.WxPay.Business;
+using System.Xml;
+using System.Data;
+using System.Linq;
+
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -254,7 +258,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="orderno"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("WeChatPayForAuction")]
         public JResult WeChatPayForAuction(string innerid, string orderno)
         {
@@ -273,7 +277,7 @@ namespace CCN.WebAPI.ApiControllers
                 GoodsTag = ""
             };
             //获取竞拍详情
-            var auctionParticipant = _auctionservice.GetAuctionParticipantByID(orderno);
+            var auctionParticipant = _auctionservice.GetAuctionParticipantByID(innerid);
             if (auctionParticipant.errcode == 0)
             {
                 if (auctionParticipant.errmsg != null)
@@ -283,8 +287,56 @@ namespace CCN.WebAPI.ApiControllers
                 }
             }
             var qrcode = WxPayAPIs.GetNativePayQrCode(data);
-            var result = "{'qrcode': '" + qrcode + "','modelname': '" + modelname + "','deposit': " + deposit + "}";
+            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
             return JResult._jResult(0, result);
+        }
+
+        /// <summary>
+        /// 支付回调
+        /// </summary>
+        [HttpGet]
+        [Route("WeChatPayForAuction")]
+        public void GetResult()
+        {
+            var a = @"<xml><appid><![CDATA[wx8237977d5ac3d164]]></appid>
+                        <attach><![CDATA[快拍立信看车费]]></attach>
+                        <bank_type><![CDATA[CFT]]></bank_type>
+                        <cash_fee><![CDATA[1]]></cash_fee>
+                        <fee_type><![CDATA[CNY]]></fee_type>
+                        <is_subscribe><![CDATA[Y]]></is_subscribe>
+                        <mch_id><![CDATA[1270879801]]></mch_id>
+                        <nonce_str><![CDATA[a6c6d5decae74ee0b484669491e48f6b]]></nonce_str>
+                        <openid><![CDATA[oRpPlwYU_dfedweCJwMgHlUaSbNA]]></openid>
+                        <out_trade_no><![CDATA[WXPAY20160318145827707]]></out_trade_no>
+                        <result_code><![CDATA[SUCCESS]]></result_code>
+                        <return_code><![CDATA[SUCCESS]]></return_code>
+                        <sign><![CDATA[A33680B7A3FA2525D147E3E52D21C067]]></sign>
+                        <time_end><![CDATA[20160318145921]]></time_end>
+                        <total_fee>1</total_fee>
+                        <trade_type><![CDATA[NATIVE]]></trade_type>
+                        <transaction_id><![CDATA[1009200583201603184079405726]]></transaction_id>
+                        </xml>";
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(a);
+
+        
+            const string itemNode = "xml";
+            var root = xmlDoc.SelectSingleNode(itemNode);
+            var roots = root.ChildNodes;
+
+            foreach (var items in from XmlNode rows in roots select rows.ChildNodes)
+            {
+                //没有子节点的时候
+                if (items != null)
+                {
+                    foreach (XmlNode row in items)
+                    {
+                        var innertext = row.InnerText;
+                        var innerxml = row.ParentNode.LocalName;
+                    }
+                }
+            }
         }
 
         #endregion
