@@ -675,5 +675,20 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         #endregion
+
+        #region 支付相关
+
+        /// <summary>
+        /// 添加定金拍卖定金支付记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddPaymentRecord(AuctionPaymentRecordModel model)
+        {
+            var result = DataAccess.AddPaymentRecord(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }

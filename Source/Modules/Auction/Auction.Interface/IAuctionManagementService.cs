@@ -274,7 +274,18 @@ namespace CCN.Modules.Auction.Interface
         /// <param name="query"></param>
         /// <returns></returns>
         BasePageList<AuctionCarInfoViewModel> GetFollowPageList(AuctionFollowQueryModel query);
-        
+
+        #endregion
+
+        #region 支付相关
+
+        /// <summary>
+        /// 添加定金拍卖定金支付记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddPaymentRecord(AuctionPaymentRecordModel model);
+
         #endregion
     }
 }
