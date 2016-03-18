@@ -74,6 +74,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string recordlist { get; set; }
 
         /// <summary>
+        /// 订单号
+        /// </summary>
+        public string orderno { get; set; }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         public AuctionCarParticipantModel()
@@ -101,6 +106,36 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 出价
         /// </summary>
         public decimal? lowestprice { get; set; }
+
+        /// <summary>
+        /// 上牌时间
+        /// </summary>
+        public DateTime? register_date { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal mileage { get; set; }
+
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string cityname { get; set; }
+
+        /// <summary>
+        /// 省份名称
+        /// </summary>
+        public string provname { get; set; }
+
+        /// <summary>
+        /// 新车价
+        /// </summary>
+        public decimal? price { get; set; }
+
+        /// <summary>
+        /// 出价次数
+        /// </summary>
+        public int? pricecount { get; set; }
     }
 
     /// <summary>
@@ -147,5 +182,25 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 业务员ID
         /// </summary>
         public string operatedid { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? minmileage { get; set; }
+
+        /// <summary>
+        /// 行驶里程
+        /// </summary>
+        public decimal? maxmileage { get; set; }
+
+        /// <summary>
+        /// 车辆上牌日期
+        /// </summary>
+        public DateTime? register_date { get; set; }
+
+        /// <summary>
+        /// 城市id(所在地)
+        /// </summary>
+        public int? cityid { get; set; }
     }
 }

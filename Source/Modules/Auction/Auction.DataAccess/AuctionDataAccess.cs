@@ -26,18 +26,26 @@ namespace CCN.Modules.Auction.DataAccess
         public BasePageList<AuctionCarInfoViewModel> GetAuctioningList(AuctionCarInfoQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"auction_carinfo as a 
+            string tableName = @"auction_carinfo as a 
                                     left join car_info as b on b.innerid=a.carid
                                     left join base_carbrand as c1 on b.brand_id=c1.innerid 
                                     left join base_carseries as c2 on b.series_id=c2.innerid 
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid
                                     left join base_province as pr on b.provid=pr.innerid 
-                                    left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid";
-            const string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
+                                    left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid ";
+            
+            string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
+
+            if (!string.IsNullOrWhiteSpace(query.userid))
+            {
+                tableName += " left join (select count(1) as follow, auctionid from auction_follow where userid = '" + query.userid + "' group by auctionid ) e on e.auctionid = a.innerid";
+                fields += " ,ifnull(e.follow,0) as follow ";
+            }
+
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
-            var sqlWhere = new StringBuilder(" a.status=2 ");
+            var sqlWhere = new StringBuilder(" a.status=6 ");
 
             //省份
             if (query.provid != null)
@@ -635,8 +643,14 @@ namespace CCN.Modules.Auction.DataAccess
                                        left join auction_carinfo as b on b.innerid=a.auctionid
                                        left join car_info as c on c.innerid=b.carid
                                        left join base_carmodel as c1 on c.model_id=c1.innerid
-                                       left join sys_user as su on su.innerid=b.operatedid";
-            const string fields = "a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name";
+                                       left join sys_user as su on su.innerid=b.operatedid
+                                       left join base_city as ct on c.cityid=ct.innerid
+                                       left join base_province as pr on c.provid=pr.innerid
+                                       left join (select count(1) as pricecount,auctionid from auction_participant group by auctionid) as e on e.auctionid=a.auctionid";
+            const string fields = @"a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,
+                                    a.orderno,b.no as auctionno,b.lowestprice,c.register_date,c.mileage,
+                                    c1.modelprice as price,c1.modelname as model_name,
+                                    ct.cityname,pr.provname,e.pricecount";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
@@ -675,6 +689,26 @@ namespace CCN.Modules.Auction.DataAccess
             if (!string.IsNullOrWhiteSpace(query.operatedid))
             {
                 sqlWhere.Append($" and b.operatedid='{query.operatedid}'");
+            }
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and c.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and c.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and c.register_date='{query.register_date}'");
+            }
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and c.cityid={query.cityid}");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -765,9 +799,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddParticipant(AuctionCarParticipantModel model)
         {
             const string sql = @"INSERT INTO `auction_participant`
-                                (innerid, auctionid, mobile, amount,username,userid, status, remark, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, auctionid, mobile, amount,username,userid, status, remark, createrid, createdtime, modifierid, modifiedtime,orderno)
                                 VALUES
-                                (uuid(), @auctionid, @mobile, @amount,@username,@userid @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (uuid(), @auctionid, @mobile, @amount,@username,@userid, @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime,@orderno);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -1325,6 +1359,26 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and f.userid='{query.Userid}'");
             }
+            //里程数
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage>={query.minmileage}");
+            }
+            //里程数
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and b.mileage<{query.maxmileage}");
+            }
+            //上牌时间
+            if (query.register_date.HasValue)
+            {
+                sqlWhere.Append($" and b.register_date='{query.register_date}'");
+            }
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and b.cityid={query.cityid}");
+            }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<AuctionCarInfoViewModel>(model, query.Echo);
@@ -1332,6 +1386,39 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
 
+
+        #endregion
+
+        #region 支付相关
+
+        /// <summary>
+        /// 添加定金拍卖定金支付记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPaymentRecord(AuctionPaymentRecordModel model)
+        {
+            const string sql = @"INSERT INTO `auction_paymentrecord`
+                                (innerid, appid, attach, bank_type, cash_fee, fee_type, is_subscribe, mch_id, nonce_str, openid, out_trade_no, result_code, return_code, sign, time_end, total_fee, trade_type, transaction_id, createdtime)
+                                VALUES
+                                (uuid(), @appid, @attach, @bank_type, @cash_fee, @fee_type, @is_subscribe, @mch_id, @nonce_str, @openid, @out_trade_no, @result_code, @return_code, @sign, @time_end, @total_fee, @trade_type, @transaction_id, now());";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
 
         #endregion
     }

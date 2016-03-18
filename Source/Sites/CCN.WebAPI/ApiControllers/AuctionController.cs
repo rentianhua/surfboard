@@ -3,6 +3,14 @@ using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using System;
+using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
+using Cedar.Foundation.WeChat.WxPay.Business;
+using System.Xml;
+using System.Data;
+using System.Linq;
+using Cedar.Core.Logging;
+using System.Diagnostics;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -32,7 +40,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.GetAuctioningList(query);
         }
-        
+
         /// <summary>
         /// 获取正在拍卖车辆详情 view
         /// </summary>
@@ -108,6 +116,19 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.GetAllAuctionParticipantList(query);
         }
+
+        /// <summary>
+        ///  获取所有竞拍记录
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetAuctionParticipantList")]
+        public BasePageList<AuctionCarParticipantViewModel> GetAuctionParticipantList(AuctionCarParticipantQueryModel query)
+        {
+            return _auctionservice.GetAuctionParticipantList(query);
+        }
+
 
         /// <summary>
         /// 根据拍卖ID 获取竞拍记录
@@ -230,5 +251,121 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 支付
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("WeChatPayForAuction")]
+        public JResult WeChatPayForAuction(string innerid, string orderno)
+        {
+            var ran = new Random();
+            var modelname = string.Empty;
+            //获取定金金额
+            var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信拍车定金",//商品描述
+                Attach = "【kply】",//附加数据
+                TotalFee = deposit,//总金额
+                ProductId = orderno,//商品ID
+                OutTradeNo = orderno,//订单编号
+                GoodsTag = ""
+            };
+            //获取竞拍详情
+            var auctionParticipant = _auctionservice.GetAuctionParticipantByID(innerid);
+            if (auctionParticipant.errcode == 0)
+            {
+                if (auctionParticipant.errmsg != null)
+                {
+                    var auctionParticipantModel = (AuctionCarParticipantViewModel)auctionParticipant.errmsg;
+                    modelname = auctionParticipantModel.model_name;
+                }
+            }
+            var qrcode = WxPayAPIs.GetNativePayQrCode(data);
+            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
+            return JResult._jResult(0, result);
+        }
+
+        /// <summary>
+        /// 支付回调
+        /// </summary>
+        [HttpGet]
+        [Route("WeChatPayForAuction")]
+        public void GetResult()
+        {
+            var a = @"<xml><appid><![CDATA[wx8237977d5ac3d164]]></appid>
+                        <attach><![CDATA[快拍立信看车费]]></attach>
+                        <bank_type><![CDATA[CFT]]></bank_type>
+                        <cash_fee><![CDATA[1]]></cash_fee>
+                        <fee_type><![CDATA[CNY]]></fee_type>
+                        <is_subscribe><![CDATA[Y]]></is_subscribe>
+                        <mch_id><![CDATA[1270879801]]></mch_id>
+                        <nonce_str><![CDATA[a6c6d5decae74ee0b484669491e48f6b]]></nonce_str>
+                        <openid><![CDATA[oRpPlwYU_dfedweCJwMgHlUaSbNA]]></openid>
+                        <out_trade_no><![CDATA[WXPAY20160318145827707]]></out_trade_no>
+                        <result_code><![CDATA[SUCCESS]]></result_code>
+                        <return_code><![CDATA[SUCCESS]]></return_code>
+                        <sign><![CDATA[A33680B7A3FA2525D147E3E52D21C067]]></sign>
+                        <time_end><![CDATA[20160318145921]]></time_end>
+                        <total_fee>1</total_fee>
+                        <trade_type><![CDATA[NATIVE]]></trade_type>
+                        <transaction_id><![CDATA[1009200583201603184079405726]]></transaction_id>
+                        </xml>";
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(a);
+
+
+            const string itemNode = "xml";
+            var root = xmlDoc.SelectSingleNode(itemNode);
+            var roots = root.ChildNodes;
+            AuctionPaymentRecordModel model = new AuctionPaymentRecordModel();
+            foreach (var items in from XmlNode rows in roots select rows.ChildNodes)
+            {
+
+                //没有子节点的时候
+                if (items != null)
+                {
+                    foreach (XmlNode row in items)
+                    {
+                        var innertext = row.InnerText;
+                        var innerxml = row.ParentNode.LocalName;
+
+                        Type type = model.GetType();
+                        System.Reflection.PropertyInfo[] ps = type.GetProperties();
+                        foreach (System.Reflection.PropertyInfo i in ps)
+                        {
+                            object obj = i.GetValue(model, null);
+                            if (row.ParentNode.LocalName == i.Name)
+                            {
+                                i.SetValue(model, innertext);
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+            //数据存入数据库
+            var result = _auctionservice.AddPaymentRecord(model);
+            if (result.errcode == 0)
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录正常！" + DateTime.Now, TraceEventType.Information);
+            }
+            else
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
+            }
+
+
+        }
+
+        #endregion
+
     }
 }
