@@ -11,6 +11,8 @@ using System.Data;
 using System.Linq;
 using Cedar.Core.Logging;
 using System.Diagnostics;
+using System.Xml.Linq;
+using Senparc.Weixin.MP.Helpers;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -318,39 +320,10 @@ namespace CCN.WebAPI.ApiControllers
                         <transaction_id><![CDATA[1009200583201603184079405726]]></transaction_id>
                         </xml>";
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(a);
-
-
-            const string itemNode = "xml";
-            var root = xmlDoc.SelectSingleNode(itemNode);
-            var roots = root.ChildNodes;
-            AuctionPaymentRecordModel model = new AuctionPaymentRecordModel();
-            foreach (var items in from XmlNode rows in roots select rows.ChildNodes)
-            {
-
-                //没有子节点的时候
-                if (items != null)
-                {
-                    foreach (XmlNode row in items)
-                    {
-                        var innertext = row.InnerText;
-                        var innerxml = row.ParentNode.LocalName;
-
-                        Type type = model.GetType();
-                        System.Reflection.PropertyInfo[] ps = type.GetProperties();
-                        foreach (System.Reflection.PropertyInfo i in ps)
-                        {
-                            object obj = i.GetValue(model, null);
-                            if (row.ParentNode.LocalName == i.Name)
-                            {
-                                i.SetValue(model, innertext);
-                                continue;
-                            }
-                        }
-                    }
-                }
-            }
+            var doc = XDocument.Parse(a);
+            var model = new AuctionPaymentRecordModel();
+            model.FillEntityWithXml(doc);
+            
             //数据存入数据库
             var result = _auctionservice.AddPaymentRecord(model);
             if (result.errcode == 0)
@@ -362,7 +335,7 @@ namespace CCN.WebAPI.ApiControllers
                 LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
             }
 
-
+            //调用nodejs 通知前端
         }
 
         #endregion

@@ -167,6 +167,32 @@ namespace CCN.Modules.Car.BusinessComponent
             {
                 return new BasePageList<CarInfoListViewModel>();
             }
+
+            switch (query.Order)
+            {
+                case "1":
+                    query.Order = "a.price asc";
+                    break;
+                case "-1":
+                    query.Order = "a.price desc";
+                    break;
+                case "2":
+                    query.Order = "a.register_date desc";
+                    break;
+                case "-2":
+                    query.Order = "a.register_date asc";
+                    break;
+                case "3":
+                    query.Order = "a.mileage asc";
+                    break;
+                case "-3":
+                    query.Order = "a.mileage desc";
+                    break;
+                default:
+                    query.Order = "a.createdtime desc";
+                    break;
+            }
+            query.keyword = query.keyword.ToDbValue();
             var list = DataAccess.SearchCarPageList(query);
 
             if (list.aaData == null)
@@ -176,6 +202,7 @@ namespace CCN.Modules.Car.BusinessComponent
             {
                 if (item.custid.Equals(query.custid))
                 {
+                    //自己
                     item.isfriend = -1;
                 }
             }
@@ -192,9 +219,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
                 });
             });
-
-            query.keyword = query.keyword.ToDbValue();
-
+            
             return list;
         }
 

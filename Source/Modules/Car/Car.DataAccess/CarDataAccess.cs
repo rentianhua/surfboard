@@ -397,9 +397,9 @@ namespace CCN.Modules.Car.DataAccess
 
             if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
             {
-                //sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
                 //车辆添加时会将【品牌/车系】放到该字段
-                sqlWhere.Append($" and title like '%{query.keyword}%'");
+                //sqlWhere.Append($" and title like '%{query.keyword}%'");
             }
 
             #endregion
@@ -511,9 +511,9 @@ namespace CCN.Modules.Car.DataAccess
 
             if (!string.IsNullOrWhiteSpace(query.SearchField) && query.model_id == null)
             {
-                //sqlWhere.Append($" and (c1.brandname like '%{query.SearchField}%' or c2.seriesname like '%{query.SearchField}%')");
+                sqlWhere.Append($" and (c1.brandname like '%{query.SearchField}%' or c2.seriesname like '%{query.SearchField}%')");
                 //车辆添加时会将【品牌/车系】放到该字段
-                sqlWhere.Append($" and title like '%{query.SearchField}%'");
+                //sqlWhere.Append($" and title like '%{query.SearchField}%'");
             }
             //用户ID
             if (!string.IsNullOrWhiteSpace(query.userid))

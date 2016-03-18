@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.WxPay.Business;
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace CCN.WebAPI.ApiControllers
@@ -145,8 +149,8 @@ namespace CCN.WebAPI.ApiControllers
 
             var data = new NativePayData
             {
-                Body = "快拍立信看车费",//商品描述
-                Attach = "ccntest",//附加数据
+                Body = "快拍立信定金",//商品描述
+                Attach = "快拍立信看车费",//附加数据
                 TotalFee = 1,//总金额
                 ProductId = "productid",//商品ID
                 OutTradeNo = outTradeNo,
@@ -155,6 +159,15 @@ namespace CCN.WebAPI.ApiControllers
             
             var qrcode = WxPayAPIs.GetNativePayQrCode(data);
             return JResult._jResult(0, qrcode);
+        }
+        
+        [HttpPost]
+        [Route("TestPayBack")]
+        public void TestPayBack()
+        {
+            var stream = Request.Content.ReadAsStringAsync().Result;
+            LoggerFactories.CreateLogger().Write($"DataDispatcher: {stream}", TraceEventType.Information);
+            
         }
     }
 
