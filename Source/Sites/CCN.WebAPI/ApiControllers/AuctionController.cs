@@ -3,6 +3,9 @@ using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
+using System;
+using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
+using Cedar.Foundation.WeChat.WxPay.Business;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -32,7 +35,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.GetAuctioningList(query);
         }
-        
+
         /// <summary>
         /// 获取正在拍卖车辆详情 view
         /// </summary>
@@ -120,7 +123,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _auctionservice.GetAuctionParticipantList(query);
         }
-        
+
 
         /// <summary>
         /// 根据拍卖ID 获取竞拍记录
@@ -243,5 +246,48 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 支付
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("WeChatPayForAuction")]
+        public JResult WeChatPayForAuction(string innerid, string orderno)
+        {
+            var ran = new Random();
+            var modelname = string.Empty;
+            //获取定金金额
+            var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信拍车定金",//商品描述
+                Attach = "【kply】",//附加数据
+                TotalFee = deposit,//总金额
+                ProductId = orderno,//商品ID
+                OutTradeNo = orderno,//订单编号
+                GoodsTag = ""
+            };
+            //获取竞拍详情
+            var auctionParticipant = _auctionservice.GetAuctionParticipantByID(orderno);
+            if (auctionParticipant.errcode == 0)
+            {
+                if (auctionParticipant.errmsg != null)
+                {
+                    var auctionParticipantModel = (AuctionCarParticipantViewModel)auctionParticipant.errmsg;
+                    modelname = auctionParticipantModel.model_name;
+                }
+            }
+            var qrcode = WxPayAPIs.GetNativePayQrCode(data);
+            var result = "{'qrcode': '" + qrcode + "','modelname': '" + modelname + "','deposit': " + deposit + "}";
+            return JResult._jResult(0, result);
+        }
+
+        #endregion
+
     }
 }

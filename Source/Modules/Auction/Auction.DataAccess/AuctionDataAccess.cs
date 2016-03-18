@@ -643,8 +643,14 @@ namespace CCN.Modules.Auction.DataAccess
                                        left join auction_carinfo as b on b.innerid=a.auctionid
                                        left join car_info as c on c.innerid=b.carid
                                        left join base_carmodel as c1 on c.model_id=c1.innerid
-                                       left join sys_user as su on su.innerid=b.operatedid";
-            const string fields = "a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name";
+                                       left join sys_user as su on su.innerid=b.operatedid
+                                       left join base_city as ct on c.cityid=ct.innerid
+                                       left join base_province as pr on c.provid=pr.innerid
+                                       left join (select count(1) as pricecount,auctionid from auction_participant group by auctionid) as e on e.auctionid=a.auctionid";
+            const string fields = @"a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,
+                                    a.orderno,b.no as auctionno,b.lowestprice,c.register_date,c.mileage,
+                                    c1.modelprice as price,c1.modelname as model_name,
+                                    ct.cityname,pr.provname,e.pricecount";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("1=1");
@@ -793,9 +799,9 @@ namespace CCN.Modules.Auction.DataAccess
         public int AddParticipant(AuctionCarParticipantModel model)
         {
             const string sql = @"INSERT INTO `auction_participant`
-                                (innerid, auctionid, mobile, amount,username,userid, status, remark, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, auctionid, mobile, amount,username,userid, status, remark, createrid, createdtime, modifierid, modifiedtime,orderno)
                                 VALUES
-                                (uuid(), @auctionid, @mobile, @amount,@username,@userid @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (uuid(), @auctionid, @mobile, @amount,@username,@userid, @status, @remark, @createrid, @createdtime, @modifierid, @modifiedtime,@orderno);";
 
             using (var conn = Helper.GetConnection())
             {

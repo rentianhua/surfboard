@@ -103,6 +103,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             //model.dealerid = "";
             //model.deletedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
+            model.no = "A" + GetOrderNumber();
             //model.status = 1;
             var result = DataAccess.AddAuctionCar(model);
             return JResult._jResult
@@ -289,6 +290,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.Modifierid = "";
             model.Modifiedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
+            model.orderno = "PAY"+ GetOrderNumber();
             var result = DataAccess.AddParticipant(model);
             return JResult._jResult(result);
         }
@@ -632,6 +634,45 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
 
+
+        #endregion
+
+        #region 公共方法
+
+        /// <summary>
+        /// 获取订单号
+        /// </summary>
+        /// <returns></returns>
+        public string GetOrderNumber()
+        {
+            string Number = DateTime.Now.ToString("yyMMddHHmm");//yyyyMMddHHmmssms
+            return Number + Next(1000, 1).ToString();
+        }
+
+        /// <summary>
+        /// 产生随机数
+        /// </summary>
+        /// <param name="numSeeds"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        private static int Next(int numSeeds, int length)
+        {
+            // Create a byte array to hold the random value.  
+            byte[] buffer = new byte[length];
+            // Create a new instance of the RNGCryptoServiceProvider.  
+            System.Security.Cryptography.RNGCryptoServiceProvider Gen = new System.Security.Cryptography.RNGCryptoServiceProvider();
+            // Fill the array with a random value.  
+            Gen.GetBytes(buffer);
+            // Convert the byte to an uint value to make the modulus operation easier.  
+            uint randomResult = 0x0;//这里用uint作为生成的随机数  
+            for (int i = 0; i < length; i++)
+            {
+                randomResult |= ((uint)buffer[i] << ((length - 1 - i) * 8));
+            }
+            // Return the random number mod the number  
+            // of sides. The possible values are zero-based  
+            return (int)(randomResult % numSeeds);
+        }
 
         #endregion
     }
