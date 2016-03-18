@@ -1388,5 +1388,38 @@ namespace CCN.Modules.Auction.DataAccess
 
 
         #endregion
+
+        #region 支付相关
+
+        /// <summary>
+        /// 添加定金拍卖定金支付记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPaymentRecord(AuctionPaymentRecordModel model)
+        {
+            const string sql = @"INSERT INTO `auction_paymentrecord`
+                                (innerid, appid, attach, bank_type, cash_fee, fee_type, is_subscribe, mch_id, nonce_str, openid, out_trade_no, result_code, return_code, sign, time_end, total_fee, trade_type, transaction_id, createdtime)
+                                VALUES
+                                (uuid(), @appid, @attach, @bank_type, @cash_fee, @fee_type, @is_subscribe, @mch_id, @nonce_str, @openid, @out_trade_no, @result_code, @return_code, @sign, @time_end, @total_fee, @trade_type, @transaction_id, now());";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        #endregion
     }
 }

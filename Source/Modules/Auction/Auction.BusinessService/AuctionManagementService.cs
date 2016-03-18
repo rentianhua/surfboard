@@ -386,7 +386,21 @@ namespace CCN.Modules.Auction.BusinessService
         {
             return BusinessComponent.GetFollowPageList(query);
         }
-        
+
+        #endregion
+
+        #region 支付相关
+
+        /// <summary>
+        /// 添加定金拍卖定金支付记录
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddPaymentRecord(AuctionPaymentRecordModel model)
+        {
+            return BusinessComponent.AddPaymentRecord(model);
+        }
+
         #endregion
     }
 }

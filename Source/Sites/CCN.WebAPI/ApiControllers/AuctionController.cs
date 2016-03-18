@@ -9,7 +9,8 @@ using Cedar.Foundation.WeChat.WxPay.Business;
 using System.Xml;
 using System.Data;
 using System.Linq;
-
+using Cedar.Core.Logging;
+using System.Diagnostics;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -320,13 +321,14 @@ namespace CCN.WebAPI.ApiControllers
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(a);
 
-        
+
             const string itemNode = "xml";
             var root = xmlDoc.SelectSingleNode(itemNode);
             var roots = root.ChildNodes;
-
+            AuctionPaymentRecordModel model = new AuctionPaymentRecordModel();
             foreach (var items in from XmlNode rows in roots select rows.ChildNodes)
             {
+
                 //没有子节点的时候
                 if (items != null)
                 {
@@ -334,9 +336,33 @@ namespace CCN.WebAPI.ApiControllers
                     {
                         var innertext = row.InnerText;
                         var innerxml = row.ParentNode.LocalName;
+
+                        Type type = model.GetType();
+                        System.Reflection.PropertyInfo[] ps = type.GetProperties();
+                        foreach (System.Reflection.PropertyInfo i in ps)
+                        {
+                            object obj = i.GetValue(model, null);
+                            if (row.ParentNode.LocalName == i.Name)
+                            {
+                                i.SetValue(model, innertext);
+                                continue;
+                            }
+                        }
                     }
                 }
             }
+            //数据存入数据库
+            var result = _auctionservice.AddPaymentRecord(model);
+            if (result.errcode == 0)
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录正常！" + DateTime.Now, TraceEventType.Information);
+            }
+            else
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
+            }
+
+
         }
 
         #endregion
