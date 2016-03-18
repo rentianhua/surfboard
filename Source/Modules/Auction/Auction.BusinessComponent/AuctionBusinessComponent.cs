@@ -685,6 +685,7 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <returns></returns>
         public JResult AddPaymentRecord(AuctionPaymentRecordModel model)
         {
+            //更新竞价人的定金支付结果
             var result = DataAccess.AddPaymentRecord(model);
             return JResult._jResult(result);
         }

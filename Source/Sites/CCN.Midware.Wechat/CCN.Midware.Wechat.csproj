@@ -267,6 +267,16 @@
     <Folder Include="Controllers\" />
     <Folder Include="Models\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
+      <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
+      <Name>Auction.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.Interface\Auction.Interface.csproj">
+      <Project>{d2e9e2f4-1ebd-4d3a-8e23-cbb5edf5131a}</Project>
+      <Name>Auction.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using CCN.Modules.Auction.BusinessEntity;
+using CCN.Modules.Auction.Interface;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
@@ -264,11 +266,12 @@ namespace CCN.Midware.Wechat.Business
         /// <returns></returns>
         public static void HandlePayMessage(string xml)
         {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            string jsonText = JsonConvert.SerializeXmlNode(doc);
-            
+            var doc = XDocument.Parse(xml);
+            var model = new AuctionPaymentRecordModel();
+            model.FillEntityWithXml(doc);
 
+            var service = ServiceLocatorFactory.GetServiceLocator().GetService<IAuctionManagementService>();
+            var result = service.AddPaymentRecord(model);
         }
     }
 }

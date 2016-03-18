@@ -1,9 +1,13 @@
-﻿using CCN.Modules.Auction.BusinessComponent;
+﻿using System;
+using CCN.Modules.Auction.BusinessComponent;
 using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Cedar.Core.Logging;
 
 namespace CCN.Modules.Auction.BusinessService
 {
@@ -398,7 +402,23 @@ namespace CCN.Modules.Auction.BusinessService
         /// <returns></returns>
         public JResult AddPaymentRecord(AuctionPaymentRecordModel model)
         {
-            return BusinessComponent.AddPaymentRecord(model);
+            var result = BusinessComponent.AddPaymentRecord(model);
+
+            if (result.errcode == 0)
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录正常！" + DateTime.Now, TraceEventType.Information);
+            }
+            else
+            {
+                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
+            }
+
+            Task.Run(() =>
+            {
+                //调用nodejs 通知前端
+            });
+
+            return result;
         }
 
         #endregion
