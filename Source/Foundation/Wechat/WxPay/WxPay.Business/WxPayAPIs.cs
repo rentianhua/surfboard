@@ -2,6 +2,7 @@
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Foundation.WeChat.WxPay.Lib;
 using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json;
 
 namespace Cedar.Foundation.WeChat.WxPay.Business
 {
@@ -27,7 +28,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Business
         {
             NativePay nativePay = new NativePay();
             string url2 = nativePay.GetPayUrl(data);
-
+            
             //生成二维码
             var bitmap = BarCodeUtility.CreateBarcode(url2, 240, 240);
             

@@ -256,5 +256,19 @@ namespace CCN.Midware.Wechat.Business
                 return GetRequestEntity(service, doc);
             }
         }
+
+        /// <summary>
+        /// 处理微信支付结果信息
+        /// </summary>
+        /// <param name="xml">结果信息</param>
+        /// <returns></returns>
+        public static void HandlePayMessage(string xml)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            string jsonText = JsonConvert.SerializeXmlNode(doc);
+            
+
+        }
     }
 }
