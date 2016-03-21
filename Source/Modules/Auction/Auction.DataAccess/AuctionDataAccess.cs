@@ -35,11 +35,12 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_province as pr on b.provid=pr.innerid 
                                     left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid ";
             
-            string fields = "a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
+            string fields = @"a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime
+                ,c1.brandname as brand_name,a.no,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
 
             if (!string.IsNullOrWhiteSpace(query.userid))
             {
-                tableName += " left join (select count(1) as follow, auctionid from auction_follow where userid = '" + query.userid + "' group by auctionid ) e on e.auctionid = a.innerid";
+                tableName += " left join (select count(1) as follow, auctionid from auction_follow where isdelete=0 and userid = '" + query.userid + "' group by auctionid ) e on e.auctionid = a.innerid";
                 fields += " ,ifnull(e.follow,0) as follow ";
             }
 
@@ -235,7 +236,7 @@ namespace CCN.Modules.Auction.DataAccess
         public AuctionCarInfoViewModel GetAuctionViewById(string id)
         {
             const string sql =
-                @"select a.innerid, a.mobile,a.carid,a.no, ci.title, ci.pic_url, 
+                @"select a.innerid, a.mobile,a.carid,a.no, ci.title, ci.pic_url, a.address,
                 ci.mileage, ci.register_date, ci.buytime, ci.buyprice, 
                 a.lowestprice, ci.isproblem, ci.istain, ci.istransferfee,
                 ci.ckyear_date, ci.tlci_date, ci.audit_date, ci.remark, 
@@ -648,7 +649,7 @@ namespace CCN.Modules.Auction.DataAccess
                                        left join base_province as pr on c.provid=pr.innerid
                                        left join (select count(1) as pricecount,auctionid from auction_participant group by auctionid) as e on e.auctionid=a.auctionid";
             const string fields = @"a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,
-                                    a.orderno,b.no as auctionno,b.lowestprice,b.validtime, now() as currenttime,c.register_date,c.mileage,
+                                    a.orderno,b.no as auctionno,b.lowestprice,b.validtime, now() as currenttime,c.register_date,c.mileage,c.pic_url,
                                     c1.modelprice as price,c1.modelname as model_name,
                                     ct.cityname,pr.provname,e.pricecount";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
@@ -1348,10 +1349,11 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_carseries as c2 on b.series_id=c2.innerid 
                                     left join base_carmodel as c3 on b.model_id=c3.innerid 
                                     left join base_city as ct on b.cityid=ct.innerid
-                                    left join base_province as pr on b.provid=pr.innerid ";
-            const string fields = @"a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,
+                                    left join base_province as pr on b.provid=pr.innerid 
+                                    left join (select count(1) as pricecount,auctionid from auction_participant group by auctionid) as e on e.auctionid=a.innerid";
+            const string fields = @"a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,a.no,
                                 b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime,now() as currenttime,
-                                c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname";
+                                c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,e.pricecount";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " f.createdtime desc " : query.Order;
 
             var sqlWhere = new StringBuilder(" f.isdelete=0 and a.status>=2");
