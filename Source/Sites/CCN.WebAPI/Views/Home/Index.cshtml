@@ -37,20 +37,20 @@
     var d = [{ PageIndex: 1 }, { PageIndex: 2 }];
     var json = JSON.stringify(d);
 
-    $.ajax({
-        url: '/api/Activity/TestPay',
-        type: 'post',
-        datatype: 'json',
-        data: json,
-        contentType: 'application/json;charset=utf-8',
-        async: false,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
-        },
-        success: function (data) {
-            console.log(data);
-            var key = data.errmsg;            
-            $("body").html("<img src='http://7xlopw.com2.z0.glb.qiniucdn.com/" + key + "' />");
-        }
-    });
+    //$.ajax({
+    //    url: '/api/Activity/TestPay',
+    //    type: 'post',
+    //    datatype: 'json',
+    //    data: json,
+    //    contentType: 'application/json;charset=utf-8',
+    //    async: false,
+    //    beforeSend: function (xhr) {
+    //        xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
+    //    },
+    //    success: function (data) {
+    //        console.log(data);
+    //        var key = data.errmsg;            
+    //        $("body").html("<img src='http://7xlopw.com2.z0.glb.qiniucdn.com/" + key + "' />");
+    //    }
+    //});
 </script>
