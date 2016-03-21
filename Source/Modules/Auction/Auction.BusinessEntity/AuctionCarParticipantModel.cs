@@ -79,6 +79,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string orderno { get; set; }
 
         /// <summary>
+        /// 支付二维码
+        /// </summary>
+        public string qrcode { get; set; }
+
+        /// <summary>
         /// 初始化
         /// </summary>
         public AuctionCarParticipantModel()

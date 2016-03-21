@@ -286,6 +286,14 @@ namespace CCN.Modules.Auction.Interface
         /// <returns></returns>
         JResult AddPaymentRecord(AuctionPaymentRecordModel model);
 
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        JResult WeChatPayForAuction(string innerid, string orderno);
+
         #endregion
     }
 }

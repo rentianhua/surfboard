@@ -759,7 +759,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public AuctionCarParticipantViewModel GetAuctionParticipantByID(string innerid)
         {
-            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.recordlist,a.remark,
+            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.qrcode,a.amount,a.status,a.createrid,a.createdtime,a.recordlist,a.remark,
                         a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name from auction_participant as a
                                        left join auction_carinfo as b on b.innerid = a.auctionid
                                        left join car_info as c on c.innerid = b.carid
