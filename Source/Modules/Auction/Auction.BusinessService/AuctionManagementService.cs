@@ -26,7 +26,7 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         #region 拍卖车辆基本信息
-        
+
         /// <summary>
         /// 获取正在拍卖的车辆列表
         /// </summary>
@@ -128,7 +128,7 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         #endregion
-        
+
         #region 图片处理
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace CCN.Modules.Auction.BusinessService
         {
             return BusinessComponent.UpdateDeposit(model);
         }
-        
+
         /// <summary>
         /// 获取押金详情 info
         /// </summary>
@@ -416,6 +416,8 @@ namespace CCN.Modules.Auction.BusinessService
             Task.Run(() =>
             {
                 //调用nodejs 通知前端
+                var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?orderno=" + model.out_trade_no;
+                var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
             });
 
             return result;

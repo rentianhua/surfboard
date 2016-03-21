@@ -98,6 +98,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string auctionno { get; set; }
 
         /// <summary>
+        /// 车辆图片
+        /// </summary>
+        public string pic_url { get; set; }
+
+        /// <summary>
         /// 车型
         /// </summary>
         public string model_name { get; set; }

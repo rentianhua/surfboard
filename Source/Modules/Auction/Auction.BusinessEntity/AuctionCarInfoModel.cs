@@ -417,6 +417,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public int? count { get; set; }
 
         /// <summary>
+        /// 叫价次数
+        /// </summary>
+        public int? pricecount { get; set; }
+
+        /// <summary>
         /// 审核状态
         /// </summary>
         public int? auditstatus { get; set; }
