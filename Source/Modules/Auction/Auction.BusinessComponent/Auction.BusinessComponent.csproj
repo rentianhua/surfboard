@@ -35,6 +35,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Cedar.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.WxPay.Business">
+      <HintPath>..\..\..\..\Lib\Cedar.Foundation.WeChat.WxPay.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.WxPay.Lib">
+      <HintPath>..\..\..\..\Lib\Cedar.Foundation.WeChat.WxPay.Lib.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>

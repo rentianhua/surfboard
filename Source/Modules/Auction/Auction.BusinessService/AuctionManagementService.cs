@@ -423,6 +423,17 @@ namespace CCN.Modules.Auction.BusinessService
             return result;
         }
 
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult WeChatPayForAuction(string innerid, string orderno)
+        {
+            return BusinessComponent.WeChatPayForAuction(innerid, orderno);
+        }
+
         #endregion
     }
 }
