@@ -146,13 +146,14 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             }
 
             model.Status = 0;
+            model.Innerid = Guid.NewGuid().ToString();
             var result = DataAccess.AddRelationsApply(model);
             if (result > 0)
             {
                 return new JResult
                 {
                     errcode = 0,
-                    errmsg = "申请成功"
+                    errmsg = model.Innerid
                 };
             }
             return new JResult
@@ -184,7 +185,24 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = result > 0 ? "处理成功" : "处理失败"
             };
         }
+        
+        /// <summary>
+        /// 添加好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFriends(CustRelationsApplyModels model)
+        {
+            var applyResult = AddRelationsApply(model);
+            if (applyResult.errcode != 0)
+            {
+                return applyResult;
+            }
 
+            var handleResult = HandleRelationsApply(applyResult.errmsg.ToString(), 1);
+            return handleResult;
+        }
+        
         /// <summary>
         /// 删除好友的申请
         /// </summary>
@@ -254,6 +272,7 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = errmsg
             };
         }
+        
         #endregion
 
         #region 社交圈

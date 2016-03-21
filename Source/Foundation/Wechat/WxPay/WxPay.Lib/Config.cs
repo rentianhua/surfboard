@@ -50,6 +50,11 @@
         */
         public static int LOG_LEVENL = 0;
 
+        public WxPayConfig()
+        {
+            Init();
+        }
+
         /// <summary>
         /// 初始化七牛帐户、请求地址等信息，不应在客户端调用。
         /// </summary>

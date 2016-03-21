@@ -85,6 +85,16 @@ namespace CCN.Modules.CustRelations.BusinessService
         {
             return BusinessComponent.HandleRelationsApply(innerid, status);
         }
+        
+        /// <summary>
+        /// 添加好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFriends(CustRelationsApplyModels model)
+        {
+            return BusinessComponent.AddFriends(model);
+        }
 
         /// <summary>
         /// 删除好友的申请

@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using Cedar.Core.Logging;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Xml.Linq;
 using Senparc.Weixin.MP.Helpers;
 
@@ -259,6 +260,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <summary>
         /// 微信定金支付
         /// </summary>
+        /// <param name="innerid"></param>
         /// <param name="orderno"></param>
         /// <returns></returns>
         [HttpGet]
@@ -295,47 +297,29 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
-        /// 支付回调
+        /// 微信支付结果回调
         /// </summary>
-        [HttpGet]
-        [Route("WeChatPayForAuction")]
-        public void GetResult()
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("WxPayBack")]
+        public HttpResponseMessage WxPayBack()
         {
-            var a = @"<xml><appid><![CDATA[wx8237977d5ac3d164]]></appid>
-                        <attach><![CDATA[快拍立信看车费]]></attach>
-                        <bank_type><![CDATA[CFT]]></bank_type>
-                        <cash_fee><![CDATA[1]]></cash_fee>
-                        <fee_type><![CDATA[CNY]]></fee_type>
-                        <is_subscribe><![CDATA[Y]]></is_subscribe>
-                        <mch_id><![CDATA[1270879801]]></mch_id>
-                        <nonce_str><![CDATA[a6c6d5decae74ee0b484669491e48f6b]]></nonce_str>
-                        <openid><![CDATA[oRpPlwYU_dfedweCJwMgHlUaSbNA]]></openid>
-                        <out_trade_no><![CDATA[WXPAY20160318145827707]]></out_trade_no>
-                        <result_code><![CDATA[SUCCESS]]></result_code>
-                        <return_code><![CDATA[SUCCESS]]></return_code>
-                        <sign><![CDATA[A33680B7A3FA2525D147E3E52D21C067]]></sign>
-                        <time_end><![CDATA[20160318145921]]></time_end>
-                        <total_fee>1</total_fee>
-                        <trade_type><![CDATA[NATIVE]]></trade_type>
-                        <transaction_id><![CDATA[1009200583201603184079405726]]></transaction_id>
-                        </xml>";
-
-            var doc = XDocument.Parse(a);
-            var model = new AuctionPaymentRecordModel();
-            model.FillEntityWithXml(doc);
-            
-            //数据存入数据库
-            var result = _auctionservice.AddPaymentRecord(model);
-            if (result.errcode == 0)
+            var stream = Request.Content.ReadAsStringAsync().Result;
+            LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
+            try
             {
-                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录正常！" + DateTime.Now, TraceEventType.Information);
+                var doc = XDocument.Parse(stream);
+                var model = new AuctionPaymentRecordModel();
+                model.FillEntityWithXml(doc);
+                var result = _auctionservice.AddPaymentRecord(model);
+                return new HttpResponseMessage { Content = new StringContent("ok") };
             }
-            else
+            catch (Exception ex)
             {
-                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
-            }
-
-            //调用nodejs 通知前端
+                LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
+                return new HttpResponseMessage {Content = new StringContent($"ex:{ex.Message}")};
+            }            
         }
 
         #endregion

@@ -178,7 +178,7 @@ namespace CCN.Modules.CustRelations.DataAccess
         public int AddRelationsApply(CustRelationsApplyModels model)
         {
             int result;
-            const string sql = "insert into cust_relations_apply (innerid, fromid, toid, status, createdtime, modifiedtime, remark, sourceid) values (uuid(), @fromid, @toid, @status, @createdtime, @modifiedtime, @remark, @sourceid);";
+            const string sql = "insert into cust_relations_apply (innerid, fromid, toid, status, createdtime, modifiedtime, remark, sourceid) values (@innerid, @fromid, @toid, @status, @createdtime, @modifiedtime, @remark, @sourceid);";
             try
             {
                 result = Helper.Execute(sql, model);

@@ -4,8 +4,19 @@ using Cedar.Foundation.WeChat.WxPay.Lib;
 
 namespace Cedar.Foundation.WeChat.WxPay.Business
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class NativePay
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public NativePay()
+        {
+            WxPayConfig.Init();
+        }
+
         /**
         * 生成扫描支付模式一URL
         * @param productId 商品ID

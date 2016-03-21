@@ -57,6 +57,13 @@ namespace CCN.Modules.CustRelations.Interface
         JResult HandleRelationsApply(string innerid, int status);
 
         /// <summary>
+        /// 添加好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddFriends(CustRelationsApplyModels model);
+
+        /// <summary>
         /// 删除好友的申请
         /// </summary>
         /// <param name="innerid"></param>
