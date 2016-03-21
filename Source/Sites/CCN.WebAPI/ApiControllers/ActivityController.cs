@@ -146,8 +146,8 @@ namespace CCN.WebAPI.ApiControllers
                 GoodsTag = ""
             };
             
-            var qrcode = WxPayAPIs.GetNativePayQrCode(data);
-            return JResult._jResult(0, qrcode);
+            var jresult = WxPayAPIs.GetNativePayQrCode(data);
+            return jresult;
         }
         
         [AllowAnonymous]
