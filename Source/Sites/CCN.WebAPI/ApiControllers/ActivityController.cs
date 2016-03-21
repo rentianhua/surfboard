@@ -6,8 +6,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Xml.Linq;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
+using CCN.Modules.Auction.BusinessEntity;
 using Cedar.Core.IoC;
 using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.WxPay.Business;
@@ -15,6 +17,7 @@ using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Framework.Common.BaseClasses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Senparc.Weixin.MP.Helpers;
 
 namespace CCN.WebAPI.ApiControllers
 {
@@ -125,20 +128,6 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
-
-        /// <summary>
-        /// 投票
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("Test")]
-        public JResult Test([FromBody]List<QModel> model)
-        {
-            var m = HttpContext.Current.Request.Form;
-            var list =  model.ToList();
-            return null;
-        }
         
         [HttpPost]
         [Route("TestPay")]
@@ -161,22 +150,28 @@ namespace CCN.WebAPI.ApiControllers
             return JResult._jResult(0, qrcode);
         }
         
+        [AllowAnonymous]
         [HttpPost]
         [Route("TestPayBack")]
-        public void TestPayBack()
+        public HttpResponseMessage TestPayBack()
         {
             var stream = Request.Content.ReadAsStringAsync().Result;
-            LoggerFactories.CreateLogger().Write($"DataDispatcher: {stream}", TraceEventType.Information);
-            
-        }
-    }
+            LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
 
-    [Serializable]
-    public class QModel
-    {
-        /// <summary>
-        ///     页索引
-        /// </summary>
-        public int PageIndex { get; set; }
-    }
+            try
+            {
+                var doc = XDocument.Parse(stream);
+                var model = new AuctionPaymentRecordModel();
+                model.FillEntityWithXml(doc);
+                //var result = _auctionservice.AddPaymentRecord(model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
+            }
+
+            //调用nodejs 通知前端
+            return new HttpResponseMessage { Content = new StringContent("") };
+        }
+    }    
 }

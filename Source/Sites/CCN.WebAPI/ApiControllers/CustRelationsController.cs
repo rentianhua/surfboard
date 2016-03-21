@@ -95,6 +95,18 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 添加好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddFriends")]
+        [HttpPost]
+        public JResult AddFriends([FromBody]CustRelationsApplyModels model)
+        {
+            return _service.AddFriends(model);
+        }
+
+        /// <summary>
         /// 删除好友的申请
         /// </summary>
         /// <param name="innerid"></param>
