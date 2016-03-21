@@ -267,33 +267,7 @@ namespace CCN.WebAPI.ApiControllers
         [Route("WeChatPayForAuction")]
         public JResult WeChatPayForAuction(string innerid, string orderno)
         {
-            var ran = new Random();
-            var modelname = string.Empty;
-            //获取定金金额
-            var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
-
-            var data = new NativePayData
-            {
-                Body = "快拍立信拍车定金",//商品描述
-                Attach = "【kply】",//附加数据
-                TotalFee = deposit,//总金额
-                ProductId = orderno,//商品ID
-                OutTradeNo = orderno,//订单编号
-                GoodsTag = ""
-            };
-            //获取竞拍详情
-            var auctionParticipant = _auctionservice.GetAuctionParticipantByID(innerid);
-            if (auctionParticipant.errcode == 0)
-            {
-                if (auctionParticipant.errmsg != null)
-                {
-                    var auctionParticipantModel = (AuctionCarParticipantViewModel)auctionParticipant.errmsg;
-                    modelname = auctionParticipantModel.model_name;
-                }
-            }
-            var qrcode = WxPayAPIs.GetNativePayQrCode(data);
-            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
-            return JResult._jResult(0, result);
+            return _auctionservice.WeChatPayForAuction( innerid,  orderno);
         }
 
         /// <summary>
@@ -318,8 +292,8 @@ namespace CCN.WebAPI.ApiControllers
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage {Content = new StringContent($"ex:{ex.Message}")};
-            }            
+                return new HttpResponseMessage { Content = new StringContent($"ex:{ex.Message}") };
+            }
         }
 
         #endregion

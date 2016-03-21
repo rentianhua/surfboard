@@ -9,6 +9,8 @@ using CCN.Modules.Auction.DataAccess;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
+using Cedar.Foundation.WeChat.WxPay.Business;
 
 namespace CCN.Modules.Auction.BusinessComponent
 {
@@ -290,7 +292,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.Modifierid = "";
             model.Modifiedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
-            model.orderno = "P"+ GetOrderNumber();
+            model.orderno = "P" + GetOrderNumber();
             var result = DataAccess.AddParticipant(model);
             return JResult._jResult(result);
         }
@@ -522,7 +524,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                     {
                         foreach (var detail in item.auctioncarinspectiondetail)
                         {
-                            var listFindings = DataAccess.GetAuctionInspectionResult(id,detail.innerid);
+                            var listFindings = DataAccess.GetAuctionInspectionResult(id, detail.innerid);
                             if (listFindings != null)
                             {
                                 //认证项内容
@@ -535,7 +537,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 }
             }
 
-            var result = listHtML.Where(p=>p.auctioncarinspectiondetail!=null).OrderBy(s=>s.sort).ToList();
+            var result = listHtML.Where(p => p.auctioncarinspectiondetail != null).OrderBy(s => s.sort).ToList();
             return JResult._jResult(result);
         }
 
@@ -688,6 +690,57 @@ namespace CCN.Modules.Auction.BusinessComponent
             //更新竞价人的定金支付结果
             var result = DataAccess.AddPaymentRecord(model);
             return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult WeChatPayForAuction(string innerid, string orderno)
+        {
+            var ran = new Random();
+            var modelname = string.Empty;
+            var qrcode = string.Empty;
+            //获取定金金额
+            var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信拍车定金",//商品描述
+                Attach = "【kply】",//附加数据
+                TotalFee = deposit,//总金额
+                ProductId = orderno,//商品ID
+                OutTradeNo = orderno,//订单编号
+                GoodsTag = ""
+            };
+            //获取竞拍详情
+            var auctionParticipant = DataAccess.GetAuctionParticipantByID(innerid);
+            if (auctionParticipant != null)
+            {
+                var auctionParticipantModel = (AuctionCarParticipantViewModel)auctionParticipant;
+                modelname = auctionParticipantModel.model_name;
+            }
+            var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
+            if (qrcodeResult.errcode == 0)
+            {
+                qrcode = qrcodeResult.errmsg.ToString();
+                AuctionCarParticipantModel model = new AuctionCarParticipantModel();
+                model.Innerid = innerid;
+                model.qrcode = qrcode;
+                DataAccess.UpdateParticipant(model);
+            }
+            else//从数据库中获取二维码
+            {
+                var participantResult = DataAccess.GetAuctionParticipantByID(innerid);
+                if (participantResult != null)
+                {
+                    qrcode = participantResult.qrcode;
+                }
+            }
+            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
+            return JResult._jResult(0, result);
         }
 
         #endregion
