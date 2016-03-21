@@ -136,6 +136,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 出价次数
         /// </summary>
         public int? pricecount { get; set; }
+
+        /// <summary>
+        /// 拍卖结束时间
+        /// </summary>
+        public DateTime? validtime { get; set; }
+
+        /// <summary>
+        /// 当前服务器时间
+        /// </summary>
+        public DateTime? currenttime { get; set; }
     }
 
     /// <summary>
