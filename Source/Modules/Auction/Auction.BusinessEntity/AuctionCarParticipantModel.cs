@@ -98,6 +98,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string auctionno { get; set; }
 
         /// <summary>
+        /// 车辆图片
+        /// </summary>
+        public string pic_url { get; set; }
+
+        /// <summary>
         /// 车型
         /// </summary>
         public string model_name { get; set; }
@@ -136,6 +141,16 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 出价次数
         /// </summary>
         public int? pricecount { get; set; }
+
+        /// <summary>
+        /// 拍卖结束时间
+        /// </summary>
+        public DateTime? validtime { get; set; }
+
+        /// <summary>
+        /// 当前服务器时间
+        /// </summary>
+        public DateTime? currenttime { get; set; }
     }
 
     /// <summary>

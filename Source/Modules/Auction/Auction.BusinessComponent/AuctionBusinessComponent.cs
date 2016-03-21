@@ -290,7 +290,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.Modifierid = "";
             model.Modifiedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
-            model.orderno = "PAY"+ GetOrderNumber();
+            model.orderno = "P"+ GetOrderNumber();
             var result = DataAccess.AddParticipant(model);
             return JResult._jResult(result);
         }
