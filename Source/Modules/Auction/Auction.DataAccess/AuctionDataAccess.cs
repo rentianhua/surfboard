@@ -34,7 +34,7 @@ namespace CCN.Modules.Auction.DataAccess
                                     left join base_city as ct on b.cityid=ct.innerid
                                     left join base_province as pr on b.provid=pr.innerid 
                                     left join (select count(1) as count,auctionid from auction_participant group by auctionid) d on d.auctionid=a.innerid ";
-            
+
             string fields = @"a.innerid,a.mobile,a.lowestprice,a.status as auditstatus,b.pic_url,b.status,b.price,b.mileage,b.register_date,a.validtime,b.createdtime
                 ,c1.brandname as brand_name,a.no,c2.seriesname as series_name,c3.modelname as model_name,c3.modelprice,ct.cityname,pr.provname,d.count";
 
@@ -279,7 +279,7 @@ namespace CCN.Modules.Auction.DataAccess
             const string sql = @"INSERT INTO `auction_carinfo`
                                 (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile)
                                 VALUES
-                                (uuid(), @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile);";
+                                (@Innerid, @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile);";
 
             using (var conn = Helper.GetConnection())
             {

@@ -95,15 +95,13 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <returns></returns>
         public JResult AddAuctionCar(AuctionCarInfoModel model)
         {
-
+            //判断拍卖开始/结束时间是否在合理范围内
+            if (model.publishedtime >= model.validtime || model.publishedtime <= DateTime.Now)
+            {
+                return JResult._jResult(401, "请输入合理的拍卖时间");
+            }
             model.createrid = ApplicationContext.Current.UserId;
             model.createdtime = DateTime.Now;
-            //model.modifierid = "";
-            //model.modifiedtime = null;
-            //model.publisherid = "";
-            //model.publishedtime = null;
-            //model.dealerid = "";
-            //model.deletedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
             model.no = "A" + GetOrderNumber();
             //model.status = 1;
@@ -131,6 +129,11 @@ namespace CCN.Modules.Auction.BusinessComponent
             if (string.IsNullOrWhiteSpace(model?.Innerid))
             {
                 return JResult._jResult(401, "参数不完整");
+            }
+            //判断拍卖开始/结束时间是否在合理范围内
+            if (model.publishedtime >= model.validtime || model.publishedtime <= DateTime.Now)
+            {
+                return JResult._jResult(402, "请输入合理的拍卖时间");
             }
 
             model.createrid = "";
