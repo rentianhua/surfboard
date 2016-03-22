@@ -531,8 +531,16 @@
             }
 
             var status = obj.status;
-            if(status==2)//待审核
+
+            $("#save").addClass("hidden");
+            $("#startaudit").addClass("hidden");
+            $("#access").addClass("hidden");
+            $("#accessnot").addClass("hidden");
+            $("#online").addClass("hidden");
+
+            if (status == 2)//待审核 
             {
+                $("#save").removeClass("hidden");
                 $("#startaudit").removeClass("hidden");
                 $("#access").removeClass("hidden");
                 $("#accessnot").removeClass("hidden");
@@ -541,6 +549,9 @@
                 $("#save").removeClass("hidden");
                 $("#access").removeClass("hidden");
                 $("#accessnot").removeClass("hidden");
+            }
+            else if (status == 5) {
+                $("#online").removeClass("hidden");
             }
             else if(status==8)
             {
@@ -568,7 +579,7 @@
              
             var picturedes = JSON.parse(obj.picturedes)
             //证件照片类型
-            var pics = ["行驶证正本正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单上部", "交强险上部"];
+            var pics = ["行驶证正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单", "交强险"];
             $.each(pics, function (k, v) {
                 var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 $('#imgss').append(
@@ -711,7 +722,7 @@
 
         json.innerid = "@ViewBag.id";
         json.status = status;
-
+        console.log(status);
         $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
             if (result.errcode !== 0) {
                 alert("更新失败");
@@ -1186,6 +1197,8 @@
                                     <input id="access" type="button" class="btn btn-palegreen shiny hidden" value="通过" onclick="ChangeStatus(5);" />
                                     <input id="accessnot" type="button" class="btn btn-palegreen shiny hidden" value="不通过" onclick="ChangeStatus(4);" />
                                     <input id="deal" type="button" class="btn btn-palegreen shiny hidden" value="成交" onclick="ChangeStatus(7);" />
+                                    <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
+                                    <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" />
                                 </div>
                             </div>

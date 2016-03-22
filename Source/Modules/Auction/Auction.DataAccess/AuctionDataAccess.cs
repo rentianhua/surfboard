@@ -83,10 +83,6 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlWhere.Append($" and a.publishedtime='{query.publishedtime}'");
             }
-            else
-            {
-                sqlWhere.Append($" and a.publishedtime<='{DateTime.Now}'");
-            }
 
             //结束时间
             if (query.validtime.HasValue)
@@ -283,7 +279,7 @@ namespace CCN.Modules.Auction.DataAccess
             const string sql = @"INSERT INTO `auction_carinfo`
                                 (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile)
                                 VALUES
-                                (uuid(), @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,sellermobile);";
+                                (uuid(), @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile);";
 
             using (var conn = Helper.GetConnection())
             {
