@@ -41,15 +41,14 @@
             else if (obj.status == 5) {
                 $("#refuse").addClass("hidden");
             }
-            
             $("#lblno").html(obj.auctionno);
             $("#lblcurrentstatus").html(ChangeStatusName(obj.status));
             $("#lbllowprice").html(obj.lowestprice);
             $("#lbldealprice").html(obj.Amount);
             $("#lblmodelname").html(obj.model_name);
-            $("#lblauctiontime").html(Dateformat(obj.createdtime, "yyyy-MM-dd HH:mm:ss"));
-            $("#lblusername").val(obj.username);
-            $("#lblmobile").val(obj.mobile);
+            $("#lblauctiontime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblusername").html(obj.username);
+            $("#lblmobile").html(obj.Mobile);
             $("#caresc").val(obj.Remark)
             $("#record").val(obj.recordlist);
             //recordlist
