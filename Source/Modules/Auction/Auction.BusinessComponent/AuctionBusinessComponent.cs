@@ -296,6 +296,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.Modifiedtime = null;
             model.Innerid = Guid.NewGuid().ToString();
             model.orderno = "P" + GetOrderNumber();
+            model.status = 1;
             var result = DataAccess.AddParticipant(model);
             return JResult._jResult(result);
         }

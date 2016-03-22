@@ -43,7 +43,7 @@
             str += "<td>" + (val.Amount == null ? "" : val.Amount) + "</td>";
             str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + (val.username == null ? "" : val.username.sub(400)) + "</td>";
-            str += "<td>" + (val.username == null ? "" : val.username.sub(400)) + "</td>";
+            str += "<td>" + (val.Mobile == null ? "" : val.Mobile.sub(400)) + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
 
             var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordEdit?id=" + val.Innerid + "&auctionid=" + auctionid + "');\" href='javascript:;'>查看详情</a> ";
