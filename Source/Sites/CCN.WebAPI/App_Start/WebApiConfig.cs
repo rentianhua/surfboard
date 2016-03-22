@@ -18,6 +18,7 @@ namespace CCN.WebAPI
 
             //add ApplicationContextFilterAttribute
             config.Filters.Add(new ApplicationContextFilterAttribute());
+            config.Filters.Add(new ApiExceptionFilterAttribute());
             //config.Filters.Add(new AuthorizeFilterAttribute());
 
             // Web API routes

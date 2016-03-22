@@ -224,6 +224,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\ApiExceptionFilterAttribute.cs" />
     <Compile Include="Common\AuthorizeFilterAttribute.cs" />
     <Compile Include="Common\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

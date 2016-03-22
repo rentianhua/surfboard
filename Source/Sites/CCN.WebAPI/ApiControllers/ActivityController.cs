@@ -157,7 +157,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             var stream = Request.Content.ReadAsStringAsync().Result;
             LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
-
+            
             try
             {
                 var doc = XDocument.Parse(stream);
