@@ -511,7 +511,7 @@
         if (id === "") {
             return;
         }
-        
+
         $('#imgss').empty();
         $('#imgfindings').empty();
         $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
@@ -537,8 +537,9 @@
             $("#access").addClass("hidden");
             $("#accessnot").addClass("hidden");
             $("#online").addClass("hidden");
+            $("#offline").addClass("hidden");
 
-            if (status == 2)//待审核 
+            if (status == 2)//待审核
             {
                 $("#save").removeClass("hidden");
                 $("#startaudit").removeClass("hidden");
@@ -553,11 +554,13 @@
             else if (status == 5) {
                 $("#online").removeClass("hidden");
             }
-            else if(status==8)
-            {
+            else if (status == 6) {
+                $("#offline").removeClass("hidden");
+            }
+            else if (status == 8) {
                 $("#deal").removeClass("hidden");
             }
-            $("#lblactionno").html(obj.no);//拍品编号 
+            $("#lblactionno").html(obj.no);//拍品编号
             $("#lblauctionstatus").html(GetStatusName(obj.status));//卖家
             $("#txtsellername").val(sellname);//卖家
             $("#txtsellermobile").val(sellermobile);//卖家联系方式
@@ -570,13 +573,13 @@
             $("#violationdes").val(obj.violationdes);//违章说明
             $("#supplementdes").val(obj.supplementdes);//补充说明
             $("#configuredes").val(obj.configuredes);//其他配置
-            $("#txtstartdate").val(Dateformat(obj.publishedtime, "yyyy-MM-dd HH:mm:ss"));//开始时间  
-            $("#txtenddate").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));//结束时间 
+            $("#txtstartdate").val(Dateformat(obj.publishedtime, "yyyy-MM-dd HH:mm:ss"));//开始时间
+            $("#txtenddate").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));//结束时间
             $("#lowestprice").val(obj.lowestprice);//底价
             $("#dealprice").val(obj.dealprice);//成交价
             $("#auditremark").val(obj.auditremark);//审核备注
-            
-             
+
+
             var picturedes = JSON.parse(obj.picturedes)
             //证件照片类型
             var pics = ["行驶证正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单", "交强险"];
@@ -612,8 +615,7 @@
             initUploadM();
 
             //认证图片 imgfindings
-            if (JSON.parse(obj.evaluationpics)!=null)
-            {
+            if (JSON.parse(obj.evaluationpics) != null) {
                 $.each(JSON.parse(obj.evaluationpics), function (k, v) {
                     $('#imgfindings').append(
                             '<div data-val="' + v.title + '" class="imgPreview imgForCar"  data-id="">\
@@ -693,7 +695,7 @@
         json.publishedtime = $("#txtstartdate").val();
         json.validtime = $("#txtenddate").val();
         json.auditremark = $("#auditremark").val();
-         
+
         //json.status = status;
         //获取图片信息
         var imgmessage = [];
@@ -716,8 +718,7 @@
         });
     }
 
-    function ChangeStatus(status)
-    {
+    function ChangeStatus(status) {
         var json = {};
 
         json.innerid = "@ViewBag.id";
@@ -733,8 +734,7 @@
         });
     }
 
-    function GetStatusName(status)
-    {
+    function GetStatusName(status) {
         switch (status) {
             case 0:
                 return "已删除";
@@ -758,6 +758,12 @@
 
         }
         return "";
+    }
+
+    //返回
+    function GoBack()
+    {
+        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
     }
 
 </script>
@@ -1114,7 +1120,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @*低价 成交价*@  
+                            @*低价 成交价*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -1133,7 +1139,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @*开始时间  结束时间*@ 
+                            @*开始时间  结束时间*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
@@ -1198,8 +1204,8 @@
                                     <input id="accessnot" type="button" class="btn btn-palegreen shiny hidden" value="不通过" onclick="ChangeStatus(4);" />
                                     <input id="deal" type="button" class="btn btn-palegreen shiny hidden" value="成交" onclick="ChangeStatus(7);" />
                                     <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
-                                    <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
-                                    <input type="button" class="btn btn-primary shiny" value="返回" />
+                                    <input id="offline" type="button" class="btn btn-palegreen shiny hidden" value="下线" onclick="ChangeStatus(8);" />
+                                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
                                 </div>
                             </div>
 
