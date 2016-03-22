@@ -111,7 +111,7 @@ namespace CCN.Modules.Auction.DataAccess
             //上牌时间
             if (query.register_date.HasValue)
             {
-                sqlWhere.Append($" and b.register_date='{query.register_date}'");
+                sqlWhere.Append($" and YEAR(b.register_date)=YEAR('{query.register_date}')");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -704,7 +704,7 @@ namespace CCN.Modules.Auction.DataAccess
             //上牌时间
             if (query.register_date.HasValue)
             {
-                sqlWhere.Append($" and c.register_date='{query.register_date}'");
+                sqlWhere.Append($" and YEAR(c.register_date)=YEAR('{query.register_date}')");
             }
             //城市
             if (query.cityid != null)
@@ -1376,7 +1376,7 @@ namespace CCN.Modules.Auction.DataAccess
             //上牌时间
             if (query.register_date.HasValue)
             {
-                sqlWhere.Append($" and b.register_date='{query.register_date}'");
+                sqlWhere.Append($" and YEAR(b.register_date)=YEAR('{query.register_date}')");
             }
             //城市
             if (query.cityid != null)
