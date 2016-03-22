@@ -40,8 +40,9 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             {
                 return new BasePageList<CustViewModel>();
             }
+
             //手机号小于4位不给搜索
-            if (string.IsNullOrWhiteSpace(query.Mobile) || query.Mobile.Trim().Length < 4)
+            if (!string.IsNullOrWhiteSpace(query.Mobile) && query.Mobile.Trim().Length < 4)
             {
                 return new BasePageList<CustViewModel>();
             }
