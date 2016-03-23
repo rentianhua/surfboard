@@ -720,9 +720,9 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public IEnumerable<AuctionCarParticipantViewModel> GetAllAuctionParticipantList(AuctionCarParticipantQueryModel query)
         {
-            var sql = new StringBuilder("select * from auction_participant as a order by createdtime desc;");
+            var sql = new StringBuilder("select * from auction_participant as a ");
 
-            var sqlWhere = new StringBuilder("1=1");
+            var sqlWhere = new StringBuilder(" where 1=1");
             if (query != null)
             {
                 if (!string.IsNullOrWhiteSpace(query.Auctionid))
@@ -735,7 +735,8 @@ namespace CCN.Modules.Auction.DataAccess
                     sqlWhere.Append($" and a.mobile='{query.Mobile}'");
                 }
             }
-
+            sql.Append(sqlWhere.ToString());
+            sql.Append(" order by createdtime desc; ");
             try
             {
                 var list = Helper.Query<AuctionCarParticipantViewModel>(sql.ToString());
@@ -801,7 +802,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int GetPriceCount(string auctionid)
         {
-            var list = GetAllAuctionParticipantList(new AuctionCarParticipantQueryModel() { Amount = auctionid });
+            var list = GetAllAuctionParticipantList(new AuctionCarParticipantQueryModel() { Auctionid = auctionid });
             if (list != null)
             {
                 return list.Count();
