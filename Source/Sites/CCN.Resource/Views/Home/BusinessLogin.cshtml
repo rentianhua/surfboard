@@ -139,19 +139,14 @@ Purchase: http://wrapbootstrap.com
                             url: actionUrl,
                             data: customerData,
                             success: function (result) {
-                                if (result.code == 1) {
+                                var myDate = new Date();
+                                if ($("#ischecked").prop("checked") == true) {
                                     var myDate = new Date();
-                                    if ($("#ischecked").prop("checked") == true) {
-                                        var myDate = new Date();
-                                        localStorage.setItem("businessname", $("#LoginName").val());
-                                        localStorage.setItem("businesspwd", $("#LoginPwd").val());
-                                        localStorage.setItem("businesstime", myDate.getTime());
-                                    }
-                                    location.href = "@Url.Action("BusinessIndex", "Home")";
+                                    localStorage.setItem("businessname", $("#LoginName").val());
+                                    localStorage.setItem("businesspwd", $("#LoginPwd").val());
+                                    localStorage.setItem("businesstime", myDate.getTime());
                                 }
-                                else {
-                                    location.href = "@Url.Action("BusinessLogin", "Home")";
-                                }
+                                location.href = "@Url.Action("BusinessIndex", "Home")";
                             }
                         });
                     }

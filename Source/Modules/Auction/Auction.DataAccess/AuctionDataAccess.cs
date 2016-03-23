@@ -774,6 +774,27 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         /// <summary>
+        /// 根据订单号获取出价详情
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public AuctionCarParticipantModel GetAuctionParticipantByOrderNo(string orderno)
+        {
+            var sql = new StringBuilder(@"select a.* from auction_participant as a where a.orderno=@orderno;");
+
+            try
+            {
+                var model = Helper.Query<AuctionCarParticipantModel>(sql.ToString(), new { orderno }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("根据订单号获取竞拍记录：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 根据拍卖ID 获取竞拍记录
         /// </summary>
         /// <param name="auctionid"></param>
@@ -839,6 +860,29 @@ namespace CCN.Modules.Auction.DataAccess
             }
             return result;
         }
+
+        /// <summary>
+        /// 若已成交更改其他竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateOtherParticipant(AuctionCarParticipantModel model)
+        {
+            var sql = new StringBuilder("update `auction_participant` set  status=7 ");
+            sql.Append(" where auctionid=@auctionid and innerid != @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                LoggerFactories.CreateLogger().Write("更新其他竞价信息异常：", TraceEventType.Information, ex);
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// 中标拍卖竞拍人员
