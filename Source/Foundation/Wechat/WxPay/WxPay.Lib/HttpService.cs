@@ -54,6 +54,8 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
 
                 request.Method = "POST";
                 request.Timeout = timeout * 1000;
+                request.Accept = "*/*";
+                request.UserAgent = "Mozilla-Firefox-Spider(Wenanry)";
 
                 //设置代理服务器
                 //WebProxy proxy = new WebProxy();                          //定义一个网关对象
@@ -78,6 +80,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
                 request.ServicePoint.Expect100Continue = false;
                 HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
                 request.CachePolicy = noCachePolicy;
+
                 //往服务器写入数据
                 reqStream = request.GetRequestStream();
                 reqStream.Write(data, 0, data.Length);

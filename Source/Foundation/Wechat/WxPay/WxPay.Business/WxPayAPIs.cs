@@ -24,9 +24,22 @@ namespace Cedar.Foundation.WeChat.WxPay.Business
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static JResult GetNativePayQrCode(NativePayData data)
+        public static JResult GetNativePayQrCode(NativePayData data2)
         {
             var nativePay = new NativePay();
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信拍车定金",//商品描述
+                Attach = "testAttach",//附加数据
+                TotalFee = 1,//总金额
+                ProductId = "prodid",//商品ID
+                OutTradeNo = WxPayApi.GenerateOutTradeNo(),//订单编号
+                GoodsTag = "testgood"
+            };
+
+
+
             var result = nativePay.GetPayUrl(data);
 
             if (result.errcode != 0)

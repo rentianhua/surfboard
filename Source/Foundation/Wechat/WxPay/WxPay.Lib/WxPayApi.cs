@@ -401,7 +401,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
             WxPayData result = new WxPayData();
             result.FromXml(response);
 
-            ReportCostTime(url, timeCost, result);//测速上报
+            //ReportCostTime(url, timeCost, result);//测速上报
 
             return result;
         }
