@@ -310,7 +310,7 @@ namespace CCN.Modules.Auction.BusinessComponent
         {
             var result = DataAccess.UpdateParticipant(model);
             //更新成功并且状态为成交（5）时，更新其他付款状态，并且更新车辆拍卖状态,更新成“成交”
-            if (result == 1)
+            if (result == 1 && model.status == 5)
             {
                 var auctioncar = new AuctionCarInfoModel();
                 auctioncar.status = 7;
