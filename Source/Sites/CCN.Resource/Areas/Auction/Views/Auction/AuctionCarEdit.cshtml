@@ -580,7 +580,10 @@
             $("#auditremark").val(obj.auditremark);//审核备注
 
 
-            var picturedes = JSON.parse(obj.picturedes)
+            var picturedes = JSON.parse(obj.picturedes);
+            if ((typeof picturedes) == "string") {
+                picturedes = JSON.parse(picturedes);
+            }
             //证件照片类型
             var pics = ["行驶证正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单", "交强险"];
             $.each(pics, function (k, v) {
@@ -616,7 +619,11 @@
 
             //认证图片 imgfindings
             if (JSON.parse(obj.evaluationpics) != null) {
-                $.each(JSON.parse(obj.evaluationpics), function (k, v) {
+                var evaluationpics = obj.evaluationpics;
+                if ((typeof evaluationpics) == "string") {
+                    evaluationpics = JSON.parse(evaluationpics);
+                }
+                $.each(evaluationpics, function (k, v) {
                     $('#imgfindings').append(
                             '<div data-val="' + v.title + '" class="imgPreview imgForCar"  data-id="">\
             			            <img data-type="img" src="' + getImgUrl(v.imgsrc) + '"  class="loading" width="550px">\
@@ -1100,7 +1107,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>其他配置</label>
+                                        <label for="" class="col-sm-1 control-label no-padding-right">其他配置</label>
                                         <div class="col-sm-11">
                                             <textarea id="configuredes" maxlength="200" rows="5" cols="150" placeholder="其他配置"></textarea>
                                         </div>
