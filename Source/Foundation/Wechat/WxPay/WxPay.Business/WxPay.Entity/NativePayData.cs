@@ -64,7 +64,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity
         {
             OutTradeNo = WxPayApi.GenerateOutTradeNo();
             TimeStart = DateTime.Now.ToString("yyyyMMddHHmmss");
-            TimeExpire = DateTime.Now.AddMinutes(5).ToString("yyyyMMddHHmmss");
+            TimeExpire = DateTime.Now.AddMinutes(10).ToString("yyyyMMddHHmmss");
         }
     }
 }

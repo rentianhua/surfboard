@@ -393,9 +393,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
             var start = DateTime.Now;
 
             LoggerFactories.CreateLogger().Write($"UnfiedOrder request :{xml}", TraceEventType.Information);
-            //Log.Debug("WxPayApi", "UnfiedOrder request : " + xml);
             string response = HttpService.Post(xml, url, false, timeOut);
-            //Log.Debug("WxPayApi", "UnfiedOrder response : " + response);
 
             var end = DateTime.Now;
             int timeCost = (int)((end - start).TotalMilliseconds);

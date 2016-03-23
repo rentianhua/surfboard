@@ -124,15 +124,15 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 };
             }
 
-            var number = DataAccess.GetApplyNumber(model.Fromid);
-            if (number >= 15)
-            {
-                return new JResult
-                {
-                    errcode = 202,
-                    errmsg = "今天添加好友达到上限"
-                };
-            }
+            //var number = DataAccess.GetApplyNumber(model.Fromid);
+            //if (number >= 15)
+            //{
+            //    return new JResult
+            //    {
+            //        errcode = 202,
+            //        errmsg = "今天添加好友达到上限"
+            //    };
+            //}
 
             var cRelationsApply = DataAccess.CheckRelationsApply(model.Fromid, model.Toid);
             if (cRelationsApply > 0)

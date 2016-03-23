@@ -261,13 +261,12 @@ namespace CCN.WebAPI.ApiControllers
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
-        /// <param name="orderno"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("WeChatPayForAuction")]
-        public JResult WeChatPayForAuction(string innerid, string orderno)
+        public JResult WeChatPayForAuction(string innerid)
         {
-            return _auctionservice.WeChatPayForAuction( innerid,  orderno);
+            return _auctionservice.WeChatPayForAuction(innerid);
         }
 
         /// <summary>

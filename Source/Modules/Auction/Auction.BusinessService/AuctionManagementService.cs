@@ -418,6 +418,7 @@ namespace CCN.Modules.Auction.BusinessService
                 //调用nodejs 通知前端
                 var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?orderno=" + model.out_trade_no;
                 var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
+                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
             });
 
             return result;
@@ -427,11 +428,10 @@ namespace CCN.Modules.Auction.BusinessService
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
-        /// <param name="orderno"></param>
         /// <returns></returns>
-        public JResult WeChatPayForAuction(string innerid, string orderno)
+        public JResult WeChatPayForAuction(string innerid)
         {
-            return BusinessComponent.WeChatPayForAuction(innerid, orderno);
+            return BusinessComponent.WeChatPayForAuction(innerid);
         }
 
         #endregion

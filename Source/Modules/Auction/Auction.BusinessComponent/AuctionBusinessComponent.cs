@@ -737,11 +737,16 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <param name="innerid"></param>
         /// <param name="orderno"></param>
         /// <returns></returns>
-        public JResult WeChatPayForAuction(string innerid, string orderno)
+        public JResult WeChatPayForAuction(string innerid)
         {
-            var ran = new Random();
-            var modelname = string.Empty;
-            var qrcode = string.Empty;
+            var perModel = DataAccess.GetAuctionParticipantByID(innerid);
+            if (string.IsNullOrWhiteSpace(perModel?.orderno))
+            {
+                return JResult._jResult(401, "订单不存在");
+            }
+
+            var modelname = perModel.model_name;
+            
             //获取定金金额
             var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
 
@@ -750,33 +755,26 @@ namespace CCN.Modules.Auction.BusinessComponent
                 Body = "快拍立信拍车定金",//商品描述
                 Attach = "【kply】",//附加数据
                 TotalFee = deposit,//总金额
-                ProductId = orderno,//商品ID
-                OutTradeNo = orderno,//订单编号
+                ProductId = perModel.orderno,//商品ID
+                OutTradeNo = perModel.orderno,//订单编号
                 GoodsTag = ""
             };
-            //获取竞拍详情
-            var auctionParticipant = DataAccess.GetAuctionParticipantByID(innerid);
-            if (auctionParticipant != null)
-            {
-                var auctionParticipantModel = (AuctionCarParticipantViewModel)auctionParticipant;
-                modelname = auctionParticipantModel.model_name;
-            }
+
+            string qrcode;
             var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
             if (qrcodeResult.errcode == 0)
             {
                 qrcode = qrcodeResult.errmsg.ToString();
-                AuctionCarParticipantModel model = new AuctionCarParticipantModel();
-                model.Innerid = innerid;
-                model.qrcode = qrcode;
+                var model = new AuctionCarParticipantModel
+                {
+                    Innerid = innerid,
+                    qrcode = qrcode
+                };
                 DataAccess.UpdateParticipant(model);
             }
-            else//从数据库中获取二维码
+            else//使用原来qrcode
             {
-                var participantResult = DataAccess.GetAuctionParticipantByID(innerid);
-                if (participantResult != null)
-                {
-                    qrcode = participantResult.qrcode;
-                }
+                qrcode = perModel.qrcode;
             }
             var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
             return JResult._jResult(0, result);

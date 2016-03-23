@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Web;
 using System.Net;
 using System.IO;
+using System.Net.Cache;
 using System.Text;
 using System.Net.Security;    
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.WxPay.Lib;
 
 namespace Cedar.Foundation.WeChat.WxPay.Lib
@@ -70,12 +73,16 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
                     request.ClientCertificates.Add(cert);
                     //Log.Debug("WxPayApi", "PostXml used cert");
                 }
+                LoggerFactories.CreateLogger().Write("WxPay post before ："+ xml, TraceEventType.Error);
 
+                request.ServicePoint.Expect100Continue = false;
+                HttpRequestCachePolicy noCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
+                request.CachePolicy = noCachePolicy;
                 //往服务器写入数据
                 reqStream = request.GetRequestStream();
                 reqStream.Write(data, 0, data.Length);
                 reqStream.Close();
-
+                LoggerFactories.CreateLogger().Write("WxPay post alfter ：" + result, TraceEventType.Error);
                 //获取服务端返回
                 response = (HttpWebResponse)request.GetResponse();
 
@@ -86,10 +93,12 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
             }
             catch (System.Threading.ThreadAbortException e)
             {
+                LoggerFactories.CreateLogger().Write("WxPay post ThreadAbortException ：" + e.Message, TraceEventType.Error);
                 System.Threading.Thread.ResetAbort();
             }
             catch (WebException e)
             {
+                LoggerFactories.CreateLogger().Write("WxPay post web：" + e.Message, TraceEventType.Error, e);
                 if (e.Status == WebExceptionStatus.ProtocolError)
                 {
 
@@ -102,6 +111,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
             }
             finally
             {
+                LoggerFactories.CreateLogger().Write("WxPay post alfter ：" + result, TraceEventType.Error);
                 //关闭连接和流
                 if (response != null)
                 {
