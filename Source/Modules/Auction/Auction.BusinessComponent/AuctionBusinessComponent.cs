@@ -320,6 +320,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 //更新其他竞价信息 
                 model.status = 7;
                 DataAccess.UpdateOtherParticipant(model);
+
             }
             return JResult._jResult(result);
         }

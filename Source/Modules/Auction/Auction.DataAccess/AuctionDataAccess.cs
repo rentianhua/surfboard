@@ -868,17 +868,35 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int UpdateOtherParticipant(AuctionCarParticipantModel model)
         {
+            //更新竞价列表
             var sql = new StringBuilder("update `auction_participant` set  status=7 ");
             sql.Append(" where auctionid=@auctionid and innerid != @innerid");
-            int result;
-            try
+
+            var carmodel = GetAuctionViewById(model.Auctionid);
+            var carid = string.Empty;
+            if (carmodel != null)
             {
-                result = Helper.Execute(sql.ToString(), model);
+                carid = carmodel.carid;
             }
-            catch (Exception ex)
+            //更新车辆信息
+            var sqlcar = new StringBuilder("update car_info set `status`=2 where innerid=@carid;");
+            int result;
+            using (var conn = Helper.GetConnection())
             {
-                result = 0;
-                LoggerFactories.CreateLogger().Write("更新其他竞价信息异常：", TraceEventType.Information, ex);
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql.ToString(), model, tran);
+                    conn.Execute(sqlcar.ToString(), new { carid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    result = 0;
+                    LoggerFactories.CreateLogger().Write("更新其他竞价信息异常：", TraceEventType.Information, ex);
+                }
             }
             return result;
         }
