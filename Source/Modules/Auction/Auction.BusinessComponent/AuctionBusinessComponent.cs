@@ -309,6 +309,30 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult UpdateParticipant(AuctionCarParticipantModel model)
         {
             var result = DataAccess.UpdateParticipant(model);
+            //更新成功并且状态为成交（5）时，更新其他付款状态，并且更新车辆拍卖状态,更新成“成交”
+            if (result == 1)
+            {
+                var auctioncar = new AuctionCarInfoModel();
+                auctioncar.status = 7;
+                auctioncar.Innerid = model.Auctionid;
+                DataAccess.UpdateAuctionCar(auctioncar);
+
+                //更新其他竞价信息 
+                model.status = 7;
+                DataAccess.UpdateOtherParticipant(model);
+
+            }
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 若已成交更改其他竞价信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateOtherParticipant(AuctionCarParticipantModel model)
+        {
+            var result = DataAccess.UpdateOtherParticipant(model);
             return JResult._jResult(result);
         }
 
@@ -320,6 +344,17 @@ namespace CCN.Modules.Auction.BusinessComponent
         public JResult GetAuctionParticipantByID(string innerid)
         {
             var result = DataAccess.GetAuctionParticipantByID(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据订单号获取出价详情
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult GetAuctionParticipantByOrderNo(string orderno)
+        {
+            var result = DataAccess.GetAuctionParticipantByOrderNo(orderno);
             return JResult._jResult(result);
         }
 

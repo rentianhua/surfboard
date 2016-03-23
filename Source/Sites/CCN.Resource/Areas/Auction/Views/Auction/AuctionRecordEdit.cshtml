@@ -70,6 +70,7 @@
             record = username + "(" + userno + "):" + myDate.toLocaleString() + "执行了" + ChangeStatusName(status) + "操作；";
             json.recordlist = $("#record").val() + record;
             json.status = status;
+            json.auctionid = auctionid;
         }
         
         $.post("/api/Auction/UpdateParticipant", json, function (result) {
@@ -97,6 +98,8 @@
                 return "已成交";
             case 6:
                 return "已拒绝";
+            case 7:
+                return "已成交";
             default:
         }
         return "";
