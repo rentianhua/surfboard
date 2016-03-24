@@ -13,6 +13,8 @@ using Cedar.Core.Logging;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Xml.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP.Helpers;
 
 namespace CCN.WebAPI.ApiControllers
@@ -267,6 +269,44 @@ namespace CCN.WebAPI.ApiControllers
         public JResult WeChatPayForAuction(string innerid)
         {
             return _auctionservice.WeChatPayForAuction(innerid);
+        }
+
+        /// <summary>
+        /// 微信支付结果回调
+        /// </summary>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("UnifiedOrder")]
+        public JResult UnifiedOrder()
+        {
+            var stream = Request.Content.ReadAsStringAsync().Result;
+            LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
+            if (string.IsNullOrWhiteSpace(stream))
+            {
+                return JResult._jResult(402,"参数不正确");
+            }
+            try
+            {
+                var jobj = JObject.Parse(stream);
+                NativePayData data = new NativePayData();
+                data.Body = jobj["Body"].ToString();
+                data.Attach = jobj["Attach"].ToString();
+                data.ProductId = jobj["ProductId"].ToString();
+                data.OutTradeNo = jobj["OutTradeNo"].ToString();
+                data.GoodsTag = jobj["GoodsTag"].ToString();
+                int fee;
+                int.TryParse(jobj["TotalFee"].ToString(), out fee);
+                data.TotalFee = fee;
+                
+                var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
+                return qrcodeResult;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
+                return JResult._jResult(500, ex.Message);
+            }
         }
 
         /// <summary>

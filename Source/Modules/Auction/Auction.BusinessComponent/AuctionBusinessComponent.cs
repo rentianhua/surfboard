@@ -11,6 +11,8 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Foundation.WeChat.WxPay.Business;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Auction.BusinessComponent
 {
@@ -750,21 +752,39 @@ namespace CCN.Modules.Auction.BusinessComponent
             //获取定金金额
             var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
 
-            var data = new NativePayData
-            {
-                Body = "快拍立信拍车定金",//商品描述
-                Attach = "【kply】",//附加数据
-                TotalFee = deposit,//总金额
-                ProductId = perModel.orderno,//商品ID
-                OutTradeNo = perModel.orderno,//订单编号
-                GoodsTag = ""
-            };
+            //var data = new NativePayData
+            //{
+            //    Body = "快拍立信拍车定金",//商品描述
+            //    Attach = "【kply】",//附加数据
+            //    TotalFee = deposit,//总金额
+            //    ProductId = perModel.orderno,//商品ID
+            //    OutTradeNo = perModel.orderno,//订单编号
+            //    GoodsTag = ""
+            //};
 
             string qrcode;
-            var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
-            if (qrcodeResult.errcode == 0)
+
+            //调用nodejs 通知前端
+            var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
+            IDictionary<string, string> parameters = new Dictionary<string, string>()
             {
-                qrcode = qrcodeResult.errmsg.ToString();
+                {"Body","快拍立信拍车定金" },
+                {"Attach","kply" },
+                {"TotalFee",deposit.ToString() },
+                {"ProductId",perModel.orderno},
+                {"OutTradeNo",perModel.orderno },
+                {"GoodsTag","" }
+            };
+            var orderresult = DynamicWebService.SendPost(nodejs, parameters, "post");
+            if (string.IsNullOrWhiteSpace(orderresult))
+            {
+                return JResult._jResult(402, "二维码生成失败");
+            }
+
+            var jobj = JObject.Parse(orderresult);
+            if (jobj["errcode"].ToString() == "0")
+            {
+                qrcode = jobj["errmsg"].ToString();
                 var model = new AuctionCarParticipantModel
                 {
                     Innerid = innerid,
@@ -776,6 +796,23 @@ namespace CCN.Modules.Auction.BusinessComponent
             {
                 qrcode = perModel.qrcode;
             }
+
+            //var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
+            //if (qrcodeResult.errcode == 0)
+            //{
+            //    qrcode = qrcodeResult.errmsg.ToString();
+            //    var model = new AuctionCarParticipantModel
+            //    {
+            //        Innerid = innerid,
+            //        qrcode = qrcode
+            //    };
+            //    DataAccess.UpdateParticipant(model);
+            //}
+            //else//使用原来qrcode
+            //{
+            //    qrcode = perModel.qrcode;
+            //}
+
             var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
             return JResult._jResult(0, result);
         }
