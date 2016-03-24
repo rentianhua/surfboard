@@ -600,4 +600,47 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public List<string> CodeList { get; set; }
     }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CustWxPayModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 订单号
+        /// </summary>
+        public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 订单号二维码
+        /// </summary>
+        public string OrderNoQrCode { get; set; }
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public int Status { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Remark { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Modifiedtime { get; set; }
+    }
 }

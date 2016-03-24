@@ -173,5 +173,28 @@ namespace CCN.WebAPI.ApiControllers
             //调用nodejs 通知前端
             return new HttpResponseMessage { Content = new StringContent("") };
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("TestPu")]
+        public void TestPu()
+        {
+            //调用nodejs 通知前端
+            var localapi = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
+
+            //IDictionary<string, string> parameters = new Dictionary<string, string>()
+            //{
+            //    {"Body","快拍立信拍车定金" },
+            //    {"Attach","kply" },
+            //    {"TotalFee","1"},
+            //    {"ProductId","P160323133517"},
+            //    {"OutTradeNo","P160323133517" },
+            //    {"GoodsTag","" }
+            //};
+
+            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kply\",\"TotalFee\":\"1\",\"ProductId\":\"P160323133517\",\"OutTradeNo\":\"P160323133517\",\"GoodsTag\":\"\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(localapi, "post", json);
+            //var orderresult = DynamicWebService.SendPost(nodejs, parameters, "post");
+        }
     }    
 }

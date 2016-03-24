@@ -1702,7 +1702,102 @@ namespace CCN.Modules.Customer.BusinessComponent
             var result = DataAccess.UpdateUserStatus(innerid, status);
             return JResult._jResult(result);
         }
-        
+
+        #endregion
+
+        #region 会员升级
+
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CustWxPayVip(string custid)
+        {
+            const int deposit = 2;
+            const string body = "快拍立信VIP费";
+
+            var perModel = DataAccess.CustWeChatPayByCustid(custid);
+            JResult result;
+            if (perModel == null)
+            {
+                var orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
+                result = GenerationQrCode(orderNo, body, deposit);
+                if (result.errcode != 0)
+                {
+                    return result;
+                }
+                DataAccess.AddCustWeChatPay(new CustWxPayModel()
+                {
+                    Innerid = Guid.NewGuid().ToString(),
+                    Createdtime = DateTime.Now,
+                    Custid = custid,
+                    Modifiedtime = null,
+                    Status = 1,
+                    OrderNo = orderNo,                    
+                    OrderNoQrCode = result.errmsg.ToString()
+                });
+                return result;
+            }
+
+            result = GenerationQrCode(perModel.OrderNo, body, deposit);
+            if (result.errcode == 0)
+            {
+                DataAccess.UpdateCustWeChatPay(new CustWxPayModel()
+                {
+                    Innerid = perModel.Innerid,
+                    Modifiedtime = DateTime.Now,
+                    OrderNoQrCode = result.errmsg.ToString()
+                });
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        public JResult CustWxPayVipBack(string orderno)
+        {
+            var result = DataAccess.UpdateCustWeChatPayBack(orderno);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <param name="body"></param>
+        /// <param name="deposit"></param>
+        /// <returns></returns>
+        public JResult GenerationQrCode(string orderno, string body, int deposit)
+        {
+            //获取定金金额
+            string qrcode;
+            //调用nodejs 通知前端
+            var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
+            var json = "{\"Body\":\"" + body + "\",\"Attach\":\"kplx_vip\",\"TotalFee\":\"" + deposit +
+                       "\",\"ProductId\":\"" + orderno + "\",\"OutTradeNo\":\"" + orderno + "\",\"GoodsTag\":\"\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
+            if (string.IsNullOrWhiteSpace(orderresult))
+            {
+                return JResult._jResult(400, "二维码生成失败");
+            }
+            var jobj = JObject.Parse(orderresult);
+            if (jobj["errcode"].ToString() == "0")
+            {
+                qrcode = jobj["errmsg"].ToString();
+            }
+            else //使用原来qrcode
+            {
+                return JResult._jResult(400, "二维码生成失败");
+            }
+
+            return JResult._jResult(0, qrcode);
+        }
+
         #endregion
     }
 }

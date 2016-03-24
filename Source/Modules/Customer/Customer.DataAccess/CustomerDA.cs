@@ -2205,5 +2205,116 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         }
 
         #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 获取会员的订单
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public CustWxPayModel CustWeChatPayByCustid(string custid)
+        {
+            const string sqlS = "select innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid;";
+            //
+            //const string sqlU = "update user_info set qrcode=@qrcode where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                return conn.Query<CustWxPayModel>(sqlS, new {custid}).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 保存会员的订单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCustWeChatPay(CustWxPayModel model)
+        {
+            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime) values (@innerid, @orderno, @qrcode, @custid, @status, @remark, @createdtime, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Execute(sqlI, model);
+                }
+                catch (Exception)
+                {
+                    return 0;                    
+                }                
+            }
+        }
+
+        /// <summary>
+        /// 保存会员的订单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCustWeChatPay(CustWxPayModel model)
+        {
+            var sqlStr = new StringBuilder("update cust_wxpay_info set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where custid = @custid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+
+                    if (model.Status == 2)
+                    {
+                        //升级VIP
+                        const string sqlL = "update cust_info set level=1 where innerid=@innerid;";
+                        conn.Execute(sqlL, new {innerid = model.Custid}, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存会员的订单
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public int UpdateCustWeChatPayBack(string orderNo)
+        {
+            const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
+            const string sqlL = "update cust_info set level=1 where innerid=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlU, new {orderno = orderNo}, tran);
+                    var sqlCust = "select custid from cust_wxpay_info where orderno=@orderno;";
+                    var custid = conn.Query<string>(sqlCust, new {orderno = orderNo}).FirstOrDefault();
+                    //升级VIP
+                    conn.Execute(sqlL, new {innerid = custid }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
     }
 }

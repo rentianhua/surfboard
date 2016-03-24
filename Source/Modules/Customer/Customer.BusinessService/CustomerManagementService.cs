@@ -11,6 +11,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using Microsoft.Practices.Unity.InterceptionExtension;
 
 #endregion
 
@@ -771,6 +772,30 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateUserStatus(string innerid, int status)
         {
             return BusinessComponent.UpdateUserStatus(innerid, status);
+        }
+
+        #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        public JResult CustWxPayVip(string custid)
+        {
+            return BusinessComponent.CustWxPayVip(custid);
+        }
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        public JResult CustWxPayVipBack(string orderno)
+        {
+            return BusinessComponent.CustWxPayVipBack(orderno);
         }
 
         #endregion

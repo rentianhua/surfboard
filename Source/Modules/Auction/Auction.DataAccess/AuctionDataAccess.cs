@@ -809,7 +809,7 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public AuctionCarParticipantViewModel GetAuctionParticipantByID(string innerid)
         {
-            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.mobile,a.qrcode,a.amount,a.status,a.createrid,a.createdtime,a.recordlist,a.remark,
+            var sql = new StringBuilder(@"select a.innerid,a.auctionid,a.orderno,a.mobile,a.qrcode,a.amount,a.status,a.createrid,a.createdtime,a.recordlist,a.remark,
                         a.username,b.no as auctionno,b.lowestprice,c1.modelname as model_name from auction_participant as a
                                        left join auction_carinfo as b on b.innerid = a.auctionid
                                        left join car_info as c on c.innerid = b.carid
@@ -1522,13 +1522,21 @@ namespace CCN.Modules.Auction.DataAccess
             using (var conn = Helper.GetConnection())
             {
                 int result;
+                var tran = conn.BeginTransaction();
                 try
                 {
-                    result = conn.Execute(sql, model);
+                    result = conn.Execute(sql, model, tran);
+
+                    //更新竞拍人处理状态
+                    var u = "update auction_participant set `status`=3,remark=CONCAT(remark,@remark) where orderno=@orderno;";
+                    conn.Execute(u, new {orderno = model.out_trade_no, remark = "\n@通知支付完成"}, tran);
+
+                    tran.Commit();
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：", TraceEventType.Information, ex);
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：", TraceEventType.Error, ex);
                     result = 0;
                 }
 

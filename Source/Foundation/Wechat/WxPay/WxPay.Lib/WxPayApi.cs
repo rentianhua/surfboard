@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using Cedar.Core.Logging;
 
 namespace Cedar.Foundation.WeChat.WxPay.Lib
 {
@@ -390,9 +392,8 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
 
             var start = DateTime.Now;
 
-            //Log.Debug("WxPayApi", "UnfiedOrder request : " + xml);
+            LoggerFactories.CreateLogger().Write($"UnfiedOrder request :{xml}", TraceEventType.Information);
             string response = HttpService.Post(xml, url, false, timeOut);
-            //Log.Debug("WxPayApi", "UnfiedOrder response : " + response);
 
             var end = DateTime.Now;
             int timeCost = (int)((end - start).TotalMilliseconds);
@@ -400,7 +401,7 @@ namespace Cedar.Foundation.WeChat.WxPay.Lib
             WxPayData result = new WxPayData();
             result.FromXml(response);
 
-            ReportCostTime(url, timeCost, result);//测速上报
+            //ReportCostTime(url, timeCost, result);//测速上报
 
             return result;
         }

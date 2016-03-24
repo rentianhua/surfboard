@@ -325,7 +325,8 @@ namespace CCN.Modules.CustRelations.DataAccess
         /// <returns></returns>
         public IEnumerable<CustRelationsViewModel> GetCustRelationsByUserId(string userid)
         {
-            const string sql = @"select friendsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,(select count(1) from car_info where custid=a.friendsid) as carnum
+            const string sql = @"select friendsid ,b.custname, b.mobile, b.email, b.headportrait, b.`status`, b.authstatus, b.brithday, b.totalpoints, b.`level`, b.createdtime,d.photo ,b.provid, b.cityid, b.area,
+                                (select count(1) from car_info where custid=a.friendsid) as carnum
                                 from cust_relations as a
                                 inner join cust_info as b on a.friendsid=b.innerid 
                                 left join cust_wechat as c on a.friendsid=c.custid

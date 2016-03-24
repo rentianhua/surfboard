@@ -297,9 +297,8 @@ namespace CCN.Modules.Auction.Interface
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
-        /// <param name="orderno"></param>
         /// <returns></returns>
-        JResult WeChatPayForAuction(string innerid, string orderno);
+        JResult WeChatPayForAuction(string innerid);
 
         #endregion
     }

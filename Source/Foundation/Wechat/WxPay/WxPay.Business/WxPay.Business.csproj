@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cedar.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Lib\Cedar.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Cedar.Core.EntLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Lib\Cedar.Core.EntLib.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Framework.Common">
       <HintPath>..\..\..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
     </Reference>

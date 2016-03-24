@@ -536,5 +536,23 @@ namespace CCN.Modules.Customer.Interface
         JResult UpdateUserStatus(string innerid, int status);
 
         #endregion
+
+        #region 会员升级
+        
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        JResult CustWxPayVip(string custid);
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        JResult CustWxPayVipBack(string orderno);
+
+        #endregion
     }
 }
