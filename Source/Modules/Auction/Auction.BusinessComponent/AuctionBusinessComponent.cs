@@ -136,14 +136,14 @@ namespace CCN.Modules.Auction.BusinessComponent
                 return JResult._jResult(402, "请输入合理的拍卖时间");
             }
 
-            model.createrid = "";
-            model.createdtime = null;
+            //model.createrid = "";
+            //model.createdtime = null;
             model.modifierid = ApplicationContext.Current.UserId;
             model.modifiedtime = DateTime.Now;
-            model.publisherid = "";
-            model.publishedtime = null;
-            model.dealerid = "";
-            model.deletedtime = null;
+            //model.publisherid = "";
+            //model.publishedtime = null;
+            //model.dealerid = "";
+            //model.deletedtime = null;
             var result = DataAccess.UpdateAuctionCar(model);
             return JResult._jResult(result);
         }

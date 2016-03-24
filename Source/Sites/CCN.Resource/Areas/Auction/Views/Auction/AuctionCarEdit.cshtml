@@ -538,6 +538,7 @@
             $("#accessnot").addClass("hidden");
             $("#online").addClass("hidden");
             $("#offline").addClass("hidden");
+            $("#deal").addClass("hidden");
 
             if (status == 2)//待审核
             {
@@ -561,6 +562,7 @@
             else if (status == 8) {
                 $("#deal").removeClass("hidden");
             }
+            $("#save").removeClass("hidden");
             $("#lblactionno").html(obj.no);//拍品编号
             $("#lblauctionstatus").html(GetStatusName(obj.status));//卖家
             $("#txtsellername").val(sellname);//卖家
@@ -713,13 +715,13 @@
             json.title = $(this).attr("data-val");
             imgmessage.push(json);
         });
-        console.log(imgmessage);
+        console.log(json);
         json.picturedes = JSON.stringify(imgmessage);
 
         $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
 
             if (result.errcode !== 0) {
-                alert("更新失败");
+                alert(result.errmsg);
                 return false;
             }
             alert("更新成功！");
