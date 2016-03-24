@@ -116,7 +116,7 @@ namespace CCN.Resource.ApiControllers
         [Route("UpdateAuctionCarStatus")]
         public JResult UpdateAuctionCarStatus([FromBody]AuctionCarInfoModel model)
         {
-            return _auctionservice.UpdateAuctionCar(model);
+            return _auctionservice.UpdateAuctionCarStatus(model);
         }
 
         /// <summary>
