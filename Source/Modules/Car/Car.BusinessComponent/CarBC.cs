@@ -219,7 +219,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
                 });
             });
-            
+
             return list;
         }
 
@@ -1494,6 +1494,21 @@ namespace CCN.Modules.Car.BusinessComponent
             // Return the random number mod the number  
             // of sides. The possible values are zero-based  
             return (int)(randomResult % numSeeds);
+        }
+
+        #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult GetCarInfoByMobile(string mobile)
+        {
+            var result = DataAccess.GetCarInfoByMobile(mobile);
+            return JResult._jResult(result);
         }
 
         #endregion
