@@ -949,6 +949,7 @@
     <Content Include="Content\Template\fonts\weathericons-regular-webfont.ttf" />
     <Content Include="Content\Template\fonts\weathericons-regular-webfont.woff" />
     <Content Include="Content\Template\fonts\weathericons-regular-webfontd41d.eot" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarAdd.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />

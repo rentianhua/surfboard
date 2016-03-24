@@ -343,5 +343,16 @@ namespace CCN.Modules.Car.Interface
         BasePageList<CarInfoListViewModel> GetCarRewardPageList(CarRewardQueryModel query);
 
         #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        JResult GetCarInfoByMobile(string mobile);
+
+        #endregion
     }
 }

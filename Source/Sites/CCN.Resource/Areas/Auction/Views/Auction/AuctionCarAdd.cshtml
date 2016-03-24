@@ -12,7 +12,7 @@
 <link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
 <script type="text/javascript">
 
-    var id = "@ViewBag.carid";
+    var carid = "";
 
     var imgs = [];
 
@@ -22,7 +22,7 @@
         InitBrand();
         InitProv();
         InitCode();
-        InitCarInfo();
+        InitImgUpLoad();
     });
 
     function InitUpload() {
@@ -191,13 +191,9 @@
     }
 
     //初始化车辆基本信息
-    function InitCarInfo() {
-
-        if (id === "") {
-            return;
-        }
-
-        $.get("/api/Car/GetCarInfoById?id=" + id, function (data) {
+    function InitCarInfo(id) {
+        carid = id;
+        $.get("/api/Car/GetCarInfoById?id=" + carid, function (data) {
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
             }
@@ -223,8 +219,7 @@
             $("#selectcolor").selectVal(obj.colorid);
 
             $("#txtmileage").val(obj.mileage);
-            //$("#txtvalidtime").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));
-
+        
             GetModelInfo(obj.model_id);
 
             var dataArr = obj.register_date.split('-');
@@ -244,11 +239,12 @@
             $("#caresc").val(obj.remark);
 
             $.ajax({
-                url: "/api/Car/GetCarPictureByCarid?carid=" + id,
+                url: "/api/Car/GetCarPictureByCarid?carid=" + carid,
                 type: 'get',
                 datatype: 'application/json',
                 async: false,
                 success: function (data) {
+                    $('#imgs').html('');
                     $.each(data.errmsg, function (k, v) {
                         var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                         $('#imgs').append(
@@ -360,7 +356,7 @@
         };
 
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
-    
+
         var uploadercount = 0;//选择的文件
         var filelength = $("img[data-type='img']").length; //图片总数
 
@@ -375,62 +371,49 @@
         }
 
         setTimeout(function () {
+            json.Innerid = id;
 
-            if (id === "") {
+            $.post("/api/Car/UpdateCar", json, function (result) {
 
-                $.post("/api/Auction/AddAuctionCar", json, function (result) {
+                if (result.errcode !== 0) {
+                    hideloading();
+                    alert("更新失败");
+                    return false;
+                }
 
-                    if (result.errcode !== 0) {
+                if (uploadercount === 0 && delList.length === 0) {  //没有添加和删除图片
+                    alert("修改成功");
+                    goList();
+                    return false;
+                }
+                else if (uploadercount === 0 && delList.length > 0) {
+                    var model = { Carid: id, AddPaths: [], DelIds: delList };
+                    $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
                         hideloading();
-                        alert("添加失败");
-                        return false;
-                    }
-
-                    var i = 0;
-                    //修改文件名
-                    plupload.each(uploader.files, function (file) {
-                        file.name = "car_" + new Date().getTime() + i + ".jpg";
-                        i++;
-                    });
-
-                    var addList = [];
-                    uploader.start();
-                    uploader.bind('FileUploaded', function (up, file, info) {
-                        var picInfo = JSON.parse(info.response);
-                        addList.push(picInfo.key);
-                        if (addList.length === uploadercount) {
-                            var model = { Carid: result.errmsg, AddPaths: addList, DelIds: [] };
-                            $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
-                                hideloading();
-                                if (resultPic.errcode !== 0) {
-                                    alert("添加成功,但图片保存失败！");
-                                } else {
-                                    alert("添加成功");
-                                }
-                                goList();
-                            });
+                        if (resultPic.errcode !== 0) {
+                            alert("修改成功,但图片保存失败！");
+                        } else {
+                            alert("修改成功");
                         }
+                        goList();
                     });
                     return false;
+                }
+
+                var i = 0;
+                //修改文件名
+                plupload.each(uploader.files, function (file) {
+                    file.name = "car_" + new Date().getTime() + i + ".jpg";
+                    i++;
                 });
-            } else {
-                json.Innerid = id;
 
-                $.post("/api/Car/UpdateCar", json, function (result) {
-
-                    if (result.errcode !== 0) {
-                        hideloading();
-                        alert("更新失败");
-                        return false;
-                    }
-
-                    if (uploadercount === 0 && delList.length === 0) {  //没有添加和删除图片
-                        alert("修改成功");
-                        goList();
-                        return false;
-                    }
-                    else if (uploadercount === 0 && delList.length > 0) {
-                        var model = { Carid: id, AddPaths: [], DelIds: delList };
+                var addList = [];
+                uploader.start();
+                uploader.bind('FileUploaded', function (up, file, info) {
+                    var picInfo = JSON.parse(info.response);
+                    addList.push(picInfo.key);
+                    if (addList.length === uploadercount) {
+                        var model = { Carid: id, AddPaths: addList, DelIds: delList };
                         $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
                             hideloading();
                             if (resultPic.errcode !== 0) {
@@ -440,38 +423,10 @@
                             }
                             goList();
                         });
-                        return false;
                     }
-
-                    var i = 0;
-                    //修改文件名
-                    plupload.each(uploader.files, function (file) {
-                        file.name = "car_" + new Date().getTime() + i + ".jpg";
-                        i++;
-                    });
-
-                    var addList = [];
-                    uploader.start();
-                    uploader.bind('FileUploaded', function (up, file, info) {
-                        var picInfo = JSON.parse(info.response);
-                        addList.push(picInfo.key);
-                        if (addList.length === uploadercount) {
-                            var model = { Carid: id, AddPaths: addList, DelIds: delList };
-                            $.post("/api/Auction/SaveAuctionCarPicture", model, function (resultPic) {
-                                hideloading();
-                                if (resultPic.errcode !== 0) {
-                                    alert("修改成功,但图片保存失败！");
-                                } else {
-                                    alert("修改成功");
-                                }
-                                goList();
-                            });
-                        }
-                    });
-
-                    return false;
                 });
-            }
+
+            });
             return false;
         }, 1000);
         return false;
@@ -502,157 +457,7 @@
 
 
     function goAcctionPics() {
-        getBodyHtml('mainbody', '/auction/auction/AuctionEvaluationPics?carid=@ViewBag.carid&auctionid=@ViewBag.id');
-    }
-
-    //初始化拍卖概要信息
-    function InitAuctionInfo() {
-        if (id === "") {
-            return;
-        }
-
-        $('#imgss').empty();
-        $('#imgfindings').empty();
-        $.get("/api/Auction/GetAuctionInfoById?id=" + id, function (data) {
-            if (data.errcode !== 0) {
-                alert("获取数据异常！");
-            }
-
-
-            var obj = data.errmsg;
-
-            var status = obj.status;
-
-            $("#save").addClass("hidden");
-            $("#startaudit").addClass("hidden");
-            $("#access").addClass("hidden");
-            $("#accessnot").addClass("hidden");
-            $("#online").addClass("hidden");
-            $("#offline").addClass("hidden");
-            $("#deal").addClass("hidden");
-
-            if (status == 2)//待审核
-            {
-                $("#save").removeClass("hidden");
-                $("#startaudit").removeClass("hidden");
-                $("#access").removeClass("hidden");
-                $("#accessnot").removeClass("hidden");
-            }
-            else if (status == 3) {
-                $("#save").removeClass("hidden");
-                $("#access").removeClass("hidden");
-                $("#accessnot").removeClass("hidden");
-            }
-            else if (status == 5) {
-                $("#online").removeClass("hidden");
-            }
-            else if (status == 6) {
-                $("#offline").removeClass("hidden");
-                $("#deal").removeClass("hidden");
-            }
-            else if (status == 8) {
-                $("#deal").removeClass("hidden");
-            }
-            $("#lblactionno").html(obj.no);//拍品编号
-            $("#lblauctionstatus").html(GetStatusName(obj.status));//卖家
-            $("#txtsellername").val(obj.sellername);//卖家
-            $("#txtsellermobile").val(obj.sellermobile);//卖家联系方式
-            $("input[name='isoperation'][value=" + obj.isoperation + "]").prop("checked", true);//是否营运车辆
-            $("#enginenum").val(obj.enginenum);//发动机号
-            $("input[name='isnewcar'][value=" + obj.isnewcar + "]").prop("checked", true);//是否一手车
-            $("#vin").val(obj.vin);//VIN号
-            $("input[name='havepurchasetax'][value=" + obj.havepurchasetax + "]").prop("checked", true);//是否有购置税
-            $("#carno").val(obj.carno);//车牌号
-            $("#violationdes").val(obj.violationdes);//违章说明
-            $("#supplementdes").val(obj.supplementdes);//补充说明
-            $("#configuredes").val(obj.configuredes);//其他配置
-            $("#txtstartdate").val(Dateformat(obj.publishedtime, "yyyy-MM-dd HH:mm:ss"));//开始时间
-            $("#txtenddate").val(Dateformat(obj.validtime, "yyyy-MM-dd HH:mm:ss"));//结束时间
-            $("#lowestprice").val(obj.lowestprice);//底价
-            $("#dealprice").val(obj.dealprice);//成交价
-            $("#auditremark").val(obj.auditremark);//审核备注
-
-
-            var picturedes = JSON.parse(obj.picturedes);
-            if ((typeof picturedes) == "string") {
-                picturedes = JSON.parse(picturedes.replace(/\\/g, ""));
-            }
-            //证件照片类型
-            var pics = ["行驶证正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单", "交强险"];
-            $.each(pics, function (k, v) {
-                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-                $('#imgss').append(
-                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgForCar"  data-id="">\
-            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
-            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
-            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
-            			            </div>\
-            		            </div>');
-
-                var option = {};
-                option.id = strradom;
-                option.container = "imgss";
-                option.uptoken = "@ViewBag.uptoken";
-                option.autostart = false;
-                option.domain = qiniuurl;
-                //初始化七牛上传控件
-                uploader = InitQiniuForAuction(option);
-            });
-            
-            $.each(picturedes, function (k, v) {
-                if (v != null) {
-                    $("div .imgForCar").each(function () {
-                        if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
-                            $(this).children('img').attr('src', getImgUrl(v.imgsrc))
-                        }
-                    });
-                }
-            });
-            initUploadM();
-
-            //认证图片 imgfindings
-            var pics = ["1", "2", "3", "4"];
-            $.each(pics, function (k, v) {
-                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-                $('#imgfindings').append(
-                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgForevaluation"  data-id="">\
-            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
-            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
-            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
-            			            </div>\
-            		            </div>');
-
-                var option = {};
-                option.id = strradom;
-                option.container = "imgfindings";
-                option.uptoken = "@ViewBag.uptoken";
-                option.autostart = false;
-                option.domain = qiniuurl;
-                //初始化七牛上传控件
-                uploader = InitQiniuForAuction(option);
-            });
-            
-            if (JSON.parse(obj.evaluationpics) != null) {
-                var evaluationpics = obj.evaluationpics;
-
-                if ((typeof evaluationpics) == "string") {
-                    evaluationpics = JSON.parse(evaluationpics.replace(/\\/g, ""));
-                }
-                var count = 1;
-                $.each(evaluationpics, function (k, v) {
-                    if (v != null) {
-                        $("div .imgForevaluation").each(function () {
-                            if ($(this).attr('data-val') == count && v.imgsrc != "") {
-                                $(this).children('img').attr('src', getImgUrl(v.imgsrc))
-                            }
-                        });
-                    }
-                    count++;
-                });
-                initUploadM();
-            }
-
-        });
+        getBodyHtml('mainbody', '/auction/auction/AuctionEvaluationPics?carid='+carid+'&auctionid=@ViewBag.id');
     }
 
     //初始化七牛控件
@@ -705,10 +510,29 @@
     }
 
     //保存拍卖概要信息
-    function SaveAuctionInfo(status) {
+    function SaveAuctionInfo() {
+        if ($("#enginenum").val() === "") {
+            alert("请填写发动机号！");
+            return false;
+        }
+        if ($("#vin").val() === "") {
+            alert("请填写VIN号！");
+            return false;
+        }
+        if ($("#carno").val() === "") {
+            alert("请填写车牌号！");
+            return false;
+        }
+        if ($("#violationdes").val() === "") {
+            alert("请填写违章说明！");
+            return false;
+        }
+        if ($("#supplementdes").val() === "") {
+            alert("请填写补充说明！");
+            return false;
+        }
         var json = {};
 
-        json.innerid = "@ViewBag.id";
         json.isoperation = $("input:radio[name='isoperation']:checked").val();
         json.enginenum = $("#enginenum").val();
         json.isnewcar = $("input:radio[name='isnewcar']:checked").val();
@@ -725,9 +549,10 @@
         json.auditremark = $("#auditremark").val();
         json.sellername = $("#txtsellername").val();//卖家
         json.sellermobile = $("#txtsellermobile").val();//卖家联系方式
-
-        //json.status = status;
-        //获取图片信息 
+        json.carid = carid;
+        json.status = 1;
+        json.operatedid = "@ViewBag.UserId";
+        //获取图片信息
         var imgmessage = [];
         $('div .imgForCar').each(function () {
             var json = {};
@@ -735,7 +560,7 @@
             json.title = $(this).attr("data-val");
             imgmessage.push(json);
         });
-
+      
         json.picturedes = JSON.stringify(imgmessage);
 
         //检测报告
@@ -748,63 +573,92 @@
         });
 
         json.evaluationpics = JSON.stringify(imgevaluation);
-
-        $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+        console.log(json);
+        $.post("/api/Auction/AddAuctionCar", json, function (result) {
 
             if (result.errcode !== 0) {
                 alert(result.errmsg);
                 return false;
             }
-            alert("更新成功！");
+            alert("新增成功！");
         });
-    }
-
-    function ChangeStatus(status) {
-        var json = {};
-
-        json.innerid = "@ViewBag.id";
-        json.carid = "@ViewBag.carid";
-        json.status = status;
-        console.log(status);
-        $.post("/api/Auction/UpdateAuctionCarStatus", json, function (result) {
-            if (result.errcode !== 0) {
-                alert("更新失败");
-                return false;
-            }
-            alert("更新成功！");
-            InitAuctionInfo();
-        });
-    }
-
-    function GetStatusName(status) {
-        switch (status) {
-            case 0:
-                return "已删除";
-            case 1:
-                return "草稿";
-            case 2:
-                return "待审核";
-            case 3:
-                return "审核中";
-            case 4:
-                return "审核失败";
-            case 5:
-                return "等待拍卖";
-            case 6:
-                return "正在拍卖";
-            case 7:
-                return "成交";
-            case 8:
-                return "拍卖结束";
-            default:
-
-        }
-        return "";
     }
 
     //返回
     function GoBack() {
         getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+    }
+
+    //获取车商对应的车辆
+    function InitCar() {
+        if ($("#txtbusmobile").val() == "") {
+            alert("请填写正确的手机号");
+            return;
+        }
+        $.ajax({
+            url: "/api/car/GetCarInfoByMobile?mobile=" + $("#txtbusmobile").val(),
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    $("#selectcar").append("<option value='" + v.Innerid + "'>" + v.title + "(" + v.carno + ")</option>");
+                });
+            }
+        });
+    }
+
+    //初始化图片上传控件
+    function InitImgUpLoad()
+    {
+        //证件照片类型
+            var pics = ["行驶证正面", "行驶证副本", "登记证第一页", "登记证第二页", "登记证第三页", "购车发票", "商业保险单", "交强险"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgss').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgForCar"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgss";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+
+       
+            initUploadM();
+
+            //认证图片 imgfindings
+            var pics = ["1", "2", "3", "4"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgfindings').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgForevaluation"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgfindings";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+        initUploadM();
     }
 
 </script>
@@ -823,7 +677,7 @@
                 </a>
             </li>
             <li>
-                <a data-toggle="tab" href="#second" onclick="InitAuctionInfo();">
+                <a data-toggle="tab" href="#second">
                     更多信息
                 </a>
             </li>
@@ -836,6 +690,29 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>手机号</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="txtbusmobile" placeholder="手机号" class="form-control" />
+                                        </div>
+                                        <div class="controls col-sm-2">
+                                            <input type="button" class="btn btn-primary shiny" value="获取" onclick="InitCar();" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车辆</label>
+                                        <div class="controls col-sm-10">
+                                            <select id="selectcar" onchange="InitCarInfo(this.options[this.options.selectedIndex].value);">
+                                                <option value="0">请选择</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row form-group">
                                 <div class="col-lg-12">
                                     <div class="form-group">
@@ -955,7 +832,7 @@
                                     @*<div class="form-group">
                                         <label for="" class="col-sm-2 control-label no-padding-right">有效期</label>
                                         <div class="col-sm-10">
-                                            <input id="txtvalidtime" class="Wdate form-control " disabled type="text" placeholder="有效期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                            <input id="txtvalidtime" class="Wdate form-control" type="text" placeholder="有效期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
                                         </div>
                                     </div>*@
                                 </div>
@@ -1011,25 +888,6 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
-                            @*拍品编号 拍卖状态*@
-                            <div class="row form-group">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right">拍品编号</label>
-                                        <div class="col-sm-10">
-                                            <label id="lblactionno" class="control-label no-padding-right" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right">拍卖状态</label>
-                                        <div class="col-sm-10">
-                                            <label id="lblauctionstatus" class="control-label no-padding-right" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             @*卖家 手机号*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -1223,7 +1081,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row form-group">
+                            @*<div class="row form-group">
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="" class="col-sm-1 control-label no-padding-right"></label>
@@ -1234,18 +1092,12 @@
                                 </div>
                                 <div class="col-lg-6">
                                 </div>
-                            </div>
+                            </div>*@
 
                             @*按钮*@
                             <div class="row form-group text-center">
                                 <div class="col-lg-12">
-                                    <input id="save" type="button" class="btn btn-palegreen shiny hidden" value="保存" onclick="SaveAuctionInfo();" />
-                                    <input id="startaudit" type="button" class="btn btn-palegreen shiny hidden" value="开始审核" onclick="ChangeStatus(3);" />
-                                    <input id="access" type="button" class="btn btn-palegreen shiny hidden" value="通过" onclick="ChangeStatus(5);" />
-                                    <input id="accessnot" type="button" class="btn btn-palegreen shiny hidden" value="不通过" onclick="ChangeStatus(4);" />
-                                    <input id="deal" type="button" class="btn btn-palegreen shiny " value="成交" onclick="ChangeStatus(7);" />
-                                    <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
-                                    <input id="offline" type="button" class="btn btn-palegreen shiny hidden" value="下线" onclick="ChangeStatus(8);" />
+                                    <input id="save" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveAuctionInfo();" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
                                 </div>
                             </div>

@@ -104,7 +104,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.createdtime = DateTime.Now;
             model.Innerid = Guid.NewGuid().ToString();
             model.no = "A" + GetOrderNumber();
-            //model.status = 1;
+            model.status = 1;
             var result = DataAccess.AddAuctionCar(model);
             return JResult._jResult
             (

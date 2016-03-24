@@ -278,11 +278,10 @@ namespace CCN.Modules.Auction.DataAccess
         {
             //添加拍卖车辆
             const string sql = @"INSERT INTO `auction_carinfo`
-                                (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile)
+                                (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile,operatedid)
                                 VALUES
-                                (@Innerid, @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile);";
-            //更新车辆状态
-            const string sqlcar = @"update `car_info` set status=3 where innerid =@carid;";
+                                (@Innerid, @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile,@operatedid);";
+ 
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -290,7 +289,6 @@ namespace CCN.Modules.Auction.DataAccess
                 try
                 {
                     conn.Execute(sql, model, tran);
-                    conn.Execute(sqlcar, model, tran);
                     tran.Commit();
                     result = 1;
                 }
@@ -346,6 +344,10 @@ namespace CCN.Modules.Auction.DataAccess
             else if (model.status == 8)
             {
                 sqlcar.Append(" set status=1 where innerid =@carid; ");
+            }
+            else if (model.status==6)//上线
+            {
+                sqlcar.Append(" set status=3 where innerid =@carid; ");
             }
             int result;
             using (var conn = Helper.GetConnection())
