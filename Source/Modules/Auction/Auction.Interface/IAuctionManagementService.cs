@@ -54,6 +54,13 @@ namespace CCN.Modules.Auction.Interface
         JResult AddAuctionCar(AuctionCarInfoModel model);
 
         /// <summary>
+        /// 添加拍卖车辆
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddAuctionCarStatus(AuctionCarInfoModel model);
+
+        /// <summary>
         /// 修改拍卖车辆
         /// </summary>
         /// <param name="model">车辆信息</param>

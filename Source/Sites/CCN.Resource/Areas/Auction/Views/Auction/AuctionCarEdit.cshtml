@@ -731,7 +731,7 @@
         json.innerid = "@ViewBag.id";
         json.status = status;
         console.log(status);
-        $.post("/api/Auction/UpdateAuctionCar", json, function (result) {
+        $.post("/api/Auction/UpdateAuctionCarStatus", json, function (result) {
             if (result.errcode !== 0) {
                 alert("更新失败");
                 return false;
