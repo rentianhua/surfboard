@@ -98,6 +98,16 @@ namespace CCN.Modules.Auction.BusinessService
         }
 
         /// <summary>
+        /// 修改拍卖车辆(状态)
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        /// <returns></returns>
+        public JResult UpdateAuctionCarStatus(AuctionCarInfoModel model)
+        {
+            return BusinessComponent.UpdateAuctionCarStatus(model);
+        }
+
+        /// <summary>
         /// 删除拍卖车辆
         /// </summary>
         /// <param name="model">删除成交model</param>

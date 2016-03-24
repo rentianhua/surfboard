@@ -108,6 +108,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 修改拍卖车辆（状态）
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateAuctionCarStatus")]
+        public JResult UpdateAuctionCarStatus([FromBody]AuctionCarInfoModel model)
+        {
+            return _auctionservice.UpdateAuctionCarStatus(model);
+        }
+
+        /// <summary>
         /// 删除拍卖车辆
         /// </summary>
         /// <param name="model">删除成交model</param>
