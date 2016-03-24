@@ -1142,5 +1142,33 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.UpdatePassword(mRetrievePassword);
         }
         #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <returns></returns>
+        [Route("CustWxPayVip")]
+        [HttpGet]
+        public JResult CustWxPayVip(string custid)
+        {
+            return _custservice.CustWxPayVip(custid);
+        }
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        [Route("CustWxPayVipBack")]
+        [HttpGet]
+        public JResult CustWxPayVipBack(string orderno)
+        {
+            return _custservice.CustWxPayVipBack(orderno);
+        }
+
+        #endregion
     }
 }

@@ -23,7 +23,7 @@ namespace Cedar.Framework.Common.BaseClasses
         /// <param name="data"></param>
         /// <param name="isjson"></param>
         /// <returns></returns>
-        public static object ExeApiMethod(string url, string type, string data, bool isjson = true)
+        public static string ExeApiMethod(string url, string type, string data, bool isjson = true)
         {
             var handler = new WebRequestHandler
             {
@@ -34,7 +34,7 @@ namespace Cedar.Framework.Common.BaseClasses
             var json = isjson ? JsonConvert.DeserializeObject(data) : data;
 
             var client = new HttpClient(handler);
-            var website = ConfigurationManager.AppSettings["website"];
+            var website = ConfigurationManager.AppSettings["localapi"];
             client.BaseAddress = new Uri(website);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             try
@@ -58,7 +58,7 @@ namespace Cedar.Framework.Common.BaseClasses
                         response = client.GetAsync(url).Result;
                         break;
                 }
-                return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync() : null;
+                return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : null;
             }
             catch (AggregateException)
             {
@@ -113,6 +113,61 @@ namespace Cedar.Framework.Common.BaseClasses
             request.ReadWriteTimeout = 5000;
             request.ContentType = "text/html;charset=UTF-8";
             var response = (HttpWebResponse) request.GetResponse();
+            var myResponseStream = response.GetResponseStream();
+            var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+
+            //返回内容
+            var retString = myStreamReader.ReadToEnd();
+            return retString;
+        }
+
+        /// <summary>
+        ///     Http (GET/POST)
+        /// </summary>
+        /// <param name="url">请求URL</param>
+        /// <param name="parameters">请求参数</param>
+        /// <param name="method">请求方法</param>
+        /// <returns>响应内容</returns>
+        public static string SendJson(string url, IDictionary<string, string> parameters, string method)
+        {
+            if (method.ToLower() == "post")
+            {
+                HttpWebResponse rsp = null;
+                Stream reqStream = null;
+                try
+                {
+                    var req = (HttpWebRequest)WebRequest.Create(url);
+                    req.Method = method;
+                    req.KeepAlive = false;
+                    req.ProtocolVersion = HttpVersion.Version10;
+                    req.Timeout = 5000;
+                    req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
+                    var postData = Encoding.UTF8.GetBytes(BuildQuery(parameters, "utf8"));
+                    reqStream = req.GetRequestStream();
+                    reqStream.Write(postData, 0, postData.Length);
+                    rsp = (HttpWebResponse)req.GetResponse();
+                    var encoding = Encoding.GetEncoding(rsp.CharacterSet);
+                    return GetResponseAsString(rsp, encoding);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+                finally
+                {
+                    reqStream?.Close();
+                    rsp?.Close();
+                }
+            }
+
+            //创建请求
+            var request = (HttpWebRequest)WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
+
+            //GET请求
+            request.Method = "GET";
+            request.ReadWriteTimeout = 5000;
+            request.ContentType = "text/html;charset=UTF-8";
+            var response = (HttpWebResponse)request.GetResponse();
             var myResponseStream = response.GetResponseStream();
             var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
 

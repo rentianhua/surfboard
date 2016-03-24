@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.DataAccess;
 using Cedar.Core.ApplicationContexts;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
@@ -781,21 +783,13 @@ namespace CCN.Modules.Auction.BusinessComponent
 
             //调用nodejs 通知前端
             var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-            IDictionary<string, string> parameters = new Dictionary<string, string>()
-            {
-                {"Body","快拍立信拍车定金" },
-                {"Attach","kply" },
-                {"TotalFee",deposit.ToString() },
-                {"ProductId",perModel.orderno},
-                {"OutTradeNo",perModel.orderno },
-                {"GoodsTag","" }
-            };
-            var orderresult = DynamicWebService.SendPost(nodejs, parameters, "post");
+            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kplx_auction\",\"TotalFee\":\"" + deposit + "\",\"ProductId\":\""+ perModel.orderno + "\",\"OutTradeNo\":\""+ perModel.orderno + "\",\"GoodsTag\":\"\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(402, "二维码生成失败");
             }
-
+            LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {orderresult}", TraceEventType.Information);
             var jobj = JObject.Parse(orderresult);
             if (jobj["errcode"].ToString() == "0")
             {
