@@ -18,11 +18,33 @@ namespace CCN.Resource.Areas.Auction.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 拍卖车辆编辑
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public ActionResult AuctionCarEdit(string carid,string id)
         {
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
             ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
+            ViewBag.UserId = UserInfo.innerid;
             ViewBag.uptoken = QiniuUtility.GetToken();
+            return View();
+        }
+
+        /// <summary>
+        /// 拍卖车辆新增
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult AuctionCarAdd(string carid, string id)
+        {
+            ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
+            ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
+            ViewBag.uptoken = QiniuUtility.GetToken();
+            ViewBag.UserId = UserInfo.innerid;
             return View();
         }
 

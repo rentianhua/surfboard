@@ -2714,5 +2714,24 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public IEnumerable<CarInfoModel> GetCarInfoByMobile(string mobile)
+        {
+            const string sql = @"select a.innerid,a.title,a.carno from car_info as a
+                                left join cust_info as b on b.innerid=a.custid
+                                where b.mobile=@mobile and a.status=1;";
+
+            var list = Helper.Query<CarInfoModel>(sql, new { mobile });
+            return list;
+        }
+
+        #endregion
     }
 }

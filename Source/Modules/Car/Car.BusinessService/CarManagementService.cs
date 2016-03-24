@@ -488,5 +488,19 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult GetCarInfoByMobile(string mobile)
+        {
+            return BusinessComponent.GetCarInfoByMobile(mobile);
+        }
+
+        #endregion
     }
 }

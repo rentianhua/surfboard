@@ -13,7 +13,7 @@
     $(function () {
         QueryList();
         $("#btnAdd").click(function () {
-            getBodyHtml('mainbody', "/auction/auction/auctioncaredit?custid=" + custid);
+            getBodyHtml('mainbody', "/auction/auction/AuctionCarAdd?");
         });
         GetUserInfo();
     });
@@ -228,7 +228,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                @*<a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>*@
             </div>
         </div>
     </div>

@@ -531,5 +531,21 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        [Route("GetCarInfoByMobile")]
+        [HttpGet]
+        public JResult GetCarInfoByMobile(string mobile)
+        {
+            return _carervice.GetCarInfoByMobile(mobile);
+        }
+
+        #endregion
     }
 }
