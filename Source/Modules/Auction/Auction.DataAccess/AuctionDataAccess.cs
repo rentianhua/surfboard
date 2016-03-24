@@ -276,20 +276,27 @@ namespace CCN.Modules.Auction.DataAccess
         /// <returns></returns>
         public int AddAuctionCar(AuctionCarInfoModel model)
         {
+            //添加拍卖车辆
             const string sql = @"INSERT INTO `auction_carinfo`
                                 (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile)
                                 VALUES
                                 (@Innerid, @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile);";
-
+            //更新车辆状态
+            const string sqlcar = @"update `car_info` set status=3 where innerid =@carid;";
             using (var conn = Helper.GetConnection())
             {
                 int result;
+                var tran = conn.BeginTransaction();
                 try
                 {
-                    result = conn.Execute(sql, model);
+                    conn.Execute(sql, model, tran);
+                    conn.Execute(sqlcar, model, tran);
+                    tran.Commit();
+                    result = 1;
                 }
                 catch (Exception ex)
                 {
+                    tran.Rollback();
                     LoggerFactories.CreateLogger().Write("添加拍卖车辆异常：", TraceEventType.Information, ex);
                     result = 0;
                 }
@@ -322,7 +329,51 @@ namespace CCN.Modules.Auction.DataAccess
         }
 
         /// <summary>
-        /// 删除拍卖车辆
+        /// 修改拍卖车辆
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        /// <returns></returns>
+        public int UpdateAuctionCarStatus(AuctionCarInfoModel model)
+        {
+            //更新拍卖信息状态
+            var sql = new StringBuilder("update `auction_carinfo` set `status`=@status where innerid = @innerid;");
+            //更车辆状态
+            var sqlcar = new StringBuilder("update `car_info`  ");
+            if (model.status == 7)
+            {
+                sqlcar.Append(" set status=2 where innerid =@carid; ");
+            }
+            else if (model.status == 8)
+            {
+                sqlcar.Append(" set status=1 where innerid =@carid; ");
+            }
+            int result;
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql.ToString(), model, tran);
+                    if (model.status == 7 || model.status == 8)
+                    {
+                        conn.Execute(sqlcar.ToString(), model, tran);
+                    }
+
+                    tran.Commit();
+                    result = 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    result = 0;
+                    LoggerFactories.CreateLogger().Write("修改拍卖车辆异常：", TraceEventType.Information, ex);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除拍卖车辆 
         /// </summary>
         /// <param name="model">删除成交model</param>
         /// <returns>1.操作成功</returns>

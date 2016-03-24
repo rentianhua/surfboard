@@ -149,6 +149,21 @@ namespace CCN.Modules.Auction.BusinessComponent
         }
 
         /// <summary>
+        /// 修改拍卖车辆(状态)
+        /// </summary>
+        /// <param name="model">车辆信息</param>
+        /// <returns></returns>
+        public JResult UpdateAuctionCarStatus(AuctionCarInfoModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.UpdateAuctionCarStatus(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
         /// 删除拍卖车辆
         /// </summary>
         /// <param name="model">删除成交model</param>
