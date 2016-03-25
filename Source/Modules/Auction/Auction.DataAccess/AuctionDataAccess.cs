@@ -356,7 +356,7 @@ namespace CCN.Modules.Auction.DataAccess
                 try
                 {
                     conn.Execute(sql.ToString(), model, tran);
-                    if (model.status == 7 || model.status == 8)
+                    if (model.status == 6 || model.status == 7 || model.status == 8)
                     {
                         conn.Execute(sqlcar.ToString(), model, tran);
                     }
