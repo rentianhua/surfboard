@@ -103,6 +103,13 @@
                 data.push(json);
             }
         });
+        //判断填入的数字项是否满足要求
+        $('input[data-result="erroritem"]').each(function () {
+            if ($(this).attr("data-count") < ($(this).val() || 0)) {
+                alert($(this).attr("data-chname")+"项，填写的错误项多余总检测项！");
+                return false;
+            }
+        });
         if (status == 1)//保存
         {
             $.ajax({
@@ -183,17 +190,17 @@
 
     <div class="widget-body">
         @*<div class="row form-group">
-            <div class="col-lg-12">
-                <div class="form-group">
-                    <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>评估检测报告</label>
-                    <div class="controls col-sm-11" id="">
-                        <div id="imgfindings" class="imgs col-xs-12" style="padding:10px 144px 0px 0;width:230px;height:150px;">
-                        </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>评估检测报告</label>
+                        <div class="controls col-sm-11" id="">
+                            <div id="imgfindings" class="imgs col-xs-12" style="padding:10px 144px 0px 0;width:230px;height:150px;">
+                            </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>*@
+            </div>*@
         <div class="widget-main ">
             <div class="tabbable" id="myBody1">
 
@@ -231,23 +238,23 @@
         <div id="home11" class="tab-pane in active">
             <form class="form-horizontal form-bordered" role="form">
                 @*<div class="row form-group">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证时间:</label>
-                            <div class="col-sm-10">
-                                <input id="" class="form-control" type="text" placeholder="认证时间">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证时间:</label>
+                                <div class="col-sm-10">
+                                    <input id="" class="form-control" type="text" placeholder="认证时间">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证地点:</label>
-                            <div class="col-sm-10">
-                                <input id="" class="form-control" type="text" placeholder="认证地点">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证地点:</label>
+                                <div class="col-sm-10">
+                                    <input id="" class="form-control" type="text" placeholder="认证地点">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>*@
+                    </div>*@
                 <div class="row form-group">
                     <div class="col-lg-4">
                         <div class="form-group">
@@ -285,11 +292,11 @@
                     </div>
                     <div class="col-lg-4">
                         @*<div class="form-group">
-                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">车架号:</label>
-                            <div class="col-sm-10">
-                                <label class="control-label no-padding-right" id="vin"></label>
-                            </div>
-                        </div>*@
+                                <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">车架号:</label>
+                                <div class="col-sm-10">
+                                    <label class="control-label no-padding-right" id="vin"></label>
+                                </div>
+                            </div>*@
                     </div>
                 </div>
             </form>
@@ -352,7 +359,7 @@
                                         {{/if}}
                                         ：
                                         {{#if inspectioncount}}
-                                        <span>(异常</span><input type="text" id="{{innerid}}count" data-type="result" data-value="{{innerid}}" style="width:30px;" /><span>项)</span>
+                                        <span>(异常</span><input type="text" id="{{innerid}}count" data-type="result" data-result="erroritem" data-chname="{{name_zh}}" data-count="{{inspectioncount}}" data-value="{{innerid}}" style="width:30px;" /><span>项)</span>
                                         {{/if}}
                                     </label>
                                 </div>
