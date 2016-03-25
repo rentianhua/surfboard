@@ -108,7 +108,10 @@ namespace CCN.Modules.Auction.BusinessComponent
             model.createdtime = DateTime.Now;
             model.Innerid = Guid.NewGuid().ToString();
             model.no = "A" + GetOrderNumber();
-            model.status = 1;
+            if (!model.status.HasValue)
+            {
+                model.status = 1;
+            }
             var result = DataAccess.AddAuctionCar(model);
             return JResult._jResult
             (
@@ -334,7 +337,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 model.Amount = null;
             }
             var result = DataAccess.UpdateParticipant(model);
-            
+
             //更新成功并且状态为成交（5）时，更新其他付款状态，并且更新车辆拍卖状态,更新成“成交”
             if (result == 1 && model.status == 5)
             {
@@ -773,7 +776,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             }
 
             var modelname = perModel.model_name;
-            
+
             //获取定金金额
             var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
 
@@ -791,7 +794,7 @@ namespace CCN.Modules.Auction.BusinessComponent
 
             //调用nodejs 通知前端
             var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kplx_auction\",\"TotalFee\":\"" + deposit + "\",\"ProductId\":\""+ perModel.orderno + "\",\"OutTradeNo\":\""+ perModel.orderno + "\",\"GoodsTag\":\"\"}";
+            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kplx_auction\",\"TotalFee\":\"" + deposit + "\",\"ProductId\":\"" + perModel.orderno + "\",\"OutTradeNo\":\"" + perModel.orderno + "\",\"GoodsTag\":\"\"}";
             var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
