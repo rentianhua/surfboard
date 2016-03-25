@@ -698,7 +698,7 @@ namespace CCN.Modules.Auction.DataAccess
                                        left join base_province as pr on c.provid=pr.innerid
                                        left join (select count(1) as pricecount,auctionid from auction_participant group by auctionid) as e on e.auctionid=a.auctionid";
             const string fields = @"a.innerid,a.auctionid,a.mobile,a.amount,a.status,a.createrid,a.createdtime,a.username,
-                                    a.orderno,b.no as auctionno,b.lowestprice,b.validtime, now() as currenttime,c.register_date,c.mileage,c.pic_url,
+                                    a.orderno,b.no as auctionno,b.lowestprice,b.validtime,b.status as auditstatus, now() as currenttime,c.register_date,c.mileage,c.pic_url,
                                     c1.modelprice as price,c1.modelname as model_name,
                                     ct.cityname,pr.provname,e.pricecount";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
