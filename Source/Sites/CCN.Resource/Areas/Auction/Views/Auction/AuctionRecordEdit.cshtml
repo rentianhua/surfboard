@@ -37,6 +37,7 @@
             }
             else if (obj.status == 4) {
                 $("#deal").removeClass("hidden");
+                $("#divprice").removeClass("hidden");
             }
             else if (obj.status == 5) {
                 $("#refuse").addClass("hidden");
@@ -71,6 +72,7 @@
             json.recordlist = $("#record").val() + record;
             json.status = status;
             json.auctionid = auctionid;
+            json.Amount = $("#dealprice").val();
         }
         
         $.post("/api/Auction/UpdateParticipant", json, function (result) {
@@ -189,6 +191,19 @@
                                 <label class="control-label no-padding-right" id="lblmobile"></label>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div id="divprice" class="row form-group hidde">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right">成交价：</label>
+                            <div class="col-sm-10">
+                                <input id="dealprice" type="text" placeholder="成交价（万元）" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        
                     </div>
                 </div>
                 @*<div class="row form-group">

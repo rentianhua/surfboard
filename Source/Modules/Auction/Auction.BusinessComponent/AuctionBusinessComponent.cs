@@ -327,13 +327,21 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// <returns></returns>
         public JResult UpdateParticipant(AuctionCarParticipantModel model)
         {
+            decimal? dealprice = 0;//记录成交价
+            if (model.Amount.HasValue)
+            {
+                dealprice = model.Amount;
+                model.Amount = null;
+            }
             var result = DataAccess.UpdateParticipant(model);
+            
             //更新成功并且状态为成交（5）时，更新其他付款状态，并且更新车辆拍卖状态,更新成“成交”
             if (result == 1 && model.status == 5)
             {
                 var auctioncar = new AuctionCarInfoModel();
                 auctioncar.status = 7;
                 auctioncar.Innerid = model.Auctionid;
+                auctioncar.dealprice = dealprice;
                 DataAccess.UpdateAuctionCar(auctioncar);
 
                 //更新其他竞价信息 

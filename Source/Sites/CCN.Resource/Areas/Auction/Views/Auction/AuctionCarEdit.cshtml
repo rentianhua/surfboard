@@ -542,6 +542,9 @@
                 $("#access").removeClass("hidden");
                 $("#accessnot").removeClass("hidden");
             }
+            else if (status == 4) {
+                $("#save").removeClass("hidden");
+            }
             else if (status == 5) {
                 $("#online").removeClass("hidden");
             }
@@ -1171,7 +1174,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label no-padding-right">成交价（万元）</label>
                                         <div class="col-sm-10">
-                                            <input id="dealprice" type="text" placeholder="成交价（万元）" class="form-control">
+                                            <input id="dealprice" type="text" placeholder="成交价（万元）" class="form-control" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -1239,7 +1242,7 @@
                                     <input id="startaudit" type="button" class="btn btn-palegreen shiny hidden" value="开始审核" onclick="ChangeStatus(3);" />
                                     <input id="access" type="button" class="btn btn-palegreen shiny hidden" value="通过" onclick="ChangeStatus(5);" />
                                     <input id="accessnot" type="button" class="btn btn-palegreen shiny hidden" value="不通过" onclick="ChangeStatus(4);" />
-                                    <input id="deal" type="button" class="btn btn-palegreen shiny " value="成交"  />
+                                    <input id="deal" type="button" class="btn btn-palegreen shiny hidden" value="成交"  />
                                     <input id="online" type="button" class="btn btn-palegreen shiny hidden" value="上线" onclick="ChangeStatus(6);" />
                                     <input id="offline" type="button" class="btn btn-palegreen shiny hidden" value="下线" onclick="ChangeStatus(8);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
