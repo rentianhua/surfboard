@@ -156,6 +156,11 @@ namespace CCN.Modules.Auction.BusinessEntity
         /// 当前服务器时间
         /// </summary>
         public DateTime? currenttime { get; set; }
+
+        /// <summary>
+        /// 拍卖状态
+        /// </summary>
+        public int? auditstatus { get; set; }
     }
 
     /// <summary>
