@@ -489,6 +489,14 @@ namespace CCN.Modules.Base.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            return DataAccess.GetTotalAreaList();
+        }
         #endregion
 
         #region 品牌/车系/车型

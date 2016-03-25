@@ -229,6 +229,14 @@ namespace CCN.Modules.Base.BusinessService
             return BusinessComponent.GetCountyList(cityId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            return BusinessComponent.GetTotalAreaList();
+        }
         #endregion
 
         #region 品牌/车系/车型

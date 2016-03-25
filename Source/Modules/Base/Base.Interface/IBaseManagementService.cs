@@ -158,6 +158,11 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult GetProvListEx(string initial);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        List<BaseProvinceAll> GetTotalAreaList();
         #endregion
 
         #region 品牌/车系/车型

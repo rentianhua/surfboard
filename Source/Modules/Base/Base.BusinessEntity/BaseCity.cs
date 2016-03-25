@@ -67,4 +67,81 @@ namespace CCN.Modules.Base.BusinessEntity
         /// </summary>
         public string TypeName { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BaseProvinceAll
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int provid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string provname { get; set; }
+
+        /// <summary>
+        /// 首字母
+        /// </summary>
+        public string initial { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<BaseCityAll> citylist { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BaseCityAll
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int cityid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string cityname { get; set; }
+        /// <summary>
+        /// 首字母
+        /// </summary>
+        public string initial { get; set; }
+
+        /// <summary>
+        /// id
+        /// </summary>
+        public int provid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public List<BaseCountyAll> countylist { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BaseCountyAll
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public int countyid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string countyname { get; set; }
+
+        /// <summary>
+        /// 城市id
+        /// </summary>
+        public int cityid { get; set; }
+    }
 }
