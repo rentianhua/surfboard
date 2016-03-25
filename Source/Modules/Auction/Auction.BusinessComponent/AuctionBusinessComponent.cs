@@ -765,7 +765,6 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
-        /// <param name="orderno"></param>
         /// <returns></returns>
         public JResult WeChatPayForAuction(string innerid)
         {
@@ -778,24 +777,11 @@ namespace CCN.Modules.Auction.BusinessComponent
             var modelname = perModel.model_name;
 
             //获取定金金额
-            var deposit = Convert.ToInt32(ConfigHelper.GetAppSettings("depositauction"));
-
-            //var data = new NativePayData
-            //{
-            //    Body = "快拍立信拍车定金",//商品描述
-            //    Attach = "【kply】",//附加数据
-            //    TotalFee = deposit,//总金额
-            //    ProductId = perModel.orderno,//商品ID
-            //    OutTradeNo = perModel.orderno,//订单编号
-            //    GoodsTag = ""
-            //};
-
+            var deposit = ConfigHelper.GetAppSettings("depositauction");
+            var payAuction = ConfigHelper.GetAppSettings("pay_auction") + $"?orderno={perModel.orderno}&total_fee={deposit}&attach=kplx_auction";
+            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
+            
             string qrcode;
-
-            //调用nodejs 通知前端
-            var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kplx_auction\",\"TotalFee\":\"" + deposit + "\",\"ProductId\":\"" + perModel.orderno + "\",\"OutTradeNo\":\"" + perModel.orderno + "\",\"GoodsTag\":\"\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(402, "二维码生成失败");
@@ -816,23 +802,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             {
                 qrcode = perModel.qrcode;
             }
-
-            //var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
-            //if (qrcodeResult.errcode == 0)
-            //{
-            //    qrcode = qrcodeResult.errmsg.ToString();
-            //    var model = new AuctionCarParticipantModel
-            //    {
-            //        Innerid = innerid,
-            //        qrcode = qrcode
-            //    };
-            //    DataAccess.UpdateParticipant(model);
-            //}
-            //else//使用原来qrcode
-            //{
-            //    qrcode = perModel.qrcode;
-            //}
-
+            
             var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
             return JResult._jResult(0, result);
         }

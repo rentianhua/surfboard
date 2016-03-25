@@ -13,6 +13,7 @@ using Cedar.Core.Logging;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Xml.Linq;
+using CCN.Modules.Customer.Interface;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP.Helpers;
@@ -271,43 +272,43 @@ namespace CCN.WebAPI.ApiControllers
             return _auctionservice.WeChatPayForAuction(innerid);
         }
 
-        /// <summary>
-        /// 微信支付结果回调
-        /// </summary>
-        /// <returns></returns>
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("UnifiedOrder")]
-        public JResult UnifiedOrder()
-        {
-            var stream = Request.Content.ReadAsStringAsync().Result;
-            LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
-            if (string.IsNullOrWhiteSpace(stream))
-            {
-                return JResult._jResult(402,"参数不正确");
-            }
-            try
-            {
-                var jobj = JObject.Parse(stream);
-                NativePayData data = new NativePayData();
-                data.Body = jobj["Body"].ToString();
-                data.Attach = jobj["Attach"].ToString();
-                data.ProductId = jobj["ProductId"].ToString();
-                data.OutTradeNo = jobj["OutTradeNo"].ToString();
-                data.GoodsTag = jobj["GoodsTag"].ToString();
-                int fee;
-                int.TryParse(jobj["TotalFee"].ToString(), out fee);
-                data.TotalFee = fee;
+        ///// <summary>
+        ///// 微信支付结果回调
+        ///// </summary>
+        ///// <returns></returns>
+        //[AllowAnonymous]
+        //[HttpPost]
+        //[Route("UnifiedOrder")]
+        //public JResult UnifiedOrder()
+        //{
+        //    var stream = Request.Content.ReadAsStringAsync().Result;
+        //    LoggerFactories.CreateLogger().Write($"WxPay Result: {stream}", TraceEventType.Information);
+        //    if (string.IsNullOrWhiteSpace(stream))
+        //    {
+        //        return JResult._jResult(402,"参数不正确");
+        //    }
+        //    try
+        //    {
+        //        var jobj = JObject.Parse(stream);
+        //        NativePayData data = new NativePayData();
+        //        data.Body = jobj["Body"].ToString();
+        //        data.Attach = jobj["Attach"].ToString();
+        //        data.ProductId = jobj["ProductId"].ToString();
+        //        data.OutTradeNo = jobj["OutTradeNo"].ToString();
+        //        data.GoodsTag = jobj["GoodsTag"].ToString();
+        //        int fee;
+        //        int.TryParse(jobj["TotalFee"].ToString(), out fee);
+        //        data.TotalFee = fee;
                 
-                var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
-                return qrcodeResult;
-            }
-            catch (Exception ex)
-            {
-                LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return JResult._jResult(500, ex.Message);
-            }
-        }
+        //        var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
+        //        return qrcodeResult;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
+        //        return JResult._jResult(500, ex.Message);
+        //    }
+        //}
 
         /// <summary>
         /// 微信支付结果回调
@@ -325,7 +326,15 @@ namespace CCN.WebAPI.ApiControllers
                 var doc = XDocument.Parse(stream);
                 var model = new AuctionPaymentRecordModel();
                 model.FillEntityWithXml(doc);
+                
                 var result = _auctionservice.AddPaymentRecord(model);
+
+                if (model.attach.Equals("kplx_vip"))
+                {
+                    var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+                    custservice.CustWxPayVipBack(model.out_trade_no);
+                }
+
                 return new HttpResponseMessage { Content = new StringContent("ok") };
             }
             catch (Exception ex)

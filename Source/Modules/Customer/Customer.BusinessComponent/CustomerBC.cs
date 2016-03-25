@@ -1715,7 +1715,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult CustWxPayVip(string custid)
         {
-            const int deposit = 2;
+            var deposit = ConfigHelper.GetAppSettings("depositauctionvip");
             const string body = "快拍立信VIP费";
 
             var perModel = DataAccess.CustWeChatPayByCustid(custid);
@@ -1772,15 +1772,12 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <param name="body"></param>
         /// <param name="deposit"></param>
         /// <returns></returns>
-        public JResult GenerationQrCode(string orderno, string body, int deposit)
+        public JResult GenerationQrCode(string orderno, string body, string deposit)
         {
             //获取定金金额
             string qrcode;
-            //调用nodejs 通知前端
-            var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-            var json = "{\"Body\":\"" + body + "\",\"Attach\":\"kplx_vip\",\"TotalFee\":\"" + deposit +
-                       "\",\"ProductId\":\"" + orderno + "\",\"OutTradeNo\":\"" + orderno + "\",\"GoodsTag\":\"\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
+            var payAuction = ConfigHelper.GetAppSettings("pay_cust") + $"?orderno={orderno}&total_fee={deposit}&attach=kplx_vip";
+            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(400, "二维码生成失败");
