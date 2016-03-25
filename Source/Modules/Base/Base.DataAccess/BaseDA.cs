@@ -496,6 +496,32 @@ namespace CCN.Modules.Base.DataAccess
             return countyList;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            var sqlProvince = $"select innerid as provid, provname, initial from base_province where isenabled=1";
+            var sqlCity = $"select innerid as cityid, cityname, initial, provid from base_city where isenabled=1";
+            var sqlCounty = $"select innerid as countyid, countyname, cityid from base_county";
+            var provinceList = Helper.Query<BaseProvinceAll>(sqlProvince).ToList();
+            var cityList = Helper.Query<BaseCityAll>(sqlCity).ToList();
+            var countyList = Helper.Query<BaseCountyAll>(sqlCounty).ToList();
+            
+            foreach (var pitem in provinceList)
+            {
+                pitem.citylist = cityList.Where(x => x.provid == pitem.provid).ToList();
+                foreach (var citem in pitem.citylist)
+                {
+                    citem.countylist = countyList.Where(x => x.cityid == citem.cityid).ToList();
+                }
+            }
+
+            return provinceList;
+        }
+
+
         #endregion
 
         #region 品牌/车系/车型

@@ -182,6 +182,16 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.GetAllDepartment(model);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetTotalAreaList")]
+        [HttpGet]
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            return _baseservice.GetTotalAreaList();
+        }
         #endregion
 
         #region 品牌/车系/车型
