@@ -775,12 +775,19 @@ namespace CCN.Modules.Auction.BusinessComponent
             }
 
             var modelname = perModel.model_name;
-
+            var status = perModel.status;
+   
+            if (status > 2)
+            {
+                return JResult._jResult(402, "订单已完成支付或者已经取消");
+            }
+          
             //获取定金金额
             var deposit = ConfigHelper.GetAppSettings("depositauction");
             var payAuction = ConfigHelper.GetAppSettings("pay_auction") + $"?orderno={perModel.orderno}&total_fee={deposit}&attach=kplx_auction";
+
             var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
-            
+
             string qrcode;
             if (string.IsNullOrWhiteSpace(orderresult))
             {
@@ -802,7 +809,7 @@ namespace CCN.Modules.Auction.BusinessComponent
             {
                 qrcode = perModel.qrcode;
             }
-            
+
             var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
             return JResult._jResult(0, result);
         }
