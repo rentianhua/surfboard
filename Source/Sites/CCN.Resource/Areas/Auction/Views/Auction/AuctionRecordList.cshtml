@@ -11,7 +11,9 @@
 
     $(function () {
         QueryList();
-
+        $("#btnBack").click(function () {
+            getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+        });
     });
 
 
@@ -46,7 +48,7 @@
             str += "<td>" + (val.Mobile == null ? "" : val.Mobile.sub(400)) + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
 
-            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordEdit?id=" + val.Innerid + "&auctionid=" + auctionid + "');\" href='javascript:;'>查看详情</a> ";
+            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordEdit?id=" + val.Innerid + "&auctionid=" + val.Auctionid + "');\" href='javascript:;'>查看详情</a> ";
             str += "<td>" + btn + "</td></tr>";
             $("#auctioncarlist tbody").append(str);
         });
@@ -68,7 +70,7 @@
             case 6:
                 return "已拒绝";
             case 7:
-                return "已成交";
+                return "拍卖结束";
             default:
         }
         return "";
@@ -129,7 +131,7 @@
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                <a id="btnBack" href="javascript:;" class="btn btn-primary shiny">返回</a>
             </div>
         </div>
     </div>
