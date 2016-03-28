@@ -1373,27 +1373,43 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="innerid">车辆图片id</param>
         /// <returns></returns>
-        [AuditTrailCallHandler("CarDataAccess.DeleteCarPicture")]
         public int DeleteCarPicture(string innerid)
         {
+            const string sqlSCarPic = "select innerid, carid, typeid, path, sort, createdtime from car_picture where carid=(select carid from car_picture where innerid=@innerid) order by sort;";//查询车辆id
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
+            const string sqlUCover = @"update car_info set pic_url=(select path from car_picture where carid=@carid order by sort limit 1) where innerid=@carid;";
+
             using (var conn = Helper.GetConnection())
             {
-                //参数
-                var obj = new
+                //获取车辆图片
+                var picedList = conn.Query<CarPictureModel>(sqlSCarPic, new { innerid }).ToList();
+                var number = picedList.Count - 1;
+                if (number < 3)
                 {
-                    p_pictureid = innerid
-                };
-
-                var args = new DynamicParameters(obj);
-                args.Add("p_values", dbType: DbType.Int32, direction: ParameterDirection.Output);
-
-                using (var result = conn.QueryMultiple("ccnsp_deletepicture", args, commandType: CommandType.StoredProcedure))
-                {
-                    //获取结果集
-                    //var data = result.Read<T>();
+                    //图片数量控制在>=3 and <=9
+                    return 402;
                 }
 
-                return args.Get<int>("p_values");
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlDPic, new { innerid }, tran);
+                    //获取封面图片
+                    var coverid = picedList.First().Innerid;
+                    if (innerid.Equals(coverid)) //删除封面
+                    {
+                        conn.Execute(sqlUCover, new {picedList.First().Carid}, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量删除图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
             }
         }
 

@@ -349,6 +349,46 @@ namespace CCN.Modules.Customer.BusinessComponent
         }
 
         /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdatePassword(CustModifyPassword model)
+        {
+            if (string .IsNullOrWhiteSpace(model?.Mobile) || string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var custModel = DataAccess.GetCustByMobile(model.Mobile);
+            if (custModel == null)
+            {
+                return JResult._jResult(402, "账户不存在");
+            }
+
+            if (custModel.Status == 2)
+            {
+                return JResult._jResult(403, "账户被冻结");
+            }
+
+            model.OldPassword = Encryptor.EncryptAes(model.OldPassword);
+            if (!model.OldPassword.Equals(custModel.Password))
+            {
+                return JResult._jResult(404, "原密码不正确");
+            }
+            
+            var result = DataAccess.UpdatePassword(new CustRetrievePassword
+            {
+                Mobile = model.Mobile,
+                NewPassword = Encryptor.EncryptAes(model.NewPassword)
+            });
+            return new JResult
+            {
+                errcode = result > 0 ? 0 : 405,
+                errmsg = result > 0 ? "修改成功" : "修改失败"
+            };
+        }
+
+        /// <summary>
         /// 修改会员信息
         /// </summary>
         /// <param name="model"></param>
@@ -1715,14 +1755,16 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult CustWxPayVip(string custid)
         {
-            const int deposit = 2;
-            const string body = "快拍立信VIP费";
+            var str = "\"qrcode\": \"{0}\",\"modelname\": \"{1}\",\"deposit\": {2},\"orderno\": \"{3}\"";
+            var deposit = ConfigHelper.GetAppSettings("depositauctionvip");
+            const string body = "快拍立信VIP会员费";
 
             var perModel = DataAccess.CustWeChatPayByCustid(custid);
             JResult result;
+            string orderNo;
             if (perModel == null)
             {
-                var orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
+                orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
                 result = GenerationQrCode(orderNo, body, deposit);
                 if (result.errcode != 0)
                 {
@@ -1735,15 +1777,18 @@ namespace CCN.Modules.Customer.BusinessComponent
                     Custid = custid,
                     Modifiedtime = null,
                     Status = 1,
-                    OrderNo = orderNo,                    
+                    OrderNo = orderNo,
                     OrderNoQrCode = result.errmsg.ToString()
                 });
-                return result;
             }
-
-            result = GenerationQrCode(perModel.OrderNo, body, deposit);
-            if (result.errcode == 0)
+            else
             {
+                orderNo = perModel.OrderNo;
+                result = GenerationQrCode(orderNo, body, deposit);
+                if (result.errcode != 0)
+                {
+                    return result;
+                }
                 DataAccess.UpdateCustWeChatPay(new CustWxPayModel()
                 {
                     Innerid = perModel.Innerid,
@@ -1751,7 +1796,9 @@ namespace CCN.Modules.Customer.BusinessComponent
                     OrderNoQrCode = result.errmsg.ToString()
                 });
             }
-            return result;
+            str = string.Format(str, result.errmsg, body, deposit, orderNo);
+            str = "{" + str + "}";
+            return JResult._jResult(0, str);
         }
 
         /// <summary>
@@ -1772,15 +1819,12 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <param name="body"></param>
         /// <param name="deposit"></param>
         /// <returns></returns>
-        public JResult GenerationQrCode(string orderno, string body, int deposit)
+        public JResult GenerationQrCode(string orderno, string body, string deposit)
         {
             //获取定金金额
             string qrcode;
-            //调用nodejs 通知前端
-            var nodejs = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-            var json = "{\"Body\":\"" + body + "\",\"Attach\":\"kplx_vip\",\"TotalFee\":\"" + deposit +
-                       "\",\"ProductId\":\"" + orderno + "\",\"OutTradeNo\":\"" + orderno + "\",\"GoodsTag\":\"\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(nodejs, "post", json);
+            var payAuction = ConfigHelper.GetAppSettings("pay_cust") + $"?orderno={orderno}&total_fee={deposit}&attach=kplx_vip";
+            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(400, "二维码生成失败");
@@ -1797,6 +1841,29 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             return JResult._jResult(0, qrcode);
         }
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSiteAdvice(SiteAdviceModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Phone) || string.IsNullOrWhiteSpace(model.Advice))
+            {
+                return JResult._jResult(401 ,"参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.AddSiteAdvice(model);
+            return JResult._jResult(result);
+        }
+
 
         #endregion
     }

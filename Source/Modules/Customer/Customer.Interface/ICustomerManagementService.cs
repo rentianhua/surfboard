@@ -99,6 +99,13 @@ namespace CCN.Modules.Customer.Interface
         JResult UpdatePassword(CustRetrievePassword mRetrievePassword);
 
         /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdatePassword(CustModifyPassword model);
+
+        /// <summary>
         /// 修改会员信息
         /// </summary>
         /// <param name="model"></param>
@@ -552,6 +559,18 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="orderno">会员id</param>
         /// <returns></returns>
         JResult CustWxPayVipBack(string orderno);
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddSiteAdvice(SiteAdviceModel model);
+
 
         #endregion
     }

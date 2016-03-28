@@ -2316,5 +2316,31 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         }
 
         #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddSiteAdvice(SiteAdviceModel model)
+        {
+            const string sqlI = "insert into site_advice (innerid, `name`, phone, advice, `column`, createdtime) values (@innerid, @name, @phone, @advice, @column, @createdtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Execute(sqlI, model);
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+
+        #endregion
     }
 }

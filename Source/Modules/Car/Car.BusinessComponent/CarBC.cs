@@ -77,7 +77,7 @@ namespace CCN.Modules.Car.BusinessComponent
             }
 
             //需要补数据
-            if (fill <= 0)
+            if (fill <= 0 || query.Echo == null)
                 return list;
 
             //查询补全数据
@@ -95,8 +95,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var aaData = list.aaData.ToList();
             aaData.AddRange(filllist.aaData);
             list.aaData = aaData;
-            list.iTotalDisplayRecords += filllist.aaData.Count();   //补齐数据后的总记录数
-
+            list.iTotalDisplayRecords += filllist.aaData.Count(); //补齐数据后的总记录数
             return list;
         }
 

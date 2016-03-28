@@ -31,7 +31,7 @@ namespace Cedar.Framework.Common.BaseClasses
                 UseProxy = false
             };
 
-            var json = isjson ? JsonConvert.DeserializeObject(data) : data;
+            var json = isjson ? (data != null ? JsonConvert.DeserializeObject(data) : (string) null) : data;
 
             var client = new HttpClient(handler);
             var website = ConfigurationManager.AppSettings["localapi"];

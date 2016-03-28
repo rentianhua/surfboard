@@ -472,6 +472,27 @@ namespace CCN.Modules.Customer.BusinessEntity
     }
 
     /// <summary>
+    /// 修改密码model
+    /// </summary>
+    public class CustModifyPassword
+    {
+        /// <summary>
+        /// 新密码
+        /// </summary>
+        public string NewPassword { get; set; }
+
+        /// <summary>
+        /// 旧密码
+        /// </summary>
+        public string OldPassword { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+    }
+
+    /// <summary>
     /// 会员相关总数信息
     /// </summary>
     public class CustTotalModel

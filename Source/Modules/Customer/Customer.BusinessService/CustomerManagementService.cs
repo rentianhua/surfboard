@@ -157,6 +157,16 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdatePassword(CustModifyPassword model)
+        {
+            return BusinessComponent.UpdatePassword(model);
+        }
+
+        /// <summary>
         /// 修改会员信息
         /// </summary>
         /// <param name="model"></param>
@@ -797,6 +807,22 @@ namespace CCN.Modules.Customer.BusinessService
         {
             return BusinessComponent.CustWxPayVipBack(orderno);
         }
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSiteAdvice(SiteAdviceModel model)
+        {
+
+            return BusinessComponent.AddSiteAdvice(model);
+        }
+
 
         #endregion
     }
