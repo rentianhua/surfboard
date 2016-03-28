@@ -104,12 +104,16 @@
             }
         });
         //判断填入的数字项是否满足要求
+        var erritem = "";
         $('input[data-result="erroritem"]').each(function () {
             if ($(this).attr("data-count") < ($(this).val() || 0)) {
-                alert($(this).attr("data-chname")+"项，填写的错误项多余总检测项！");
-                return false;
+                erritem += erritem + $(this).attr("data-chname") + ",";
             }
         });
+        if (erritem != "") {
+            alert(erritem + "项，填写的错误项多余总检测项！");
+            return false;
+        }
         if (status == 1)//保存
         {
             $.ajax({
