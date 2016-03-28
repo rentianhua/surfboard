@@ -328,7 +328,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdatePassword")]
         [HttpPost]
-        public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
+        public JResult UpdatePassword([FromBody]CustRetrievePassword mRetrievePassword)
         {
             if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
             {
@@ -348,6 +348,18 @@ namespace CCN.WebAPI.ApiControllers
             }
 
             return _custservice.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdatePwd")]
+        [HttpPost]
+        public JResult UpdatePassword([FromBody]CustModifyPassword model)
+        {
+            return _custservice.UpdatePassword(model);
         }
 
         /// <summary>
@@ -1169,6 +1181,22 @@ namespace CCN.WebAPI.ApiControllers
             return _custservice.CustWxPayVipBack(orderno);
         }
 
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddSiteAdvice")]
+        [HttpPost]
+        public JResult AddSiteAdvice([FromBody]SiteAdviceModel model)
+        {
+            return _custservice.AddSiteAdvice(model);
+        }
+        
         #endregion
     }
 }
