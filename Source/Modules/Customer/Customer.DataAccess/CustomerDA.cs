@@ -633,7 +633,7 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int AuditAuthentication(CustAuthenticationModel model)
         {
-            const string sql = "update cust_info set authstatus=@authstatus where innerid=@innerid;";
+            const string sql = "update cust_info set authstatus=@authstatus,type=1 where innerid=@innerid;";
             const string sqlau = "update cust_authentication set auditper=@auditper,auditdesc=@auditdesc,audittime=@audittime where custid=@custid;";
 
             using (var conn = Helper.GetConnection())
