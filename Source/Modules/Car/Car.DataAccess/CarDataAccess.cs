@@ -2749,5 +2749,37 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCarLoan(CarLoanModel model)
+        {
+            const string sql = @"INSERT INTO `car_loan`
+                                (`innerid`, `contacts`, `mobile`, `term`, `instruction`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
+                                VALUES
+                                (uuid(), @contacts, @mobile, @term, @instruction, @modifiedid, now(), @createdid, now());";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("车贷申请信息异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+                return result;
+            }
+        }
+
+        #endregion
     }
 }

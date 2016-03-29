@@ -426,9 +426,20 @@ namespace CCN.Modules.Auction.BusinessService
             Task.Run(() =>
             {
                 //调用nodejs 通知前端
-                var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?orderno=" + model.out_trade_no;
-                var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
-                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
+                //根据ID获取竞价数据
+                var resultPay = BusinessComponent.GetAuctionParticipantByOrderNo(model.out_trade_no);
+                var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
+                if (modelPay != null)
+                {
+                    var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?innerid=" + modelPay.Innerid;
+                    var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
+                    LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
+                }
+                else
+                {
+                    LoggerFactories.CreateLogger().Write("socket result ：没有获取到竞价数据 ", TraceEventType.Information);
+                }
+
             });
 
             return result;

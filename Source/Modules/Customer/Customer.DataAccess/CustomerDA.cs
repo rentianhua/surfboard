@@ -2289,8 +2289,9 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public int UpdateCustWeChatPayBack(string orderNo)
         {
+            var expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
             const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
-            const string sqlL = "update cust_info set level=1 where innerid=@innerid;";
+            const string sqlL = "update cust_info set level=1,expirestime=@expirestime where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
             {
