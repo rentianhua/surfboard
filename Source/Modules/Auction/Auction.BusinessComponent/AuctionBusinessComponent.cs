@@ -783,10 +783,13 @@ namespace CCN.Modules.Auction.BusinessComponent
             }
           
             //获取定金金额
-            var deposit = ConfigHelper.GetAppSettings("depositauction");
-            var payAuction = ConfigHelper.GetAppSettings("pay_auction") + $"?orderno={perModel.orderno}&total_fee={deposit}&attach=kplx_auction";
+            
+            var payurl = ConfigHelper.GetAppSettings("payurl");
+            var body = ConfigHelper.GetAppSettings("auction_body");
+            var totalFee = ConfigHelper.GetAppSettings("auction_total_fee");
 
-            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
+            var json = "{\"out_trade_no\":\"" + perModel.orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_auction\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
 
             string qrcode;
             if (string.IsNullOrWhiteSpace(orderresult))
@@ -810,7 +813,7 @@ namespace CCN.Modules.Auction.BusinessComponent
                 qrcode = perModel.qrcode;
             }
 
-            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + deposit + "}";
+            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + totalFee + "}";
             return JResult._jResult(0, result);
         }
 

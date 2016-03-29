@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -1756,8 +1757,8 @@ namespace CCN.Modules.Customer.BusinessComponent
         public JResult CustWxPayVip(string custid)
         {
             var str = "\"qrcode\": \"{0}\",\"modelname\": \"{1}\",\"deposit\": {2},\"orderno\": \"{3}\"";
-            var deposit = ConfigHelper.GetAppSettings("depositauctionvip");
-            const string body = "快拍立信VIP会员费";
+            var totalFee = ConfigHelper.GetAppSettings("vip_total_fee");
+            var body = ConfigHelper.GetAppSettings("vip_body");
 
             var perModel = DataAccess.CustWeChatPayByCustid(custid);
             JResult result;
@@ -1765,7 +1766,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             if (perModel == null)
             {
                 orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
-                result = GenerationQrCode(orderNo, body, deposit);
+                result = GenerationQrCode(orderNo, body, totalFee);
                 if (result.errcode != 0)
                 {
                     return result;
@@ -1784,7 +1785,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             else
             {
                 orderNo = perModel.OrderNo;
-                result = GenerationQrCode(orderNo, body, deposit);
+                result = GenerationQrCode(orderNo, body, totalFee);
                 if (result.errcode != 0)
                 {
                     return result;
@@ -1796,7 +1797,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                     OrderNoQrCode = result.errmsg.ToString()
                 });
             }
-            str = string.Format(str, result.errmsg, body, deposit, orderNo);
+            str = string.Format(str, result.errmsg, body, totalFee, orderNo);
             str = "{" + str + "}";
             return JResult._jResult(0, str);
         }
@@ -1817,14 +1818,16 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// </summary>
         /// <param name="orderno"></param>
         /// <param name="body"></param>
-        /// <param name="deposit"></param>
+        /// <param name="totalFee"></param>
         /// <returns></returns>
-        public JResult GenerationQrCode(string orderno, string body, string deposit)
+        public JResult GenerationQrCode(string orderno, string body, string totalFee)
         {
             //获取定金金额
             string qrcode;
-            var payAuction = ConfigHelper.GetAppSettings("pay_cust") + $"?orderno={orderno}&total_fee={deposit}&attach=kplx_vip";
-            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", null, false);
+            var payAuction = ConfigHelper.GetAppSettings("payurl");
+
+            var json = "{\"out_trade_no\":\""+ orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_vip\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", json, false);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(400, "二维码生成失败");
