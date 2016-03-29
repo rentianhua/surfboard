@@ -656,6 +656,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 状态
         /// </summary>
         public int Status { get; set; }
+
+        /// <summary>
+        /// 类型 1、vip会员 2、体验会员
+        /// </summary>
+        public string type { get; set; }
         /// <summary>
         /// 
         /// </summary>

@@ -93,5 +93,10 @@ namespace CCN.Modules.Car.BusinessEntity
     /// 车贷显示实体
     /// </summary>
     public class CarLoanViewModel : CarLoanModel
-    { }
+    {
+        /// <summary>
+        /// 会员等级 1、VIP 2、1元体验会员
+        /// </summary>
+        public int? level { get; set; }
+    }
 }
