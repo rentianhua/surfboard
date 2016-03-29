@@ -1521,7 +1521,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
         {
-            if (query != null)
+            if (query == null)
             {
                 LoggerFactories.CreateLogger().Write("获取贷款列表，参数不完整", TraceEventType.Warning);
                 return new BasePageList<CarLoanViewModel>();
