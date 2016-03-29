@@ -674,4 +674,20 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// </summary>
         public DateTime? Modifiedtime { get; set; }
     }
+
+    /// <summary>
+    /// 新粉丝重新绑定会员model
+    /// </summary>
+    public class CustRebindFansModel
+    {
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// openid
+        /// </summary>
+        public string Openid { get; set; }
+    }
 }

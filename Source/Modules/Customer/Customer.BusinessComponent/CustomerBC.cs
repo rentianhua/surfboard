@@ -17,6 +17,7 @@ using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 #endregion
 
@@ -1804,7 +1805,9 @@ namespace CCN.Modules.Customer.BusinessComponent
                 result = GenerationQrCode(orderNo, body, totalFee, attach);
                 if (result.errcode != 0)
                 {
-                    return result;
+                    str = string.Format(str, perModel.OrderNoQrCode, body, totalFee, orderNo);
+                    str = "{" + str + "}";
+                    return JResult._jResult(0, str);
                 }
                 DataAccess.UpdateCustWeChatPay(new CustWxPayModel()
                 {
@@ -1895,6 +1898,27 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(result);
         }
 
+
+        #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult RebindFans(CustRebindFansModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Mobile) || string.IsNullOrWhiteSpace(model.Openid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.RebindFans(model);
+
+            CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.Openid, result == 0 ? "您还没有成为我们的会员，请点击菜单赶快去注册吧！" : "绑定成功！");
+
+            return JResult._jResult(result);
+        }
 
         #endregion
     }

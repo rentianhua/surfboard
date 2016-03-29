@@ -177,24 +177,10 @@ namespace CCN.WebAPI.ApiControllers
         [AllowAnonymous]
         [HttpPost]
         [Route("TestPu")]
-        public void TestPu()
+        public void TestPu(string mobile)
         {
-            //调用nodejs 通知前端
-            var localapi = ConfigHelper.GetAppSettings("localapi") + "api/Auction/UnifiedOrder";
-
-            //IDictionary<string, string> parameters = new Dictionary<string, string>()
-            //{
-            //    {"Body","快拍立信拍车定金" },
-            //    {"Attach","kply" },
-            //    {"TotalFee","1"},
-            //    {"ProductId","P160323133517"},
-            //    {"OutTradeNo","P160323133517" },
-            //    {"GoodsTag","" }
-            //};
-
-            var json = "{\"Body\":\"快拍立信拍车定金\",\"Attach\":\"kply\",\"TotalFee\":\"1\",\"ProductId\":\"P160323133517\",\"OutTradeNo\":\"P160323133517\",\"GoodsTag\":\"\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(localapi, "post", json);
-            //var orderresult = DynamicWebService.SendPost(nodejs, parameters, "post");
+            const string test = @"^1[3|4|5|8][0-9]\d{8}$";
+            var b = System.Text.RegularExpressions.Regex.IsMatch(mobile, test);
         }
     }    
 }

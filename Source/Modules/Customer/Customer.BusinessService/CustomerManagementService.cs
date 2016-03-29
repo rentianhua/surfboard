@@ -835,5 +835,18 @@ namespace CCN.Modules.Customer.BusinessService
 
 
         #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult RebindFans(CustRebindFansModel model)
+        {
+            return BusinessComponent.RebindFans(model);
+        }
+
+        #endregion
     }
 }
