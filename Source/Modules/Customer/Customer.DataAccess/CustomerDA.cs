@@ -1982,7 +1982,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
 
         #region C用户管理
-        
+
         /// <summary>
         /// 会员注册检查手机号是否被注册
         /// </summary>
@@ -2034,7 +2034,8 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
             try
             {
-                var model = Helper.Query<UserViewModel>(sql, new {
+                var model = Helper.Query<UserViewModel>(sql, new
+                {
                     mobile = loginInfo.Mobile,
                     password = loginInfo.Password
                 }).FirstOrDefault();
@@ -2070,7 +2071,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                 return null;
             }
         }
-        
+
         /// <summary>
         /// C用户 获取会员详情
         /// </summary>
@@ -2085,7 +2086,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
             try
             {
-                var model = Helper.Query<UserViewModel>(sql, new { innerid }).FirstOrDefault();                
+                var model = Helper.Query<UserViewModel>(sql, new { innerid }).FirstOrDefault();
                 return model;
             }
             catch (Exception ex)
@@ -2094,7 +2095,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                 return null;
             }
         }
-        
+
         /// <summary>
         /// C用户 获取会员列表
         /// </summary>
@@ -2190,7 +2191,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
             });
             return result;
         }
-        
+
         /// <summary>
         /// C用户 更新会员二维码
         /// </summary>
@@ -2220,7 +2221,22 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
             //const string sqlU = "update user_info set qrcode=@qrcode where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
             {
-                return conn.Query<CustWxPayModel>(sqlS, new {custid}).FirstOrDefault();
+                return conn.Query<CustWxPayModel>(sqlS, new { custid }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public CustWxPayModel CustWeChatPayByorderno(string orderno)
+        {
+            const string sqlS = "select innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                return conn.Query<CustWxPayModel>(sqlS, new { orderno }).FirstOrDefault();
             }
         }
 
@@ -2240,8 +2256,8 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                 }
                 catch (Exception)
                 {
-                    return 0;                    
-                }                
+                    return 0;
+                }
             }
         }
 
@@ -2267,7 +2283,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                     {
                         //升级VIP
                         const string sqlL = "update cust_info set level=1 where innerid=@innerid;";
-                        conn.Execute(sqlL, new {innerid = model.Custid}, tran);
+                        conn.Execute(sqlL, new { innerid = model.Custid }, tran);
                     }
 
                     tran.Commit();
@@ -2290,7 +2306,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         public int UpdateCustWeChatPayBack(string orderNo)
         {
             var expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-            const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
+            const string sqlU = "update cust_wxpay_info set status=@status where orderno=@orderno;";
             const string sqlL = "update cust_info set level=1,expirestime=@expirestime where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
@@ -2298,12 +2314,13 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                 var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sqlU, new {orderno = orderNo}, tran);
-                    var sqlCust = "select custid from cust_wxpay_info where orderno=@orderno;";
-                    var custid = conn.Query<string>(sqlCust, new {orderno = orderNo}).FirstOrDefault();
-                    //升级VIP
-                    conn.Execute(sqlL, new {innerid = custid }, tran);
 
+                    var sqlCust = "select custid,type from cust_wxpay_info where orderno=@orderno;";
+                    var cwp = conn.Query<CustWxPayModel>(sqlCust, new { orderno = orderNo }).FirstOrDefault();
+                    //升级VIP
+                    conn.Execute(sqlU, new { status = cwp.type, orderno = orderNo }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid }, tran);
+                    
                     tran.Commit();
                     return 1;
                 }

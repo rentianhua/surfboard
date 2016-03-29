@@ -91,9 +91,9 @@ namespace CCN.WebAPI.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
-            
+
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
             if (cresult.errcode != 0)
@@ -111,7 +111,7 @@ namespace CCN.WebAPI.ApiControllers
             if (result.errcode == 0)
             {
                 Task.Run(() =>
-                {                    
+                {
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -136,7 +136,7 @@ namespace CCN.WebAPI.ApiControllers
                     //}
                 });
             }
-            
+
             #endregion
 
             return result;
@@ -166,7 +166,7 @@ namespace CCN.WebAPI.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+
             var result = _custservice.CustRegister(userInfo);
 
             #region 后台注册送积分
@@ -272,7 +272,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLoginByOpenid(openid);
         }
-        
+
         /// <summary>
         /// 判断是否会员
         /// </summary>
@@ -474,13 +474,13 @@ namespace CCN.WebAPI.ApiControllers
                     return;
                 }
 
-                var custmodel = (CustModel) custjresult.errmsg;
+                var custmodel = (CustModel)custjresult.errmsg;
 
                 if (string.IsNullOrWhiteSpace(custmodel?.RecommendedId))
                 {
                     return;
                 }
-                    
+
                 var repointresult = rewardsservice.ChangePoint(new CustPointModel
                 {
                     Custid = custmodel.RecommendedId,
@@ -812,7 +812,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.AddCompanyApplyUpdate(model);
         }
-        
+
         /// <summary>
         /// 获取公司图片
         /// </summary>
@@ -842,7 +842,7 @@ namespace CCN.WebAPI.ApiControllers
             //{
             //    model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
             //}
-            
+
             return _custservice.DoComment(model);
         }
 
@@ -1018,7 +1018,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.GetUserInfoByMobile(mobile);
         }
-        
+
         /// <summary>
         /// C用户 获取会员列表
         /// </summary>
@@ -1150,7 +1150,7 @@ namespace CCN.WebAPI.ApiControllers
             {
                 return JResult._jResult(402, "手机号不能空");
             }
-            
+
             return _custservice.UpdatePassword(mRetrievePassword);
         }
         #endregion
@@ -1161,12 +1161,13 @@ namespace CCN.WebAPI.ApiControllers
         /// 微信会员费支付
         /// </summary>
         /// <param name="custid">会员id</param>
+        /// <param name="type">类型</param>
         /// <returns></returns>
         [Route("CustWxPayVip")]
         [HttpGet]
-        public JResult CustWxPayVip(string custid)
+        public JResult CustWxPayVip(string custid, string type)
         {
-            return _custservice.CustWxPayVip(custid);
+            return _custservice.CustWxPayVip(custid, type);
         }
 
         /// <summary>
@@ -1179,6 +1180,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult CustWxPayVipBack(string orderno)
         {
             return _custservice.CustWxPayVipBack(orderno);
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        [Route("CustWeChatPayByorderno")]
+        [HttpGet]
+        public JResult CustWeChatPayByorderno(string orderno)
+        {
+            return _custservice.CustWeChatPayByorderno(orderno);
         }
 
         #endregion
@@ -1196,7 +1209,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.AddSiteAdvice(model);
         }
-        
+
         #endregion
     }
 }

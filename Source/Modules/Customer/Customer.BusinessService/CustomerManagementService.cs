@@ -793,9 +793,9 @@ namespace CCN.Modules.Customer.BusinessService
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public JResult CustWxPayVip(string custid)
+        public JResult CustWxPayVip(string custid,string type)
         {
-            return BusinessComponent.CustWxPayVip(custid);
+            return BusinessComponent.CustWxPayVip(custid, type);
         }
 
         /// <summary>
@@ -806,6 +806,16 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult CustWxPayVipBack(string orderno)
         {
             return BusinessComponent.CustWxPayVipBack(orderno);
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult CustWeChatPayByorderno(string orderno)
+        {
+            return BusinessComponent.CustWeChatPayByorderno(orderno);
         }
 
         #endregion

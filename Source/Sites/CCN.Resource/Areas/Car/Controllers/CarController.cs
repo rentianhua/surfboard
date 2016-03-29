@@ -77,11 +77,22 @@ namespace CCN.Resource.Areas.Car.Controllers
         }
 
         /// <summary>
-        /// 车贷列表
+        /// 车(主)贷列表
         /// </summary>
         /// <returns></returns>
         public ActionResult CarLoanList()
         {
+            return View();
+        }
+
+        /// <summary>
+        /// 车(主)贷编辑页面
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public ActionResult CarLoanEdit(string id)
+        {
+            ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
             return View();
         }
     }

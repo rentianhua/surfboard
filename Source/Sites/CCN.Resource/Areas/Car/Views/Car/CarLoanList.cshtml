@@ -31,6 +31,7 @@
             str += "<td>" + (val.instruction == null ? "" : val.instruction.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.createdtime, "yyyy-MM") + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
+            str += "<td>" + GetLevelName(val.level) + "</td>";
             str += "<td>待添加</td>";
             str += "</tr>";
             $("#carloanlist tbody").append(str);
@@ -44,6 +45,18 @@
                 return "通过";
             case 2:
                 return "未通过";
+            default:
+
+        }
+        return "";
+    }
+
+    function GetLevelName(level) {
+        switch (level) {
+            case 1:
+                return "VIP";
+            case 2:
+                return "1元体验";
             default:
 
         }
@@ -86,6 +99,7 @@
                 <th>贷款说明</th>
                 <th>申请时间</th>
                 <th>状态</th>
+                <th>会员等级</th>
                 <th>操作</th>
             </tr>
         </thead>

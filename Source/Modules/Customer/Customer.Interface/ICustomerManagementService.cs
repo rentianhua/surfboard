@@ -545,13 +545,21 @@ namespace CCN.Modules.Customer.Interface
         #endregion
 
         #region 会员升级
-        
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        JResult CustWeChatPayByorderno(string orderno);
+
         /// <summary>
         /// 微信会员费支付
         /// </summary>
         /// <param name="custid">会员id</param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        JResult CustWxPayVip(string custid);
+        JResult CustWxPayVip(string custid,string type);
 
         /// <summary>
         /// 微信会员支付回调
