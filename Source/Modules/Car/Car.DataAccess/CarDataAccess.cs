@@ -2808,6 +2808,66 @@ namespace CCN.Modules.Car.DataAccess
             }
         }
 
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCarLoan(CarLoanModel model)
+        {
+            var sql = new StringBuilder("update `car_loan` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("车贷修改：", TraceEventType.Error, ex);
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public CarLoanModel CarLoanInfo(string id)
+        {
+            const string sql =
+                @"select * from car_loan where innerid=@innerid";
+            var result = Helper.Query<CarLoanModel>(sql, new { innerid = id }).FirstOrDefault();
+            return result;
+        }
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddLoanPicture(CarLoanPicture model)
+        {
+            const string sql = @"INSERT INTO car_loan_picture
+                        (innerid, loanid, typeid, path, sort, createdtime)
+                        VALUES
+                        (@innerid, @loanid, @typeid, @path, @sort, @createdtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+        }
+
         #endregion
     }
 }
