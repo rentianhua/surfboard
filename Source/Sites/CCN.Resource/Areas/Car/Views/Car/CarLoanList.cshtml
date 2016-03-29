@@ -6,8 +6,7 @@
 
 <script type="text/javascript">
 
-    var custid = "@ViewBag.custid";
-
+ 
     $(function () {
         QueryList();
     });
@@ -32,7 +31,7 @@
             str += "<td>" + Dateformat(val.createdtime, "yyyy-MM") + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
             str += "<td>" + GetLevelName(val.level) + "</td>";
-            str += "<td>待添加</td>";
+            //str += "<td>"<a onclick=\"getBodyHtml('mainbody', '/car/car/CarLoanEdit?id=');\" href='javascript:;'>详情</a> " +</td>";
             str += "</tr>";
             $("#carloanlist tbody").append(str);
         });
@@ -100,7 +99,7 @@
                 <th>申请时间</th>
                 <th>状态</th>
                 <th>会员等级</th>
-                <th>操作</th>
+                @*<th>操作</th>*@
             </tr>
         </thead>
 
