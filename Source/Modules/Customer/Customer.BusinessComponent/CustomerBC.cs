@@ -17,6 +17,7 @@ using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 #endregion
 
@@ -1867,6 +1868,27 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(result);
         }
 
+
+        #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult RebindFansModel(CustRebindFansModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Mobile) || string.IsNullOrWhiteSpace(model.Openid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.RebindFansModel(model);
+
+            CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.Openid, result == 0 ? "您还没有成为我们的会员，请点击菜单赶快去注册吧！" : "绑定成功！");
+
+            return JResult._jResult(result);
+        }
 
         #endregion
     }

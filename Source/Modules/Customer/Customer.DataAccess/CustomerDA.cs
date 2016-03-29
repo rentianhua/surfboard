@@ -2343,5 +2343,60 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
 
         #endregion
+
+        #region 粉丝绑定
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int RebindFansModel(CustRebindFansModel model)
+        {
+            const string sqlS = "select innerid from cust_info where mobile=@mobile;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    var custid = conn.Query<string>(sqlS, new {mobile = model.Mobile}).FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        //非会员
+                        return 0;
+                    }
+
+                    const string sqlSFans = "select count(1) from cust_wechat where custid=@custid;";
+                    var i = conn.Query<int>(sqlSFans, new { custid }).FirstOrDefault();
+                    if (i == 0)
+                    {
+                        const string sql = "insert into cust_wechat (innerid, custid, openid, createdtime) values (@innerid, @custid, @openid, @createdtime);";
+                        conn.Execute(sql, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            custid,
+                            model.Openid,
+                            createdtime = DateTime.Now
+                        });
+                    }
+                    else
+                    {
+                        const string sql = "update cust_wechat set openid=@openid,modifiedtime=@modifiedtime where custid=@custid;";
+                        conn.Execute(sql, new
+                        {
+                            custid,
+                            model.Openid,
+                            modifiedtime = DateTime.Now
+                        });
+                    }
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
     }
 }

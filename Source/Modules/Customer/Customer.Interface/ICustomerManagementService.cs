@@ -573,5 +573,16 @@ namespace CCN.Modules.Customer.Interface
 
 
         #endregion
+
+        #region 粉丝绑定
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult RebindFansModel(CustRebindFansModel model);
+
+        #endregion
     }
 }

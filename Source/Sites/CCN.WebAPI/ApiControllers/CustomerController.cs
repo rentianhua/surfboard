@@ -1196,7 +1196,18 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.AddSiteAdvice(model);
         }
-        
+
+        /// <summary>
+        /// test
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("RebindFansModel")]
+        [HttpPost]
+        public JResult RebindFansModel([FromBody]CustRebindFansModel model)
+        {
+            return _custservice.RebindFansModel(model);
+        }
         #endregion
     }
 }

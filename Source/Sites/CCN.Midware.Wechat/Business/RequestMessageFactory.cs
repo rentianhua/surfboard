@@ -9,6 +9,8 @@ using System.Xml;
 using System.Xml.Linq;
 using CCN.Modules.Auction.BusinessEntity;
 using CCN.Modules.Auction.Interface;
+using CCN.Modules.Customer.BusinessEntity;
+using CCN.Modules.Customer.Interface;
 using CCN.Modules.Rewards.BusinessEntity;
 using CCN.Modules.Rewards.Interface;
 using Cedar.Core.IoC;
@@ -73,6 +75,18 @@ namespace CCN.Midware.Wechat.Business
                         else
                         {
                             CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
+                        }
+
+                        //回复手机号重新绑定到会员
+                        var b = System.Text.RegularExpressions.Regex.IsMatch(rMessage.Content, @"^1[3|4|5|8][0-9]\d{8}$");
+                        if (b)
+                        {
+                            var customerService = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+                            customerService.RebindFansModel(new CustRebindFansModel
+                            {
+                                Openid = rMessage.FromUserName,
+                                Mobile = rMessage.Content
+                            });
                         }
 
                         break;
