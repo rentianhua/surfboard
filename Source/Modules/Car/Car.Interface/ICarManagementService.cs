@@ -354,5 +354,23 @@ namespace CCN.Modules.Car.Interface
         JResult GetCarInfoByMobile(string mobile);
 
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query);
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCarLoan(CarLoanModel model);
+
+        #endregion
     }
 }

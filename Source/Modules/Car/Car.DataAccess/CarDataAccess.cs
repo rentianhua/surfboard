@@ -388,7 +388,7 @@ namespace CCN.Modules.Car.DataAccess
                 var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
                 sqlWhere.Append($" and a.register_date>='{date}'");
             }
-            
+
             //车源类型
             if (query.type.HasValue)
             {
@@ -453,7 +453,7 @@ namespace CCN.Modules.Car.DataAccess
             #region 查询条件
             var sqlWhere = new StringBuilder("1=1");
 
-            sqlWhere.Append(query.status != null 
+            sqlWhere.Append(query.status != null
                 ? $" and a.status={query.status}"
                 : " and a.status<>0");
 
@@ -760,7 +760,7 @@ namespace CCN.Modules.Car.DataAccess
                 int result;
                 try
                 {
-                    var num = conn.Query<int>(sqlSelectCust, new {model.custid}).FirstOrDefault();
+                    var num = conn.Query<int>(sqlSelectCust, new { model.custid }).FirstOrDefault();
                     if (0 == num)
                     {
                         return -1;
@@ -776,7 +776,7 @@ namespace CCN.Modules.Car.DataAccess
 
                 return result;
             }
-            
+
         }
 
         /// <summary>
@@ -1075,7 +1075,7 @@ namespace CCN.Modules.Car.DataAccess
             using (var conn = Helper.GetConnection())
             {
                 const string sqlSelectTotal = "select b.refreshnum,b.custid from car_info as a inner join cust_total_info as b on a.custid=b.custid where a.innerid=@carid;";
-                var totalModel = conn.Query<CustomerTotalModel>(sqlSelectTotal, new {carid}).FirstOrDefault();
+                var totalModel = conn.Query<CustomerTotalModel>(sqlSelectTotal, new { carid }).FirstOrDefault();
                 if (totalModel == null || totalModel.Refreshnum == 0)
                 {
                     return 401;
@@ -1086,7 +1086,7 @@ namespace CCN.Modules.Car.DataAccess
                     //更新刷新时间
                     var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
                     string sql = $"update car_info set refreshtime={(long)ts.TotalSeconds} where innerid=@carid;";
-                    conn.Execute(sql, new { carid },tran);
+                    conn.Execute(sql, new { carid }, tran);
 
                     //更新刷新剩余次数
                     const string sqlUt = "update cust_total_info set refreshnum=refreshnum-1 where custid=@custid;";
@@ -1101,7 +1101,7 @@ namespace CCN.Modules.Car.DataAccess
                         count = -1,
                         type = 1,
                         remark = "正常刷新：减1次",
-                        createrid= totalModel.Custid,
+                        createrid = totalModel.Custid,
                         createdtime = DateTime.Now
                     }, tran);
 
@@ -1324,13 +1324,13 @@ namespace CCN.Modules.Car.DataAccess
                     {
                         model.Sort = picedList[0].Sort + 1;
                     }
-                    
+
                     conn.Execute(sqlIPic, model, tran); //插入图片
 
                     //表示添加张图片
                     if (picedList.Count == 0)
                     {
-                        conn.Execute(sqlUCover, new {carid = model.Carid, pic_url = model.Path}, tran);
+                        conn.Execute(sqlUCover, new { carid = model.Carid, pic_url = model.Path }, tran);
                     }
 
                     tran.Commit();
@@ -1398,7 +1398,7 @@ namespace CCN.Modules.Car.DataAccess
                     var coverid = picedList.First().Innerid;
                     if (innerid.Equals(coverid)) //删除封面
                     {
-                        conn.Execute(sqlUCover, new {picedList.First().Carid}, tran);
+                        conn.Execute(sqlUCover, new { picedList.First().Carid }, tran);
                     }
 
                     tran.Commit();
@@ -1637,7 +1637,7 @@ namespace CCN.Modules.Car.DataAccess
                 }
             }
         }
-        
+
         /// <summary>
         /// 批量保存图片(添加+删除)
         /// </summary>
@@ -1707,9 +1707,9 @@ namespace CCN.Modules.Car.DataAccess
                 }
             }
         }
-        
+
         #region 图片处理新接口
-        
+
         /// <summary>
         /// 获取车辆封面图片
         /// </summary>
@@ -1926,7 +1926,7 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         #endregion
-        
+
         #endregion
 
         #region 车辆收藏
@@ -1996,13 +1996,13 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="carid">车辆id</param>
         /// <param name="custid">会员id</param>
         /// <returns></returns>
-        public int DeleteCollectionByCarid(string carid,string custid)
+        public int DeleteCollectionByCarid(string carid, string custid)
         {
             const string sql = "delete from car_collection where carid=@carid and custid=@custid;";
 
             try
             {
-                var i = Helper.Execute(sql, new {carid, custid});
+                var i = Helper.Execute(sql, new { carid, custid });
                 return i > 0 ? 1 : 0;
             }
             catch (Exception ex)
@@ -2048,7 +2048,7 @@ namespace CCN.Modules.Car.DataAccess
 
 
         #region 精品店基本信息
-        
+
         /// <summary>
         /// 获取精品车商列表
         /// </summary>
@@ -2105,7 +2105,7 @@ namespace CCN.Modules.Car.DataAccess
                 return 0;
             }
         }
-        
+
         /// <summary>
         /// 修改精品店基本信息
         /// </summary>
@@ -2589,7 +2589,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_province as e on d.innerid = a.provid
                                     left join base_city as f on f.innerid = a.cityid";
             const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname ";
-            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarRewardViewModel>(model, query.Echo);
@@ -2630,7 +2630,7 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="status">状态值</param>
         /// <param name="innerid">主键</param>
         /// <returns></returns>
-        public int UpdateCarRewardStatus(int status,string innerid)
+        public int UpdateCarRewardStatus(int status, string innerid)
         {
             const string sql = @"Update `car_reward` set status = @status where `innerid`=@innerid;";
 
@@ -2753,6 +2753,34 @@ namespace CCN.Modules.Car.DataAccess
         #region 车贷相关
 
         /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_loan as a 
+                                       left join cust_info as b on b.mobile=a.mobile";
+            const string fields = " a.*,ifnull(b.level,'') as level ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            //联系电话
+            if (!string.IsNullOrWhiteSpace(query.mobile))
+            {
+                sqlWhere.Append($" and a.mobile={query.mobile}");
+            }
+            //联系人
+            if (!string.IsNullOrWhiteSpace(query.contacts))
+            {
+                sqlWhere.Append($" and a.contacts={query.contacts}");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarLoanViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
         /// 车贷申请
         /// </summary>
         /// <param name="model"></param>
@@ -2760,9 +2788,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarLoan(CarLoanModel model)
         {
             const string sql = @"INSERT INTO `car_loan`
-                                (`innerid`, `contacts`, `mobile`, `term`, `instruction`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
+                                (`innerid`, `contacts`, `mobile`, `term`, `instruction`,`amount`,`status`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
                                 VALUES
-                                (uuid(), @contacts, @mobile, @term, @instruction, @modifiedid, now(), @createdid, now());";
+                                (uuid(), @contacts, @mobile, @term, @instruction,@amount,0, @modifiedid, now(), @createdid, now());";
 
             using (var conn = Helper.GetConnection())
             {

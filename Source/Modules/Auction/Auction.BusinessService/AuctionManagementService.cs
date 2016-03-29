@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Cedar.Core.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Auction.BusinessService
 {
@@ -425,20 +426,29 @@ namespace CCN.Modules.Auction.BusinessService
 
             Task.Run(() =>
             {
-                //调用nodejs 通知前端
-                //根据ID获取竞价数据
                 var resultPay = BusinessComponent.GetAuctionParticipantByOrderNo(model.out_trade_no);
-                var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
-                if (modelPay != null)
+                var innerid = string.Empty;
+
+                //调用nodejs 通知前端
+                if (model.attach == "kplx_auction")//定金支付，获取支付ID
                 {
-                    var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?innerid=" + modelPay.Innerid;
-                    var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
-                    LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
+                    resultPay = BusinessComponent.GetAuctionParticipantByOrderNo(model.out_trade_no);
+                    var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
+                    innerid = modelPay.Innerid;
                 }
-                else
+                else//获取会员ID
                 {
-                    LoggerFactories.CreateLogger().Write("socket result ：没有获取到竞价数据 ", TraceEventType.Information);
+                    var custorder = ConfigHelper.GetAppSettings("localapi") + "/api/Customer/CustWeChatPayByorderno?orderno=" + model.out_trade_no;
+                    var custRes = JObject.Parse(DynamicWebService.SendPost(custorder, null, "get"));
+                    if (custRes != null)
+                    {
+                        innerid = custRes["Innerid"].ToString();
+                    }
                 }
+
+                var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?innerid=" + innerid;
+                var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
+                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
 
             });
 

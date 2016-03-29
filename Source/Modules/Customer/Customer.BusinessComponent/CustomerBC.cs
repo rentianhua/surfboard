@@ -357,7 +357,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <returns></returns>
         public JResult UpdatePassword(CustModifyPassword model)
         {
-            if (string .IsNullOrWhiteSpace(model?.Mobile) || string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+            if (string.IsNullOrWhiteSpace(model?.Mobile) || string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
             {
                 return JResult._jResult(401, "参数不完整");
             }
@@ -377,7 +377,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(404, "原密码不正确");
             }
-            
+
             var result = DataAccess.UpdatePassword(new CustRetrievePassword
             {
                 Mobile = model.Mobile,
@@ -1417,14 +1417,14 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(result);
         }
 
-    #region 图片处理
+        #region 图片处理
 
-    /// <summary>
-    /// 获取企业已有图片
-    /// </summary>
-    /// <param name="settid">企业id</param>
-    /// <returns></returns>
-    public JResult GetCompanyPictureById(string settid)
+        /// <summary>
+        /// 获取企业已有图片
+        /// </summary>
+        /// <param name="settid">企业id</param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureById(string settid)
         {
             var list = DataAccess.GetCompanyPictureById(settid);
             return JResult._jResult(list);
@@ -1518,10 +1518,10 @@ namespace CCN.Modules.Customer.BusinessComponent
                 userInfo.Nickname = string.Concat("ccn_", DateTime.Now.Year, "_",
                     userInfo.Mobile.Substring(userInfo.Mobile.Length - 6));
             }
-            
+
             //密码加密
             userInfo.Password = Encryptor.EncryptAes(userInfo.Password);
-            
+
             userInfo.Status = 1; //初始化状态[1.正常]
             userInfo.Createdtime = DateTime.Now;
             userInfo.Totalpoints = 0;
@@ -1603,7 +1603,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             return JResult._jResult(0, model);
         }
-        
+
         /// <summary>
         /// C用户 手机+验证码登录
         /// </summary>
@@ -1623,7 +1623,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             model.Password = "";
             return JResult._jResult(model);
         }
-        
+
         /// <summary>
         /// C用户 获取会员详情
         /// </summary>
@@ -1754,12 +1754,27 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// 微信定金支付
         /// </summary>
         /// <param name="custid">会员id</param>
+        /// <param name="type">1、VIP 2、体验版会员</param>
         /// <returns></returns>
-        public JResult CustWxPayVip(string custid)
+        public JResult CustWxPayVip(string custid, string type)
         {
             var str = "\"qrcode\": \"{0}\",\"modelname\": \"{1}\",\"deposit\": {2},\"orderno\": \"{3}\"";
-            var totalFee = ConfigHelper.GetAppSettings("vip_total_fee");
-            var body = ConfigHelper.GetAppSettings("vip_body");
+            var totalFee = string.Empty;//费用
+            var body = string.Empty;//内容
+            var attach = string.Empty;//类型
+
+            if (type == "1")//VIP会员
+            {
+                totalFee = ConfigHelper.GetAppSettings("vip_total_fee");
+                body = ConfigHelper.GetAppSettings("vip_body");
+                attach = "kplx_vip";
+            }
+            else
+            {
+                totalFee = ConfigHelper.GetAppSettings("betavip_total_fee");
+                body = ConfigHelper.GetAppSettings("betavip_body");
+                attach = "kplx_betavip";
+            }
 
             var perModel = DataAccess.CustWeChatPayByCustid(custid);
             JResult result;
@@ -1767,7 +1782,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             if (perModel == null)
             {
                 orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
-                result = GenerationQrCode(orderNo, body, totalFee);
+                result = GenerationQrCode(orderNo, body, totalFee, attach);
                 if (result.errcode != 0)
                 {
                     return result;
@@ -1780,13 +1795,14 @@ namespace CCN.Modules.Customer.BusinessComponent
                     Modifiedtime = null,
                     Status = 1,
                     OrderNo = orderNo,
-                    OrderNoQrCode = result.errmsg.ToString()
+                    OrderNoQrCode = result.errmsg.ToString(),
+                    type = attach
                 });
             }
             else
             {
                 orderNo = perModel.OrderNo;
-                result = GenerationQrCode(orderNo, body, totalFee);
+                result = GenerationQrCode(orderNo, body, totalFee, attach);
                 if (result.errcode != 0)
                 {
                     return result;
@@ -1820,14 +1836,15 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <param name="orderno"></param>
         /// <param name="body"></param>
         /// <param name="totalFee"></param>
+        /// <param name="attach"></param>
         /// <returns></returns>
-        public JResult GenerationQrCode(string orderno, string body, string totalFee)
+        public JResult GenerationQrCode(string orderno, string body, string totalFee,string attach)
         {
             //获取定金金额
             string qrcode;
             var payAuction = ConfigHelper.GetAppSettings("payurl");
 
-            var json = "{\"out_trade_no\":\""+ orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_vip\"}";
+            var json = "{\"out_trade_no\":\"" + orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\""+ attach + "\"}";
             var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", json, false);
             if (string.IsNullOrWhiteSpace(orderresult))
             {
@@ -1846,6 +1863,17 @@ namespace CCN.Modules.Customer.BusinessComponent
             return JResult._jResult(0, qrcode);
         }
 
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult CustWeChatPayByorderno(string orderno)
+        {
+            var result = DataAccess.CustWeChatPayByorderno(orderno);
+            return JResult._jResult(result);
+        }
+
         #endregion
 
         #region 投诉建议
@@ -1859,7 +1887,7 @@ namespace CCN.Modules.Customer.BusinessComponent
         {
             if (string.IsNullOrWhiteSpace(model?.Phone) || string.IsNullOrWhiteSpace(model.Advice))
             {
-                return JResult._jResult(401 ,"参数不完整");
+                return JResult._jResult(401, "参数不完整");
             }
 
             model.Innerid = Guid.NewGuid().ToString();
