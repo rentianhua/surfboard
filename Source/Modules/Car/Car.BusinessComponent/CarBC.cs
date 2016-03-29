@@ -1511,5 +1511,40 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            if (query != null)
+            {
+                LoggerFactories.CreateLogger().Write("获取贷款列表，参数不完整", TraceEventType.Warning);
+                return new BasePageList<CarLoanViewModel>();
+            }
+            var list = DataAccess.GetCarLoanList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            if (model != null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.AddCarLoan(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }

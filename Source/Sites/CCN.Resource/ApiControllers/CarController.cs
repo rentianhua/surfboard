@@ -547,5 +547,33 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCarLoanList")]
+        [HttpPost]
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            return _carervice.GetCarLoanList(query);
+        }
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarLoan")]
+        [HttpPost]
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            return _carervice.AddCarLoan(model);
+        }
+
+        #endregion
     }
 }

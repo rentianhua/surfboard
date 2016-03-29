@@ -2753,6 +2753,33 @@ namespace CCN.Modules.Car.DataAccess
         #region 车贷相关
 
         /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_loan as a ";
+            const string fields = " a.* ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;  
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            //联系电话
+            if (!string.IsNullOrWhiteSpace(query.mobile))
+            {
+                sqlWhere.Append($" and a.mobile={query.mobile}");
+            }
+            //联系人
+            if (!string.IsNullOrWhiteSpace(query.contacts))
+            {
+                sqlWhere.Append($" and a.contacts={query.contacts}");
+            }
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarLoanViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
         /// 车贷申请
         /// </summary>
         /// <param name="model"></param>
@@ -2760,9 +2787,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarLoan(CarLoanModel model)
         {
             const string sql = @"INSERT INTO `car_loan`
-                                (`innerid`, `contacts`, `mobile`, `term`, `instruction`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
+                                (`innerid`, `contacts`, `mobile`, `term`, `instruction`,`status`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
                                 VALUES
-                                (uuid(), @contacts, @mobile, @term, @instruction, @modifiedid, now(), @createdid, now());";
+                                (uuid(), @contacts, @mobile, @term, @instruction,0, @modifiedid, now(), @createdid, now());";
 
             using (var conn = Helper.GetConnection())
             {
