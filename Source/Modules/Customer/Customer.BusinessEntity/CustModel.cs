@@ -138,6 +138,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 车辆数量
         /// </summary>
         public int? CarNum { get; set; }
+
+        /// <summary>
+        /// VIP有效期
+        /// </summary>
+        public DateTime? expirestime { get; set; }
     }
 
     /// <summary>

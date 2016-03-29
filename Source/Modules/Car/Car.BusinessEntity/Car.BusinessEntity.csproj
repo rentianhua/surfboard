@@ -48,6 +48,7 @@
     <Compile Include="CarCustomerModel.cs" />
     <Compile Include="CarEvaluateModel.cs" />
     <Compile Include="CarInfoModel.cs" />
+    <Compile Include="CarLoanModel.cs" />
     <Compile Include="CarPictureModel.cs" />
     <Compile Include="CarReward.cs" />
     <Compile Include="CarShareModel.cs" />
