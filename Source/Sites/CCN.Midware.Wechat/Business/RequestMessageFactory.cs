@@ -82,7 +82,7 @@ namespace CCN.Midware.Wechat.Business
                         if (b)
                         {
                             var customerService = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                            customerService.RebindFansModel(new CustRebindFansModel
+                            customerService.RebindFans(new CustRebindFansModel
                             {
                                 Openid = rMessage.FromUserName,
                                 Mobile = rMessage.Content

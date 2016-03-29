@@ -842,9 +842,9 @@ namespace CCN.Modules.Customer.BusinessService
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public JResult RebindFansModel(CustRebindFansModel model)
+        public JResult RebindFans(CustRebindFansModel model)
         {
-            return BusinessComponent.RebindFansModel(model);
+            return BusinessComponent.RebindFans(model);
         }
 
         #endregion

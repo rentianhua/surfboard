@@ -589,7 +589,7 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        JResult RebindFansModel(CustRebindFansModel model);
+        JResult RebindFans(CustRebindFansModel model);
 
         #endregion
     }

@@ -1211,5 +1211,20 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("RebindFans")]
+        [HttpPost]
+        public JResult RebindFans([FromBody]CustRebindFansModel model)
+        {
+            return _custservice.RebindFans(model);
+        }
+
+        #endregion
     }
 }

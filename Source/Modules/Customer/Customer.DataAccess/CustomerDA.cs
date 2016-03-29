@@ -2216,9 +2216,9 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public CustWxPayModel CustWeChatPayByCustid(string custid)
         {
-            const string sqlS = "select innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid;";
+            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid;";
             //
-            //const string sqlU = "update user_info set qrcode=@qrcode where innerid=@innerid;";
+            //const string sqlU = "update user_info set ordernoqrcode=@ordernoqrcode where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
             {
                 return conn.Query<CustWxPayModel>(sqlS, new { custid }).FirstOrDefault();
@@ -2232,7 +2232,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public CustWxPayModel CustWeChatPayByorderno(string orderno)
         {
-            const string sqlS = "select innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
+            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2247,7 +2247,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public int AddCustWeChatPay(CustWxPayModel model)
         {
-            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, qrcode, custid, status, remark, createdtime, modifiedtime) values (@innerid, @orderno, @qrcode, @custid, @status, @remark, @createdtime, @modifiedtime);";
+            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, ordernoqrcode, custid, status,type, remark, createdtime, modifiedtime) values (@innerid, @orderno, @ordernoqrcode, @custid, @status,@type, @remark, @createdtime, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
@@ -2306,8 +2306,8 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         public int UpdateCustWeChatPayBack(string orderNo)
         {
             var expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
-            const string sqlU = "update cust_wxpay_info set status=@status where orderno=@orderno;";
-            const string sqlL = "update cust_info set level=1,expirestime=@expirestime where innerid=@innerid;";
+            const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
+            const string sqlL = "update cust_info set level=@level,expirestime=@expirestime where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2317,9 +2317,15 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
 
                     var sqlCust = "select custid,type from cust_wxpay_info where orderno=@orderno;";
                     var cwp = conn.Query<CustWxPayModel>(sqlCust, new { orderno = orderNo }).FirstOrDefault();
+
+                    if (cwp == null)
+                    {
+                        return 0;
+                    }
+
                     //升级VIP
-                    conn.Execute(sqlU, new { status = cwp.type, orderno = orderNo }, tran);
-                    conn.Execute(sqlL, new { innerid = cwp.Custid }, tran);
+                    conn.Execute(sqlU, new { orderno = orderNo }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type }, tran);
                     
                     tran.Commit();
                     return 1;
@@ -2368,7 +2374,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int RebindFansModel(CustRebindFansModel model)
+        public int RebindFans(CustRebindFansModel model)
         {
             const string sqlS = "select innerid from cust_info where mobile=@mobile;";
             using (var conn = Helper.GetConnection())
