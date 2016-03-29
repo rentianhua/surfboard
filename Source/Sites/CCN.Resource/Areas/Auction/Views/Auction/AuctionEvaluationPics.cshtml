@@ -106,7 +106,11 @@
         //判断填入的数字项是否满足要求
         var erritem = "";
         $('input[data-result="erroritem"]').each(function () {
-            if ($(this).attr("data-count") < ($(this).val() || 0)) {
+            var errcount = 0;
+            if ($(this).val() != "") {
+                errcount = parseInt($(this).val());
+            }
+            if (parseInt($(this).attr("data-count")) < errcount) {
                 erritem = erritem + $(this).attr("data-chname") + ",";
             }
         });

@@ -857,5 +857,21 @@ namespace CCN.WebAPI.ApiControllers
             return _carervice.GetCarRewardPageList(query);
         }
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarLoan")]
+        [HttpPost]
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            return _carervice.AddCarLoan(model);
+        }
+
+        #endregion
     }
 }

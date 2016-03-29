@@ -75,5 +75,14 @@ namespace CCN.Resource.Areas.Car.Controllers
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
             return View();
         }
+
+        /// <summary>
+        /// 车贷列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CarLoanList()
+        {
+            return View();
+        }
     }
 }

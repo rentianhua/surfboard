@@ -28,6 +28,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public string mobile { get; set; }
 
         /// <summary>
+        /// 贷款金额
+        /// </summary>
+        public decimal? amount { get; set; }
+
+        /// <summary>
         /// 期限（月数）
         /// </summary>
         public int? term { get; set; }
@@ -36,6 +41,16 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 贷款说明
         /// </summary>
         public string instruction { get; set; }
+
+        /// <summary>
+        /// 状态 0申请中 1通过 2未通过
+        /// </summary>
+        public int? status { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
 
         /// <summary>
         /// 修改人
@@ -62,7 +77,17 @@ namespace CCN.Modules.Car.BusinessEntity
     /// 车贷查询实体
     /// </summary>
     public class CarLoanQueryModel : QueryModel
-    { }
+    {
+        /// <summary>
+        /// 联系人
+        /// </summary>
+        public string contacts { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string mobile { get; set; }
+    }
 
     /// <summary>
     /// 车贷显示实体

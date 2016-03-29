@@ -502,5 +502,30 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            return BusinessComponent.GetCarLoanList(query);
+        }
+
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            return BusinessComponent.AddCarLoan(model);
+        }
+
+        #endregion
     }
 }
