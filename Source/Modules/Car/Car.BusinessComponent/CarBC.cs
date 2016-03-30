@@ -1537,7 +1537,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCarLoan(CarLoanModel model)
         {
-            if (model != null)
+            if (model == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }

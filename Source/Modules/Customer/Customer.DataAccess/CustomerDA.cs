@@ -2343,7 +2343,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                     
                     //升级VIP
                     conn.Execute(sqlU, new { orderno = orderNo }, tran);
-                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime= expirestime }, tran);
                     
                     tran.Commit();
                     return 1;
