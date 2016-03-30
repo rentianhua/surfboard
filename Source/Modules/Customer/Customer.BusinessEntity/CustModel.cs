@@ -143,6 +143,11 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// VIP有效期
         /// </summary>
         public DateTime? expirestime { get; set; }
+
+        /// <summary>
+        /// 是否参与过体验 1已参与 0未参与
+        /// </summary>
+        public int? isbate { get; set; }
     }
 
     /// <summary>
