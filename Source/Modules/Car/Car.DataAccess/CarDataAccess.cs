@@ -2762,7 +2762,7 @@ namespace CCN.Modules.Car.DataAccess
             const string spName = "sp_common_pager";
             const string tableName = @"car_loan as a 
                                        left join cust_info as b on b.mobile=a.mobile";
-            const string fields = " a.*,ifnull(b.level,'') as level ";
+            const string fields = " a.*,ifnull(b.`level`,0) as `level` ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
             //联系电话
