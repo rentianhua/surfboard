@@ -2855,7 +2855,7 @@ namespace CCN.Modules.Car.DataAccess
             const string sql = @"INSERT INTO car_loan_picture
                         (innerid, loanid, typeid, path, sort, createdtime)
                         VALUES
-                        (@innerid, @loanid, @typeid, @path, @sort, @createdtime);";
+                        (uuid(), @loanid, @typeid, @path, @sort, @createdtime);";
 
             try
             {
@@ -2865,6 +2865,74 @@ namespace CCN.Modules.Car.DataAccess
             catch (Exception ex)
             {
                 return 0;
+            }
+        }
+
+        /// <summary>
+        /// 根据贷款ID获取对应的图片
+        /// </summary>
+        /// <param name="loanid">loanid</param>
+        /// <returns></returns>
+        public IEnumerable<CarLoanPicture> GetLoanPictureByloanid(string loanid)
+        {
+            const string sql = @"select innerid, loanid, typeid, path, sort, createdtime from car_loan_picture where loanid=@loanid order by sort asc;";
+
+            try
+            {
+                var list = Helper.Query<CarLoanPicture>(sql, new { loanid });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 删除贷款图片
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteLoanPicture(string innerid)
+        {
+            const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
+            
+            using (var conn = Helper.GetConnection())
+            {
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlDPic, new { innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("删除贷款图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款图片
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CarLoanPicture GetLoanPictureByid(string innerid)
+        {
+            const string sql = @"select innerid, carid, typeid, path, sort, createdtime from car_picture where innerid=@innerid;";
+
+            try
+            {
+                var model = Helper.Query<CarLoanPicture>(sql, new { innerid }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
 

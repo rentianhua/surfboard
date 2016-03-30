@@ -28,6 +28,9 @@
 <script type="text/javascript">
 
     var id = "@ViewBag.id";
+    var username = "@ViewBag.UserName";
+    var userno = "@ViewBag.UserNo";
+    var arrResult = {};
 
     var imgs = [];
     var uploader
@@ -65,29 +68,31 @@
             }
 
             var obj = data.errmsg;
+            arrResult = obj;
             $("#mobile").html(obj.mobile);
             $("#term").html(obj.term);
             $("#amount").html(obj.amount);
             $("#instruction").html(obj.instruction);
             $("#selectstatus").selectVal(obj.status);
-            $("#remark").val(obj.remark);
+            $("#selecttype").selectVal(obj.type);
+            $("#recordlist").html(obj.recordlist);
+            //$("#remark").val(obj.remark);
 
-            //$.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
-            //    $.each(data.errmsg, function (k, v) {
-            //        var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-            //        $('.imgs').append(
-            //                '<div id="' + strradom + '" class="imgPreview">\
-            //			<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
-            //			<div class="caidan">\
-            //				<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
-            //			</div>\
-            //		</div>');
-            //        initUploadM();
-            //    });
-            //});
+            $.get("/api/Car/GetLoanPictureByloanid?id=" + id, function (data) {
+                $.each(data.errmsg, function (k, v) {
+                    var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                    $('.imgs').append(
+                            '<div id="' + strradom + '" class="imgPreview">\
+            			<img data-type="img" src="' + getImgUrl(v.path) + '" class="loading" width="550px">\
+            			<div class="caidan">\
+            				<div hash="' + strradom + '" class="cz_4" data-id="' + v.innerid + '"><div class="czl_icon"></div></div>\
+            			</div>\
+            		</div>');
+                    initUploadM();
+                });
+            });
         });
     }
-
 
     function DeletePicture(picid, strhash) {
 
@@ -96,7 +101,7 @@
         }
 
         $.ajax({
-            url: "/api/Car/DeleteCarPicture?innerid=" + picid,
+            url: "/api/Car/DeleteLoanPicture?innerid=" + picid,
             type: 'delete',
             datatype: 'application/json',
             async: false,
@@ -111,24 +116,49 @@
 
     function Submit() {
         var remark = $("#remark").val();
-        var status = $("#selectstatus").val()
+        var status = $("#selectstatus").val();
+        var type = $("#selecttype").val();
+        var myDate = new Date();
+        var record = username + "(" + userno + "):" + myDate.toLocaleString() + "执行了修改操作,";
+        //+$("#selectstatus").find("option:selected").text() + "操作；<br />";
 
         if ($.trim(remark).length === 0) {
             alert("请填写备注信息！");
             return false;
         }
+        debugger
+        //判断状态是否发生变化
+        if (arrResult.status != parseInt(status)) {
+            record = record + "," + GetStatusName(arrResult.status) + "=>" + GetStatusName(parseInt(status)) + ",";
+        }
+        //判断类型是否发生变化
+        if (arrResult.type != parseInt(type)) {
+            record = record + "," + GetTypeName(arrResult.type) + "=>" + GetTypeName(parseInt(type)) + ",";
+        }
 
         var json = {
-            remark: remark,
-            status: status
+            status: status,
+            recordlist: recordlist,
+            type: type
         };
 
-        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        json.recordlist = $("#recordlist").html() + record + remark + "<br />";
 
+        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        var filelength = 0;
+        var uploadercount = 0;
+        //统计新增的图片
+        //遍历img
+        $("img[data-type='img']").each(function () {
+            filelength++;
+        });
+        if (uploader != undefined && uploader != null) {
+            uploadercount = uploader.files.length;
+        }
         setTimeout(function () {
             json.Innerid = id;
 
-            $.post("/api/Car/UpdateCar", json, function (result) {
+            $.post("/api/Car/UpdateCarLoan", json, function (result) {
                 if (result.errcode === 0) {
                     //删除图片 imgs
                     if (uploadercount > 0) {
@@ -223,6 +253,32 @@
         });
     }
 
+    //获取状态名称
+    function GetStatusName(status) {
+        switch (status) {
+            case 0:
+                return "申请中";
+            case 1:
+                return "通过";
+            case 2:
+                return "未通过";
+            default:
+        }
+        return "";
+    }
+
+    //获取类型名称
+    function GetTypeName(type) {
+        switch (type) {
+            case 1:
+                return "车主贷";
+            case 2:
+                return "车商贷";
+            default:
+        }
+        return "";
+    }
+
 </script>
 
 <div class="theme-popover">
@@ -268,6 +324,23 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="instruction" class="col-sm-1 control-label no-padding-right">贷款说明：</label>
+                            <div class="col-sm-11">
+                                <label class="control-label no-padding-right" id="instruction"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="term" class="col-sm-2 control-label no-padding-right">状态:</label>
                             <div class="col-sm-10">
                                 <select id="selectstatus">
@@ -278,16 +351,18 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="instruction" class="col-sm-1 control-label no-padding-right">贷款说明：</label>
-                            <div class="col-sm-11">
-                                <label id="instruction" rows="5" cols="150" placeholder="贷款说明"></label>
+                            <label for="term" class="col-sm-2 control-label no-padding-right">类型:</label>
+                            <div class="col-sm-10">
+                                <select id="selecttype">
+                                    <option value="1">车主贷</option>
+                                    <option value="2">车商贷</option>
+                                </select>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row form-group">
@@ -324,6 +399,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right">操作记录：</label>
+                            <div class="col-sm-11">
+                                <label class="control-label no-padding-right" id="recordlist"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
                         <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />

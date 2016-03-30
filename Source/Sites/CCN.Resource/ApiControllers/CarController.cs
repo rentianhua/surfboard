@@ -610,6 +610,30 @@ namespace CCN.Resource.ApiControllers
             return _carervice.AddLoanPicture(model);
         }
 
+        /// <summary>
+        /// 根据贷款ID获取对应的图片
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("GetLoanPictureByloanid")]
+        [HttpGet]
+        public JResult GetLoanPictureByloanid(string id)
+        {
+            return _carervice.GetLoanPictureByloanid(id);
+        }
+
+        /// <summary>
+        /// 删除贷款图片
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteLoanPicture")]
+        [HttpDelete]
+        public JResult DeleteLoanPicture(string innerid)
+        {
+            return _carervice.DeleteLoanPicture(innerid);
+        }
+
         #endregion
     }
 }
