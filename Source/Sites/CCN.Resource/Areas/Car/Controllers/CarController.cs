@@ -93,6 +93,8 @@ namespace CCN.Resource.Areas.Car.Controllers
         public ActionResult CarLoanEdit(string id)
         {
             ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
+            ViewBag.UserName = UserInfo.username;
+            ViewBag.UserNo = UserInfo.no;
             new QiniuUtility();
             ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
