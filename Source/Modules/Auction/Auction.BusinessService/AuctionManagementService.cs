@@ -237,6 +237,16 @@ namespace CCN.Modules.Auction.BusinessService
             return BusinessComponent.GetPriceCount(auctionid);
         }
 
+        /// <summary>
+        /// 支付完成更新出价状态
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult UpdateStatusForPay(string orderno)
+        {
+            return BusinessComponent.UpdateStatusForPay(orderno);
+        }
+
         #endregion
 
         #region 押金

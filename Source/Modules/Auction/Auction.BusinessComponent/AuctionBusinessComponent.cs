@@ -349,6 +349,7 @@ namespace CCN.Modules.Auction.BusinessComponent
 
                 //更新其他竞价信息 
                 model.status = 7;
+                model.Amount = dealprice;
                 DataAccess.UpdateOtherParticipant(model);
 
             }
@@ -441,6 +442,17 @@ namespace CCN.Modules.Auction.BusinessComponent
             jResult.errmsg = result;
 
             return jResult;
+        }
+
+        /// <summary>
+        /// 支付完成更新出价状态
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult UpdateStatusForPay(string orderno)
+        {
+            var result = DataAccess.UpdateStatusForPay(orderno);
+            return JResult._jResult(result);
         }
 
         #endregion
