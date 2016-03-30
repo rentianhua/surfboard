@@ -1537,11 +1537,44 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCarLoan(CarLoanModel model)
         {
-            if (model != null)
+            if (model == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }
             var result = DataAccess.AddCarLoan(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarLoan(CarLoanModel model)
+        {
+            var result = DataAccess.UpdateCarLoan(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult CarLoanInfo(string id)
+        {
+            var result = DataAccess.CarLoanInfo(id);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddLoanPicture(CarLoanPicture model)
+        {
+            var result = DataAccess.AddLoanPicture(model);
             return JResult._jResult(result);
         }
 

@@ -861,6 +861,19 @@ namespace CCN.WebAPI.ApiControllers
         #region 车贷相关
 
         /// <summary>
+        /// 车贷列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCarLoanList")]
+        [HttpPost]
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            return _carervice.GetCarLoanList(query);
+        }
+
+
+        /// <summary>
         /// 车贷申请
         /// </summary>
         /// <param name="model"></param>

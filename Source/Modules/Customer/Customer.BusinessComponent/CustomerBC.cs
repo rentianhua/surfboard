@@ -1797,7 +1797,7 @@ namespace CCN.Modules.Customer.BusinessComponent
                     Status = 1,
                     OrderNo = orderNo,
                     OrderNoQrCode = result.errmsg.ToString(),
-                    type = attach
+                    type = type
                 });
             }
             else

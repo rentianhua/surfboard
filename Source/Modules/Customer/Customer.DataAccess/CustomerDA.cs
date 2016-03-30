@@ -2314,7 +2314,8 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public int UpdateCustWeChatPayBack(string orderNo)
         {
-            var expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+            var expirestime = new DateTime();
+            
             const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
             const string sqlL = "update cust_info set level=@level,expirestime=@expirestime where innerid=@innerid;";
 
@@ -2331,10 +2332,18 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                     {
                         return 0;
                     }
-
+                    if (cwp.type == "1")
+                    {
+                        expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+                    }
+                    else
+                    {
+                        expirestime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(7).Day, 23, 59, 59);
+                    }
+                    
                     //升级VIP
                     conn.Execute(sqlU, new { orderno = orderNo }, tran);
-                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime= expirestime }, tran);
                     
                     tran.Commit();
                     return 1;

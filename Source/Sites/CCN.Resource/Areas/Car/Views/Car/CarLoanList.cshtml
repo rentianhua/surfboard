@@ -28,10 +28,12 @@
             str += "<td>" + (val.amount == null ? "" : val.amount) + "</td>";
             str += "<td>" + (val.term == null ? '' : val.term) + "</td>";
             str += "<td>" + (val.instruction == null ? "" : val.instruction.sub(400)) + "</td>";
-            str += "<td>" + Dateformat(val.createdtime, "yyyy-MM") + "</td>";
+            str += "<td>" + Dateformat(val.createdtime, "yyyy-MM-dd") + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
             str += "<td>" + GetLevelName(val.level) + "</td>";
-            //str += "<td>"<a onclick=\"getBodyHtml('mainbody', '/car/car/CarLoanEdit?id=');\" href='javascript:;'>详情</a> " +</td>";
+            str += "<td>"+
+                "<a onclick=\"getBodyHtml('mainbody', '/car/car/carloanedit?id=" + val.innerid + "');\" href='javascript:;'>详情</a>" +
+                "</td>";
             str += "</tr>";
             $("#carloanlist tbody").append(str);
         });
@@ -99,7 +101,7 @@
                 <th>申请时间</th>
                 <th>状态</th>
                 <th>会员等级</th>
-                @*<th>操作</th>*@
+                <th>操作</th>
             </tr>
         </thead>
 

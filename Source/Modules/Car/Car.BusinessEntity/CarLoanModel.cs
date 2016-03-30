@@ -99,4 +99,41 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? level { get; set; }
     }
+
+    /// <summary>
+    /// 贷款图片
+    /// </summary>
+    public class CarLoanPicture
+    {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string innerid { get; set; }
+
+        /// <summary>
+        /// 贷款Id
+        /// </summary>
+        public string loanid { get; set; }
+
+        /// <summary>
+        /// 类型
+        /// </summary>
+        public int? typeid { get; set; }
+
+        /// <summary>
+        /// 图片路径
+        /// </summary>
+        public string path { get; set; }
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int? sort { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime? createdtime { get; set; }
+
+    }
 }

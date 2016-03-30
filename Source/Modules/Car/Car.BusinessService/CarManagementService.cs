@@ -526,6 +526,36 @@ namespace CCN.Modules.Car.BusinessService
             return BusinessComponent.AddCarLoan(model);
         }
 
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCarLoan(CarLoanModel model)
+        {
+            return BusinessComponent.UpdateCarLoan(model);
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public JResult CarLoanInfo(string id)
+        {
+            return BusinessComponent.CarLoanInfo(id);
+        }
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddLoanPicture(CarLoanPicture model)
+        {
+            return BusinessComponent.AddLoanPicture(model);
+        }
+
         #endregion
     }
 }

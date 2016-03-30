@@ -371,6 +371,27 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult AddCarLoan(CarLoanModel model);
 
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCarLoan(CarLoanModel model);
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        JResult CarLoanInfo(string id);
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddLoanPicture(CarLoanPicture model);
+
         #endregion
     }
 }

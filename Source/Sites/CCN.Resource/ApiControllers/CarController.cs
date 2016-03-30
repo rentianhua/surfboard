@@ -574,6 +574,42 @@ namespace CCN.Resource.ApiControllers
             return _carervice.AddCarLoan(model);
         }
 
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCarLoan")]
+        [HttpPost]
+        public JResult UpdateCarLoan(CarLoanModel model)
+        {
+            return _carervice.UpdateCarLoan(model);
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("CarLoanInfo")]
+        [HttpGet]
+        public JResult CarLoanInfo(string id)
+        {
+            return _carervice.CarLoanInfo(id);
+        }
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddLoanPicture")]
+        [HttpPost]
+        public JResult AddLoanPicture(CarLoanPicture model)
+        {
+            return _carervice.AddLoanPicture(model);
+        }
+
         #endregion
     }
 }
