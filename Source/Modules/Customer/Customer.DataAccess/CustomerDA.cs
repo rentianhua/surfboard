@@ -2225,7 +2225,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public CustWxPayModel CustWeChatPayByCustid(string custid)
         {
-            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid;";
+            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid and status=1;";
             //
             //const string sqlU = "update user_info set ordernoqrcode=@ordernoqrcode where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
