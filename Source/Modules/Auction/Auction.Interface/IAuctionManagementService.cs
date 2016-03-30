@@ -287,6 +287,13 @@ namespace CCN.Modules.Auction.Interface
         #region 支付相关
 
         /// <summary>
+        /// 根据订单号获取出价详情
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        JResult GetAuctionParticipantByOrderNo(string orderno);
+
+        /// <summary>
         /// 添加定金拍卖定金支付记录
         /// </summary>
         /// <param name="model"></param>

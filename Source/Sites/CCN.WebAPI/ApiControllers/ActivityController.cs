@@ -179,8 +179,12 @@ namespace CCN.WebAPI.ApiControllers
         [Route("TestPu")]
         public void TestPu(string mobile)
         {
-            const string test = @"^1[3|4|5|8][0-9]\d{8}$";
-            var b = System.Text.RegularExpressions.Regex.IsMatch(mobile, test);
+            var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "auction/largeTransaction";
+            var param = new Dictionary<string, string>
+                {
+                    {"innerid", "40805cab-36c0-4395-8811-7a71a97280f0"}
+                };
+            var nodeRes = DynamicWebService.SendPost(url, param, "post");
         }
     }    
 }
