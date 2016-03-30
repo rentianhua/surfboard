@@ -407,6 +407,17 @@ namespace CCN.Modules.Auction.BusinessService
         #region 支付相关
 
         /// <summary>
+        /// 根据订单号获取出价详情
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult GetAuctionParticipantByOrderNo(string orderno)
+        {
+            var result = BusinessComponent.GetAuctionParticipantByOrderNo(orderno);
+            return result;
+        }
+
+        /// <summary>
         /// 添加定金拍卖定金支付记录
         /// </summary>
         /// <param name="model"></param>
@@ -414,44 +425,6 @@ namespace CCN.Modules.Auction.BusinessService
         public JResult AddPaymentRecord(AuctionPaymentRecordModel model)
         {
             var result = BusinessComponent.AddPaymentRecord(model);
-
-            if (result.errcode == 0)
-            {
-                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录正常！" + DateTime.Now, TraceEventType.Information);
-            }
-            else
-            {
-                LoggerFactories.CreateLogger().Write("添加定金拍卖定金支付记录异常：记录保存到数据库失败！" + DateTime.Now, TraceEventType.Information);
-            }
-
-            Task.Run(() =>
-            {
-                var resultPay = BusinessComponent.GetAuctionParticipantByOrderNo(model.out_trade_no);
-                var innerid = string.Empty;
-
-                //调用nodejs 通知前端
-                if (model.attach == "kplx_auction")//定金支付，获取支付ID
-                {
-                    resultPay = BusinessComponent.GetAuctionParticipantByOrderNo(model.out_trade_no);
-                    var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
-                    innerid = modelPay.Innerid;
-                }
-                else//获取会员ID
-                {
-                    var custorder = ConfigHelper.GetAppSettings("localapi") + "/api/Customer/CustWeChatPayByorderno?orderno=" + model.out_trade_no;
-                    var custRes = JObject.Parse(DynamicWebService.SendPost(custorder, null, "get"));
-                    if (custRes != null)
-                    {
-                        innerid = custRes["Innerid"].ToString();
-                    }
-                }
-
-                var nodejs = ConfigHelper.GetAppSettings("nodejssiteurl") + "/auction/largeTransaction?innerid=" + innerid;
-                var nodeRes = DynamicWebService.SendPost(nodejs, null, "get");
-                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
-
-            });
-
             return result;
         }
 

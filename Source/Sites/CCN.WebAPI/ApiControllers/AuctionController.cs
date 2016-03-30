@@ -4,6 +4,7 @@ using CCN.Modules.Auction.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using System;
+using System.Collections.Generic;
 using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Foundation.WeChat.WxPay.Business;
 using System.Xml;
@@ -13,6 +14,7 @@ using Cedar.Core.Logging;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Xml.Linq;
+using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -326,21 +328,43 @@ namespace CCN.WebAPI.ApiControllers
                 var doc = XDocument.Parse(stream);
                 var model = new AuctionPaymentRecordModel();
                 model.FillEntityWithXml(doc);
-                
-                var result = _auctionservice.AddPaymentRecord(model);
 
-                if (model.attach.Equals("kplx_vip"))
+                //记录支付结果
+                var result = _auctionservice.AddPaymentRecord(model);
+                LoggerFactories.CreateLogger().Write($"WxPay Saved Result: {result.errcode}", TraceEventType.Information);
+
+                if (result.errcode != 0)
                 {
-                    var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                    custservice.CustWxPayVipBack(model.out_trade_no);
+                    return new HttpResponseMessage { Content = new StringContent("ok") };
                 }
 
-                return new HttpResponseMessage { Content = new StringContent("ok") };
+                string innerid;
+                if (model.attach.Equals("kplx_auction"))
+                {
+                    var resultPay = _auctionservice.GetAuctionParticipantByOrderNo(model.out_trade_no);
+                    var modelPay = (AuctionCarParticipantModel) resultPay.errmsg;
+                    innerid = modelPay.Innerid;
+                }
+                else //获取会员ID
+                {
+                    var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+                    var custPayModel = (CustWxPayModel) custservice.CustWeChatPayByorderno(model.out_trade_no).errmsg;
+                    innerid = custPayModel.Innerid;
+                }
+
+                var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "auction/largeTransaction";
+                var param = new Dictionary<string, string>
+                {
+                    {"innerid", innerid}
+                };
+                var nodeRes = DynamicWebService.SendPost(url, param, "post");
+                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
+                return new HttpResponseMessage {Content = new StringContent("ok")};
             }
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage { Content = new StringContent($"ex:{ex.Message}") };
+                return new HttpResponseMessage {Content = new StringContent($"ex:{ex.Message}")};
             }
         }
 
