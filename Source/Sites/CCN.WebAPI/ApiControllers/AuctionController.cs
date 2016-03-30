@@ -335,7 +335,7 @@ namespace CCN.WebAPI.ApiControllers
 
                 if (result.errcode != 0)
                 {
-                    return new HttpResponseMessage { Content = new StringContent("ok") };
+                    return new HttpResponseMessage { Content = new StringContent("ERROR") };
                 }
 
                 string innerid;
@@ -359,12 +359,12 @@ namespace CCN.WebAPI.ApiControllers
                 };
                 var nodeRes = DynamicWebService.SendPost(url, param, "post");
                 LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
-                return new HttpResponseMessage {Content = new StringContent("ok")};
+                return new HttpResponseMessage {Content = new StringContent("SUCCESS") };
             }
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage {Content = new StringContent($"ex:{ex.Message}")};
+                return new HttpResponseMessage {Content = new StringContent("Exception") };
             }
         }
 
