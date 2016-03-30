@@ -55,9 +55,18 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns>0：未被注册，非0：被注册</returns>
         public int CheckMobile(string mobile)
         {
-            const string sql = @"select count(1) from cust_info where mobile=@mobile;";
-            var result = Helper.ExecuteScalar<int>(sql, new { mobile });
-            return result;
+            string sql = $"select count(1) as count from cust_info where mobile='{mobile}';";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Query<int>(sql).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>

@@ -932,6 +932,7 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns></returns>
+        [NonAction]
         [Route("UserRegister")]
         [HttpPost]
         public JResult UserRegister([FromBody]UserRegModel userInfo)
@@ -961,6 +962,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns>用户信息</returns>
         [Route("UserLogin")]
         [HttpPost]
+        [NonAction]
         public JResult UserLogin([FromBody]UserLoginInfo loginInfo)
         {
             JResult result;
@@ -1002,6 +1004,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetUserInfoById")]
         [HttpGet]
+        [NonAction]
         public JResult GetUserInfoById(string innerid)
         {
             return _custservice.GetUserInfoById(innerid);
@@ -1014,6 +1017,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetUserInfoByMobile")]
         [HttpGet]
+        [NonAction]
         public JResult GetUserInfoByMobile(string mobile)
         {
             return _custservice.GetUserInfoByMobile(mobile);
@@ -1026,6 +1030,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("GetUserPageList")]
         [HttpPost]
+        [NonAction]
         public BasePageList<UserListModel> GetUserPageList([FromBody]UserQueryModel query)
         {
             return _custservice.GetUserPageList(query);
@@ -1038,6 +1043,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateUserPassword")]
         [HttpPost]
+        [NonAction]
         public JResult UpdateUserPassword([FromBody]UserRetrievePassword mRetrievePassword)
         {
             if (string.IsNullOrWhiteSpace(mRetrievePassword?.Mobile))
@@ -1065,6 +1071,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateUserInfo")]
         [HttpPost]
+        [NonAction]
         public JResult UpdateUserInfo([FromBody]UserModel model)
         {
             return _custservice.UpdateUserInfo(model);
@@ -1078,6 +1085,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdateUserStatus")]
         [HttpPost]
+        [NonAction]
         public JResult UpdateUserStatus(string innerid, int status)
         {
             return _custservice.UpdateUserStatus(innerid, status);
