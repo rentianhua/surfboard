@@ -1578,6 +1578,41 @@ namespace CCN.Modules.Car.BusinessComponent
             return JResult._jResult(result);
         }
 
+        /// <summary>
+        /// 根据贷款ID获取对应的图片
+        /// </summary>
+        /// <param name="loanid">loanid</param>
+        /// <returns></returns>
+        public JResult GetLoanPictureByloanid(string loanid)
+        {
+            var result = DataAccess.GetLoanPictureByloanid(loanid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除贷款图片
+        /// </summary>
+        /// <param name="innerid">贷款图片id</param>
+        /// <returns></returns>
+        public JResult DeleteLoanPicture(string innerid)
+        {
+            var model = DataAccess.GetLoanPictureByid(innerid);
+
+            var result = DataAccess.DeleteLoanPicture(innerid);
+            switch (result)
+            {
+                case 400: return JResult._jResult(result, "删除失败");
+            }
+
+            if (!string.IsNullOrWhiteSpace(model?.path))
+            {
+                var qiniu = new QiniuUtility();
+                qiniu.DeleteFile(model.path);
+            }
+
+            return JResult._jResult(0, "删除成功");
+        }
+
         #endregion
     }
 }

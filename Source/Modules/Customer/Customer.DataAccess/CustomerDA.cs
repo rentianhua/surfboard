@@ -147,6 +147,12 @@ namespace CCN.Modules.Customer.DataAccess
                 {
                     custid = custModel.Innerid
                 }).FirstOrDefault();
+
+                //获取是否参与过会员体验
+                custModel.isbate = Helper.Query<int>("select count(1) from cust_wxpay_info where custid=@custid and type=2;", new
+                {
+                    custid = custModel.Innerid
+                }).FirstOrDefault();
             }
 
             return custModel;
@@ -2315,7 +2321,8 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         public int UpdateCustWeChatPayBack(string orderNo)
         {
             var expirestime = new DateTime();
-            
+            var bateday = 0;
+
             const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
             const string sqlL = "update cust_info set level=@level,expirestime=@expirestime where innerid=@innerid;";
 
@@ -2334,17 +2341,18 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                     }
                     if (cwp.type == "1")
                     {
-                        expirestime = new DateTime(DateTime.Now.AddYears(1).Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+                        expirestime = new DateTime(expirestime.AddYears(1).Year, expirestime.Month, expirestime.Day, 23, 59, 59);
                     }
                     else
                     {
-                        expirestime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(7).Day, 23, 59, 59);
+                        bateday =Convert.ToInt32(ConfigHelper.GetAppSettings("betavip_day"));
+                        expirestime = new DateTime(expirestime.Year, expirestime.Month, expirestime.AddDays(bateday).Day, 23, 59, 59);
                     }
-                    
+
                     //升级VIP
                     conn.Execute(sqlU, new { orderno = orderNo }, tran);
-                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime= expirestime }, tran);
-                    
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime = expirestime }, tran);
+
                     tran.Commit();
                     return 1;
                 }
@@ -2399,7 +2407,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
             {
                 try
                 {
-                    var custid = conn.Query<string>(sqlS, new {mobile = model.Mobile}).FirstOrDefault();
+                    var custid = conn.Query<string>(sqlS, new { mobile = model.Mobile }).FirstOrDefault();
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         //非会员

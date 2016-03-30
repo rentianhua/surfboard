@@ -43,6 +43,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public string instruction { get; set; }
 
         /// <summary>
+        /// 类型 1车主贷 2车商贷
+        /// </summary>
+        public int? type { get; set; }
+
+        /// <summary>
         /// 状态 0申请中 1通过 2未通过
         /// </summary>
         public int? status { get; set; }
@@ -51,6 +56,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 备注
         /// </summary>
         public string remark { get; set; }
+
+        /// <summary>
+        /// 车贷修改记录
+        /// </summary>
+        public string recordlist { get; set; }
 
         /// <summary>
         /// 修改人

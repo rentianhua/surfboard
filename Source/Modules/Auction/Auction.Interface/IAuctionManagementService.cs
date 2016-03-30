@@ -161,6 +161,13 @@ namespace CCN.Modules.Auction.Interface
         /// <returns></returns>
         JResult GetPriceCount(string auctionid);
 
+        /// <summary>
+        /// 支付完成更新出价状态
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        JResult UpdateStatusForPay(string orderno);
+
         #endregion
 
         #region 押金

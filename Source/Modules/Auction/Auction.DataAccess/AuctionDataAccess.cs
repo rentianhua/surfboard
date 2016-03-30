@@ -281,7 +281,7 @@ namespace CCN.Modules.Auction.DataAccess
                                 (innerid, carid, carno,no, mobile, dealrewards, transferrisk, remind, tips, status, lowestprice, isoperation, certificatesdeliver, isnewcar, vin, enginenum, transfer, violationdes, configuredes, supplementdes, picturedes, havepurchasetax, evaluationtest, introduction, address, evaluationpics,createrid, createdtime, modifierid, modifiedtime, deleterid, deletedtime, deletedesc, publisherid, publishedtime, dealerid, dealedtime, dealedprice, dealdesc, dealmobile, validtime,sellername,sellermobile,operatedid)
                                 VALUES
                                 (@Innerid, @carid, @carno,@no, @mobile, @dealrewards, @transferrisk, @remind, @tips, @status, @lowestprice, @isoperation, @certificatesdeliver, @isnewcar, @vin, @enginenum, @transfer, @violationdes, @configuredes, @supplementdes, @picturedes, @havepurchasetax, @evaluationtest, @introduction, @address,@evaluationpics, @createrid, @createdtime, @modifierid, @modifiedtime, @deleterid, @deletedtime, @deletedesc, @publisherid, @publishedtime, @dealerid, @dealedtime, @dealedprice, @dealdesc, @dealmobile, @validtime,@sellername,@sellermobile,@operatedid);";
- 
+
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -345,7 +345,7 @@ namespace CCN.Modules.Auction.DataAccess
             {
                 sqlcar.Append(" set status=1 where innerid =@carid; ");
             }
-            else if (model.status==6)//上线
+            else if (model.status == 6)//上线
             {
                 sqlcar.Append(" set status=3 where innerid =@carid; ");
             }
@@ -933,7 +933,7 @@ namespace CCN.Modules.Auction.DataAccess
                 carid = carmodel.carid;
             }
             //更新车辆信息
-            var sqlcar = new StringBuilder("update car_info set `status`=2 where innerid=@carid;");
+            var sqlcar = new StringBuilder("update car_info set `status`=2,`dealprice`=@dealprice,dealdesc='拍卖成交' where innerid=@carid;");
             int result;
             using (var conn = Helper.GetConnection())
             {
@@ -941,7 +941,7 @@ namespace CCN.Modules.Auction.DataAccess
                 try
                 {
                     conn.Execute(sql.ToString(), model, tran);
-                    conn.Execute(sqlcar.ToString(), new { carid }, tran);
+                    conn.Execute(sqlcar.ToString(), new { carid, dealprice = model.Amount }, tran);
                     tran.Commit();
                     return 1;
                 }
@@ -991,6 +991,36 @@ namespace CCN.Modules.Auction.DataAccess
         {
             const string sql = @"select count(1) as count from auction_participant where auctionid=@auctionid and isbid=1;";
             return Helper.ExecuteScalar<int>(sql, new { auctionid });
+        }
+
+        /// <summary>
+        /// 支付完成更新出价状态
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public int UpdateStatusForPay(string orderno)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                int result = 1;
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //更新竞拍人处理状态
+                    var u = "update auction_participant set `status`=3,remark=CONCAT(remark,@remark) where orderno=@orderno;";
+                    conn.Execute(u, new { orderno = orderno, remark = "\n@通知支付完成" }, tran);
+
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("拍卖定金支付记录更新出价状态异常：", TraceEventType.Error, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
         }
 
         #endregion
@@ -1528,8 +1558,8 @@ namespace CCN.Modules.Auction.DataAccess
                     result = conn.Execute(sql, model, tran);
 
                     //更新竞拍人处理状态
-                    var u = "update auction_participant set `status`=3,remark=CONCAT(remark,@remark) where orderno=@orderno;";
-                    conn.Execute(u, new {orderno = model.out_trade_no, remark = "\n@通知支付完成"}, tran);
+                    //var u = "update auction_participant set `status`=3,remark=CONCAT(remark,@remark) where orderno=@orderno;";
+                    //conn.Execute(u, new { orderno = model.out_trade_no, remark = "\n@通知支付完成" }, tran);
 
                     tran.Commit();
                 }

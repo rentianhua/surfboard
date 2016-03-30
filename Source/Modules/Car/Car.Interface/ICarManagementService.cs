@@ -392,6 +392,20 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult AddLoanPicture(CarLoanPicture model);
 
+        /// <summary>
+        /// 根据贷款ID获取对应的图片
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        JResult GetLoanPictureByloanid(string id);
+
+        /// <summary>
+        /// 删除贷款图片
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteLoanPicture(string innerid);
+
         #endregion
     }
 }
