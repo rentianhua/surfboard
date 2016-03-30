@@ -66,10 +66,11 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         public JResult CustRegister(CustModel userInfo)
         {
-            LoggerFactories.CreateLogger().Write("注册：" + JsonConvert.SerializeObject(userInfo, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }), TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("注册参数：" + JsonConvert.SerializeObject(userInfo), TraceEventType.Information);
             var mYan = DataAccess.CheckMobile(userInfo.Mobile);
             if (mYan > 0)
             {
+                LoggerFactories.CreateLogger().Write("mYan：" + mYan + "|" + userInfo.Mobile, TraceEventType.Information);
                 return new JResult
                 {
                     errcode = 402,
