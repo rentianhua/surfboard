@@ -150,6 +150,18 @@ namespace CCN.WebAPI.ApiControllers
             return _auctionservice.GetPriceCount(auctionid);
         }
 
+        /// <summary>
+        /// 支付完成更新出价状态
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("UpdateStatusForPay")]
+        public JResult UpdateStatusForPay(string orderno)
+        {
+            return _auctionservice.UpdateStatusForPay(orderno);
+        }
+
         #endregion
 
         #region 拍卖时间 
@@ -301,7 +313,7 @@ namespace CCN.WebAPI.ApiControllers
         //        int fee;
         //        int.TryParse(jobj["TotalFee"].ToString(), out fee);
         //        data.TotalFee = fee;
-                
+
         //        var qrcodeResult = WxPayAPIs.GetNativePayQrCode(data);
         //        return qrcodeResult;
         //    }
@@ -342,14 +354,26 @@ namespace CCN.WebAPI.ApiControllers
                 if (model.attach.Equals("kplx_auction"))
                 {
                     var resultPay = _auctionservice.GetAuctionParticipantByOrderNo(model.out_trade_no);
-                    var modelPay = (AuctionCarParticipantModel) resultPay.errmsg;
+                    var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
                     innerid = modelPay.Innerid;
+                    //更新竞价
+                    var upstatus = _auctionservice.UpdateStatusForPay(model.out_trade_no).errcode;
+                    if (upstatus != 0)
+                    {
+                        LoggerFactories.CreateLogger().Write("socket result ： 支付定金完成，更新竞价状态出错！", TraceEventType.Information);
+                    }
                 }
                 else //获取会员ID
                 {
                     var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                    var custPayModel = (CustWxPayModel) custservice.CustWeChatPayByorderno(model.out_trade_no).errmsg;
+                    var custPayModel = (CustWxPayModel)custservice.CustWeChatPayByorderno(model.out_trade_no).errmsg;
                     innerid = custPayModel.Innerid;
+                    //更新会员状态
+                    var ucstatus = custservice.CustWxPayVipBack(model.out_trade_no).errcode;
+                    if (ucstatus != 0)
+                    {
+                        LoggerFactories.CreateLogger().Write("socket result ： 会员支付完成，更新状态出错！", TraceEventType.Information);
+                    }
                 }
 
                 var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "auction/largeTransaction";
@@ -359,12 +383,12 @@ namespace CCN.WebAPI.ApiControllers
                 };
                 var nodeRes = DynamicWebService.SendPost(url, param, "post");
                 LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
-                return new HttpResponseMessage {Content = new StringContent("SUCCESS") };
+                return new HttpResponseMessage { Content = new StringContent("SUCCESS") };
             }
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage {Content = new StringContent("Exception") };
+                return new HttpResponseMessage { Content = new StringContent("Exception") };
             }
         }
 

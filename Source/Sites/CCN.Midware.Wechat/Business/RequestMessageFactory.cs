@@ -63,7 +63,7 @@ namespace CCN.Midware.Wechat.Business
 
                         /*tim update by 2016-01-07*/
 
-                        string[] strArr = { "车信网大吉", "车信网抽奖", "车信网兴旺" };
+                        string[] strArr = { "玖伍大吉", "玖伍抽奖", "玖伍兴旺" };
                         var rMessage = (RequestMessageText)requestMessage;
                         if (strArr.Contains(rMessage.Content))
                         {
@@ -74,7 +74,7 @@ namespace CCN.Midware.Wechat.Business
                         }
                         else
                         {
-                            CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
+                            CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，玖伍淘车会尽快回复您。");
                         }
 
                         //回复手机号重新绑定到会员
@@ -122,7 +122,7 @@ namespace CCN.Midware.Wechat.Business
                                 requestMessage = new RequestMessageEvent_Subscribe();
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
-                                CustomApi.SendText(AppID, requestMessage.FromUserName, "欢迎关注车信网！");
+                                CustomApi.SendText(AppID, requestMessage.FromUserName, "欢迎关注“玖伍淘车”！");
                                 break;
                             case "UNSUBSCRIBE"://取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();
