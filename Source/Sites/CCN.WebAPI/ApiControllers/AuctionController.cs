@@ -347,7 +347,7 @@ namespace CCN.WebAPI.ApiControllers
 
                 if (result.errcode != 0)
                 {
-                    return new HttpResponseMessage { Content = new StringContent("ok") };
+                    return new HttpResponseMessage { Content = new StringContent("ERROR") };
                 }
 
                 string innerid;
@@ -360,7 +360,7 @@ namespace CCN.WebAPI.ApiControllers
                     var upstatus = _auctionservice.UpdateStatusForPay(model.out_trade_no).errcode;
                     if (upstatus != 0)
                     {
-                        LoggerFactories.CreateLogger().Write("socket result ： 支付定金完成，更新竞价状态出错！" , TraceEventType.Information);
+                        LoggerFactories.CreateLogger().Write("socket result ： 支付定金完成，更新竞价状态出错！", TraceEventType.Information);
                     }
                 }
                 else //获取会员ID
@@ -383,12 +383,12 @@ namespace CCN.WebAPI.ApiControllers
                 };
                 var nodeRes = DynamicWebService.SendPost(url, param, "post");
                 LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
-                return new HttpResponseMessage { Content = new StringContent("ok") };
+                return new HttpResponseMessage { Content = new StringContent("SUCCESS") };
             }
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage { Content = new StringContent($"ex:{ex.Message}") };
+                return new HttpResponseMessage { Content = new StringContent("Exception") };
             }
         }
 

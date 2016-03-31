@@ -31,7 +31,7 @@ namespace CCN.Resource.Controllers
         HttpCookie cookie = new HttpCookie("type");
         public ActionResult Index()
         {
-            ViewBag.Title = "苏州车信网";
+            ViewBag.Title = "玖伍淘车";
             ViewBag.UserInfo = (BaseUserModel)Session["UserInfo"];
             ViewBag.showname = UserInfo.username;
             if (ADMIN == UserInfo.innerid)
@@ -129,7 +129,7 @@ namespace CCN.Resource.Controllers
 
         public ActionResult BusinessIndex()
         {
-            ViewBag.Title = "苏州车信网";
+            ViewBag.Title = "玖伍淘车";
             var custModel = (CustModel)Session["CustModel"];
             ViewBag.UserInfo = custModel;
             ViewBag.showname = custModel.Mobile;

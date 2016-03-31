@@ -282,7 +282,7 @@ namespace CCN.WebAPI.ApiControllers
 
                         //发送短信通知
                         var sms = new SMSMSG();
-                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用车信网发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【车信网】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。车信网承诺不会透露用户信息。");
+                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用玖伍淘车发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【玖伍淘车】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。玖伍淘车承诺不会透露用户信息。");
                     });
 
                     return _carervice.AddCar(model);
