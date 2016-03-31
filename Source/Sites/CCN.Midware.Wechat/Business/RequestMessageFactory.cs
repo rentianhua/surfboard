@@ -61,32 +61,25 @@ namespace CCN.Midware.Wechat.Business
                         requestMessage = new RequestMessageText();
                         requestMessage.FillEntityWithXml(doc);
 
-                        /*tim update by 2016-01-07*/
-
-                        string[] strArr = { "玖伍大吉", "玖伍抽奖", "玖伍兴旺" };
+                        /*tim update by 2016-03-31*/
                         var rMessage = (RequestMessageText)requestMessage;
-                        if (strArr.Contains(rMessage.Content))
-                        {
-                            var lotteryurl = ConfigurationManager.AppSettings["lotteryurl"];
-                            var redirecturl = $"{lotteryurl}/api/Lottery/TakeActivity?openId={rMessage.FromUserName}&flagCode={rMessage.Content}&flag=0";
-                            var res = Senparc.Weixin.HttpUtility.RequestUtility.HttpGetAsync(redirecturl, null, null, 1000);
-                            LoggerFactories.CreateLogger().Write("参与抽奖结果：" + res.Result, TraceEventType.Information);
-                        }
-                        else
-                        {
-                            CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，玖伍淘车会尽快回复您。");
-                        }
-
                         //回复手机号重新绑定到会员
-                        var b = System.Text.RegularExpressions.Regex.IsMatch(rMessage.Content, @"^1[3|4|5|8][0-9]\d{8}$");
+                        var b = System.Text.RegularExpressions.Regex.IsMatch(rMessage.Content.Trim(), @"^1[3|4|5|8][0-9]\d{8}$");
                         if (b)
                         {
-                            var customerService = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                            customerService.RebindFans(new CustRebindFansModel
+                            var customerService =
+                                ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
+                            var result = customerService.RebindFans(new CustRebindFansModel
                             {
                                 Openid = rMessage.FromUserName,
                                 Mobile = rMessage.Content
                             });
+                            LoggerFactories.CreateLogger()
+                                .Write($"rebind result：{result.errcode}", TraceEventType.Information);
+                        }
+                        else
+                        {
+                            CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，玖伍淘车会尽快回复您。");
                         }
 
                         break;

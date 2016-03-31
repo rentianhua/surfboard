@@ -1915,9 +1915,15 @@ namespace CCN.Modules.Customer.BusinessComponent
                 return JResult._jResult(401, "参数不完整");
             }
             var result = DataAccess.RebindFans(model);
-
-            CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.Openid, result == 0 ? "您还没有成为我们的会员，请点击菜单赶快去注册吧！" : "绑定成功！");
-
+            try
+            {
+                CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.Openid, result == 0 ? "您还没有成为我们的会员，请点击菜单赶快去注册吧！" : "绑定成功！");
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("发送消息异常：", TraceEventType.Error, ex);
+            }
+            
             return JResult._jResult(result);
         }
 
