@@ -128,13 +128,13 @@ namespace CCN.Resource.ApiControllers
         {
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
@@ -198,13 +198,13 @@ namespace CCN.Resource.ApiControllers
             //添加车辆
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
