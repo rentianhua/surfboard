@@ -367,7 +367,7 @@ namespace CCN.WebAPI.ApiControllers
                 {
                     var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
                     var custPayModel = (CustWxPayModel)custservice.CustWeChatPayByorderno(model.out_trade_no).errmsg;
-                    innerid = custPayModel.Innerid;
+                    innerid = custPayModel.Custid;
                     //更新会员状态
                     var ucstatus = custservice.CustWxPayVipBack(model.out_trade_no).errcode;
                     if (ucstatus != 0)
