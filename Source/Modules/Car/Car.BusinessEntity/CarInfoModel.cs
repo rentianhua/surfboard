@@ -310,6 +310,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
+        /// 车辆编号
+        /// </summary>
+        public string carno { get; set; }
+
+        /// <summary>
         /// 封面图片
         /// </summary>
         public string pic_url { get; set; }
