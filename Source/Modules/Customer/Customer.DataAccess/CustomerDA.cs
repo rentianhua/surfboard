@@ -2320,7 +2320,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public int UpdateCustWeChatPayBack(string orderNo)
         {
-            var expirestime = new DateTime();
+            var expirestime = DateTime.Now;
             var bateday = 0;
 
             const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
