@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.DataAccess;
 using Cedar.Core.ApplicationContexts;
@@ -10,6 +12,8 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
 using Cedar.Foundation.SMS.Common;
+using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Base.BusinessComponent
 {
@@ -958,19 +962,23 @@ namespace CCN.Modules.Base.BusinessComponent
             var userinfo = DataAccess.GetUserInfoByLoginName(model.loginname);
             if (userinfo != null)
             {
-                return new JResult
-                {
-                    errcode = 400,
-                    errmsg = "用户名已存在，请更换用户名！"
-                };
+                return JResult._jResult(400, "用户名已存在，请更换用户名！");
             }
 
+            model.innerid = Guid.NewGuid().ToString();
             var result = DataAccess.AddUser(model);
-            return new JResult
+            switch (result)
             {
-                errcode = 0,
-                errmsg = result
-            };
+                case -1:
+                    return JResult._jResult(401, "编码重复");
+                case 0:
+                    return JResult._jResult(402, "添加失败");
+            }
+
+            var qrcode = GenerateQrCode(model.no);
+            DataAccess.UpdateUserSceneQrCode(qrcode,model.innerid);
+
+            return JResult._jResult(0, result);
         }
 
         /// <summary>
@@ -990,7 +998,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     errmsg = "用户名已存在，请更换用户名！"
                 };
             }
-
+            model.no = null; //编号不能修改
             var result = DataAccess.UpdateUser(model);
             return new JResult
             {
@@ -1013,6 +1021,27 @@ namespace CCN.Modules.Base.BusinessComponent
                 errcode = 0,
                 errmsg = result
             };
+        }
+
+        /// <summary>
+        /// 生成场景二维码
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateQrCode(string no)
+        {
+            var qcresult = QrCodeApi.CreateByStr(ConfigHelper.GetAppSettings("APPID"), no);
+            //生成二维码位图
+            var logoUrl = HttpContext.Current.Server.MapPath("~/Content/images/logo.png");
+            var bitmap = BarCodeUtility.CreateBarcode(qcresult.url, logoUrl, 380, 380, 48, 48)[1];
+            //var bitmap = BarCodeUtility.CreateBarcode(qcresult.url, 240, 240);
+            var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+            var stream = BarCodeUtility.BitmapToStream(bitmap);
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+            var qrcode = qinniu.Put(stream, "", filename) ?? Path.GetFileName(filename);
+            stream.Dispose();
+            
+            return qrcode;
         }
 
         /// <summary>

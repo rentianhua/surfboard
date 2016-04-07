@@ -32,5 +32,22 @@ namespace Cedar.Foundation.WeChat.Interface
         /// <param name="openid"></param>
         /// <returns></returns>
         JResult GetFriendInformationByOpenid(string appid, string openid);
+
+        /// <summary>
+        /// 更新粉丝
+        /// </summary>
+        /// <param name="scenestr"></param>
+        /// <param name="openid"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        JResult UpdateWechatFriendQrScene(string openid, string scenestr, string appid);
+
+        /// <summary>
+        /// </summary>
+        /// <param name="appid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        JResult UpdateWechatFriendUnSubscribe(string appid, string openid);
+
     }
 }

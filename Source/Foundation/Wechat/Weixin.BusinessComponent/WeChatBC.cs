@@ -114,5 +114,37 @@ namespace Cedar.Foundation.WeChat.BusinessComponent
         {
             return new JResult();
         }
+
+        /// <summary>
+        /// 更新粉丝
+        /// </summary>
+        /// <param name="scenestr"></param>
+        /// <param name="openid"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public JResult UpdateWechatFriendQrScene(string openid, string scenestr, string appid)
+        {
+            var result = DataAccess.UpdateWechatFriendQrScene(openid, scenestr, appid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="appid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult UpdateWechatFriendUnSubscribe(string appid, string openid)
+        {
+            var friendModel = new FriendModel
+            {
+                Accountid = appid,
+                OPENID = openid,
+                SubscribeTime = DateTime.Now.Ticks,
+                Subscribe = 0
+            };
+            var result = DataAccess.UpdateWechatFriendUnSubscribe(friendModel);
+            return JResult._jResult(result);
+        }
+
     }
 }

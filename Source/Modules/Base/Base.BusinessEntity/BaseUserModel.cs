@@ -23,6 +23,11 @@ namespace CCN.Modules.Base.BusinessEntity
         public string no { get; set; }
 
         /// <summary>
+        /// 场景二维码
+        /// </summary>
+        public string sceneqrcode { get; set; }
+
+        /// <summary>
         /// 用户名
         /// </summary>
         public string username { get; set; }

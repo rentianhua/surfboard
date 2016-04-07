@@ -654,9 +654,10 @@ namespace CCN.Modules.Customer.BusinessEntity
         public string OrderNo { get; set; }
 
         /// <summary>
-        /// 订单号二维码
+        /// 统一下单结果信息
         /// </summary>
-        public string OrderNoQrCode { get; set; }
+        public string OrderInfo { get; set; }
+
         /// <summary>
         /// 状态
         /// </summary>
