@@ -763,14 +763,13 @@ namespace CCN.Modules.Auction.BusinessComponent
 
             var modelname = perModel.model_name;
             var status = perModel.status;
-   
+
             if (status > 2)
             {
                 return JResult._jResult(402, "订单已完成支付或者已经取消");
             }
-          
+
             //获取定金金额
-            
             var payurl = ConfigHelper.GetAppSettings("payurl");
             var body = ConfigHelper.GetAppSettings("auction_body");
             var totalFee = ConfigHelper.GetAppSettings("auction_total_fee");
@@ -778,32 +777,37 @@ namespace CCN.Modules.Auction.BusinessComponent
             var json = "{\"out_trade_no\":\"" + perModel.orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_auction\"}";
             var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
 
-            string qrcode;
             if (string.IsNullOrWhiteSpace(orderresult))
             {
                 return JResult._jResult(402, "二维码生成失败");
             }
-            LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {orderresult}", TraceEventType.Information);
+
+            LoggerFactories.CreateLogger().Write($"WxPay Result: {orderresult}", TraceEventType.Information);
+
             var jobj = JObject.Parse(orderresult);
-            if (jobj["errcode"].ToString() == "0")
-            {
-                qrcode = jobj["errmsg"].ToString();
-                var model = new AuctionCarParticipantModel
-                {
-                    Innerid = innerid,
-                    qrcode = qrcode
-                };
-                DataAccess.UpdateParticipant(model);
-            }
-            else//使用原来qrcode
-            {
-                qrcode = perModel.qrcode;
-            }
+            if (jobj["errcode"].ToString() != "0")
+                return JResult._jResult(0, JsonConvert.DeserializeObject(perModel.orderInfo));
 
-            var result = "{\"qrcode\": \"" + qrcode + "\",\"modelname\": \"" + modelname + "\",\"deposit\": " + totalFee + "}";
-            return JResult._jResult(0, result);
+            dynamic orderInfo = new
+            {
+                qrcode = jobj["errmsg"]["qrcode"].ToString(),
+                prepay_id = jobj["errmsg"]["prepay_id"].ToString(),
+                sign = jobj["errmsg"]["sign"].ToString(),
+                code_url = jobj["errmsg"]["code_url"].ToString(),
+                modelname,
+                deposit = totalFee
+            };
+
+            var model = new AuctionCarParticipantModel
+            {
+                Innerid = innerid,
+                orderInfo = JsonConvert.SerializeObject(orderInfo) 
+            };
+
+            DataAccess.UpdateParticipant(model);
+            return JResult._jResult(0, orderInfo);
         }
-
+        
         #endregion
     }
 }

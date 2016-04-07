@@ -100,9 +100,12 @@
         };
         if (id === "") {
             $.post("/api/Base/AddUser", json, function (result) {
-                var str = result.errcode === 0 ? "添加成功" : result.errmsg;
-                alert(str);
-                getBodyHtml('mainbody', '/system/system/SysUserList');
+                if (result.errcode === 0) {
+                    alert("添加成功");
+                    getBodyHtml('mainbody', '/system/system/SysUserList');
+                } else {
+                    alert("添加失败");
+                }
             });
         } else {
             json.Innerid = id;

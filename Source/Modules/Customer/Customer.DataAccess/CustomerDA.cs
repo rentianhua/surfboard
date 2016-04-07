@@ -84,6 +84,13 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
+                    //获取销售编号
+                    if (userInfo.Wechat != null)
+                    {
+                        userInfo.RecommendedId = conn.Query<string>("select scenestr from wechat_friend where openid=@openid;", new { openid = userInfo.Wechat.Openid }).FirstOrDefault();
+                    }
+
+                    //插入会员信息
                     conn.Execute(sql, userInfo, tran);
 
                     //插入会员的总数信息
@@ -2231,9 +2238,9 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public CustWxPayModel CustWeChatPayByCustid(string custid)
         {
-            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid and status=1;";
+            const string sqlS = "select innerid, orderno, orderinfo, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid and status=1;";
             //
-            //const string sqlU = "update user_info set ordernoqrcode=@ordernoqrcode where innerid=@innerid;";
+            //const string sqlU = "update user_info set orderinfo=@orderinfo where innerid=@innerid;";
             using (var conn = Helper.GetConnection())
             {
                 return conn.Query<CustWxPayModel>(sqlS, new { custid }).FirstOrDefault();
@@ -2247,7 +2254,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public CustWxPayModel CustWeChatPayByorderno(string orderno)
         {
-            const string sqlS = "select innerid, orderno, ordernoqrcode, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
+            const string sqlS = "select innerid, orderno, orderinfo, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2262,7 +2269,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         /// <returns></returns>
         public int AddCustWeChatPay(CustWxPayModel model)
         {
-            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, ordernoqrcode, custid, status,type, remark, createdtime, modifiedtime) values (@innerid, @orderno, @ordernoqrcode, @custid, @status,@type, @remark, @createdtime, @modifiedtime);";
+            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, orderinfo, custid, status,type, remark, createdtime, modifiedtime) values (@innerid, @orderno, @orderinfo, @custid, @status,@type, @remark, @createdtime, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 try
@@ -2285,45 +2292,35 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
         {
             var sqlStr = new StringBuilder("update cust_wxpay_info set ");
             sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
-            sqlStr.Append(" where custid = @custid");
+            sqlStr.Append(" where innerid=@innerid");
 
             using (var conn = Helper.GetConnection())
             {
-                var tran = conn.BeginTransaction();
                 try
                 {
-                    conn.Execute(sqlStr.ToString(), model, tran);
-
-                    if (model.Status == 2)
-                    {
-                        //升级VIP
-                        const string sqlL = "update cust_info set level=1 where innerid=@innerid;";
-                        conn.Execute(sqlL, new { innerid = model.Custid }, tran);
-                    }
-
-                    tran.Commit();
+                    conn.Execute(sqlStr.ToString(), model);
                     return 1;
                 }
                 catch (Exception ex)
                 {
                     LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
-                    tran.Rollback();
                     return 0;
                 }
             }
         }
 
         /// <summary>
-        /// 保存会员的订单
+        /// 支付回调更新会员信息
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
         public int UpdateCustWeChatPayBack(string orderNo)
         {
             var expirestime = DateTime.Now;
-            var bateday = 0;
 
+            //更新订单状态为已支付
             const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
+            //更新会员状态 level 为 1是正式VIP，2是体验版VIP
             const string sqlL = "update cust_info set level=@level,expirestime=@expirestime where innerid=@innerid;";
 
             using (var conn = Helper.GetConnection())
@@ -2332,7 +2329,7 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                 try
                 {
 
-                    var sqlCust = "select custid,type from cust_wxpay_info where orderno=@orderno;";
+                    const string sqlCust = "select custid,type from cust_wxpay_info where orderno=@orderno;";
                     var cwp = conn.Query<CustWxPayModel>(sqlCust, new { orderno = orderNo }).FirstOrDefault();
 
                     if (cwp == null)
@@ -2345,20 +2342,24 @@ from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.se
                     }
                     else
                     {
-                        bateday =Convert.ToInt32(ConfigHelper.GetAppSettings("betavip_day"));
-                        expirestime = new DateTime(expirestime.Year, expirestime.Month, expirestime.AddDays(bateday).Day, 23, 59, 59);
+                        var days = 7;
+                        var bateday = ConfigHelper.GetAppSettings("betavip_day");
+                        if (!string.IsNullOrWhiteSpace(bateday))
+                            days = Convert.ToInt32(ConfigHelper.GetAppSettings("betavip_day"));
+
+                        expirestime = new DateTime(expirestime.Year, expirestime.Month, expirestime.AddDays(days).Day, 23, 59, 59);
                     }
 
                     //升级VIP
                     conn.Execute(sqlU, new { orderno = orderNo }, tran);
-                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime = expirestime }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime }, tran);
 
                     tran.Commit();
                     return 1;
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    LoggerFactories.CreateLogger().Write("支付回调更新会员信息异常：", TraceEventType.Error, ex);
                     tran.Rollback();
                     return 0;
                 }

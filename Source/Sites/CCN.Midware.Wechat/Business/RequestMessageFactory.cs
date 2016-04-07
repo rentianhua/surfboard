@@ -41,6 +41,7 @@ namespace CCN.Midware.Wechat.Business
         //</xml>
 
         private static readonly string AppID = ConfigurationManager.AppSettings["APPID"];
+        private static string _slogan = ConfigurationManager.AppSettings["SLOGAN"];
 
         /// <summary>
         /// 获取XDocument转换后的IRequestMessageBase实例。
@@ -115,11 +116,20 @@ namespace CCN.Midware.Wechat.Business
                                 requestMessage = new RequestMessageEvent_Subscribe();
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
-                                CustomApi.SendText(AppID, requestMessage.FromUserName, "欢迎关注“玖伍淘车”！");
+                                _slogan = _slogan.Replace("\\n", Environment.NewLine);
+                                CustomApi.SendText(AppID, requestMessage.FromUserName, _slogan);
+
+                                //判断是否扫描场景二维码关注
+                                var xElement = doc.Root.Element("EventKey");
+                                if (xElement != null && xElement.Value.Contains("qrscene_"))
+                                {
+                                    var code = xElement.Value.Replace("qrscene_", "");
+                                    service.UpdateWechatFriendQrScene(requestMessage.FromUserName, code, AppID);
+                                }
                                 break;
                             case "UNSUBSCRIBE"://取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();
-                                service.GenerateWechatFriend(requestMessage.ToUserName, requestMessage.FromUserName, true);
+                                service.UpdateWechatFriendUnSubscribe(AppID, requestMessage.FromUserName);
                                 break;
                             case "CLICK"://菜单点击
                                 requestMessage = new RequestMessageEvent_Click();
@@ -277,8 +287,7 @@ namespace CCN.Midware.Wechat.Business
             var model = new AuctionPaymentRecordModel();
             model.FillEntityWithXml(doc);
 
-            var service = ServiceLocatorFactory.GetServiceLocator().GetService<IAuctionManagementService>();
-            var result = service.AddPaymentRecord(model);
+            //待实现
         }
     }
 }

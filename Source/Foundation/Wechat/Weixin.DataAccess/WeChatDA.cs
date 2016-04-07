@@ -51,5 +51,41 @@ namespace Cedar.Foundation.WeChat.DataAccess
 
             return Helper.Execute(strSql, model) > 0;
         }
+
+        /// <summary>
+        /// 更新粉丝
+        /// </summary>
+        /// <param name="scenestr"></param>
+        /// <param name="openid"></param>
+        /// <param name="appid"></param>
+        /// <returns></returns>
+        public bool UpdateWechatFriendQrScene(string openid,string scenestr,string appid)
+        {
+            var strSql = @"UPDATE wechat_friend SET `scenestr` = @scenestr WHERE `openid` = @openid and `accountid` = @accountid ";
+
+            return Helper.Execute(strSql, new
+            {
+                scenestr,
+                openid,
+                accountid = appid
+            }) > 0;
+        }
+
+        /// <summary>
+        /// 更新粉丝状态（取消关注）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public bool UpdateWechatFriendUnSubscribe(FriendModel model)
+        {
+            var strSql = @"UPDATE wechat_friend SET `subscribe_time` = @subscribetime,`subscribe` = @subscribe WHERE `openid` = @openid and `accountid` = @accountid";
+            return Helper.Execute(strSql, new
+            {
+                subscribe_time = model.SubscribeTime,
+                subscribe = model.Subscribe,
+                openid = model.OPENID,
+                accountid = model.Accountid
+            }) > 0;
+        }
     }
 }

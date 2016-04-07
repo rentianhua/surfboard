@@ -300,6 +300,7 @@
     <Content Include="Content\images\jia.png" />
     <Content Include="Content\images\loading-bars.gif" />
     <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\multiple-select.png" />
     <Content Include="Content\images\signup.jpg" />
     <Content Include="Content\multiple-select.css" />

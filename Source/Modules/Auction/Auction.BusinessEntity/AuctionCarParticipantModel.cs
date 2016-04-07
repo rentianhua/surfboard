@@ -79,9 +79,9 @@ namespace CCN.Modules.Auction.BusinessEntity
         public string orderno { get; set; }
 
         /// <summary>
-        /// 支付二维码
+        /// 统一下单结果信息
         /// </summary>
-        public string qrcode { get; set; }
+        public string orderInfo { get; set; }
 
         /// <summary>
         /// 初始化

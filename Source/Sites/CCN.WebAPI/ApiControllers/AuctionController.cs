@@ -275,7 +275,7 @@ namespace CCN.WebAPI.ApiControllers
         #region 支付
 
         /// <summary>
-        /// 微信定金支付
+        /// 微信支付统一下单（拍卖）
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,6 +9,7 @@ using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
@@ -1205,7 +1208,7 @@ namespace CCN.Modules.Base.DataAccess
             var list = Helper.ExecutePaging<BaseUserModel>(model, query.Echo);
             return list;
         }
-
+        
         /// <summary>
         /// 添加用户信息 
         /// </summary>
@@ -1214,14 +1217,39 @@ namespace CCN.Modules.Base.DataAccess
         public int AddUser(BaseUserModel model)
         {
             const string sql = @"INSERT INTO `sys_user`
-                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid,`level`)
+                                (`innerid`,`no`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid,`level`)
                                 VALUES
-                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid,@level);";
+                                (@innerid,@no, @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid,@level);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
                 try
                 {
+                    //生成编号
+                    var obj = new
+                    {
+                        p_tablename = "sys_user",
+                        p_columnname = "no",
+                        p_prefix = "S",
+                        p_length = 4,
+                        p_hasdate = 0
+                    };
+
+                    var args = new DynamicParameters(obj);
+                    args.Add("p_value", dbType: DbType.String, direction: ParameterDirection.Output);
+                    args.Add("p_errmessage", dbType: DbType.String, direction: ParameterDirection.Output);
+
+                    using (conn.QueryMultiple("sp_automaticnumbering", args, commandType: CommandType.StoredProcedure)) {}
+
+                    model.no = args.Get<string>("p_value");
+
+                    if (string.IsNullOrWhiteSpace(model.no))
+                    {
+                        var msg = args.Get<string>("p_errmessage");
+                        LoggerFactories.CreateLogger().Write("销售编号生成失败：" + msg, TraceEventType.Error);
+                        return -1;
+                    }
+
                     conn.Execute(sql, model, tran);
                     tran.Commit();
                     return 1;
@@ -1254,6 +1282,29 @@ namespace CCN.Modules.Base.DataAccess
                 result = 0;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 更新用户的二维码  
+        /// </summary>
+        /// <param name="qrcode"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int UpdateUserSceneQrCode(string qrcode,string innerid)
+        {
+            const string sql = @"update `sys_user` set sceneqrcode=@sceneqrcode where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, new { innerid, sceneqrcode = qrcode });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
