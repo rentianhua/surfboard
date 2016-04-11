@@ -2593,6 +2593,41 @@ namespace CCN.Modules.Car.DataAccess
             const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
+            //品牌
+            if (query.brand_id.HasValue)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id.HasValue)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //城市
+            if (query.cityid.HasValue)
+            {
+                sqlWhere.Append($" or a.cityid={query.cityid}");
+            }
+            
+            //价格
+            if (string.IsNullOrWhiteSpace(query.price))
+            {
+                sqlWhere.Append($" and  a.price='{query.price}' )");
+            }
+
+            //里程
+            if (string.IsNullOrWhiteSpace(query.mileage))
+            {
+                sqlWhere.Append($" and  a.mileage ='{query.mileage}' )");
+            }
+
+            //车龄
+            if (string.IsNullOrWhiteSpace(query.coty))
+            {
+                sqlWhere.Append($" or ( a.coty<='{query.coty}'");
+            }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarRewardViewModel>(model, query.Echo);
             return list;
