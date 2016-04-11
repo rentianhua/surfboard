@@ -2588,9 +2588,10 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carbrand as b on b.innerid = a.brand_id
                                     left join base_carseries as c on c.innerid = a.series_id
                                     left join base_carmodel as d on d.innerid = a.model_id
-                                    left join base_province as e on d.innerid = a.provid
-                                    left join base_city as f on f.innerid = a.cityid";
-            const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname ";
+                                    left join base_province as e on e.innerid = a.provid
+                                    left join base_city as f on f.innerid = a.cityid
+                                    left join base_code as bc on a.colorid=bc.codevalue and bc.typekey='car_color'";
+            const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname,bc.codename as color ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
             //品牌
@@ -2604,27 +2605,32 @@ namespace CCN.Modules.Car.DataAccess
             {
                 sqlWhere.Append($" and a.series_id={query.series_id}");
             }
+            //车型
+            if (query.model_id.HasValue)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
 
             //城市
             if (query.cityid.HasValue)
             {
                 sqlWhere.Append($" or a.cityid={query.cityid}");
             }
-            
+
             //价格
-            if (string.IsNullOrWhiteSpace(query.price))
+            if (!string.IsNullOrWhiteSpace(query.price))
             {
                 sqlWhere.Append($" and  a.price='{query.price}' )");
             }
 
             //里程
-            if (string.IsNullOrWhiteSpace(query.mileage))
+            if (!string.IsNullOrWhiteSpace(query.mileage))
             {
                 sqlWhere.Append($" and  a.mileage ='{query.mileage}' )");
             }
 
             //车龄
-            if (string.IsNullOrWhiteSpace(query.coty))
+            if (!string.IsNullOrWhiteSpace(query.coty))
             {
                 sqlWhere.Append($" or ( a.coty<='{query.coty}'");
             }
@@ -2641,9 +2647,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarReward(CarReward model)
         {
             const string sql = @"INSERT INTO `car_reward`
-                                (`innerid`, `brand_id`, `series_id`, `mileage`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`,`qrcode`, `createdid`, `createdtime`, `modifiedtime`)
+                                (`innerid`, `brand_id`, `series_id`,`model_id`, `mileage`,`colorid`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`,`qrcode`, `createdid`, `createdtime`, `modifiedtime`)
                                 VALUES
-                                (uuid(), @brand_id, @series_id, @mileage, @coty, @price, @provid, @cityid, @status, @username, @usermobile,@qrcode, @createdid, @createdtime, @modifiedtime);";
+                                (uuid(), @brand_id, @series_id,@model_id, @mileage,@colorid, @coty, @price, @provid, @cityid, 1, @username, @usermobile,@qrcode, @createdid, now(), now());";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2933,7 +2939,7 @@ namespace CCN.Modules.Car.DataAccess
         public int DeleteLoanPicture(string innerid)
         {
             const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
-            
+
             using (var conn = Helper.GetConnection())
             {
 
