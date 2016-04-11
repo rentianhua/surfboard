@@ -243,5 +243,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 城市名称
         /// </summary>
         public string cityname { get; set; }
+
+        /// <summary>
+        /// 颜色名称
+        /// </summary>
+        public string color { get; set; }
     }
 }
