@@ -12,15 +12,123 @@
 <link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
 <script type="text/javascript">
 
-    var carid = "";
+    var innerid = "@ViewBag.innerid";
 
     var imgs = [];
 
     var uploader;
     $(function () {
         InitUpload();
-        InitImgUpLoad();
+        //获取金融方案数据
+        Init();
     });
+
+    //获取数据
+    function Init() {
+        if (innerid === "") {
+            return;
+        }
+
+        $('#imgss').empty();
+        $('#imgfindings').empty();
+        $.get("/api/car/GetFinanceProgrammeById?innerid=" + innerid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#amount").val(obj.amount);
+            $("#coty").val(obj.coty);
+            $("#mileage").val(obj.mileage);
+            $("#loanterm").val(obj.loanterm);
+            $("#selectcust").selectVal(obj.customerpro);
+            $("#applicant").val(obj.applicant);
+            $("#mobile").val(obj.mobile);
+            $("#applytime").val(Dateformat(obj.applytime, "yyyy-MM-dd"));
+
+            var identitypic = JSON.parse(obj.identitypic);
+            if ((typeof identitypic) == "string") {
+                identitypic = JSON.parse(identitypic.replace(/\\/g, ""));
+            }
+
+            //身份证图片
+            var pics = ["身份证正面", "身份证反面"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgidentitypic').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgidentitypic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgidentitypic";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+
+            $.each(identitypic, function (k, v) {
+                if (v != null) {
+                    $("div .imgidentitypic").each(function () {
+                        if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
+                            $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                        }
+                    });
+                }
+            });
+            initUploadM();
+
+            //驾驶证
+            var pics = ["驾驶证正面", "驾驶证反面"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgdriverspic').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgdriverspic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgdriverspic";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+
+            if (JSON.parse(obj.driverspic) != null) {
+                var driverspic = obj.driverspic;
+
+                if ((typeof driverspic) == "string") {
+                    driverspic = JSON.parse(driverspic.replace(/\\/g, ""));
+                }
+                var count = 1;
+                $.each(driverspic, function (k, v) {
+                    if (v != null) {
+                        $("div .imgdriverspic").each(function () {
+                            if ($(this).attr('data-val') == count && v.imgsrc != "") {
+                                $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                            }
+                        });
+                    }
+                    count++;
+                });
+                initUploadM();
+            }
+
+        });
+    }
 
     function InitUpload() {
         var option = {};
@@ -53,7 +161,7 @@
 
     function goList() {
         hideloading();
-        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
     }
 
     function initUploadM() {
@@ -72,11 +180,6 @@
         $(".imgs .imgPreview .cz_4").unbind().click(function () {
             DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
         });
-    }
-
-
-    function goAcctionPics() {
-        getBodyHtml('mainbody', '/auction/auction/AuctionEvaluationPics?carid=' + carid + '&auctionid=@ViewBag.id');
     }
 
     //初始化七牛控件
@@ -188,7 +291,7 @@
         json.applicant = $("#applicant").val();
         json.mobile = $("#mobile").val();
         json.applytime = $("#applytime").val();
-        json.createdid = "@ViewBag.UserId";
+        json.modifiedid = "@ViewBag.UserId";
         //获取身份证信息
         var imgidentitypic = [];
         $('div .imgidentitypic').each(function () {
@@ -223,54 +326,7 @@
 
     //返回
     function GoBack() {
-        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
-    }
-
-    //初始化图片上传控件
-    function InitImgUpLoad() {
-        //身份证图片
-        var pics = ["身份证正面", "身份证反面"];
-        $.each(pics, function (k, v) {
-            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-            $('#imgidentitypic').append(
-                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgidentitypic"  data-id="">\
-            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
-            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
-            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
-            			            </div>\
-            		            </div>');
-
-            var option = {};
-            option.id = strradom;
-            option.container = "imgidentitypic";
-            option.uptoken = "@ViewBag.uptoken";
-            option.autostart = false;
-            option.domain = qiniuurl;
-            //初始化七牛上传控件
-            uploader = InitQiniuForAuction(option);
-        });
-        //驾驶证
-        var pics = ["驾驶证正面", "驾驶证反面"];
-        $.each(pics, function (k, v) {
-            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-            $('#imgdriverspic').append(
-                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgdriverspic"  data-id="">\
-            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
-            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
-            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
-            			            </div>\
-            		            </div>');
-
-            var option = {};
-            option.id = strradom;
-            option.container = "imgdriverspic";
-            option.uptoken = "@ViewBag.uptoken";
-            option.autostart = false;
-            option.domain = qiniuurl;
-            //初始化七牛上传控件
-            uploader = InitQiniuForAuction(option);
-        });
-        initUploadM();
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
     }
 
 </script>
