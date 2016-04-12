@@ -50,10 +50,10 @@
 
     }
 
-  
+
     function goList() {
         hideloading();
-        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
     }
 
     function initUploadM() {
@@ -72,11 +72,6 @@
         $(".imgs .imgPreview .cz_4").unbind().click(function () {
             DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
         });
-    }
-
-
-    function goAcctionPics() {
-        getBodyHtml('mainbody', '/auction/auction/AuctionEvaluationPics?carid=' + carid + '&auctionid=@ViewBag.id');
     }
 
     //初始化七牛控件
@@ -210,7 +205,7 @@
         });
 
         json.driverspic = JSON.stringify(imgdriverspic);
-    
+
         $.post("/api/Car/AddFinanceProgramme", json, function (result) {
 
             if (result.errcode !== 0) {
@@ -223,7 +218,7 @@
 
     //返回
     function GoBack() {
-        getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
     }
 
     //初始化图片上传控件
@@ -249,7 +244,7 @@
             //初始化七牛上传控件
             uploader = InitQiniuForAuction(option);
         });
-        //驾驶证 
+        //驾驶证
         var pics = ["驾驶证正面", "驾驶证反面"];
         $.each(pics, function (k, v) {
             var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);

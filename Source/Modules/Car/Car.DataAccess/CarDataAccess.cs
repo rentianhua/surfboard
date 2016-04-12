@@ -3060,13 +3060,16 @@ namespace CCN.Modules.Car.DataAccess
         /// <returns></returns>
         public IEnumerable<FinanceProgrammeModel> GetFinanceProgramme(FinanceProgrammeModel query)
         {
-            StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`)
+            StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, 
+                                `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, 
+                                `identitypic`, `driverspic`, `bankpic`
                                  from finance_programme 
-                                where 1=1 ;");
+                                where 1=1 ");
             if (!string.IsNullOrWhiteSpace(query.innerid))
             {
                 sql.Append($" and innerid='{query.innerid}' ");
             }
+            sql.Append($" order by applytime asc; ");
 
             try
             {
