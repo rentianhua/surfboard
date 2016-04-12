@@ -99,5 +99,45 @@ namespace CCN.Resource.Areas.Car.Controllers
             ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
         }
+
+        #region 金融
+
+        /// <summary>
+        /// 申请金融方案列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult FinanceProgrammeList()
+        {
+            if (ADMIN != UserInfo.innerid)
+            {
+                ViewBag.userid = UserInfo.innerid;
+            }
+            return View();
+        }
+
+        /// <summary>
+        /// 金融方案申请新增
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult FinanceProgrammeAdd()
+        {
+            ViewBag.userid = UserInfo.innerid;
+            ViewBag.uptoken = QiniuUtility.GetToken();
+            return View();
+        }
+
+        /// <summary>
+        /// 金融方案申请编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult FinanceProgrammeEdit(string innerid)
+        {
+            ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
+            ViewBag.userid = UserInfo.innerid;
+            ViewBag.uptoken = QiniuUtility.GetToken();
+            return View();
+        }
+
+        #endregion
     }
 }
