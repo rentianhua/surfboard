@@ -577,5 +577,39 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            return BusinessComponent.GetFinanceProgrammeList(query);
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return BusinessComponent.AddFinanceProgramme(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetFinanceProgrammeById(string innerid)
+        {
+            return BusinessComponent.GetFinanceProgrammeById(innerid);
+        }
+
+        #endregion
     }
 }

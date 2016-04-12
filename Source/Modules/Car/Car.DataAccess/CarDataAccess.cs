@@ -2980,5 +2980,105 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"finance_programme as a ";
+            const string fields = " a.* ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.applytime desc" : query.Order;
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            //联系电话
+            if (!string.IsNullOrWhiteSpace(query.mobile))
+            {
+                sqlWhere.Append($" and a.mobile={query.mobile}");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<FinanceProgrammeViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public string AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            const string sql = @"INSERT INTO `finance_programme`
+                                (`innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`)
+                                VALUES
+                                (@innerid, @amount, @coty, @mileage, @loanterm, @interestrate, @customerpro, @applicant, @applytime, @mobile, @modifiedid, now(), @createdid, now(), @identitypic, @driverspic, @bankpic);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                string result = string.Empty;
+                try
+                {
+                    if (conn.Execute(sql, model) == 1)
+                    {
+                        result = model.innerid;
+                    }
+                    else
+                    {
+                        result = "0";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("金融方案新增：", TraceEventType.Information, ex);
+                    result = "0";
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public FinanceProgrammeModel GetFinanceProgrammeById(string innerid)
+        {
+            return GetFinanceProgramme(new FinanceProgrammeModel { innerid = innerid }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取金融方案相关信息
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IEnumerable<FinanceProgrammeModel> GetFinanceProgramme(FinanceProgrammeModel query)
+        {
+            StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`)
+                                 from finance_programme 
+                                where 1=1 ;");
+            if (!string.IsNullOrWhiteSpace(query.innerid))
+            {
+                sql.Append($" and innerid='{query.innerid}' ");
+            }
+
+            try
+            {
+                var list = Helper.Query<FinanceProgrammeModel>(sql.ToString());
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
     }
 }

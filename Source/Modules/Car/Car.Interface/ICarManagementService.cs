@@ -407,5 +407,30 @@ namespace CCN.Modules.Car.Interface
         JResult DeleteLoanPicture(string innerid);
 
         #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query);
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddFinanceProgramme(FinanceProgrammeModel model);
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetFinanceProgrammeById(string innerid);
+
+        #endregion
     }
 }

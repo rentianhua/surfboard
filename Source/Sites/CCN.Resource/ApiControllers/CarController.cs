@@ -635,5 +635,45 @@ namespace CCN.Resource.ApiControllers
         }
 
         #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeList")]
+        [HttpPost]
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            return _carervice.GetFinanceProgrammeList(query);
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddFinanceProgramme")]
+        [HttpPost]
+        public JResult AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return _carervice.AddFinanceProgramme(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeById")]
+        [HttpGet]
+        public JResult GetFinanceProgrammeById(string innerid)
+        {
+            return _carervice.GetFinanceProgrammeById(innerid);
+        }
+
+        #endregion
     }
 }

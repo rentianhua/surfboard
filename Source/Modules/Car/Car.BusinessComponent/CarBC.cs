@@ -1575,5 +1575,50 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            if (query == null)
+            {
+                LoggerFactories.CreateLogger().Write("获取金融方案列表，参数不完整", TraceEventType.Warning);
+                return new BasePageList<FinanceProgrammeViewModel>();
+            }
+            var list = DataAccess.GetFinanceProgrammeList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            //获取主键
+            model.innerid = Guid.NewGuid().ToString();
+
+            var result = DataAccess.AddFinanceProgramme(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetFinanceProgrammeById(string innerid)
+        {
+            var result = DataAccess.GetFinanceProgrammeById(innerid);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }
