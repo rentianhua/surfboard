@@ -117,4 +117,64 @@ namespace CCN.Modules.Car.BusinessEntity
     {
 
     }
+
+    /// <summary>
+    /// 经融方案详情
+    /// </summary>
+    public class FinanceProgrammeDetailModel
+    {
+        /// <summary>
+        /// 主键
+        /// </summary>
+        public string innerid { get; set; }
+
+        /// <summary>
+        /// 金融ID
+        /// </summary>
+        public string financeid { get; set; }
+
+        /// <summary>
+        /// 利率
+        /// </summary>
+        public decimal? interestrate { get; set; }
+        /// <summary>
+        /// 类型 方案一 方案二 方案三
+        /// </summary>
+        public int? type { get; set; }
+
+        /// <summary>
+        /// 状态 1保存 2提交 3通过 4未通过 5结束
+        /// </summary>
+        public int? status { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+
+        /// <summary>
+        /// 图片信息（json格式）
+        /// </summary>
+        public string describepic { get; set; }
+
+        /// <summary>
+        /// 修改人ID
+        /// </summary>
+        public string modifiedid { get; set; }
+
+        /// <summary>
+        /// 修改时间
+        /// </summary>
+        public DateTime? modifiedtime { get; set; }
+        /// <summary>
+        /// 创建人ID
+        /// </summary>
+        public string createdid { get; set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime? createdtime { get; set; }
+
+    }
 }

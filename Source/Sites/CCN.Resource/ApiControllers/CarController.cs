@@ -663,6 +663,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateFinanceProgramme")]
+        [HttpPost]
+        public JResult UpdateFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return _carervice.UpdateFinanceProgramme(model);
+        }
+
+        /// <summary>
         /// 根据id获取金融方案详情
         /// </summary>
         /// <param name="innerid"></param>
@@ -672,6 +684,42 @@ namespace CCN.Resource.ApiControllers
         public JResult GetFinanceProgrammeById(string innerid)
         {
             return _carervice.GetFinanceProgrammeById(innerid);
+        }
+
+        /// <summary>
+        /// 经融方案明细新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddFinanceProgrammeDetail")]
+        [HttpPost]
+        public JResult AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return _carervice.AddFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 金融方案明细修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateFinanceProgrammeDetail")]
+        [HttpPost]
+        public JResult UpdateFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return _carervice.UpdateFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案明细详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeDetailById")]
+        [HttpGet]
+        public JResult GetFinanceProgrammeDetailById(string innerid)
+        {
+            return _carervice.GetFinanceProgrammeDetailById(innerid);
         }
 
         #endregion
