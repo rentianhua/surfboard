@@ -3042,6 +3042,30 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         /// <summary>
+        /// 金融方案修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateFinanceProgramme(FinanceProgrammeModel model)
+        {
+            var sql = new StringBuilder("update `finance_programme` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("金融方案修改：", TraceEventType.Error, ex);
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
         /// 根据id获取金融方案详情
         /// </summary>
         /// <param name="innerid"></param>
@@ -3073,6 +3097,80 @@ namespace CCN.Modules.Car.DataAccess
             {
                 var list = Helper.Query<FinanceProgrammeModel>(sql.ToString());
                 return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 经融方案明细新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            const string sql = @"INSERT INTO `finance_programme_detail`
+                                (`innerid`, `financeid`, `interestrate`, `type`, `status`, `remark`, `describepic`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
+                                VALUES
+                                (uuid(), @financeid, @interestrate, @type, @status, @remark, @describepic, @modifiedid, now(), @createdid, now());";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result ;
+                try
+                {
+                    result = conn.Execute(sql, model);
+
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("金融方案明细新增：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 金融方案明细修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            var sql = new StringBuilder("update `finance_programme_detail` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("金融方案明细修改：", TraceEventType.Error, ex);
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案明细详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public FinanceProgrammeModel GetFinanceProgrammeDetailById(string innerid)
+        {
+            StringBuilder sql = new StringBuilder(@"select * from finance_programme_detail 
+                                where innerid=@innerid order by createdtime desc");
+
+            try
+            {
+                return Helper.Query<FinanceProgrammeModel>(sql.ToString(),new { innerid }).FirstOrDefault();
             }
             catch (Exception ex)
             {

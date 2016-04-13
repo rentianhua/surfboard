@@ -425,11 +425,39 @@ namespace CCN.Modules.Car.Interface
         JResult AddFinanceProgramme(FinanceProgrammeModel model);
 
         /// <summary>
+        /// 金融方案修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateFinanceProgramme(FinanceProgrammeModel model);
+
+        /// <summary>
         /// 根据id获取金融方案详情
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult GetFinanceProgrammeById(string innerid);
+
+        /// <summary>
+        /// 经融方案明细新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model);
+
+        /// <summary>
+        /// 金融方案明细修改 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateFinanceProgrammeDetail(FinanceProgrammeDetailModel model);
+
+        /// <summary>
+        /// 根据id获取金融方案明细详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetFinanceProgrammeDetailById(string innerid);
 
         #endregion
         
