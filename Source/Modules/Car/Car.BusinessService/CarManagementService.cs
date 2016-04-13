@@ -601,6 +601,16 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 金融方案修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return BusinessComponent.UpdateFinanceProgramme(model);
+        }
+
+        /// <summary>
         /// 根据id获取金融方案详情
         /// </summary>
         /// <param name="innerid"></param>
@@ -608,6 +618,36 @@ namespace CCN.Modules.Car.BusinessService
         public JResult GetFinanceProgrammeById(string innerid)
         {
             return BusinessComponent.GetFinanceProgrammeById(innerid);
+        }
+
+        /// <summary>
+        /// 经融方案明细新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return BusinessComponent.AddFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 金融方案明细修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return BusinessComponent.UpdateFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案明细详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetFinanceProgrammeDetailById(string innerid)
+        {
+            return BusinessComponent.GetFinanceProgrammeDetailById(innerid);
         }
 
         #endregion
