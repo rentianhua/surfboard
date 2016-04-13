@@ -46,6 +46,31 @@
             $("#applicant").val(obj.applicant);
             $("#mobile").val(obj.mobile);
             $("#applytime").val(Dateformat(obj.applytime, "yyyy-MM-dd"));
+            //方案信息
+
+            $.each(obj.financeprogrammedetail, function (k, v) {
+                var imgtype = v.type;
+                $("#interestrate" + v.type).val(v.interestrate);
+                $("#selectstatus" + v.type).selectVal(v.status);
+                $("#caresc" + v.type).val(v.remark);
+                var describepic = JSON.parse(v.describepic);
+                if ((typeof describepic) == "string") {
+                    describepic = JSON.parse(describepic.replace(/\\/g, ""));
+                }
+                $("#value" + imgtype).val(v.innerid);
+                $.each(describepic, function (k, v) {
+                    
+                    var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                    $('#imgs' + imgtype).append(
+                            '<div id="' + strradom + '" class="imgPreview divType' + imgtype + '"  data-id="' + v.imgsrc + '">\
+						<img data-type="img" src="' + getImgUrl(v.imgsrc) + '" class="loading" width="550px">\
+						<div class="caidan">\
+							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
+						</div>\
+					</div>');
+                    initUploadM();
+                });
+            });
 
             var identitypic = JSON.parse(obj.identitypic);
             if ((typeof identitypic) == "string") {
@@ -73,7 +98,7 @@
                 //初始化七牛上传控件
                 uploader = InitQiniuForAuction(option);
             });
-        
+
             $.each(identitypic, function (k, v) {
                 if (v != null) {
                     $("div .imgidentitypic").each(function () {
@@ -110,13 +135,12 @@
 
             if (JSON.parse(obj.driverspic) != null) {
                 var driverspic = JSON.parse(obj.driverspic);
-                console.log(driverspic);
+
                 if ((typeof driverspic) == "string") {
                     driverspic = JSON.parse(driverspic.replace(/\\/g, ""));
                 }
                 var count = 1;
                 $.each(driverspic, function (k, v) {
-                    debugger
                     if (v != null) {
                         $("div .imgdriverspic").each(function () {
                             if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
@@ -135,13 +159,38 @@
 
     function InitUpload() {
         var option = {};
-        option.id = "pickfiles2";
-        option.container = "container2";
+        option.id = "pickfiles1";
+        option.container = "container1";
         option.uptoken = "@ViewBag.uptoken";
         option.autostart = false;
         option.domain = qiniuurl;
+        option.type = 1;
+        option.multiup = true;
         //初始化七牛上传控件
-        uploader = InitQiniuUpload(option);
+        uploader = InitQiniuForAuction(option);
+
+        var option2 = {};
+        option2.id = "pickfiles2";
+        option2.container = "container2";
+        option2.uptoken = "@ViewBag.uptoken";
+        option2.autostart = false;
+        option2.domain = qiniuurl;
+        option2.type = 2;
+        option2.multiup = true;
+        //初始化七牛上传控件
+        uploader = InitQiniuForAuction(option2);
+
+        var option3 = {};
+        option3.id = "pickfiles3";
+        option3.container = "container3";
+        option3.uptoken = "@ViewBag.uptoken";
+        option3.autostart = false;
+        option3.domain = qiniuurl;
+        option3.type = 3;
+        option3.multiup = true;
+        //初始化七牛上传控件
+        //uploader = InitQiniuUpload(option3);
+        uploader = InitQiniuForAuction(option3);
     }
 
     function showloading() {
@@ -226,12 +275,103 @@
                     json.imgsrc = JSON.parse(info).key;
                     json.title = $("#" + option.id).attr("data-val");
 
-                    $("#" + option.id).css("line-height", "120px");
-                    $("#" + option.id + " img").attr("src", option.domain + JSON.parse(info).key).css("margin-top", "0px");
-                    $("#" + option.id).attr("data-id", JSON.parse(info).key).css("margin-top", "0px");
+
+                    if (option.multiup) {
+                        FileProgress(file, option.type, JSON.parse(info).key);
+                    }
+                    else {
+                        $("#" + option.id).css("line-height", "120px");
+                        $("#" + option.id + " img").attr("src", option.domain + JSON.parse(info).key).css("margin-top", "0px");
+                        $("#" + option.id).attr("data-id", JSON.parse(info).key).css("margin-top", "0px");
+                    }
                 }
             }
         });
+    }
+
+    function FileProgress(file, type, filename) {
+        console.log(type);
+        this.fileProgressID = file.id;
+        this.file = file;
+
+        this.opacity = 100;
+        this.height = 0;
+        this.fileProgressWrapper = $('#' + this.fileProgressID);
+        if (!this.fileProgressWrapper.length) {
+            previewImage(file, function (imgsrc) {
+                //获取随机数
+                strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+
+                var strHtml = '<div id="' + strradom + '" class="imgPreview div2 divType' + type + '"  data-id="' + filename + '">';
+                strHtml += '<img data-type="img" src="' + imgsrc + '" class="loading" >';
+                strHtml += '<div class="caidan">';
+                strHtml += '<div hash="' + strradom + '" class="cz_4" id="' + file.id + '"><div class="czl_icon"></div></div>';
+                strHtml += '</div></div>';
+
+                $('#imgs' + type).append(strHtml);
+
+                // 立即执行事件绑定
+                (function () {
+                    // 当前方法对象
+                    var fun = arguments.callee;
+                    // 图片选中
+                    $(".imgs .imgPreview").unbind().mousemove(function () {
+                        $(this).find(".caidan").show();
+                    }).mouseout(function () {
+                        $(this).find(".caidan").hide();
+                    });
+                    $(".imgs .caidan").unbind().mousemove(function () {
+                        $(this).show();
+                    }).mouseout(function () {
+                        $(this).hide();
+                    });
+                    // 图片删除
+                    $(".imgs .imgPreview .cz_4").unbind().click(function () {
+                        $("#" + $(this).attr("hash")).remove();
+                        var toremove = '';
+                        var id = $(this).attr("data-val");
+                        for (var i in uploader.files) {
+                            if (uploader.files[i].id === id) {
+                                toremove = i;
+                            }
+                        }
+                        uploader.files.splice(toremove, 1);
+                    });
+                    // 置顶图片
+                    $(".imgs .imgPreview .cz_1").unbind().click(function () {
+                        var imghtml = $("#" + $(this).attr("hash"))[0];
+                        $("#" + $(this).attr("hash")).remove();
+                        $('.imgs').prepend(imghtml);
+                        fun();
+                    });
+                    // 图片前移
+                    $(".imgs .imgPreview .cz_2").unbind().click(function () {
+                        var id = "#" + $(this).attr("hash");
+                        var $this = $(id).prev();
+                        var imghtml = $(id)[0];
+                        if ($this.size()) {
+                            $(id).remove();
+                            $this.before(imghtml);
+                            fun();
+                        }
+                    });
+                    // 图片后移
+                    $(".imgs .imgPreview .cz_3").unbind().click(function () {
+                        var id = "#" + $(this).attr("hash");
+                        var $this = $(id).next();
+                        var imghtml = $(id)[0];
+                        if ($this.size()) {
+                            $(id).remove();
+                            $this.after(imghtml);
+                            fun();
+                        }
+                    });
+                })();
+
+            });
+        } else {
+            this.reset();
+        }
     }
 
     //保存基本信息
@@ -331,6 +471,63 @@
     //返回
     function GoBack() {
         getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
+    }
+
+    //保存方案信息
+    function SaveInfo(type) {
+        var redecimal = /^[0-9]+([.]{1}[0-9]{1,2})?$/;//两位小数
+
+        if ($("#interestrate" + type).val() === "") {
+            alert("请填写利率！");
+            return false;
+        }
+        if (!redecimal.test($("#interestrate" + type).val())) {
+            alert("利率只能输入数值！");
+            return false;
+        }
+
+        var json = {};
+        
+        json.interestrate = $("#interestrate" + type).val();
+        json.status = $("#selectstatus" + type).val();
+        json.remark = $("#caresc" + type).val();
+        json.createdid = "@ViewBag.UserId";
+        json.type = type;
+
+        //获取图片信息
+        var jsonpic = [];
+        $(' div .divType' + type).each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            jsonpic.push(json);
+        });
+
+        json.describepic = JSON.stringify(jsonpic);
+        if ($("#value" + type).val() == "")
+        {
+            json.financeid = innerid;
+            $.post("/api/Car/AddFinanceProgrammeDetail", json, function (result) {
+
+                if (result.errcode !== 0) {
+                    alert(result.errmsg);
+                    return false;
+                }
+                alert("新增成功！");
+            });
+        }
+        else
+        {
+            json.innerid = $("#value" + type).val();
+            $.post("/api/Car/UpdateFinanceProgrammeDetail", json, function (result) {
+
+                if (result.errcode !== 0) {
+                    alert(result.errmsg);
+                    return false;
+                }
+                alert("修改成功！");
+            });
+        }
+        
     }
 
 </script>
@@ -486,7 +683,7 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
                                         <div class="controls col-sm-8">
-                                            <input type="text" id="applicant" placeholder="利率" class="form-control" />
+                                            <input type="text" id="interestrate1" placeholder="利率" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -494,8 +691,8 @@
                                     <div class="form-group">
                                         <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
                                         <div class="controls col-sm-8">
-                                            <select id="selectstatus" style="width:100%">
-                                                <option >请选择</option>
+                                            <select id="selectstatus1" style="width:100%">
+                                                <option>请选择</option>
                                                 <option value="3">通过</option>
                                                 <option value="4">驳回</option>
                                             </select>
@@ -507,19 +704,19 @@
                                 <div class="col-lg-12">
                                     <div class="form-group">
                                         <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>相关图片</label>
-                                        <div class="controls col-sm-11" id="imgList1">
-                                            <div id="container2">
-                                                <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                        <div class="controls col-sm-11" id="imgList">
+                                            <div id="container1">
+                                                <a class="btn btn-default btn-lg " id="pickfiles1" href="#">
                                                     <i class="glyphicon glyphicon-plus"></i>
                                                     <sapn>选择文件</sapn>
                                                 </a><label class="required">只能上传2M以下图片</label>
                                             </div>
                                             <div>
-                                                <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                                <div id="imgs1" class="imgs1 col-xs-12" style="padding:10px 144px 0px 0;">
                                                 </div>
                                             </div>
                                             <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
-                                                <tbody id="fsUploadProgress"></tbody>
+                                                <tbody id="fsUploadProgress1"></tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -533,7 +730,7 @@
                                     <div class="form-group">
                                         <label for="caresc" class="col-sm-1 control-label no-padding-right">备注</label>
                                         <div class="col-sm-11">
-                                            <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                                            <textarea id="caresc1" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -542,7 +739,7 @@
                             @*按钮*@
                             <div class="row form-group text-center">
                                 <div class="col-lg-12">
-                                    <input id="save1" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveAuctionInfo();" />
+                                    <input id="save1" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(1);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
                                 </div>
                             </div>
@@ -557,12 +754,69 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
-
+                            @*利率 状态*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="interestrate2" placeholder="利率" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
+                                        <div class="controls col-sm-8">
+                                            <select id="selectstatus2" style="width:100%">
+                                                <option>请选择</option>
+                                                <option value="3">通过</option>
+                                                <option value="4">驳回</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>相关图片</label>
+                                        <div class="controls col-sm-11" id="imgList2">
+                                            <div id="container2">
+                                                <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                    <sapn>选择文件</sapn>
+                                                </a><label class="required">只能上传2M以下图片</label>
+                                            </div>
+                                            <div>
+                                                <div id="imgs2" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                                </div>
+                                            </div>
+                                            <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+                                                <tbody id="fsUploadProgress2"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                </div>
+                            </div>
+                            @*备注*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="caresc2" class="col-sm-1 control-label no-padding-right">备注</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="caresc2" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             @*按钮*@
                             <div class="row form-group text-center">
                                 <div class="col-lg-12">
-                                    <input id="save2" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveAuctionInfo();" />
+                                    <input id="save2" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(2);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
                                 </div>
                             </div>
@@ -576,12 +830,69 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
-
+                            @*利率 状态*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="interestrate3" placeholder="利率" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
+                                        <div class="controls col-sm-8">
+                                            <select id="selectstatus3" style="width:100%">
+                                                <option>请选择</option>
+                                                <option value="3">通过</option>
+                                                <option value="4">驳回</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>相关图片</label>
+                                        <div class="controls col-sm-11" id="imgList3">
+                                            <div id="container3">
+                                                <a class="btn btn-default btn-lg " id="pickfiles3" href="#">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                    <sapn>选择文件</sapn>
+                                                </a><label class="required">只能上传2M以下图片</label>
+                                            </div>
+                                            <div>
+                                                <div id="imgs3" class="imgs3 col-xs-12" style="padding:10px 144px 0px 0;">
+                                                </div>
+                                            </div>
+                                            <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+                                                <tbody id="fsUploadProgress3"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                </div>
+                            </div>
+                            @*备注*@
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="caresc" class="col-sm-1 control-label no-padding-right">备注</label>
+                                        <div class="col-sm-11">
+                                            <textarea id="caresc3" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             @*按钮*@
                             <div class="row form-group text-center">
                                 <div class="col-lg-12">
-                                    <input id="save3" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveAuctionInfo();" />
+                                    <input id="save3" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(3);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
                                 </div>
                             </div>
@@ -593,6 +904,9 @@
         </div>
     </div>
 </div>
+<input type="text" id="value1"  class="form-control hidden" />
+<input type="text" id="value2"  class="form-control hidden" />
+<input type="text" id="value3"  class="form-control hidden" />
 
 
 
