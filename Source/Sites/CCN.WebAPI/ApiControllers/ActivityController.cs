@@ -128,7 +128,33 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
-        
+
+        #region 众筹活动
+
+        [HttpPost]
+        [Route("CrowdUnifiedOrder")]
+        public JResult CrowdUnifiedOrder()
+        {
+            var ran = new Random();
+            var outTradeNo = $"{"WXPAY"}{DateTime.Now.ToString("yyyyMMddHHmmss")}{ran.Next(999)}";
+
+            var data = new NativePayData
+            {
+                Body = "快拍立信定金",//商品描述
+                Attach = "快拍立信看车费",//附加数据
+                TotalFee = 1,//总金额
+                ProductId = "productid",//商品ID
+                OutTradeNo = outTradeNo,
+                GoodsTag = ""
+            };
+
+            var jresult = WxPayAPIs.GetNativePayQrCode(data);
+            return jresult;
+        }
+
+
+        #endregion
+
         [HttpPost]
         [Route("TestPay")]
         public JResult TestPay()

@@ -483,10 +483,26 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            if (model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }
+
+            if (model.seller_type == 3)
+            {
+                if (string.IsNullOrWhiteSpace(model.supplierid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.custid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            
             LoggerFactories.CreateLogger().Write("添加车辆", TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
@@ -495,7 +511,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             model.refreshtime = (long)ts.TotalSeconds;
 
-            model.istop = 0;            ////
+            model.istop = 0;
 
             model.modifiedtime = null;
             model.carno = "CAR" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
