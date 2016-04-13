@@ -483,27 +483,10 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
-            if (model?.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }
-
-            //判断是否是添加神秘车源
-            if (model.seller_type == 3)
-            {
-                if (string.IsNullOrWhiteSpace(model.supplierid))
-                {
-                    return JResult._jResult(401, "参数不完整");
-                }
-            }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(model.custid))
-                {
-                    return JResult._jResult(401, "参数不完整");
-                }
-            }
-            
             LoggerFactories.CreateLogger().Write("添加车辆", TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
@@ -512,7 +495,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             model.refreshtime = (long)ts.TotalSeconds;
 
-            model.istop = 0;
+            model.istop = 0;            ////
 
             model.modifiedtime = null;
             model.carno = "CAR" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
@@ -1592,7 +1575,53 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
-        
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            if (query == null)
+            {
+                LoggerFactories.CreateLogger().Write("获取金融方案列表，参数不完整", TraceEventType.Warning);
+                return new BasePageList<FinanceProgrammeViewModel>();
+            }
+            var list = DataAccess.GetFinanceProgrammeList(query);
+            return list;
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            //获取主键
+            model.innerid = Guid.NewGuid().ToString();
+
+            var result = DataAccess.AddFinanceProgramme(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetFinanceProgrammeById(string innerid)
+        {
+            var result = DataAccess.GetFinanceProgrammeById(innerid);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
+
         #region 供应商管理
 
         /// <summary>
@@ -1638,7 +1667,7 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.GetMysteriousBackCarPageList(query);
         }
-        
+
 
         #endregion
     }

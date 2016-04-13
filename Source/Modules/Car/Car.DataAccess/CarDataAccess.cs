@@ -2586,11 +2586,52 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carbrand as b on b.innerid = a.brand_id
                                     left join base_carseries as c on c.innerid = a.series_id
                                     left join base_carmodel as d on d.innerid = a.model_id
-                                    left join base_province as e on d.innerid = a.provid
-                                    left join base_city as f on f.innerid = a.cityid";
-            const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname ";
+                                    left join base_province as e on e.innerid = a.provid
+                                    left join base_city as f on f.innerid = a.cityid
+                                    left join base_code as bc on a.colorid=bc.codevalue and bc.typekey='car_color'";
+            const string fields = "a.*,b.brandname,b.logurl,c.seriesname,d.modelname,e.provname,f.cityname,bc.codename as color ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
+            //品牌
+            if (query.brand_id.HasValue)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id.HasValue)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+            //车型
+            if (query.model_id.HasValue)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //城市
+            if (query.cityid.HasValue)
+            {
+                sqlWhere.Append($" or a.cityid={query.cityid}");
+            }
+
+            //价格
+            if (!string.IsNullOrWhiteSpace(query.price))
+            {
+                sqlWhere.Append($" and  a.price='{query.price}' )");
+            }
+
+            //里程
+            if (!string.IsNullOrWhiteSpace(query.mileage))
+            {
+                sqlWhere.Append($" and  a.mileage ='{query.mileage}' )");
+            }
+
+            //车龄
+            if (!string.IsNullOrWhiteSpace(query.coty))
+            {
+                sqlWhere.Append($" or ( a.coty<='{query.coty}'");
+            }
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<CarRewardViewModel>(model, query.Echo);
             return list;
@@ -2604,9 +2645,9 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCarReward(CarReward model)
         {
             const string sql = @"INSERT INTO `car_reward`
-                                (`innerid`, `brand_id`, `series_id`, `mileage`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`,`qrcode`, `createdid`, `createdtime`, `modifiedtime`)
+                                (`innerid`, `brand_id`, `series_id`,`model_id`, `mileage`,`colorid`, `coty`, `price`, `provid`, `cityid`, `status`, `username`, `usermobile`,`qrcode`, `createdid`, `createdtime`, `modifiedtime`)
                                 VALUES
-                                (uuid(), @brand_id, @series_id, @mileage, @coty, @price, @provid, @cityid, @status, @username, @usermobile,@qrcode, @createdid, @createdtime, @modifiedtime);";
+                                (uuid(), @brand_id, @series_id,@model_id, @mileage,@colorid, @coty, @price, @provid, @cityid, 1, @username, @usermobile,@qrcode, @createdid, now(), now());";
 
             using (var conn = Helper.GetConnection())
             {
@@ -2929,6 +2970,109 @@ namespace CCN.Modules.Car.DataAccess
             {
                 var model = Helper.Query<CarLoanPicture>(sql, new { innerid }).FirstOrDefault();
                 return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+        
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"finance_programme as a ";
+            const string fields = " a.* ";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.applytime desc" : query.Order;
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            //联系电话
+            if (!string.IsNullOrWhiteSpace(query.mobile))
+            {
+                sqlWhere.Append($" and a.mobile={query.mobile}");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<FinanceProgrammeViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public string AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            const string sql = @"INSERT INTO `finance_programme`
+                                (`innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`)
+                                VALUES
+                                (@innerid, @amount, @coty, @mileage, @loanterm, @interestrate, @customerpro, @applicant, @applytime, @mobile, @modifiedid, now(), @createdid, now(), @identitypic, @driverspic, @bankpic);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                string result = string.Empty;
+                try
+                {
+                    if (conn.Execute(sql, model) == 1)
+                    {
+                        result = model.innerid;
+                    }
+                    else
+                    {
+                        result = "0";
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("金融方案新增：", TraceEventType.Information, ex);
+                    result = "0";
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public FinanceProgrammeModel GetFinanceProgrammeById(string innerid)
+        {
+            return GetFinanceProgramme(new FinanceProgrammeModel { innerid = innerid }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取金融方案相关信息
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public IEnumerable<FinanceProgrammeModel> GetFinanceProgramme(FinanceProgrammeModel query)
+        {
+            StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, 
+                                `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, 
+                                `identitypic`, `driverspic`, `bankpic`
+                                 from finance_programme 
+                                where 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.innerid))
+            {
+                sql.Append($" and innerid='{query.innerid}' ");
+            }
+            sql.Append($" order by applytime asc; ");
+
+            try
+            {
+                var list = Helper.Query<FinanceProgrammeModel>(sql.ToString());
+                return list;
             }
             catch (Exception ex)
             {

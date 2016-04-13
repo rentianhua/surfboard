@@ -1,0 +1,499 @@
+﻿@{
+
+}
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+<script type="text/javascript">
+
+    var innerid = "@ViewBag.innerid";
+
+    var imgs = [];
+
+    var uploader;
+    $(function () {
+        InitUpload();
+        //获取金融方案数据
+        Init();
+    });
+
+    //获取数据
+    function Init() {
+        if (innerid === "") {
+            return;
+        }
+
+        $('#imgss').empty();
+        $('#imgfindings').empty();
+        $.get("/api/car/GetFinanceProgrammeById?innerid=" + innerid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#amount").val(obj.amount);
+            $("#coty").val(obj.coty);
+            $("#mileage").val(obj.mileage);
+            $("#loanterm").val(obj.loanterm);
+            $("#selectcust").selectVal(obj.customerpro);
+            $("#applicant").val(obj.applicant);
+            $("#mobile").val(obj.mobile);
+            $("#applytime").val(Dateformat(obj.applytime, "yyyy-MM-dd"));
+
+            var identitypic = JSON.parse(obj.identitypic);
+            if ((typeof identitypic) == "string") {
+                identitypic = JSON.parse(identitypic.replace(/\\/g, ""));
+            }
+
+            //身份证图片
+            var pics = ["身份证正面", "身份证反面"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgidentitypic').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgidentitypic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgidentitypic";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+
+            $.each(identitypic, function (k, v) {
+                if (v != null) {
+                    $("div .imgidentitypic").each(function () {
+                        if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
+                            $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                        }
+                    });
+                }
+            });
+            initUploadM();
+
+            //驾驶证
+            var pics = ["驾驶证正面", "驾驶证反面"];
+            $.each(pics, function (k, v) {
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('#imgdriverspic').append(
+                        '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgdriverspic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+                var option = {};
+                option.id = strradom;
+                option.container = "imgdriverspic";
+                option.uptoken = "@ViewBag.uptoken";
+                option.autostart = false;
+                option.domain = qiniuurl;
+                //初始化七牛上传控件
+                uploader = InitQiniuForAuction(option);
+            });
+
+            if (JSON.parse(obj.driverspic) != null) {
+                var driverspic = obj.driverspic;
+
+                if ((typeof driverspic) == "string") {
+                    driverspic = JSON.parse(driverspic.replace(/\\/g, ""));
+                }
+                var count = 1;
+                $.each(driverspic, function (k, v) {
+                    if (v != null) {
+                        $("div .imgdriverspic").each(function () {
+                            if ($(this).attr('data-val') == count && v.imgsrc != "") {
+                                $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                            }
+                        });
+                    }
+                    count++;
+                });
+                initUploadM();
+            }
+
+        });
+    }
+
+    function InitUpload() {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+    }
+
+    function showloading() {
+        $('.loading-container.loading-inactive').css('display', 'block');
+        $('.loading-container.loading-inactive .loader').css('display', 'block');
+    }
+    function hideloading() {
+        $('.loading-container.loading-inactive').css('display', 'none');
+        $('.loading-container.loading-inactive .loader').css('display', 'none');
+    }
+
+    var delList = [];
+    function DeletePicture(picid, strhash) {
+
+        delList.push(picid);
+        $("#" + strhash).remove();
+
+    }
+
+
+    function goList() {
+        hideloading();
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
+    }
+
+    function initUploadM() {
+        // 图片选中
+        $(".imgs .imgPreview").unbind().mousemove(function () {
+            $(this).find(".caidan").show();
+        }).mouseout(function () {
+            $(this).find(".caidan").hide();
+        });
+        $(".imgs .caidan").unbind().mousemove(function () {
+            $(this).show();
+        }).mouseout(function () {
+            $(this).hide();
+        });
+        // 图片删除
+        $(".imgs .imgPreview .cz_4").unbind().click(function () {
+            DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
+        });
+    }
+
+    //初始化七牛控件
+    function InitQiniuForAuction(option) {
+        Qiniu.uploader({
+            runtimes: 'html5,flash,html4', //上传模式,依次退化
+            flash_swf_url: '/common/plupload/Moxie.swf',
+            browse_button: option.id, //上传选择的点选按钮，**必需**
+            container: option.container, //上传区域DOM ID，默认是browser_button的父元素，
+            max_file_size: '2mb', //最大文件体积限制
+            dragdrop: true, //开启可拖曳上传
+            chunk_size: '2mb', //分块上传时，每片的体积
+            uptoken: option.uptoken,
+            domain: option.domain, //cket 域名，下载资源时用到，**必需**
+            auto_start: option.autostart, //选择文件后自动上传，若关闭需要自己绑定事件触发上传
+            filters: [{
+                title: "Image files",
+                extensions: "jpg,png"
+            }],
+            init: {
+                // 文件添加进队列后,处理相关的事情
+                'FilesAdded': function (up, files) {
+                    // 最多上传1张图
+                    if (up.files.length > 1) {
+                        up.splice(3, 999);
+                    }
+                    var i = 0;
+                    plupload.each(files, function (file) {
+                        var myDate = new Date();
+                        file.name = "car_" + myDate.getTime() + i + ".jpg";
+                        i++;
+                    });
+                    up.start();
+                },
+                // 每个文件上传前,处理相关的事情
+                'BeforeUpload': function (up, file) {
+                },
+                // 每个文件上传成功后,处理相关的事情
+                'FileUploaded': function (up, file, info) {
+                    var json = {};
+                    json.imgsrc = JSON.parse(info).key;
+                    json.title = $("#" + option.id).attr("data-val");
+
+                    $("#" + option.id).css("line-height", "120px");
+                    $("#" + option.id + " img").attr("src", option.domain + JSON.parse(info).key).css("margin-top", "0px");
+                    $("#" + option.id).attr("data-id", JSON.parse(info).key).css("margin-top", "0px");
+                }
+            }
+        });
+    }
+
+    //保存基本信息
+    function Submit() {
+        var redecimal = /^[0-9]+([.]{1}[0-9]{1,2})?$/;//两位小数
+        var reint = /^[1-9]\d*$/;//整数
+
+        if ($("#amount").val() === "") {
+            alert("请填写金额！");
+            return false;
+        }
+        if (!redecimal.test($("#amount").val())) {
+            alert("金额只能输入数值[最多两位小数]！");
+            return false;
+        }
+        if ($("#coty").val() === "") {
+            alert("请填写车龄！");
+            return false;
+        }
+        if (!reint.test($("#coty").val())) {
+            alert("车龄只能输入数值！");
+            return false;
+        }
+        if ($("#mileage").val() === "") {
+            alert("请填写里程！");
+            return false;
+        }
+        if (!redecimal.test($("#mileage").val())) {
+            alert("里程只能输入数值[最多两位小数]！");
+            return false;
+        }
+        if ($("#loanterm").val() === "") {
+            alert("请填写贷款期限！");
+            return false;
+        }
+        if (!reint.test($("#loanterm").val())) {
+            alert("贷款期限只能输入数值！");
+            return false;
+        }
+        if ($("#applicant").val() === "") {
+            alert("请填写申请人！");
+            return false;
+        }
+        if ($("#mobile").val() === "") {
+            alert("请填写联系方式！");
+            return false;
+        }
+        if ($("#applytime").val() === "") {
+            alert("请填写申请时间！");
+            return false;
+        }
+
+        var json = {};
+
+        json.amount = $("#amount").val();
+        json.coty = $("#coty").val();
+        json.mileage = $("#mileage").val();
+        json.loanterm = $("#loanterm").val();
+        json.customerpro = $("#selectcust").val();
+        json.applicant = $("#applicant").val();
+        json.mobile = $("#mobile").val();
+        json.applytime = $("#applytime").val();
+        json.modifiedid = "@ViewBag.UserId";
+        //获取身份证信息
+        var imgidentitypic = [];
+        $('div .imgidentitypic').each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            imgidentitypic.push(json);
+        });
+
+        json.identitypic = JSON.stringify(imgidentitypic);
+
+        //驾驶证
+        var imgdriverspic = [];
+        $('div .imgdriverspic').each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            imgdriverspic.push(json);
+        });
+
+        json.driverspic = JSON.stringify(imgdriverspic);
+
+        $.post("/api/Car/AddFinanceProgramme", json, function (result) {
+
+            if (result.errcode !== 0) {
+                alert(result.errmsg);
+                return false;
+            }
+            alert("新增成功！");
+        });
+    }
+
+    //返回
+    function GoBack() {
+        getBodyHtml('mainbody', '/car/car/FinanceProgrammeList');
+    }
+
+</script>
+
+<div class="theme-popover">
+    上传图片中...
+    <img src="~/Content/images/loading.gif" alt="" />
+</div>
+<div class="theme-popover-mask"></div>
+<div class="widget">
+    <div class="tabbable" id="myBody1">
+        <ul class="nav nav-tabs tabs-flat" id="myTab11">
+            <li class="active">
+                <a data-toggle="tab" href="#home11">
+                    车辆基础资料
+                </a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#second">
+                    方案选择
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content tabs-flat" id="myBody">
+            <div id="home11" class="tab-pane in active">
+                <div class="widget-header bordered-bottom bordered-palegreen">
+                    <span class="widget-caption">车辆基本信息</span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form">
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>申请金额</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="amount" placeholder="申请金额" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车龄</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="coty" placeholder="车龄" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>里程</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="mileage" placeholder="里程" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>期限（月）</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="loanterm" placeholder="期限（月）" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>客户区域</label>
+                                        <div class="controls col-sm-8">
+                                            <select id="selectcust" style="width:100%">
+                                                <option value="1">省内</option>
+                                                <option value="2">省外</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>申请人</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="applicant" placeholder="申请人" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>联系方式</label>
+                                        <div class="controls col-sm-8">
+                                            <input type="text" id="mobile" placeholder="联系方式" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right">申请时间</label>
+                                        <div class="col-sm-10">
+                                            <input id="applytime" class="Wdate form-control" type="text" placeholder="申请时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>身份证</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="imgidentitypic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>驾驶证</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="imgdriverspic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-group text-center">
+                                <div class="col-lg-12">
+                                    <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="second" class="tab-pane">
+                <div class="widget-header bordered-bottom bordered-palegreen">
+                    <span class="widget-caption">方案选择</span>
+                </div>
+                <div class="widget-body">
+                    <div>
+                        <form class="form-horizontal form-bordered" role="form">
+
+
+                            @*按钮*@
+                            <div class="row form-group text-center">
+                                <div class="col-lg-12">
+                                    <input id="save" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveAuctionInfo();" />
+                                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
