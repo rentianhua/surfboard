@@ -49,7 +49,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("SearchCarPageListTop")]
         [HttpPost]
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop([FromBody]CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop([FromBody]CarGlobalQueryModel query)
         {
             return _carervice.SearchCarPageListTop(query);
         }
@@ -61,7 +61,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("SearchCarPageListEx")]
         [HttpPost]
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx([FromBody]CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx([FromBody]CarGlobalQueryModel query)
         {
             return _carervice.SearchCarPageListEx(query);
         }
@@ -885,6 +885,48 @@ namespace CCN.WebAPI.ApiControllers
             return _carervice.AddCarLoan(model);
         }
 
+        #endregion
+        
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierAll")]
+        public JResult GetSupplierAll()
+        {
+            return _carervice.GetSupplierAll();
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierInfoById")]
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            return _carervice.GetSupplierInfoById(innerid);
+        }
+
+        #endregion
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMysteriousCarPageList")]
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList([FromBody]CarGlobalQueryModel query)
+        {
+            return _carervice.GetMysteriousCarPageList(query);
+        }
+        
         #endregion
     }
 }

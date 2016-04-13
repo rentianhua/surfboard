@@ -72,6 +72,7 @@
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.carno + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.buytime, "yyyy-MM-dd") + "</td>";
             str += "<td>" + (val.buyprice == null ? '' : val.buyprice) + "</td>";
@@ -113,6 +114,8 @@
                 return "在售";
             case 2:
                 return "已售";
+            case 3:
+                return "在拍卖";
             default:
 
         }
@@ -136,7 +139,6 @@
                     <option value="0">请选择</option>
                 </select>
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
-                <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
             </td>
             <td style="text-align: right">
                 <div>
@@ -151,6 +153,7 @@
         <thead>
             <tr role="row">
                 <th>序号</th>
+                <th>车辆编号</th>
                 <th>车型</th>
                 <th>收购日期</th>
                 <th>收购价格</th>

@@ -30,7 +30,7 @@ namespace CCN.Modules.Car.BusinessService
         /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
         /// </param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalQueryModel query)
         {
             return BusinessComponent.SearchCarPageListTop(query);
         }
@@ -40,7 +40,7 @@ namespace CCN.Modules.Car.BusinessService
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalQueryModel query)
         {
             return BusinessComponent.SearchCarPageListEx(query);
         }
@@ -575,6 +575,54 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetLoanPictureByloanid(innerid);
         }
+
+        #endregion
+
+
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierAll()
+        {
+            return BusinessComponent.GetSupplierAll();
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            return BusinessComponent.GetSupplierInfoById(innerid);
+        }
+
+        #endregion
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList(CarGlobalQueryModel query)
+        {
+            return BusinessComponent.GetMysteriousCarPageList(query);
+        }
+
+        /// <summary>
+        /// 后台查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList(CarGlobalQueryModel query)
+        {
+            return BusinessComponent.GetMysteriousBackCarPageList(query);
+        }
+
 
         #endregion
     }

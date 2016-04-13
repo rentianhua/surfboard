@@ -46,9 +46,7 @@ namespace CCN.Resource.Areas.Car.Controllers
 
             ViewBag.custid = custid;
             ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
-            new QiniuUtility();
             ViewBag.uptoken = QiniuUtility.GetToken();
-
             return View();
         }
 
@@ -95,9 +93,32 @@ namespace CCN.Resource.Areas.Car.Controllers
             ViewBag.id = string.IsNullOrWhiteSpace(id) ? "" : id;
             ViewBag.UserName = UserInfo.username;
             ViewBag.UserNo = UserInfo.no;
-            new QiniuUtility();
             ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
         }
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 神秘车源列表
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CarSupplierList()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 神秘车源编辑
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult CarSupplierEdit(string carid)
+        {
+            ViewBag.carid = string.IsNullOrWhiteSpace(carid) ? "" : carid;
+            ViewBag.uptoken = QiniuUtility.GetToken();
+            return View();
+        }
+        
+        #endregion
     }
 }

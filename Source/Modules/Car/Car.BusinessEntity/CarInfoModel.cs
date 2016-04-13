@@ -18,9 +18,9 @@ namespace CCN.Modules.Car.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
-        /// 聚合数据车辆id
+        /// 神秘车源
         /// </summary>
-        public int? Carid { get; set; }
+        public string supplierid { get; set; }
 
         /// <summary>
         /// 车辆编号
@@ -136,9 +136,9 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车辆上牌日期
         /// </summary>
         public DateTime? register_date { get; set; }
-        
+
         /// <summary>
-        /// 卖家类型，1表示个人，2表示商家
+        /// 车源类型，1车商车源，2个人车源,3.神秘车源
         /// </summary>
         public int? seller_type { get; set; }
 
@@ -409,7 +409,7 @@ namespace CCN.Modules.Car.BusinessEntity
         public string custid { get; set; }
 
         /// <summary>
-        /// 会员类型
+        /// 车源类型，1车商车源，2个人车源,3.神秘车源
         /// </summary>
         public int? type { get; set; }
 
@@ -643,76 +643,9 @@ namespace CCN.Modules.Car.BusinessEntity
     }
 
     /// <summary>
-    /// 全城搜车条件
-    /// </summary>
-    public class CarGlobalQueryModel : QueryModel
-    {
-        
-        /// <summary>
-        /// 会员id
-        /// </summary>
-        public string custid { get; set; }
-
-        /// <summary>
-        /// 省份id
-        /// </summary>
-        public int? provid { get; set; }
-
-        /// <summary>
-        /// 城市id
-        /// </summary>
-        public int? cityid { get; set; }
-
-        /// <summary>
-        /// 品牌id
-        /// </summary>
-        public int? brand_id { get; set; }
-
-        /// <summary>
-        /// 车系id
-        /// </summary>
-        public int? series_id { get; set; }
-
-        /// <summary>
-        /// 车型id
-        /// </summary>
-        public int? model_id { get; set; }
-        
-        /// <summary>
-        /// min销售价格(万元)
-        /// </summary>
-        public decimal? minprice { get; set; }
-
-        /// <summary>
-        /// max销售价格(万元)
-        /// </summary>
-        public decimal? maxprice { get; set; }
-
-        /// <summary>
-        /// min上牌年份
-        /// </summary>
-        public int? minyear { get; set; }
-
-        /// <summary>
-        /// max上牌年份
-        /// </summary>
-        public int? maxyear { get; set; }
-
-        /// <summary>
-        /// 全局搜索字段
-        /// </summary>
-        public string keyword { get; set; }
-
-        /// <summary>
-        /// 车源类型
-        /// </summary>
-        public int? type { get; set; }
-    }
-
-    /// <summary>
     /// 官网页面 全城搜车条件
     /// </summary>
-    public class CarGlobalExQueryModel : QueryModel
+    public class CarGlobalQueryModel : QueryModel
     {
         /// <summary>
         /// 会员id
@@ -798,7 +731,6 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 车源类型
         /// </summary>
         public int? type { get; set; }
-
     }
 
     /// <summary>
@@ -864,4 +796,5 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string Jsonobj { get; set; }
     }
+    
 }

@@ -953,6 +953,8 @@
     <Content Include="Areas\Auction\Views\Auction\AuctionCarAdd.cshtml" />
     <Content Include="Areas\Car\Views\Car\CarLoanList.cshtml" />
     <Content Include="Areas\Car\Views\Car\CarLoanEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierEdit.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />

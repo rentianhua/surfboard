@@ -13,7 +13,6 @@
 
 <script type="text/javascript">
 
-    var custid = "@ViewBag.custid";
     var id = "@ViewBag.carid";
 
     var imgs = [];
@@ -31,6 +30,7 @@
         InitBrand();
         InitProv();
         InitCode();
+        InitSupplier();
         Init();
 
     });
@@ -47,17 +47,11 @@
         $("#selectbrand").empty();
         $("#selectbrand").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetCarBrand",
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
-                });
-            }
+        getJson("/api/Base/GetCarBrand", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
+            });
         });
     }
 
@@ -66,17 +60,11 @@
         $("#selectseries").empty();
         $("#selectseries").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetCarSeries?brandId=" + brandid,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
-                });
-            }
+        getJson("/api/Base/GetCarSeries?brandId=" + brandid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
+            });
         });
     }
 
@@ -85,42 +73,30 @@
         $("#selectmodel").empty();
         $("#selectmodel").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetCarModel?seriesId=" + seriesid,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
-                });
-            }
+        getJson("/api/Base/GetCarModel?seriesId=" + seriesid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
+            });
         });
     }
 
     function GetModelInfo(modelid) {
 
-        $.ajax({
-            url: "/api/Base/GetCarModelById?innerid=" + modelid,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                $("#selectregyear").empty();
-                $("#selectregyear").append("<option value='0'>请选择</option>");
-                var model = data.errmsg;
-                for (var i = model.Minregyear; i <= model.Maxregyear; i++) {
-                    $("#selectregyear").append("<option value='" + i + "'>" + i + "</option>");
-                }
+        getJson("/api/Base/GetCarModelById?innerid=" + modelid, null, function (data) {
+            $("#selectregyear").empty();
+            $("#selectregyear").append("<option value='0'>请选择</option>");
+            var model = data.errmsg;
+            for (var i = model.Minregyear; i <= model.Maxregyear; i++) {
+                $("#selectregyear").append("<option value='" + i + "'>" + i + "</option>");
+            }
 
-                $("#selectregmonth").empty();
-                $("#selectregmonth").append("<option value='0'>请选择</option>");
-                for (var j = 1; j <= 12; j++) {
+            $("#selectregmonth").empty();
+            $("#selectregmonth").append("<option value='0'>请选择</option>");
+            for (var j = 1; j <= 12; j++) {
 
-                    var val = j < 10 ? ("0" + j) : j;
-                    $("#selectregmonth").append("<option value='" + val + "'>" + val + "</option>");
-                }
+                var val = j < 10 ? ("0" + j) : j;
+                $("#selectregmonth").append("<option value='" + val + "'>" + val + "</option>");
             }
         });
     }
@@ -130,20 +106,14 @@
         $("#selectprov").empty();
         $("#selectprov").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetProvList",
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
-                });
+        getJson("/api/Base/GetProvList", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+            });
 
-                $("#selectprov").selectText(getCookie("province"));
-                InitCity($("#selectprov").val());
-            }
+            $("#selectprov").selectText(getCookie("province"));
+            InitCity($("#selectprov").val());
         });
     }
 
@@ -153,19 +123,12 @@
         $("#selectcity").empty();
         $("#selectcity").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetCityList/?provid=" + provid,
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
-                });
-                $("#selectcity").selectText(getCookie("city"));
-
-            }
+        getJson("/api/Base/GetCityList/?provid=" + provid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+            });
+            $("#selectcity").selectText(getCookie("city"));
         });
     }
 
@@ -174,17 +137,24 @@
         $("#selectcolor").empty();
         $("#selectcolor").append("<option value='0'>请选择</option>");
 
-        $.ajax({
-            url: "/api/Base/GetCodeByTypeKey?typekey=car_color",
-            type: 'get',
-            datatype: 'application/json',
-            async: false,
-            success: function (data) {
-                data = data.errmsg;
-                $.each(data, function (k, v) {
-                    $("#selectcolor").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
-                });
-            }
+        getJson("/api/Base/GetCodeByTypeKey?typekey=car_color", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcolor").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
+            });
+        });
+    }
+
+    //初始化供应商
+    function InitSupplier() {
+        $("#selectsupplier").empty();
+        $("#selectsupplier").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Car/GetSupplierAll", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectsupplier").append("<option value='" + v.Innerid + "'>" + v.Suppliername + "</option>");
+            });
         });
     }
 
@@ -194,7 +164,7 @@
             return;
         }
 
-        $.get("/api/Car/GetCarInfoById?id=" + id, function (data) {
+        getJson("/api/Car/GetCarInfoById?id=" + id, null, function(data) {
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
             }
@@ -218,6 +188,8 @@
             $("#selectcity").selectVal(obj.cityid);
 
             $("#selectcolor").selectVal(obj.colorid);
+
+            $("#selectsupplier").selectVal(obj.supplierid);
 
             $("#txtmileage").val(obj.mileage);
 
@@ -243,29 +215,21 @@
 
             $("#caresc").val(obj.remark);
 
-            //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
-            
-            $.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
-                $.each(data.errmsg, function (k, v) {
+            getJson("/api/Car/GetCarPictureByCarid?carid=" + id, null, function(picData) {
+                $.each(picData.errmsg, function (k, v) {
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                     $('.imgs').append(
-                            '<div id="' + strradom + '" class="imgPreview">\
+                        '<div id="' + strradom + '" class="imgPreview">\
 						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
 						<div class="caidan">\
 							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
 						</div>\
 					</div>');
                     initUploadM();
-                    //if (k === 0) {
-                    //    $("#imgList").append("<div style='vertical-align:top'><img data-type='img' style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(v.Path) + "\" />封面图 <span style='cursor:pointer' onclick=\"DeletePicture('" + v.Innerid + "',this)\"> X </span></div>");
-                    //} else {
-                    //    $("#imgList").append("<div style='vertical-align:top'><img data-type='img' style=\"max-width: 150px;max-height:150px;margin-top:5px\" src=\"" + getQiniuUrl(v.Path) + "\" /><span style='cursor:pointer' onclick=\"DeletePicture('" + v.Innerid + "',this)\"> X </span></div>");
-                    //}
                 });
-            });
-        });
+            }, true);
+        }, true);
     }
-
 
     function DeletePicture(picid, strhash) {
 
@@ -315,6 +279,12 @@
             return false;
         }
 
+        var supplierid = $("#selectsupplier").val();
+        if (supplierid === "0") {
+            alert("请选择供应商！");
+            return false;
+        }
+
         var colorid = $("#selectcolor").val();
         var txtmileage = $("#txtmileage").val();
 
@@ -352,16 +322,6 @@
         var txtbuyprice = $("#txtbuyprice").val();
         var txtsoldyprice = $("#txtsoldyprice").val();
 
-        //if ($.trim(txtbuydate).length === 0) {
-        //    alert("请选择收购日期！");
-        //    return false;
-        //}
-
-        //if ($.trim(txtbuyprice).length === 0) {
-        //    alert("请填写收购价格！");
-        //    return false;
-        //}
-
         if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
             alert("收购价格只能输入数值[最多两位小数]！");
             return false;
@@ -391,7 +351,7 @@
         }
 
         var json = {
-            custid: custid,
+            supplierid: supplierid,
             brand_id: brandid,
             series_id: seriesid,
             model_id: modelid,
@@ -408,7 +368,8 @@
             remark: caresc,
             ckyear_date: txtckyearDate,
             tlci_date: txttlciDate,
-            audit_date: txtauditDate
+            audit_date: txtauditDate,
+            seller_type:3
         };
 
         showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
@@ -426,32 +387,30 @@
         else {
             uploadercount = uploader.files.length;
         }
-        
-        
 
-        setTimeout(function () {
+        setTimeout(function() {
             if (id === "") {
                 if (filelength > 9 || filelength < 3) {
                     hideloading();
                     alert('请上传3-9张图片');
                     return false;
                 }
-                $.post("/api/Car/AddCarBack", json, function (result) {
+                $.post("/api/Car/AddCarBack", json, function(result) {
                     if (result.errcode === 0) {
                         //上传并保存图片 Begin
                         var i = 0;
-                        plupload.each(uploader.files, function (file) {
+                        plupload.each(uploader.files, function(file) {
                             var myDate = new Date();
-                            file.name = "car_" + myDate.getTime() + i + ".jpg";
+                            file.name = "car_picture_" + myDate.getTime() + i + ".jpg";
                             i++;
                         });
                         uploader.start();
                         var carid = result.errmsg;
                         var m = 0;
-                        
-                        uploader.bind('FileUploaded', function (up, file, info) {
+
+                        uploader.bind('FileUploaded', function(up, file, info) {
                             var picInfo = JSON.parse(info.response);
-                            $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
+                            $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function() {
 
                             });
                             m++;
@@ -465,7 +424,6 @@
                     } else {
                         hideloading();
                         alert("添加失败:" + result.errmsg);
-
                     }
 
                 });
@@ -477,22 +435,22 @@
                     alert('请上传3-9张图片');
                     return false;
                 }
-                $.post("/api/Car/UpdateCar", json, function (result) {
+                $.post("/api/Car/UpdateCar", json, function(result) {
                     if (result.errcode === 0) {
                         //删除图片 imgs
                         if (uploadercount > 0) {
                             //上传并保存图片 Begin
                             var i = 0;
-                            plupload.each(uploader.files, function (file) {
+                            plupload.each(uploader.files, function(file) {
                                 var myDate = new Date();
                                 file.name = "car_" + myDate.getTime() + i + ".jpg";
                                 i++;
                             });
                             uploader.start();
                             var m = 0;
-                            uploader.bind('FileUploaded', function (up, file, info) {
+                            uploader.bind('FileUploaded', function(up, file, info) {
                                 var picInfo = JSON.parse(info.response);
-                                $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function () {
+                                $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function() {
 
                                 });
                                 m++;
@@ -503,8 +461,7 @@
                                 }
                             });
                             //上传并保存图片 End
-                        }
-                        else {
+                        } else {
                             hideloading();
                             alert("修改成功");
                             goList();
@@ -516,12 +473,12 @@
                     }
                 });
             }
-        }, 1000)
+        }, 1000);
         return false;
     }
 
     function goList() {
-        getBodyHtml('mainbody', "/car/car/carlist?custid=" + custid);
+        getBodyHtml('mainbody', "/car/car/carsupplierlist");
     }
 
     function initUploadM() {
@@ -577,7 +534,7 @@
 
 <div class="theme-popover">
     上传图片中...
-    <img src="~/Content/images/loading.gif" />
+    <img src="~/Content/images/loading.gif" alt=""/>
 </div>
 <div class="theme-popover-mask"></div>
 <div class="widget">
@@ -634,7 +591,7 @@
                         <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
                             <div class="controls col-sm-10">
-                                <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control" />
+                                <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control"/>
                             </div>
                         </div>
                     </div>
@@ -649,6 +606,23 @@
                                     <option value="0">请选择</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>供应商</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectsupplier">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            
                         </div>
                     </div>
                 </div>

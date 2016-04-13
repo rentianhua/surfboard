@@ -40,11 +40,10 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
-                                    left join base_city as ct on a.cityid=ct.innerid 
-                                    inner join cust_info as cc on cc.innerid=a.custid ";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.refreshtime desc" : query.Order;  //排序以后调整为 支付时间
-            var sqlWhere = new StringBuilder("a.status=1 and a.istop>0");
+            var sqlWhere = new StringBuilder("a.seller_type<>3 and a.status=1 and a.istop>0");
 
             if (!string.IsNullOrWhiteSpace(query.where))
             {
@@ -74,20 +73,19 @@ namespace CCN.Modules.Car.DataAccess
         /// <param name="query">查询条件</param>
         /// <param name="strwhere"></param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query, out string strwhere)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalQueryModel query, out string strwhere)
         {
             const string spName = "sp_common_pager";
             const string tableName = @"car_info as a 
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
-                                    left join base_city as ct on a.cityid=ct.innerid 
-                                    inner join cust_info as cc on cc.innerid=a.custid ";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("a.status=1 and a.istop>0");
+            var sqlWhere = new StringBuilder("a.seller_type<>3 and a.status=1 and a.istop>0");
 
             //省份
             if (query.provid != null)
@@ -194,20 +192,19 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalQueryModel query)
         {
             const string spName = "sp_common_pager";
             const string tableName = @"car_info as a 
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
-                                    left join base_city as ct on a.cityid=ct.innerid 
-                                    inner join cust_info as cc on cc.innerid=a.custid ";
-            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type";
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("(a.status=1 or a.status=2)"); //在售和已售车辆
+            var sqlWhere = new StringBuilder("a.seller_type<>3 and (a.status=1 or a.status=2)"); //在售和已售车辆
 
             //省份
             if (query.provid != null)
@@ -298,7 +295,7 @@ namespace CCN.Modules.Car.DataAccess
             //车源类型
             if (query.type.HasValue)
             {
-                sqlWhere.Append(query.type == 2 ? " and cc.type=2" : " and cc.type<>2");
+                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
             }
 
             //关键字搜索
@@ -326,14 +323,13 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carbrand as c1 on a.brand_id=c1.innerid 
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
-                                    left join base_city as ct on a.cityid=ct.innerid 
-                                    inner join cust_info as cc on cc.innerid=a.custid ";
-            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,cc.type," +
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname," +
                                   $" (select count(1) from cust_relations where userid='{query.custid}' and friendsid=a.custid) as isfriend";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("(a.status=1 or a.status=2)");
+            var sqlWhere = new StringBuilder("a.seller_type<>3 and (a.status=1 or a.status=2)");
 
             //省份
             if (query.provid != null)
@@ -392,7 +388,7 @@ namespace CCN.Modules.Car.DataAccess
             //车源类型
             if (query.type.HasValue)
             {
-                sqlWhere.Append(query.type == 2 ? " and cc.type=2" : " and cc.type<>2");
+                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
             }
 
             if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
@@ -451,7 +447,7 @@ namespace CCN.Modules.Car.DataAccess
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
-            var sqlWhere = new StringBuilder("1=1");
+            var sqlWhere = new StringBuilder("1=1 and a.seller_type<>3");   //seller_type=3 为神秘车源
 
             sqlWhere.Append(query.status != null
                 ? $" and a.status={query.status}"
@@ -558,7 +554,7 @@ namespace CCN.Modules.Car.DataAccess
                 a.innerid,
                 a.carno,
                 a.custid,
-                a.carid,
+                a.supplierid,
                 a.title,
                 a.pic_url,
                 a.provid,
@@ -627,7 +623,7 @@ namespace CCN.Modules.Car.DataAccess
                 a.innerid, 
                 a.carno,
                 a.custid, 
-                a.carid, 
+                a.supplierid,
                 a.title, 
                 a.pic_url, 
                 a.provid,
@@ -728,7 +724,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #region 查询条件
 
-            var sqlWhere = new StringBuilder("a.status=1");
+            var sqlWhere = new StringBuilder("a.seller_type<>3 and (a.status=1 or a.status=2)");
 
             sqlWhere.Append(
                 $" and a.innerid <> '{query.carid}' and(a.series_id = {query.series_id} or(a.price > {query.price - 3 ?? 0} and a.price < {query.price + 5 ?? 0}) or(register_date > '{query.regdate?.AddMonths(-6) ?? DateTime.Now}' and register_date < '{query.regdate?.AddMonths(6) ?? DateTime.Now}'))");
@@ -751,23 +747,25 @@ namespace CCN.Modules.Car.DataAccess
         public int AddCar(CarInfoModel model)
         {
             const string sql = @"INSERT INTO `car_info`
-                                (`innerid`,`custid`,`carid`,`carno`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`,`refreshtime`, `istop`, `istransferfee`)
+                                (`innerid`,`custid`,`supplierid`,`carno`,`title`,`pic_url`,`provid`,`cityid`,`brand_id`,`series_id`,`model_id`,`colorid`,`mileage`,`register_date`,`buytime`,`buyprice`,`price`,`dealprice`,`isproblem`,`remark`,`ckyear_date`,`tlci_date`,`audit_date`,`istain`,`sellreason`,`masterdesc`,`dealdesc`,`deletedesc`,`estimateprice`,`status`,`createdtime`,`modifiedtime`,`seller_type`,`post_time`,`audit_time`,`sold_time`,`closecasetime`,`eval_price`,`next_year_eval_price`,`refreshtime`, `istop`, `istransferfee`)
                                 VALUES
-                                (@innerid,@custid,@carid,@carno,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price,@refreshtime, @istop, @istransferfee);";
-
-            const string sqlSelectCust = "select count(1) as count from cust_info where innerid=@custid;";
+                                (@innerid,@custid,@supplierid,@carno,@title,@pic_url,@provid,@cityid,@brand_id,@series_id,@model_id,@colorid,@mileage,@register_date,@buytime,@buyprice,@price,@dealprice,@isproblem,@remark,@ckyear_date,@tlci_date,@audit_date,@istain,@sellreason,@masterdesc,@dealdesc,@deletedesc,@estimateprice,@status,@createdtime,@modifiedtime,@seller_type,@post_time,@audit_time,@sold_time,@closecasetime,@eval_price,@next_year_eval_price,@refreshtime, @istop, @istransferfee);";
 
             using (var conn = Helper.GetConnection())
             {
                 int result;
                 try
                 {
-                    var num = conn.Query<int>(sqlSelectCust, new { model.custid }).FirstOrDefault();
-                    if (0 == num)
+                    if (model.seller_type != 3)
                     {
-                        return -1;
+                        var num = conn.Query<int?>("select `type` from cust_info where innerid=@custid;", new { model.custid }).FirstOrDefault();
+                        if (num == null || num == 0)
+                        {
+                            return -1;
+                        }
+                        model.seller_type = num;
                     }
-
+                    
                     result = conn.Execute(sql, model);
                 }
                 catch (Exception ex)
@@ -2936,6 +2934,197 @@ namespace CCN.Modules.Car.DataAccess
             {
                 return null;
             }
+        }
+
+        #endregion
+
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<CarSupplierDdlModel> GetSupplierAll()
+        {
+            const string sql = @"select innerid,suppliername from car_supplier where isenabled=1;";
+
+            var list = Helper.Query<CarSupplierDdlModel>(sql);
+            return list;
+        }
+        
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        public CarSupplierDdlModel GetSupplierInfoById(string innerid)
+        {
+            const string sql = @"select innerid, suppliername, address, introduction, contacts, contactsphone, remark, extend, isenabled, createrid, createdtime, modifierid, modifiedtime from car_supplier where innerid=@innerid;";
+            var list = Helper.Query<CarSupplierDdlModel>(sql,new {innerid}).FirstOrDefault();
+            return list;
+        }
+
+        #endregion
+
+        #region 神秘车源
+        
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList(CarGlobalQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pic_url,a.price,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.seller_type=3 and (a.status=1 or a.status=2)"); //在售和已售车辆
+            sqlWhere.Append(GetWhere(query));
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarMysteriousListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 后台查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList(CarGlobalQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pic_url,a.price,a.status,a.mileage,a.register_date,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("a.seller_type=3");
+            sqlWhere.Append(GetWhere(query));
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarMysteriousListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public string GetWhere(CarGlobalQueryModel query)
+        {
+            var sqlWhere = new StringBuilder(""); //在售和已售车辆
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //销售价大于..
+            if (query.minprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price>={query.minprice}");
+            }
+
+            //销售价小于..
+            if (query.maxprice.HasValue)
+            {
+                sqlWhere.Append($" and a.price<={query.maxprice}");
+            }
+
+            //上牌时间 <
+            if (query.minyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date<='{date}'");
+            }
+
+            //上牌时间 >
+            if (query.maxyear.HasValue)
+            {
+                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
+                sqlWhere.Append($" and a.register_date>='{date}'");
+            }
+
+            //行驶里程 >
+            if (query.minmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage>='{query.minmileage}'");
+            }
+
+            //行驶里程 <
+            if (query.maxmileage.HasValue)
+            {
+                sqlWhere.Append($" and a.mileage<='{query.maxmileage}'");
+            }
+
+            //颜色
+            if (query.colorid.HasValue)
+            {
+                sqlWhere.Append($" and a.colorid={query.colorid}");
+            }
+
+            //排量
+            if (!string.IsNullOrWhiteSpace(query.liter))
+            {
+                sqlWhere.Append($" and c3.liter='{query.liter.Trim()}'");
+            }
+
+            //变速箱类型
+            if (!string.IsNullOrWhiteSpace(query.gear))
+            {
+                sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
+            }
+
+            //车源类型
+            if (query.type.HasValue)
+            {
+                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
+            }
+
+            //关键字搜索
+            if (!string.IsNullOrWhiteSpace(query.keyword))
+            {
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+            }
+            return sqlWhere.ToString();
         }
 
         #endregion

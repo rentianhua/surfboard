@@ -42,7 +42,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
         /// </param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalQueryModel query)
         {
             if (query == null)
             {
@@ -104,7 +104,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalQueryModel query)
         {
             if (query == null)
             {
@@ -483,10 +483,27 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            if (model?.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }
+
+            //判断是否是添加神秘车源
+            if (model.seller_type == 3)
+            {
+                if (string.IsNullOrWhiteSpace(model.supplierid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.custid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            
             LoggerFactories.CreateLogger().Write("添加车辆", TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
@@ -495,7 +512,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             model.refreshtime = (long)ts.TotalSeconds;
 
-            model.istop = 0;            ////
+            model.istop = 0;
 
             model.modifiedtime = null;
             model.carno = "CAR" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
@@ -1573,6 +1590,55 @@ namespace CCN.Modules.Car.BusinessComponent
 
             return JResult._jResult(0, "删除成功");
         }
+
+        #endregion
+        
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierAll()
+        {
+            var result = DataAccess.GetSupplierAll();
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            var result = DataAccess.GetSupplierInfoById(innerid);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList(CarGlobalQueryModel query)
+        {
+            return DataAccess.GetMysteriousCarPageList(query);
+        }
+
+        /// <summary>
+        /// 后台查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList(CarGlobalQueryModel query)
+        {
+            return DataAccess.GetMysteriousBackCarPageList(query);
+        }
+        
 
         #endregion
     }
