@@ -115,7 +115,10 @@ namespace CCN.Modules.Car.BusinessEntity
     /// </summary>
     public class FinanceProgrammeViewModel : FinanceProgrammeModel
     {
-
+        /// <summary>
+        /// 方案明细
+        /// </summary>
+        public IEnumerable<FinanceProgrammeDetailModel> financeprogrammedetail { get; set; }
     }
 
     /// <summary>

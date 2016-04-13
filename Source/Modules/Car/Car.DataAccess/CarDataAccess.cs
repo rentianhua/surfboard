@@ -765,7 +765,7 @@ namespace CCN.Modules.Car.DataAccess
                         }
                         model.seller_type = num;
                     }
-                    
+
                     result = conn.Execute(sql, model);
                 }
                 catch (Exception ex)
@@ -2609,6 +2609,12 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and a.model_id={query.model_id}");
             }
 
+            //省份
+            if (query.provid.HasValue)
+            {
+                sqlWhere.Append($" or a.provid={query.provid}");
+            }
+
             //城市
             if (query.cityid.HasValue)
             {
@@ -2618,7 +2624,7 @@ namespace CCN.Modules.Car.DataAccess
             //价格
             if (!string.IsNullOrWhiteSpace(query.price))
             {
-                sqlWhere.Append($" and  a.price='{query.price}' )");
+                sqlWhere.Append($" and  a.price='{query.price}' ");
             }
 
             //里程
@@ -2937,7 +2943,7 @@ namespace CCN.Modules.Car.DataAccess
         public int DeleteLoanPicture(string innerid)
         {
             const string sqlDPic = @"delete from car_picture where innerid=@innerid;";
-            
+
             using (var conn = Helper.GetConnection())
             {
 
@@ -2978,7 +2984,7 @@ namespace CCN.Modules.Car.DataAccess
         }
 
         #endregion
-        
+
         #region 金融方案
 
         /// <summary>
@@ -3070,7 +3076,7 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
-        public FinanceProgrammeModel GetFinanceProgrammeById(string innerid)
+        public FinanceProgrammeViewModel GetFinanceProgrammeById(string innerid)
         {
             return GetFinanceProgramme(new FinanceProgrammeModel { innerid = innerid }).FirstOrDefault();
         }
@@ -3080,7 +3086,7 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public IEnumerable<FinanceProgrammeModel> GetFinanceProgramme(FinanceProgrammeModel query)
+        public IEnumerable<FinanceProgrammeViewModel> GetFinanceProgramme(FinanceProgrammeModel query)
         {
             StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, 
                                 `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, 
@@ -3095,7 +3101,7 @@ namespace CCN.Modules.Car.DataAccess
 
             try
             {
-                var list = Helper.Query<FinanceProgrammeModel>(sql.ToString());
+                var list = Helper.Query<FinanceProgrammeViewModel>(sql.ToString());
                 return list;
             }
             catch (Exception ex)
@@ -3109,7 +3115,7 @@ namespace CCN.Modules.Car.DataAccess
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        public string AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
         {
             const string sql = @"INSERT INTO `finance_programme_detail`
                                 (`innerid`, `financeid`, `interestrate`, `type`, `status`, `remark`, `describepic`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
@@ -3118,16 +3124,23 @@ namespace CCN.Modules.Car.DataAccess
 
             using (var conn = Helper.GetConnection())
             {
-                int result ;
+                string result = string.Empty;
                 try
                 {
-                    result = conn.Execute(sql, model);
+                    if (conn.Execute(sql, model) == 1)
+                    {
+                        result = model.innerid;
+                    }
+                    else
+                    {
+                        result = "0";
+                    }
 
                 }
                 catch (Exception ex)
                 {
                     LoggerFactories.CreateLogger().Write("金融方案明细新增：", TraceEventType.Information, ex);
-                    result = 0;
+                    result = "0";
                 }
 
                 return result;
@@ -3170,13 +3183,35 @@ namespace CCN.Modules.Car.DataAccess
 
             try
             {
-                return Helper.Query<FinanceProgrammeModel>(sql.ToString(),new { innerid }).FirstOrDefault();
+                return Helper.Query<FinanceProgrammeModel>(sql.ToString(), new { innerid }).FirstOrDefault();
             }
             catch (Exception ex)
             {
                 return null;
             }
         }
+
+        /// <summary>
+        /// 获取金融方案Id获取明细信息
+        /// </summary>
+        /// <param name="financeid"></param>
+        /// <returns></returns>
+        public IEnumerable<FinanceProgrammeDetailModel> GetFinanceProgrammeDetailByFid(string financeid)
+        {
+            StringBuilder sql = new StringBuilder(@"select * from finance_programme_detail 
+                                where 1=1 and financeid=@financeid order by type;");
+
+            try
+            {
+                var list = Helper.Query<FinanceProgrammeDetailModel>(sql.ToString(), new { financeid });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
         #endregion
 
@@ -3193,7 +3228,7 @@ namespace CCN.Modules.Car.DataAccess
             var list = Helper.Query<CarSupplierDdlModel>(sql);
             return list;
         }
-        
+
         /// <summary>
         /// 根据id获取供应商的信息
         /// </summary>
@@ -3201,14 +3236,14 @@ namespace CCN.Modules.Car.DataAccess
         public CarSupplierDdlModel GetSupplierInfoById(string innerid)
         {
             const string sql = @"select innerid, suppliername, address, introduction, contacts, contactsphone, remark, extend, isenabled, createrid, createdtime, modifierid, modifiedtime from car_supplier where innerid=@innerid;";
-            var list = Helper.Query<CarSupplierDdlModel>(sql,new {innerid}).FirstOrDefault();
+            var list = Helper.Query<CarSupplierDdlModel>(sql, new { innerid }).FirstOrDefault();
             return list;
         }
 
         #endregion
 
         #region 神秘车源
-        
+
         /// <summary>
         /// 查询神秘车源列表
         /// </summary>
