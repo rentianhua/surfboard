@@ -956,6 +956,8 @@
     <Content Include="Areas\Car\Views\Car\FinanceProgrammeList.cshtml" />
     <Content Include="Areas\Car\Views\Car\FinanceProgrammeAdd.cshtml" />
     <Content Include="Areas\Car\Views\Car\FinanceProgrammeEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierList.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />

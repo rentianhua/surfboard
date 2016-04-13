@@ -75,7 +75,7 @@ namespace WebAPITest.Car
             var model = new CarInfoModel
             {
                 Innerid = Guid.NewGuid().ToString(),
-                Carid = 0,
+                supplierid = "",
                 title = "",
                 pic_url = "",
                 provid = 0,

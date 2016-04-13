@@ -42,7 +42,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// query.Echo 用于第几次进入最后一页，补齐的时候就代表第几页
         /// </param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop(CarGlobalQueryModel query)
         {
             if (query == null)
             {
@@ -104,7 +104,7 @@ namespace CCN.Modules.Car.BusinessComponent
         /// </summary>
         /// <param name="query">查询条件</param>
         /// <returns></returns>
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx(CarGlobalQueryModel query)
         {
             if (query == null)
             {
@@ -1618,6 +1618,56 @@ namespace CCN.Modules.Car.BusinessComponent
             var result = DataAccess.GetFinanceProgrammeById(innerid);
             return JResult._jResult(result);
         }
+
+        #endregion
+
+
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierAll()
+        {
+            var result = DataAccess.GetSupplierAll();
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            var result = DataAccess.GetSupplierInfoById(innerid);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList(CarGlobalQueryModel query)
+        {
+            return DataAccess.GetMysteriousCarPageList(query);
+        }
+
+        /// <summary>
+        /// 后台查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList(CarGlobalQueryModel query)
+        {
+            return DataAccess.GetMysteriousBackCarPageList(query);
+        }
+
 
         #endregion
     }
