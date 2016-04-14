@@ -132,6 +132,16 @@ namespace CCN.WebAPI.ApiControllers
         #region 众筹活动
 
         [HttpPost]
+        [Route("CrowdGenerateQrCode")]
+        public JResult CrowdGenerateQrCode(string activityid)
+        {
+            var appid = ConfigHelper.GetAppSettings("APPID");
+            var activityurl = ConfigHelper.GetAppSettings("activityurl");
+            var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
+            return null;
+        }
+
+        [HttpPost]
         [Route("CrowdUnifiedOrder")]
         public JResult CrowdUnifiedOrder([FromBody]CrowdUnifiedOrderModel model)
         {

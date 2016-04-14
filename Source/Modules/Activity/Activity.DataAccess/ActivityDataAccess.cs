@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -417,15 +418,39 @@ namespace CCN.Modules.Activity.DataAccess
         public int AddCrowdInfo(CrowdInfoModel model)
         {
             const string sql = @"INSERT INTO activity_crow_info
-                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime, @status, @type, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
                 int result;
                 try
                 {
+                    //生成编号
+                    var obj = new
+                    {
+                        p_tablename = "activity_crow_info",
+                        p_columnname = "flagcode",
+                        p_prefix = "A",
+                        p_length = 4,
+                        p_hasdate = 0
+                    };
+
+                    var args = new DynamicParameters(obj);
+                    args.Add("p_value", dbType: DbType.String, direction: ParameterDirection.Output);
+                    args.Add("p_errmessage", dbType: DbType.String, direction: ParameterDirection.Output);
+
+                    using (conn.QueryMultiple("sp_automaticnumbering", args, commandType: CommandType.StoredProcedure)) { }
+
+                    model.Flagcode = args.Get<string>("p_value");
+
+                    if (string.IsNullOrWhiteSpace(model.Flagcode))
+                    {
+                        var msg = args.Get<string>("p_errmessage");
+                        LoggerFactories.CreateLogger().Write("活动码生成失败：" + msg, TraceEventType.Error);
+                        return -1;
+                    }
                     result = conn.Execute(sql, model);
                 }
                 catch (Exception ex)
@@ -462,18 +487,31 @@ namespace CCN.Modules.Activity.DataAccess
         }
 
         /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="qrcode"></param>
+        /// <returns></returns>
+        public int UpdateCrowdQrCode(string flagcode,string qrcode)
+        {
+            const string sql = @"update activity_crow_info set qrcode=@qrcode where flagcode = @flagcode;";
+            var result = Helper.Execute(sql, new { flagcode, qrcode });
+            return result;
+        }
+
+        /// <summary>
         /// 获取活动的信息及档次list信息
         /// </summary>
         /// <returns></returns>
-        public CrowdTotalInfoModel GetCrowdActivityTotal(int type)
+        public CrowdTotalInfoModel GetCrowdActivityTotal(string flagcode)
         {
-            const string sqlSelPid = "select innerid from activity_crow_info where `status`=2 and `type`=@type;";
+            const string sqlSelPid = "select innerid from activity_crow_info where `flagcode`=@flagcode;";
             using (var conn = Helper.GetConnection())
             {
                 var info = new CrowdTotalInfoModel();
                 try
                 {
-                    var activityid = conn.Query<string>(sqlSelPid,new { type }).FirstOrDefault();
+                    var activityid = conn.Query<string>(sqlSelPid,new { flagcode }).FirstOrDefault();
                     if (string.IsNullOrWhiteSpace(activityid))
                     {
                         return null;
@@ -619,10 +657,10 @@ namespace CCN.Modules.Activity.DataAccess
         /// </summary>
         /// <param name="activityid"></param>
         /// <returns></returns>
-        public IEnumerable<CrowdPlayerModel> GetPlayerListByActivityId(string activityid)
+        public IEnumerable<CrowdPlayerSecretModel> GetPlayerListByActivityId(string activityid)
         {
-            const string sql = @"SELECT innerid, activityid, totalfee,ispay, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_player where activityid=@activityid and isenabled=1;";
-            var list = Helper.Query<CrowdPlayerModel>(sql, new { activityid });
+            const string sql = @"SELECT innerid, wechatnick, wechatheadportrait,mobile,(select sum(totalfee) from activity_crow_payrecord where activityid=@activityid and openid=a.openid and ispay=1) as totalfee FROM activity_crow_player as a where activityid=@activityid and isenabled=1;";
+            var list = Helper.Query<CrowdPlayerSecretModel>(sql, new { activityid });
             return list;
         }
 
@@ -639,6 +677,20 @@ namespace CCN.Modules.Activity.DataAccess
             return model;
         }
 
+        /// <summary>
+        /// 根据openid获取Player详情 info
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public CrowdPlayerModel GetPlayerInfoById(string activityid, string openid)
+        {
+            const string sql =
+                @"SELECT innerid, activityid, openid, mobile, wechatnick, wechatheadportrait, isenabled, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_player where activityid=@activityid and openid=@openid;";
+            var model = Helper.Query<CrowdPlayerModel>(sql, new { activityid, openid }).FirstOrDefault();
+            return model;
+        }
+        
         /// <summary>
         /// 添加Player
         /// </summary>
@@ -691,6 +743,82 @@ namespace CCN.Modules.Activity.DataAccess
             return result;
         }
 
+        #region 添加订单
+
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPlayerPay(CrowdPayRecordModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddPlayerPay异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPlayerPayEx(CrowdPayRecordModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //检查是否已经保存过粉丝信息
+                    const string sqlSel = @"SELECT 1 FROM activity_crow_player where activityid=@activityid and openid=@openid;";
+                    var i = conn.Query<int>(sqlSel, new { model.Activityid, model.Openid }).FirstOrDefault();
+                    if (i != 1)
+                    {
+                        const string sqlPlayer = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+                        conn.Execute(sqlPlayer, model.Player, tran);
+                    }
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("AddPlayerPay异常：", TraceEventType.Information, ex);
+                    return 0;
+                }
+            }
+        }
+
+
+        #endregion
+
         /// <summary>
         /// 确认支付
         /// </summary>
@@ -698,7 +826,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int DoPay(string orderNo)
         {
-            const string sql = @"update activity_crow_player set ispay=1 where orderno = @orderno;";
+            const string sql = @"update activity_crow_payrecord set ispay=1 where orderno = @orderno;";
             var result = Helper.Execute(sql, new { orderNo });
             return result;
         }

@@ -284,9 +284,9 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// 获取活动的信息及档次list信息
         /// </summary>
         /// <returns></returns>
-        public JResult GetCrowdActivityTotal(int type)
+        public JResult GetCrowdActivityTotal(string flagcode)
         {
-            var result = DataAccess.GetCrowdActivityTotal(type);
+            var result = DataAccess.GetCrowdActivityTotal(flagcode);
             return JResult._jResult(result);
         }
 
@@ -425,7 +425,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult UpdatePlayer(CrowdPlayerModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Orderno) ||
+            if (string.IsNullOrWhiteSpace(model?.Activityid) ||
                 string.IsNullOrWhiteSpace(model.Openid))
             {
                 return JResult._jResult(401, "参数不完整");
@@ -435,6 +435,30 @@ namespace CCN.Modules.Activity.BusinessComponent
             var list = DataAccess.UpdatePlayer(model);
             return JResult._jResult(list);
         }
+
+        #region 添加订单
+
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddPlayerPay(CrowdPayRecordModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Activityid) ||
+                string.IsNullOrWhiteSpace(model.Openid) || model.Totalfee == 0)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var list = DataAccess.AddPlayerPay(model);
+            return JResult._jResult(list);
+        }
+
+
+        #endregion
 
         #endregion
 
@@ -467,17 +491,22 @@ namespace CCN.Modules.Activity.BusinessComponent
                 return JResult._jResult(402, "JsPay下单失败");
             }
 
-            AddPlayer(new CrowdPlayerModel
+            DataAccess.AddPlayerPayEx(new CrowdPayRecordModel
             {
                 Activityid = model.activityid,
-                Totalfee = int.Parse(model.total_fee),
-                Mobile = model.mobile,
-                Orderno = outTradeNo,
                 Openid = model.openid,
-                Wechatnick = model.wechatnick,
-                Wechatheadportrait = model.wechatheadportrait
+                Totalfee = int.Parse(model.total_fee),
+                Orderno = outTradeNo,
+                Player = new CrowdPlayerModel
+                {
+                    Activityid = model.activityid,
+                    Mobile = model.mobile,
+                    Openid = model.openid,
+                    Wechatnick = model.wechatnick,
+                    Wechatheadportrait = model.wechatheadportrait
+                }
             });
-
+            
             LoggerFactories.CreateLogger().Write($"WxPay Result--众筹: {orderresult}", TraceEventType.Information);
 
             var jobj = JObject.Parse(orderresult);
@@ -486,6 +515,39 @@ namespace CCN.Modules.Activity.BusinessComponent
                 : JResult._jResult(402, "JsPay下单失败");
         }
 
+        /// <summary>
+        /// 成功活动二维码
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult CrowdGenerateQrCode(string flagcode)
+        {
+            var appid = ConfigHelper.GetAppSettings("APPID");
+            var activityurl = ConfigHelper.GetAppSettings("activityurl") + "?flag=" + flagcode;
+            var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
+            try
+            {
+                //生成二维码位图
+                var bitmap = BarCodeUtility.CreateBarcode(url, 240, 240);
+                var filename = string.Concat("AQ", Guid.NewGuid().ToString().Replace("-", ""));
+                var stream = BarCodeUtility.BitmapToStream(bitmap);
+                //上传图片到七牛云
+                var qinniu = new QiniuUtility();
+                var qrcode = qinniu.Put(stream, "", filename);
+                stream.Dispose();
+                //上传成功更新活动二维码
+                if (!string.IsNullOrWhiteSpace(qrcode))
+                {
+                    DataAccess.UpdateCrowdQrCode(flagcode,qrcode);
+                }
+            }
+            catch (Exception ex)
+            {
+                // ignored
+                LoggerFactories.CreateLogger().Write("CustRegister接口异常", TraceEventType.Error, ex);
+            }
+            return null;
+        }
         #endregion
     }
 }
