@@ -115,7 +115,10 @@ namespace CCN.Modules.Car.BusinessEntity
     /// </summary>
     public class FinanceProgrammeViewModel : FinanceProgrammeModel
     {
-
+        /// <summary>
+        /// 方案明细
+        /// </summary>
+        public IEnumerable<FinanceProgrammeDetailModel> financeprogrammedetail { get; set; }
     }
 
     /// <summary>
@@ -156,6 +159,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 图片信息（json格式）
         /// </summary>
         public string describepic { get; set; }
+
+        /// <summary>
+        /// 银行卡图片
+        /// </summary>
+        public string bankpic { get; set; }
 
         /// <summary>
         /// 修改人ID

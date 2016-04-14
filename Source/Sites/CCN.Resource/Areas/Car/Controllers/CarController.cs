@@ -8,6 +8,9 @@ using CCN.Modules.Customer.Interface;
 using Cedar.Core.IoC;
 using Cedar.Framework.Common.BaseClasses;
 using CCN.Resource.Main.Common;
+using System.Net;
+using CCN.Modules.Car.Interface;
+using System.IO;
 
 namespace CCN.Resource.Areas.Car.Controllers
 {
@@ -16,7 +19,7 @@ namespace CCN.Resource.Areas.Car.Controllers
         // GET: Car/Car
         public ActionResult CarList(string custid)
         {
-            if ((CustModel)Session["CustModel"] !=null)
+            if ((CustModel)Session["CustModel"] != null)
             {
                 custid = ((CustModel)Session["CustModel"]).Innerid;
             }
@@ -158,7 +161,41 @@ namespace CCN.Resource.Areas.Car.Controllers
             ViewBag.uptoken = QiniuUtility.GetToken();
             return View();
         }
-        
+
+        #endregion
+
+        #region 下载
+        public ActionResult DownZip(List<PicModel> piclist)
+        {
+            var res = new JsonResult();
+            foreach (var item in piclist)
+            {
+                var url=ConfigHelper.GetAppSettings("GETURL");
+                var savepath = "d:\\kplxpic\\"+DateTime.Now.ToString("yyyyMMddhhmmss") +"\\"+ item.imgsrc;
+                //验证并创建目录
+                CheckPath(savepath);
+
+                url = url + item.imgsrc;
+                WebClient web = new WebClient();
+                web.DownloadFile(url, savepath);
+            }
+
+            return res;
+        }
+
+        /// <summary>
+        /// 检查路径，创建目录
+        /// </summary>
+        static void CheckPath(string path)
+        {
+            path = path.Substring(0, path.LastIndexOf('\\'));
+            if (Directory.Exists(path) == false) Directory.CreateDirectory(path);
+        }
+
+        public class PicModel
+        {
+            public string imgsrc { get; set; }
+        }
         #endregion
     }
 }

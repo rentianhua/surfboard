@@ -1643,6 +1643,7 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult GetFinanceProgrammeById(string innerid)
         {
             var result = DataAccess.GetFinanceProgrammeById(innerid);
+            result.financeprogrammedetail= DataAccess.GetFinanceProgrammeDetailByFid(innerid);
             return JResult._jResult(result);
         }
 
@@ -1653,6 +1654,8 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
         {
+            //获取主键
+            model.innerid = Guid.NewGuid().ToString();
             var result = DataAccess.AddFinanceProgrammeDetail(model);
             return JResult._jResult(result);
         }
