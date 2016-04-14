@@ -161,6 +161,11 @@ namespace CCN.Modules.Car.BusinessEntity
         public string describepic { get; set; }
 
         /// <summary>
+        /// 银行卡图片
+        /// </summary>
+        public string bankpic { get; set; }
+
+        /// <summary>
         /// 修改人ID
         /// </summary>
         public string modifiedid { get; set; }
