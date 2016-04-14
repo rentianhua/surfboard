@@ -108,6 +108,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 联系电话
         /// </summary>
         public string mobile { get; set; }
+
+        /// <summary>
+        /// 创建人
+        /// </summary>
+        public string createdid { get; set; }
     }
 
     /// <summary>
