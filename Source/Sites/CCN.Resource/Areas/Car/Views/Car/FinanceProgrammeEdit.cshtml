@@ -25,6 +25,30 @@
 
     //获取数据
     function Init() {
+        //银行卡 
+        var pics = ["银行卡正面", "银行卡正面", "银行卡正面"];
+        var i = 0;
+        $.each(pics, function (k, v) {
+            i++;
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#bankpic' + i).append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgbankpic' + i + '"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "bankpic" + i;
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件
+            uploader = InitQiniuForAuction(option);
+        });
+
         if (innerid === "") {
             return;
         }
@@ -58,8 +82,9 @@
                     describepic = JSON.parse(describepic.replace(/\\/g, ""));
                 }
                 $("#value" + imgtype).val(v.innerid);
+                $("#pic" + imgtype).val(v.describepic);
+                //证件图片
                 $.each(describepic, function (k, v) {
-                    
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                     $('#imgs' + imgtype).append(
                             '<div id="' + strradom + '" class="imgPreview divType' + imgtype + '"  data-id="' + v.imgsrc + '">\
@@ -70,6 +95,28 @@
 					</div>');
                     initUploadM();
                 });
+
+                if (v.bankpic != null && v.bankpic!="")
+                {
+                    var bankpic = JSON.parse(v.bankpic);
+                    if ((typeof bankpic) == "string") {
+                        bankpic = JSON.parse(bankpic.replace(/\\/g, ""));
+                    }
+                    $.each(bankpic, function (k, v) {
+                        if (v != null) {
+                            $("div .imgbankpic" + imgtype).each(function () {
+                                debugger
+                                if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
+                                    $(this).attr('data-id', v.imgsrc);
+                                    $(this).children('img').attr('src', getImgUrl(v.imgsrc))
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                initUploadM();
+
             });
 
             var identitypic = JSON.parse(obj.identitypic);
@@ -290,7 +337,6 @@
     }
 
     function FileProgress(file, type, filename) {
-        console.log(type);
         this.fileProgressID = file.id;
         this.file = file;
 
@@ -457,7 +503,6 @@
         });
 
         json.driverspic = JSON.stringify(imgdriverspic);
-        console.log(json);
         $.post("/api/Car/UpdateFinanceProgramme", json, function (result) {
 
             if (result.errcode !== 0) {
@@ -501,8 +546,18 @@
             json.imgsrc = $(this).attr('data-id');
             jsonpic.push(json);
         });
-
         json.describepic = JSON.stringify(jsonpic);
+
+        //获取银行卡图片信息
+        var jsonbankpic = [];
+        $(' div .imgbankpic' + type).each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            jsonbankpic.push(json);
+        });
+        json.bankpic = JSON.stringify(jsonbankpic);
+
         if ($("#value" + type).val() == "")
         {
             json.financeid = innerid;
@@ -528,6 +583,28 @@
             });
         }
         
+    }
+
+    //图片下载
+    function DownPic(type)
+    {
+        var actionUrl = "@Url.Action("DownZip", "Car")";
+
+        var data = $("#pic" + type).val();
+
+        $.ajax({
+            type: "POST",
+            url: actionUrl,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                "piclist": jQuery.parseJSON(data)
+            }),
+            success: function (result) {
+         
+            }
+        });
+  
     }
 
 </script>
@@ -677,6 +754,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic1" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -741,6 +834,7 @@
                                 <div class="col-lg-12">
                                     <input id="save1" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(1);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(1);" />
                                 </div>
                             </div>
 
@@ -754,6 +848,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic2" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -818,6 +928,7 @@
                                 <div class="col-lg-12">
                                     <input id="save2" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(2);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(2);" />
                                 </div>
                             </div>
 
@@ -830,6 +941,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic3" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -894,6 +1021,7 @@
                                 <div class="col-lg-12">
                                     <input id="save3" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(3);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(3);" />
                                 </div>
                             </div>
 
@@ -907,6 +1035,9 @@
 <input type="text" id="value1"  class="form-control hidden" />
 <input type="text" id="value2"  class="form-control hidden" />
 <input type="text" id="value3"  class="form-control hidden" />
+<input type="text" id="pic1" class="form-control hidden" />
+<input type="text" id="pic2" class="form-control hidden" />
+<input type="text" id="pic3" class="form-control hidden" />
 
 
 

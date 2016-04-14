@@ -402,6 +402,68 @@
             //初始化七牛上传控件
             uploader = InitQiniuForAuction(option);
         });
+
+        //银行卡 方案一
+        var pics = ["银行卡正面"];
+        $.each(pics, function (k, v) {
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#bankpic1').append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgbankpic1"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "bankpic1";
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件
+            uploader = InitQiniuForAuction(option);
+        });
+        //银行卡 方案二
+        $.each(pics, function (k, v) {
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#bankpic2').append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgbankpic2"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "bankpic2";
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件
+            uploader = InitQiniuForAuction(option);
+        });
+        //银行卡 方案三
+        $.each(pics, function (k, v) {
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#bankpic3').append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgbankpic3"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "bankpic3";
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件
+            uploader = InitQiniuForAuction(option);
+        });
         initUploadM();
     }
 
@@ -419,7 +481,7 @@
         }
 
         var json = {};
-        
+
         json.interestrate = $("#interestrate" + type).val();
         json.status = $("#status" + type).val();
         json.remark = $("#caresc" + type).val();
@@ -436,7 +498,17 @@
 
         json.describepic = JSON.stringify(jsonpic);
 
-        if ($("#valus" + type).val() == "") {
+        //获取银行卡图片信息
+        var jsonbankpic = [];
+        $(' div .imgbankpic' + type).each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            jsonbankpic.push(json);
+        });
+
+        json.bankpic = JSON.stringify(jsonbankpic);
+        console.log(json);
+        if ($("#value" + type).val() == "") {
             json.financeid = financeid;
             $.post("/api/Car/AddFinanceProgrammeDetail", json, function (result) {
 
@@ -445,11 +517,11 @@
                     return false;
                 }
                 alert("新增成功！");
-                $("#valus" + type).val(result.errmsg)
+                $("#value" + type).val(result.errmsg)
             });
         }
         else {
-            json.innerid = $("#valus" + type).val();
+            json.innerid = $("#value" + type).val();
             $.post("/api/Car/UpdateFinanceProgrammeDetail", json, function (result) {
 
                 if (result.errcode !== 0) {
@@ -617,6 +689,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic1" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -681,6 +769,7 @@
                                 <div class="col-lg-12">
                                     <input id="save1" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(1);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(1);" />
                                 </div>
                             </div>
 
@@ -694,6 +783,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic2" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -758,6 +863,7 @@
                                 <div class="col-lg-12">
                                     <input id="save2" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(2);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(2);" />
                                 </div>
                             </div>
 
@@ -770,6 +876,22 @@
                 <div class="widget-body">
                     <div>
                         <form class="form-horizontal form-bordered" role="form">
+                            @*银行卡*@
+                            <div class="row form-group">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>银行卡</label>
+                                        <div class="controls col-sm-8" id="">
+                                            <div id="bankpic3" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+
+                                </div>
+                            </div>
                             @*利率 状态*@
                             <div class="row form-group">
                                 <div class="col-lg-6">
@@ -834,6 +956,7 @@
                                 <div class="col-lg-12">
                                     <input id="save3" type="button" class="btn btn-palegreen shiny " value="保存" onclick="SaveInfo(3);" />
                                     <input type="button" class="btn btn-primary shiny" value="返回" onclick="GoBack();" />
+                                    <input type="button" class="btn btn-primary shiny" value="下载" onclick="DownPic(3);" />
                                 </div>
                             </div>
 

@@ -3118,9 +3118,9 @@ namespace CCN.Modules.Car.DataAccess
         public string AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
         {
             const string sql = @"INSERT INTO `finance_programme_detail`
-                                (`innerid`, `financeid`, `interestrate`, `type`, `status`, `remark`, `describepic`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
+                                (`innerid`, `financeid`, `interestrate`, `type`, `status`, `remark`, `describepic`,`bankpic`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`)
                                 VALUES
-                                (uuid(), @financeid, @interestrate, @type, @status, @remark, @describepic, @modifiedid, now(), @createdid, now());";
+                                (uuid(), @financeid, @interestrate, @type, @status, @remark, @describepic,@bankpic, @modifiedid, now(), @createdid, now());";
 
             using (var conn = Helper.GetConnection())
             {
