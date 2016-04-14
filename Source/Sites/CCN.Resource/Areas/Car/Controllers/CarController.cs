@@ -132,6 +132,10 @@ namespace CCN.Resource.Areas.Car.Controllers
         /// <returns></returns>
         public ActionResult FinanceProgrammeEdit(string innerid)
         {
+            if (ADMIN == UserInfo.innerid)
+            {
+                ViewBag.isadmin = 1;
+            }
             ViewBag.innerid = string.IsNullOrWhiteSpace(innerid) ? "" : innerid;
             ViewBag.userid = UserInfo.innerid;
             ViewBag.uptoken = QiniuUtility.GetToken();
@@ -170,14 +174,17 @@ namespace CCN.Resource.Areas.Car.Controllers
             var res = new JsonResult();
             foreach (var item in piclist)
             {
-                var url=ConfigHelper.GetAppSettings("GETURL");
-                var savepath = "d:\\kplxpic\\"+DateTime.Now.ToString("yyyyMMddhhmmss") +"\\"+ item.imgsrc;
-                //验证并创建目录
-                CheckPath(savepath);
+                if (!string.IsNullOrWhiteSpace(item.imgsrc))
+                {
+                    var url = ConfigHelper.GetAppSettings("GETURL");
+                    var savepath = "d:\\kplxpic\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "\\" + item.imgsrc;
+                    //验证并创建目录
+                    CheckPath(savepath);
 
-                url = url + item.imgsrc;
-                WebClient web = new WebClient();
-                web.DownloadFile(url, savepath);
+                    url = url + item.imgsrc;
+                    WebClient web = new WebClient();
+                    web.DownloadFile(url, savepath);
+                }
             }
 
             return res;

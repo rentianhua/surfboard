@@ -18,6 +18,10 @@
 
     var uploader;
     $(function () {
+        if("@ViewBag.isadmin"=="1")
+        {
+            $(".selectstatus").addClass("hidden");
+        }
         InitUpload();
         //获取金融方案数据
         Init();
@@ -25,7 +29,7 @@
 
     //获取数据
     function Init() {
-        //银行卡 
+        //银行卡
         var pics = ["银行卡正面", "银行卡正面", "银行卡正面"];
         var i = 0;
         $.each(pics, function (k, v) {
@@ -96,16 +100,16 @@
                     initUploadM();
                 });
 
-                if (v.bankpic != null && v.bankpic!="")
-                {
+                if (v.bankpic != null && v.bankpic != "") {
                     var bankpic = JSON.parse(v.bankpic);
+                    $("#bankpic" + imgtype).val(v.bankpic);
                     if ((typeof bankpic) == "string") {
                         bankpic = JSON.parse(bankpic.replace(/\\/g, ""));
                     }
                     $.each(bankpic, function (k, v) {
                         if (v != null) {
                             $("div .imgbankpic" + imgtype).each(function () {
-                                debugger
+                                
                                 if ($(this).attr('data-val') == v.title && v.imgsrc != "") {
                                     $(this).attr('data-id', v.imgsrc);
                                     $(this).children('img').attr('src', getImgUrl(v.imgsrc))
@@ -114,12 +118,13 @@
                         }
                     });
                 }
-                
+
                 initUploadM();
 
             });
 
             var identitypic = JSON.parse(obj.identitypic);
+            $("#identitypic").val(obj.identitypic);
             if ((typeof identitypic) == "string") {
                 identitypic = JSON.parse(identitypic.replace(/\\/g, ""));
             }
@@ -180,6 +185,7 @@
                 uploader = InitQiniuForAuction(option);
             });
 
+            $("#driverspic").val(obj.driverspic);
             if (JSON.parse(obj.driverspic) != null) {
                 var driverspic = JSON.parse(obj.driverspic);
 
@@ -532,7 +538,7 @@
         }
 
         var json = {};
-        
+
         json.interestrate = $("#interestrate" + type).val();
         json.status = $("#selectstatus" + type).val();
         json.remark = $("#caresc" + type).val();
@@ -558,8 +564,7 @@
         });
         json.bankpic = JSON.stringify(jsonbankpic);
 
-        if ($("#value" + type).val() == "")
-        {
+        if ($("#value" + type).val() == "") {
             json.financeid = innerid;
             $.post("/api/Car/AddFinanceProgrammeDetail", json, function (result) {
 
@@ -570,8 +575,7 @@
                 alert("新增成功！");
             });
         }
-        else
-        {
+        else {
             json.innerid = $("#value" + type).val();
             $.post("/api/Car/UpdateFinanceProgrammeDetail", json, function (result) {
 
@@ -582,15 +586,48 @@
                 alert("修改成功！");
             });
         }
-        
+
     }
 
     //图片下载
-    function DownPic(type)
-    {
+    function DownPic(type) {
         var actionUrl = "@Url.Action("DownZip", "Car")";
-
-        var data = $("#pic" + type).val();
+        var data = [];
+        
+        if ($("#pic" + type).val() != "")
+        {
+            var datacertificates = jQuery.parseJSON($("#pic" + type).val());
+            $.each(datacertificates, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#bankpic" + type).val() != "") {
+            var databank = jQuery.parseJSON($("#bankpic" + type).val());
+            $.each(databank, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#identitypic").val() != "") {
+            var dataidentity = jQuery.parseJSON($("#identitypic").val());
+            $.each(dataidentity, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#driverspic").val() != "") {
+            var datadriverspic = jQuery.parseJSON($("#driverspic").val());
+            $.each(datadriverspic, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        //var data = $("#pic" + type).val();
 
         $.ajax({
             type: "POST",
@@ -598,13 +635,13 @@
             contentType: "application/json",
             dataType: "json",
             data: JSON.stringify({
-                "piclist": jQuery.parseJSON(data)
+                "piclist": data
             }),
             success: function (result) {
-         
+
             }
         });
-  
+
     }
 
 </script>
@@ -767,7 +804,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    
+
                                 </div>
                             </div>
                             @*利率 状态*@
@@ -781,7 +818,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group">
+                                    <div class="form-group selectstatus">
                                         <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
                                         <div class="controls col-sm-8">
                                             <select id="selectstatus1" style="width:100%">
@@ -875,7 +912,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group">
+                                    <div class="form-group selectstatus">
                                         <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
                                         <div class="controls col-sm-8">
                                             <select id="selectstatus2" style="width:100%">
@@ -968,7 +1005,7 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <div class="form-group">
+                                    <div class="form-group selectstatus">
                                         <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
                                         <div class="controls col-sm-8">
                                             <select id="selectstatus3" style="width:100%">
@@ -1032,12 +1069,17 @@
         </div>
     </div>
 </div>
-<input type="text" id="value1"  class="form-control hidden" />
-<input type="text" id="value2"  class="form-control hidden" />
-<input type="text" id="value3"  class="form-control hidden" />
+<input type="text" id="value1" class="form-control hidden" />
+<input type="text" id="value2" class="form-control hidden" />
+<input type="text" id="value3" class="form-control hidden" />
 <input type="text" id="pic1" class="form-control hidden" />
 <input type="text" id="pic2" class="form-control hidden" />
 <input type="text" id="pic3" class="form-control hidden" />
+<input type="text" id="bankpic1" class="form-control hidden" />
+<input type="text" id="bankpic2" class="form-control hidden" />
+<input type="text" id="bankpic3" class="form-control hidden" />
+<input type="text" id="identitypic" class="form-control hidden" />
+<input type="text" id="driverspic" class="form-control hidden" />
 
 
 

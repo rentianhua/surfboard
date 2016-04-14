@@ -2749,6 +2749,11 @@ namespace CCN.Modules.Car.DataAccess
             {
                 sqlWhere.Append($" and a.mobile={query.mobile}");
             }
+            //创建人
+            if (!string.IsNullOrWhiteSpace(query.createdid))
+            {
+                sqlWhere.Append($" and a.createdid='{query.createdid}'");
+            }
 
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<FinanceProgrammeViewModel>(model, query.Echo);
