@@ -1837,13 +1837,12 @@ namespace CCN.Modules.Customer.BusinessComponent
         /// <param name="totalFee"></param>
         /// <param name="attach"></param>
         /// <returns></returns>
-        public JResult GenerationQrCode(string orderno, string body, string totalFee,string attach)
+        public JResult GenerationQrCode(string orderno, string body, string totalFee, string attach)
         {
             //获取定金金额
-            var payAuction = ConfigHelper.GetAppSettings("payurl");
-
-            var json = "{\"out_trade_no\":\"" + orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\""+ attach + "\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(payAuction, "post", json, false);
+            var payurl = ConfigHelper.GetAppSettings("payurl") + "unifiedorder";
+            var json = "{\"out_trade_no\":\"" + orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"" + attach + "\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
 
             if (string.IsNullOrWhiteSpace(orderresult))
             {

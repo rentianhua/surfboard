@@ -14,6 +14,8 @@ using Cedar.Core.Logging;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Xml.Linq;
+using CCN.Modules.Activity.BusinessEntity;
+using CCN.Modules.Activity.Interface;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Newtonsoft.Json;
@@ -278,10 +280,11 @@ namespace CCN.WebAPI.ApiControllers
         /// 微信支付统一下单（拍卖）
         /// </summary>
         /// <param name="innerid"></param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("WeChatPayForAuction")]
-        public JResult WeChatPayForAuction(string innerid)
+        public JResult WeChatPayForAuction(string innerid, string tradeType = "NATIVE")
         {
             return _auctionservice.WeChatPayForAuction(innerid);
         }
@@ -341,55 +344,61 @@ namespace CCN.WebAPI.ApiControllers
                 var model = new AuctionPaymentRecordModel();
                 model.FillEntityWithXml(doc);
 
-                //记录支付结果
-                var result = _auctionservice.AddPaymentRecord(model);
-                LoggerFactories.CreateLogger().Write($"WxPay Saved Result: {result.errcode}", TraceEventType.Information);
-
-                if (result.errcode != 0)
-                {
-                    return new HttpResponseMessage { Content = new StringContent("ERROR") };
-                }
-
-                string innerid;
                 if (model.attach.Equals("kplx_auction"))
                 {
                     var resultPay = _auctionservice.GetAuctionParticipantByOrderNo(model.out_trade_no);
                     var modelPay = (AuctionCarParticipantModel)resultPay.errmsg;
-                    innerid = modelPay.Innerid;
                     //更新竞价
                     var upstatus = _auctionservice.UpdateStatusForPay(model.out_trade_no).errcode;
                     if (upstatus != 0)
                     {
                         LoggerFactories.CreateLogger().Write("socket result ： 支付定金完成，更新竞价状态出错！", TraceEventType.Information);
                     }
+                    SendPost(modelPay.Innerid);
                 }
-                else //获取会员ID
+                else if (model.attach.Equals("kplx_vip")|| model.attach.Equals("kplx_betavip")) //获取会员ID
                 {
                     var custservice = ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>();
-                    var custPayModel = (CustWxPayModel)custservice.CustWeChatPayByorderno(model.out_trade_no).errmsg;
-                    innerid = custPayModel.Custid;
-                    //更新会员状态
-                    var ucstatus = custservice.CustWxPayVipBack(model.out_trade_no).errcode;
-                    if (ucstatus != 0)
+                    var custResult = custservice.CustWeChatPayByorderno(model.out_trade_no);
+                    if (custResult.errcode == 0)
                     {
-                        LoggerFactories.CreateLogger().Write("socket result ： 会员支付完成，更新状态出错！", TraceEventType.Information);
+                        var custPayModel = (CustWxPayModel) custResult.errmsg;
+                        //更新会员状态
+                        var ucstatus = custservice.CustWxPayVipBack(model.out_trade_no).errcode;
+                        if (ucstatus != 0)
+                        {
+                            LoggerFactories.CreateLogger().Write("socket result ： 会员支付完成，更新状态出错！", TraceEventType.Information);
+                        }
+                        SendPost(custPayModel.Custid);
                     }
                 }
-
-                var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "auction/largeTransaction";
-                var param = new Dictionary<string, string>
+                else if(model.attach.Equals("kplx_activity_crowd"))  //众筹活动支付
                 {
-                    {"innerid", innerid}
-                };
-                var nodeRes = DynamicWebService.SendPost(url, param, "post");
-                LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
+                    var activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
+                    activityservice.DoPay(model.out_trade_no);
+                }
+
+                //记录支付结果
+                var result = _auctionservice.AddPaymentRecord(model);
+                LoggerFactories.CreateLogger().Write($"WxPay Saved Result: {result.errcode}", TraceEventType.Information);
                 return new HttpResponseMessage { Content = new StringContent("SUCCESS") };
             }
             catch (Exception ex)
             {
                 LoggerFactories.CreateLogger().Write($"WxPay Result Ex: {ex.Message}", TraceEventType.Information);
-                return new HttpResponseMessage { Content = new StringContent("Exception") };
+                return new HttpResponseMessage { Content = new StringContent("ERROR") };
             }
+        }
+
+        public void SendPost(string innerid)
+        {
+            var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "auction/largeTransaction";
+            var param = new Dictionary<string, string>
+                {
+                    {"innerid", innerid}
+                };
+            var nodeRes = DynamicWebService.SendPost(url, param, "post");
+            LoggerFactories.CreateLogger().Write("socket result ： " + nodeRes, TraceEventType.Information);
         }
 
         #endregion

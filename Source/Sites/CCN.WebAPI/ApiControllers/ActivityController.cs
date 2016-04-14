@@ -133,47 +133,19 @@ namespace CCN.WebAPI.ApiControllers
 
         [HttpPost]
         [Route("CrowdUnifiedOrder")]
-        public JResult CrowdUnifiedOrder()
+        public JResult CrowdUnifiedOrder([FromBody]CrowdUnifiedOrderModel model)
         {
-            var ran = new Random();
-            var outTradeNo = $"{"WXPAY"}{DateTime.Now.ToString("yyyyMMddHHmmss")}{ran.Next(999)}";
-
-            var data = new NativePayData
-            {
-                Body = "快拍立信定金",//商品描述
-                Attach = "快拍立信看车费",//附加数据
-                TotalFee = 1,//总金额
-                ProductId = "productid",//商品ID
-                OutTradeNo = outTradeNo,
-                GoodsTag = ""
-            };
-
-            var jresult = WxPayAPIs.GetNativePayQrCode(data);
-            return jresult;
+            return _activityservice.CrowdUnifiedOrder(model);
         }
-
-
+        
         #endregion
 
         [HttpPost]
         [Route("TestPay")]
         public JResult TestPay()
         {
-            var ran = new Random();
-            var outTradeNo = $"{"WXPAY"}{DateTime.Now.ToString("yyyyMMddHHmmss")}{ran.Next(999)}";
 
-            var data = new NativePayData
-            {
-                Body = "快拍立信定金",//商品描述
-                Attach = "快拍立信看车费",//附加数据
-                TotalFee = 1,//总金额
-                ProductId = "productid",//商品ID
-                OutTradeNo = outTradeNo,
-                GoodsTag = ""
-            };
-            
-            var jresult = WxPayAPIs.GetNativePayQrCode(data);
-            return jresult;
+            return null;
         }
         
         [AllowAnonymous]

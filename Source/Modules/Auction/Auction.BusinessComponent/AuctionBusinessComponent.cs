@@ -752,8 +752,9 @@ namespace CCN.Modules.Auction.BusinessComponent
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
+        /// <param name="tradeType">交易类型JSAPI，NATIVE，APP</param>
         /// <returns></returns>
-        public JResult WeChatPayForAuction(string innerid)
+        public JResult WeChatPayForAuction(string innerid,string tradeType = "NATIVE")
         {
             var perModel = DataAccess.GetAuctionParticipantByID(innerid);
             if (string.IsNullOrWhiteSpace(perModel?.orderno))
@@ -770,42 +771,83 @@ namespace CCN.Modules.Auction.BusinessComponent
             }
 
             //获取定金金额
-            var payurl = ConfigHelper.GetAppSettings("payurl");
+            
             var body = ConfigHelper.GetAppSettings("auction_body");
             var totalFee = ConfigHelper.GetAppSettings("auction_total_fee");
 
             var json = "{\"out_trade_no\":\"" + perModel.orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_auction\"}";
-            var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
-
-            if (string.IsNullOrWhiteSpace(orderresult))
+            
+            object errmsg = null;
+            if (tradeType.Equals("NATIVE"))
             {
-                return JResult._jResult(402, "二维码生成失败");
+                #region NATIVE
+
+                var payurl = ConfigHelper.GetAppSettings("payurl") + "unifiedorder";
+                var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
+
+                if (string.IsNullOrWhiteSpace(orderresult))
+                {
+                    return JResult._jResult(402, "统一下单失败");
+                }
+
+                LoggerFactories.CreateLogger().Write($"NATIVE WxPay Result: {orderresult}", TraceEventType.Information);
+
+                var jobj = JObject.Parse(orderresult);
+
+                if (jobj["errcode"].ToString() != "0")
+                    return JResult._jResult(0, JsonConvert.DeserializeObject(perModel.orderInfo));
+
+                dynamic orderInfo = new
+                {
+                    qrcode = jobj["errmsg"]["qrcode"].ToString(),
+                    prepay_id = jobj["errmsg"]["prepay_id"].ToString(),
+                    sign = jobj["errmsg"]["sign"].ToString(),
+                    code_url = jobj["errmsg"]["code_url"].ToString(),
+                    modelname,
+                    deposit = totalFee
+                };
+
+                var model = new AuctionCarParticipantModel
+                {
+                    Innerid = innerid,
+                    orderInfo = JsonConvert.SerializeObject(orderInfo)
+                };
+
+                DataAccess.UpdateParticipant(model);
+
+                errmsg = orderInfo;
+
+                #endregion
+            }
+            else if (tradeType.Equals("APP"))
+            {
+                #region app下单
+
+                var payurl = ConfigHelper.GetAppSettings("payurl") + "apppay";
+                var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
+                if (string.IsNullOrWhiteSpace(orderresult))
+                {
+                    return JResult._jResult(402, "统一下单失败");
+                }
+                LoggerFactories.CreateLogger().Write($"APP WxPay Result: {orderresult}", TraceEventType.Information);
+                var jobj = JObject.Parse(orderresult);
+                if (jobj["errcode"].ToString() != "0")
+                    return JResult._jResult(0, JsonConvert.DeserializeObject(perModel.orderInfo));
+                
+                var model = new AuctionCarParticipantModel
+                {
+                    Innerid = innerid,
+                    orderInfo = jobj["errmsg"].ToString()
+                };
+
+                DataAccess.UpdateParticipant(model);
+
+                errmsg = jobj["errmsg"].ToString();
+
+                #endregion
             }
 
-            LoggerFactories.CreateLogger().Write($"WxPay Result: {orderresult}", TraceEventType.Information);
-
-            var jobj = JObject.Parse(orderresult);
-            if (jobj["errcode"].ToString() != "0")
-                return JResult._jResult(0, JsonConvert.DeserializeObject(perModel.orderInfo));
-
-            dynamic orderInfo = new
-            {
-                qrcode = jobj["errmsg"]["qrcode"].ToString(),
-                prepay_id = jobj["errmsg"]["prepay_id"].ToString(),
-                sign = jobj["errmsg"]["sign"].ToString(),
-                code_url = jobj["errmsg"]["code_url"].ToString(),
-                modelname,
-                deposit = totalFee
-            };
-
-            var model = new AuctionCarParticipantModel
-            {
-                Innerid = innerid,
-                orderInfo = JsonConvert.SerializeObject(orderInfo) 
-            };
-
-            DataAccess.UpdateParticipant(model);
-            return JResult._jResult(0, orderInfo);
+            return JResult._jResult(0, errmsg);
         }
         
         #endregion

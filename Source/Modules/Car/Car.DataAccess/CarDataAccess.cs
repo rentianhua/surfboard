@@ -86,99 +86,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.seller_type<>3 and a.status=1 and a.istop>0");
-
-            //省份
-            if (query.provid != null)
-            {
-                sqlWhere.Append($" and a.provid={query.provid}");
-            }
-
-            //城市
-            if (query.cityid != null)
-            {
-                sqlWhere.Append($" and a.cityid={query.cityid}");
-            }
-
-            //品牌
-            if (query.brand_id != null && query.brand_id != 0)
-            {
-                sqlWhere.Append($" and a.brand_id={query.brand_id}");
-            }
-
-            //车系
-            if (query.series_id != null && query.series_id != 0)
-            {
-                sqlWhere.Append($" and a.series_id={query.series_id}");
-            }
-
-            //车型
-            if (query.model_id != null && query.model_id != 0)
-            {
-                sqlWhere.Append($" and a.model_id={query.model_id}");
-            }
-
-            //销售价大于..
-            if (query.minprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price>={query.minprice}");
-            }
-
-            //销售价小于..
-            if (query.maxprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price<={query.maxprice}");
-            }
-
-            //上牌时间 <
-            if (query.minyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date<='{date}'");
-            }
-
-            //上牌时间 >
-            if (query.maxyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date>='{date}'");
-            }
-
-            //行驶里程 >
-            if (query.minmileage.HasValue)
-            {
-                sqlWhere.Append($" and a.mileage>='{query.minmileage}'");
-            }
-
-            //行驶里程 <
-            if (query.maxmileage.HasValue)
-            {
-                sqlWhere.Append($" and a.mileage<='{query.maxmileage}'");
-            }
-
-            //颜色
-            if (query.colorid.HasValue)
-            {
-                sqlWhere.Append($" and a.colorid={query.colorid}");
-            }
-
-            //排量
-            if (!string.IsNullOrWhiteSpace(query.liter))
-            {
-                sqlWhere.Append($" and c3.liter='{query.liter.Trim()}'");
-            }
-
-            //变速箱类型
-            if (!string.IsNullOrWhiteSpace(query.gear))
-            {
-                sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
-            }
-
-            //关键字搜索
-            if (!string.IsNullOrWhiteSpace(query.keyword))
-            {
-                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
-            }
-
+            sqlWhere.Append(GetWhere(query));
             #endregion
 
             strwhere = sqlWhere.ToString().Replace("a.status=1 and a.istop>0", "").Trim();   //只需要手动设置的条件
@@ -200,110 +108,12 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid";
-            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.seller_type<>3 and (a.status=1 or a.status=2)"); //在售和已售车辆
-
-            //省份
-            if (query.provid != null)
-            {
-                sqlWhere.Append($" and a.provid={query.provid}");
-            }
-
-            //城市
-            if (query.cityid != null)
-            {
-                sqlWhere.Append($" and a.cityid={query.cityid}");
-            }
-
-            //品牌
-            if (query.brand_id != null && query.brand_id != 0)
-            {
-                sqlWhere.Append($" and a.brand_id={query.brand_id}");
-            }
-
-            //车系
-            if (query.series_id != null && query.series_id != 0)
-            {
-                sqlWhere.Append($" and a.series_id={query.series_id}");
-            }
-
-            //车型
-            if (query.model_id != null && query.model_id != 0)
-            {
-                sqlWhere.Append($" and a.model_id={query.model_id}");
-            }
-
-            //销售价大于..
-            if (query.minprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price>={query.minprice}");
-            }
-
-            //销售价小于..
-            if (query.maxprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price<={query.maxprice}");
-            }
-
-            //上牌时间 <
-            if (query.minyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date<='{date}'");
-            }
-
-            //上牌时间 >
-            if (query.maxyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date>='{date}'");
-            }
-
-            //行驶里程 >
-            if (query.minmileage.HasValue)
-            {
-                sqlWhere.Append($" and a.mileage>='{query.minmileage}'");
-            }
-
-            //行驶里程 <
-            if (query.maxmileage.HasValue)
-            {
-                sqlWhere.Append($" and a.mileage<='{query.maxmileage}'");
-            }
-
-            //颜色
-            if (query.colorid.HasValue)
-            {
-                sqlWhere.Append($" and a.colorid={query.colorid}");
-            }
-
-            //排量
-            if (!string.IsNullOrWhiteSpace(query.liter))
-            {
-                sqlWhere.Append($" and c3.liter='{query.liter.Trim()}'");
-            }
-
-            //变速箱类型
-            if (!string.IsNullOrWhiteSpace(query.gear))
-            {
-                sqlWhere.Append($" and c3.geartype='{query.gear.Trim()}'");
-            }
-
-            //车源类型
-            if (query.type.HasValue)
-            {
-                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
-            }
-
-            //关键字搜索
-            if (!string.IsNullOrWhiteSpace(query.keyword))
-            {
-                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
-            }
-
+            sqlWhere.Append(GetWhere(query));
             #endregion
 
             var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -331,72 +141,7 @@ namespace CCN.Modules.Car.DataAccess
             #region 查询条件
             var sqlWhere = new StringBuilder("a.seller_type<>3 and (a.status=1 or a.status=2)");
 
-            //省份
-            if (query.provid != null)
-            {
-                sqlWhere.Append($" and a.provid={query.provid}");
-            }
-
-            //城市
-            if (query.cityid != null)
-            {
-                sqlWhere.Append($" and a.cityid={query.cityid}");
-            }
-
-            //品牌
-            if (query.brand_id != null && query.brand_id != 0)
-            {
-                sqlWhere.Append($" and a.brand_id={query.brand_id}");
-            }
-
-            //车系
-            if (query.series_id != null && query.series_id != 0)
-            {
-                sqlWhere.Append($" and a.series_id={query.series_id}");
-            }
-
-            //车型
-            if (query.model_id != null && query.model_id != 0)
-            {
-                sqlWhere.Append($" and a.model_id={query.model_id}");
-            }
-
-            //销售价大于..
-            if (query.minprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price>={query.minprice}");
-            }
-
-            //销售价小于..
-            if (query.maxprice.HasValue)
-            {
-                sqlWhere.Append($" and a.price<={query.maxprice}");
-            }
-
-            if (query.minyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.minyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date<='{date}'");
-            }
-
-            if (query.maxyear.HasValue)
-            {
-                var date = DateTime.Now.AddYears(-query.maxyear.Value).ToShortDateString();
-                sqlWhere.Append($" and a.register_date>='{date}'");
-            }
-
-            //车源类型
-            if (query.type.HasValue)
-            {
-                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
-            }
-
-            if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
-            {
-                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
-                //车辆添加时会将【品牌/车系】放到该字段
-                //sqlWhere.Append($" and title like '%{query.keyword}%'");
-            }
+            sqlWhere.Append(GetWhere(query));
 
             #endregion
 
@@ -3198,10 +2943,10 @@ namespace CCN.Modules.Car.DataAccess
         /// 根据id获取供应商的信息
         /// </summary>
         /// <returns></returns>
-        public CarSupplierDdlModel GetSupplierInfoById(string innerid)
+        public CarSupplierModel GetSupplierInfoById(string innerid)
         {
             const string sql = @"select innerid, suppliername, address, introduction, contacts, contactsphone, remark, extend, isenabled, createrid, createdtime, modifierid, modifiedtime from car_supplier where innerid=@innerid;";
-            var list = Helper.Query<CarSupplierDdlModel>(sql,new {innerid}).FirstOrDefault();
+            var list = Helper.Query<CarSupplierModel>(sql,new {innerid}).FirstOrDefault();
             return list;
         }
 
@@ -3227,6 +2972,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.seller_type=3 and (a.status=1 or a.status=2)"); //在售和已售车辆
+            query.type = null;
             sqlWhere.Append(GetWhere(query));
             #endregion
 
@@ -3253,6 +2999,7 @@ namespace CCN.Modules.Car.DataAccess
 
             #region 查询条件
             var sqlWhere = new StringBuilder("a.seller_type=3");
+            query.type = null;
             sqlWhere.Append(GetWhere(query));
             #endregion
 
@@ -3358,13 +3105,13 @@ namespace CCN.Modules.Car.DataAccess
             //车源类型
             if (query.type.HasValue)
             {
-                sqlWhere.Append(query.type == 1 ? " and a.seller_type=1" : " and a.seller_type=2");
+                sqlWhere.Append($" and a.seller_type={query.type}");
             }
 
             //关键字搜索
             if (!string.IsNullOrWhiteSpace(query.keyword))
             {
-                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%' or a.carno='{query.keyword}')");
             }
             return sqlWhere.ToString();
         }

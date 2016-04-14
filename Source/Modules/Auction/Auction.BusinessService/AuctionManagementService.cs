@@ -442,8 +442,9 @@ namespace CCN.Modules.Auction.BusinessService
         /// 微信定金支付
         /// </summary>
         /// <param name="innerid"></param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
-        public JResult WeChatPayForAuction(string innerid)
+        public JResult WeChatPayForAuction(string innerid, string tradeType = "NATIVE")
         {
             return BusinessComponent.WeChatPayForAuction(innerid);
         }

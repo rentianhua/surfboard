@@ -728,7 +728,7 @@ namespace CCN.Modules.Car.BusinessEntity
         public string keyword { get; set; }
 
         /// <summary>
-        /// 车源类型
+        /// 车源类型，1车商车源，2个人车源,3.神秘车源
         /// </summary>
         public int? type { get; set; }
     }

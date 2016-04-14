@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrowdGradeModel.cs" />
     <Compile Include="CrowdModel.cs" />
+    <Compile Include="CrowdPlayerModel.cs" />
     <Compile Include="VoteLogModel.cs" />
     <Compile Include="VotePerModel.cs" />
     <Compile Include="VoteModel.cs" />

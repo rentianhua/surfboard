@@ -595,11 +595,14 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int AddAuthentication(CustAuthenticationModel model)
         {
-            const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
+            //添加认证 自动升级成车商
+            const string sqlU = "update cust_info set authstatus=1,type=1 where innerid=@innerid;";
             const string sqlI = @"INSERT INTO `cust_authentication`
                                 (innerid, custid, realname, idcard, enterprisename, licencecode, licencearea, organizationcode, taxcode, relevantpicture, createdtime)
                                 VALUES
                                 (uuid(), @custid, @realname, @idcard, @enterprisename, @licencecode, @licencearea, @organizationcode, @taxcode, @relevantpicture, @createdtime);";
+            //修改会员的车辆类型成为  1车商车源
+            const string sqlUCar = "update car_info set seller_type=1 where custid=@custid;";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -607,6 +610,7 @@ namespace CCN.Modules.Customer.DataAccess
                 {
                     conn.Execute(sqlU, new { innerid = model.Custid }, tran);
                     conn.Execute(sqlI, model, tran);
+                    conn.Execute(sqlUCar, new {custid = model.Custid}, tran);
                     tran.Commit();
                     return 1;
                 }
@@ -716,8 +720,7 @@ namespace CCN.Modules.Customer.DataAccess
                 }
             }
         }
-
-
+        
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
