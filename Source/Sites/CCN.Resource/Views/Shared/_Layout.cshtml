@@ -1,9 +1,6 @@
 ﻿@{ 
     var innerid = "";
-    if (Request.Cookies["type"].Value.ToString() == "1")
-    {
-        innerid = ViewBag.UserInfo.innerid;
-    }
+    innerid = ViewBag.UserInfo.innerid;
 }
 <!DOCTYPE html>
 <html>
@@ -93,14 +90,9 @@
                                         </ul>
                                     </li>
                                     <!--选择主题结束-->
-                                    @{
-                                        if (Request.Cookies["type"].Value.ToString() == "1")
-                                        {
-                                            <li class="edit">
-                                                <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
-                                            </li>
-                                        }
-                                    }
+                                    <li class="edit">
+                                        <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
+                                    </li>
                                     
                                     <li class="dropdown-footer">
                                         <br />
