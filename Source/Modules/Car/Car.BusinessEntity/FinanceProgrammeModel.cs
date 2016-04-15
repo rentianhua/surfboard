@@ -96,7 +96,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 银行卡图片
         /// </summary>
         public string bankpic { get; set; }
-        
+
+        /// <summary>
+        /// 行驶证图片
+        /// </summary>
+        public string drivinglicensepic { get; set; }
+
+        /// <summary>
+        /// 产权证
+        /// </summary>
+        public string certificatepic { get; set; }
+
     }
 
     /// <summary>
@@ -120,6 +130,11 @@ namespace CCN.Modules.Car.BusinessEntity
     /// </summary>
     public class FinanceProgrammeViewModel : FinanceProgrammeModel
     {
+        /// <summary>
+        /// 创建人姓名
+        /// </summary>
+        public string createdname { get; set; }
+
         /// <summary>
         /// 方案明细
         /// </summary>
