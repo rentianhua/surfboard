@@ -7,34 +7,7 @@
     var menusecond = Model.Where(p => p.level == 2).OrderBy(p => p.sort);
     var menuthird = Model.Where(p => p.level == 3).OrderBy(p => p.sort);
     <ul class="nav sidebar-menu">
-        @*判断是商户登入还是后台管理员登入*@
 
-        @if (Request.Cookies["type"].Value.ToString() == "0")
-        {
-            <!--主页-->
-            <li class="active">
-                <a href="/Home/BusinessIndex">
-                    <i class="menu-icon glyphicon glyphicon-home"></i>
-                    <span class="menu-text"> 主页 </span>
-                </a>
-            </li>
-            <li class="open">
-                <a href="#" class="menu-dropdown">
-                    <i class="menu-icon glyphicon glyphicon-tasks"></i>
-                    <span class="menu-text"> 车辆管理 </span>
-                    <i class="menu-expand"></i>
-                </a>
-                <ul class="submenu">
-                    <li>
-                        <a href="javascript:void(0);" onclick="getBodyHtmlByMenu('mainbody', '/Car/Car/CarList', this);">
-                            <span class="menu-text">车辆列表</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-        }
-        else
-        {
             <!--主页-->
             <li class="active">
                 <a href="/Home/Index">
@@ -42,7 +15,7 @@
                     <span class="menu-text"> 主页 </span>
                 </a>
             </li>
-            foreach (var group in menufirst)
+            @foreach (var group in menufirst)
             {
                 <!--Databoxes-->
                 string dropClass = "";
@@ -101,7 +74,6 @@
 
                 </li>
             }
-        }
 
         <li>
             <a href="#">
