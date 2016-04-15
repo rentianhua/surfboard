@@ -28,9 +28,11 @@
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + (val.createdname == null ? "" : val.createdname) + "</td>";
+            str += "<td>" + (Dateformat(val.createdtime, "yyyy-MM-dd")) + "</td>";
             str += "<td>" + (val.mobile == null ? "" : val.mobile) + "</td>";
             str += "<td>" + (val.applicant == null ? "" : val.applicant) + "</td>";
-            str += "<td>" + val.amount + "</td>";
+            str += "<td>" + (val.amount == null ? "" : val.amount) + "</td>";
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/FinanceProgrammeEdit?innerid=" + val.innerid + "');\" href='javascript:;'>详情</a> " +
                 "</td>";
@@ -85,6 +87,8 @@
         <thead>
             <tr role="row">
                 <th>序号</th>
+                <th>创建人</th>
+                <th>创建时间</th>
                 <th>联系方式</th>
                 <th>申请人</th>
                 <th>申请金额</th>

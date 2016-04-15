@@ -2930,8 +2930,8 @@ namespace CCN.Modules.Car.DataAccess
         public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"finance_programme as a ";
-            const string fields = " a.* ";
+            const string tableName = @"finance_programme as a left join sys_user as b on b.innerid=a.createdid ";
+            const string fields = " a.*,b.username as createdname ";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.applytime desc" : query.Order;
             var sqlWhere = new StringBuilder(" 1=1 ");
             //联系电话
@@ -2958,9 +2958,9 @@ namespace CCN.Modules.Car.DataAccess
         public string AddFinanceProgramme(FinanceProgrammeModel model)
         {
             const string sql = @"INSERT INTO `finance_programme`
-                                (`innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`)
+                                (`innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, `identitypic`, `driverspic`, `bankpic`,`drivinglicensepic`,`certificatepic`)
                                 VALUES
-                                (@innerid, @amount, @coty, @mileage, @loanterm, @interestrate, @customerpro, @applicant, @applytime, @mobile, @modifiedid, now(), @createdid, now(), @identitypic, @driverspic, @bankpic);";
+                                (@innerid, @amount, @coty, @mileage, @loanterm, @interestrate, @customerpro, @applicant, @applytime, @mobile, @modifiedid, now(), @createdid, now(), @identitypic, @driverspic, @bankpic,@drivinglicensepic,@certificatepic);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -3030,7 +3030,7 @@ namespace CCN.Modules.Car.DataAccess
         {
             StringBuilder sql = new StringBuilder(@"select `innerid`, `amount`, `coty`, `mileage`, `loanterm`, `interestrate`, 
                                 `customerpro`, `applicant`, `applytime`, `mobile`, `modifiedid`, `modifiedtime`, `createdid`, `createdtime`, 
-                                `identitypic`, `driverspic`, `bankpic`
+                                `identitypic`, `driverspic`, `bankpic`,`drivinglicensepic`,`certificatepic`
                                  from finance_programme 
                                 where 1=1 ");
             if (!string.IsNullOrWhiteSpace(query.innerid))

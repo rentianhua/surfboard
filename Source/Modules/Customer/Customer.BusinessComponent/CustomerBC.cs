@@ -411,7 +411,8 @@ namespace CCN.Modules.Customer.BusinessComponent
                 Sex = model.Sex,
                 Brithday = model.Brithday,
                 QQ = model.QQ,
-                Signature = model.Signature
+                Signature = model.Signature,
+                RecommendedId=model.RecommendedId
             };
 
             var result = DataAccess.UpdateCustInfo(newModel);

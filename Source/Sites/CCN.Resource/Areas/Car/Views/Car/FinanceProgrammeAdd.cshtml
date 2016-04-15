@@ -246,48 +246,23 @@
         var redecimal = /^[0-9]+([.]{1}[0-9]{1,2})?$/;//两位小数
         var reint = /^[1-9]\d*$/;//整数
 
-        if ($("#amount").val() === "") {
-            alert("请填写金额！");
-            return false;
-        }
-        if (!redecimal.test($("#amount").val())) {
+        if ($("#amount").val() != "" && !redecimal.test($("#amount").val())) {
             alert("金额只能输入数值[最多两位小数]！");
             return false;
         }
-        if ($("#coty").val() === "") {
-            alert("请填写车龄！");
-            return false;
-        }
-        if (!reint.test($("#coty").val())) {
+
+        if ($("#coty").val() != "" && !reint.test($("#coty").val())) {
             alert("车龄只能输入数值！");
             return false;
         }
-        if ($("#mileage").val() === "") {
-            alert("请填写里程！");
-            return false;
-        }
-        if (!redecimal.test($("#mileage").val())) {
+
+        if ($("#mileage").val() != "" && !redecimal.test($("#mileage").val())) {
             alert("里程只能输入数值[最多两位小数]！");
             return false;
         }
-        if ($("#loanterm").val() === "") {
-            alert("请填写贷款期限！");
-            return false;
-        }
-        if (!reint.test($("#loanterm").val())) {
+
+        if ($("#loanterm").val() != "" && !reint.test($("#loanterm").val())) {
             alert("贷款期限只能输入数值！");
-            return false;
-        }
-        if ($("#applicant").val() === "") {
-            alert("请填写申请人！");
-            return false;
-        }
-        if ($("#mobile").val() === "") {
-            alert("请填写联系方式！");
-            return false;
-        }
-        if ($("#applytime").val() === "") {
-            alert("请填写申请时间！");
             return false;
         }
 
@@ -321,9 +296,27 @@
             json.title = $(this).attr("data-val");
             imgdriverspic.push(json);
         });
-
         json.driverspic = JSON.stringify(imgdriverspic);
 
+        //获取行驶证图片信息
+        var jsondrivinglicensepic = [];
+        $(' div .imgdrivinglicensepic').each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            jsondrivinglicensepic.push(json);
+        });
+        json.drivinglicensepic = JSON.stringify(jsondrivinglicensepic);
+
+        //获取产权证图片信息
+        var jsoncertificatepic = [];
+        $(' div .imgcertificatepic').each(function () {
+            var json = {};
+            json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
+            jsoncertificatepic.push(json);
+        });
+        json.certificatepic = JSON.stringify(jsoncertificatepic);
 
         if (financeid == "") {
             json.financeid = financeid;
@@ -396,6 +389,48 @@
             var option = {};
             option.id = strradom;
             option.container = "imgdriverspic";
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件
+            uploader = InitQiniuForAuction(option);
+        });
+        //行驶证
+        var pics = ["行驶证正面", "行驶证反面"];
+        $.each(pics, function (k, v) {
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#imgdrivinglicensepic').append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgdrivinglicensepic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "imgdrivinglicensepic";
+            option.uptoken = "@ViewBag.uptoken";
+            option.autostart = false;
+            option.domain = qiniuurl;
+            //初始化七牛上传控件 
+            uploader = InitQiniuForAuction(option);
+        });
+        //产权证
+        var pics = ["第一页", "第二页","第三页"];
+        $.each(pics, function (k, v) {
+            var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            $('#imgcertificatepic').append(
+                    '<div id="' + strradom + '" data-val="' + v + '" class="imgPreview imgcertificatepic"  data-id="">\
+            			            <img data-type="imgs" src="/Content/images/jia.png"  class="loading" width="550px">\
+            			            <div class="caidan" style="background: rgba(232, 215, 215, 0.6);">\
+            				            <div hash="' + strradom + '" style="width:100%;" class="cz_4" data-id="' + v + '">' + v + '</div>\
+            			            </div>\
+            		            </div>');
+
+            var option = {};
+            option.id = strradom;
+            option.container = "imgcertificatepic";
             option.uptoken = "@ViewBag.uptoken";
             option.autostart = false;
             option.domain = qiniuurl;
@@ -495,7 +530,6 @@
             json.imgsrc = $(this).attr('data-id');
             jsonpic.push(json);
         });
-
         json.describepic = JSON.stringify(jsonpic);
 
         //获取银行卡图片信息
@@ -505,9 +539,8 @@
             json.imgsrc = $(this).attr('data-id');
             jsonbankpic.push(json);
         });
-
         json.bankpic = JSON.stringify(jsonbankpic);
-        console.log(json);
+
         if ($("#value" + type).val() == "") {
             json.financeid = financeid;
             $.post("/api/Car/AddFinanceProgrammeDetail", json, function (result) {
@@ -574,7 +607,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>申请金额</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">申请金额</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="amount" placeholder="申请金额" class="form-control" />
                                         </div>
@@ -582,7 +615,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车龄</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">车龄</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="coty" placeholder="车龄" class="form-control" />
                                         </div>
@@ -592,7 +625,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>里程</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">里程</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="mileage" placeholder="里程" class="form-control" />
                                         </div>
@@ -600,7 +633,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>期限（月）</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">期限（月）</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="loanterm" placeholder="期限（月）" class="form-control" />
                                         </div>
@@ -610,7 +643,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>客户区域</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">客户区域</label>
                                         <div class="controls col-sm-8">
                                             <select id="selectcust" style="width:100%">
                                                 <option value="1">省内</option>
@@ -621,7 +654,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>申请人</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">申请人</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="applicant" placeholder="申请人" class="form-control" />
                                         </div>
@@ -632,7 +665,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>联系方式</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">联系方式</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="mobile" placeholder="联系方式" class="form-control" />
                                         </div>
@@ -650,21 +683,47 @@
                             </div>
 
                             <div class="row form-group">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>身份证</label>
-                                        <div class="controls col-sm-8" id="">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>身份证</label>
+                                        <div class="controls col-sm-11" id="">
                                             <div id="imgidentitypic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>驾驶证</label>
-                                        <div class="controls col-sm-8" id="">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>驾驶证</label>
+                                        <div class="controls col-sm-11" id="">
                                             <div id="imgdriverspic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>行驶证</label>
+                                        <div class="controls col-sm-11" id="">
+                                            <div id="imgdrivinglicensepic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>产权证</label>
+                                        <div class="controls col-sm-11" id="">
+                                            <div id="imgcertificatepic" class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
                                             </div>
 
                                         </div>
@@ -709,7 +768,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">利率</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="interestrate1" placeholder="利率" class="form-control" />
                                         </div>
@@ -717,14 +776,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
-                                        <div class="controls col-sm-8">
-                                            <select id="selectstatus1" style="width:100%">
-                                                <option>请选择</option>
-                                                <option value="3">通过</option>
-                                                <option value="4">驳回</option>
-                                            </select>
-                                        </div>
+                                      
                                     </div>
                                 </div>
                             </div>
@@ -803,7 +855,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">利率</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="interestrate2" placeholder="利率" class="form-control" />
                                         </div>
@@ -811,14 +863,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
-                                        <div class="controls col-sm-8">
-                                            <select id="selectstatus2" style="width:100%">
-                                                <option>请选择</option>
-                                                <option value="3">通过</option>
-                                                <option value="4">驳回</option>
-                                            </select>
-                                        </div>
+                                     
                                     </div>
                                 </div>
                             </div>
@@ -896,7 +941,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>利率</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">利率</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="interestrate3" placeholder="利率" class="form-control" />
                                         </div>
@@ -904,14 +949,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>状态</label>
-                                        <div class="controls col-sm-8">
-                                            <select id="selectstatus3" style="width:100%">
-                                                <option>请选择</option>
-                                                <option value="3">通过</option>
-                                                <option value="4">驳回</option>
-                                            </select>
-                                        </div>
+                                       
                                     </div>
                                 </div>
                             </div>
