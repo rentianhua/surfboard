@@ -433,6 +433,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? auditstatus { get; set; }
 
+        /// <summary>
+        /// 未处理的举报条数
+        /// </summary>
+        public int toNum { get; set; }
     }
 
     /// <summary>
@@ -603,7 +607,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 全局搜索字段
         /// </summary>
-        public string SearchField { get; set; }
+        public string keyword { get; set; }
 
         /// <summary>
         /// 用户ID
@@ -640,6 +644,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? maxcoty { get; set; }
 
+        /// <summary>
+        /// 查询举报次数
+        /// </summary>
+        public int? tipoffonum { get; set; }
     }
 
     /// <summary>

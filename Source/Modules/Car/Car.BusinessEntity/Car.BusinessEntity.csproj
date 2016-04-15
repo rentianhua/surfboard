@@ -55,6 +55,7 @@
     <Compile Include="CarShareModel.cs" />
     <Compile Include="CarCollectionModel.cs" />
     <Compile Include="CarSupplierModel.cs" />
+    <Compile Include="CarTipOffModel.cs" />
     <Compile Include="FinanceProgrammeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

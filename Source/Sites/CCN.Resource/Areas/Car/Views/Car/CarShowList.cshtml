@@ -81,9 +81,16 @@
             str += "<td>" + val.price + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + "</td>";
             str += "<td data-value='" + seecount + "'>" + seecount + "&nbsp;&nbsp;</td>";
-            str += "<td>" +
-                "<a onclick=\"getBodyHtml('mainbody', '/car/car/carview?carid=" + val.Innerid + "');\" href='javascript:;'>车辆详情</a> " +
-                "</td>";
+
+            var btn = "";
+            btn += "<a onclick=\"getBodyHtml('mainbody', '/car/car/carview?carid=" + val.Innerid + "');\" href='javascript:;'>车辆详情</a> ";
+            if (val.status === 0) {
+                btn += "<a href='javascript:;' onclick=\"RecoveryCar('" + val.Innerid + "',this);\">恢复</a> ";
+            } else {
+                btn += "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> ";
+            }
+            
+            str += "<td>" + btn + "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
         });
@@ -92,15 +99,28 @@
     function DeleteCar(id, obj) {
 
         $(obj).after($("#deleteDiv").removeClass("hide"));
-
         $("#delsubmit").unbind("click").bind("click", function () {
-            var json = { Innerid: id, deletedesc: $("#deldesc").val() };
+            var json = { Innerid: id, dealdesc: $("#deldesc").val() };
             $.post("/api/Car/DeleteCar", json, function (delres) {
                 if (delres.errcode === 0) {
-                    //alert("删除成功");
-                    getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+                    getBodyHtml('mainbody', '/car/car/carshowlist');
                 } else {
-                    alert("删除失败");
+                    alert("操作失败");
+                }
+            });
+        });
+    }
+
+    function RecoveryCar(id, obj) {
+
+        $(obj).after($("#recoveryDiv").removeClass("hide"));
+        $("#recsubmit").unbind("click").bind("click", function () {
+            var json = { Innerid: id, dealdesc: $("#recdesc").val() };
+            $.post("/api/Car/RecoveryCar", json, function (delres) {
+                if (delres.errcode === 0) {
+                    getBodyHtml('mainbody', '/car/car/carshowlist');
+                } else {
+                    alert("操作失败");
                 }
             });
         });
@@ -171,10 +191,17 @@
         </tbody>
     </table>
 </div>
-<div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
+<div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px; padding: 5px">
 
-    描述:
-    <input type="text" id="deldesc" maxlength="200" />
-    <input type="button" value="确定" id="delsubmit" />
+    删除描述:
+    <input type="text" id="deldesc" maxlength="200"/>
+    <input type="button" value="确定" id="delsubmit"/>
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')"/>
+</div>
+<div id="recoveryDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
+
+    恢复描述:
+    <input type="text" id="recdesc" maxlength="200" />
+    <input type="button" value="确定" id="recsubmit" />
     <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>

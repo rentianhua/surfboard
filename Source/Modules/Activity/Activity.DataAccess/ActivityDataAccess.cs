@@ -659,7 +659,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public IEnumerable<CrowdPlayerSecretModel> GetPlayerListByActivityId(string activityid)
         {
-            const string sql = @"SELECT innerid, wechatnick, wechatheadportrait,mobile,(select sum(totalfee) from activity_crow_payrecord where activityid=@activityid and openid=a.openid and ispay=1) as totalfee FROM activity_crow_player as a where activityid=@activityid and isenabled=1;";
+            const string sql = @"SELECT innerid, openid, wechatnick, wechatheadportrait, mobile,(select sum(totalfee) from activity_crow_payrecord where activityid=@activityid and openid=a.openid and ispay=1) as totalfee FROM activity_crow_player as a where activityid=@activityid and isenabled=1;";
             var list = Helper.Query<CrowdPlayerSecretModel>(sql, new { activityid });
             return list;
         }

@@ -457,6 +457,20 @@ namespace CCN.Modules.Activity.BusinessComponent
             return JResult._jResult(list);
         }
 
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddPlayerPayEx(CrowdPayRecordModel model)
+        {
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Player.Innerid = Guid.NewGuid().ToString();
+            model.Player.Createdtime = DateTime.Now;            
+            var list = DataAccess.AddPlayerPayEx(model);
+            return JResult._jResult(list);
+        }
 
         #endregion
 
@@ -469,6 +483,25 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult CrowdUnifiedOrder(CrowdUnifiedOrderModel model)
         {
+            /*
+            if (string.IsNullOrWhiteSpace(model?.code) 
+                || string.IsNullOrWhiteSpace(model.total_fee))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            var appId = ConfigHelper.GetAppSettings("APPID");
+            var appSecret = ConfigHelper.GetAppSettings("AppSecret");
+            //Stopwatch stopwatch = new Stopwatch();
+            var token = OAuthApi.GetAccessToken(appId, appSecret, model.code);
+            var userInfo = OAuthApi.GetUserInfo(token.access_token, token.openid);
+
+            model.openid = token.openid;
+            model.wechatnick = userInfo.nickname;
+            model.wechatheadportrait = userInfo.headimgurl;
+            */
+
+
             if (string.IsNullOrWhiteSpace(model?.openid) || string.IsNullOrWhiteSpace(model.total_fee))
             {
                 return JResult._jResult(401, "参数不完整");

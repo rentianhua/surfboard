@@ -444,6 +444,40 @@ namespace CCN.Modules.Car.BusinessService
         }
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddTipOff(CarTipOffModel model)
+        {
+            return BusinessComponent.AddTipOff(model);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query)
+        {
+            return BusinessComponent.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult HandleTipOff(CarTipHandleModel model)
+        {
+            return BusinessComponent.HandleTipOff(model);
+        }
+
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>

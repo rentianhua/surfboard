@@ -41,7 +41,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.refreshtime desc" : query.Order;  //排序以后调整为 支付时间
             var sqlWhere = new StringBuilder("a.seller_type<>3 and a.status=1 and a.istop>0");
 
@@ -81,7 +81,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.istop desc,a.refreshtime desc" : query.Order;
 
             #region 查询条件
@@ -108,7 +108,8 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid";
-            const string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname";
+            const string fields = "a.innerid,a.carno,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum";
+            
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
@@ -134,7 +135,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            string fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname," +
+            var fields = "a.innerid,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum," +
                                   $" (select count(1) from cust_relations where userid='{query.custid}' and friendsid=a.custid) as isfriend";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
@@ -188,7 +189,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carseries as c2 on a.series_id=c2.innerid 
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid ";
-            const string fields = "a.innerid,a.carno,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.istop,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,b.status as auditstatus";
+            const string fields = "a.innerid,a.carno,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,a.istop,b.status as auditstatus,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             #region 查询条件
@@ -202,10 +203,101 @@ namespace CCN.Modules.Car.DataAccess
             {
                 sqlWhere.Append($" and a.custid='{query.custid}'");
             }
-
-            if (!string.IsNullOrWhiteSpace(query.title))
+            
+            //省份
+            if (query.provid != null)
             {
-                sqlWhere.Append($" and a.title like '%{query.title}%'");
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            //收购价大于..
+            if (query.minbuyprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice>={query.minbuyprice}");
+            }
+
+            //收购价小于..
+            if (query.maxbuyprice.HasValue)
+            {
+                sqlWhere.Append($" and a.buyprice<={query.maxbuyprice}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
+            {
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
+            }
+
+            //用户ID
+            if (!string.IsNullOrWhiteSpace(query.userid))
+            {
+                sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.userid}')");
+            }
+
+            //有举报的
+            if (query.tipoffonum != null)
+            {
+                sqlWhere.Append(" and (select count(1) from car_tipoff where carid=a.innerid and status=1)>0");
+            }
+            
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarInfoListViewModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_info as a 
+                                    left join auction_carinfo as b on b.carid=a.innerid
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid ";
+            const string fields = "a.innerid,a.carno,a.custid,a.pic_url,a.price,a.buyprice,a.dealprice,a.buytime,a.status,a.mileage,a.register_date,a.seller_type as type,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,ct.cityname,a.istop,b.status as auditstatus,(select count(1) from car_tipoff where carid=a.innerid and status=1) as toNum";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("1=1 and a.seller_type<>3");   //seller_type=3 为神秘车源
+            
+            if (query.status != null)
+            {
+                sqlWhere.Append($" and a.status={query.status}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.custid))
+            {
+                sqlWhere.Append($" and a.custid='{query.custid}'");
             }
 
             //省份
@@ -250,16 +342,21 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and a.buyprice<={query.maxbuyprice}");
             }
 
-            if (!string.IsNullOrWhiteSpace(query.SearchField) && query.model_id == null)
+            if (!string.IsNullOrWhiteSpace(query.keyword) && query.model_id == null)
             {
-                sqlWhere.Append($" and (c1.brandname like '%{query.SearchField}%' or c2.seriesname like '%{query.SearchField}%')");
-                //车辆添加时会将【品牌/车系】放到该字段
-                //sqlWhere.Append($" and title like '%{query.SearchField}%'");
+                sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%')");
             }
+
             //用户ID
             if (!string.IsNullOrWhiteSpace(query.userid))
             {
                 sqlWhere.Append($" and cityid in (select cityid from sys_user_city where userid='{query.userid}')");
+            }
+
+            //有举报的
+            if (query.tipoffonum != null)
+            {
+                sqlWhere.Append(" and (select count(1) from car_tipoff where carid=a.innerid and status=1)>0");
             }
 
             #endregion
@@ -1787,6 +1884,99 @@ namespace CCN.Modules.Car.DataAccess
             return list;
         }
 
+        #endregion
+
+        #region 车辆举报
+        
+        /// <summary>
+        /// 添加收藏
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddTipOff(CarTipOffModel model)
+        {
+            const string sql = @"INSERT INTO car_tipoff
+                        (innerid, carid, tipoffname, tipoffphone, content, status, handlecontent, ip, remark, createdtime,handledtime)
+                        VALUES
+                        (@innerid, @carid, @tipoffname, @tipoffphone, @content, @status, @handlecontent, @ip, @remark, @createdtime,@handledtime);";
+
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("举报异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 获取
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query)
+        {
+
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_tipoff as a";
+            const string fields = "innerid, carid, tipoffname, tipoffphone, content, status, handlecontent, ip, remark, createdtime,handledtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.createdtime desc" : query.Order;
+
+            #region 查询条件
+
+            var sqlWhere = new StringBuilder("1=1");
+
+            if (!string.IsNullOrWhiteSpace(query.Carid))
+            {
+                sqlWhere.Append($" and a.carid='{query.Carid}'");
+            }
+
+            if (query.Status != null)
+            {
+                sqlWhere.Append($" and a.status={query.Status}");
+            }
+
+            if (query.StartCreatedtime != null)
+            {
+                sqlWhere.Append($" and a.createdtime>='{query.StartCreatedtime}'");
+            }
+
+            if (query.EndCreatedtime != null)
+            {
+                sqlWhere.Append($" and a.createdtime<='{query.EndCreatedtime}'");
+            }
+
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarTipOffModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int HandleTipOff(CarTipHandleModel model)
+        {
+            const string sql = "update car_tipoff set status=@status,handledtime=@handledtime,handlecontent=@handlecontent where innerid=@innerid;";
+
+            try
+            {
+                Helper.Execute(sql, new {innerid = model.Innerid, handlecontent = model.Handlecontent, status = model.Status, handledtime = model.Handledtime});
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("举报处理异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+        }
+        
         #endregion
 
         #region 精品车商

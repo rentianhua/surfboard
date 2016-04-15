@@ -107,7 +107,7 @@ namespace CCN.Modules.Customer.BusinessComponent
 
             if (userInfo.Type == null)
             {
-                userInfo.Type = 1; //这版只有车商
+                userInfo.Type = 2; //这版只有车商
             }
 
             userInfo.Status = 1; //初始化状态[1.正常]

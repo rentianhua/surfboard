@@ -311,6 +311,31 @@ namespace CCN.Modules.Car.Interface
 
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddTipOff(CarTipOffModel model);
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query);
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult HandleTipOff(CarTipHandleModel model);
+
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>

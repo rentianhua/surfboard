@@ -64,6 +64,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Senparc.Weixin">
+      <HintPath>..\..\..\..\Lib\Senparc.Weixin.dll</HintPath>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP">
+      <HintPath>..\..\..\..\Lib\Senparc.Weixin.MP.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

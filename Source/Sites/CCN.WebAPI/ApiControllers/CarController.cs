@@ -806,6 +806,45 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddTipOff")]
+        [HttpPost]
+        public JResult AddTipOff([FromBody]CarTipOffModel model)
+        {
+            return _carervice.AddTipOff(model);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetTipOffPageList")]
+        [HttpPost]
+        public BasePageList<CarTipOffModel> GetTipOffPageList([FromBody]CarTipQueryModel query)
+        {
+            return _carervice.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("HandleTipOff")]
+        [HttpPost]
+        public JResult HandleTipOff([FromBody]CarTipHandleModel model)
+        {
+            return _carervice.HandleTipOff(model);
+        }
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>

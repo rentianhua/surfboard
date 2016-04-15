@@ -249,7 +249,7 @@ namespace CCN.Modules.Car.BusinessComponent
                 if (firstOrDefault != null)
                     model.ShareModel = firstOrDefault;
             }
-            query.SearchField = query.SearchField.ToDbValue();
+            query.keyword = query.keyword.ToDbValue();
             return list;
         }
 
@@ -1392,6 +1392,55 @@ namespace CCN.Modules.Car.BusinessComponent
 
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddTipOff(CarTipOffModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || string.IsNullOrWhiteSpace(model.Content))
+            {
+                return JResult._jResult(401, "参数不完整！");
+            }
+
+            model.Status = 1;
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.AddTipOff(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query)
+        {
+            return DataAccess.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult HandleTipOff(CarTipHandleModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid) || string.IsNullOrWhiteSpace(model.Handlecontent))
+            {
+                return JResult._jResult(401, "参数不完整！");
+            }
+            model.Handledtime = DateTime.Now;
+            var result = DataAccess.HandleTipOff(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>
@@ -1683,8 +1732,7 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
-
-
+        
         #region 供应商管理
 
         /// <summary>
