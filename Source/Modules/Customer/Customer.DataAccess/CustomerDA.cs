@@ -596,13 +596,12 @@ namespace CCN.Modules.Customer.DataAccess
         public int AddAuthentication(CustAuthenticationModel model)
         {
             //添加认证 自动升级成车商
-            const string sqlU = "update cust_info set authstatus=1,type=1 where innerid=@innerid;";
+            const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
             const string sqlI = @"INSERT INTO `cust_authentication`
                                 (innerid, custid, realname, idcard, enterprisename, licencecode, licencearea, organizationcode, taxcode, relevantpicture, createdtime)
                                 VALUES
                                 (uuid(), @custid, @realname, @idcard, @enterprisename, @licencecode, @licencearea, @organizationcode, @taxcode, @relevantpicture, @createdtime);";
-            //修改会员的车辆类型成为  1车商车源
-            const string sqlUCar = "update car_info set seller_type=1 where custid=@custid;";
+            
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -610,12 +609,12 @@ namespace CCN.Modules.Customer.DataAccess
                 {
                     conn.Execute(sqlU, new { innerid = model.Custid }, tran);
                     conn.Execute(sqlI, model, tran);
-                    conn.Execute(sqlUCar, new {custid = model.Custid}, tran);
                     tran.Commit();
                     return 1;
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("AddAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }
@@ -646,6 +645,7 @@ namespace CCN.Modules.Customer.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("UpdateAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }
@@ -661,7 +661,8 @@ namespace CCN.Modules.Customer.DataAccess
         {
             const string sql = "update cust_info set authstatus=@authstatus,type=1 where innerid=@innerid;";
             const string sqlau = "update cust_authentication set auditper=@auditper,auditdesc=@auditdesc,audittime=@audittime where custid=@custid;";
-
+            //修改会员的车辆类型成为  1车商车源
+            const string sqlUCar = "update car_info set seller_type=1 where custid=@custid;";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -679,12 +680,13 @@ namespace CCN.Modules.Customer.DataAccess
                         audittime = model.AuditTime,
                         custid = model.Custid
                     }, tran);
-
+                    conn.Execute(sqlUCar, new { custid = model.Custid }, tran);
                     tran.Commit();
                     return 1;
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("AuditAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }

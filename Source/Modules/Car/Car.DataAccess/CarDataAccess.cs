@@ -300,6 +300,11 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and a.custid='{query.custid}'");
             }
 
+            if (!string.IsNullOrWhiteSpace(query.carno))
+            {
+                sqlWhere.Append($" and a.carno='{query.carno}'");
+            }
+
             //省份
             if (query.provid != null)
             {
@@ -695,7 +700,28 @@ namespace CCN.Modules.Car.DataAccess
         {
             try
             {
-                const string sql = "update car_info set status=0,deletedesc=@deletedesc where `innerid`=@innerid;";
+                const string sql = "update car_info set eval_price=status,status=0,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
+                model.deletedesc = string.Concat("\n@", model.deletedesc);
+                Helper.Execute(sql, new { innerid = model.Innerid, model.deletedesc });
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        public int RecoveryCar(CarInfoModel model)
+        {
+            try
+            {
+                const string sql = "update car_info set `status`=eval_price,eval_price=null,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
+                model.deletedesc = string.Concat("\n@", model.deletedesc);
                 Helper.Execute(sql, new { innerid = model.Innerid, model.deletedesc });
             }
             catch (Exception ex)
@@ -1887,7 +1913,26 @@ namespace CCN.Modules.Car.DataAccess
         #endregion
 
         #region 车辆举报
-        
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public IEnumerable<CarTipOffModel> GetTipOffListByCarId(string carid)
+        {
+            const string sql = "select innerid, carid, tipoffname, tipoffphone, content, status, handlecontent, ip, remark, createdtime, handledtime from car_tipoff where carid=@carid order by createdtime desc;";
+            try
+            {
+                return Helper.Query<CarTipOffModel>(sql, new { carid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取举报异常：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
         /// <summary>
         /// 添加收藏
         /// </summary>

@@ -4,18 +4,7 @@
 }
 
 <link href="~/Content/cover.css" rel="stylesheet" />
-<script>
 
-    function showloading() {
-        $('.theme-popover-mask').show();
-        $('.theme-popover').show();
-    }
-    function hideloading() {
-        $('.theme-popover-mask').hide();
-        $('.theme-popover').hide();
-    }
-
-</script>
 <script type="text/javascript">
 
     var id = "@ViewBag.carid";
@@ -238,20 +227,72 @@
                     }
                 });
             });
+
+            if (obj.deletedesc != null && obj.deletedesc !== "") {
+                $(".deleteddesc").removeClass("deleteddesc");
+                $("#deleteddesc").val(obj.deletedesc);
+            }
+
+            GetTipOff(id);
         });
     }
 
+    function GetTipOff(carid) {
+
+        getJson("/api/Car/GetTipOffListByCarId?carid=" + carid, null, function (data) {
+
+            if (data.errcode === 0) {
+                if (data.errmsg.length > 0) {
+                    $(".tipoffinfo").removeClass("tipoffinfo");
+                }
+                data = data.errmsg;
+                $.each(data, function (k, v) {
+                    var str = "<textarea rows='5' cols='150' disabled>";
+                    if (v.Tipoffname != null) {
+                        str += "举报人姓名：" + v.Tipoffname;
+                    }
+                    if (v.Tipoffphone != null) {
+                        str += "\n举报人电话：" + v.Tipoffphone;
+                    }
+                    str += "\n举报内容：" + v.Content;
+                    str += "\n处理状态：" + ChangeStatusName(v.Status);
+                    if (v.Status !== 1) {
+                        str += "\n处理说明：" + v.Handlecontent;
+                    }
+                    str += "</textarea>";
+                    $("#tipoffinfo").append(str);
+                });
+            }
+        });
+    }
+
+    function ChangeStatusName(status) {
+        switch (status) {
+            case 0:
+                return "已删除";
+            case 1:
+                return "未处理";
+            case 2:
+                return "已处理";
+            default:
+
+        }
+        return "";
+    }
+
     function goList() {
-        getBodyHtml('mainbody', "/car/car/carlist");
+        getBodyHtml('mainbody', "/car/car/carshowlist");
     }
 
 </script>
-
-<div class="theme-popover">
-    上传图片中...
-    <img src="~/Content/images/loading.gif" />
-</div>
-<div class="theme-popover-mask"></div>
+<style type="text/css">
+    .deleteddesc {
+        display: none;
+    }
+    .tipoffinfo {
+        display: none;
+    }
+</style>
 
 <div class="widget">
     <div class="widget-header bordered-bottom bordered-palegreen">
@@ -427,7 +468,7 @@
                             <div class="col-sm-10 rd">
                                 <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" disabled />
                                 <label for="radioistain1">是</label>
-                                <input type="radio" name="radioistain" id="radioistain2" value="0" disabled/>
+                                <input type="radio" name="radioistain" id="radioistain2" value="0" disabled />
                                 <label for="radioistain2">否</label>
                             </div>
                         </div>
@@ -444,14 +485,48 @@
                         </div>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
 
-                <div class="row form-group text-center">
+    <div class="deleteddesc widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">删除和恢复信息</span>
+    </div>
+    <div class="deleteddesc widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+
+                <div class="row form-group">
                     <div class="col-lg-12">
-                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                        <div class="form-group">
+                            <div class="col-sm-11">
+                                <textarea id="deleteddesc" rows="5" cols="150" disabled></textarea>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </form>
+        </div>
+    </div>
+    <div class="tipoffinfo widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">举报信息</span>
+    </div>
+    <div class="tipoffinfo widget-body">
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <div class="col-sm-11" id="tipoffinfo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="widget-body">
+        <div class="row form-group text-center">
+            <div class="col-lg-12">
+                <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+            </div>
         </div>
     </div>
 </div>

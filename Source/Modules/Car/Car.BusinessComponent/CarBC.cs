@@ -253,6 +253,18 @@ namespace CCN.Modules.Car.BusinessComponent
             return list;
         }
 
+
+        /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            return DataAccess.GetAllCarPageList(query);
+        }
+
+
         /// <summary>
         /// 获取车辆详情
         /// </summary>
@@ -575,11 +587,18 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult DeleteCar(CarInfoModel model)
         {
             var result = DataAccess.DeleteCar(model);
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = result > 0 ? "操作成功" : "操作失败"
-            };
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RecoveryCar(CarInfoModel model)
+        {
+            var result = DataAccess.RecoveryCar(model);
+            return JResult._jResult(result);
         }
 
         /// <summary>
@@ -1393,6 +1412,17 @@ namespace CCN.Modules.Car.BusinessComponent
         #endregion
 
         #region 车辆举报
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetTipOffListByCarId(string carid)
+        {
+            var list = DataAccess.GetTipOffListByCarId(carid);
+            return JResult._jResult(list);
+        }
 
         /// <summary>
         /// 添加举报
