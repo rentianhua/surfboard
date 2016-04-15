@@ -128,26 +128,34 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         #endregion
+
+        #region 众筹活动
+
+        [HttpPost]
+        [Route("CrowdGenerateQrCode")]
+        public JResult CrowdGenerateQrCode(string activityid)
+        {
+            var appid = ConfigHelper.GetAppSettings("APPID");
+            var activityurl = ConfigHelper.GetAppSettings("activityurl");
+            var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
+            return null;
+        }
+
+        [HttpPost]
+        [Route("CrowdUnifiedOrder")]
+        public JResult CrowdUnifiedOrder([FromBody]CrowdUnifiedOrderModel model)
+        {
+            return _activityservice.CrowdUnifiedOrder(model);
+        }
         
+        #endregion
+
         [HttpPost]
         [Route("TestPay")]
         public JResult TestPay()
         {
-            var ran = new Random();
-            var outTradeNo = $"{"WXPAY"}{DateTime.Now.ToString("yyyyMMddHHmmss")}{ran.Next(999)}";
 
-            var data = new NativePayData
-            {
-                Body = "快拍立信定金",//商品描述
-                Attach = "快拍立信看车费",//附加数据
-                TotalFee = 1,//总金额
-                ProductId = "productid",//商品ID
-                OutTradeNo = outTradeNo,
-                GoodsTag = ""
-            };
-            
-            var jresult = WxPayAPIs.GetNativePayQrCode(data);
-            return jresult;
+            return null;
         }
         
         [AllowAnonymous]

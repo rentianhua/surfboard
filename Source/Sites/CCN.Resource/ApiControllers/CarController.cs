@@ -48,6 +48,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetAllCarPageList")]
+        [HttpPost]
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            return _carervice.GetAllCarPageList(query);
+        }
+
+        /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -231,6 +243,18 @@ namespace CCN.Resource.ApiControllers
         public JResult DeleteCar([FromBody] CarInfoModel model)
         {
             return _carervice.DeleteCar(model);
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        [Route("RecoveryCar")]
+        [HttpPost]
+        public JResult RecoveryCar([FromBody]CarInfoModel model)
+        {
+            return _carervice.RecoveryCar(model);
         }
 
         /// <summary>
@@ -528,6 +552,58 @@ namespace CCN.Resource.ApiControllers
         {
             LoggerFactories.CreateLogger().Write("批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
             return _carervice.BatchSaveCarPicture(model);
+        }
+
+        #endregion
+
+        #region 车辆举报
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        [Route("GetTipOffListByCarId")]
+        [HttpGet]
+        public JResult GetTipOffListByCarId(string carid)
+        {
+            return _carervice.GetTipOffListByCarId(carid);
+        }
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddTipOff")]
+        [HttpPost]
+        public JResult AddTipOff([FromBody]CarTipOffModel model)
+        {
+            return _carervice.AddTipOff(model);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetTipOffPageList")]
+        [HttpPost]
+        public BasePageList<CarTipOffModel> GetTipOffPageList([FromBody]CarTipQueryModel query)
+        {
+            return _carervice.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("HandleTipOff")]
+        [HttpPost]
+        public JResult HandleTipOff([FromBody]CarTipHandleModel model)
+        {
+            return _carervice.HandleTipOff(model);
         }
 
         #endregion

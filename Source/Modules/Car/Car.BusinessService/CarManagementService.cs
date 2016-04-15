@@ -66,6 +66,16 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            return BusinessComponent.GetAllCarPageList(query);
+        }
+
+        /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -157,6 +167,16 @@ namespace CCN.Modules.Car.BusinessService
         public JResult DeleteCar(CarInfoModel model)
         {
             return BusinessComponent.DeleteCar(model);
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RecoveryCar(CarInfoModel model)
+        {
+            return BusinessComponent.RecoveryCar(model);
         }
 
         /// <summary>
@@ -442,6 +462,50 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetCollectionList(query);
         }
+        #endregion
+
+        #region 车辆举报
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetTipOffListByCarId(string carid)
+        {
+            return BusinessComponent.GetTipOffListByCarId(carid);
+        }
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddTipOff(CarTipOffModel model)
+        {
+            return BusinessComponent.AddTipOff(model);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query)
+        {
+            return BusinessComponent.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult HandleTipOff(CarTipHandleModel model)
+        {
+            return BusinessComponent.HandleTipOff(model);
+        }
+
         #endregion
 
         #region 车辆悬赏

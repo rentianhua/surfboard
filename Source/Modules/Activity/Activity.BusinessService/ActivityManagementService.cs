@@ -129,5 +129,135 @@ namespace CCN.Modules.Activity.BusinessService
             return BusinessComponent.AddVoteLog(model, number);
         }
         #endregion
+
+        #region 众筹活动
+
+
+        #region 档次管理
+        /// <summary>
+        /// 获取投票活动的参赛人员列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdGradeModel> GetGradePageList(QueryModel query)
+        {
+            return BusinessComponent.GetGradePageList(query);
+        }
+
+        /// <summary>
+        /// 获取档次列表
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <returns></returns>
+        public JResult GetGradeListByActivityId(string activityid)
+        {
+            return BusinessComponent.GetGradeListByActivityId(activityid);
+        }
+
+        /// <summary>
+        /// 获取档次详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetGradeInfoById(string innerid)
+        {
+            return BusinessComponent.GetGradeInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 添加档次
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddGrade(CrowdGradeModel model)
+        {
+            return BusinessComponent.AddGrade(model);
+        }
+
+        /// <summary>
+        /// 修改档次
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateGrade(CrowdGradeModel model)
+        {
+            return BusinessComponent.UpdateGrade(model);
+        }
+        
+        #endregion
+
+        #region 参与人管理
+        /// <summary>
+        /// 获取投票活动的参赛人员列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query)
+        {
+            return BusinessComponent.GetPlayerPageList(query);
+        }
+
+        /// <summary>
+        /// 获取Player列表
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <returns></returns>
+        public JResult GetPlayerListByActivityId(string activityid)
+        {
+            return BusinessComponent.GetPlayerListByActivityId(activityid);
+        }
+
+        /// <summary>
+        /// 获取Player详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetPlayerInfoById(string innerid)
+        {
+            return BusinessComponent.GetPlayerInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddPlayer(CrowdPlayerModel model)
+        {
+            return BusinessComponent.AddPlayer(model);
+        }
+        /// <summary>
+        /// UpdatePlayer
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdatePlayer(CrowdPlayerModel model)
+        {
+            return BusinessComponent.UpdatePlayer(model);
+        }
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public JResult DoPay(string orderNo)
+        {
+
+            return BusinessComponent.DoPay(orderNo);
+        }
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult CrowdUnifiedOrder(CrowdUnifiedOrderModel model)
+        {
+            return BusinessComponent.CrowdUnifiedOrder(model);
+        }
+
+        #endregion
     }
 }

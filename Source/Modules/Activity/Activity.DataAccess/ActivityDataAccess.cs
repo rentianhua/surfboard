@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace CCN.Modules.Activity.DataAccess
     /// </summary>
     public class ActivityDataAccess : DataAccessBase
     {
+        #region 投票活动
+
         #region 投票活动
 
         /// <summary>
@@ -366,6 +369,468 @@ namespace CCN.Modules.Activity.DataAccess
                 return result;
             }
         }
+
+        #endregion
+
+        #endregion
+
+        #region 众筹活动
+
+        #region 活动管理
+
+        /// <summary>
+        /// 获取活动列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"activity_crow_info as a ";
+            const string fields = "innerid, title, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, createrid, createdtime,(select count(1) from activity_crow_player where activityid=a.innerid) as playernum";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
+
+            var sqlWhere = new StringBuilder("");
+
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CrowdInfoListModel>(model, query.Echo);
+            return list;
+        }
+        
+        /// <summary>
+        /// 获取活动详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CrowdInfoModel GetCrowdInfoById(string innerid)
+        {
+            const string sql =
+                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_info where innerid=@innerid";
+            var model = Helper.Query<CrowdInfoModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCrowdInfo(CrowdInfoModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_info
+                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    //生成编号
+                    var obj = new
+                    {
+                        p_tablename = "activity_crow_info",
+                        p_columnname = "flagcode",
+                        p_prefix = "A",
+                        p_length = 4,
+                        p_hasdate = 0
+                    };
+
+                    var args = new DynamicParameters(obj);
+                    args.Add("p_value", dbType: DbType.String, direction: ParameterDirection.Output);
+                    args.Add("p_errmessage", dbType: DbType.String, direction: ParameterDirection.Output);
+
+                    using (conn.QueryMultiple("sp_automaticnumbering", args, commandType: CommandType.StoredProcedure)) { }
+
+                    model.Flagcode = args.Get<string>("p_value");
+
+                    if (string.IsNullOrWhiteSpace(model.Flagcode))
+                    {
+                        var msg = args.Get<string>("p_errmessage");
+                        LoggerFactories.CreateLogger().Write("活动码生成失败：" + msg, TraceEventType.Error);
+                        return -1;
+                    }
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddCrowdInfo异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCrowdInfo(CrowdInfoModel model)
+        {
+            var sql = new StringBuilder("update activity_crow_info set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                LoggerFactories.CreateLogger().Write("UpdateCrowdInfo异常：", TraceEventType.Information, ex);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="qrcode"></param>
+        /// <returns></returns>
+        public int UpdateCrowdQrCode(string flagcode,string qrcode)
+        {
+            const string sql = @"update activity_crow_info set qrcode=@qrcode where flagcode = @flagcode;";
+            var result = Helper.Execute(sql, new { flagcode, qrcode });
+            return result;
+        }
+
+        /// <summary>
+        /// 获取活动的信息及档次list信息
+        /// </summary>
+        /// <returns></returns>
+        public CrowdTotalInfoModel GetCrowdActivityTotal(string flagcode)
+        {
+            const string sqlSelPid = "select innerid from activity_crow_info where `flagcode`=@flagcode;";
+            using (var conn = Helper.GetConnection())
+            {
+                var info = new CrowdTotalInfoModel();
+                try
+                {
+                    var activityid = conn.Query<string>(sqlSelPid,new { flagcode }).FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(activityid))
+                    {
+                        return null;
+                    }
+                    info.Activityid = activityid;
+                    const string sqlGrade = @"SELECT innerid, totalfee, description, photo FROM activity_crow_grade where activityid=@activityid;";
+                    info.GradeList = conn.Query<CrowdGradeInfo>(sqlGrade,new { activityid }).ToList();
+
+                    return info;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddGrade异常：", TraceEventType.Information, ex);
+                    return null;
+                }
+            }
+        }
+
+        #endregion
+
+        #region 档次管理
+        /// <summary>
+        /// 获取投票活动的参赛人员列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdGradeModel> GetGradePageList(QueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"vote_per as a ";
+            const string fields = "innerid, voteid, fullname, num, picture, mobile, ip, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from vote_log where perid=a.innerid) as votenum";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
+
+            var sqlWhere = new StringBuilder($" a.activity='' ");
+            
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CrowdGradeModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取档次列表
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <returns></returns>
+        public IEnumerable<CrowdGradeModel> GetGradeListByActivityId(string activityid)
+        {
+            const string sql = @"SELECT innerid, activityid, totalfee, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_grade where activityid=@activityid";
+            var list = Helper.Query<CrowdGradeModel>(sql, new { activityid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取档次详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CrowdGradeModel GetGradeInfoById(string innerid)
+        {
+            const string sql =
+                @"SELECT innerid, activityid, totalfee, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_grade where innerid=@innerid";
+            var model = Helper.Query<CrowdGradeModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 添加档次
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddGrade(CrowdGradeModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_grad
+                                (innerid, activityid, totalfee, description, isenabled, photo, remark, createrid, createdtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @description, @isenabled, @photo, @remark, @createrid, @createdtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddGrade异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 修改档次
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateGrade(CrowdGradeModel model)
+        {
+            var sql = new StringBuilder("update activity_crow_grad set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                LoggerFactories.CreateLogger().Write("UpdateGrade异常：", TraceEventType.Information, ex);
+            }
+            return result;
+        }
+
+
+        #endregion
+
+        #region 参与人管理
+        /// <summary>
+        /// 获取投票活动的参赛人员列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"activity_crow_player as a ";
+            const string fields = "innerid, activityid, totalfee,ispay, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
+
+            var sqlWhere = new StringBuilder($" a.activity='{query.Activityid}' ");
+
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CrowdPlayerModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取Player列表
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <returns></returns>
+        public IEnumerable<CrowdPlayerSecretModel> GetPlayerListByActivityId(string activityid)
+        {
+            const string sql = @"SELECT innerid, openid, wechatnick, wechatheadportrait, mobile,(select sum(totalfee) from activity_crow_payrecord where activityid=@activityid and openid=a.openid and ispay=1) as totalfee FROM activity_crow_player as a where activityid=@activityid and isenabled=1;";
+            var list = Helper.Query<CrowdPlayerSecretModel>(sql, new { activityid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取Player详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CrowdPlayerModel GetPlayerInfoById(string innerid)
+        {
+            const string sql =
+                @"SELECT innerid, activityid, totalfee,ispay, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_player where innerid=@innerid";
+            var model = Helper.Query<CrowdPlayerModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 根据openid获取Player详情 info
+        /// </summary>
+        /// <param name="activityid"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public CrowdPlayerModel GetPlayerInfoById(string activityid, string openid)
+        {
+            const string sql =
+                @"SELECT innerid, activityid, openid, mobile, wechatnick, wechatheadportrait, isenabled, remark, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_player where activityid=@activityid and openid=@openid;";
+            var model = Helper.Query<CrowdPlayerModel>(sql, new { activityid, openid }).FirstOrDefault();
+            return model;
+        }
+        
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPlayer(CrowdPlayerModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_player
+                                (innerid, activityid, gradeid, totalfee, openid, mobile, wechatnick, wechatheadportrait, orderno, ispay, isenabled, remark, createrid, createdtime)
+                                VALUES
+                                (@innerid, @activityid, @gradeid, @totalfee, @openid, @mobile, @wechatnick, @wechatheadportrait, @orderno, @ispay, @isenabled, @remark, @createrid, @createdtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddPlayer异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// UpdatePlayer
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdatePlayer(CrowdPlayerModel model)
+        {
+            var sql = new StringBuilder("update activity_crow_player set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where orderno = @orderno");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+                LoggerFactories.CreateLogger().Write("UpdatePlayer：", TraceEventType.Information, ex);
+            }
+            return result;
+        }
+
+        #region 添加订单
+
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPlayerPay(CrowdPayRecordModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("AddPlayerPay异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// 添加Player
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddPlayerPayEx(CrowdPayRecordModel model)
+        {
+            const string sql = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //检查是否已经保存过粉丝信息
+                    const string sqlSel = @"SELECT 1 FROM activity_crow_player where activityid=@activityid and openid=@openid;";
+                    var i = conn.Query<int>(sqlSel, new { model.Activityid, model.Openid }).FirstOrDefault();
+                    if (i != 1)
+                    {
+                        const string sqlPlayer = @"INSERT INTO activity_crow_payrecord
+                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+                        conn.Execute(sqlPlayer, model.Player, tran);
+                    }
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("AddPlayerPay异常：", TraceEventType.Information, ex);
+                    return 0;
+                }
+            }
+        }
+
+
+        #endregion
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public int DoPay(string orderNo)
+        {
+            const string sql = @"update activity_crow_payrecord set ispay=1 where orderno = @orderno;";
+            var result = Helper.Execute(sql, new { orderNo });
+            return result;
+        }
+        #endregion
 
         #endregion
     }

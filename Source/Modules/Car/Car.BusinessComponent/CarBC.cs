@@ -249,9 +249,21 @@ namespace CCN.Modules.Car.BusinessComponent
                 if (firstOrDefault != null)
                     model.ShareModel = firstOrDefault;
             }
-            query.SearchField = query.SearchField.ToDbValue();
+            query.keyword = query.keyword.ToDbValue();
             return list;
         }
+
+
+        /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            return DataAccess.GetAllCarPageList(query);
+        }
+
 
         /// <summary>
         /// 获取车辆详情
@@ -483,10 +495,26 @@ namespace CCN.Modules.Car.BusinessComponent
         /// <returns></returns>
         public JResult AddCar(CarInfoModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.custid) || model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
+            if (model.model_id == null || model.colorid == null || model.price == null || model.register_date == null || model.cityid == null || model.mileage == null)
             {
                 return JResult._jResult(401, "参数不完整");
             }
+
+            if (model.seller_type == 3)
+            {
+                if (string.IsNullOrWhiteSpace(model.supplierid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(model.custid))
+                {
+                    return JResult._jResult(401, "参数不完整");
+                }
+            }
+            
             LoggerFactories.CreateLogger().Write("添加车辆", TraceEventType.Information);
             model.Innerid = Guid.NewGuid().ToString();
             model.status = 1;
@@ -495,7 +523,7 @@ namespace CCN.Modules.Car.BusinessComponent
             var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             model.refreshtime = (long)ts.TotalSeconds;
 
-            model.istop = 0;            ////
+            model.istop = 0;
 
             model.modifiedtime = null;
             model.carno = "CAR" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
@@ -559,11 +587,18 @@ namespace CCN.Modules.Car.BusinessComponent
         public JResult DeleteCar(CarInfoModel model)
         {
             var result = DataAccess.DeleteCar(model);
-            return new JResult
-            {
-                errcode = result > 0 ? 0 : 400,
-                errmsg = result > 0 ? "操作成功" : "操作失败"
-            };
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RecoveryCar(CarInfoModel model)
+        {
+            var result = DataAccess.RecoveryCar(model);
+            return JResult._jResult(result);
         }
 
         /// <summary>
@@ -1376,6 +1411,66 @@ namespace CCN.Modules.Car.BusinessComponent
 
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        public JResult GetTipOffListByCarId(string carid)
+        {
+            var list = DataAccess.GetTipOffListByCarId(carid);
+            return JResult._jResult(list);
+        }
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddTipOff(CarTipOffModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Carid) || string.IsNullOrWhiteSpace(model.Content))
+            {
+                return JResult._jResult(401, "参数不完整！");
+            }
+
+            model.Status = 1;
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            var result = DataAccess.AddTipOff(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query)
+        {
+            return DataAccess.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult HandleTipOff(CarTipHandleModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid) || string.IsNullOrWhiteSpace(model.Handlecontent))
+            {
+                return JResult._jResult(401, "参数不完整！");
+            }
+            model.Handledtime = DateTime.Now;
+            var result = DataAccess.HandleTipOff(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>
@@ -1667,8 +1762,7 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
-
-
+        
         #region 供应商管理
 
         /// <summary>

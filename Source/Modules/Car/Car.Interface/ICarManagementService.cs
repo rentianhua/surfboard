@@ -42,6 +42,13 @@ namespace CCN.Modules.Car.Interface
         BasePageList<CarInfoListViewModel> GetCarPageList(CarQueryModel query);
 
         /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query);
+
+        /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -107,6 +114,13 @@ namespace CCN.Modules.Car.Interface
         /// <param name="model">删除成交model</param>
         /// <returns>1.操作成功</returns>
         JResult DeleteCar(CarInfoModel model);
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        JResult RecoveryCar(CarInfoModel model);
 
         /// <summary>
         /// 车辆成交
@@ -308,6 +322,38 @@ namespace CCN.Modules.Car.Interface
         /// <param name="query"></param>
         /// <returns></returns>
         BasePageList<CarCollectionViewListModel> GetCollectionList(CarCollectionQueryModel query);
+
+        #endregion
+
+        #region 车辆举报
+
+        /// <summary>
+        /// 获取举报信息
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <returns></returns>
+        JResult GetTipOffListByCarId(string carid);
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddTipOff(CarTipOffModel model);
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CarTipOffModel> GetTipOffPageList(CarTipQueryModel query);
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult HandleTipOff(CarTipHandleModel model);
 
         #endregion
 

@@ -433,6 +433,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? auditstatus { get; set; }
 
+        /// <summary>
+        /// 未处理的举报条数
+        /// </summary>
+        public int toNum { get; set; }
     }
 
     /// <summary>
@@ -449,6 +453,11 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 封面图片
         /// </summary>
         public string pic_url { get; set; }
+
+        /// <summary>
+        /// 车辆编号
+        /// </summary>
+        public string carno { get; set; }
 
         /// <summary>
         /// 省份id
@@ -603,7 +612,7 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 全局搜索字段
         /// </summary>
-        public string SearchField { get; set; }
+        public string keyword { get; set; }
 
         /// <summary>
         /// 用户ID
@@ -640,6 +649,10 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public int? maxcoty { get; set; }
 
+        /// <summary>
+        /// 查询举报次数
+        /// </summary>
+        public int? tipoffonum { get; set; }
     }
 
     /// <summary>
@@ -728,7 +741,7 @@ namespace CCN.Modules.Car.BusinessEntity
         public string keyword { get; set; }
 
         /// <summary>
-        /// 车源类型
+        /// 车源类型，1车商车源，2个人车源,3.神秘车源
         /// </summary>
         public int? type { get; set; }
     }
