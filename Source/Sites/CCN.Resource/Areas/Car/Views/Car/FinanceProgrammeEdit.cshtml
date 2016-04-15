@@ -638,7 +638,10 @@
                 "piclist": data
             }),
             success: function (result) {
-
+                if (result.errcode==0)
+                {
+                    alert("下载成功！");
+                }
             }
         });
 
@@ -723,7 +726,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>申请人</label>
+                                        <label for="" class="col-sm-2 control-label no-padding-right">申请人</label>
                                         <div class="controls col-sm-8">
                                             <input type="text" id="applicant" placeholder="申请人" class="form-control" />
                                         </div>
