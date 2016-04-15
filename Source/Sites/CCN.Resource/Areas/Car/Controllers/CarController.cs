@@ -11,6 +11,9 @@ using CCN.Resource.Main.Common;
 using System.Net;
 using CCN.Modules.Car.Interface;
 using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
+using System.IO.Compression;
+using ICSharpCode.SharpZipLib.Checksums;
 
 namespace CCN.Resource.Areas.Car.Controllers
 {
@@ -171,23 +174,30 @@ namespace CCN.Resource.Areas.Car.Controllers
         #region 下载
         public ActionResult DownZip(List<PicModel> piclist)
         {
-            var res = new JsonResult();
-            foreach (var item in piclist)
+            var currenttime = DateTime.Now.ToString("yyyyMMddhhmmss");
+            try
             {
-                if (!string.IsNullOrWhiteSpace(item.imgsrc))
+                foreach (var item in piclist)
                 {
-                    var url = ConfigHelper.GetAppSettings("GETURL");
-                    var savepath = "d:\\kplxpic\\" + DateTime.Now.ToString("yyyyMMddhhmmss") + "\\" + item.imgsrc;
-                    //验证并创建目录
-                    CheckPath(savepath);
+                    if (!string.IsNullOrWhiteSpace(item.imgsrc))
+                    {
+                        var url = ConfigHelper.GetAppSettings("GETURL");
+                        var savepath = "d:\\kplxpic\\" + currenttime + "\\" + item.imgsrc;
+                        //验证并创建目录
+                        CheckPath(savepath);
 
-                    url = url + item.imgsrc;
-                    WebClient web = new WebClient();
-                    web.DownloadFile(url, savepath);
+                        url = url + item.imgsrc;
+                        WebClient web = new WebClient();
+                        web.DownloadFile(url, savepath);
+                    }
                 }
             }
-
-            return res;
+            catch
+            {
+                return Json(new { errcode = 1 }, "text/html; charset=UTF-8");
+            }
+            CreateZip("d:\\kplxpic\\" + currenttime, "d:\\kplxpic\\" + currenttime+".zip");
+            return Json(new { errcode = 0 }, "text/html; charset=UTF-8");
         }
 
         /// <summary>
@@ -203,6 +213,62 @@ namespace CCN.Resource.Areas.Car.Controllers
         {
             public string imgsrc { get; set; }
         }
+
+        /// <summary>
+        /// 压缩文件
+        /// </summary>
+        /// <param name="sourceFilePath"></param>
+        /// <param name="destinationZipFilePath"></param>
+        public static void CreateZip(string sourceFilePath, string destinationZipFilePath)
+        {
+            if (sourceFilePath[sourceFilePath.Length - 1] != Path.DirectorySeparatorChar)
+                sourceFilePath += Path.DirectorySeparatorChar;
+            ZipOutputStream zipStream = new ZipOutputStream(global::System.IO.File.Create(destinationZipFilePath));
+            zipStream.SetLevel(6);  // 压缩级别 0-9
+            CreateZipFiles(sourceFilePath, zipStream);
+            zipStream.Finish();
+            zipStream.Close();
+            sourceFilePath = sourceFilePath.Substring(0, sourceFilePath.LastIndexOf('\\'));
+            Directory.Delete(sourceFilePath,true);
+        }
+        /// <summary>
+        /// 递归压缩文件
+        /// </summary>
+        /// <param name="sourceFilePath">待压缩的文件或文件夹路径</param>
+        /// <param name="zipStream">打包结果的zip文件路径（类似 D:\WorkSpace\a.zip）,全路径包括文件名和.zip扩展名</param>
+        /// <param name="staticFile"></param>
+        private static void CreateZipFiles(string sourceFilePath, ZipOutputStream zipStream)
+        {
+            Crc32 crc = new Crc32();
+            string[] filesArray = Directory.GetFileSystemEntries(sourceFilePath);
+            foreach (string file in filesArray)
+            {
+                if (Directory.Exists(file))                     //如果当前是文件夹，递归
+                {
+                    CreateZipFiles(file, zipStream);
+                }
+                else                                            //如果是文件，开始压缩
+                {
+                    FileStream fileStream = global::System.IO.File.OpenRead(file);
+                    byte[] buffer = new byte[fileStream.Length];
+                    fileStream.Read(buffer, 0, buffer.Length);
+                    string tempFile = file.Substring(sourceFilePath.LastIndexOf("\\") + 1);
+                    ZipEntry entry = new ZipEntry(tempFile);
+                    entry.DateTime = DateTime.Now;
+                    entry.Size = fileStream.Length;
+                    fileStream.Close();
+                    crc.Reset();
+                    crc.Update(buffer);
+                    entry.Crc = crc.Value;
+                    zipStream.PutNextEntry(entry);
+                    zipStream.Write(buffer, 0, buffer.Length);
+                }
+            }
+        }
+
+
+
+
         #endregion
     }
 }
