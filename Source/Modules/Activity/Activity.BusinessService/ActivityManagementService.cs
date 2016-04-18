@@ -132,6 +132,58 @@ namespace CCN.Modules.Activity.BusinessService
 
         #region 众筹活动
 
+        #region 活动管理
+
+        /// <summary>
+        /// 获取活动列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query)
+        {
+            return BusinessComponent.GetCrowdActivityPageList(query);
+        }
+
+        /// <summary>
+        /// 获取活动详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCrowdInfoById(string innerid)
+        {
+            return BusinessComponent.GetCrowdInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCrowdInfo(CrowdInfoModel model)
+        {
+            return BusinessComponent.AddCrowdInfo(model);
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCrowdInfo(CrowdInfoModel model)
+        {
+            return BusinessComponent.UpdateCrowdInfo(model);
+        }
+
+        /// <summary>
+        /// 获取活动的信息及档次list信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetCrowdActivityTotal(string flagcode)
+        {
+            return BusinessComponent.GetCrowdActivityTotal(flagcode);
+        }
+
+        #endregion
 
         #region 档次管理
         /// <summary>
@@ -237,6 +289,17 @@ namespace CCN.Modules.Activity.BusinessService
         }
 
         /// <summary>
+        /// 获取用户已支付总金额
+        /// </summary>
+        /// <param name="flagcode">活动码</param>
+        /// <param name="openid">openid</param>
+        /// <returns></returns>
+        public JResult GetPaidTotal(string flagcode, string openid)
+        {
+            return BusinessComponent.GetPaidTotal(flagcode, openid);
+        }
+
+        /// <summary>
         /// 确认支付
         /// </summary>
         /// <param name="orderNo"></param>
@@ -247,6 +310,16 @@ namespace CCN.Modules.Activity.BusinessService
             return BusinessComponent.DoPay(orderNo);
         }
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult CrowdGenerateQrCode(string flagcode)
+        {
+            return BusinessComponent.CrowdGenerateQrCode(flagcode);
+        }
 
         /// <summary>
         /// 

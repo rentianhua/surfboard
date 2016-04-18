@@ -405,7 +405,7 @@ namespace CCN.Modules.Activity.DataAccess
         public CrowdInfoModel GetCrowdInfoById(string innerid)
         {
             const string sql =
-                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_info where innerid=@innerid";
+                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_info where innerid=@innerid";
             var model = Helper.Query<CrowdInfoModel>(sql, new { innerid }).FirstOrDefault();
             return model;
         }
@@ -418,9 +418,9 @@ namespace CCN.Modules.Activity.DataAccess
         public int AddCrowdInfo(CrowdInfoModel model)
         {
             const string sql = @"INSERT INTO activity_crow_info
-                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime,@uppertotal,@uppereach, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -505,22 +505,20 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public CrowdTotalInfoModel GetCrowdActivityTotal(string flagcode)
         {
-            const string sqlSelPid = "select innerid from activity_crow_info where `flagcode`=@flagcode;";
+            const string sqlSelPid = "select innerid,uppertotal,uppereach from activity_crow_info where `flagcode`=@flagcode;";
             using (var conn = Helper.GetConnection())
             {
-                var info = new CrowdTotalInfoModel();
                 try
                 {
-                    var activityid = conn.Query<string>(sqlSelPid,new { flagcode }).FirstOrDefault();
-                    if (string.IsNullOrWhiteSpace(activityid))
+                    var totalInfo = conn.Query<CrowdTotalInfoModel>(sqlSelPid,new { flagcode }).FirstOrDefault();
+                    if (totalInfo == null)
                     {
                         return null;
                     }
-                    info.Activityid = activityid;
                     const string sqlGrade = @"SELECT innerid, totalfee, description, photo FROM activity_crow_grade where activityid=@activityid;";
-                    info.GradeList = conn.Query<CrowdGradeInfo>(sqlGrade,new { activityid }).ToList();
+                    totalInfo.GradeList = conn.Query<CrowdGradeInfo>(sqlGrade,new { totalInfo.Activityid }).ToList();
 
-                    return info;
+                    return totalInfo;
                 }
                 catch (Exception ex)
                 {
@@ -797,10 +795,10 @@ namespace CCN.Modules.Activity.DataAccess
                     var i = conn.Query<int>(sqlSel, new { model.Activityid, model.Openid }).FirstOrDefault();
                     if (i != 1)
                     {
-                        const string sqlPlayer = @"INSERT INTO activity_crow_payrecord
-                                (innerid, activityid, totalfee, openid, orderno, ispay, remark, createdtime, modifiedtime)
+                        const string sqlPlayer = @"INSERT INTO activity_crow_player
+                                (innerid, activityid, openid, mobile, wechatnick, wechatheadportrait, isenabled, remark, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @activityid, @totalfee, @openid, @orderno, @ispay, @remark, @createdtime, @modifiedtime);";
+                                (@innerid, @activityid, @openid, @mobile, @wechatnick, @wechatheadportrait, @isenabled, @remark, @createrid, @createdtime, @modifierid, @modifiedtime);";
                         conn.Execute(sqlPlayer, model.Player, tran);
                     }
                     conn.Execute(sql, model, tran);
@@ -829,6 +827,19 @@ namespace CCN.Modules.Activity.DataAccess
             const string sql = @"update activity_crow_payrecord set ispay=1 where orderno = @orderno;";
             var result = Helper.Execute(sql, new { orderNo });
             return result;
+        }
+
+        /// <summary>
+        /// 获取用户已支付总金额
+        /// </summary>
+        /// <param name="flagcode">活动码</param>
+        /// <param name="openid">openid</param>
+        /// <returns></returns>
+        public int GetPaidTotal(string flagcode,string openid)
+        {
+            const string sql = @"select sum(a.totalfee) from activity_crow_payrecord as a inner join activity_crow_info as b on a.activityid=b.innerid where b.flagcode=@flagcode and a.openid=@openid and ispay=1;";
+            var total = Helper.Query<int>(sql, new { flagcode, openid }).FirstOrDefault();
+            return total;
         }
         #endregion
 

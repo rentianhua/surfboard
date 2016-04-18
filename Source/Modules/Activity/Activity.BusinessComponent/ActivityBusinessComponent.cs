@@ -14,6 +14,8 @@ using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Senparc.Weixin.MP;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace CCN.Modules.Activity.BusinessComponent
 {
@@ -270,17 +272,6 @@ namespace CCN.Modules.Activity.BusinessComponent
         }
 
         /// <summary>
-        /// 确认支付
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        public JResult DoPay(string orderNo)
-        {
-            var result = DataAccess.DoPay(orderNo);
-            return JResult._jResult(result);
-        }
-
-        /// <summary>
         /// 获取活动的信息及档次list信息
         /// </summary>
         /// <returns></returns>
@@ -436,6 +427,29 @@ namespace CCN.Modules.Activity.BusinessComponent
             return JResult._jResult(list);
         }
 
+        /// <summary>
+        /// 获取用户已支付总金额
+        /// </summary>
+        /// <param name="flagcode">活动码</param>
+        /// <param name="openid">openid</param>
+        /// <returns></returns>
+        public JResult GetPaidTotal(string flagcode, string openid)
+        {
+            var total = DataAccess.GetPaidTotal(flagcode, openid);
+            return JResult._jResult(total);
+        }
+        
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public JResult DoPay(string orderNo)
+        {
+            var result = DataAccess.DoPay(orderNo);
+            return JResult._jResult(result);
+        }
+
         #region 添加订单
 
 
@@ -500,8 +514,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             model.wechatnick = userInfo.nickname;
             model.wechatheadportrait = userInfo.headimgurl;
             */
-
-
+            
             if (string.IsNullOrWhiteSpace(model?.openid) || string.IsNullOrWhiteSpace(model.total_fee))
             {
                 return JResult._jResult(401, "参数不完整");
@@ -526,12 +539,16 @@ namespace CCN.Modules.Activity.BusinessComponent
 
             DataAccess.AddPlayerPayEx(new CrowdPayRecordModel
             {
+                Innerid = Guid.NewGuid().ToString(),
+                Createdtime = DateTime.Now,
                 Activityid = model.activityid,
                 Openid = model.openid,
                 Totalfee = int.Parse(model.total_fee),
                 Orderno = outTradeNo,
                 Player = new CrowdPlayerModel
                 {
+                    Innerid = Guid.NewGuid().ToString(),
+                    Createdtime = DateTime.Now,
                     Activityid = model.activityid,
                     Mobile = model.mobile,
                     Openid = model.openid,
@@ -557,7 +574,8 @@ namespace CCN.Modules.Activity.BusinessComponent
         {
             var appid = ConfigHelper.GetAppSettings("APPID");
             var activityurl = ConfigHelper.GetAppSettings("activityurl") + "?flag=" + flagcode;
-            var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
+            var url = OAuthApi.GetAuthorizeUrl(appid, activityurl, "", OAuthScope.snsapi_base);
+            //var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
             try
             {
                 //生成二维码位图

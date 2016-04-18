@@ -24,6 +24,10 @@ namespace CCN.Resource.Areas.Customer.Controllers
             {
                 ViewBag.userid = UserInfo.innerid;
             }
+            else
+            {
+                ViewBag.userid = "admin";
+            }
             return View();
         }
 
