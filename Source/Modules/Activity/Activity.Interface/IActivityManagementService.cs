@@ -92,6 +92,43 @@ namespace CCN.Modules.Activity.Interface
 
         #region 众筹活动
 
+        #region 活动管理
+
+        /// <summary>
+        /// 获取活动列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query);
+
+        /// <summary>
+        /// 获取活动详情 info
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCrowdInfoById(string innerid);
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCrowdInfo(CrowdInfoModel model);
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCrowdInfo(CrowdInfoModel model);
+        
+        /// <summary>
+        /// 获取活动的信息及档次list信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetCrowdActivityTotal(string flagcode);
+
+        #endregion
 
         #region 档次管理
 
@@ -171,6 +208,14 @@ namespace CCN.Modules.Activity.Interface
         JResult UpdatePlayer(CrowdPlayerModel model);
 
         /// <summary>
+        /// 获取用户已支付总金额
+        /// </summary>
+        /// <param name="flagcode">活动码</param>
+        /// <param name="openid">openid</param>
+        /// <returns></returns>
+        JResult GetPaidTotal(string flagcode, string openid);
+
+        /// <summary>
         /// 确认支付
         /// </summary>
         /// <param name="orderNo"></param>
@@ -178,6 +223,12 @@ namespace CCN.Modules.Activity.Interface
         JResult DoPay(string orderNo);
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        JResult CrowdGenerateQrCode(string flagcode);
 
         /// <summary>
         /// 

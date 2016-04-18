@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using System.Xml.Linq;
 using CCN.Modules.Activity.BusinessEntity;
@@ -12,11 +8,7 @@ using CCN.Modules.Activity.Interface;
 using CCN.Modules.Auction.BusinessEntity;
 using Cedar.Core.IoC;
 using Cedar.Core.Logging;
-using Cedar.Foundation.WeChat.WxPay.Business;
-using Cedar.Foundation.WeChat.WxPay.Business.WxPay.Entity;
 using Cedar.Framework.Common.BaseClasses;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP.Helpers;
 
 namespace CCN.WebAPI.ApiControllers
@@ -131,14 +123,11 @@ namespace CCN.WebAPI.ApiControllers
 
         #region 众筹活动
 
-        [HttpPost]
+        [HttpGet]
         [Route("CrowdGenerateQrCode")]
-        public JResult CrowdGenerateQrCode(string activityid)
+        public JResult CrowdGenerateQrCode(string flagcode)
         {
-            var appid = ConfigHelper.GetAppSettings("APPID");
-            var activityurl = ConfigHelper.GetAppSettings("activityurl");
-            var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
-            return null;
+            return _activityservice.CrowdGenerateQrCode(flagcode);
         }
 
         [HttpPost]

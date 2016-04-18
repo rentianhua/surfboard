@@ -43,6 +43,16 @@ namespace CCN.Modules.Activity.BusinessEntity
         public DateTime? Secrettime { get; set; }
 
         /// <summary>
+        /// 活动金额总的上限(单位分)
+        /// </summary>
+        public int? Uppertotal { get; set; }
+
+        /// <summary>
+        /// 每人的上限(单位分)
+        /// </summary>
+        public int? Uppereach { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         public short? Status { get; set; }
@@ -164,6 +174,16 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 活动id
         /// </summary>
         public string Activityid { get; set; }
+
+        /// <summary>
+        /// 活动金额总的上限(单位分)
+        /// </summary>
+        public int Uppertotal { get; set; }
+
+        /// <summary>
+        /// 每人的上限(单位分)
+        /// </summary>
+        public int Uppereach { get; set; }
 
         /// <summary>
         /// 档次list

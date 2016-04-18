@@ -12,10 +12,6 @@
 
     function QueryList() {
         var json = { Mobile: $("#mobile").val(), Custname: $("#custname").val() };
-        if ("@ViewBag.userid" != null && "@ViewBag.userid" != "")
-        {
-            json.innerid = "@ViewBag.userid";
-        }
         $("#custlist").getPageList(20, "/api/Customer/GetCustPageList", json, LoadData);
     }
 
@@ -40,7 +36,10 @@
             } else {
                 str += "<a href='javascript:;' onclick=\"ThawCust('" + val.Innerid + "');\">解冻</a> ";
             }
-            str += "<a href='javascript:;' onclick=\"DeleteCustomer('" + val.Mobile + "');\">删除</a> ";
+            if ("@ViewBag.userid" === "admin") {
+                str += "<a href='javascript:;' onclick=\"DeleteCustomer('" + val.Mobile + "');\">删除</a> ";
+            }
+            
             str += "<a onclick=\"getBodyHtml('mainbody', '/car/car/carlist?custid=" + val.Innerid + "');\" href='javascript:;'>车辆管理(" + val.CarNum + ")</a> ";
             str += "</td>";
             str += "</tr>";

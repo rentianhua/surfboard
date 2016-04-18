@@ -307,6 +307,7 @@
     <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\multiple-select.png" />
     <Content Include="Content\images\signup.jpg" />
+    <Content Include="Content\images\timg.jpg" />
     <Content Include="Content\multiple-select.css" />
     <Content Include="Content\Pager.css" />
     <Content Include="Content\Site.css" />

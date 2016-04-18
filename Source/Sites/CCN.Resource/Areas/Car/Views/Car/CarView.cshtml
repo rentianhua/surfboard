@@ -260,9 +260,34 @@
                         str += "\n处理说明：" + v.Handlecontent;
                     }
                     str += "</textarea>";
+                    if (v.Status === 1) {
+                        str += " <a href='javascript:;' onclick=\"HandleTO('" + v.Innerid + "',this);\">处理</a>";
+                    }
                     $("#tipoffinfo").append(str);
                 });
             }
+        });
+    }
+
+    function HandleTO(innerid, obj) {
+
+        $(obj).after($("#handleDiv").removeClass("hide"));
+        $("#handlesubmit").unbind("click").bind("click", function () {
+
+            var status = $("#selectstatus").val();
+            if (status === "1") {
+                alert("请选择状态");
+                return false;
+            }
+            var json = { Innerid: innerid, Handlecontent: $("#handledesc").val(), Status: status };
+            postJson("/api/Car/HandleTipOff", json, function (res) {
+                if (res.errcode === 0) {
+                    getBodyHtml('mainbody', '/car/car/carview?carid=' + id);
+                } else {
+                    alert("操作失败");
+                }
+            });
+            return false;
         });
     }
 
@@ -529,4 +554,29 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="handleDiv" class="hide" style="background-color: #ccc; margin-top: 8px; padding: 5px">
+    <table style="border: 0;">
+        <tr>
+            <td>处理状态:</td>
+            <td>
+                <select id="selectstatus">
+                    <option value="1">请选择</option>
+                    <option value="0">已删除</option>
+                    <option value="2">已处理</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 2px">
+                处理说明:
+            </td>
+            <td>
+                <textarea id="handledesc" maxlength="500" cols="120"></textarea>
+            </td>
+        </tr>
+    </table>
+    <input type="button" value="确定" id="handlesubmit" />
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
 </div>

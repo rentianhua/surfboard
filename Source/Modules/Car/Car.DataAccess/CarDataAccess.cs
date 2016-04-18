@@ -720,7 +720,7 @@ namespace CCN.Modules.Car.DataAccess
         {
             try
             {
-                const string sql = "update car_info set `status`=eval_price,eval_price=null,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
+                const string sql = "update car_info set `status`=ifnull(eval_price,1),eval_price=null,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
                 model.deletedesc = string.Concat("\n@", model.deletedesc);
                 Helper.Execute(sql, new { innerid = model.Innerid, model.deletedesc });
             }
