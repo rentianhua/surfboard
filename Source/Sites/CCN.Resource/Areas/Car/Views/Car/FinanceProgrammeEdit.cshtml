@@ -735,9 +735,12 @@
                 "piclist": data
             }),
             success: function (result) {
-                if (result.errcode==0)
-                {
-                    alert("下载成功！");
+                if (result.errcode == 0) {
+                    location.href = result.errmsg;
+                }
+                else {
+                    alert("下载失败！");
+                    
                 }
             }
         });
