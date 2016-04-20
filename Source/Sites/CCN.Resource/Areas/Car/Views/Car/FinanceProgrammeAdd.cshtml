@@ -413,7 +413,7 @@
             option.uptoken = "@ViewBag.uptoken";
             option.autostart = false;
             option.domain = qiniuurl;
-            //初始化七牛上传控件 
+            //初始化七牛上传控件
             uploader = InitQiniuForAuction(option);
         });
         //产权证
@@ -537,6 +537,7 @@
         $(' div .imgbankpic' + type).each(function () {
             var json = {};
             json.imgsrc = $(this).attr('data-id');
+            json.title = $(this).attr("data-val");
             jsonbankpic.push(json);
         });
         json.bankpic = JSON.stringify(jsonbankpic);
@@ -573,6 +574,84 @@
             $("#home11").addClass("active");
             $("#second").removeClass("active");
         }
+    }
+
+    //图片下载
+    function DownPic(type) {
+        var actionUrl = "@Url.Action("DownZip", "Car")";
+        var data = [];
+
+        if ($("#pic" + type).val() != "")
+        {
+            var datacertificates = jQuery.parseJSON($("#pic" + type).val());
+            $.each(datacertificates, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#bankpic" + type).val() != "") {
+            var databank = jQuery.parseJSON($("#bankpic" + type).val());
+            $.each(databank, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#identitypic").val() != "") {
+            var dataidentity = jQuery.parseJSON($("#identitypic").val());
+            $.each(dataidentity, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#driverspic").val() != "") {
+            var datadriverspic = jQuery.parseJSON($("#driverspic").val());
+            $.each(datadriverspic, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+
+        if ($("#drivinglicensepic").val() != "") {
+            var drivinglicensepic = jQuery.parseJSON($("#drivinglicensepic").val());
+            $.each(drivinglicensepic, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        if ($("#certificatepic").val() != "") {
+            var certificatepic = jQuery.parseJSON($("#certificatepic").val());
+            $.each(certificatepic, function (k, v) {
+                var json = {};
+                json.imgsrc = v.imgsrc;
+                data.push(json);
+            });
+        }
+        //var data = $("#pic" + type).val();
+
+        $.ajax({
+            type: "POST",
+            url: actionUrl,
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify({
+                "piclist": data
+            }),
+            success: function (result) {
+                if (result.errcode == 0) {
+                    location.href = result.errmsg;
+                }
+                else {
+                    alert("下载失败！");
+
+                }
+            }
+        });
+
     }
 
 </script>
