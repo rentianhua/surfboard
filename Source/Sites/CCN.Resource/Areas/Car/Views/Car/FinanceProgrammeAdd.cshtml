@@ -417,7 +417,7 @@
             uploader = InitQiniuForAuction(option);
         });
         //产权证
-        var pics = ["第一页", "第二页","第三页"];
+        var pics = ["第一页", "第二页", "第三页"];
         $.each(pics, function (k, v) {
             var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             $('#imgcertificatepic').append(
@@ -506,11 +506,7 @@
     function SaveInfo(type) {
         var redecimal = /^[0-9]+([.]{1}[0-9]{1,2})?$/;//两位小数
 
-        if ($("#interestrate" + type).val() === "") {
-            alert("请填写利率！");
-            return false;
-        }
-        if (!redecimal.test($("#interestrate" + type).val())) {
+        if ($("#interestrate" + type).val() != "" && !redecimal.test($("#interestrate" + type).val())) {
             alert("利率只能输入数值！");
             return false;
         }
@@ -568,8 +564,7 @@
     }
 
     function GetProgram() {
-        if (financeid == "")
-        {
+        if (financeid == "") {
             alert("请先保存基本数据！");
             $("#home11").addClass("active");
             $("#second").removeClass("active");
@@ -581,8 +576,7 @@
         var actionUrl = "@Url.Action("DownZip", "Car")";
         var data = [];
 
-        if ($("#pic" + type).val() != "")
-        {
+        if ($("#pic" + type).val() != "") {
             var datacertificates = jQuery.parseJSON($("#pic" + type).val());
             $.each(datacertificates, function (k, v) {
                 var json = {};
@@ -841,12 +835,14 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                        <p>金融方案：两证一卡;<br />
-贷款期限：12期，18期，24期，30期，36期;<br />
-贷款利率：月费率0.86%（贷款一万元，每月86元利息）;<br />
-放款流程：先抵押后放款;<br />
-牌照：个人蓝牌;车龄：9年以内车辆，车辆+贷款年限≤10年，累计公里数＜15万公里
-                                        <br />贷款额度：70%车价+保险≤8万；60%车价+保险≤10万</p>
+                                        <p>
+                                            金融方案：两证一卡;<br />
+                                            贷款期限：12期，18期，24期，30期，36期;<br />
+                                            贷款利率：月费率0.86%（贷款一万元，每月86元利息）;<br />
+                                            放款流程：先抵押后放款;<br />
+                                            牌照：个人蓝牌;车龄：9年以内车辆，车辆+贷款年限≤10年，累计公里数＜15万公里
+                                            <br />贷款额度：70%车价+保险≤8万；60%车价+保险≤10万
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -862,7 +858,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                      
+
                                     </div>
                                 </div>
                             </div>
@@ -934,11 +930,12 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <p>月费率0.8%，等额本息还款<br />
-GPS加装费用1500元（每单必须加装）<br />
-每单100元抵押登记费<br />
-贷款期限1-3年
-</p>
+                                    <p>
+                                        月费率0.8%，等额本息还款<br />
+                                        GPS加装费用1500元（每单必须加装）<br />
+                                        每单100元抵押登记费<br />
+                                        贷款期限1-3年
+                                    </p>
                                 </div>
                             </div>
                             @*利率 状态*@
@@ -953,7 +950,7 @@ GPS加装费用1500元（每单必须加装）<br />
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                     
+
                                     </div>
                                 </div>
                             </div>
@@ -1024,13 +1021,14 @@ GPS加装费用1500元（每单必须加装）<br />
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <p>贷款首付：首付不得低于车辆价格的50%<br />
-贷款费率：月息0.63%<br />
-贷款期限：最长不超过3年，最短不低于1年<br />
-贷款车型：基本乘用车<br />
-客户条件：18-65周岁<br />
-车辆条件：车龄和贷款年限之和不超过8年<br />
-</p>
+                                    <p>
+                                        贷款首付：首付不得低于车辆价格的50%<br />
+                                        贷款费率：月息0.63%<br />
+                                        贷款期限：最长不超过3年，最短不低于1年<br />
+                                        贷款车型：基本乘用车<br />
+                                        客户条件：18-65周岁<br />
+                                        车辆条件：车龄和贷款年限之和不超过8年<br />
+                                    </p>
                                 </div>
                             </div>
                             @*利率 状态*@
@@ -1045,7 +1043,7 @@ GPS加装费用1500元（每单必须加装）<br />
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group">
-                                       
+
                                     </div>
                                 </div>
                             </div>
