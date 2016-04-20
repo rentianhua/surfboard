@@ -396,7 +396,7 @@
                 // 文件添加进队列后,处理相关的事情
                 'FilesAdded': function (up, files) {
                     // 最多上传1张图
-                    if (up.files.length > 1) {
+                    if (up.files.length > 1 && !option.multiup) {
                         up.splice(3, 999);
                     }
                     var i = 0;
@@ -650,7 +650,7 @@
                     alert(result.errmsg);
                     return false;
                 }
-                $("#down" + imgtype).removeClass("hidden");
+                $("#down" + type).removeClass("hidden");
                 $("#value" + type).val(result.errmsg)
                 alert("新增成功！");
             });
@@ -735,9 +735,12 @@
                 "piclist": data
             }),
             success: function (result) {
-                if (result.errcode==0)
-                {
-                    alert("下载成功！");
+                if (result.errcode == 0) {
+                    location.href = result.errmsg;
+                }
+                else {
+                    alert("下载失败！");
+                    
                 }
             }
         });

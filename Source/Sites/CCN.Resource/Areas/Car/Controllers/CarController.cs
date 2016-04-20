@@ -182,7 +182,7 @@ namespace CCN.Resource.Areas.Car.Controllers
                     if (!string.IsNullOrWhiteSpace(item.imgsrc))
                     {
                         var url = ConfigHelper.GetAppSettings("GETURL");
-                        var savepath = "d:\\kplxpic\\" + currenttime + "\\" + item.imgsrc;
+                        var savepath = Server.MapPath("~/kplxpic/") + currenttime + "\\" + item.imgsrc;
                         //验证并创建目录
                         CheckPath(savepath);
 
@@ -196,8 +196,9 @@ namespace CCN.Resource.Areas.Car.Controllers
             {
                 return Json(new { errcode = 1 }, "text/html; charset=UTF-8");
             }
-            CreateZip("d:\\kplxpic\\" + currenttime, "d:\\kplxpic\\" + currenttime+".zip");
-            return Json(new { errcode = 0 }, "text/html; charset=UTF-8");
+            CreateZip(Server.MapPath("~/kplxpic/") + currenttime, Server.MapPath("~/kplxpic/") + currenttime+".zip");
+
+            return Json(new { errcode = 0, errmsg = "/kplxpic/" + currenttime + ".zip" }, "text/html; charset=UTF-8");
         }
 
         /// <summary>
