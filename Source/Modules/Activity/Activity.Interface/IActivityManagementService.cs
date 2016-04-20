@@ -142,9 +142,9 @@ namespace CCN.Modules.Activity.Interface
         /// <summary>
         /// 获取档次列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        JResult GetGradeListByActivityId(string activityid);
+        JResult GetGradeListByFlagcode(string flagcode);
 
         /// <summary>
         /// 获取档次详情 info
@@ -182,9 +182,9 @@ namespace CCN.Modules.Activity.Interface
         /// <summary>
         /// 获取Player列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        JResult GetPlayerListByActivityId(string activityid);
+        JResult GetPlayerListByFlagcode(string flagcode);
 
         /// <summary>
         /// 获取Player详情 info

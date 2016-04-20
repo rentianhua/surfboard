@@ -199,11 +199,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// <summary>
         /// 获取档次列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetGradeListByActivityId(string activityid)
+        public JResult GetGradeListByFlagcode(string flagcode)
         {
-            return BusinessComponent.GetGradeListByActivityId(activityid);
+            return BusinessComponent.GetGradeListByFlagcode(flagcode);
         }
 
         /// <summary>
@@ -252,11 +252,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// <summary>
         /// 获取Player列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetPlayerListByActivityId(string activityid)
+        public JResult GetPlayerListByFlagcode(string flagcode)
         {
-            return BusinessComponent.GetPlayerListByActivityId(activityid);
+            return BusinessComponent.GetPlayerListByFlagcode(flagcode);
         }
 
         /// <summary>

@@ -1751,14 +1751,14 @@ namespace CCN.Modules.Customer.BusinessComponent
 
         #region 会员升级
 
-
         /// <summary>
         /// 微信定金支付
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <param name="type">1、VIP 2、体验版会员</param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
-        public JResult CustWxPayVip(string custid, string type)
+        public JResult CustWxPayVip(string custid, string type, string tradeType = "NATIVE")
         {
             //var str = "\"qrcode\": \"{0}\",\"modelname\": \"{1}\",\"deposit\": {2},\"orderno\": \"{3}\"";
             string totalFee;//费用
@@ -1784,7 +1784,9 @@ namespace CCN.Modules.Customer.BusinessComponent
             if (perModel == null)
             {
                 orderNo = "VIP" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
-                result = GenerationQrCode(orderNo, body, totalFee, attach);
+
+                result = tradeType.Equals("NATIVE") ? GenerationQrCode(orderNo, body, totalFee, attach) : GenerationQrCode_APP(orderNo, body, totalFee, attach);
+
                 if (result.errcode != 0)
                 {
                     return result;
@@ -1804,7 +1806,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             else
             {
                 orderNo = perModel.OrderNo;
-                result = GenerationQrCode(orderNo, body, totalFee, attach);
+                result = tradeType.Equals("NATIVE") ? GenerationQrCode(orderNo, body, totalFee, attach) : GenerationQrCode_APP(orderNo, body, totalFee, attach);
                 if (result.errcode != 0)
                 {
                     return JResult._jResult(0, JsonConvert.DeserializeObject(perModel.OrderInfo));
@@ -1849,7 +1851,7 @@ namespace CCN.Modules.Customer.BusinessComponent
             {
                 return JResult._jResult(400, "二维码生成失败");
             }
-
+            LoggerFactories.CreateLogger().Write($"VIP NATIVE WxPay Result: {orderresult}", TraceEventType.Information);
             var jobj = JObject.Parse(orderresult);
 
             if (jobj["errcode"].ToString() != "0")
@@ -1866,6 +1868,32 @@ namespace CCN.Modules.Customer.BusinessComponent
                 orderno
             };
             return JResult._jResult(0, orderInfo);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <param name="body"></param>
+        /// <param name="totalFee"></param>
+        /// <param name="attach"></param>
+        /// <returns></returns>
+        public JResult GenerationQrCode_APP(string orderno, string body, string totalFee, string attach)
+        {
+            //获取定金金额
+            var payurl = ConfigHelper.GetAppSettings("payurl") + "apppay";
+            var json = "{\"out_trade_no\":\"" + orderno + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"" + attach + "\"}";
+            var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
+            if (string.IsNullOrWhiteSpace(orderresult))
+            {
+                return JResult._jResult(400, "下单失败");
+            }
+            LoggerFactories.CreateLogger().Write($"VIP APP WxPay Result: {orderresult}", TraceEventType.Information);
+            var jobj = JObject.Parse(orderresult);
+
+            return jobj["errcode"].ToString() != "0" 
+                ? JResult._jResult(400, "下单失败") 
+                : JResult._jResult(0, jobj["errmsg"].ToString());
         }
 
         /// <summary>

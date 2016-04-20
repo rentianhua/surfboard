@@ -446,7 +446,7 @@ namespace CCN.Modules.Auction.BusinessService
         /// <returns></returns>
         public JResult WeChatPayForAuction(string innerid, string tradeType = "NATIVE")
         {
-            return BusinessComponent.WeChatPayForAuction(innerid);
+            return BusinessComponent.WeChatPayForAuction(innerid, tradeType);
         }
 
         #endregion

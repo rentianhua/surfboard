@@ -171,9 +171,9 @@ namespace CCN.Modules.Activity.BusinessEntity
     public class CrowdTotalInfoModel
     {
         /// <summary>
-        /// 活动id
+        /// 活动码
         /// </summary>
-        public string Activityid { get; set; }
+        public string Flagcode { get; set; }
 
         /// <summary>
         /// 活动金额总的上限(单位分)
@@ -197,9 +197,9 @@ namespace CCN.Modules.Activity.BusinessEntity
     public class CrowdUnifiedOrderModel
     {
         /// <summary>
-        /// 活动id
+        /// 活动码
         /// </summary>
-        public string activityid { get; set; }
+        public string flagcode { get; set; }
 
         /// <summary>
         /// 活动id
@@ -235,5 +235,11 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 头像
         /// </summary>
         public string code { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string remark { get; set; }
+
     }
 }

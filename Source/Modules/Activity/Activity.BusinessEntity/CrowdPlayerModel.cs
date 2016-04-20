@@ -18,9 +18,9 @@ namespace CCN.Modules.Activity.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
-        /// 活动id
+        /// 活动码
         /// </summary>
-        public string Activityid { get; set; }
+        public string Flagcode { get; set; }
 
         /// <summary>
         /// 微信OpenID
@@ -116,9 +116,9 @@ namespace CCN.Modules.Activity.BusinessEntity
     public class CrowdPlayerQueryModel: QueryModel
     {
         /// <summary>
-        /// 活动id
+        /// 活动码
         /// </summary>
-        public string Activityid { get; set; }
+        public string Flagcode { get; set; }
 
         /// <summary>
         /// 档次id
@@ -159,9 +159,9 @@ namespace CCN.Modules.Activity.BusinessEntity
         public string Innerid { get; set; }
 
         /// <summary>
-        /// 活动id
+        /// 活动码
         /// </summary>
-        public string Activityid { get; set; }
+        public string Flagcode { get; set; }
 
         /// <summary>
         /// 档次金额

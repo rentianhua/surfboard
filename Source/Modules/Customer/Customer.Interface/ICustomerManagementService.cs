@@ -558,8 +558,9 @@ namespace CCN.Modules.Customer.Interface
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <param name="type"></param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
-        JResult CustWxPayVip(string custid,string type);
+        JResult CustWxPayVip(string custid,string type, string tradeType = "NATIVE");
 
         /// <summary>
         /// 微信会员支付回调

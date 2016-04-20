@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AVOSCloud;
 using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.DataAccess;
 using Cedar.Framework.AuditTrail.Interception;
@@ -289,5 +291,40 @@ namespace CCN.Modules.CustRelations.BusinessComponent
         }
 
         #endregion
+    }
+
+    /// <summary>
+    /// LeanCloud机器人
+    /// </summary>
+    public class LeanCloudModel
+    {
+        private const string ApplicationId = "2jIgkDKXQMmywTU33bL49ahv-gzGzoHsz";
+        private const string AppKey = "3luuqph0m8wvbaHQsxdS0K2F";
+        private const string MasterKey = "mLHuTFdLkqGg0J53mCOT8e2F";
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public LeanCloudModel()
+        {
+
+            AVClient.Initialize(ApplicationId, AppKey);
+        }
+
+        /// <summary>
+        /// 发送给特定的用户
+        /// 发送给public频道的用户
+        /// </summary>
+        /// <returns></returns>
+        public async void SendMsg(string msg)
+        {
+            var push = new AVPush
+            {
+                Alert = msg,
+                Query = new AVQuery<AVInstallation>().WhereEqualTo("channels", "public")
+            };
+            var task = push.SendAsync();
+            await task;
+        }
     }
 }

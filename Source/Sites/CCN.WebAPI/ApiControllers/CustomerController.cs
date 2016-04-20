@@ -1170,12 +1170,13 @@ namespace CCN.WebAPI.ApiControllers
         /// </summary>
         /// <param name="custid">会员id</param>
         /// <param name="type">类型</param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
         [Route("CustWxPayVip")]
         [HttpGet]
-        public JResult CustWxPayVip(string custid, string type)
+        public JResult CustWxPayVip(string custid, string type, string tradeType = "NATIVE")
         {
-            return _custservice.CustWxPayVip(custid, type);
+            return _custservice.CustWxPayVip(custid, type, tradeType);
         }
 
         /// <summary>

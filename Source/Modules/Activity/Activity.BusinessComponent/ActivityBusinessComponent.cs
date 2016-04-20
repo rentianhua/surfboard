@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.DataAccess;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
@@ -297,11 +290,11 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <summary>
         /// 获取档次列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetGradeListByActivityId(string activityid)
+        public JResult GetGradeListByFlagcode(string flagcode)
         {
-            var list = DataAccess.GetGradeListByActivityId(activityid);
+            var list = DataAccess.GetGradeListByFlagcode(flagcode);
             return JResult._jResult(list);
         }
 
@@ -323,7 +316,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddGrade(CrowdGradeModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Activityid) || model.Totalfee == 0)
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) || model.Totalfee == 0)
             {
                 return JResult._jResult(401, "参数不完整");
             }
@@ -341,7 +334,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult UpdateGrade(CrowdGradeModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Activityid) || string.IsNullOrWhiteSpace(model.Innerid) ||
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) || string.IsNullOrWhiteSpace(model.Innerid) ||
                 model.Totalfee == 0)
             {
                 return JResult._jResult(401, "参数不完整");
@@ -371,11 +364,11 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <summary>
         /// 获取Player列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetPlayerListByActivityId(string activityid)
+        public JResult GetPlayerListByFlagcode(string flagcode)
         {
-            var list = DataAccess.GetPlayerListByActivityId(activityid);
+            var list = DataAccess.GetPlayerListByFlagcode(flagcode);
             return JResult._jResult(list);
         }
 
@@ -397,7 +390,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddPlayer(CrowdPlayerModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Activityid) || 
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) || 
                 string.IsNullOrWhiteSpace(model.Mobile))
             {
                 return JResult._jResult(401, "参数不完整");
@@ -416,7 +409,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult UpdatePlayer(CrowdPlayerModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Activityid) ||
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) ||
                 string.IsNullOrWhiteSpace(model.Openid))
             {
                 return JResult._jResult(401, "参数不完整");
@@ -436,7 +429,11 @@ namespace CCN.Modules.Activity.BusinessComponent
         public JResult GetPaidTotal(string flagcode, string openid)
         {
             var total = DataAccess.GetPaidTotal(flagcode, openid);
-            return JResult._jResult(total);
+            var json = new
+            {
+                total
+            };
+            return JResult._jResult(0, json);
         }
         
         /// <summary>
@@ -460,7 +457,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddPlayerPay(CrowdPayRecordModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Activityid) ||
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) ||
                 string.IsNullOrWhiteSpace(model.Openid) || model.Totalfee == 0)
             {
                 return JResult._jResult(401, "参数不完整");
@@ -470,7 +467,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             var list = DataAccess.AddPlayerPay(model);
             return JResult._jResult(list);
         }
-
+        
         /// <summary>
         /// 添加Player
         /// </summary>
@@ -478,12 +475,21 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddPlayerPayEx(CrowdPayRecordModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.Flagcode)
+                || string.IsNullOrWhiteSpace(model.Openid)
+                || string.IsNullOrWhiteSpace(model.Orderno)
+                || model.Totalfee == 0)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
             model.Innerid = Guid.NewGuid().ToString();
             model.Createdtime = DateTime.Now;
             model.Player.Innerid = Guid.NewGuid().ToString();
-            model.Player.Createdtime = DateTime.Now;            
-            var list = DataAccess.AddPlayerPayEx(model);
-            return JResult._jResult(list);
+            model.Player.Createdtime = DateTime.Now;
+            model.Player.Isenabled = 1;
+            var result = DataAccess.AddPlayerPayEx(model);
+            return JResult._jResult(result);
         }
 
         #endregion
@@ -537,23 +543,20 @@ namespace CCN.Modules.Activity.BusinessComponent
                 return JResult._jResult(402, "JsPay下单失败");
             }
 
-            DataAccess.AddPlayerPayEx(new CrowdPayRecordModel
+            AddPlayerPayEx(new CrowdPayRecordModel
             {
-                Innerid = Guid.NewGuid().ToString(),
-                Createdtime = DateTime.Now,
-                Activityid = model.activityid,
+                Flagcode = model.flagcode,
                 Openid = model.openid,
                 Totalfee = int.Parse(model.total_fee),
                 Orderno = outTradeNo,
                 Player = new CrowdPlayerModel
                 {
-                    Innerid = Guid.NewGuid().ToString(),
-                    Createdtime = DateTime.Now,
-                    Activityid = model.activityid,
+                    Flagcode = model.flagcode,
                     Mobile = model.mobile,
                     Openid = model.openid,
                     Wechatnick = model.wechatnick,
-                    Wechatheadportrait = model.wechatheadportrait
+                    Wechatheadportrait = model.wechatheadportrait,
+                    Remark = model.remark
                 }
             });
             
