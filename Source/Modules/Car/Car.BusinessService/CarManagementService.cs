@@ -95,6 +95,16 @@ namespace CCN.Modules.Car.BusinessService
             return BusinessComponent.GetCarViewById(id);
         }
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        public JResult GetCarInfoByNo(string carno)
+        {
+            return BusinessComponent.GetCarInfoByNo(carno);
+        }
+
         #region 感兴趣
 
         /// <summary>

@@ -286,7 +286,7 @@ namespace CCN.WebAPI.ApiControllers
         [Route("WeChatPayForAuction")]
         public JResult WeChatPayForAuction(string innerid, string tradeType = "NATIVE")
         {
-            return _auctionservice.WeChatPayForAuction(innerid);
+            return _auctionservice.WeChatPayForAuction(innerid, tradeType);
         }
 
         ///// <summary>

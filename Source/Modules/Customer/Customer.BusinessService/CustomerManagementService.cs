@@ -792,10 +792,12 @@ namespace CCN.Modules.Customer.BusinessService
         /// 微信会员费支付
         /// </summary>
         /// <param name="custid">会员id</param>
+        /// <param name="type"></param>
+        /// <param name="tradeType"></param>
         /// <returns></returns>
-        public JResult CustWxPayVip(string custid,string type)
+        public JResult CustWxPayVip(string custid,string type, string tradeType = "NATIVE")
         {
-            return BusinessComponent.CustWxPayVip(custid, type);
+            return BusinessComponent.CustWxPayVip(custid, type, tradeType);
         }
 
         /// <summary>

@@ -1,6 +1,10 @@
-﻿using CCN.Modules.Activity.BusinessComponent;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using CCN.Modules.Activity.BusinessComponent;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -11,6 +15,7 @@ namespace CCN.Modules.Activity.BusinessService
     /// </summary>
     public class ActivityManagementService : ServiceBase<ActivityBusinessComponent>, IActivityManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// 
         /// </summary>
@@ -133,13 +138,32 @@ namespace CCN.Modules.Activity.BusinessService
         #region 众筹活动
 
         #region 活动管理
+        /// <summary>
+        /// 开始抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult StartDraw(StartDrawModel model)
+        {
+            return BusinessComponent.StartDraw(model);
+        }
+
+        /// <summary>
+        /// 结束抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult EndDraw(StartDrawModel model)
+        {
+            return BusinessComponent.EndDraw(model);
+        }
 
         /// <summary>
         /// 获取活动列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query)
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(CrowdInfoQueryModel query)
         {
             return BusinessComponent.GetCrowdActivityPageList(query);
         }
@@ -154,6 +178,24 @@ namespace CCN.Modules.Activity.BusinessService
             return BusinessComponent.GetCrowdInfoById(innerid);
         }
 
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult GetCrowdViewById(string flagcode)
+        {
+            return BusinessComponent.GetCrowdViewById(flagcode);
+        }
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult GetCrowdProgressByFlagcode(string flagcode)
+        {
+            return BusinessComponent.GetCrowdProgressByFlagcode(flagcode);
+        }
         /// <summary>
         /// 添加
         /// </summary>
@@ -199,11 +241,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// <summary>
         /// 获取档次列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetGradeListByActivityId(string activityid)
+        public JResult GetGradeListByFlagcode(string flagcode)
         {
-            return BusinessComponent.GetGradeListByActivityId(activityid);
+            return BusinessComponent.GetGradeListByFlagcode(flagcode);
         }
 
         /// <summary>
@@ -244,7 +286,7 @@ namespace CCN.Modules.Activity.BusinessService
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query)
+        public BasePageList<CrowdPlayerListModel> GetPlayerPageList(CrowdPlayerQueryModel query)
         {
             return BusinessComponent.GetPlayerPageList(query);
         }
@@ -252,11 +294,11 @@ namespace CCN.Modules.Activity.BusinessService
         /// <summary>
         /// 获取Player列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        public JResult GetPlayerListByActivityId(string activityid)
+        public JResult GetPlayerListByFlagcode(string flagcode)
         {
-            return BusinessComponent.GetPlayerListByActivityId(activityid);
+            return BusinessComponent.GetPlayerListByFlagcode(flagcode);
         }
 
         /// <summary>
@@ -268,7 +310,25 @@ namespace CCN.Modules.Activity.BusinessService
         {
             return BusinessComponent.GetPlayerInfoById(innerid);
         }
-
+        /// <summary>
+        /// 根据openid获取Player详情 view
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetPlayerViewById(string innerid)
+        {
+            return BusinessComponent.GetPlayerViewById(innerid);
+        }
+        /// <summary>
+        /// 获取Player支付记录列表
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult GetPayRecordListWithPlayer(string flagcode, string openid)
+        {
+            return BusinessComponent.GetPayRecordListWithPlayer(flagcode, openid);
+        }
         /// <summary>
         /// 添加Player
         /// </summary>
@@ -289,14 +349,14 @@ namespace CCN.Modules.Activity.BusinessService
         }
 
         /// <summary>
-        /// 获取用户已支付总金额
+        /// 获取活动信息及用户已支付总金额
         /// </summary>
         /// <param name="flagcode">活动码</param>
         /// <param name="openid">openid</param>
         /// <returns></returns>
-        public JResult GetPaidTotal(string flagcode, string openid)
+        public JResult GetActivityAndPaidTotal(string flagcode, string openid)
         {
-            return BusinessComponent.GetPaidTotal(flagcode, openid);
+            return BusinessComponent.GetActivityAndPaidTotal(flagcode, openid);
         }
 
         /// <summary>
@@ -328,7 +388,24 @@ namespace CCN.Modules.Activity.BusinessService
         /// <returns></returns>
         public JResult CrowdUnifiedOrder(CrowdUnifiedOrderModel model)
         {
-            return BusinessComponent.CrowdUnifiedOrder(model);
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.CrowdUnifiedOrder(model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("微信支付下单异常", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "微信支付下单异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         #endregion

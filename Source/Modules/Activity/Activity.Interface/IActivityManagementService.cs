@@ -95,11 +95,25 @@ namespace CCN.Modules.Activity.Interface
         #region 活动管理
 
         /// <summary>
+        /// 开始抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult StartDraw(StartDrawModel model);
+
+        /// <summary>
+        /// 结束抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult EndDraw(StartDrawModel model);
+
+        /// <summary>
         /// 获取活动列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query);
+        BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(CrowdInfoQueryModel query);
 
         /// <summary>
         /// 获取活动详情 info
@@ -107,6 +121,20 @@ namespace CCN.Modules.Activity.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult GetCrowdInfoById(string innerid);
+
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        JResult GetCrowdViewById(string flagcode);
+
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        JResult GetCrowdProgressByFlagcode(string flagcode);
 
         /// <summary>
         /// 添加
@@ -142,9 +170,9 @@ namespace CCN.Modules.Activity.Interface
         /// <summary>
         /// 获取档次列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        JResult GetGradeListByActivityId(string activityid);
+        JResult GetGradeListByFlagcode(string flagcode);
 
         /// <summary>
         /// 获取档次详情 info
@@ -177,14 +205,14 @@ namespace CCN.Modules.Activity.Interface
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query);
+        BasePageList<CrowdPlayerListModel> GetPlayerPageList(CrowdPlayerQueryModel query);
 
         /// <summary>
         /// 获取Player列表
         /// </summary>
-        /// <param name="activityid"></param>
+        /// <param name="flagcode"></param>
         /// <returns></returns>
-        JResult GetPlayerListByActivityId(string activityid);
+        JResult GetPlayerListByFlagcode(string flagcode);
 
         /// <summary>
         /// 获取Player详情 info
@@ -192,6 +220,21 @@ namespace CCN.Modules.Activity.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult GetPlayerInfoById(string innerid);
+
+        /// <summary>
+        /// 根据openid获取Player详情 view
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetPlayerViewById(string innerid);
+
+        /// <summary>
+        /// 获取Player支付记录列表
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        JResult GetPayRecordListWithPlayer(string flagcode, string openid);
 
         /// <summary>
         /// 添加Player
@@ -208,12 +251,12 @@ namespace CCN.Modules.Activity.Interface
         JResult UpdatePlayer(CrowdPlayerModel model);
 
         /// <summary>
-        /// 获取用户已支付总金额
+        /// 获取活动信息及用户已支付总金额
         /// </summary>
         /// <param name="flagcode">活动码</param>
         /// <param name="openid">openid</param>
         /// <returns></returns>
-        JResult GetPaidTotal(string flagcode, string openid);
+        JResult GetActivityAndPaidTotal(string flagcode, string openid);
 
         /// <summary>
         /// 确认支付

@@ -318,6 +318,17 @@ namespace CCN.Modules.Car.BusinessComponent
             return JResult._jResult(model);
         }
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        public JResult GetCarInfoByNo(string carno)
+        {
+            var model = DataAccess.GetCarInfoByNo(carno);
+            return JResult._jResult(model);
+        }
+
         #region 感兴趣
 
         /// <summary>

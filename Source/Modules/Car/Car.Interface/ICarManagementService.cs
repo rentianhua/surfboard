@@ -62,6 +62,13 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         JResult GetCarViewById(string id);
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        JResult GetCarInfoByNo(string carno);
+
         #region 感兴趣
 
         /// <summary>

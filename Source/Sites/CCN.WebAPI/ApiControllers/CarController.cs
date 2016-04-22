@@ -113,6 +113,17 @@ namespace CCN.WebAPI.ApiControllers
             return _carervice.GetCarViewById(id);
         }
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        [Route("GetCarInfoByNo")]
+        [HttpGet]
+        public JResult GetCarInfoByNo(string carno)
+        {
+            return _carervice.GetCarInfoByNo(carno);
+        }
         #region 感兴趣
 
         /// <summary>

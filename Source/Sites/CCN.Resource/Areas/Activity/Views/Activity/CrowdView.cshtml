@@ -1,0 +1,245 @@
+﻿@{
+
+}
+
+<script type="text/javascript">
+
+    var flagcode = "@ViewBag.flagcode";
+
+    $(function () {
+        Init();
+    });
+
+    function Init() {
+
+        if (flagcode === "") {
+            return;
+        }
+
+        getJson("/api/Activity/GetCrowdViewById?flagcode=" + flagcode, null, function (data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+                return;
+            }
+
+            var obj = data.errmsg;
+            $("#lbltitle").html(obj.Title);
+            $("#lblsubtitle").html(obj.Subtitle);
+            $("#lblenrollstarttime").html(Dateformat(obj.Enrollstarttime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblenrollendtime").html(Dateformat(obj.Enrollendtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lblsecrettime").html(Dateformat(obj.Secrettime, "yyyy-MM-dd HH:mm:ss"));
+            $("#lbluppertotal").html(obj.Uppertotal.toFormat());
+            $("#lbluppereach").html(obj.Uppereach.toFormat());
+            $("#lblplayernum").html(obj.PlayerNum);
+            $("#lblupperedtotal").html(obj.Upperedtotal.toFormat());
+
+            $("#lblremark").html(obj.Remark);
+            //$("#imgprize").attr("src", getQiniuUrl(obj.Prize));
+            $("#imgprize").parent().html(obj.Prize);
+
+            if (obj.Type === 1) {
+                $("#lbltype").html("现场活动");
+            } else {
+                $("#lbltype").html("线上活动");
+            }
+            
+            if (obj.QrCode == null) {
+                $("#divQrcode").html("<a href='javascript:void(0);' onclick='GenerateQrCode();'>点击生成</a>");
+            } else {
+                $("#imgqrcode").attr("src", getQiniuUrl(obj.QrCode));
+                $("#divQrcode").append("<br/><a style='margin-left:12px;' href='javascript:void(0);' onclick='GenerateQrCode();'>重新生成</a>");
+            }
+        });
+    }
+
+    var changeSize = function (obj) {
+
+        if ($(obj).css("max-width") === "240px") {
+            $(obj).addClass("imgbig");
+            $(obj).removeClass("imgsmall");
+        } else {
+            $(obj).addClass("imgsmall");
+            $(obj).removeClass("imgbig");
+        }
+    }
+
+    function GenerateQrCode() {
+        getJson("/api/Activity/CrowdGenerateQrCode?flagcode=" + flagcode, null, function (data) {
+            if (data.errcode !== 0) {
+                alert("生成二维码失败！");
+                return;
+            }
+            getBodyHtml('mainbody', '/Activity/Activity/CrowdView?flagcode=' + flagcode);
+        });
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Activity/Activity/CrowdList");
+    }
+
+</script>
+<style type="text/css">
+    .imgbig {
+        position: relative;
+        z-index: 999;
+        max-width: 1200px;
+        max-height: 1200px;
+        cursor: pointer;
+    }
+
+    .imgsmall {
+        position: inherit;
+        z-index: 0;
+        max-width: 240px;
+        max-height: 240px;
+        cursor: pointer;
+    }
+</style>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">众筹活动信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">主题：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lbltitle"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label no-padding-right">副标题：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lblsubtitle"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">参与开始时间：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lblenrollstarttime"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">参与结束时间：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lblenrollendtime"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">开奖时间：</label>
+                            <div class="controls col-sm-8" id="divfiles">
+                                <label class="control-label no-padding-right" id="lblsecrettime"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">活动类型：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lbltype"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">活动总上限金额（元）：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lbluppertotal"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">每人上限金额（元）：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lbluppereach"></label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">当前已参与人数：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lblplayernum"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">当前支付金额（元）：</label>
+                            <div class="controls col-sm-8">
+                                <label class="control-label no-padding-right" id="lblupperedtotal"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">奖品(车辆编号)：</label>
+                            <div class="controls col-sm-8">
+                                <img onclick="changeSize(this);" id="imgprize" class="imgsmall" alt="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label no-padding-right">二维码：</label>
+                            <div class="controls col-sm-8" id="divQrcode">
+                                <img id="imgqrcode" class="" alt=""/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row form-group">
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">备注：</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="imgsmall"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
