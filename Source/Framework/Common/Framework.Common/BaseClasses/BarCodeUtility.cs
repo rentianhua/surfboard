@@ -165,7 +165,9 @@ namespace Cedar.Framework.Common.BaseClasses
                 Options = new EncodingOptions
                 {
                     Height = height,
-                    Width = width
+                    Width = width,
+                    Margin = 0,
+                    PureBarcode = true
                 },
                 Renderer = (IBarcodeRenderer<Bitmap>) Activator.CreateInstance(typeof (BitmapRenderer))
             };

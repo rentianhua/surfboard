@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.DataAccess;
 using Cedar.Core.ApplicationContexts;
@@ -220,15 +222,65 @@ namespace CCN.Modules.Activity.BusinessComponent
         #region 众筹活动
 
         #region 活动管理
+        /// <summary>
+        /// 开始抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult StartDraw(StartDrawModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Flagcode) || string.IsNullOrWhiteSpace(model.Openids))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            var result = DataAccess.StartDraw(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 结束抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult EndDraw(StartDrawModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Flagcode))
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
+            var result = DataAccess.EndDraw(model);
+            return JResult._jResult(result);
+        }
 
         /// <summary>
         /// 获取活动列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query)
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(CrowdInfoQueryModel query)
         {
-            return DataAccess.GetCrowdActivityPageList(query);
+            var list = DataAccess.GetCrowdActivityPageList(query);
+            if (list.aaData.Any())
+            {
+                var nowtime = DateTime.Now;
+                foreach (var model in list.aaData)
+                {
+                    if (model.Status != 1)
+                        continue;
+                                        
+                    if (nowtime > model.Enrollstarttime && nowtime <model.Enrollendtime)
+                    {
+                        //参与时间
+                        model.Status = 2;
+                    }
+                    else if (nowtime > model.Enrollendtime && nowtime < model.Secrettime)
+                    {
+                        //待开奖时间
+                        model.Status = 3;
+                    }
+                }
+            }
+            return list;
         }
 
         /// <summary>
@@ -243,12 +295,70 @@ namespace CCN.Modules.Activity.BusinessComponent
         }
 
         /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult GetCrowdViewById(string flagcode)
+        {
+            var model = DataAccess.GetCrowdViewById(flagcode);
+            if (model.Status != 1)
+                return JResult._jResult(model);
+            var nowtime = DateTime.Now;
+
+            if (nowtime > model.Enrollstarttime && nowtime < model.Enrollendtime)
+            {
+                //参与时间
+                model.Status = 2;
+            }
+            else if (nowtime > model.Enrollendtime && nowtime < model.Secrettime)
+            {
+                //待开奖时间
+                model.Status = 3;
+            }
+            return JResult._jResult(model);
+        }
+        
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public JResult GetCrowdProgressByFlagcode(string flagcode)
+        {
+            var model = DataAccess.GetCrowdProgressByFlagcode(flagcode);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
         /// 添加
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         public JResult AddCrowdInfo(CrowdInfoModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.Title) ||
+                model.Secrettime == null ||
+                model.Enrollstarttime == null ||
+                model.Enrollendtime == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            if (model.Enrollstarttime.Value > model.Enrollendtime.Value
+                || model.Enrollendtime.Value > model.Secrettime.Value)
+            {
+                return JResult._jResult(402, "时间顺序不正确");
+            }
+            if (model.Enrollendtime.Value.AddMinutes(10) > model.Secrettime.Value)
+            {
+                return JResult._jResult(402, "时间顺序不正确");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Status = 1;
+            model.Createdtime = DateTime.Now;
+            model.Createrid = ApplicationContext.Current.UserId;
             var result = DataAccess.AddCrowdInfo(model);
             return JResult._jResult(result);
         }
@@ -260,6 +370,23 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult UpdateCrowdInfo(CrowdInfoModel model)
         {
+            if (string.IsNullOrWhiteSpace(model?.Title) ||
+                model.Secrettime == null ||
+                model.Enrollstarttime == null ||
+                model.Enrollendtime == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            if (model.Enrollstarttime.Value > model.Enrollendtime.Value
+                || model.Enrollendtime.Value > model.Secrettime.Value)
+            {
+                return JResult._jResult(402, "时间顺序不正确");
+            }
+            if (model.Enrollendtime.Value.AddMinutes(10) > model.Secrettime.Value)
+            {
+                return JResult._jResult(402, "时间顺序不正确");
+            }
             var result = DataAccess.UpdateCrowdInfo(model);
             return JResult._jResult(result);
         }
@@ -270,8 +397,22 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult GetCrowdActivityTotal(string flagcode)
         {
-            var result = DataAccess.GetCrowdActivityTotal(flagcode);
-            return JResult._jResult(result);
+            var model = DataAccess.GetCrowdActivityTotal(flagcode);
+            if (model.Status != 1)
+                return JResult._jResult(model);
+            var nowtime = DateTime.Now;
+
+            if (nowtime > model.Enrollstarttime && nowtime < model.Enrollendtime)
+            {
+                //参与时间
+                model.Status = 2;
+            }
+            else if (nowtime > model.Enrollendtime && nowtime < model.Secrettime)
+            {
+                //待开奖时间
+                model.Status = 3;
+            }
+            return JResult._jResult(model);
         }
 
         #endregion
@@ -356,7 +497,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query)
+        public BasePageList<CrowdPlayerListModel> GetPlayerPageList(CrowdPlayerQueryModel query)
         {
             return DataAccess.GetPlayerPageList(query);
         }
@@ -380,6 +521,17 @@ namespace CCN.Modules.Activity.BusinessComponent
         public JResult GetPlayerInfoById(string innerid)
         {
             var model = DataAccess.GetPlayerInfoById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 根据openid获取Player详情 view
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetPlayerViewById(string innerid)
+        {
+            var model = DataAccess.GetPlayerViewById(innerid);
             return JResult._jResult(model);
         }
 
@@ -421,19 +573,55 @@ namespace CCN.Modules.Activity.BusinessComponent
         }
 
         /// <summary>
-        /// 获取用户已支付总金额
+        /// 获取活动信息及用户已支付总金额
         /// </summary>
         /// <param name="flagcode">活动码</param>
         /// <param name="openid">openid</param>
         /// <returns></returns>
-        public JResult GetPaidTotal(string flagcode, string openid)
+        public JResult GetActivityAndPaidTotal(string flagcode, string openid)
         {
-            var total = DataAccess.GetPaidTotal(flagcode, openid);
-            var json = new
+            var activityModel = DataAccess.GetCrowdInfoByFlagcode(flagcode);
+            if (activityModel == null)
             {
-                total
+                return JResult._jResult(402, "活动不存在");
+            }
+            var model = new CrowdPayInfoModel
+            {
+                CarNo = activityModel.Prize,
+                QrCode = activityModel.QrCode,
+                Title = activityModel.Title,
+                Uppertotal = activityModel.Uppertotal ?? 0,
+                Uppereach = activityModel.Uppereach ?? 0
             };
-            return JResult._jResult(0, json);
+
+            if (activityModel.Status == 1)
+            {
+                var nowtime = DateTime.Now;
+                if (nowtime > activityModel.Enrollstarttime && nowtime < activityModel.Enrollendtime)
+                {
+                    //参与时间
+                    model.Status = 2;
+                }
+                else if (nowtime > activityModel.Enrollendtime && nowtime < activityModel.Secrettime)
+                {
+                    //待开奖时间
+                    model.Status = 3;
+                }
+            }
+            else
+            {
+                model.Status = activityModel.Status ?? 0;
+            }
+
+            //获取粉丝已支付金额
+            var total = DataAccess.GetPaidTotal(flagcode, openid);
+            model.Totalfee = total;
+
+            var progress = DataAccess.GetCrowdProgressByFlagcode(flagcode);
+            model.PlayerNum = progress.PlayerNum;
+            model.Upperedtotal = progress.Upperedtotal;
+
+            return JResult._jResult(0, model);
         }
         
         /// <summary>
@@ -444,11 +632,36 @@ namespace CCN.Modules.Activity.BusinessComponent
         public JResult DoPay(string orderNo)
         {
             var result = DataAccess.DoPay(orderNo);
+
+            if (result <= 0) return JResult._jResult(result);
+
+            var player = DataAccess.GetPlayerByOrderNo(orderNo);
+            var url = ConfigHelper.GetAppSettings("nodejssiteurl2") + "api/bit";
+            var param = new Dictionary<string, string>
+            {
+                {"wechatnick", player.Wechatnick},
+                {"wechatheadportrait", player.Wechatheadportrait},
+                {"fee", player.Totalfee.ToString()},
+                {"remark", player.Remark}
+            };
+            var nodeRes = DynamicWebService.SendPost(url, param, "post");
+            LoggerFactories.CreateLogger().Write($"参与支付通知结果 ： {url},result:{nodeRes}", TraceEventType.Information);
             return JResult._jResult(result);
         }
 
-        #region 添加订单
+        #region 订单
 
+        /// <summary>
+        /// 获取Player支付记录列表
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public JResult GetPayRecordListWithPlayer(string flagcode, string openid)
+        {
+            var list = DataAccess.GetPayRecordListWithPlayer(flagcode, openid);
+            return JResult._jResult(list);
+        }
 
         /// <summary>
         /// 添加Player
@@ -467,7 +680,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             var list = DataAccess.AddPlayerPay(model);
             return JResult._jResult(list);
         }
-        
+
         /// <summary>
         /// 添加Player
         /// </summary>
@@ -489,6 +702,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             model.Player.Createdtime = DateTime.Now;
             model.Player.Isenabled = 1;
             var result = DataAccess.AddPlayerPayEx(model);
+            
             return JResult._jResult(result);
         }
 
@@ -524,6 +738,17 @@ namespace CCN.Modules.Activity.BusinessComponent
             if (string.IsNullOrWhiteSpace(model?.openid) || string.IsNullOrWhiteSpace(model.total_fee))
             {
                 return JResult._jResult(401, "参数不完整");
+            }
+
+            var activityModel = DataAccess.GetCrowdInfoByFlagcode(model.flagcode);
+            var nowTime = DateTime.Now;
+            if (activityModel == null)
+            {
+                return JResult._jResult(403, "活动不存在");
+            }
+            if (nowTime < activityModel.Enrollstarttime || nowTime > activityModel.Enrollendtime)
+            {
+                return JResult._jResult(404, "不在参与时间范围内");
             }
 
             var outTradeNo = "AT" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
@@ -578,7 +803,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             var appid = ConfigHelper.GetAppSettings("APPID");
             var activityurl = ConfigHelper.GetAppSettings("activityurl") + "?flag=" + flagcode;
             var url = OAuthApi.GetAuthorizeUrl(appid, activityurl, "", OAuthScope.snsapi_base);
-            //var url = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri={activityurl}&response_type=code&scope=snsapi_userinfo&state=#wechat_redirect";
+            LoggerFactories.CreateLogger().Write("url："+ url, TraceEventType.Information);
             try
             {
                 //生成二维码位图
@@ -594,13 +819,14 @@ namespace CCN.Modules.Activity.BusinessComponent
                 {
                     DataAccess.UpdateCrowdQrCode(flagcode,qrcode);
                 }
+                return JResult._jResult(0,"生成成功");
             }
             catch (Exception ex)
             {
                 // ignored
                 LoggerFactories.CreateLogger().Write("CustRegister接口异常", TraceEventType.Error, ex);
+                return JResult._jResult(400, "生成失败");
             }
-            return null;
         }
         #endregion
     }

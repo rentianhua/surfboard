@@ -377,17 +377,104 @@ namespace CCN.Modules.Activity.DataAccess
         #region 众筹活动
 
         #region 活动管理
+        
+        /// <summary>
+        /// 开始抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int StartDraw(StartDrawModel model)
+        {
+            const string sqlA = @"update activity_crow_info set `status`=4 where flagcode=@flagcode;";
+            const string sqlB = @"update activity_crow_player set `iswinning`=1 where flagcode=@flagcode and openid=@openid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlA, new { flagcode = model.Flagcode }, tran);
+
+                    foreach (var item in model.Openids.Split(','))
+                    {
+                        conn.Execute(sqlB, new { flagcode = model.Flagcode, openid = item }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("开始抽奖记录异常：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 结束抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int EndDraw(StartDrawModel model)
+        {
+            const string sqlA = @"update activity_crow_info set `status`=5 where flagcode=@flagcode;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sqlA, new { flagcode = model.Flagcode });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("结束抽奖记录异常：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 重置抽奖
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int ResetDraw(string innerid)
+        {
+            const string sqlA = @"update activity_crow_info set `status`=3 where innerid=@innerid;";
+            const string sqlB = @"update activity_crow_player set `iswinning`=0 where flagcode=@flagcode;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var activityModel = GetCrowdInfoById(innerid);
+                    conn.Execute(sqlA, new {innerid}, tran);
+                    conn.Execute(sqlB, new {flagcode = activityModel.Flagcode}, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("结束抽奖记录异常：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
 
         /// <summary>
         /// 获取活动列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(QueryModel query)
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList(CrowdInfoQueryModel query)
         {
             const string spName = "sp_common_pager";
             const string tableName = @"activity_crow_info as a ";
-            const string fields = "innerid, title, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, createrid, createdtime,(select count(1) from activity_crow_player where flagcode=a.flagcode) as playernum";
+            const string fields = @"innerid,flagcode, title, enrollstarttime, enrollendtime, secrettime, status, type, qrcode, createrid, createdtime,
+                (select count(1) from activity_crow_player where flagcode=a.flagcode and isenabled=1) as playernum,
+                (select sum(totalfee) from activity_crow_payrecord where flagcode=a.flagcode and ispay=1) as upperedtotal";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder("");
@@ -405,8 +492,47 @@ namespace CCN.Modules.Activity.DataAccess
         public CrowdInfoModel GetCrowdInfoById(string innerid)
         {
             const string sql =
-                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_info where innerid=@innerid";
+                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, prize, status, type, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime FROM activity_crow_info where innerid=@innerid";
             var model = Helper.Query<CrowdInfoModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+        /// <summary>
+        /// 获取活动详情 flagcode
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public CrowdInfoModel GetCrowdInfoByFlagcode(string flagcode)
+        {
+            const string sql =
+                @"SELECT innerid, title, enrollstarttime, enrollendtime, secrettime, uppertotal, uppereach, status, qrcode, prize FROM activity_crow_info where flagcode=@flagcode";
+            var model = Helper.Query<CrowdInfoModel>(sql, new { flagcode }).FirstOrDefault();
+            return model;
+        }
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public CrowdViewModel GetCrowdViewById(string flagcode)
+        {
+            const string sql =
+                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, uppertotal, uppereach, prize, `status`, `type`, qrcode, remark, extend, 
+                (select count(1) from activity_crow_player where flagcode=a.flagcode and isenabled=1) as playernum, 
+                (select sum(totalfee) from activity_crow_payrecord where flagcode=a.flagcode and ispay=1) as upperedtotal FROM activity_crow_info as a where a.flagcode=@flagcode";
+            var model = Helper.Query<CrowdViewModel>(sql, new { flagcode }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        public CrowdProgressModel GetCrowdProgressByFlagcode(string flagcode)
+        {
+            const string sql =
+                "select count(1) as playernum ,(select sum(totalfee) from activity_crow_payrecord where flagcode = @flagcode and ispay = 1) as upperedtotal from activity_crow_player where flagcode = @flagcode and isenabled = 1;";
+            var model = Helper.Query<CrowdProgressModel>(sql, new { flagcode }).FirstOrDefault();
             return model;
         }
 
@@ -418,9 +544,9 @@ namespace CCN.Modules.Activity.DataAccess
         public int AddCrowdInfo(CrowdInfoModel model)
         {
             const string sql = @"INSERT INTO activity_crow_info
-                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
+                                (innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime,uppertotal,uppereach, prize, status, type,flagcode, qrcode, remark, extend, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
-                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime,@uppertotal,@uppereach, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
+                                (@innerid, @title, @subtitle, @enrollstarttime, @enrollendtime, @secrettime,@uppertotal,@uppereach, @prize, @status, @type,@flagcode, @qrcode, @remark, @extend, @createrid, @createdtime, @modifierid, @modifiedtime);";
 
             using (var conn = Helper.GetConnection())
             {
@@ -515,14 +641,14 @@ namespace CCN.Modules.Activity.DataAccess
                     {
                         return null;
                     }
-                    const string sqlGrade = @"SELECT innerid, totalfee, description, photo FROM activity_crow_grade where flagcode=@flagcode;";
+                    const string sqlGrade = @"SELECT innerid, totalfee, description, photo FROM activity_crow_grade where flagcode=@flagcode and isenabled=1;";
                     totalInfo.GradeList = conn.Query<CrowdGradeInfo>(sqlGrade,new { totalInfo.Flagcode }).ToList();
 
                     return totalInfo;
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("AddGrade异常：", TraceEventType.Error, ex);
+                    LoggerFactories.CreateLogger().Write("GetCrowdActivityTotal异常：", TraceEventType.Error, ex);
                     return null;
                 }
             }
@@ -631,22 +757,33 @@ namespace CCN.Modules.Activity.DataAccess
         #endregion
 
         #region 参与人管理
+        
         /// <summary>
         /// 获取投票活动的参赛人员列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public BasePageList<CrowdPlayerModel> GetPlayerPageList(CrowdPlayerQueryModel query)
+        public BasePageList<CrowdPlayerListModel> GetPlayerPageList(CrowdPlayerQueryModel query)
         {
             const string spName = "sp_common_pager";
             const string tableName = @"activity_crow_player as a ";
-            const string fields = "innerid, flagcode, totalfee,ispay, description, isenabled, photo, remark, createrid, createdtime, modifierid, modifiedtime";
-            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
+            const string fields = @"innerid, wechatnick, wechatheadportrait, mobile, openid, flagcode, isenabled, iswinning, 
+                                    (select      count(1) from activity_crow_payrecord where flagcode=a.flagcode and openid=a.openid and ispay=1) as paynum,
+                                    (select sum(totalfee) from activity_crow_payrecord where flagcode=a.flagcode and openid=a.openid and ispay=1) as totalfee";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc " : query.Order;
 
             var sqlWhere = new StringBuilder($" a.flagcode='{query.Flagcode}' ");
 
+            if (!string.IsNullOrWhiteSpace(query.Wechatnick))
+            {
+                sqlWhere.Append($" and a.wechatnick like '%{query.Wechatnick}%'");
+            }
+            if (query.Iswinning == 1)
+            {
+                sqlWhere.Append(" and a.iswinning=1");
+            }
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
-            var list = Helper.ExecutePaging<CrowdPlayerModel>(model, query.Echo);
+            var list = Helper.ExecutePaging<CrowdPlayerListModel>(model, query.Echo);
             return list;
         }
 
@@ -657,7 +794,9 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public IEnumerable<CrowdPlayerSecretModel> GetPlayerListByFlagcode(string flagcode)
         {
-            const string sql = @"SELECT innerid, openid, wechatnick, wechatheadportrait, mobile,(select sum(totalfee) from activity_crow_payrecord where flagcode=@flagcode and openid=a.openid and ispay=1) as totalfee FROM activity_crow_player as a where flagcode=@flagcode and isenabled=1;";
+            const string sql = @"SELECT innerid, openid, wechatnick, wechatheadportrait, mobile, iswinning,
+            (select sum(totalfee) from activity_crow_payrecord where flagcode=@flagcode and openid=a.openid and ispay=1) as totalfee 
+            FROM activity_crow_player as a where flagcode=@flagcode and isenabled=1 order by totalfee desc;";
             var list = Helper.Query<CrowdPlayerSecretModel>(sql, new { flagcode });
             return list;
         }
@@ -688,7 +827,23 @@ namespace CCN.Modules.Activity.DataAccess
             var model = Helper.Query<CrowdPlayerModel>(sql, new { flagcode, openid }).FirstOrDefault();
             return model;
         }
-        
+
+        /// <summary>
+        /// 根据openid获取Player详情 view
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CrowdPlayerViewModel GetPlayerViewById(string innerid)
+        {
+            const string sql =
+                @"SELECT innerid, flagcode, openid, mobile, wechatnick, wechatheadportrait, isenabled, remark, createrid, createdtime, modifierid, modifiedtime,
+                (select      count(1) from activity_crow_payrecord where flagcode=a.flagcode and openid=a.openid and ispay=1) as paynum,
+                (select sum(totalfee) from activity_crow_payrecord where flagcode=a.flagcode and openid=a.openid and ispay=1) as totalfee
+                FROM activity_crow_player as a where innerid=@innerid;";
+            var model = Helper.Query<CrowdPlayerViewModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
         /// <summary>
         /// 添加Player
         /// </summary>
@@ -743,6 +898,18 @@ namespace CCN.Modules.Activity.DataAccess
 
         #region 添加订单
 
+        /// <summary>
+        /// 获取Player支付记录列表
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <param name="openid"></param>
+        /// <returns></returns>
+        public IEnumerable<CrowdPayRecordListModel> GetPayRecordListWithPlayer(string flagcode, string openid)
+        {
+            const string sql = @"SELECT innerid, totalfee, orderno, createdtime FROM activity_crow_payrecord where flagcode=@flagcode and openid=@openid and ispay=1 order by createdtime desc;";
+            var list = Helper.Query<CrowdPayRecordListModel>(sql, new {flagcode, openid });
+            return list;
+        }
 
         /// <summary>
         /// 添加Player
@@ -787,6 +954,7 @@ namespace CCN.Modules.Activity.DataAccess
 
             using (var conn = Helper.GetConnection())
             {
+                
                 var tran = conn.BeginTransaction();
                 try
                 {
@@ -829,6 +997,18 @@ namespace CCN.Modules.Activity.DataAccess
         }
 
         /// <summary>
+        /// 获取粉丝信息
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public PayNotifyModel GetPlayerByOrderNo(string orderNo)
+        {
+            const string sql = @"select a.totalfee,a.remark,b.wechatnick,b.wechatheadportrait from  activity_crow_payrecord as a inner join activity_crow_player as b on a.openid=b.openid and a.flagcode=b.flagcode where a.orderno = @orderno;";
+            var model = Helper.Query<PayNotifyModel>(sql, new { orderNo }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
         /// 获取用户已支付总金额
         /// </summary>
         /// <param name="flagcode">活动码</param>
@@ -840,6 +1020,8 @@ namespace CCN.Modules.Activity.DataAccess
             var total = Helper.Query<int>(sql, new { flagcode, openid }).FirstOrDefault();
             return total;
         }
+
+        
         #endregion
 
         #endregion

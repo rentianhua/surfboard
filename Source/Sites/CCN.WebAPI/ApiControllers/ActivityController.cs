@@ -126,13 +126,37 @@ namespace CCN.WebAPI.ApiControllers
         #region 活动管理
 
         /// <summary>
+        /// 开始抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("StartDraw")]
+        public JResult StartDraw([FromBody] StartDrawModel model)
+        {
+            return _activityservice.StartDraw(model);
+        }
+
+        /// <summary>
+        /// 结束抽奖
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("EndDraw")]
+        public JResult EndDraw([FromBody] StartDrawModel model)
+        {
+            return _activityservice.EndDraw(model);
+        }
+
+        /// <summary>
         /// 获取活动列表
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("GetCrowdActivityPageList")]
-        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList([FromBody]QueryModel query)
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList([FromBody]CrowdInfoQueryModel query)
         {
             return _activityservice.GetCrowdActivityPageList(query);
         }
@@ -147,6 +171,30 @@ namespace CCN.WebAPI.ApiControllers
         public JResult GetCrowdInfoById(string innerid)
         {
             return _activityservice.GetCrowdInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetCrowdViewById")]
+        public JResult GetCrowdViewById(string flagcode)
+        {
+            return _activityservice.GetCrowdViewById(flagcode);
+        }
+
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetCrowdProgressByFlagcode")]
+        public JResult GetCrowdProgressByFlagcode(string flagcode)
+        {
+            return _activityservice.GetCrowdProgressByFlagcode(flagcode);
         }
 
         /// <summary>
@@ -257,7 +305,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetPlayerPageList")]
-        public BasePageList<CrowdPlayerModel> GetPlayerPageList([FromBody]CrowdPlayerQueryModel query)
+        public BasePageList<CrowdPlayerListModel> GetPlayerPageList([FromBody]CrowdPlayerQueryModel query)
         {
             return _activityservice.GetPlayerPageList(query);
         }
@@ -310,16 +358,16 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
-        /// 获取用户已支付总金额
+        /// 获取活动信息及用户已支付总金额
         /// </summary>
         /// <param name="flagcode">活动码</param>
         /// <param name="openid">openid</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetPaidTotal")]
-        public JResult GetPaidTotal(string flagcode, string openid)
+        [Route("GetActivityAndPaidTotal")]
+        public JResult GetActivityAndPaidTotal(string flagcode, string openid)
         {
-            return _activityservice.GetPaidTotal(flagcode, openid);
+            return _activityservice.GetActivityAndPaidTotal(flagcode, openid);
         }
 
         /// <summary>

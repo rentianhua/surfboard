@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using AVOSCloud;
@@ -9,6 +10,7 @@ using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.DataAccess;
 using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -290,6 +292,17 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             return DataAccess.GetHaveCarCustList(query);
         }
 
+        /// <summary>
+        /// 发送给特定的用户
+        /// 发送给public频道的用户
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendMessage()
+        {
+            var lc = new LeanCloudModel();
+            lc.SendPublicMessage("欢迎您的咨询，我们会尽快为您解答！");
+            return JResult._jResult(0, "发送成功");
+        }
         #endregion
     }
 
@@ -298,17 +311,45 @@ namespace CCN.Modules.CustRelations.BusinessComponent
     /// </summary>
     public class LeanCloudModel
     {
-        private const string ApplicationId = "2jIgkDKXQMmywTU33bL49ahv-gzGzoHsz";
-        private const string AppKey = "3luuqph0m8wvbaHQsxdS0K2F";
-        private const string MasterKey = "mLHuTFdLkqGg0J53mCOT8e2F";
+        private readonly string _applicationId = "2jIgkDKXQMmywTU33bL49ahv-gzGzoHsz";
+        private readonly string _appKey = "3luuqph0m8wvbaHQsxdS0K2F";
+        private readonly string _masterKey = "mLHuTFdLkqGg0J53mCOT8e2F";
 
         /// <summary>
         /// 初始化
         /// </summary>
         public LeanCloudModel()
         {
+            var appid = ConfigHelper.GetAppSettings("ApplicationId");
+            var appkey = ConfigHelper.GetAppSettings("AppKey");
+            var masterkey = ConfigHelper.GetAppSettings("MasterKey");
+            if (!string.IsNullOrWhiteSpace(appid))
+            {
+                _applicationId = appid;
+            }
+            if (!string.IsNullOrWhiteSpace(appkey))
+            {
+                _appKey = appkey;
+            }
+            if (!string.IsNullOrWhiteSpace(masterkey))
+            {
+                _masterKey = masterkey;
+            }
+            AVClient.Initialize(_applicationId, _appKey);
+        }
 
-            AVClient.Initialize(ApplicationId, AppKey);
+        /// <summary>
+        /// 推送给所有的设备
+        /// </summary>
+        /// <returns></returns>
+        public async void SendAllMessage(string msg)
+        {
+            var push = new AVPush
+            {
+                Alert = msg
+            };
+            var task = push.SendAsync();
+            await task;
         }
 
         /// <summary>
@@ -316,7 +357,7 @@ namespace CCN.Modules.CustRelations.BusinessComponent
         /// 发送给public频道的用户
         /// </summary>
         /// <returns></returns>
-        public async void SendMsg(string msg)
+        public async void SendPublicMessage(string msg)
         {
             var push = new AVPush
             {

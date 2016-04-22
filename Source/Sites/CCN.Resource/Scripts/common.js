@@ -376,5 +376,30 @@ function checkEmial(email)
     return !reg.test(email);
 }
 
+// ReSharper disable once NativeTypePrototypeExtending
+Number.prototype.toFormat = function ()
+{
+    if (this.length <= 0) {
+        return 0;
+    }
+    else {
 
+        var num = (parseFloat(this) / 100).toFixed(2);
+        return num;
+    }
+}
 
+/*
+* 生成Guid
+* 返回Guid
+*/
+function jsNewGuid() {
+    var guid = "";
+    for (var i = 1; i <= 32; i++) {
+        var n = Math.floor(Math.random() * 16.0).toString(16);
+        guid += n;
+        if ((i === 8) || (i === 12) || (i === 16) || (i === 20))
+            guid += "-";
+    }
+    return guid;
+}

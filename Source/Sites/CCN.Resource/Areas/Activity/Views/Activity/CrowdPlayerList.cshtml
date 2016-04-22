@@ -3,52 +3,81 @@
 }
 <script type="text/javascript">
 
-    var voteid = "@ViewBag.voteid";
+    var flagcode = "@ViewBag.flagcode";
 
     $(function () {
+        $("#flagcode").html(flagcode);
         QueryList();
     });
 
     function QueryList() {
-        $("#votelist").getPageList(20, "/api/Activity/GetVoteList", {}, LoadData);
+        var json = { Flagcode: flagcode, Wechatnick: $("#txtnickname").val() };
+        if ($("#iswinning").prop("checked")) {
+            json.Iswinning = 1;
+        }
+        $("#playerlist").getPageList(20, "/api/Activity/GetPlayerPageList", json, LoadData);
     }
 
     function LoadData(data, index) {
 
-        $("#votelist tbody").empty();
+        $("#playerlist tbody").empty();
         var str = "";
         $.each(data, function (key, val) {
 
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
-            str += "<td>" + val.Title + "</td>";
-            str += "<td>" + Dateformat(val.Enrollstarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Enrollendtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
-            str += "<td>" + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + "</td>";
-            str += "<td>" + val.Numper + "</td>";
-            str += "<td>" + val.Numvote + "</td>";
+            var corn = ""; //标记是否被举报
+            
+            if (val.Iswinning === 1) {
+                corn = " <img src='/Content/images/winner.jpg' style='width:15px;height:15px;cursor:pointer' />";
+            }
+            str += "<td><img width='30' height='30' src='" + val.Wechatheadportrait + "' /> " + corn + "</td>";
+            str += "<td>" + val.Wechatnick + "</td>";
+            str += "<td>" + val.PayNum + "</td>";
+            str += "<td>" + val.Totalfee.toFormat() + "</td>";
             var btn = "";
-            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VoteView?voteid=" + val.Innerid + "');\"> 查看详情 </a> ";
-            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerList?voteid=" + val.Innerid + "');\"> 参赛人员 </a> ";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/CrowdPlayerView?flagcode=" + flagcode + "&playerid=" + val.Innerid + "');\"> 查看详情 </a> ";
             str += "<td>" + btn + "</td></tr>";
-            $("#votelist tbody").append(str);
+            $("#playerlist tbody").append(str);
         });
     }
 
-
+    function goList() {
+        getBodyHtml('mainbody', "/Activity/Activity/CrowdList");
+    }
 </script>
 <div style="margin: 0 auto;">
-    <div style="font-size: 18px; font-weight: bold; text-align: center">投票活动列表</div><br />
+    <div style="font-size: 18px; font-weight: bold; text-align: center">众筹活动参与人员列表 [<label id="flagcode"></label>]</div><br />
+    <div class="row" style="margin-bottom: 10px">
 
-    <table class="table table-striped table-hover table-bordered" id="votelist">
+        <div class="col-lg-6 col-sm-6 col-xs-6">
+            <div class="form-group">
+                <label for="txtnickname" class="col-sm-2 control-label no-padding-right searchLayout">昵称：</label>
+                <div class="col-sm-10">
+                    <input type="text" id="txtnickname" placeholder="昵称" class="form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-xs-3">
+            <div class="form-group">
+                <input type="checkbox" id="iswinning" style="opacity: 100; position: inherit; left: auto;" />
+                <label for="iswinning" class="">中奖的</label>
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-3 col-xs-3">
+            <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+            <a id="btnBack" href="javascript:;" class="btn btn-palegreen shiny" onclick="goList();">返回</a>
+        </div>
+    </div>
+    <table class="table table-striped table-hover table-bordered" id="playerlist">
         <thead>
             <tr role="row">
-                <th>序号</th>
-                <th>投票主题</th>
-                <th>参赛时间</th>
-                <th>投票时间</th>
-                <th>参赛人数</th>
-                <th>投票总数</th>
+                <th style="width: 80px">序号</th>
+                <th>头像</th>
+                <th>昵称</th>
+                <th>支付次数</th>
+                <th>支付总金额（元）</th>
                 <th>操作</th>
             </tr>
         </thead>

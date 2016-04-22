@@ -527,6 +527,75 @@ namespace CCN.Modules.Car.DataAccess
             return result;
         }
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        public CarViewModel GetCarInfoByNo(string carno)
+        {
+            const string sql =
+                @"select 
+                a.innerid, 
+                a.carno,
+                a.custid, 
+                a.supplierid,
+                a.title, 
+                a.pic_url, 
+                a.provid,
+                a.cityid,
+                a.brand_id,
+                a.series_id,
+                a.model_id,
+                a.colorid,
+                a.mileage, 
+                a.register_date, 
+                a.buytime, 
+                a.buyprice, 
+                a.price, 
+                a.dealprice, 
+                a.isproblem, 
+                a.remark, 
+                a.ckyear_date, 
+                a.tlci_date, 
+                a.audit_date, 
+                a.istain, 
+                a.sellreason, 
+                a.masterdesc, 
+                a.dealdesc, 
+                a.deletedesc, 
+                a.estimateprice, 
+                a.`status`, 
+                a.createdtime, 
+                a.modifiedtime, 
+                a.seller_type,
+                a.post_time, 
+                a.audit_time, 
+                a.sold_time, 
+                a.closecasetime, 
+                a.eval_price, 
+                a.next_year_eval_price, 
+                pr.provname,
+                ct.cityname,
+                cb.brandname as brand_name,
+                cs.seriesname as series_name,
+                cm.modelname as model_name,
+                cm.liter,
+                cm.geartype,
+                cm.dischargestandard as dischargeName,
+                bc1.codename as color
+                from `car_info` as a 
+                left join base_province as pr on a.provid=pr.innerid
+                left join base_city as ct on a.cityid=ct.innerid
+                left join base_carbrand as cb on a.brand_id=cb.innerid
+                left join base_carseries as cs on a.series_id=cs.innerid
+                left join base_carmodel as cm on a.model_id=cm.innerid
+                left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color'
+                where a.carno=@carno";
+            var result = Helper.Query<CarViewModel>(sql, new { carno }).FirstOrDefault();
+            return result;
+        }
+
         #region 感兴趣
 
         /// <summary>

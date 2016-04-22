@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CCN.Resource.Main.Common;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Resource.Areas.Activity.Controllers
 {
@@ -100,6 +101,7 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// <returns></returns>
         public ActionResult CrowdEdit(string activityid)
         {
+            ViewBag.uptoken = QiniuUtility.GetToken();
             ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
             return View();
         }
@@ -108,9 +110,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 活动详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult CrowdView(string activityid)
+        public ActionResult CrowdView(string flagcode)
         {
-            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
+            ViewBag.flagcode = string.IsNullOrWhiteSpace(flagcode) ? "" : flagcode;
             return View();
         }
 
@@ -139,9 +141,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 活动参与人员列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult CrowdPlayerList(string activityid)
+        public ActionResult CrowdPlayerList(string flagcode)
         {
-            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
+            ViewBag.flagcode = string.IsNullOrWhiteSpace(flagcode) ? "" : flagcode;
             return View();
         }
 
@@ -149,9 +151,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 活动参与人员详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult CrowdPlayerView(string activityid,string playerid)
+        public ActionResult CrowdPlayerView(string flagcode, string playerid)
         {
-            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
+            ViewBag.flagcode = string.IsNullOrWhiteSpace(flagcode) ? "" : flagcode;
             ViewBag.playerid = string.IsNullOrWhiteSpace(playerid) ? "" : playerid;
             return View();
         }

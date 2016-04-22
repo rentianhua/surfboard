@@ -153,7 +153,7 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetCrowdActivityPageList")]
-        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList([FromBody]QueryModel query)
+        public BasePageList<CrowdInfoListModel> GetCrowdActivityPageList([FromBody]CrowdInfoQueryModel query)
         {
             return _activityservice.GetCrowdActivityPageList(query);
         }
@@ -168,6 +168,18 @@ namespace CCN.Resource.ApiControllers
         public JResult GetCrowdInfoById(string innerid)
         {
             return _activityservice.GetCrowdInfoById(innerid);
+        }
+        
+        /// <summary>
+        /// 获取活动详情 view
+        /// </summary>
+        /// <param name="flagcode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetCrowdViewById")]
+        public JResult GetCrowdViewById(string flagcode)
+        {
+            return _activityservice.GetCrowdViewById(flagcode);
         }
 
         /// <summary>
@@ -193,18 +205,7 @@ namespace CCN.Resource.ApiControllers
         {
             return _activityservice.UpdateCrowdInfo(model);
         }
-
-        /// <summary>
-        /// 获取活动的信息及档次list信息
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetCrowdActivityTotal")]
-        public JResult GetCrowdActivityTotal(string flagcode)
-        {
-            return _activityservice.GetCrowdActivityTotal(flagcode);
-        }
-
+        
         #endregion
 
         #region 档次管理
@@ -271,6 +272,7 @@ namespace CCN.Resource.ApiControllers
         #endregion
 
         #region 参与人管理
+
         /// <summary>
         /// 获取投票活动的参赛人员列表
         /// </summary>
@@ -278,82 +280,36 @@ namespace CCN.Resource.ApiControllers
         /// <returns></returns>
         [HttpPost]
         [Route("GetPlayerPageList")]
-        public BasePageList<CrowdPlayerModel> GetPlayerPageList([FromBody]CrowdPlayerQueryModel query)
+        public BasePageList<CrowdPlayerListModel> GetPlayerPageList([FromBody]CrowdPlayerQueryModel query)
         {
             return _activityservice.GetPlayerPageList(query);
         }
 
         /// <summary>
-        /// 获取Player列表
-        /// </summary>
-        /// <param name="flagcode"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetPlayerListByFlagcode")]
-        public JResult GetPlayerListByFlagcode(string flagcode)
-        {
-            return _activityservice.GetPlayerListByFlagcode(flagcode);
-        }
-
-        /// <summary>
-        /// 获取Player详情 info
+        /// 根据openid获取Player详情 view
         /// </summary>
         /// <param name="innerid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetPlayerInfoById")]
-        public JResult GetPlayerInfoById(string innerid)
+        [Route("GetPlayerViewById")]
+        public JResult GetPlayerViewById(string innerid)
         {
-            return _activityservice.GetPlayerInfoById(innerid);
+            return _activityservice.GetPlayerViewById(innerid);
         }
 
         /// <summary>
-        /// 添加Player
+        /// 获取Player支付记录列表
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("AddPlayer")]
-        public JResult AddPlayer([FromBody]CrowdPlayerModel model)
-        {
-            return _activityservice.AddPlayer(model);
-        }
-        /// <summary>
-        /// UpdatePlayer
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("UpdatePlayer")]
-        public JResult UpdatePlayer([FromBody]CrowdPlayerModel model)
-        {
-            return _activityservice.UpdatePlayer(model);
-        }
-
-        /// <summary>
-        /// 获取用户已支付总金额
-        /// </summary>
-        /// <param name="flagcode">活动码</param>
-        /// <param name="openid">openid</param>
+        /// <param name="flagcode"></param>
+        /// <param name="openid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetPaidTotal")]
-        public JResult GetPaidTotal(string flagcode, string openid)
+        [Route("GetPayRecordListWithPlayer")]
+        public JResult GetPayRecordListWithPlayer(string flagcode, string openid)
         {
-            return _activityservice.GetPaidTotal(flagcode, openid);
+            return _activityservice.GetPayRecordListWithPlayer(flagcode, openid);
         }
 
-        /// <summary>
-        /// 确认支付
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("DoPay")]
-        public JResult DoPay(string orderNo)
-        {
-            return _activityservice.DoPay(orderNo);
-        }
         #endregion
 
         [HttpGet]

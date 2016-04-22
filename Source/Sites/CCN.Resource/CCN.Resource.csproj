@@ -308,6 +308,7 @@
     <Content Include="Content\images\multiple-select.png" />
     <Content Include="Content\images\signup.jpg" />
     <Content Include="Content\images\timg.jpg" />
+    <Content Include="Content\images\winner.jpg" />
     <Content Include="Content\multiple-select.css" />
     <Content Include="Content\Pager.css" />
     <Content Include="Content\Site.css" />
@@ -970,6 +971,7 @@
     <Content Include="Areas\Activity\Views\Activity\CrowdGradeList.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\CrowdGradeEdit.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\CrowdPlayerList.cshtml" />
+    <None Include="Areas\Activity\Views\Activity\CrowdEditBak.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
