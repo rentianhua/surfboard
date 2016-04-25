@@ -39,6 +39,23 @@ namespace WebAPITest.Base
                 Innerid = Guid.NewGuid().ToString(),
                 Target = "18662240324"
             };
+            var sss = nameof(model);
+            var value = bms.SendVerification(model);
+            Assert.IsTrue(value.errcode == 0);
+        }
+
+        /// <summary>
+        /// 测试新特性
+        /// </summary>
+        [TestMethod]
+        public void Test()
+        {
+            var model = new BaseVerification
+            {
+                Innerid = Guid.NewGuid().ToString(),
+                Target = "18662240324"
+            };
+            var sss = nameof(model);
             var value = bms.SendVerification(model);
             Assert.IsTrue(value.errcode == 0);
         }
