@@ -516,7 +516,7 @@ namespace CCN.Modules.Activity.DataAccess
         public CrowdViewModel GetCrowdViewById(string flagcode)
         {
             const string sql =
-                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, secrettime, uppertotal, uppereach, prize, `status`, `type`, qrcode, remark, extend, 
+                @"SELECT innerid, flagcode, title, subtitle, enrollstarttime, enrollendtime, secrettime, uppertotal, uppereach, prize, `status`, `type`, qrcode, remark, extend, 
                 (select count(1) from activity_crow_player where flagcode=a.flagcode and isenabled=1) as playernum, 
                 (select sum(totalfee) from activity_crow_payrecord where flagcode=a.flagcode and ispay=1) as upperedtotal FROM activity_crow_info as a where a.flagcode=@flagcode";
             var model = Helper.Query<CrowdViewModel>(sql, new { flagcode }).FirstOrDefault();

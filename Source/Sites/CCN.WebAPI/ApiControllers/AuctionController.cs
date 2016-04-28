@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Xml.Linq;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.Interface;
+using CCN.Modules.Car.Interface;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
 using Newtonsoft.Json;
@@ -374,8 +375,13 @@ namespace CCN.WebAPI.ApiControllers
                 }
                 else if(model.attach.Equals("kplx_activity_crowd"))  //众筹活动支付
                 {
-                    var activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
-                    activityservice.DoPay(model.out_trade_no);
+                    var service = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
+                    service.DoPay(model.out_trade_no);
+                }
+                else if (model.attach.Equals("kplx_mysterious"))  //查看神秘车源支付回调
+                {
+                    var service = ServiceLocatorFactory.GetServiceLocator().GetService<ICarManagementService>();
+                    service.DoPay(model.out_trade_no);
                 }
 
                 //记录支付结果

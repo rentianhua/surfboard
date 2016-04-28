@@ -803,6 +803,52 @@ namespace CCN.Resource.ApiControllers
         #region 供应商管理
 
         /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddSupplier")]
+        public JResult AddSupplier([FromBody]CarSupplierModel model)
+        {
+            return _carervice.AddSupplier(model);
+        }
+
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateSupplier")]
+        public JResult UpdateSupplier([FromBody]CarSupplierModel model)
+        {
+            return _carervice.UpdateSupplier(model);
+        }
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpDelete]
+        [Route("DeleteSupplier")]
+        public JResult DeleteSupplier(string innerid)
+        {
+            return _carervice.DeleteSupplier(innerid);
+        }
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSupplierCarPageList")]
+        public BasePageList<CarSupplierModel> GetSupplierCarPageList([FromBody]CarSupplierQueryModel query)
+        {
+            return _carervice.GetSupplierCarPageList(query);
+        }
+        /// <summary>
         /// 获取会员所有供应商列表
         /// </summary>
         /// <returns></returns>
@@ -840,6 +886,124 @@ namespace CCN.Resource.ApiControllers
             return _carervice.GetMysteriousBackCarPageList(query);
         }
 
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [HttpGet]
+        [Route("PushUpMysteriousCar")]
+        public JResult PushUpMysteriousCar(string innerid)
+        {
+            return _carervice.PushUpMysteriousCar(innerid);
+        }
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddMaddenCar")]
+        public JResult AddMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.AddMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateMaddenCar")]
+        public JResult UpdateMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.UpdateMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpDelete]
+        [Route("DeleteMaddenCar")]
+        public JResult DeleteMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.DeleteMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpPost]
+        [Route("RecoveryMaddenCar")]
+        public JResult RecoveryMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.RecoveryMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpPost]
+        [Route("DealMaddenCar")]
+        public JResult DealMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.DealMaddenCar(model);
+        }
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [HttpGet]
+        [Route("PushUpMaddenCar")]
+        public JResult PushUpMaddenCar(string innerid)
+        {
+            return _carervice.PushUpMaddenCar(innerid);
+        }
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarInfoById")]
+        public JResult GetMaddenCarInfoById(string innerid)
+        {
+            return _carervice.GetMaddenCarInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarViewById")]
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            return _carervice.GetMaddenCarViewById(innerid);
+        }
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMaddenCarBackPageList")]
+        public BasePageList<CarMaddenListModel> GetMaddenCarBackPageList([FromBody]CarMaddenQueryModel query)
+        {
+            return _carervice.GetMaddenCarBackPageList(query);
+        }
 
         #endregion
     }

@@ -1,0 +1,760 @@
+﻿
+
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.carid";
+
+    var imgs = [];
+    var uploader;
+    $(function () {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+
+        InitBrand();
+        InitProv();
+        InitCode();
+        InitSupplier();
+        Init();
+
+    });
+    function showloading() {
+        $('.loading-container.loading-inactive').css('display', 'block');
+        $('.loading-container.loading-inactive .loader').css('display', 'block');
+    }
+    function hideloading() {
+        $('.loading-container.loading-inactive').css('display', 'none');
+        $('.loading-container.loading-inactive .loader').css('display', 'none');
+    }
+    //初始化品牌
+    function InitBrand() {
+        $("#selectbrand").empty();
+        $("#selectbrand").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarBrand", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
+            });
+        });
+    }
+
+    //初始化车系
+    function InitSeries(brandid) {
+        $("#selectseries").empty();
+        $("#selectseries").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarSeries?brandId=" + brandid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
+            });
+        });
+    }
+
+    //初始化车型
+    function InitModel(seriesid) {
+        $("#selectmodel").empty();
+        $("#selectmodel").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarModel?seriesId=" + seriesid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
+            });
+        });
+    }
+
+    function GetModelInfo(modelid) {
+
+        getJson("/api/Base/GetCarModelById?innerid=" + modelid, null, function (data) {
+            $("#selectregyear").empty();
+            $("#selectregyear").append("<option value='0'>请选择</option>");
+            var model = data.errmsg;
+            for (var i = model.Minregyear; i <= model.Maxregyear; i++) {
+                $("#selectregyear").append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            $("#selectregmonth").empty();
+            $("#selectregmonth").append("<option value='0'>请选择</option>");
+            for (var j = 1; j <= 12; j++) {
+
+                var val = j < 10 ? ("0" + j) : j;
+                $("#selectregmonth").append("<option value='" + val + "'>" + val + "</option>");
+            }
+        });
+    }
+
+    //初始化省份
+    function InitProv() {
+        $("#selectprov").empty();
+        $("#selectprov").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetProvList", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+            });
+
+            $("#selectprov").selectText(getCookie("province"));
+            InitCity($("#selectprov").val());
+        });
+    }
+
+    //初始化城市
+    function InitCity(provid) {
+
+        $("#selectcity").empty();
+        $("#selectcity").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCityList/?provid=" + provid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+            });
+            $("#selectcity").selectText(getCookie("city"));
+        });
+    }
+
+    //初始化颜色
+    function InitCode() {
+        $("#selectcolor").empty();
+        $("#selectcolor").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCodeByTypeKey?typekey=car_color", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcolor").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
+            });
+        });
+    }
+
+    //初始化供应商
+    function InitSupplier() {
+        $("#selectsupplier").empty();
+        $("#selectsupplier").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Car/GetSupplierAll", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectsupplier").append("<option value='" + v.Innerid + "'>" + v.Suppliername + "</option>");
+            });
+        });
+    }
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        getJson("/api/Car/GetCarInfoById?id=" + id, null, function(data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#selectbrand").selectVal(obj.brand_id);
+
+            InitSeries(obj.brand_id);
+
+            $("#selectseries").selectVal(obj.series_id);
+
+            InitModel(obj.series_id);
+
+            $("#selectmodel").selectVal(obj.model_id);
+
+            $("#selectprov").selectVal(obj.provid);
+
+            InitCity(obj.provid);
+
+            $("#selectcity").selectVal(obj.cityid);
+
+            $("#selectcolor").selectVal(obj.colorid);
+
+            $("#selectsupplier").selectVal(obj.supplierid);
+
+            $("#txtmileage").val(obj.mileage);
+
+            GetModelInfo(obj.model_id);
+
+            var dataArr = obj.register_date.split('-');
+
+            $("#selectregyear").selectVal(dataArr[0]);
+            $("#selectregmonth").selectVal(dataArr[1]);
+
+            //更多信息
+
+            $("#txtbuydate").val(Dateformat(obj.buytime, "yyyy-MM-dd"));
+            $("#txtbuyprice").val(obj.buyprice);
+            $("#txtsoldyprice").val(obj.price);
+
+            $("input[name='radioisproblem'][value=" + obj.isproblem + "]").prop("checked", true);
+            $("input[name='radioistain'][value=" + obj.istain + "]").prop("checked", true);
+
+            $("#txtckyear_date").val(Dateformat(obj.ckyear_date, "yyyy-MM-dd"));
+            $("#txttlci_date").val(Dateformat(obj.tlci_date, "yyyy-MM-dd"));
+            $("#txtaudit_date").val(Dateformat(obj.audit_date, "yyyy-MM-dd"));
+
+            $("#caresc").val(obj.remark);
+
+            getJson("/api/Car/GetCarPictureByCarid?carid=" + id, null, function(picData) {
+                $.each(picData.errmsg, function (k, v) {
+                    var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                    $('.imgs').append(
+                        '<div id="' + strradom + '" class="imgPreview">\
+						<img data-type="img" src="' + getImgUrl(v.Path) + '" class="loading" width="550px">\
+						<div class="caidan">\
+							<div hash="' + strradom + '" class="cz_4" data-id="' + v.Innerid + '"><div class="czl_icon"></div></div>\
+						</div>\
+					</div>');
+                    initUploadM();
+                });
+            }, true);
+        }, true);
+    }
+
+    function DeletePicture(picid, strhash) {
+
+        if (!confirm("确定删除？")) {
+            return;
+        }
+
+        var flag = 0;
+        //遍历img
+        $("img[data-type='img']").each(function () {
+            flag++;
+        });
+        if (flag > 3) {
+            $.ajax({
+                url: "/api/Car/DeleteCarPicture?innerid=" + picid,
+                type: 'delete',
+                datatype: 'application/json',
+                async: false,
+                success: function (data) {
+                    if (data.errcode === 0) {
+                        //alert("删除成功");
+                        $("#" + strhash).remove();
+                    }
+                }
+            });
+        }
+        else {
+            alert("图片将少于3张，不能继续删除！");
+        }
+    }
+
+    function Submit() {
+        var brandid = $("#selectbrand").val();
+        var seriesid = $("#selectseries").val();
+        var modelid = $("#selectmodel").val();
+
+        if (modelid === "0") {
+            alert("请选择车型！");
+            return false;
+        }
+
+        var provid = $("#selectprov").val();
+        var cityid = $("#selectcity").val();
+
+        if (cityid === "0") {
+            alert("请选择城市！");
+            return false;
+        }
+
+        var supplierid = $("#selectsupplier").val();
+        if (supplierid === "0") {
+            alert("请选择供应商！");
+            return false;
+        }
+
+        var colorid = $("#selectcolor").val();
+        var txtmileage = $("#txtmileage").val();
+
+        var regyear = $("#selectregyear").val();
+        var regmonth = $("#selectregmonth").val();
+
+        if (colorid === "0") {
+            alert("请选择颜色！");
+            return false;
+        }
+
+        if ($.trim(txtmileage).length === 0) {
+            alert("请填写里程数！");
+            return false;
+        }
+
+        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        if (!re.test(txtmileage)) {
+            alert("里程数只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        if (regyear === "0") {
+            alert("请选择上牌年份！");
+            return false;
+        }
+        if (regmonth === "0") {
+            alert("请选择上牌月份！");
+            return false;
+        }
+
+        //更多信息
+
+        var txtbuydate = $("#txtbuydate").val();
+        var txtbuyprice = $("#txtbuyprice").val();
+        var txtsoldyprice = $("#txtsoldyprice").val();
+
+        if ($.trim(txtbuyprice).length > 0 && !re.test(txtbuyprice)) {
+            alert("收购价格只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        if ($.trim(txtsoldyprice).length === 0) {
+            alert("请填写待售价格！");
+            return false;
+        }
+
+        if (!re.test(txtsoldyprice)) {
+            alert("待售价格只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        var isproblem = $("input:radio[name='radioisproblem']:checked").val();
+        var istain = $("input:radio[name='radioistain']:checked").val();
+
+        var txtckyearDate = $("#txtckyear_date").val();
+        var txttlciDate = $("#txttlci_date").val();
+        var txtauditDate = $("#txtaudit_date").val();
+
+        var caresc = $("#caresc").val();
+        if ($.trim(caresc).length === 0) {
+            alert("请填写详细信息！");
+            return false;
+        }
+
+        var json = {
+            supplierid: supplierid,
+            brand_id: brandid,
+            series_id: seriesid,
+            model_id: modelid,
+            provid: provid,
+            cityid: cityid,
+            colorid: colorid,
+            buytime: txtbuydate,
+            buyprice: txtbuyprice,
+            mileage: txtmileage,
+            register_date: regyear + "-" + regmonth + "-01",
+            price: txtsoldyprice,
+            isproblem: isproblem,
+            istain: istain,
+            remark: caresc,
+            ckyear_date: txtckyearDate,
+            tlci_date: txttlciDate,
+            audit_date: txtauditDate,
+            seller_type:3
+        };
+
+        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+
+        var filelength = 0;
+        var uploadercount = 0;
+        //统计新增的图片
+        //遍历img
+        $("img[data-type='img']").each(function () {
+            filelength++;
+        });
+        if (uploader == undefined || uploader == null) {
+            //    filelength = 0;
+        }
+        else {
+            uploadercount = uploader.files.length;
+        }
+
+        setTimeout(function() {
+            if (id === "") {
+                if (filelength > 9 || filelength < 3) {
+                    hideloading();
+                    alert('请上传3-9张图片');
+                    return false;
+                }
+                $.post("/api/Car/AddCarBack", json, function(result) {
+                    if (result.errcode === 0) {
+                        //上传并保存图片 Begin
+                        var i = 0;
+                        plupload.each(uploader.files, function(file) {
+                            var myDate = new Date();
+                            file.name = "car_picture_" + myDate.getTime() + i + ".jpg";
+                            i++;
+                        });
+                        uploader.start();
+                        var carid = result.errmsg;
+                        var m = 0;
+
+                        uploader.bind('FileUploaded', function(up, file, info) {
+                            var picInfo = JSON.parse(info.response);
+                            $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function() {
+
+                            });
+                            m++;
+                            //上传并保存图片 End
+                            if (m == uploadercount) {
+                                hideloading();
+                                alert("添加成功");
+                                goList();
+                            }
+                        });
+                    } else {
+                        hideloading();
+                        alert("添加失败:" + result.errmsg);
+                    }
+
+                });
+            } else {
+                json.Innerid = id;
+
+                if (filelength > 9 || filelength < 3) {
+                    hideloading();
+                    alert('请上传3-9张图片');
+                    return false;
+                }
+                $.post("/api/Car/UpdateCar", json, function(result) {
+                    if (result.errcode === 0) {
+                        //删除图片 imgs
+                        if (uploadercount > 0) {
+                            //上传并保存图片 Begin
+                            var i = 0;
+                            plupload.each(uploader.files, function(file) {
+                                var myDate = new Date();
+                                file.name = "car_" + myDate.getTime() + i + ".jpg";
+                                i++;
+                            });
+                            uploader.start();
+                            var m = 0;
+                            uploader.bind('FileUploaded', function(up, file, info) {
+                                var picInfo = JSON.parse(info.response);
+                                $.post("/api/Car/AddCarPicture", { Carid: id, Path: picInfo.key }, function() {
+
+                                });
+                                m++;
+                                if (m == uploadercount) {
+                                    hideloading();
+                                    alert("修改成功");
+                                    goList();
+                                }
+                            });
+                            //上传并保存图片 End
+                        } else {
+                            hideloading();
+                            alert("修改成功");
+                            goList();
+                        }
+
+                    } else {
+                        hideloading();
+                        alert("修改失败:" + result.errmsg);
+                    }
+                });
+            }
+        }, 1000);
+        return false;
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/car/car/carmysteriouslist");
+    }
+
+    function initUploadM() {
+        // 当前方法对象
+        var fun = arguments.callee;
+        // 图片选中
+        $(".imgs .imgPreview").unbind().mousemove(function () {
+            $(this).find(".caidan").show();
+        }).mouseout(function () {
+            $(this).find(".caidan").hide();
+        });
+        $(".imgs .caidan").unbind().mousemove(function () {
+            $(this).show();
+        }).mouseout(function () {
+            $(this).hide();
+        });
+        // 图片删除
+        $(".imgs .imgPreview .cz_4").unbind().click(function () {
+            DeletePicture($(this).attr("data-id"), $(this).attr("hash"));
+        });
+        // 置顶图片
+        $(".imgs .imgPreview .cz_1").unbind().click(function () {
+            var imghtml = $("#" + $(this).attr("hash"))[0];
+            $("#" + $(this).attr("hash")).remove();
+            $('.imgs').prepend(imghtml);
+            fun();
+        });
+        // 图片前移
+        $(".imgs .imgPreview .cz_2").unbind().click(function () {
+            var id = "#" + $(this).attr("hash");
+            var $this = $(id).prev();
+            var imghtml = $(id)[0];
+            if ($this.size()) {
+                $(id).remove();
+                $this.before(imghtml);
+                fun();
+            }
+        });
+        // 图片后移
+        $(".imgs .imgPreview .cz_3").unbind().click(function () {
+            var id = "#" + $(this).attr("hash");
+            var $this = $(id).next();
+            var imghtml = $(id)[0];
+            if ($this.size()) {
+                $(id).remove();
+                $this.after(imghtml);
+                fun();
+            }
+        });
+    }
+
+</script>
+
+<div class="theme-popover">
+    上传图片中...
+    <img src="~/Content/images/loading.gif" alt=""/>
+</div>
+<div class="theme-popover-mask"></div>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车辆基本信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>选车</label>
+                            <div class="controls col-sm-11">
+                                <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectmodel" onchange="GetModelInfo(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>颜色</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectcolor" style="width:100%"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>上牌时间</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectregyear">
+                                    <option value="0">年份</option>
+                                </select>
+                                <select id="selectregmonth">
+                                    <option value="0">月份</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>行驶里程(万公里)</label>
+                            <div class="controls col-sm-10">
+                                <input type="text" id="txtmileage" placeholder="行驶里程" class="form-control"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>地区</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <select id="selectcity">
+                                    <option value="0">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>供应商</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectsupplier">
+                                    <option value="0">请选择</option>
+                                </select>
+                                <a href="javascript:;" onclick="getBodyHtml('mainbody', '/car/car/carsupplierlist');"> 供应商管理 </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
+                            <div class="controls col-sm-11" id="imgList">
+                                <div id="container2">
+                                    <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <span>选择文件</span>
+                                    </a><label class="required">只能上传2M以下图片</label>
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding:10px 144px 0px 0;">
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+                                    <tbody id="fsUploadProgress"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">更多信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">收购日期</label>
+                            <div class="col-sm-10">
+                                <input id="txtbuydate" class="Wdate form-control" type="text" placeholder="收购日期" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">收购价格(万元)</label>
+                            <div class="col-sm-10">
+                                <input id="txtbuyprice" type="text" placeholder="收购价格" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtsoldyprice" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>待售价格(万元)</label>
+                            <div class="col-sm-10">
+                                <input id="txtsoldyprice" type="text" placeholder="待售价格" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtckyear_date" class="col-sm-2 control-label no-padding-right">年检到期时间</label>
+                            <div class="col-sm-10">
+                                <input id="txtckyear_date" class="Wdate form-control" type="text" placeholder="年检到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">商业险到期时间</label>
+                            <div class="col-sm-10">
+                                <input id="txtaudit_date" class="Wdate form-control" type="text" placeholder="商业险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">交强险到期时间</label>
+                            <div class="col-sm-10">
+                                <input id="txttlci_date" class="Wdate form-control" type="text" placeholder="交强险到期时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txtaudit_date" class="col-sm-2 control-label no-padding-right">重大事故/水侵/火烧</label>
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
+                                <input type="radio" name="radioisproblem" id="rYes" value="1" />
+                                <label for="rYes">是</label>
+                                <input type="radio" name="radioisproblem" id="rNo" value="0" checked="checked" />
+                                <label for="rNo">否</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="txttlci_date" class="col-sm-2 control-label no-padding-right">定期4S保养</label>
+                            <div class="col-sm-10 rd" style="padding-top:5px;">
+                                <input type="radio" name="radioistain" id="radioistain1" value="1" checked="checked" />
+                                <label for="radioistain1">是</label>
+                                <input type="radio" name="radioistain" id="radioistain2" value="0" />
+                                <label for="radioistain2">否</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="caresc" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>详细信息</label>
+                            <div class="col-sm-11">
+                                <textarea id="caresc" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -513,9 +513,36 @@ namespace CCN.Modules.Car.Interface
         JResult GetFinanceProgrammeDetailById(string innerid);
 
         #endregion
-        
+
         #region 供应商管理
 
+        /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        JResult AddSupplier(CarSupplierModel model);
+
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        JResult UpdateSupplier(CarSupplierModel model);
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        JResult DeleteSupplier(string innerid);
+
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarSupplierModel> GetSupplierCarPageList(CarSupplierQueryModel query);
         /// <summary>
         /// 获取会员所有供应商列表
         /// </summary>
@@ -546,6 +573,105 @@ namespace CCN.Modules.Car.Interface
         /// <returns></returns>
         BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList(CarGlobalQueryModel query);
 
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        JResult PushUpMysteriousCar(string innerid);
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult MysteriousUnifiedOrder(PayModel model);
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        JResult DoPay(string orderNo);
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        JResult GetPayRecordById(string carid, string custid);
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        JResult AddMaddenCar(CarMaddenModel model);
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        JResult UpdateMaddenCar(CarMaddenModel model);
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        JResult DeleteMaddenCar(CarMaddenModel model);
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        JResult RecoveryMaddenCar(CarMaddenModel model);
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        JResult DealMaddenCar(CarMaddenModel model);
+
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        JResult PushUpMaddenCar(string innerid);
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetMaddenCarInfoById(string innerid);
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        JResult GetMaddenCarViewById(string innerid);
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarMaddenListModel> GetMaddenCarPageList(CarMaddenQueryModel query);
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<CarMaddenListModel> GetMaddenCarBackPageList(CarMaddenQueryModel query);
 
         #endregion
     }

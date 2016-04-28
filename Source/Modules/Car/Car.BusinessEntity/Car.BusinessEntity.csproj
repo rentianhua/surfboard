@@ -49,6 +49,7 @@
     <Compile Include="CarEvaluateModel.cs" />
     <Compile Include="CarInfoModel.cs" />
     <Compile Include="CarLoanModel.cs" />
+    <Compile Include="CarMaddenModel.cs" />
     <Compile Include="CarMysteriousModel.cs" />
     <Compile Include="CarPictureModel.cs" />
     <Compile Include="CarReward.cs" />

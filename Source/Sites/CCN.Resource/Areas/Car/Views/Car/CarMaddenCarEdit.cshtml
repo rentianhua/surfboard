@@ -1,0 +1,469 @@
+﻿
+
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    var picArray = [];
+    var uploader;
+    $(function () {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+
+        InitBrand();
+        InitProv();
+        InitCode();
+        InitSupplier();
+        Init();
+
+    });
+    function showloading() {
+        $('.loading-container.loading-inactive').css('display', 'block');
+        $('.loading-container.loading-inactive .loader').css('display', 'block');
+    }
+    function hideloading() {
+        $('.loading-container.loading-inactive').css('display', 'none');
+        $('.loading-container.loading-inactive .loader').css('display', 'none');
+    }
+    //初始化品牌
+    function InitBrand() {
+        $("#selectbrand").empty();
+        $("#selectbrand").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarBrand", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
+            });
+        });
+    }
+
+    //初始化车系
+    function InitSeries(brandid) {
+        $("#selectseries").empty();
+        $("#selectseries").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarSeries?brandId=" + brandid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
+            });
+        });
+    }
+
+    //初始化车型
+    function InitModel(seriesid) {
+        $("#selectmodel").empty();
+        $("#selectmodel").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCarModel?seriesId=" + seriesid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
+            });
+        });
+    }
+
+    //初始化省份
+    function InitProv() {
+        $("#selectprov").empty();
+        $("#selectprov").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetProvList", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectprov").append("<option value='" + v.Innerid + "'>" + v.ProvName + "</option>");
+            });
+
+            $("#selectprov").selectText(getCookie("province"));
+            InitCity($("#selectprov").val());
+        });
+    }
+
+    //初始化城市
+    function InitCity(provid) {
+
+        $("#selectcity").empty();
+        $("#selectcity").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCityList/?provid=" + provid, null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcity").append("<option value='" + v.Innerid + "'>" + v.CityName + "</option>");
+            });
+            $("#selectcity").selectText(getCookie("city"));
+        });
+    }
+
+    //初始化颜色
+    function InitCode() {
+        $("#selectcolor").empty();
+        $("#selectcolor").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Base/GetCodeByTypeKey?typekey=car_color", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectcolor").append("<option value='" + v.CodeValue + "'>" + v.CodeName + "</option>");
+            });
+        });
+    }
+
+    //初始化供应商
+    function InitSupplier() {
+        $("#selectsupplier").empty();
+        $("#selectsupplier").append("<option value='0'>请选择</option>");
+
+        getJson("/api/Car/GetSupplierAll", null, function (data) {
+            data = data.errmsg;
+            $.each(data, function (k, v) {
+                $("#selectsupplier").append("<option value='" + v.Innerid + "'>" + v.Suppliername + "</option>");
+            });
+        });
+    }
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        getJson("/api/Car/GetMaddenCarInfoById?innerid=" + id, null, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#selectbrand").selectVal(obj.brand_id);
+
+            InitSeries(obj.brand_id);
+
+            $("#selectseries").selectVal(obj.series_id);
+
+            InitModel(obj.series_id);
+
+            $("#selectmodel").selectVal(obj.model_id);
+
+            $("#selectprov").selectVal(obj.provid);
+
+            InitCity(obj.provid);
+
+            $("#selectcity").selectVal(obj.cityid);
+
+            $("#selectsupplier").selectVal(obj.supplierid);
+            
+            $("#txtguideprice").val(obj.guideprice);
+            $("#txtprogramme").val(obj.programme);
+            $("#txtprogrammedesc").val(obj.programmedesc);
+            $("#txtremark").val(obj.remark);
+            $("#txtguideprice").val(obj.guideprice);
+
+            if (obj.pictures == null) {
+                return;
+            }
+            picArray = obj.pictures.split(",");
+            $.each(picArray, function (k, v) {
+                $('.imgs').append(
+                    '<div id="' + v + '" class="imgPreview">\
+					    <img data-type="img" src="' + getImgUrl(v) + '" class="loading" width="550px">\
+					    <div class="caidan">\
+						    <div hash="' + v + '" class="cz_4" data-id="' + v + '"><div class="czl_icon"></div></div>\
+					    </div>\
+				    </div>');
+                initUploadM();
+            });
+        }, true);
+    }
+
+    function Submit() {
+        var brandid = $("#selectbrand").val();
+        var seriesid = $("#selectseries").val();
+        var modelid = $("#selectmodel").val();
+        var supplierid = $("#selectsupplier").val();
+
+        if (modelid === "0") {
+            alert("请选择车型！");
+            return false;
+        }
+
+        var provid = $("#selectprov").val();
+        var cityid = $("#selectcity").val();
+
+        if (cityid === "0") {
+            alert("请选择城市！");
+            return false;
+        }
+
+        var txtguideprice = $("#txtguideprice").val();
+        var txtprice = $("#txtprice").val();
+
+        if ($.trim(txtguideprice).length === 0) {
+            alert("请填写厂方指导价！");
+            return false;
+        }
+
+        if ($.trim(txtprice).length === 0) {
+            alert("请填写现售价");
+            return false;
+        }
+        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        if (!re.test(txtguideprice)) {
+            alert("收购价格只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        if (!re.test(txtprice)) {
+            alert("待售价格只能输入数值[最多两位小数]！");
+            return false;
+        }
+
+        var txtprogramme = $("#txtprogramme").val();
+        var txtprogrammedesc = $("#txtprogrammedesc").val();
+        var txtremark = $("#txtremark").val();
+
+        var json = {
+            supplierid: supplierid,
+            brand_id: brandid,
+            series_id: seriesid,
+            model_id: modelid,
+            provid: provid,
+            cityid: cityid,
+            guideprice: txtguideprice,
+            price: txtprice,
+            programme: txtprogramme,
+            programmedesc: txtprogrammedesc,
+            remark: txtremark
+        };
+
+        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        var uploadercount = 0;//选择的文件
+        var filelength = $("img[data-type='img']").length; //图片总数
+
+        if (filelength === 0) {
+            alert("请上传图片");
+            hideloading();
+            return false;
+        }
+
+        if (uploader != undefined && uploader != null) {
+            uploadercount = uploader.files.length;
+        }
+
+        //修改文件名
+        plupload.each(uploader.files, function (file) {
+            file.name = "CM" + jsNewGuid().replace("-", "");
+        });
+
+        var tempArr = [];
+        uploader.start();
+        uploader.bind('FileUploaded', function (up, file, info) {
+            var picInfo = JSON.parse(info.response);
+            tempArr.push(picInfo.key);
+            if (tempArr.length === uploadercount) {
+                json.pictures = picArray.concat(tempArr).join(",");
+                Save(json);
+            }
+        });
+        return false;
+    }
+
+    function Save(json) {
+        //添加
+
+        if (id === "") {
+            postJson("/api/Car/AddMaddenCar", json, function (result) {
+                hideloading();
+                if (result.errcode !== 0) {
+                    alert("保存失败!");
+                    return false;
+                }
+                goList();
+                return false;
+            });
+        } else {
+            json.innerid = id;
+            postJson("/api/Car/UpdateMaddenCar", json, function (result) {
+                hideloading();
+                if (result.errcode !== 0) {
+                    alert("保存失败!");
+                    return false;
+                }
+                goList();
+                return false;
+            });
+        }
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/car/car/carmaddencarlist");
+    }
+
+    function initUploadM() {
+        // 图片删除
+        $(".imgs .imgPreview .cz_4").unbind().click(function () {
+            var pic = $(this).attr("data-id");
+            $(this).parent().parent().remove();
+            if ($.inArray(pic, picArray) >= 0) {
+                picArray.splice($.inArray(pic, picArray), 1);
+            }
+        });
+    }
+
+    //Array.p
+
+</script>
+
+<div class="theme-popover">
+    上传图片中...
+    <img src="~/Content/images/loading.gif" alt=""/>
+</div>
+<div class="theme-popover-mask"></div>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">车辆基本信息</span>
+    </div>
+    <div class="widget-body">
+        <form class="form-horizontal form-bordered" role="form">
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>选车</label>
+                        <div class="controls col-sm-10">
+                            <select id="selectbrand" onchange="InitSeries(this.options[this.options.selectedIndex].value)">
+                                <option value="0">请选择</option>
+                            </select>
+                            <select id="selectseries" onchange="InitModel(this.options[this.options.selectedIndex].value)">
+                                <option value="0">请选择</option>
+                            </select>
+                            <select id="selectmodel">
+                                <option value="0">请选择</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">*</label>供应商</label>
+                        <div class="controls col-sm-6">
+                            <select id="selectsupplier">
+                                <option value="0">请选择</option>
+                            </select>
+                            <br/>
+                            <a href="javascript:;" onclick="getBodyHtml('mainbody', '/car/car/carsupplierlist');"> 供应商管理 </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">*</label>地区</label>
+                    <div class="controls col-sm-6">
+                        <select id="selectprov" onchange="InitCity(this.options[this.options.selectedIndex].value)">
+                            <option value="0">请选择</option>
+                        </select>
+                        <select id="selectcity">
+                            <option value="0">请选择</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">*</label>厂方指导价（万元）</label>
+                        <div class="col-sm-6">
+                            <input id="txtguideprice" type="text" placeholder="厂方指导价" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">*</label>现售价（万元）</label>
+                        <div class="col-sm-6">
+                            <input id="txtprice" type="text" placeholder="现售价" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
+                        <div class="controls col-sm-10" id="imgList">
+                            <div id="container2">
+                                <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>选择文件</span>
+                                </a><label class="required">只能上传2M以下图片</label>
+                            </div>
+                            <div>
+                                <div class="imgs col-xs-12" style="padding: 10px 144px 0 0;">
+                                </div>
+                            </div>
+                            <table class="table table-striped table-hover text-left" style="margin-top: 40px; display: none">
+                                <tbody id="fsUploadProgress"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right">购车方案</label>
+                        <div class="controls col-sm-10">
+                            <input type="text" id="txtprogramme" placeholder="购车方案" class="form-control"/>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right">方案说明</label>
+                        <div class="col-sm-10">
+                            <textarea id="txtprogrammedesc" maxlength="200" rows="5" cols="150" placeholder="方案说明"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right">详细信息</label>
+                        <div class="col-sm-10">
+                            <textarea id="txtremark" maxlength="200" rows="5" cols="150" placeholder="详细信息"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row form-group text-center">
+                <div class="col-lg-12">
+                    <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

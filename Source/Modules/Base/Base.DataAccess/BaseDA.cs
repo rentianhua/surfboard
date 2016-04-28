@@ -13,6 +13,7 @@ using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Base.DataAccess
 {
@@ -1162,6 +1163,203 @@ namespace CCN.Modules.Base.DataAccess
                 return null;
             }
         }
+        #endregion
+
+        #region 更新基础数据
+
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public int UpdateCarBrand(string json)
+        {
+            const string sql = @"INSERT INTO `base_carbrand`
+                                (`innerid`,`brandname`,`initial`,`isenabled`,`remark`,`logurl`,`hot`)
+                                VALUES
+                                (@innerid,@brandname,@initial,@isenabled,@remark,@logurl,@hot);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["brand_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["brand_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carbrand where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            brandname = item["brand_name"].ToString(),
+                            initial = item["initial"].ToString(),
+                            isenabled = 1,
+                            remark = time,
+                            logurl = "",
+                            hot = 0
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新品牌记录, list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("品牌更新失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取品牌
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarBrandModel> GetCarBrand()
+        {
+            var sql = "select innerid, brandname, initial, isenabled, remark, logurl, hot from base_carbrand;";
+            var brandList = Helper.Query<BaseCarBrandModel>(sql);
+            return brandList;
+        }
+        /// <summary>
+        /// 根据品牌id获取车系
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarSeriesModel> GetCarSeries()
+        {
+            const string sql = "select innerid, seriesname, seriesgroupname, brandid, isenabled, remark, hot from base_carseries;";
+            var seriesList = Helper.Query<BaseCarSeriesModel>(sql);
+            return seriesList;
+        }
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="brandid"></param>
+        /// <returns></returns>
+        public int UpdateCarSeries(string json,int brandid)
+        {
+            const string sql = @"INSERT INTO `base_carseries`
+                                (`innerid`,`seriesname`,`seriesgroupname`,`brandid`,`isenabled`,`remark`,hot)
+                                VALUES
+                                (@innerid,@seriesname,@seriesgroupname,@brandid,@isenabled,@remark,@hot);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["series_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["series_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carseries where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            seriesname = item["series_name"].ToString(),
+                            seriesgroupname = item["series_group_name"].ToString(),
+                            isenabled = 1,
+                            remark =time,
+                            brandid,
+                            hot = 0
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新车系记录,brandid:{brandid},list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新车系失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="seriesid"></param>
+        /// <returns></returns>
+        public int UpdateCarModel(string json, int seriesid)
+        {
+            const string sql = @"INSERT INTO `base_carmodel`
+                                (innerid, modelname, modelprice, modelyear, minregyear, maxregyear, liter, geartype, dischargestandard, seriesid, isenabled, remark)
+                                VALUES
+                                (@innerid, @modelname, @modelprice, @modelyear, @minregyear, @maxregyear, @liter, @geartype, @dischargestandard, @seriesid, @isenabled, @remark);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["model_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["model_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carmodel where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            modelname = item["model_name"].ToString(),
+                            modelprice = item["model_price"].ToString(),
+                            modelyear = item["model_year"].ToString(),
+                            minregyear = item["min_reg_year"].ToString(),
+                            maxregyear = item["max_reg_year"].ToString(),
+                            liter = item["liter"].ToString(),
+                            geartype = item["gear_type"].ToString(),
+                            dischargestandard = item["discharge_standard"].ToString(),
+                            seriesid,
+                            isenabled = 1,
+                            remark = time
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新车型记录,seriesid:{seriesid},list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新车型失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
         #endregion
 
         #region 获取系统后台基础信息

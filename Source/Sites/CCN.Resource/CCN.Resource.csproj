@@ -972,6 +972,10 @@
     <Content Include="Areas\Activity\Views\Activity\CrowdGradeEdit.cshtml" />
     <Content Include="Areas\Activity\Views\Activity\CrowdPlayerList.cshtml" />
     <None Include="Areas\Activity\Views\Activity\CrowdEditBak.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMysteriousList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMysteriousEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMaddenCarEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMaddenCarList.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
