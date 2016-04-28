@@ -325,7 +325,27 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult UpdateCarModel(BaseCarModelModel model);
         #endregion
+        #region 更新基础数据
 
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarBrand();
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarSeries();
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarModel();
+
+        #endregion
         #region 获取系统后台基础信息
 
         #region 用户管理

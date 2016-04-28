@@ -725,11 +725,47 @@ namespace CCN.Modules.Car.BusinessService
         }
 
         #endregion
-
-			
-
+        
         #region 供应商管理
+        
+        /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public JResult AddSupplier(CarSupplierModel model)
+        {
+            return BusinessComponent.AddSupplier(model);
+        }
 
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public JResult UpdateSupplier(CarSupplierModel model)
+        {
+            return BusinessComponent.UpdateSupplier(model);
+        }
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteSupplier(string innerid)
+        {
+            return BusinessComponent.DeleteSupplier(innerid);
+        }
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarSupplierModel> GetSupplierCarPageList(CarSupplierQueryModel query)
+        {
+            return BusinessComponent.GetSupplierCarPageList(query);
+        }
         /// <summary>
         /// 获取会员所有供应商列表
         /// </summary>
@@ -771,7 +807,147 @@ namespace CCN.Modules.Car.BusinessService
         {
             return BusinessComponent.GetMysteriousBackCarPageList(query);
         }
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpMysteriousCar(string innerid)
+        {
+            return BusinessComponent.PushUpMysteriousCar(innerid);
+        }
 
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult MysteriousUnifiedOrder(PayModel model)
+        {
+            return BusinessComponent.MysteriousUnifiedOrder(model);
+        }
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public JResult DoPay(string orderNo)
+        {
+            return BusinessComponent.DoPay(orderNo);
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public JResult GetPayRecordById(string carid, string custid)
+        {
+            return BusinessComponent.GetPayRecordById(carid, custid);
+        }
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public JResult AddMaddenCar(CarMaddenModel model)
+        {
+            return BusinessComponent.AddMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public JResult UpdateMaddenCar(CarMaddenModel model)
+        {
+            return BusinessComponent.UpdateMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteMaddenCar(CarMaddenModel model)
+        {
+            return BusinessComponent.DeleteMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RecoveryMaddenCar(CarMaddenModel model)
+        {
+            return BusinessComponent.RecoveryMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DealMaddenCar(CarMaddenModel model)
+        {
+            return BusinessComponent.DealMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpMaddenCar(string innerid)
+        {
+            return BusinessComponent.PushUpMaddenCar(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetMaddenCarInfoById(string innerid)
+        {
+            return BusinessComponent.GetMaddenCarInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            return BusinessComponent.GetMaddenCarViewById(innerid);
+        }
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarPageList(CarMaddenQueryModel query)
+        {
+            return BusinessComponent.GetMaddenCarPageList(query);
+        }
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarBackPageList(CarMaddenQueryModel query)
+        {
+            return BusinessComponent.GetMaddenCarBackPageList(query);
+        }
 
         #endregion
     }

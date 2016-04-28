@@ -3270,6 +3270,106 @@ namespace CCN.Modules.Car.DataAccess
         #endregion
 
         #region 供应商管理
+        
+        /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public int AddSupplier(CarSupplierModel model)
+        {
+            const string sql = @"INSERT INTO `car_supplier`
+                                (innerid, suppliername, address, introduction, contacts, contactsphone, remark, extend, isenabled, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (@innerid, @suppliername, @address, @introduction, @contacts, @contactsphone, @remark, @extend, @isenabled, @createrid, @createdtime, @modifierid, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加供应商异常：", TraceEventType.Information, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+
+        }
+
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public int UpdateSupplier(CarSupplierModel model)
+        {
+            var sql = new StringBuilder("update `car_supplier` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改供应商异常：", TraceEventType.Error, ex);
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        public int DeleteSupplier(string innerid)
+        {
+            try
+            {
+                const string sql = "delete from car_supplier where `innerid`=@innerid;";
+                Helper.Execute(sql, new { innerid});
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除供应商异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarSupplierModel> GetSupplierCarPageList(CarSupplierQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_supplier";
+            const string fields = "innerid, suppliername, address, introduction, contacts, contactsphone, remark, extend, isenabled, createrid, createdtime, modifierid, modifiedtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+
+            #region 查询条件
+            var sqlWhere = new StringBuilder("1=1"); //在售和已售车辆
+            if (!string.IsNullOrWhiteSpace(query.Suppliername))
+            {
+                sqlWhere.Append($" and suppliername like '%{query.Suppliername}%'");
+            }
+            
+            #endregion
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarSupplierModel>(model, query.Echo);
+            return list;
+        }
+
 
         /// <summary>
         /// 获取会员所有供应商列表
@@ -3458,6 +3558,404 @@ namespace CCN.Modules.Car.DataAccess
                 sqlWhere.Append($" and (c1.brandname like '%{query.keyword}%' or c2.seriesname like '%{query.keyword}%' or a.carno='{query.keyword}')");
             }
             return sqlWhere.ToString();
+        }
+
+        /// <summary>
+        /// 添加订单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddMysteriousOrder(PayRecordModel model)
+        {
+            const string sql = @"INSERT INTO `car_itrecords`
+                                (innerid, custid, carid, orderno, ispay, createdtime, modifiedtime)
+                                VALUES
+                                (@innerid, @custid, @carid, @orderno, @ispay, @createdtime, @modifiedtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加查看劲爆车源订单异常：", TraceEventType.Error, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+
+        }
+
+        /// <summary>
+        /// 更新订单
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public int UpdateOrder(string orderNo)
+        {
+            const string sql = @"update car_itrecords set ispay=1,modifiedtime=now() where orderno = @orderno;";
+            var result = Helper.Execute(sql, new { orderNo });
+            return result;
+        }
+
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int PushUpMysteriousCar(string innerid)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    //更新刷新时间
+                    var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    string sql = $"update car_info set refreshtime={(long)ts.TotalSeconds} where innerid=@innerid;";
+                    conn.Execute(sql, new { innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("顶神秘车源异常：" + ex.Message, TraceEventType.Error);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public PayRecordModel GetPayRecordByOrderNo(string orderNo)
+        {
+            const string sql = @"select innerid, custid, carid, orderno, ispay, createdtime, modifiedtime from car_itrecords where orderno = @orderno;";
+            var model = Helper.Query<PayRecordModel>(sql, new { orderNo }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public PayRecordModel GetPayRecordById(string carid,string custid)
+        {
+            const string sql = @"select innerid, custid, carid, orderno, ispay, createdtime, modifiedtime from car_itrecords where carid=@carid and custid=@custid and ispay=1;";
+            var model = Helper.Query<PayRecordModel>(sql, new { carid, custid }).FirstOrDefault();
+            return model;
+        }
+
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public int AddMaddenCar(CarMaddenModel model)
+        {
+            const string sql = @"INSERT INTO `car_madden_info`
+                                (innerid, supplierid, carno, pictures, provid, cityid, brand_id, series_id, model_id, colorid, programme, programmedesc, guideprice, price, dealprice, dealtime, dealdesc, deletedtime, deletedesc, estimateprice, status, isdeleted, createdtime, modifiedtime, refreshtime, remark, operatedid)
+                                VALUES
+                                (@innerid, @supplierid, @carno, @pictures, @provid, @cityid, @brand_id, @series_id, @model_id, @colorid, @programme, @programmedesc, @guideprice, @price, @dealprice, @dealtime, @dealdesc, @deletedtime, @deletedesc, @estimateprice, @status, @isdeleted, @createdtime, @modifiedtime, @refreshtime, @remark, @operatedid);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                int result;
+                try
+                {
+                    result = conn.Execute(sql, model);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("添加劲爆车源异常：", TraceEventType.Error, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+
+        }
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public int UpdateMaddenCar(CarMaddenModel model)
+        {
+            var sql = new StringBuilder("update `car_madden_info` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));            
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("修改劲爆车源异常：", TraceEventType.Error, ex);
+                result = 0;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        public int DeleteMaddenCar(CarMaddenModel model)
+        {
+            try
+            {
+                const string sql = "update car_madden_info set isdeleted=1,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
+                model.deletedesc = string.Concat("\n@", model.deletedesc);
+                Helper.Execute(sql, new { model.innerid, model.deletedesc });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("删除劲爆车源异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        public int RecoveryMaddenCar(CarMaddenModel model)
+        {
+            try
+            {
+                const string sql = "update car_madden_info set isdeleted=0,deletedesc=concat(ifnull(deletedesc,''),@deletedesc) where `innerid`=@innerid;";
+                model.deletedesc = string.Concat("\n@", model.deletedesc);
+                Helper.Execute(sql, new {model.innerid, model.deletedesc});
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("回复劲爆车辆异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        public int DealMaddenCar(CarMaddenModel model)
+        {
+            try
+            {
+                const string sql = "update car_madden_info set status=2,dealprice=@dealprice,dealtime=@dealtime,dealdesc=@dealdesc where `innerid`=@innerid;";
+                Helper.Execute(sql, new
+                {
+                    model.innerid,
+                    model.dealprice,
+                    model.dealtime,
+                    model.dealdesc
+                });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("车辆劲爆成交异常：", TraceEventType.Error, ex);
+                return 0;
+            }
+            return 1;
+        }
+
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public int PushUpMaddenCar(string innerid)
+        {
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    //更新刷新时间
+                    var ts = DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                    string sql = $"update car_madden_info set refreshtime={(long)ts.TotalSeconds} where innerid=@innerid;";
+                    conn.Execute(sql, new { innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("顶劲爆车源异常：" + ex.Message, TraceEventType.Error);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public CarMaddenModel GetMaddenCarInfoById(string innerid)
+        {
+            const string sql = @"select innerid, supplierid, carno, pictures, provid, cityid, brand_id, series_id, model_id, colorid, programme, programmedesc, guideprice, price, dealprice, dealtime, dealdesc, deletedtime, deletedesc, estimateprice, status, isdeleted, createdtime, modifiedtime, refreshtime, remark, operatedid from car_madden_info where innerid=@innerid;";
+            var list = Helper.Query<CarMaddenModel>(sql, new { innerid }).FirstOrDefault();
+            return list;
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public CarMaddenViewModel GetMaddenCarViewById(string innerid)
+        {
+            const string sql = @"select 
+                                    a.innerid, a.supplierid, a.carno, a.pictures, a.provid, a.cityid, a.brand_id, a.series_id, a.model_id, a.colorid, a.programme, a.programmedesc, a.guideprice, 
+                                    a.price, a.dealprice, a.dealtime, a.dealdesc, a.deletedtime, a.deletedesc, a.estimateprice, a.status, a.isdeleted, a.createdtime, a.modifiedtime, a.refreshtime, a.remark, a.operatedid,
+                                    pr.provname,
+                                    ct.cityname,
+                                    cb.brandname as brand_name,
+                                    cs.seriesname as series_name,
+                                    cm.modelname as model_name,
+                                    cm.liter,
+                                    cm.geartype,
+                                    cm.dischargestandard as dischargeName,
+                                    bc1.codename as color
+                                    from  car_madden_info as a 
+                                    left join base_province as pr on a.provid=pr.innerid
+                                    left join base_city as ct on a.cityid=ct.innerid
+                                    left join base_carbrand as cb on a.brand_id=cb.innerid
+                                    left join base_carseries as cs on a.series_id=cs.innerid
+                                    left join base_carmodel as cm on a.model_id=cm.innerid
+                                    left join base_code as bc1 on a.colorid=bc1.codevalue and bc1.typekey='car_color' 
+                                    where a.innerid=@innerid;";
+
+            try
+            {
+                var list = Helper.Query<CarMaddenViewModel>(sql, new { innerid }).FirstOrDefault();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("根据id获取劲爆车源的信息异常：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarPageList(CarMaddenQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_madden_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_province as pt on a.provid=pt.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            query.isdeleted = 0;
+
+            var model = new PagingModel(spName, tableName, fields, orderField, GetMaddenWhere(query), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarMaddenListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarBackPageList(CarMaddenQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"car_madden_info as a 
+                                    left join base_carbrand as c1 on a.brand_id=c1.innerid 
+                                    left join base_carseries as c2 on a.series_id=c2.innerid 
+                                    left join base_carmodel as c3 on a.model_id=c3.innerid 
+                                    left join base_province as pt on a.provid=pt.innerid 
+                                    left join base_city as ct on a.cityid=ct.innerid";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
+
+            var model = new PagingModel(spName, tableName, fields, orderField, GetMaddenWhere(query), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CarMaddenListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取条件
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public string GetMaddenWhere(CarMaddenQueryModel query)
+        {
+            #region 查询条件
+
+            var sqlWhere = new StringBuilder("1=1"); //在售和已售车辆
+
+            //是否删除
+            if (query.isdeleted != null)
+            {
+                sqlWhere.Append($" and a.isdeleted={query.isdeleted}");
+            }
+
+            //状态
+            if (query.status != null)
+            {
+                sqlWhere.Append($" and a.status={query.status}");
+            }
+
+            //省份
+            if (query.provid != null)
+            {
+                sqlWhere.Append($" and a.provid={query.provid}");
+            }
+
+            //城市
+            if (query.cityid != null)
+            {
+                sqlWhere.Append($" and a.cityid={query.cityid}");
+            }
+
+            //品牌
+            if (query.brand_id != null && query.brand_id != 0)
+            {
+                sqlWhere.Append($" and a.brand_id={query.brand_id}");
+            }
+
+            //车系
+            if (query.series_id != null && query.series_id != 0)
+            {
+                sqlWhere.Append($" and a.series_id={query.series_id}");
+            }
+
+            //车型
+            if (query.model_id != null && query.model_id != 0)
+            {
+                sqlWhere.Append($" and a.model_id={query.model_id}");
+            }
+
+            sqlWhere.Append("");
+
+            return sqlWhere.ToString();
+
+            #endregion
         }
 
         #endregion

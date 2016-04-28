@@ -80,5 +80,66 @@ namespace CCN.Modules.Car.BusinessEntity
         
         #endregion
     }
-    
+
+    /// <summary>
+    /// 查看车源下单model
+    /// </summary>
+    public class PayRecordModel
+    {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string Innerid { get; set; } 
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string Carid { get; set; }
+
+        /// <summary>
+        /// 订单号
+        /// </summary>
+        public string Orderno { get; set; }
+
+        /// <summary>
+        /// 是否支付
+        /// </summary>
+        public short? Ispay { get; set; }
+
+        /// <summary>
+        /// 添加时间
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
+
+        /// <summary>
+        /// 修改时间
+        /// </summary>
+        public DateTime? Modifiedtime { get; set; }
+    }
+
+    /// <summary>
+    /// 查看车源下单model
+    /// </summary>
+    public class PayModel
+    {
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string custid { get; set; }
+
+        /// <summary>
+        /// 车辆id
+        /// </summary>
+        public string carid { get; set; }
+
+        /// <summary>
+        /// 交易类型JSAPI，NATIVE，APP
+        /// </summary>
+        public string tradeType { get; set; } = "NATIVE";
+    }
 }

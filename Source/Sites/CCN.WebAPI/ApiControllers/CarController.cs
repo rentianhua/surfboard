@@ -976,7 +976,70 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _carervice.GetMysteriousCarPageList(query);
         }
-        
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("MysteriousUnifiedOrder")]
+        public JResult MysteriousUnifiedOrder([FromBody]PayModel model)
+        {
+            return _carervice.MysteriousUnifiedOrder(model);
+        }
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("DoPay")]
+        public JResult DoPay(string orderNo)
+        {
+            return _carervice.DoPay(orderNo);
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetPayRecordById")]
+        public JResult GetPayRecordById(string carid, string custid)
+        {
+            return _carervice.GetPayRecordById(carid, custid);
+        }
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarViewById")]
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            return _carervice.GetMaddenCarViewById(innerid);
+        }
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMaddenCarPageList")]
+        public BasePageList<CarMaddenListModel> GetMaddenCarPageList([FromBody]CarMaddenQueryModel query)
+        {
+            return _carervice.GetMaddenCarPageList(query);
+        }
+
         #endregion
     }
 }

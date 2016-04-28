@@ -1,4 +1,5 @@
 ﻿using System;
+using Cedar.Framework.Common.BaseClasses;
 
 namespace CCN.Modules.Car.BusinessEntity
 {
@@ -83,4 +84,31 @@ namespace CCN.Modules.Car.BusinessEntity
         /// </summary>
         public string Suppliername { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CarSupplierQueryModel : QueryModel
+    {
+        /// <summary>
+        /// 供应商名称
+        /// </summary>
+        public string Suppliername { get; set; }
+
+        /// <summary>
+        /// 供应商地址
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// 联系人
+        /// </summary>
+        public string Contacts { get; set; }
+
+        /// <summary>
+        /// 联系电话
+        /// </summary>
+        public string Contactsphone { get; set; }
+    }
+
 }

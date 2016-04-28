@@ -644,6 +644,41 @@ namespace CCN.Resource.ApiControllers
         }
         #endregion
 
+        #region 更新基础数据
+
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateCarBrand")]
+        [HttpGet]
+        public JResult UpdateCarBrand()
+        {
+            return _baseservice.UpdateCarBrand();
+        }
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateCarSeries")]
+        [HttpGet]
+        public JResult UpdateCarSeries()
+        {
+            return _baseservice.UpdateCarSeries();
+        }
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <returns></returns>
+        [Route("UpdateCarModel")]
+        [HttpGet]
+        public JResult UpdateCarModel()
+        {
+            return _baseservice.UpdateCarModel();
+        }
+        #endregion
+
         #region 广告管理
 
         /// <summary>

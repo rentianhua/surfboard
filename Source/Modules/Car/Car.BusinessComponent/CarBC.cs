@@ -120,7 +120,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     Createdtime = DateTime.Now,
                     Custid = custid,
                     Innerid = Guid.NewGuid().ToString(),
-                    Jsonobj = "web:" + JsonConvert.SerializeObject(query)
+                    Jsonobj = "web:" + JsonConvert.SerializeObject(query, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore })
                 });
             });
 
@@ -215,7 +215,7 @@ namespace CCN.Modules.Car.BusinessComponent
                     Createdtime = DateTime.Now,
                     Custid = custid,
                     Innerid = Guid.NewGuid().ToString(),
-                    Jsonobj = "mobile:" + JsonConvert.SerializeObject(query)
+                    Jsonobj = "mobile:" + JsonConvert.SerializeObject(query, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore })
                 });
             });
 
@@ -252,8 +252,7 @@ namespace CCN.Modules.Car.BusinessComponent
             query.keyword = query.keyword.ToDbValue();
             return list;
         }
-
-
+        
         /// <summary>
         /// 获取车辆列表
         /// </summary>
@@ -263,8 +262,7 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.GetAllCarPageList(query);
         }
-
-
+        
         /// <summary>
         /// 获取车辆详情
         /// </summary>
@@ -314,6 +312,11 @@ namespace CCN.Modules.Car.BusinessComponent
             {
                 model.IsCollection = 1;
             }
+
+            //if (model.seller_type == 3)
+            //{
+            //    var rModel = DataAccess.GetPayRecordById(custid, model.Innerid);
+            //}
 
             return JResult._jResult(model);
         }
@@ -1773,8 +1776,62 @@ namespace CCN.Modules.Car.BusinessComponent
         }
 
         #endregion
-        
+
         #region 供应商管理
+
+        /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public JResult AddSupplier(CarSupplierModel model)
+        {
+            //获取主键
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Createrid = ApplicationContext.Current.UserId;
+            model.Modifiedtime = null;
+            model.Modifierid = null;
+            var result = DataAccess.AddSupplier(model);
+            return JResult._jResult(result);
+
+        }
+
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        public JResult UpdateSupplier(CarSupplierModel model)
+        {
+            //获取主键
+            model.Createdtime = null;
+            model.Createrid = null;
+            model.Modifiedtime = DateTime.Now;
+            model.Modifierid = ApplicationContext.Current.UserId;
+            var result = DataAccess.UpdateSupplier(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteSupplier(string innerid)
+        {
+            var result = DataAccess.DeleteSupplier(innerid);
+            return JResult._jResult(result);
+        }
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarSupplierModel> GetSupplierCarPageList(CarSupplierQueryModel query)
+        {
+            return DataAccess.GetSupplierCarPageList(query);
+        }
 
         /// <summary>
         /// 获取会员所有供应商列表
@@ -1819,8 +1876,301 @@ namespace CCN.Modules.Car.BusinessComponent
         {
             return DataAccess.GetMysteriousBackCarPageList(query);
         }
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpMysteriousCar(string innerid)
+        {
+            var result = DataAccess.PushUpMysteriousCar(innerid);
+            return JResult._jResult(result);
+        }
 
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult MysteriousUnifiedOrder(PayModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.custid)||
+                string.IsNullOrWhiteSpace(model.carid))
+            {
+                return JResult._jResult(401,"参数不完整");
+            }
+            
+            var body = ConfigHelper.GetAppSettings("mys_body");
+            var totalFee = ConfigHelper.GetAppSettings("mys_total_fee");
 
+            var orderNo = "M" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
+            var json = "{\"out_trade_no\":\"" + orderNo + "\",\"total_fee\":\"" + totalFee + "\",\"body\":\"" + body + "\",\"attach\":\"kplx_mysterious\"}";
+
+            object errmsg = null;
+            if (model.tradeType.Equals("NATIVE"))
+            {
+                #region NATIVE
+
+                var payurl = ConfigHelper.GetAppSettings("payurl") + "unifiedorder";
+                var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
+
+                if (string.IsNullOrWhiteSpace(orderresult))
+                {
+                    return JResult._jResult(402, "下单失败");
+                }
+
+                LoggerFactories.CreateLogger().Write($"NATIVE WxPay Result: {orderresult}", TraceEventType.Information);
+
+                var jobj = JObject.Parse(orderresult);
+
+                if (jobj["errcode"].ToString() != "0")
+                    return JResult._jResult(402, "下单失败");
+
+                dynamic orderInfo = new
+                {
+                    qrcode = jobj["errmsg"]["qrcode"].ToString(),
+                    prepay_id = jobj["errmsg"]["prepay_id"].ToString(),
+                    sign = jobj["errmsg"]["sign"].ToString(),
+                    code_url = jobj["errmsg"]["code_url"].ToString(),
+                    modelname = body,
+                    deposit = totalFee
+                };
+
+                errmsg = orderInfo;
+                #endregion
+            }
+            else if (model.tradeType.Equals("APP"))
+            {
+                #region app下单
+
+                var payurl = ConfigHelper.GetAppSettings("payurl") + "apppay";
+                var orderresult = DynamicWebService.ExeApiMethod(payurl, "post", json, false);
+                if (string.IsNullOrWhiteSpace(orderresult))
+                {
+                    return JResult._jResult(402, "统一下单失败");
+                }
+                LoggerFactories.CreateLogger().Write($"APP WxPay Result: {orderresult}", TraceEventType.Information);
+                var jobj = JObject.Parse(orderresult);
+                if (jobj["errcode"].ToString() != "0")
+                    return JResult._jResult(402, "统一下单失败");
+                
+                errmsg = jobj["errmsg"].ToString();
+                #endregion
+            }
+            var record = new PayRecordModel
+            {
+                Carid = model.carid,
+                Custid = model.custid,
+                Createdtime = DateTime.Now,
+                Innerid = Guid.NewGuid().ToString(),
+                Orderno = orderNo,
+                Ispay = 0
+            };
+            DataAccess.AddMysteriousOrder(record);
+            return JResult._jResult(0, errmsg);
+        }
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public JResult DoPay(string orderNo)
+        {
+            var result = DataAccess.UpdateOrder(orderNo);
+            if (result <= 0) return JResult._jResult(result);
+            var record = DataAccess.GetPayRecordByOrderNo(orderNo);
+            var url = ConfigHelper.GetAppSettings("nodejssiteurl") + "api/paymys";
+            var param = new Dictionary<string, string>
+            {
+                {"carid", record.Carid},
+                {"custid", record.Custid}
+            };
+            var nodeRes = DynamicWebService.SendPost(url, param, "post");
+            LoggerFactories.CreateLogger().Write($"神秘车源支付通知结果 ： {url},result:{nodeRes}", TraceEventType.Information);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public JResult GetPayRecordById(string carid, string custid)
+        {
+            var model = DataAccess.GetPayRecordById(carid, custid);
+            if (model == null)
+            {
+                return JResult._jResult(0, new {isauth = 0});
+            }
+            var mysDay = ConfigHelper.GetAppSettings("mys_day");
+            if (string.IsNullOrWhiteSpace(mysDay))
+            {
+                return JResult._jResult(0, new {isauth = 1});
+            }
+
+            int day;
+            int.TryParse(mysDay, out day);
+            if (model.Modifiedtime.HasValue &&
+                model.Modifiedtime.Value.AddDays(day) > DateTime.Now)
+            {
+                return JResult._jResult(0, new {isauth = 1});
+            }
+
+            return JResult._jResult(0, new {isauth = 0});
+        }
+
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public JResult AddMaddenCar(CarMaddenModel model)
+        {
+            if (model.model_id == null || model.guideprice == null || model.price == null || model.cityid == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.innerid = Guid.NewGuid().ToString();
+            model.status = 1;
+            model.createdtime = DateTime.Now;            
+            var ts = model.createdtime.Value - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            model.refreshtime = (long)ts.TotalSeconds;
+            model.modifiedtime = null;
+            model.isdeleted = 0;
+            model.carno = "CM" + DateTime.Now.ToString("yyyyMMddHHmmss") + RandomUtility.GetRandom(4);
+            var result = DataAccess.AddMaddenCar(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        public JResult UpdateMaddenCar(CarMaddenModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.innerid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            LoggerFactories.CreateLogger().Write("车辆修改：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            model.createdtime = null;
+            model.status = null;
+            model.refreshtime = null;
+            model.modifiedtime = DateTime.Now;
+            var result = DataAccess.UpdateMaddenCar(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DeleteMaddenCar(CarMaddenModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.innerid) ||
+                string.IsNullOrWhiteSpace(model.deletedesc))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.deletedtime = DateTime.Now;
+            var result = DataAccess.DeleteMaddenCar(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult RecoveryMaddenCar(CarMaddenModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.innerid) ||
+                string.IsNullOrWhiteSpace(model.deletedesc))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.deletedtime = DateTime.Now;
+            var result = DataAccess.RecoveryMaddenCar(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        public JResult DealMaddenCar(CarMaddenModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.innerid) ||
+                string.IsNullOrWhiteSpace(model.dealdesc) ||
+                model.dealprice == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.dealtime = DateTime.Now;
+            var result = DataAccess.DealMaddenCar(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        public JResult PushUpMaddenCar(string innerid)
+        {
+            var result = DataAccess.PushUpMaddenCar(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetMaddenCarInfoById(string innerid)
+        {
+            var model = DataAccess.GetMaddenCarInfoById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            var model = DataAccess.GetMaddenCarViewById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarPageList(CarMaddenQueryModel query)
+        {
+            return DataAccess.GetMaddenCarPageList(query);
+        }
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<CarMaddenListModel> GetMaddenCarBackPageList(CarMaddenQueryModel query)
+        {
+            return DataAccess.GetMaddenCarBackPageList(query);
+        }
+        
         #endregion
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ using Cedar.Core.ApplicationContexts;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Foundation.SMS.Common;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
@@ -924,6 +926,76 @@ namespace CCN.Modules.Base.BusinessComponent
                 errmsg = result
             };
         }
+        #endregion
+
+        #region 更新基础数据
+
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarBrand()
+        {
+            var cheU = new Che300Utility();
+            var json = cheU.GetCarBrandList();
+            var result = DataAccess.UpdateCarBrand(json);
+            return JResult._jResult(0, result);
+        }
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarSeries()
+        {
+            //获取所有品牌
+            var brandList = DataAccess.GetCarBrand().ToList();
+            if (!brandList.Any())
+            {
+                return JResult._jResult(401, "没有品牌");
+            }
+
+            //根据品牌获取车系
+            var cheU = new Che300Utility();
+            foreach (var item in brandList)
+            {
+                if (item.Innerid == null)
+                    continue;
+
+                var jsonSeries = cheU.GetCarSeriesList(item.Innerid.Value);
+                DataAccess.UpdateCarSeries(jsonSeries, item.Innerid.Value);
+            }
+
+            return JResult._jResult(0, "完成");
+        }
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarModel()
+        {
+            //获取所有品牌
+            var seriesList = DataAccess.GetCarSeries().ToList();
+            if (!seriesList.Any())
+            {
+                return JResult._jResult(401, "没有车系");
+            }
+
+            //根据品牌获取车系
+            var cheU = new Che300Utility();
+            foreach (var item in seriesList)
+            {
+                if (item.Innerid == null)
+                    continue;
+
+                var jsonModel = cheU.GetCarModelList(item.Innerid.Value);
+                DataAccess.UpdateCarModel(jsonModel, item.Innerid.Value);
+            }
+
+            return JResult._jResult(0, "完成");
+        }
+
         #endregion
 
         #region 获取系统后台基础信息
