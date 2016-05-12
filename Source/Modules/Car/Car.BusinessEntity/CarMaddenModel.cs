@@ -76,17 +76,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 厂方指导价(万元)
         /// </summary>
-        public decimal? guideprice { get; set; }
+        public string guideprice { get; set; }
 
         /// <summary>
         /// 现售价（万元）
         /// </summary>
-        public decimal? price { get; set; }
+        public string price { get; set; }
 
         /// <summary>
         /// 成交价格（万元）
         /// </summary>
-        public decimal? dealprice { get; set; }
+        public string dealprice { get; set; }
 
         /// <summary>
         /// 结案时间
@@ -238,12 +238,12 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 厂方指导价(万元)
         /// </summary>
-        public decimal? guideprice { get; set; }
+        public string guideprice { get; set; }
 
         /// <summary>
         /// 现售价（万元）
         /// </summary>
-        public decimal? price { get; set; }
+        public string price { get; set; }
         
         /// <summary>
         /// 状态状态[1.在售，2.已售]
@@ -254,6 +254,22 @@ namespace CCN.Modules.Car.BusinessEntity
         /// 是否删除
         /// </summary>
         public short? isdeleted { get; set; }
+
+        /// <summary>
+        /// 品牌id
+        /// </summary>
+        public int? brand_id { get; set; }
+
+
+        /// <summary>
+        /// 车系id
+        /// </summary>
+        public int? series_id { get; set; }
+
+        /// <summary>
+        /// 车型id
+        /// </summary>
+        public int? model_id { get; set; }
 
         /// <summary>
         /// createdtime

@@ -1,9 +1,9 @@
 ﻿<script type="text/javascript">
 
-    $(function () {
+    $(function() {
         InitBrand();
         QueryList();
-        $("#btnAdd").click(function () {
+        $("#btnAdd").click(function() {
             getBodyHtml('mainbody', "/car/car/CarMaddenCarEdit");
         });
     });
@@ -12,10 +12,10 @@
     function InitBrand() {
         $("#selectbrand").empty();
         $("#selectbrand").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarBrand", function (data) {
+        $.get("/api/Base/GetCarBrand", function(data) {
 
             data = data.errmsg;
-            $.each(data, function (k, v) {
+            $.each(data, function(k, v) {
                 $("#selectbrand").append("<option value='" + v.Innerid + "'>" + v.Initial + " " + v.BrandName + "</option>");
             });
         });
@@ -25,10 +25,10 @@
     function InitSeries(brandid) {
         $("#selectseries").empty();
         $("#selectseries").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarSeries?brandId=" + brandid, function (data) {
+        $.get("/api/Base/GetCarSeries?brandId=" + brandid, function(data) {
 
             data = data.errmsg;
-            $.each(data, function (k, v) {
+            $.each(data, function(k, v) {
                 $("#selectseries").append("<option value='" + v.Innerid + "'>" + v.SeriesName + "</option>");
             });
         });
@@ -38,10 +38,10 @@
     function InitModel(seriesid) {
         $("#selectmodel").empty();
         $("#selectmodel").append("<option value='0'>请选择</option>");
-        $.get("/api/Base/GetCarModel?seriesId=" + seriesid, function (data) {
+        $.get("/api/Base/GetCarModel?seriesId=" + seriesid, function(data) {
 
             data = data.errmsg;
-            $.each(data, function (k, v) {
+            $.each(data, function(k, v) {
                 $("#selectmodel").append("<option value='" + v.Innerid + "'>" + v.Modelname + "</option>");
             });
         });
@@ -57,19 +57,19 @@
 
         var str = "";
 
-        $.each(data, function (key, val) {
+        $.each(data, function(key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + val.carno + "</td>";
-            str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
+            str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + (val.programme === null ? "" : "（" + val.programme + "）") + "</td>";
             str += "<td>" + val.provname + " " + val.cityname + "</td>";
             str += "<td>" + val.guideprice + "</td>";
             str += "<td>" + val.price + "</td>";
             str += "<td>" + ChangeStatusName(val.status) + (val.isdeleted === 1 ? "<span style='color:red'>[已删除]</span>" : "") + "</td>";
             str += "<td>" +
                 "<a onclick=\"getBodyHtml('mainbody', '/car/car/CarMaddenCarEdit?innerid=" + val.innerid + "');\" href='javascript:;'>修改</a> " +
-                "<a href='javascript:;' onclick=\"PushUpMaddenCar('" + val.innerid + "');\"> 顶 </a> " ;
+                "<a href='javascript:;' onclick=\"PushUpMaddenCar('" + val.innerid + "');\"> 顶 </a> ";
 
             if (val.status === 1) {
                 str += "<a href='javascript:;' onclick=\"DealMaddenCar('" + val.innerid + "',this);\">结案</a> ";
@@ -90,9 +90,9 @@
 
         $(obj).after($("#deleteDiv").removeClass("hide"));
 
-        $("#delsubmit").unbind("click").bind("click", function () {
+        $("#delsubmit").unbind("click").bind("click", function() {
             var json = { innerid: id, deletedesc: $("#deldesc").val() };
-            delJson("/api/Car/DeleteMaddenCar", json, function (delres) {
+            delJson("/api/Car/DeleteMaddenCar", json, function(delres) {
                 if (delres.errcode === 0) {
                     getBodyHtml('mainbody', '/car/car/CarMaddenCarList');
                 } else {
@@ -105,9 +105,9 @@
     function RecoveryMaddenCar(id, obj) {
 
         $(obj).after($("#recoveryDiv").removeClass("hide"));
-        $("#recsubmit").unbind("click").bind("click", function () {
+        $("#recsubmit").unbind("click").bind("click", function() {
             var json = { Innerid: id, deletedesc: $("#recdesc").val() };
-            postJson("/api/Car/RecoveryMaddenCar", json, function (delres) {
+            postJson("/api/Car/RecoveryMaddenCar", json, function(delres) {
                 if (delres.errcode === 0) {
                     getBodyHtml('mainbody', '/car/car/CarMaddenCarList');
                 } else {
@@ -121,7 +121,7 @@
     function DealMaddenCar(id, obj) {
 
         $(obj).after($("#dealDiv").removeClass("hide"));
-        $("#dealsubmit").unbind("click").bind("click", function () {
+        $("#dealsubmit").unbind("click").bind("click", function() {
             var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if ($.trim($("#dealprice").val()).length > 0 && !re.test($("#dealprice").val())) {
                 alert("价格只能输入数值[最多两位小数]！");
@@ -129,10 +129,9 @@
             }
             if ($("#dealdesc").val() === "" || $("#dealprice").val() === "") {
                 alert("请将价格和描述填写完整！");
-            }
-            else {
+            } else {
                 var json = { innerid: id, dealdesc: $("#dealdesc").val(), dealprice: $("#dealprice").val() };
-                $.post("/api/Car/DealMaddenCar", json, function (dealres) {
+                $.post("/api/Car/DealMaddenCar", json, function(dealres) {
                     if (dealres.errcode === 0) {
                         getBodyHtml('mainbody', '/car/car/CarMaddenCarList');
                     } else {
@@ -147,7 +146,7 @@
     //顶车辆
     function PushUpMaddenCar(id) {
 
-        $.get("/api/Car/PushUpMaddenCar?innerid=" + id, function (result) {
+        $.get("/api/Car/PushUpMaddenCar?innerid=" + id, function(result) {
             if (result.errcode === 0) {
                 getBodyHtml('mainbody', '/car/car/CarMaddenCarList');
             } else {
@@ -158,16 +157,250 @@
 
     function ChangeStatusName(status) {
         switch (status) {
-            case 1:
-                return "在售";
-            case 2:
-                return "已售";
-            default:
+        case 1:
+            return "在售";
+        case 2:
+            return "已售";
+        default:
         }
         return "";
     }
 
 </script>
+<style type="text/css">
+.main-content {
+  height: 421px;
+  background: url('/car/img/valuation-banner.png');
+  background-repeat: no-repeat;
+  position: relative;
+}
+.main-content .valuation-container {
+  display: inline-block;
+  float: right;
+  width: 357px;
+  height: 360px;
+  margin: 30px;
+  border-top: 4px solid #0aa0ef;
+  background: white;
+}
+.main-content .valuation-container .valuation-title {
+  font-size: 24px;
+  text-align: center;
+  line-height: 62px;
+  color: #333;
+}
+.main-content .valuation-container .valuation-item {
+  height: 56px;
+  line-height: 56px;
+}
+.main-content .valuation-container .valuation-item .valuation-inputbox {
+  display: inline-block;
+}
+.main-content .valuation-container .valuation-item .valuation-inputbox input[type="text"] {
+  border: 1px solid #d2d2d2;
+  border-radius: 1px;
+  width: 237px;
+  height: 34px;
+  line-height: 34px;
+  padding-left: 10px;
+}
+.main-content .valuation-container .valuation-item .has-down {
+  position: relative;
+}
+.main-content .valuation-container .valuation-item .has-down:after {
+  line-height: 56px;
+  content: "\f0d7";
+  font: normal normal normal 16px/1 FontAwesome;
+  position: absolute;
+  top: 22px;
+  right: 13px;
+  color: #999;
+}
+.main-content .valuation-container .valuation-item .has-down input[type="text"] {
+  padding-right: 27px;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts {
+  width: 237px;
+  height: 411px;
+  position: absolute;
+  top: 0;
+  border: 1px solid #ccc;
+  border-top: 0;
+  z-index: 200;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts ul {
+  width: 29px;
+  height: 410px;
+  margin: 0;
+  padding: 0;
+  border-right: 1px solid #ddd;
+  background-color: #f5f5f5;
+  float: left;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts ul li {
+  width: 100%;
+  text-align: center;
+  line-height: 17px;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts ul li a {
+  color: #333;
+  font-size: 12px;
+  line-height: 18px;
+  text-decoration: none;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts ul li a:hover {
+  color: #fd521d;
+  cursor: pointer;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts > div {
+  width: 206px;
+  height: 410px;
+  overflow-y: scroll;
+  float: left;
+  background-color: #fff;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts > div span {
+  display: block;
+  height: 22px;
+  font-size: 14px;
+  line-height: 22px;
+  padding-left: 10px;
+  color: #333;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #eee;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts > div p {
+  padding-left: 10px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  height: 31px;
+  line-height: 32px;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts > div p:hover {
+  color: #fd521d;
+  cursor: pointer;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts .year-list {
+  width: 100%;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next {
+  min-width: 237px;
+  height: 411px;
+  position: absolute;
+  top: 0;
+  border: 1px solid #ccc;
+  border-top: 0;
+  background-color: #fff;
+  overflow-y: scroll;
+  z-index: 201;
+  display: none;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next span {
+  display: block;
+  height: 32px;
+  background-color: #eee;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next span,
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next p {
+  padding-left: 10px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  line-height: 32px;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next span:hover,
+.main-content .valuation-container .valuation-item .has-down .moreitem-opts-next p:hover {
+  color: #fd521d;
+  cursor: pointer;
+}
+.main-content .valuation-container .valuation-item .has-down .moreitem-box {
+  border: 1px solid #bbb;
+  background-color: #fff;
+  position: absolute;
+  left: -1px;
+  top: 45px;
+  z-index: 43;
+  display: none;
+}
+.main-content .valuation-container .valuation-item label {
+  display: inline-block;
+  width: 85px;
+  margin-right: 5px;
+  text-align: right;
+  color: #333;
+  font-size: 16px;
+}
+.main-content .valuation-container .item-mile .valuation-inputbox {
+  position: relative;
+}
+.main-content .valuation-container .item-mile .valuation-inputbox input[type="text"] {
+  padding-right: 60px;
+}
+.main-content .valuation-container .item-mile .valuation-inputbox .unit {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  font-size: 14px;
+  color: #666;
+}
+.main-content .valuation-container input[type="button"] {
+  width: 245px;
+  height: 47px;
+  line-height: 47px;
+  background-color: #0aa0ef;
+  font-size: 18px;
+  color: white;
+  margin: 5px auto 0;
+  display: block;
+  border-radius: 5px;
+}
+.main-content .valuation-container input[type="button"]:hover {
+  background-color: #008fde;
+}
+.feature {
+  height: 521px;
+  padding: 12px 0 0;
+}
+.feature .feature-title {
+  text-align: center;
+  color: #666;
+  line-height: 180px;
+  font-size: 39px;
+}
+.feature ul li {
+  float: left;
+  width: 33.3%;
+  text-align: center;
+}
+.feature ul li img {
+  margin: 5px 0;
+}
+.feature ul li .feature-tip {
+  color: #0aa0ef;
+  font-size: 24px;
+  line-height: 64px;
+}
+.feature ul li .feature-desc {
+  color: #666;
+  font-size: 17px;
+  line-height: 22px;
+}
+
+/*media screen and (max-width: 1200px) {
+  .main-content {
+    height: 780px;
+  }
+  .main-content .valuation-container {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    margin-left: -180px;
+  }
+}*/
+
+</style>
 <div style="margin: 0 auto;">
     <div style="font-size: 18px; font-weight: bold; text-align: center">劲爆车源列表</div>
 
@@ -190,6 +423,31 @@
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="valuation-item item-model">
+                    <label>车型</label>
+                    <div class="valuation-inputbox has-down">
+                        <input type="text" readonly class="ellipsis" />
+                        <div class="moreitem-box moreitem">
+                            <div class="moreitem-opts sales-brand" id="sales_brand">
+                                <ul class="letter-ul">
+                                    <li><a>首字母</a></li>
+                                </ul>
+                                <div class="brand-list list">
+                                    <li>
+                                        <span id="letter_i" data-title="i" class="title">i</span>
+                                        <p class="brand-item item" data-brand-id="innerid" data-brand-name="brandname">
+                                                
+                                        </p>
+                                    </li>
+                                </div>
+                            </div>
+                            <div class="moreitem-opts-next sales-series">
+                            </div>
+                            <div class="moreitem-opts-next sales-models">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row" style="margin-top:5px">

@@ -174,6 +174,7 @@
             $("#txtprogrammedesc").val(obj.programmedesc);
             $("#txtremark").val(obj.remark);
             $("#txtguideprice").val(obj.guideprice);
+            $("#txtprice").val(obj.price);
 
             if (obj.pictures == null) {
                 return;
@@ -223,16 +224,17 @@
             alert("请填写现售价");
             return false;
         }
-        var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
-        if (!re.test(txtguideprice)) {
-            alert("收购价格只能输入数值[最多两位小数]！");
-            return false;
-        }
 
-        if (!re.test(txtprice)) {
-            alert("待售价格只能输入数值[最多两位小数]！");
-            return false;
-        }
+        //var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
+        //if (!re.test(txtguideprice)) {
+        //    alert("收购价格只能输入数值[最多两位小数]！");
+        //    return false;
+        //}
+
+        //if (!re.test(txtprice)) {
+        //    alert("待售价格只能输入数值[最多两位小数]！");
+        //    return false;
+        //}
 
         var txtprogramme = $("#txtprogramme").val();
         var txtprogrammedesc = $("#txtprogrammedesc").val();
@@ -265,7 +267,10 @@
         if (uploader != undefined && uploader != null) {
             uploadercount = uploader.files.length;
         }
-
+        if (uploadercount === 0) {
+            json.pictures = picArray.join(",");
+            Save(json);
+        }
         //修改文件名
         plupload.each(uploader.files, function (file) {
             file.name = "CM" + jsNewGuid().replace("-", "");
@@ -316,6 +321,17 @@
     }
 
     function initUploadM() {
+        // 图片选中
+        $(".imgs .imgPreview").unbind().mousemove(function () {
+            $(this).find(".caidan").show();
+        }).mouseout(function () {
+            $(this).find(".caidan").hide();
+        });
+        $(".imgs .caidan").unbind().mousemove(function () {
+            $(this).show();
+        }).mouseout(function () {
+            $(this).hide();
+        });
         // 图片删除
         $(".imgs .imgPreview .cz_4").unbind().click(function () {
             var pic = $(this).attr("data-id");
