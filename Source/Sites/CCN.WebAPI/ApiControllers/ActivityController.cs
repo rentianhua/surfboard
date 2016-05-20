@@ -13,6 +13,8 @@ using CCN.Modules.Auction.BusinessEntity;
 using Cedar.Core.IoC;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
+using Senparc.Weixin;
+using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.Helpers;
 
 namespace CCN.WebAPI.ApiControllers
@@ -28,6 +30,35 @@ namespace CCN.WebAPI.ApiControllers
         public ActivityController()
         {
             _activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
+        }
+
+        #region 投票活动
+
+        /// <summary>
+        /// 验证是否粉丝
+        /// </summary>
+        /// <param name="dc"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("CheckIsFans")]
+        public JResult CheckIsFans(dynamic dc)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(dc.appid.ToString()))
+                {
+                    dc.appid = ConfigHelper.GetAppSettings("APPID");
+                }
+
+                dynamic backmeg = UserApi.Info(dc.appid.ToString(), dc.openid.ToString());
+                return string.IsNullOrEmpty(backmeg.nickname)
+                    ? JResult._jResult(400, "非粉丝")
+                    : JResult._jResult(0, "粉丝");
+            }
+            catch (Exception)
+            {
+                return JResult._jResult(400, "非粉丝");
+            }
         }
 
         #region 投票活动
@@ -125,6 +156,7 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
+        #endregion
         #region 众筹活动
 
         #region 活动管理

@@ -17,7 +17,10 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 主题
         /// </summary>
         public string Title { get; set; }
-
+        /// <summary>
+        /// 主题
+        /// </summary>
+        public string Subtitle { get; set; }
         /// <summary>
         /// 报名开始时间
         /// </summary>
@@ -39,22 +42,27 @@ namespace CCN.Modules.Activity.BusinessEntity
         public DateTime? Voteendtime { get; set; }
 
         /// <summary>
-        /// 投票方式
+        /// 开奖时间
+        /// </summary>
+        public string Awardstime { get; set; }
+
+        /// <summary>
+        /// 投票方式[unused]
         /// </summary>
         public string Votemode { get; set; }
 
         /// <summary>
-        /// 投票流程
+        /// 投票流程[unused]
         /// </summary>
         public string Voteflow { get; set; }
 
         /// <summary>
-        /// 奖项说明
+        /// 奖项说明[unused]
         /// </summary>
         public string Prizedeac { get; set; }
 
         /// <summary>
-        /// 注意事项
+        /// 活动说明
         /// </summary>
         public string Attention { get; set; }
 

@@ -25,9 +25,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 投票活动编辑
         /// </summary>
         /// <returns></returns>
-        public ActionResult VoteEdit(string voteid)
+        public ActionResult VoteEdit(string activityid)
         {
-            ViewBag.voteid = string.IsNullOrWhiteSpace(voteid) ? "" : voteid;
+            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
             return View();
         }
 
@@ -35,9 +35,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 投票活动详情
         /// </summary>
         /// <returns></returns>
-        public ActionResult VoteView(string voteid)
+        public ActionResult VoteView(string activityid)
         {
-            ViewBag.voteid = string.IsNullOrWhiteSpace(voteid) ? "" : voteid;
+            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
             return View();
         }
 
@@ -45,9 +45,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 投票活动参赛人员列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult VotePerList(string voteid)
+        public ActionResult VotePerList(string activityid)
         {
-            ViewBag.voteid = string.IsNullOrWhiteSpace(voteid) ? "" : voteid;
+            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
             return View();
         }
 
@@ -75,9 +75,9 @@ namespace CCN.Resource.Areas.Activity.Controllers
         /// 投票活动参赛人员列表
         /// </summary>
         /// <returns></returns>
-        public ActionResult VoteLogList(string voteid, string perid)
+        public ActionResult VoteLogList(string activityid, string perid)
         {
-            ViewBag.voteid = string.IsNullOrWhiteSpace(voteid) ? "" : voteid;
+            ViewBag.activityid = string.IsNullOrWhiteSpace(activityid) ? "" : activityid;
             ViewBag.perid = string.IsNullOrWhiteSpace(perid) ? "" : perid;
             return View();
         }

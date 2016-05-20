@@ -16,7 +16,7 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// <summary>
         /// 投票活动id
         /// </summary>
-        public string Voteid { get; set; }
+        public string Activityid { get; set; }
 
         /// <summary>
         /// 姓名
@@ -27,12 +27,15 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 编号
         /// </summary>
         public int? Num { get; set; }
-
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Introduction { get; set; }
         /// <summary>
         /// 成品图片
         /// </summary>
         public string Picture { get; set; }
-
+        
         /// <summary>
         /// 其他文件
         /// </summary>
@@ -47,6 +50,11 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// ip
         /// </summary>
         public string IP { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int IsAudit { get; set; }
 
         /// <summary>
         /// 备注
@@ -88,7 +96,7 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// <summary>
         /// 投票活动id
         /// </summary>
-        public string Voteid { get; set; }
+        public string Activityid { get; set; }
 
         /// <summary>
         /// 参赛人id
@@ -141,5 +149,27 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 排名
         /// </summary>
         public int Ranking { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class VotePerAuditModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string perid { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int result { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string openid { get; set; }
+        
     }
 }

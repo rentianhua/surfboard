@@ -3,8 +3,6 @@
 }
 <script type="text/javascript">
 
-    var voteid = "@ViewBag.voteid";
-
     $(function () {
         QueryList();
     });
@@ -25,6 +23,7 @@
             str += "<td>" + val.Title + "</td>";
             str += "<td>" + Dateformat(val.Enrollstarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Enrollendtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + Dateformat(val.Awardstime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + val.Numper + "</td>";
             str += "<td>" + val.Numvote + "</td>";
             var btn = "";
@@ -47,6 +46,7 @@
                 <th>投票主题</th>
                 <th>参赛时间</th>
                 <th>投票时间</th>
+                <th>颁奖时间</th>
                 <th>参赛人数</th>
                 <th>投票总数</th>
                 <th>操作</th>

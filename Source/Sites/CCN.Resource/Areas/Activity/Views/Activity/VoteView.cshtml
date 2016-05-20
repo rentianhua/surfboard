@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 
-    var voteid = "@ViewBag.voteid";
+    var activityid = "@ViewBag.activityid";
 
     $(function () {
         Init();
@@ -12,11 +12,11 @@
 
     function Init() {
 
-        if (voteid === "") {
+        if (activityid === "") {
             return;
         }
 
-        $.get("/api/Activity/GetVoteViewById?id=" + voteid, function (data) {
+        $.get("/api/Activity/GetVoteViewById?id=" + activityid, function (data) {
 
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
