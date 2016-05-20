@@ -16,7 +16,7 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// <summary>
         /// 投票活动id
         /// </summary>
-        public string Voteid { get; set; }
+        public string Activityid { get; set; }
         
         /// <summary>
         /// 参赛人id
@@ -48,7 +48,7 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// <summary>
         /// 投票活动id
         /// </summary>
-        public string Voteid { get; set; }
+        public string Activityid { get; set; }
 
         /// <summary>
         /// 参赛人id

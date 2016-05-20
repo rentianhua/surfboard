@@ -6,6 +6,7 @@
 
     var perid = "@ViewBag.perid";
     var voteid = "";
+    var openid;
 
     $(function () {
         Init();
@@ -37,6 +38,7 @@
 
             $("#divfiles").html("<a alt='点击下载' href='" + getQiniuUrl(obj.Files) + "'>" + obj.Files + "</a>");
             $("#lblopenid").html(obj.Openid);
+            openid = obj.Openid;
 
             $("#lblcreatedtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
             $("#lblremark").html(obj.Remark);
@@ -57,6 +59,25 @@
 
     function goList() {
         getBodyHtml('mainbody', "/Activity/Activity/VotePerList?voteid=" + voteid);
+    }
+
+    var AuditPer = function () {
+
+        var audit = $("#selectaudit").val();
+        if (audit === "0") {
+            alert("请选择审核结果");
+            return false;
+        }
+        var json = { perid: perid, result: 1, openid: openid };
+        postJson("/api/Activity/AuditPer", json, function (result) {
+
+            if (result.errcode === 0) {
+                getBodyHtml('mainbody', "/Activity/Activity/VotePerView?perid=" + perid);
+            } else {
+                alert("操作失败");
+            }
+        });
+        return false;
     }
 
 </script>
@@ -180,7 +201,13 @@
             <form class="form-horizontal form-bordered" role="form">
                 <div class="row form-group text-center">
                     <div class="col-lg-12">
-                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                        <select id="selectaudit">
+                            <option value="0">请选择</option>
+                            <option value="1">通过</option>
+                            <option value="2">不通过</option>
+                        </select>
+                        <input type="button" class="btn btn-primary shiny" value="审核" onclick="AuditPer();"/>
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();"/>
                     </div>
                 </div>
             </form>

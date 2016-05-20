@@ -70,6 +70,13 @@ namespace CCN.Modules.Activity.Interface
         /// <param name="number"></param>
         /// <returns></returns>
         JResult AddVoteLog(VoteLogModel model, int number);
+
+        /// <summary>
+        /// 审核
+        /// </summary>
+        /// <returns></returns>
+        JResult AuditPer(VotePerAuditModel model);
+
         #endregion
 
         #region 投票日志

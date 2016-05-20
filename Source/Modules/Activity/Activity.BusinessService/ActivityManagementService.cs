@@ -99,7 +99,14 @@ namespace CCN.Modules.Activity.BusinessService
         {
             return BusinessComponent.AddVotePer(model);
         }
-
+        /// <summary>
+        /// 审核
+        /// </summary>
+        /// <returns></returns>
+        public JResult AuditPer(VotePerAuditModel model)
+        {
+            return BusinessComponent.AuditPer(model);
+        }
         #endregion
 
         #region 投票日志

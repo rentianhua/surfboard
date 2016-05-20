@@ -91,7 +91,7 @@ namespace CCN.Modules.Activity.BusinessComponent
                 return JResult._jResult(400, "");
             }
 
-            model.Ranking = DataAccess.GetVotePerRanking(model.Voteid, model.Votenum) + 1;
+            model.Ranking = DataAccess.GetVotePerRanking(model.Activityid, model.Votenum) + 1;
 
             return JResult._jResult(model);
         }
@@ -114,7 +114,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddVotePer(VotePerModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Voteid) 
+            if (string.IsNullOrWhiteSpace(model?.Activityid) 
                 || string.IsNullOrWhiteSpace(model.Fullname) 
                 || string.IsNullOrWhiteSpace(model.Picture) 
                 || string.IsNullOrWhiteSpace(model.Mobile))
@@ -141,7 +141,27 @@ namespace CCN.Modules.Activity.BusinessComponent
 
             return JResult._jResult(result);
         }
-        
+
+        /// <summary>
+        /// 审核
+        /// </summary>
+        /// <returns></returns>
+        public JResult AuditPer(VotePerAuditModel model)
+        {            
+            var re = DataAccess.AuditPer(model.perid, model.result);
+            if (re == 0)
+            {
+                return JResult._jResult(400, "审核失败");
+            }
+
+            CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.openid,
+                model.result == 0 
+                ? "您的报名已经审核通过啦，赶快分享给你的好友帮你投票吧！" 
+                : "您的车王大赛报名审核没过，请您重新报名！");
+
+            return JResult._jResult(0, "审核成功");
+        }
+
         #endregion
 
         #region 投票日志
@@ -163,7 +183,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddVoteLog(VoteLogModel model)
         {
-            if (string.IsNullOrWhiteSpace(model?.Voteid)
+            if (string.IsNullOrWhiteSpace(model?.Activityid)
                 || string.IsNullOrWhiteSpace(model.Perid) 
                 || string.IsNullOrWhiteSpace(model.Openid))
             {
@@ -200,7 +220,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddVoteLog(VoteLogModel model, int number)
         {
-            if (string.IsNullOrWhiteSpace(model?.Voteid)
+            if (string.IsNullOrWhiteSpace(model?.Activityid)
                 || string.IsNullOrWhiteSpace(model.Perid))
             {
                 return JResult._jResult(401, "参数不完整");

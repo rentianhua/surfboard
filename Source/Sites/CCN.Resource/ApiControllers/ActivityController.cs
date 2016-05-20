@@ -110,6 +110,19 @@ namespace CCN.Resource.ApiControllers
             return _activityservice.AddVotePer(model);
         }
 
+        /// <summary>
+        /// 审核
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AuditPer")]
+        public JResult AuditPer([FromBody]VotePerAuditModel model)
+        {
+            return _activityservice.AuditPer(model);
+        }
+
+        
         #endregion
 
         #region 投票日志
