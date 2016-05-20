@@ -276,6 +276,14 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessEntity\Activity.BusinessEntity.csproj">
+      <Project>{22a53eb5-f95a-486a-8ce0-249ba2a05c8b}</Project>
+      <Name>Activity.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.Interface\Activity.Interface.csproj">
+      <Project>{077aba3a-e911-4b72-a4e9-eb8bdf119738}</Project>
+      <Name>Activity.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
       <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
       <Name>Auction.BusinessEntity</Name>

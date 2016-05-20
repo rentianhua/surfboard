@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Web.Http;
 using System.Xml.Linq;
 using CCN.Modules.Activity.BusinessEntity;
@@ -436,7 +440,26 @@ namespace CCN.WebAPI.ApiControllers
         [Route("TestPu")]
         public void TestPu(string mobile)
         {
-            var b = System.Text.RegularExpressions.Regex.IsMatch(mobile, @"^1[3|4|5|8][0-9]\d{8}$");
+            string a = "a";
+            string c = "c";
+            char[] cc = new char[]{};
+            switch (a)
+            {
+                case "a":
+                    break;
+            }
+
+            for (int i = 0; i < cc.Length; i++)
+            {
+                
+            }
+            a.CopyTo(1,cc,1,1);
+
+            Thread thead = new Thread(getValue);
+            thead.Start();
+
+
+            var b = Regex.IsMatch(mobile, @"^1[3|4|5|8][0-9]\d{8}$");
             if (b)
             {
                 LoggerFactories.CreateLogger().Write("TestPu true：" + mobile, TraceEventType.Information);
@@ -453,5 +476,27 @@ namespace CCN.WebAPI.ApiControllers
             //    };
             //var nodeRes = DynamicWebService.SendPost(url, param, "post");
         }
-    }    
+
+        public void getValue()
+        {
+            lock (this)
+            {
+                
+            }
+        }
+    }
+
+    public abstract class AbdClass
+    {
+        public void GetValue()
+        {
+
+            short s1 = 1;
+            s1 = (short)(s1 + 1);
+
+            string str = " i am        a student. ";
+            str = Regex.Replace(str.Trim(), " *", " ");
+        }
+
+    }
 }

@@ -3866,7 +3866,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_province as pt on a.provid=pt.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid";
-            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,a.brand_id,a.series_id,a.model_id,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             query.isdeleted = 0;
@@ -3890,7 +3890,7 @@ namespace CCN.Modules.Car.DataAccess
                                     left join base_carmodel as c3 on a.model_id=c3.innerid 
                                     left join base_province as pt on a.provid=pt.innerid 
                                     left join base_city as ct on a.cityid=ct.innerid";
-            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
+            const string fields = "a.innerid,a.supplierid,a.carno,a.pictures,a.programme,a.guideprice,a.price,a.status,a.isdeleted,a.createdtime,a.brand_id,a.series_id,a.model_id,c1.brandname as brand_name,c2.seriesname as series_name,c3.modelname as model_name,pt.provname,ct.cityname";
             var orderField = string.IsNullOrWhiteSpace(query.Order) ? "a.refreshtime desc" : query.Order;
 
             var model = new PagingModel(spName, tableName, fields, orderField, GetMaddenWhere(query), query.PageSize, query.PageIndex);

@@ -88,6 +88,12 @@ namespace CCN.Modules.Activity.Interface
         /// <returns></returns>
         JResult AddVoteLog(VoteLogModel model);
 
+        /// <summary>
+        /// 取消订阅操作
+        /// </summary>
+        /// <returns></returns>
+        JResult UnSubscribe(string appid, string openid);
+
         #endregion
 
         #region 众筹活动
