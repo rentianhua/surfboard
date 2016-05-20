@@ -602,5 +602,19 @@ namespace CCN.WebAPI.ApiControllers
             var url = ConfigHelper.GetAppSettings("GETURL");
             return JResult._jResult(0, url);
         }
+
+        [Route("CheckUpdatesForAndroid")]
+        [HttpGet]
+        public JResult CheckUpdatesForAndroid()
+        {
+            return JResult._jResult(400, "无新版本");
+        }
+
+        [Route("CheckUpdatesForIos")]
+        [HttpGet]
+        public JResult CheckUpdatesForIos()
+        {
+            return JResult._jResult(400, "无新版本");
+        }
     }
 }

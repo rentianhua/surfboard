@@ -133,6 +133,15 @@ namespace CCN.Modules.Activity.BusinessService
         {
             return BusinessComponent.AddVoteLog(model, number);
         }
+
+        /// <summary>
+        /// 取消订阅操作
+        /// </summary>
+        /// <returns></returns>
+        public JResult UnSubscribe(string appid, string openid)
+        {
+            return BusinessComponent.UnSubscribe(appid, openid);
+        }
         #endregion
 
         #region 众筹活动

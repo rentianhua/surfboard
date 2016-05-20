@@ -29,8 +29,8 @@ namespace CCN.Modules.Activity.DataAccess
         public BasePageList<VoteListModel> GetVoteList(VoteQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"vote_info as a ";
-            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,createdtime,(select count(1) from vote_per where voteid=a.innerid) as numper,(select count(1) from vote_log where voteid=a.innerid) as numvote";
+            const string tableName = @"activity_vote_info as a ";
+            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,createdtime,(select count(1) from activity_vote_per where voteid=a.innerid) as numper,(select count(1) from activity_vote_log where voteid=a.innerid) as numvote";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder(" 1=1 ");
@@ -48,8 +48,8 @@ namespace CCN.Modules.Activity.DataAccess
         {
             const string sql =
                 @"SELECT innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime, votemode, voteflow, prizedeac, attention, createrid, createdtime, modifierid, modifiedtime, 
-(select count(1) from vote_per where voteid=a.innerid) as numper,
-(select count(1) from vote_log where voteid=a.innerid) as numvote FROM vote_info as a where innerid=@innerid";
+(select count(1) from activity_vote_per where voteid=a.innerid) as numper,
+(select count(1) from activity_vote_log where voteid=a.innerid) as numvote FROM activity_vote_info as a where innerid=@innerid";
             var model = Helper.Query<VoteViewModel>(sql, new {innerid = id}).FirstOrDefault();
             return model;
         }
@@ -62,7 +62,7 @@ namespace CCN.Modules.Activity.DataAccess
         public VoteModel GetVoteInfoById(string id)
         {
             const string sql =
-                @"SELECT innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime, votemode, voteflow, prizedeac, attention, createrid, createdtime, modifierid, modifiedtime FROM vote_info as a where innerid=@innerid";
+                @"SELECT innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime, votemode, voteflow, prizedeac, attention, createrid, createdtime, modifierid, modifiedtime FROM activity_vote_info as a where innerid=@innerid";
             var model = Helper.Query<VoteModel>(sql, new { innerid = id }).FirstOrDefault();
             return model;
         }
@@ -78,8 +78,8 @@ namespace CCN.Modules.Activity.DataAccess
         public BasePageList<VotePerListModel> GetVotePerList(VotePerQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"vote_per as a ";
-            const string fields = "innerid, voteid, fullname, num, picture, mobile, ip, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from vote_log where perid=a.innerid) as votenum";
+            const string tableName = @"activity_vote_per as a ";
+            const string fields = "innerid, voteid, fullname, num, picture, mobile, ip, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from activity_vote_log where perid=a.innerid) as votenum";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder($" a.voteid='{query.Voteid}' ");
@@ -117,7 +117,7 @@ namespace CCN.Modules.Activity.DataAccess
         public VotePerViewModel GetVotePerViewById(string id)
         {
             const string sql =
-                @"SELECT innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from vote_log where perid=a.innerid) as votenum FROM vote_per as a where innerid=@innerid";
+                @"SELECT innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from activity_vote_log where perid=a.innerid) as votenum FROM activity_vote_per as a where innerid=@innerid";
             var model = Helper.Query<VotePerViewModel>(sql, new { innerid = id }).FirstOrDefault();
             return model;
         }
@@ -130,7 +130,7 @@ namespace CCN.Modules.Activity.DataAccess
         public VotePerModel GetVotePerInfoById(string id)
         {
             const string sql =
-                @"SELECT innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime FROM vote_per as a where innerid=@innerid";
+                @"SELECT innerid, voteid, fullname, num, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime FROM activity_vote_per as a where innerid=@innerid";
             var model = Helper.Query<VotePerModel>(sql, new { innerid = id }).FirstOrDefault();
             return model;
         }
@@ -142,7 +142,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int AddVotePer(VotePerModel model)
         {
-            const string sql = @"INSERT INTO vote_per
+            const string sql = @"INSERT INTO activity_vote_per
                                 (innerid, voteid, fullname, picture, files, mobile, ip, remark, openid, createrid, createdtime, modifierid, modifiedtime)
                                 VALUES
                                 (@innerid, @voteid, @fullname, @picture, @files, @mobile, @ip, @remark, @openid, @createrid, @createdtime, @modifierid, @modifiedtime);";
@@ -154,7 +154,7 @@ namespace CCN.Modules.Activity.DataAccess
                 {
                     var voteModel =
                         conn.Query<VoteModel>(
-                            "SELECT enrollstarttime, enrollendtime FROM vote_info where innerid = @innerid;",
+                            "SELECT enrollstarttime, enrollendtime FROM activity_vote_info where innerid = @innerid;",
                             new {innerid = model.Voteid}).FirstOrDefault();
 
                     var nowTime = DateTime.Now;
@@ -165,7 +165,7 @@ namespace CCN.Modules.Activity.DataAccess
 
                     var n =
                         conn.Query<int>(
-                            "select count(1) from vote_per where voteid=@voteid and openid=@openid;",new
+                            "select count(1) from activity_vote_per where voteid=@voteid and openid=@openid;",new
                             {
                                 voteid = model.Voteid,
                                 openid = model.Openid
@@ -197,8 +197,8 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int GetVotePerRanking(string voteid, int votenum)
         {
-            const string sql = @"select count(1) from vote_per as a where voteid=@voteid and (select count(1) from vote_log where perid=a.innerid and voteid=a.voteid)>@votenum;";
-            //const string sql = @"select count(1) from (select count(1),perid from vote_log where voteid=@voteid group by perid having count(1) > @votenum) as tt;";
+            const string sql = @"select count(1) from activity_vote_per as a where voteid=@voteid and (select count(1) from activity_vote_log where perid=a.innerid and voteid=a.voteid)>@votenum;";
+            //const string sql = @"select count(1) from (select count(1),perid from activity_vote_log where voteid=@voteid group by perid having count(1) > @votenum) as tt;";
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -223,7 +223,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int GetVotePerTotal(string voteid)
         {
-            const string sql = @"select count(1) from vote_per as a where voteid=@voteid;";
+            const string sql = @"select count(1) from activity_vote_per as a where voteid=@voteid;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -254,7 +254,7 @@ namespace CCN.Modules.Activity.DataAccess
         public BasePageList<VoteLogListModel> GetVoteLogList(VoteLogQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"vote_log as a ";
+            const string tableName = @"activity_vote_log as a ";
             const string fields = "innerid, voteid, perid, ip, openid, createdtime";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
@@ -282,7 +282,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int AddVoteLog(VoteLogModel model)
         {
-            const string sql = @"INSERT INTO vote_log (innerid, voteid, perid, ip, openid, createdtime) VALUES (@innerid, @voteid, @perid, @ip, @openid, @createdtime);";
+            const string sql = @"INSERT INTO activity_vote_log (innerid, voteid, perid, ip, openid, createdtime) VALUES (@innerid, @voteid, @perid, @ip, @openid, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -290,7 +290,7 @@ namespace CCN.Modules.Activity.DataAccess
                 {
                     var voteModel =
                         conn.Query<VoteModel>(
-                            "SELECT votestarttime, voteendtime FROM vote_info where innerid = @innerid;",
+                            "SELECT votestarttime, voteendtime FROM activity_vote_info where innerid = @innerid;",
                             new { innerid = model.Voteid }).FirstOrDefault();
 
                     var nowTime = DateTime.Now;
@@ -300,7 +300,7 @@ namespace CCN.Modules.Activity.DataAccess
                     }
 
                     var loglist =
-                        conn.Query<VoteLogModel>("select perid from vote_log where voteid=@voteid and openid=@openid;",
+                        conn.Query<VoteLogModel>("select perid from activity_vote_log where voteid=@voteid and openid=@openid;",
                             new {voteid = model.Voteid, openid = model.Openid}).ToList();
 
                     var votenum = ConfigHelper.GetAppSettings("votenum");
@@ -341,7 +341,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int AddVoteLog(VoteLogModel model, int number)
         {
-            const string sql = @"INSERT INTO vote_log (innerid, voteid, perid, ip, openid, createdtime) VALUES (@innerid, @voteid, @perid, @ip, @openid, @createdtime);";
+            const string sql = @"INSERT INTO activity_activity_vote_log (innerid, voteid, perid, ip, openid, createdtime) VALUES (@innerid, @voteid, @perid, @ip, @openid, @createdtime);";
             using (var conn = Helper.GetConnection())
             {
                 var result = 0;
@@ -370,6 +370,34 @@ namespace CCN.Modules.Activity.DataAccess
             }
         }
 
+        /// <summary>
+        /// 取消订阅操作
+        /// </summary>
+        /// <returns></returns>
+        public int UnSubscribe(string appid, string openid)
+        {
+            const string sql = @"update activity_vote_log set invalid=1,modifiedtime=@modifiedtime where openid=@openid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var result = 0;
+                try
+                {
+                    result = conn.Execute(sql, new
+                    {
+                        openid,
+                        modifiedtime = DateTime.Now
+                    });
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("取消订阅操作异常：", TraceEventType.Error, ex);
+                    result = 0;
+                }
+
+                return result;
+            }
+        }
+
         #endregion
 
         #endregion
@@ -377,7 +405,7 @@ namespace CCN.Modules.Activity.DataAccess
         #region 众筹活动
 
         #region 活动管理
-        
+
         /// <summary>
         /// 开始抽奖
         /// </summary>
@@ -665,8 +693,8 @@ namespace CCN.Modules.Activity.DataAccess
         public BasePageList<CrowdGradeModel> GetGradePageList(QueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"vote_per as a ";
-            const string fields = "innerid, voteid, fullname, num, picture, mobile, ip, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from vote_log where perid=a.innerid) as votenum";
+            const string tableName = @"activity_vote_per as a ";
+            const string fields = "innerid, voteid, fullname, num, picture, mobile, ip, openid, createrid, createdtime, modifierid, modifiedtime,(select count(1) from activity_vote_log where perid=a.innerid) as votenum";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder($" a.activity='' ");

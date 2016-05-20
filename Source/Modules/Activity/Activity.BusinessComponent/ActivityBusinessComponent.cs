@@ -215,6 +215,16 @@ namespace CCN.Modules.Activity.BusinessComponent
             return JResult._jResult(result);
         }
 
+        /// <summary>
+        /// 取消订阅操作
+        /// </summary>
+        /// <returns></returns>
+        public JResult UnSubscribe(string appid, string openid)
+        {
+            var result = DataAccess.UnSubscribe(appid, openid);
+            return JResult._jResult(result);
+        }
+
         #endregion
 
         #endregion
