@@ -122,6 +122,16 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 微信openid
         /// </summary>
         public string Openid { get; set; }
+
+        /// <summary>
+        /// 审核状态
+        /// </summary>
+        public int? Status { get; set; }
+
+        /// <summary>
+        /// 是否前端访问
+        /// </summary>
+        public int Isfront { get; set; } = 1;
     }
 
     /// <summary>
@@ -144,6 +154,32 @@ namespace CCN.Modules.Activity.BusinessEntity
         /// 投票数
         /// </summary>
         public int Votenum { get; set; }
+
+        /// <summary>
+        /// 排名
+        /// </summary>
+        public int Ranking { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class VotePerBackViewModel : VotePerModel
+    {
+        /// <summary>
+        /// 投票数
+        /// </summary>
+        public int Votenum { get; set; }
+
+        /// <summary>
+        /// 假票数
+        /// </summary>
+        public int FakeVotenum { get; set; }
+
+        /// <summary>
+        /// 无效票数
+        /// </summary>
+        public int InvalidVotenum { get; set; }
 
         /// <summary>
         /// 排名

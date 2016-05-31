@@ -14,7 +14,7 @@ namespace Cedar.Framework.Common.BaseClasses
     public class Che300Utility
     {
         private readonly string _appkey = "89f5c616f242348a894728b73becfd64";
-        private string _url = "http://api.che300.com/";
+        private readonly string _url = "http://api.che300.com/";
 
         /// <summary>
         ///     初始化
@@ -41,11 +41,11 @@ namespace Cedar.Framework.Common.BaseClasses
                 {"token", _appkey}
             };
 
-            _url += "service/getUsedCarPrice";
+            var url = _url + "service/getUsedCarPrice";
             //合并参数
             var parameters = paramBase.Concat(paramList).ToDictionary(k => k.Key, v => v.Value);
 
-            var result = DynamicWebService.SendPost(_url, parameters, "get");
+            var result = DynamicWebService.SendPost(url, parameters, "get");
 
             var obj = JObject.Parse(result);
             var errorCode = obj["status"].ToString();

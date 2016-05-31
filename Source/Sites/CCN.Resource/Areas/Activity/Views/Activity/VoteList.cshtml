@@ -22,13 +22,13 @@
             str += "<td>" + (index + key) + "</td>";
             str += "<td>" + val.Title + "</td>";
             str += "<td>" + Dateformat(val.Enrollstarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Enrollendtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
-            str += "<td>" + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + Dateformat(val.Votestarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Voteendtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + Dateformat(val.Awardstime, "yyyy-MM-dd HH:mm:ss") + "</td>";
             str += "<td>" + val.Numper + "</td>";
             str += "<td>" + val.Numvote + "</td>";
             var btn = "";
-            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VoteView?voteid=" + val.Innerid + "');\"> 查看详情 </a> ";
-            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerList?voteid=" + val.Innerid + "');\"> 参赛人员 </a> ";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VoteView?activityid=" + val.Innerid + "');\"> 查看详情 </a> ";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/VotePerList?activityid=" + val.Innerid + "');\"> 参赛人员 </a> ";
             str += "<td>" + btn + "</td></tr>";
             $("#votelist tbody").append(str);
         });

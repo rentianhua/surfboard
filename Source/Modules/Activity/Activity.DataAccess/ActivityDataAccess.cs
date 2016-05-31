@@ -30,9 +30,9 @@ namespace CCN.Modules.Activity.DataAccess
         {
             const string spName = "sp_common_pager";
             const string tableName = @"activity_vote_info as a ";
-            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,awardstime,createdtime," +
+            const string fields = "innerid, title, enrollstarttime, enrollendtime, votestarttime, voteendtime,votemode,voteflow,prizedeac,awardstime,createdtime," +
                                   "(select count(1) from activity_vote_per where activityid=a.innerid) as numper," +
-                                  "(select count(1) from activity_vote_log where activityid=a.innerid and invalid=1) as numvote";
+                                  "(select count(1) from activity_vote_log where activityid=a.innerid and invalid=0) as numvote";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder(" 1=1 ");
@@ -49,9 +49,9 @@ namespace CCN.Modules.Activity.DataAccess
         public VoteViewModel GetVoteViewById(string id)
         {
             const string sql =
-                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, votestarttime, voteendtime, awardstime, attention, createrid, createdtime, modifierid, modifiedtime, 
-                (select count(1) from activity_vote_per where activityid=a.innerid) as numper,
-                (select count(1) from activity_vote_log where activityid=a.innerid and invalid=1) as numvote FROM activity_vote_info as a where innerid=@innerid";
+                @"SELECT innerid, title, subtitle, enrollstarttime, enrollendtime, votestarttime, voteendtime,awardstime,votemode,voteflow,prizedeac, awardstime, attention, createrid, createdtime, modifierid, modifiedtime, 
+                (select count(1) from activity_vote_per where activityid=a.innerid and isaudit=1) as numper,
+                (select count(1) from activity_vote_log where activityid=a.innerid and invalid=0) as numvote FROM activity_vote_info as a where innerid=@innerid";
             var model = Helper.Query<VoteViewModel>(sql, new {innerid = id}).FirstOrDefault();
             return model;
         }
@@ -82,7 +82,7 @@ namespace CCN.Modules.Activity.DataAccess
             const string spName = "sp_common_pager";
             const string tableName = @"activity_vote_per as a ";
             const string fields = "innerid, activityid, fullname, num, picture, mobile, ip,isaudit, openid, createrid, createdtime, modifierid, modifiedtime," +
-                                  "(select count(1) from activity_vote_log where perid=a.innerid and invalid=1) as votenum";
+                                  "(select count(1) from activity_vote_log where perid=a.innerid and invalid=0) as votenum";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
             var sqlWhere = new StringBuilder($" a.activityid='{query.Activityid}' ");
@@ -106,6 +106,17 @@ namespace CCN.Modules.Activity.DataAccess
             {
                 sqlWhere.Append($" and openid like '%{query.Openid}%'");
             }
+            
+            //前端调用，必须是1审核通过的
+            if (query.Isfront == 1)
+            {
+                query.Status = 1;
+            }
+
+            if (query.Status != null)
+            {
+                sqlWhere.Append($" and isaudit={query.Status}");
+            }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
             var list = Helper.ExecutePaging<VotePerListModel>(model, query.Echo);
@@ -121,7 +132,24 @@ namespace CCN.Modules.Activity.DataAccess
         {
             const string sql =
                 @"SELECT innerid, activityid, num, fullname, mobile, introduction, picture, files, ip,isaudit, remark, openid, createrid, createdtime, modifierid, modifiedtime,
-                    (select count(1) from activity_vote_log where perid=a.innerid and invalid=1) as votenum FROM activity_vote_per as a where innerid=@innerid";
+                    (select count(1) from activity_vote_log where perid=a.innerid and invalid=0) as votenum FROM activity_vote_per as a where innerid=@innerid";
+            var model = Helper.Query<VotePerViewModel>(sql, new { innerid = id }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 获取投票活动的参赛人员详情 view
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public VotePerViewModel GetVotePerBackViewById(string id)
+        {
+            const string sql =
+                @"SELECT innerid, activityid, num, fullname, mobile, introduction, picture, files, ip,isaudit, remark, openid, createrid, createdtime, modifierid, modifiedtime,
+                    (select count(1) from activity_vote_log where perid=a.innerid and invalid=0) as votenum,
+                    (select count(1) from activity_vote_log where perid=a.innerid and openid='') as fakevotenum ,
+                    (select count(1) from activity_vote_log where perid=a.innerid and invalid=1) as invalidvotenum ,
+                    FROM activity_vote_per as a where innerid=@innerid";
             var model = Helper.Query<VotePerViewModel>(sql, new { innerid = id }).FirstOrDefault();
             return model;
         }
@@ -211,7 +239,7 @@ namespace CCN.Modules.Activity.DataAccess
         public int GetVotePerRanking(string activityid, int votenum)
         {
             const string sql = @"select count(1) from activity_vote_per as a where activityid=@activityid and
-                                (select count(1) from activity_vote_log where perid=a.innerid and activityid=a.activityid and invalid=1)>@votenum;";
+                                (select count(1) from activity_vote_log where perid=a.innerid and activityid=a.activityid and invalid=0)>@votenum;";
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -236,7 +264,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int GetVotePerTotal(string activityid)
         {
-            const string sql = @"select count(1) from activity_vote_per as a where activityid=@activityid;";
+            const string sql = @"select count(1) from activity_vote_per as a where activityid=@activityid and isaudit=1;";
 
             using (var conn = Helper.GetConnection())
             {
@@ -275,13 +303,12 @@ namespace CCN.Modules.Activity.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    LoggerFactories.CreateLogger().Write("审核异常：", TraceEventType.Error, ex);
+                    LoggerFactories.CreateLogger().Write($"审核异常,result:{result}：", TraceEventType.Error, ex);
                     return 0;
                 }
             }
         }
-
-
+        
         #endregion
 
         #region 投票日志
@@ -294,20 +321,20 @@ namespace CCN.Modules.Activity.DataAccess
         public BasePageList<VoteLogListModel> GetVoteLogList(VoteLogQueryModel query)
         {
             const string spName = "sp_common_pager";
-            const string tableName = @"activity_vote_log as a ";
-            const string fields = "innerid, activityid, perid, ip, openid, invalid, createdtime, modifiedtime";
+            const string tableName = @"activity_vote_log as a inner join wechat_friend as b on a.openid=b.openid ";
+            const string fields = "a.openid,b.nickname,b.photo, a.createdtime, a.modifiedtime,a.invalid";
             var oldField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime asc " : query.Order;
 
-            var sqlWhere = new StringBuilder($" perid='{query.Perid}' ");
+            var sqlWhere = new StringBuilder($" a.perid='{query.Perid}' ");
 
             if (!string.IsNullOrWhiteSpace(query.Activityid))
             {
-                sqlWhere.Append($" and activityid='{query.Activityid}'");
+                sqlWhere.Append($" and a.activityid='{query.Activityid}'");
             }            
 
             if (!string.IsNullOrWhiteSpace(query.Openid))
             {
-                sqlWhere.Append($" and openid like '{query.Openid}'");
+                sqlWhere.Append($" and a.openid='{query.Openid}'");
             }
 
             var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
@@ -322,7 +349,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int AddVoteLog(VoteLogModel model)
         {
-            const string sql = @"INSERT INTO activity_vote_log (innerid, activityid, perid, ip, openid, invalid, createdtime, modifiedtime) VALUES (@innerid, @activityid, @perid, @ip, @openid, @invalid, @createdtime, @modifiedtime);";
+            const string sql = @"INSERT INTO activity_vote_log (innerid, activityid, perid, ip, openid, invalid, createdtime, modifiedtime) VALUES (@innerid, @activityid, @perid, @ip, @openid, 0, @createdtime, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 int result;
@@ -381,7 +408,7 @@ namespace CCN.Modules.Activity.DataAccess
         /// <returns></returns>
         public int AddVoteLog(VoteLogModel model, int number)
         {
-            const string sql = @"INSERT INTO activity_vote_log (innerid, activityid, perid, ip, openid, invalid, createdtime, modifiedtime) VALUES (@innerid, @activityid, @perid, @ip, @openid, @invalid, @createdtime, @modifiedtime);";
+            const string sql = @"INSERT INTO activity_vote_log (innerid, activityid, perid, ip, openid, invalid, createdtime, modifiedtime) VALUES (@innerid, @activityid, @perid, @ip, @openid, 0, @createdtime, @modifiedtime);";
             using (var conn = Helper.GetConnection())
             {
                 var result = 0;
