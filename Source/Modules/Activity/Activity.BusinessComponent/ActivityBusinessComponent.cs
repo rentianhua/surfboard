@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using CCN.Modules.Activity.BusinessEntity;
 using CCN.Modules.Activity.DataAccess;
 using Cedar.Core.ApplicationContexts;
 using Cedar.Core.Logging;
+using Cedar.Foundation.SMS.Common;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Newtonsoft.Json.Linq;
@@ -115,7 +117,8 @@ namespace CCN.Modules.Activity.BusinessComponent
         public JResult AddVotePer(VotePerModel model)
         {
             if (string.IsNullOrWhiteSpace(model?.Activityid) 
-                || string.IsNullOrWhiteSpace(model.Fullname) 
+                || string.IsNullOrWhiteSpace(model.Fullname)
+                || string.IsNullOrWhiteSpace(model.Openid)
                 || string.IsNullOrWhiteSpace(model.Picture) 
                 || string.IsNullOrWhiteSpace(model.Mobile))
             {
@@ -127,6 +130,7 @@ namespace CCN.Modules.Activity.BusinessComponent
             model.Createdtime = DateTime.Now;
             model.Modifiedtime = null;
             model.Modifierid = "";
+            model.IsAudit = 0;//初始化没有审核
             var result = DataAccess.AddVotePer(model);
 
             if (result == -1)
@@ -138,6 +142,15 @@ namespace CCN.Modules.Activity.BusinessComponent
             {
                 return JResult._jResult(403, "不能重复报名");
             }
+
+            var task = new Task(() =>
+            {
+                CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.Openid, "车王大赛报名成功，我们的小编会尽快审核的资料！");
+                //发送手机
+                var sms = new SMSMSG();
+                sms.PostSms(ConfigHelper.GetAppSettings("NotifyMobile"), $"车王大赛有新人报名，姓名：{model.Fullname},手机号：{model.Mobile}，请尽快审核！");
+            });
+            task.Start();
 
             return JResult._jResult(result);
         }
@@ -155,8 +168,8 @@ namespace CCN.Modules.Activity.BusinessComponent
             }
 
             CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.openid,
-                model.result == 0 
-                ? "您的报名已经审核通过啦，赶快分享给你的好友帮你投票吧！" 
+                model.result != 0 
+                ? "您的车王大赛报名已经审核通过啦，赶快分享给你的好友帮你投票吧！"
                 : "您的车王大赛报名审核没过，请您重新报名！");
 
             return JResult._jResult(0, "审核成功");
@@ -201,7 +214,7 @@ namespace CCN.Modules.Activity.BusinessComponent
 
             if (result == -2)
             {
-                return JResult._jResult(403, "三次机会已用完");
+                return JResult._jResult(403, "每人只能投一次");
             }
 
             if (result == -3)

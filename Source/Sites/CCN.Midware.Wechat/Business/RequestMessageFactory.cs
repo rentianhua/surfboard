@@ -43,8 +43,8 @@ namespace CCN.Midware.Wechat.Business
         //</xml>
 
         private static readonly string AppID = ConfigurationManager.AppSettings["APPID"];
-        private static string _slogan = ConfigurationManager.AppSettings["SLOGAN"];
-        private static string _urlVote = ConfigurationManager.AppSettings["UrlVote"];   //投票大赛的地址
+        private static readonly string _slogan = ConfigurationManager.AppSettings["SLOGAN"];
+        private static readonly string _urlVote = ConfigurationManager.AppSettings["UrlVote"];   //投票大赛的地址
 
         /// <summary>
         /// 获取XDocument转换后的IRequestMessageBase实例。
@@ -126,15 +126,23 @@ namespace CCN.Midware.Wechat.Business
                             case "SUBSCRIBE": //订阅（关注）
                                 requestMessage = new RequestMessageEvent_Subscribe();
                                 EntityHelper.FillEntityWithXml(requestMessage, doc);
-                                service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
-                                _slogan = _slogan.Replace("\\n", Environment.NewLine);
+                                var taskSubscribe = new Task(() =>
+                                {
+                                    service.GenerateWechatFriend(AppID, requestMessage.FromUserName, true);
+                                });
+                                taskSubscribe.Start();
+                                
+                                var slogan = _slogan.Replace("\\n", Environment.NewLine);
 
                                 //"\n\n&lt;a src=''&gt;点击参加玖伍淘车首届“/强绝代车王/强”微信自拍投票大赛&lt;a/&gt;";
                                 var btnContent = ConfigurationManager.AppSettings["BtnContent"];
-                                btnContent = $"<a src='{_urlVote}'>{btnContent}</a>";
-                                _slogan = string.Concat(Environment.NewLine, Environment.NewLine, btnContent);
 
-                                CustomApi.SendText(AppID, requestMessage.FromUserName, _slogan);
+                                var tourl = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={AppID}&redirect_uri={_urlVote}&response_type=code&scope=snsapi_base&state=vote&connect_redirect=1#wechat_redirect";
+
+                                btnContent = $"<a href=\"{tourl}\">{btnContent}</a>";
+                                slogan = string.Concat(slogan, Environment.NewLine, btnContent);
+
+                                CustomApi.SendText(AppID, requestMessage.FromUserName, slogan);
 
                                 //判断是否扫描场景二维码关注
                                 var xElement = doc.Root.Element("EventKey");
@@ -146,13 +154,12 @@ namespace CCN.Midware.Wechat.Business
                                 break;
                             case "UNSUBSCRIBE": //取消订阅（关注）
                                 requestMessage = new RequestMessageEvent_Unsubscribe();
+                                EntityHelper.FillEntityWithXml(requestMessage, doc);
                                 service.UpdateWechatFriendUnSubscribe(AppID, requestMessage.FromUserName);
-                                var task = new Task(() =>
-                                {
-                                    var activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
-                                    activityservice.UnSubscribe(AppID, requestMessage.FromUserName);
-                                });
-                                task.Start();
+
+                                var activityservice = ServiceLocatorFactory.GetServiceLocator().GetService<IActivityManagementService>();
+                                activityservice.UnSubscribe(AppID, requestMessage.FromUserName);
+
                                 break;
                             case "CLICK": //菜单点击
                                 requestMessage = new RequestMessageEvent_Click();
@@ -332,6 +339,7 @@ namespace CCN.Midware.Wechat.Business
             
             var title = ConfigurationManager.AppSettings["Title"];
             var picUrl = ConfigurationManager.AppSettings["PicUrl"];
+            var tourl = $"https://open.weixin.qq.com/connect/oauth2/authorize?appid={AppID}&redirect_uri={_urlVote}&response_type=code&scope=snsapi_base&state=vote&connect_redirect=1#wechat_redirect";
             var description = ConfigurationManager.AppSettings["Description"];
             CustomApi.SendNews(AppID, openid, new List<Article>
             {
@@ -340,7 +348,7 @@ namespace CCN.Midware.Wechat.Business
                     Description = description,
                     PicUrl =picUrl,
                     Title = title,
-                    Url = _urlVote
+                    Url = tourl
                 }
             });
             return true;

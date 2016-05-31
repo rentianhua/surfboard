@@ -13,6 +13,8 @@ using CCN.Modules.Auction.BusinessEntity;
 using Cedar.Core.IoC;
 using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Senparc.Weixin;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.Helpers;
@@ -43,6 +45,7 @@ namespace CCN.WebAPI.ApiControllers
         [Route("CheckIsFans")]
         public JResult CheckIsFans(dynamic dc)
         {
+            LoggerFactories.CreateLogger().Write("CheckIsFans参数：" + JsonConvert.SerializeObject(dc), TraceEventType.Information);
             try
             {
                 if (string.IsNullOrEmpty(dc.appid.ToString()))
@@ -472,25 +475,6 @@ namespace CCN.WebAPI.ApiControllers
         [Route("TestPu")]
         public void TestPu(string mobile)
         {
-            string a = "a";
-            string c = "c";
-            char[] cc = new char[]{};
-            switch (a)
-            {
-                case "a":
-                    break;
-            }
-
-            for (int i = 0; i < cc.Length; i++)
-            {
-                
-            }
-            a.CopyTo(1,cc,1,1);
-
-            Thread thead = new Thread(getValue);
-            thead.Start();
-
-
             var b = Regex.IsMatch(mobile, @"^1[3|4|5|8][0-9]\d{8}$");
             if (b)
             {
@@ -507,14 +491,6 @@ namespace CCN.WebAPI.ApiControllers
             //        {"innerid", "40805cab-36c0-4395-8811-7a71a97280f0"}
             //    };
             //var nodeRes = DynamicWebService.SendPost(url, param, "post");
-        }
-
-        public void getValue()
-        {
-            lock (this)
-            {
-                
-            }
         }
     }
 

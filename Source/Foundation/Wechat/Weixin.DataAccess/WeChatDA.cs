@@ -1,5 +1,7 @@
 ﻿#region
 
+using System.Diagnostics;
+using Cedar.Core.Logging;
 using Cedar.Foundation.WeChat.Entities.WeChat;
 
 #endregion
@@ -78,6 +80,10 @@ namespace Cedar.Foundation.WeChat.DataAccess
         /// <returns></returns>
         public bool UpdateWechatFriendUnSubscribe(FriendModel model)
         {
+            LoggerFactories.CreateLogger().Write("Accountid:" + model.Accountid, TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("OPENID:" + model.OPENID, TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("SubscribeTime:" + model.SubscribeTime, TraceEventType.Information);
+            LoggerFactories.CreateLogger().Write("Subscribe:" + model.Subscribe, TraceEventType.Information);
             var strSql = @"UPDATE wechat_friend SET `subscribe_time` = @subscribetime,`subscribe` = @subscribe WHERE `openid` = @openid and `accountid` = @accountid";
             return Helper.Execute(strSql, new
             {

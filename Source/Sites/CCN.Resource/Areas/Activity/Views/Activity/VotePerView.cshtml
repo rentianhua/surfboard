@@ -5,10 +5,10 @@
 <script type="text/javascript">
 
     var perid = "@ViewBag.perid";
-    var voteid = "";
+    var activityid = "";
     var openid;
 
-    $(function () {
+    $(function() {
         Init();
     });
 
@@ -18,7 +18,7 @@
             return;
         }
 
-        $.get("/api/Activity/GetVotePerViewById?id=" + perid, function (data) {
+        $.get("/api/Activity/GetVotePerViewById?id=" + perid, function(data) {
 
             if (data.errcode !== 0) {
                 alert("获取数据异常！");
@@ -27,26 +27,45 @@
 
             var obj = data.errmsg;
 
-            voteid = obj.Voteid;
+            activityid = obj.Activityid;
+            openid = obj.Openid;
 
             $("#lblnum").html(obj.Num);
             $("#lblfullname").html(obj.Fullname);
             $("#lblmobile").html(obj.Mobile);
 
-            $("#imgpicture").attr("src", getQiniuUrl(obj.Picture));
             $("#lblip").html(obj.IP);
-
-            $("#divfiles").html("<a alt='点击下载' href='" + getQiniuUrl(obj.Files) + "'>" + obj.Files + "</a>");
             $("#lblopenid").html(obj.Openid);
-            openid = obj.Openid;
+
+            //$("#divfiles").html("<a alt='点击下载' href='" + getQiniuUrl(obj.Files) + "'>" + obj.Files + "</a>");
 
             $("#lblcreatedtime").html(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
             $("#lblremark").html(obj.Remark);
 
+            var imgArr = obj.Picture.split(",");
+            var str = "";
+            for (var i = 0; i < imgArr.length; i++) {
+                str += "<img src=\"" + getQiniuUrl(imgArr[i]) + "\" onclick=\"changeSize(this)\" class=\"imgsmall\" alt=\"\"/>";
+            }
+
+            $("#divImgs").html(str);
+
+            //未审核
+            if (obj.IsAudit === 0) {
+                $("#btnAudit").show();
+                $("#btnRevokeAudit").hide();
+            }
+            else {
+                $("#selectaudit").prop("disabled", true).selectVal(obj.IsAudit);
+                $("#btnAudit").hide();
+                $("#btnRevokeAudit").show();
+            }
+
+            InitFansList();
         });
     }
 
-    var changeSize = function (obj) {
+    var changeSize = function(obj) {
 
         if ($(obj).css("max-width") === "100px") {
             $(obj).addClass("imgbig");
@@ -58,18 +77,18 @@
     }
 
     function goList() {
-        getBodyHtml('mainbody', "/Activity/Activity/VotePerList?voteid=" + voteid);
+        getBodyHtml('mainbody', "/Activity/Activity/VotePerList?activityid=" + activityid);
     }
 
-    var AuditPer = function () {
+    var AuditPer = function() {
 
         var audit = $("#selectaudit").val();
         if (audit === "0") {
             alert("请选择审核结果");
             return false;
         }
-        var json = { perid: perid, result: 1, openid: openid };
-        postJson("/api/Activity/AuditPer", json, function (result) {
+        var json = { perid: perid, result: audit, openid: openid };
+        postJson("/api/Activity/AuditPer", json, function(result) {
 
             if (result.errcode === 0) {
                 getBodyHtml('mainbody', "/Activity/Activity/VotePerView?perid=" + perid);
@@ -80,6 +99,43 @@
         return false;
     }
 
+    //撤销审核
+    var RevokeAuditPer = function() {
+        var json = { perid: perid, result: 0, openid: openid };
+        postJson("/api/Activity/AuditPer", json, function (result) {
+            if (result.errcode === 0) {
+                getBodyHtml('mainbody', "/Activity/Activity/VotePerView?perid=" + perid);
+            } else {
+                alert("操作失败");
+            }
+        });
+        return false;
+    }
+
+    var InitFansList = function () {
+
+        var json = { Activityid: activityid, Perid: perid };
+        $("#votefanslist").getPageList(20, "/api/Activity/GetVoteLogList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#votefanslist tbody").empty();
+        var str = "";
+        $.each(data, function (key, val) {
+
+            str = "";
+            str += "<tr>";
+            str += "<td >" + (index + key) + "</td>";
+            str += "<td><img width='30' height='30' src='" + val.Photo + "'/></td>";
+            str += "<td>" + val.NickName + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + (val.IsInvalid == 1 ? "无效" : "有效") + "</td>";
+            str += "</tr>";
+            $("#votefanslist tbody").append(str);
+        });
+    }
+    
 </script>
 <style type="text/css">
     .imgbig { 
@@ -95,6 +151,7 @@
         max-width: 100px;
         max-height: 100px;
         cursor: pointer;
+        padding-right: 8px;
     }
 </style>
 <div class="theme-popover-mask"></div>
@@ -128,17 +185,29 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">成品图片</label>
-                            <div class="controls col-sm-10" style="position:relative">
-                                <img onclick="changeSize(this)" id="imgpicture" class="imgsmall" />
+                            <label for="" class="col-sm-2 control-label no-padding-right">联系手机号</label>
+                            <div class="controls col-sm-10">
+                                <label class="control-label no-padding-right" id="lblmobile"></label>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">联系手机号</label>
+                            <label for="" class="col-sm-2 control-label no-padding-right">参赛时间</label>
                             <div class="controls col-sm-10">
-                                <label class="control-label no-padding-right" id="lblmobile"></label>
+                                <label class="control-label no-padding-right" id="lblcreatedtime"></label>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">图片</label>
+                            <div class="controls col-sm-10" id="divImgs">
+                                <img onclick="changeSize(this)" class="imgsmall" alt=""/>
                             </div>
                         </div>
                     </div>
@@ -147,28 +216,9 @@
                 <div class="row form-group">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">其他文件</label>
-                            <div class="controls col-sm-10" id="divfiles">
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
                             <label for="" class="col-sm-2 control-label no-padding-right">ip</label>
                             <div class="controls col-sm-10">
                                 <label class="control-label no-padding-right" id="lblip"></label>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="" class="col-sm-2 control-label no-padding-right">参赛时间</label>
-                            <div class="controls col-sm-10">
-                                <label class="control-label no-padding-right" id="lblcreatedtime"></label>
                             </div>
                         </div>
                     </div>
@@ -206,11 +256,26 @@
                             <option value="1">通过</option>
                             <option value="2">不通过</option>
                         </select>
-                        <input type="button" class="btn btn-primary shiny" value="审核" onclick="AuditPer();"/>
+                        <input type="button" class="btn btn-primary shiny" id="btnAudit" value="审核" onclick="AuditPer();"/>
+                        <input type="button" class="btn btn-primary shiny" id="btnRevokeAudit" value="撤销审核" onclick="RevokeAuditPer();"/>
                         <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();"/>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    <table class="table table-striped table-hover table-bordered" id="votefanslist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>头像</th>
+                <th>昵称</th>
+                <th>投票时间</th>
+                <th>状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
 </div>
