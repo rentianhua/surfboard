@@ -10,6 +10,7 @@ using Cedar.Core.Logging;
 using Cedar.Foundation.SMS.Common;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs;
@@ -116,6 +117,7 @@ namespace CCN.Modules.Activity.BusinessComponent
         /// <returns></returns>
         public JResult AddVotePer(VotePerModel model)
         {
+            LoggerFactories.CreateLogger().Write("VotePerModel：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
             if (string.IsNullOrWhiteSpace(model?.Activityid) 
                 || string.IsNullOrWhiteSpace(model.Fullname)
                 || string.IsNullOrWhiteSpace(model.Openid)
@@ -166,12 +168,16 @@ namespace CCN.Modules.Activity.BusinessComponent
             {
                 return JResult._jResult(400, "审核失败");
             }
-
-            CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.openid,
-                model.result != 0 
-                ? "您的车王大赛报名已经审核通过啦，赶快分享给你的好友帮你投票吧！"
-                : "您的车王大赛报名审核没过，请您重新报名！");
-
+            
+            if (model.result == 1)
+            {
+                CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.openid,"您的车王大赛报名已经审核通过啦，赶快分享给你的好友帮你投票吧！");
+            }
+            else if (model.result == 2)
+            {
+                CustomApi.SendText(ConfigHelper.GetAppSettings("APPID"), model.openid, "您的车王大赛报名审核没过，请您重新报名！");
+            }
+            
             return JResult._jResult(0, "审核成功");
         }
 
