@@ -210,7 +210,8 @@ namespace CCN.Modules.Activity.DataAccess
                             model.Modifiedtime = DateTime.Now;
                             const string sqlUp =
                                 @"update activity_vote_per set fullname=@fullname,mobile=@mobile,introduction=@introduction,picture=@picture,isaudit=@isaudit,modifiedtime=@modifiedtime,remark=@remark where activityid=@activityid and openid=@openid;";
-                            conn.Execute(sqlUp, model);
+                            result = conn.Execute(sqlUp, model);
+                            return result;
                         }
                         else
                         {
