@@ -68,6 +68,11 @@ namespace CCN.Midware.Wechat.Business
                             var res = Senparc.Weixin.HttpUtility.RequestUtility.HttpGetAsync(redirecturl, null, null, 1000);
                             LoggerFactories.CreateLogger().Write("参与抽奖结果：" + res.Result, TraceEventType.Information);
                         }
+                        if (rMessage.Content == "天华最帅")
+                        {
+                            var openid = rMessage.FromUserName;
+                            Senparc.Weixin.HttpUtility.RequestUtility.HttpGetAsync($"http://139.196.189.130:8888/redpack?openid={openid}", null, null, 1000);
+                        }
                         else
                         {
                             CustomApi.SendText(AppID, requestMessage.FromUserName, "感谢您的回复，车信网会尽快回复您。");
