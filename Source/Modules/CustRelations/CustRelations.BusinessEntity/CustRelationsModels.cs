@@ -124,6 +124,21 @@ namespace CCN.Modules.CustRelations.BusinessEntity
         public DateTime? Createdtime { get; set; }
 
 
+        /// <summary>
+        /// 所在地：省份
+        /// </summary>
+        public int? Provid { get; set; }
+
+        /// <summary>
+        /// 所在地：城市
+        /// </summary>
+        public int? Cityid { get; set; }
+
+        /// <summary>
+        /// 所在地：区/县
+        /// </summary>
+        public string Area { get; set; }
+
     }
 
     /// <summary>

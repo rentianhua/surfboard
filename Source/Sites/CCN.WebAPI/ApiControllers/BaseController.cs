@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -181,6 +182,16 @@ namespace CCN.WebAPI.ApiControllers
             return _baseservice.GetAllDepartment(model);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetTotalAreaList")]
+        [HttpGet]
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            return _baseservice.GetTotalAreaList();
+        }
         #endregion
 
         #region 品牌/车系/车型
@@ -507,6 +518,21 @@ namespace CCN.WebAPI.ApiControllers
         }
         #endregion
 
+        #region 广告管理
+        
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetBannerList")]
+        [HttpGet]
+        public JResult GetBannerList()
+        {
+            return _baseservice.GetBannerList();
+        }
+        
+        #endregion
+
         /// <summary>
         ///     上传文件
         /// </summary>
@@ -563,6 +589,32 @@ namespace CCN.WebAPI.ApiControllers
         {
             var uptoken = QiniuUtility.GetToken();
             return JResult._jResult(0, uptoken);
+        }
+
+        /// <summary>
+        /// 获取七牛url
+        /// </summary>
+        /// <returns></returns>
+        [Route("GetQiniuUrl")]
+        [HttpGet]
+        public JResult GetQiniuUrl()
+        {
+            var url = ConfigHelper.GetAppSettings("GETURL");
+            return JResult._jResult(0, url);
+        }
+
+        [Route("CheckUpdatesForAndroid")]
+        [HttpGet]
+        public JResult CheckUpdatesForAndroid()
+        {
+            return JResult._jResult(400, "无新版本");
+        }
+
+        [Route("CheckUpdatesForIos")]
+        [HttpGet]
+        public JResult CheckUpdatesForIos()
+        {
+            return JResult._jResult(400, "无新版本");
         }
     }
 }

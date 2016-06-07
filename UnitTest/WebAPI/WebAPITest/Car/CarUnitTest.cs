@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cedar.Core.IoC;
 using CCN.Modules.Car.Interface;
 using CCN.Modules.Car.BusinessService;
 using CCN.Modules.Car.DataAccess;
 using CCN.Modules.Car.BusinessEntity;
+using Cedar.Framework.Common.BaseClasses;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace WebAPITest.Car
 {
@@ -71,7 +75,7 @@ namespace WebAPITest.Car
             var model = new CarInfoModel
             {
                 Innerid = Guid.NewGuid().ToString(),
-                Carid = 0,
+                supplierid = "",
                 title = "",
                 pic_url = "",
                 provid = 0,
@@ -83,8 +87,6 @@ namespace WebAPITest.Car
                 buytime = DateTime.Now,
                 buyprice = 0,
                 dealprice = 0,
-                avgprice = 0,
-                dealnumber = 0,
                 isproblem = 0,
                 sellreason = "转让原因",
                 masterdesc = "原车主信息",
@@ -122,6 +124,31 @@ namespace WebAPITest.Car
             };
             var value = cms.AddCar(model);
             Assert.IsTrue(value.errcode == 0);
+        }
+
+        /// <summary>
+        /// 精确估值
+        /// </summary>
+        [TestMethod]
+        public void GetUsedCarPrice()
+        {
+            var paramList = new Dictionary<string, string>
+            {
+                {"token", "89f5c616f242348a894728b73becfd64"},
+                {"modelId", "58"},
+                {"regDate", DateTime.Now.AddYears(-2).ToString("yyyy-MM")},
+                {"mile", "5"},
+                {"zone", "125"}
+            };
+
+            var result = DynamicWebService.SendPost("http://api.che300.com/service/getUsedCarPrice", paramList, "GET");
+
+            var jobj = JObject.Parse(result);
+            //var title = jobj["title"].ToString().UrlDecode();
+
+            
+
+            Assert.IsTrue(jobj["status"].ToString().Equals("1"));
         }
     }
 }

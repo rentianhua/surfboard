@@ -2,11 +2,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
+using AVOSCloud;
 using CCN.Modules.CustRelations.BusinessEntity;
 using CCN.Modules.CustRelations.DataAccess;
 using Cedar.Framework.AuditTrail.Interception;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 
@@ -40,8 +44,9 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             {
                 return new BasePageList<CustViewModel>();
             }
+
             //手机号小于4位不给搜索
-            if (string.IsNullOrWhiteSpace(query.Mobile) || query.Mobile.Trim().Length < 4)
+            if (!string.IsNullOrWhiteSpace(query.Mobile) && query.Mobile.Trim().Length < 4)
             {
                 return new BasePageList<CustViewModel>();
             }
@@ -123,15 +128,15 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 };
             }
 
-            var number = DataAccess.GetApplyNumber(model.Fromid);
-            if (number >= 15)
-            {
-                return new JResult
-                {
-                    errcode = 202,
-                    errmsg = "今天添加好友达到上限"
-                };
-            }
+            //var number = DataAccess.GetApplyNumber(model.Fromid);
+            //if (number >= 15)
+            //{
+            //    return new JResult
+            //    {
+            //        errcode = 202,
+            //        errmsg = "今天添加好友达到上限"
+            //    };
+            //}
 
             var cRelationsApply = DataAccess.CheckRelationsApply(model.Fromid, model.Toid);
             if (cRelationsApply > 0)
@@ -146,13 +151,14 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             }
 
             model.Status = 0;
+            model.Innerid = Guid.NewGuid().ToString();
             var result = DataAccess.AddRelationsApply(model);
             if (result > 0)
             {
                 return new JResult
                 {
                     errcode = 0,
-                    errmsg = "申请成功"
+                    errmsg = model.Innerid
                 };
             }
             return new JResult
@@ -184,7 +190,24 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = result > 0 ? "处理成功" : "处理失败"
             };
         }
+        
+        /// <summary>
+        /// 添加好友
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddFriends(CustRelationsApplyModels model)
+        {
+            var applyResult = AddRelationsApply(model);
+            if (applyResult.errcode != 0)
+            {
+                return applyResult;
+            }
 
+            var handleResult = HandleRelationsApply(applyResult.errmsg.ToString(), 1);
+            return handleResult;
+        }
+        
         /// <summary>
         /// 删除好友的申请
         /// </summary>
@@ -254,6 +277,7 @@ namespace CCN.Modules.CustRelations.BusinessComponent
                 errmsg = errmsg
             };
         }
+        
         #endregion
 
         #region 社交圈
@@ -268,6 +292,80 @@ namespace CCN.Modules.CustRelations.BusinessComponent
             return DataAccess.GetHaveCarCustList(query);
         }
 
+        /// <summary>
+        /// 发送给特定的用户
+        /// 发送给public频道的用户
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendMessage()
+        {
+            var lc = new LeanCloudModel();
+            lc.SendPublicMessage("欢迎您的咨询，我们会尽快为您解答！");
+            return JResult._jResult(0, "发送成功");
+        }
         #endregion
+    }
+
+    /// <summary>
+    /// LeanCloud机器人
+    /// </summary>
+    public class LeanCloudModel
+    {
+        private readonly string _applicationId = "2jIgkDKXQMmywTU33bL49ahv-gzGzoHsz";
+        private readonly string _appKey = "3luuqph0m8wvbaHQsxdS0K2F";
+        private readonly string _masterKey = "mLHuTFdLkqGg0J53mCOT8e2F";
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public LeanCloudModel()
+        {
+            var appid = ConfigHelper.GetAppSettings("ApplicationId");
+            var appkey = ConfigHelper.GetAppSettings("AppKey");
+            var masterkey = ConfigHelper.GetAppSettings("MasterKey");
+            if (!string.IsNullOrWhiteSpace(appid))
+            {
+                _applicationId = appid;
+            }
+            if (!string.IsNullOrWhiteSpace(appkey))
+            {
+                _appKey = appkey;
+            }
+            if (!string.IsNullOrWhiteSpace(masterkey))
+            {
+                _masterKey = masterkey;
+            }
+            AVClient.Initialize(_applicationId, _appKey);
+        }
+
+        /// <summary>
+        /// 推送给所有的设备
+        /// </summary>
+        /// <returns></returns>
+        public async void SendAllMessage(string msg)
+        {
+            var push = new AVPush
+            {
+                Alert = msg
+            };
+            var task = push.SendAsync();
+            await task;
+        }
+
+        /// <summary>
+        /// 发送给特定的用户
+        /// 发送给public频道的用户
+        /// </summary>
+        /// <returns></returns>
+        public async void SendPublicMessage(string msg)
+        {
+            var push = new AVPush
+            {
+                Alert = msg,
+                Query = new AVQuery<AVInstallation>().WhereEqualTo("channels", "public")
+            };
+            var task = push.SendAsync();
+            await task;
+        }
     }
 }

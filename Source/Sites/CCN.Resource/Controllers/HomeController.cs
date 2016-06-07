@@ -6,6 +6,7 @@ using CCN.Resource.Main.Common;
 using Cedar.Core.IoC;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,14 +31,18 @@ namespace CCN.Resource.Controllers
         HttpCookie cookie = new HttpCookie("type");
         public ActionResult Index()
         {
-            var UserInfosdfd = UserInfo;
-            ViewBag.Title = "苏州车信网";
+            ViewBag.Title = "玖伍淘车";
             ViewBag.UserInfo = (BaseUserModel)Session["UserInfo"];
             ViewBag.showname = UserInfo.username;
             if (ADMIN == UserInfo.innerid)
             {
                 ViewBag.Admin = "1";
             }
+
+            //02/20 update by tim
+            ViewBag.QiniuUrl = ConfigurationManager.AppSettings["GETURL"] ?? "";
+            ViewBag.userid = UserInfo.innerid;
+            ViewBag.sessionid = Session.SessionID;
 
             return View();
         }
@@ -124,9 +129,16 @@ namespace CCN.Resource.Controllers
 
         public ActionResult BusinessIndex()
         {
-            ViewBag.Title = "苏州车信网";
-            ViewBag.UserInfo = (CustModel)Session["CustModel"];
-            ViewBag.showname = ((CustModel)Session["CustModel"]).Mobile;
+            ViewBag.Title = "玖伍淘车";
+            var custModel = (CustModel)Session["CustModel"];
+            ViewBag.UserInfo = custModel;
+            ViewBag.showname = custModel.Mobile;
+
+            //02/20 update by tim
+            ViewBag.QiniuUrl = ConfigurationManager.AppSettings["GETURL"] ?? "";
+            ViewBag.userid = custModel.Innerid;
+            ViewBag.sessionid = Session.SessionID;
+
             return View();
         }
 

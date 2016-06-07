@@ -5,7 +5,7 @@ urlstr = urlstr.substring(0, urlstr.indexOf('/', 9));
 function QueryString() {
     var name, value, i;
     var str = location.href;
-    var num = str.indexOf("?")
+    var num = str.indexOf("?");
     str = str.substr(num + 1);
     var arrtmp = str.split("&");
     for (i = 0; i < arrtmp.length; i++) {
@@ -70,22 +70,24 @@ var Dateformat = function (obj, fmt) {
     }
 }
 
-var setCookie = function () {
+var setCookie = function (userid,sessionid) {
     var expireTime = new Date().getTime() + 1000 * 36000;
     var da = new Date();
     da.setTime(expireTime);
-    document.cookie = 'userid=admin;expires=' + da.toGMTString() + ';path=/';
-    document.cookie = 'sessionid=xxxxxxxxxxxxxxxxx;expires=' + da.toGMTString() + ';path=/';
+    document.cookie = "userid=" + userid + ";expires=" + da.toGMTString() + ";path=/";
+    document.cookie = "sessionid=" + sessionid + ";expires=" + da.toGMTString() + ";path=/";
 }
 
-var QiuniuHost = function () {
-    //var qiniuurl = "http://7xnwvr.com2.z0.glb.qiniucdn.com/";  //正式空间
-    var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";   //测试空间
-    return qiniuurl;
+//获取七牛图片url全路径
+var qiniuurl = "";
+var setQiniuUrl = function (url) {
+    qiniuurl = url;
 }
 
-var getQiniuUrl = function (key) {    
-    return QiuniuHost() + key;
+var getQiniuUrl = function (key) {
+    //var qiniuurl = "http://7xnwvr.com2.z0.glb.qiniucdn.com/";   //正式空间
+    //var qiniuurl = "http://7xlopw.com2.z0.glb.qiniucdn.com/";   //测试空间    
+    return qiniuurl + key;
 }
 
 /*
@@ -176,6 +178,140 @@ var uploadfile = function (id, fileSize, exts, linkType, callback, async, maxnum
     });
 }
 
+//授权token
+var authorization = "03919859818ade16d013a84aa64a3be1";
+/*
+* get方式请求.
+* @url            {string} 请求地址(/aaaaaa.html?v=1&id=lllll)
+* @data           {string} data参数（json格式）
+* @callback       {string} 回调函数
+* @async          {bool}   是否异步
+*/
+function getJson(url, data, callback, async) {
+
+    if (!async) {
+        async = false;
+    }
+
+    if (url == null || url === "") {
+        return;
+    }
+
+    $.ajax({
+        url: url,
+        type: "get",
+        data: data,
+        datatype: "json",
+        //contentType: "application/json; charset=utf-8",
+        async: async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", authorization);
+        },
+        success: function (msg) {
+            callback(msg);
+        },
+        error: function () {
+
+        }
+    });
+}
+
+/*
+* post方式请求.
+* @url            {string} 请求地址(/aaaaaa.html?v=1&id=lllll)
+* @data           {string} data参数（json格式）
+* @callback       {string} 回调函数
+* @async          {bool}   是否异步
+*/
+function postJson(url, data, callback, async) {
+    if (!async) {
+        async = false;
+    }
+    if (url == null || url === "") {
+        return;
+    }
+    $.ajax({
+        url: url,
+        type: "post",
+        data: data,
+        datatype: "json",
+        async: async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", authorization);
+        },
+        success: function (msg) {
+            callback(msg);
+        },
+        error: function () {
+
+        }
+    });
+}
+
+/*
+* delete方式请求.
+* @url            {string} 请求地址(/aaaaaa.html?v=1&id=lllll)
+* @data           {string} data参数（json格式）
+* @callback       {string} 回调函数
+* @async          {bool}   是否异步
+*/
+function delJson(url, data, callback, async) {
+    if (!async) {
+        async = false;
+    }
+    if (url == null || url === "") {
+        return;
+    }
+    $.ajax({
+        url: url,
+        type: "delete",
+        data: data,
+        datatype: "json",
+        async: async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", authorization);
+        },
+        success: function (msg) {
+            callback(msg);
+        },
+        error: function () {
+
+        }
+    });
+}
+
+/*
+* put方式请求.
+* @url            {string} 请求地址(/aaaaaa.html?v=1&id=lllll)
+* @data           {string} data参数（json格式）
+* @callback       {string} 回调函数
+* @async          {bool}   是否异步
+*/
+function putJson(url, data, callback, async) {
+    if (!async) {
+        async = false;
+    }
+    if (url == null || url === "") {
+        return;
+    }
+    $.ajax({
+        url: url,
+        type: "put",
+        data: data,
+        datatype: "json",
+        async: async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", authorization);
+        },
+        success: function (msg) {
+            callback(msg);
+        },
+        error: function () {
+
+        }
+    });
+}
+
 /*
 显示body中的内容
 */
@@ -240,5 +376,30 @@ function checkEmial(email)
     return !reg.test(email);
 }
 
+// ReSharper disable once NativeTypePrototypeExtending
+Number.prototype.toFormat = function ()
+{
+    if (this.length <= 0) {
+        return 0;
+    }
+    else {
 
+        var num = (parseFloat(this) / 100).toFixed(2);
+        return num;
+    }
+}
 
+/*
+* 生成Guid
+* 返回Guid
+*/
+function jsNewGuid() {
+    var guid = "";
+    for (var i = 1; i <= 32; i++) {
+        var n = Math.floor(Math.random() * 16.0).toString(16);
+        guid += n;
+        if ((i === 8) || (i === 12) || (i === 16) || (i === 20))
+            guid += "-";
+    }
+    return guid;
+}

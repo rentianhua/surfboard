@@ -1,0 +1,362 @@
+﻿@{
+
+}
+<link href="~/Content/cover.css" rel="stylesheet" />
+<link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
+
+<script src="~/Plugins/UploadImg/js/plupload/plupload.full.min.js"></script>
+<script src="~/Plugins/UploadImg/js/plupload/i18n/zh_CN.js"></script>
+<script src="~/Plugins/UploadImg/js/ui.js"></script>
+<script src="~/Plugins/UploadImg/js/qiniu.js"></script>
+<script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
+<script src="~/Plugins/UploadImg/js/multiple.js"></script>
+<link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
+@* ReSharper disable once CallerCalleeUsing *@
+<script type="text/javascript">
+
+    var activityid = "@ViewBag.activityid";
+
+    var imgs = [];
+    var uploader;
+    $(function() {
+        var option = {};
+        option.id = "pickfiles2";
+        option.container = "container2";
+        option.uptoken = "@ViewBag.uptoken";
+        option.autostart = false;
+        option.domain = qiniuurl;
+        //初始化七牛上传控件
+        uploader = InitQiniuUpload(option);
+        Init();
+    });
+
+    function Init() {
+
+        if (activityid === "") {
+            return;
+        }
+
+        $.get("/api/Activity/GetCrowdInfoById?innerid=" + activityid, function(data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+                return;
+            }
+
+            var obj = data.errmsg;
+            $("#txttitle").val(obj.Title);
+            $("#txtsubtitle").val(obj.Subtitle);
+            $("#txtenrollstarttime").val(Dateformat(obj.Enrollstarttime, "yyyy-MM-dd HH:mm:ss"));
+            $("#txtenrollendtime").val(Dateformat(obj.Enrollendtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#txtsecrettime").val(Dateformat(obj.Createdtime, "yyyy-MM-dd HH:mm:ss"));
+            $("#txtuppertotal").val(obj.Uppertotal);
+            $("#txtuppereach").val(obj.Uppereach);
+            $("#txtremark").val(obj.Remark);
+            $("#selecttype").selectVal(obj.Type);
+
+            if (obj.Prize != null) {
+
+                var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+                $('.imgs').append(
+                    '<div class="imgPreview">\
+				        <img data-type="img" src="' + getImgUrl(obj.Prize) + '" class="loading" width="550px">\
+				        <div class="caidan">\
+					        <div hash="' + strradom + '" class="cz_4" data-id="obj.Prize"><div class="czl_icon"></div></div>\
+				        </div>\
+			        </div>');
+                initUploadM();
+            }
+        });
+    }
+
+    function Submit() {
+
+        var title = $("#txttitle").val();
+        var subtitle = $("#txtsubtitle").val();
+        var enrollstarttime = $("#txtenrollstarttime").val();
+        var enrollendtime = $("#txtenrollendtime").val();
+        var secrettime = $("#txtsecrettime").val();
+        var type = $("#selecttype").val();
+        var uppertotal = $("#txtuppertotal").val();
+        var uppereach = $("#txtuppereach").val();
+        var remark = $("#txtremark").val();
+
+        if (title === "") {
+            alert("请填写活动主题！");
+            return false;
+        }
+        if (enrollstarttime === "") {
+            alert("请填写参与开始时间！");
+            return false;
+        }
+        if (enrollendtime === "") {
+            alert("请填写参与结束时间！");
+            return false;
+        }
+        if (secrettime === "") {
+            alert("请填写开奖时间！");
+            return false;
+        }
+        if (type === "0") {
+            alert("请选择活动类型！");
+            return false;
+        }
+        if (uppertotal === "") {
+            alert("请填写活动总上限金额！");
+            return false;
+        }
+        if (uppereach === "") {
+            alert("请填写每人上限金额！");
+            return false;
+        }
+
+        var re = /^[0-9]+$/;
+        if ($.trim(uppertotal).length > 0 && !re.test(uppertotal)) {
+            alert("活动总上限金额[只能输入整数]！");
+            return false;
+        }
+        if ($.trim(uppereach).length > 0 && !re.test(uppereach)) {
+            alert("每人上限金额[只能输入整数]！");
+            return false;
+        }
+
+        var json = {
+            Title: title,
+            Subtitle: subtitle,
+            Enrollstarttime: enrollstarttime,
+            Enrollendtime: enrollendtime,
+            Secrettime: secrettime,
+            Type: type,
+            Uppertotal: uppertotal,
+            Uppereach: uppereach,
+            Remark: remark
+        };
+
+        showloading();  //显示遮罩 （目前ajax processData参数 影响显示不出来）
+        var uploadercount = 0;//选择的文件
+        var filelength = $("img[data-type='img']").length; //图片总数
+
+        if (filelength === 0) {
+            json.Prize = $("#txtcarno").val(); //
+            Save(json);
+            return false;
+        }
+
+        if (uploader != undefined && uploader != null) {
+            uploadercount = uploader.files.length;
+        }
+
+        json.innerid = activityid;
+        //修改文件名
+        plupload.each(uploader.files, function (file) {
+            file.name = "AP" + jsNewGuid().replace("-", "");
+        });
+
+        uploader.start();
+        uploader.bind('FileUploaded', function (up, file, info) {
+            var picInfo = JSON.parse(info.response);
+            json.Prize = picInfo.key;
+            Save(json);
+        });
+        return false;
+    }
+
+    function Save(json) {
+        //添加
+        if (activityid === "") {
+
+            postJson("/api/Activity/AddCrowdInfo", json, function (result) {
+                hideloading();
+                if (result.errcode !== 0) {
+                    alert("保存失败!");
+                    return;
+                }
+                goList();
+            });
+        } else {
+            json.innerid = activityid;
+            
+            postJson("/api/Activity/UpdateCrowdInfo", json, function (result) {
+                hideloading();
+                if (result.errcode !== 0) {
+                    alert("保存失败!");
+                    return;
+                }
+                goList();
+            });
+        }
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/Activity/Activity/CrowdList");
+    }
+    function initUploadM() {
+
+        // 图片选中
+        $(".imgs .imgPreview").unbind().mousemove(function () {
+            $(this).find(".caidan").show();
+        }).mouseout(function () {
+            $(this).find(".caidan").hide();
+        });
+        $(".imgs .caidan").unbind().mousemove(function () {
+            $(this).show();
+        }).mouseout(function () {
+            $(this).hide();
+        });
+        // 图片删除
+        $(".imgs .imgPreview .cz_4").unbind().click(function () {
+            $(this).parent().parent().remove();
+        });
+    }
+    function showloading() {
+        $('.loading-container.loading-inactive').css('display', 'block');
+        $('.loading-container.loading-inactive .loader').css('display', 'block');
+    }
+    function hideloading() {
+        $('.loading-container.loading-inactive').css('display', 'none');
+        $('.loading-container.loading-inactive .loader').css('display', 'none');
+    }
+</script>
+
+<div class="theme-popover-mask"></div>
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">众筹活动信息</span>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">主题：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txttitle" type="text" placeholder="主题" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label no-padding-right">副标题：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtsubtitle" type="text" placeholder="副标题" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">参与开始时间：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtenrollstarttime" class="Wdate form-control" type="text" placeholder="参与开始时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">参与结束时间：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtenrollendtime" class="Wdate form-control" type="text" placeholder="参与结束时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">开奖时间：</label>
+                            <div class="controls col-sm-10" id="divfiles">
+                                <input id="txtsecrettime" class="Wdate form-control" type="text" placeholder="开奖时间" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">活动类型：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selecttype">
+                                    <option value="0">请选择</option>
+                                    <option value="1">现场活动</option>
+                                    <option value="2">线上活动</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">活动总上限金额：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtuppertotal" type="text" placeholder="活动上限金额（单位分）" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">每人上限金额：</label>
+                            <div class="controls col-sm-10">
+                                <input id="txtuppereach" type="text" placeholder="每人上限金额（单位分）" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">*</label>奖品(车辆编号)</label>
+                            <div class="controls col-sm-10 hide" id="imgList">
+                                <div id="container2">
+                                    <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                        <span>选择文件</span>
+                                    </a><label class="required">只能上传2M以下图片</label>
+                                </div>
+                                <div>
+                                    <div class="imgs col-xs-12" style="padding: 10px 144px 0 0;">
+                                    </div>
+                                </div>
+                                <table class="table table-striped table-hover text-left" style="margin-top: 40px; display: none">
+                                    <tbody id="fsUploadProgress"></tbody>
+                                </table>
+                            </div>
+                            <div class="controls col-sm-11">
+                                <input id="txtcarno" type="text" placeholder="奖品(车辆编号)" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                    </div>
+                </div>
+                <div class="row form-group">
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="" class="col-sm-1 control-label no-padding-right">备注：</label>
+                            <div class="controls col-sm-11">
+                                <textarea id="txtremark" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="widget-body">
+        <div>
+            <form class="form-horizontal form-bordered" role="form">
+                <div class="row form-group text-center">
+                    <div class="col-lg-12">
+                        <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                        <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

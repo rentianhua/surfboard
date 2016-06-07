@@ -81,6 +81,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Cedar.Foundation.SMS.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Cedar.Foundation.WeChat.WxPay.Business">
+      <HintPath>..\..\..\Lib\Cedar.Foundation.WeChat.WxPay.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Cedar.Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Cedar.Framework.Common.dll</HintPath>
@@ -209,6 +212,8 @@
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ActivityController.cs" />
+    <Compile Include="ApiControllers\AuctionController.cs" />
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
@@ -219,6 +224,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\ApiExceptionFilterAttribute.cs" />
+    <Compile Include="Common\AuthorizeFilterAttribute.cs" />
     <Compile Include="Common\DefaultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -329,6 +336,26 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessEntity\Activity.BusinessEntity.csproj">
+      <Project>{22a53eb5-f95a-486a-8ce0-249ba2a05c8b}</Project>
+      <Name>Activity.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.Interface\Activity.Interface.csproj">
+      <Project>{077aba3a-e911-4b72-a4e9-eb8bdf119738}</Project>
+      <Name>Activity.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
+      <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
+      <Name>Auction.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessService\Auction.BusinessService.csproj">
+      <Project>{a8669bd9-3c5a-4a1e-b1e1-9ebcf291c5df}</Project>
+      <Name>Auction.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.Interface\Auction.Interface.csproj">
+      <Project>{d2e9e2f4-1ebd-4d3a-8e23-cbb5edf5131a}</Project>
+      <Name>Auction.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
       <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
       <Name>Base.BusinessEntity</Name>

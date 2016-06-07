@@ -1,9 +1,6 @@
 ﻿@{ 
     var innerid = "";
-    if (Request.Cookies["type"].Value.ToString() == "1")
-    {
-        innerid = ViewBag.UserInfo.innerid;
-    }
+    innerid = ViewBag.UserInfo.innerid;
 }
 <!DOCTYPE html>
 <html>
@@ -14,10 +11,17 @@
     <link href="~/Content/Site.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/original")
     @Styles.Render("~/Content/template")
+    <script src="/Scripts/common.js"></script>
     <script type="text/javascript">
         $(function () {
-            //设置cookie值
-            setCookie();
+        
+            //给common文件的七牛URL变量赋值
+            var qiniuurl = "@ViewBag.QiniuUrl";
+            setQiniuUrl(qiniuurl);
+
+            var userid = "@ViewBag.userid";
+            var sessionid = "@ViewBag.sessionid";
+            setCookie(userid, sessionid);
         });
         //定位当前城市
         $.getScript('http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', function (_result) {
@@ -48,7 +52,7 @@
                 <div class="navbar-header pull-left">
                     <a href="#" class="navbar-brand" style="padding-top: 8px">
                         <small>
-                            车信网资源后台
+                            玖伍淘车
                         </small>
                     </a>
                 </div>
@@ -86,14 +90,9 @@
                                         </ul>
                                     </li>
                                     <!--选择主题结束-->
-                                    @{
-                                        if (Request.Cookies["type"].Value.ToString() == "1")
-                                        {
-                                            <li class="edit">
-                                                <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
-                                            </li>
-                                        }
-                                    }
+                                    <li class="edit">
+                                        <a href='javascript:;' class="pull-right" style="padding-bottom: 3px;" data-toggle="modal" data-target="#changeModal">修改密码 </a>
+                                    </li>
                                     
                                     <li class="dropdown-footer">
                                         <br />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,24 +15,31 @@ namespace Cedar.Framework.Common.BaseClasses
     /// </summary>
     public class DynamicWebService
     {
-        public static object ExeAPIMethod(string url, string type, string data, bool isjson = true)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="type"></param>
+        /// <param name="data"></param>
+        /// <param name="isjson"></param>
+        /// <returns></returns>
+        public static string ExeApiMethod(string url, string type, string data, bool isjson = true)
         {
             var handler = new WebRequestHandler
             {
                 AllowAutoRedirect = false,
                 UseProxy = false
             };
-            object json = null;
-            json = isjson ? JsonConvert.DeserializeObject(data) : data;
+
+            var json = isjson ? (data != null ? JsonConvert.DeserializeObject(data) : (string) null) : data;
 
             var client = new HttpClient(handler);
-            //string website = "http://wx5.smartac.co/";
-            var website = "http://op.juhe.cn/";
+            var website = ConfigurationManager.AppSettings["localapi"];
             client.BaseAddress = new Uri(website);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response;
             try
             {
+                HttpResponseMessage response;
                 switch (type)
                 {
                     case "get":
@@ -50,13 +58,9 @@ namespace Cedar.Framework.Common.BaseClasses
                         response = client.GetAsync(url).Result;
                         break;
                 }
-                if (response.IsSuccessStatusCode)
-                {
-                    return response.Content.ReadAsStringAsync();
-                }
-                return null;
+                return response.IsSuccessStatusCode ? response.Content.ReadAsStringAsync().Result : null;
             }
-            catch (AggregateException ex)
+            catch (AggregateException)
             {
                 return "";
             }
@@ -73,12 +77,11 @@ namespace Cedar.Framework.Common.BaseClasses
         {
             if (method.ToLower() == "post")
             {
-                HttpWebRequest req = null;
                 HttpWebResponse rsp = null;
                 Stream reqStream = null;
                 try
                 {
-                    req = (HttpWebRequest) WebRequest.Create(url);
+                    var req = (HttpWebRequest) WebRequest.Create(url);
                     req.Method = method;
                     req.KeepAlive = false;
                     req.ProtocolVersion = HttpVersion.Version10;
@@ -97,10 +100,11 @@ namespace Cedar.Framework.Common.BaseClasses
                 }
                 finally
                 {
-                    if (reqStream != null) reqStream.Close();
-                    if (rsp != null) rsp.Close();
+                    reqStream?.Close();
+                    rsp?.Close();
                 }
             }
+
             //创建请求
             var request = (HttpWebRequest) WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
 
@@ -109,6 +113,61 @@ namespace Cedar.Framework.Common.BaseClasses
             request.ReadWriteTimeout = 5000;
             request.ContentType = "text/html;charset=UTF-8";
             var response = (HttpWebResponse) request.GetResponse();
+            var myResponseStream = response.GetResponseStream();
+            var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
+
+            //返回内容
+            var retString = myStreamReader.ReadToEnd();
+            return retString;
+        }
+
+        /// <summary>
+        ///     Http (GET/POST)
+        /// </summary>
+        /// <param name="url">请求URL</param>
+        /// <param name="parameters">请求参数</param>
+        /// <param name="method">请求方法</param>
+        /// <returns>响应内容</returns>
+        public static string SendJson(string url, IDictionary<string, string> parameters, string method)
+        {
+            if (method.ToLower() == "post")
+            {
+                HttpWebResponse rsp = null;
+                Stream reqStream = null;
+                try
+                {
+                    var req = (HttpWebRequest)WebRequest.Create(url);
+                    req.Method = method;
+                    req.KeepAlive = false;
+                    req.ProtocolVersion = HttpVersion.Version10;
+                    req.Timeout = 5000;
+                    req.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
+                    var postData = Encoding.UTF8.GetBytes(BuildQuery(parameters, "utf8"));
+                    reqStream = req.GetRequestStream();
+                    reqStream.Write(postData, 0, postData.Length);
+                    rsp = (HttpWebResponse)req.GetResponse();
+                    var encoding = Encoding.GetEncoding(rsp.CharacterSet);
+                    return GetResponseAsString(rsp, encoding);
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+                finally
+                {
+                    reqStream?.Close();
+                    rsp?.Close();
+                }
+            }
+
+            //创建请求
+            var request = (HttpWebRequest)WebRequest.Create(url + "?" + BuildQuery(parameters, "utf8"));
+
+            //GET请求
+            request.Method = "GET";
+            request.ReadWriteTimeout = 5000;
+            request.ContentType = "text/html;charset=UTF-8";
+            var response = (HttpWebResponse)request.GetResponse();
             var myResponseStream = response.GetResponseStream();
             var myStreamReader = new StreamReader(myResponseStream, Encoding.GetEncoding("utf-8"));
 
@@ -179,9 +238,9 @@ namespace Cedar.Framework.Common.BaseClasses
             finally
             {
                 // 释放资源
-                if (reader != null) reader.Close();
-                if (stream != null) stream.Close();
-                if (rsp != null) rsp.Close();
+                reader?.Close();
+                stream?.Close();
+                rsp?.Close();
             }
         }
     }

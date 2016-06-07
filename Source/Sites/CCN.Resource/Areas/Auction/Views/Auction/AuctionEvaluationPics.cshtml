@@ -1,0 +1,490 @@
+﻿
+@{
+    Layout = null;
+}
+<script src="~/Scripts/handlebars-1.0.0.beta.6.js"></script>
+<!DOCTYPE html>
+
+<script type="text/javascript">
+    var carid = "@ViewBag.Carid";
+    var auctionid = "@ViewBag.Auctionid";
+    var status = 1;
+    $(function () {
+        //获取页面元素
+        GetHtmlItem();
+        InitAuctionInfo();
+    });
+
+    //获取页面元素
+    function GetHtmlItem() {
+        $.ajax({
+            url: "/api/Auction/AuctionCarInspectionItem",
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (data) {
+                var result = {
+                    "listitems": data.errmsg
+                };
+                //组装检查项页面
+                var myTemplate = Handlebars.compile($("#table-template").html());
+                //注册一个比较大小的Helper,判断v1是否大于v2
+                Handlebars.registerHelper("compare", function (v1, v2, options) {
+                    if (v1 == v2) {
+                        //满足添加继续执行
+                        return options.fn(this);
+                    } else {
+                        //不满足条件执行{{else}}部分
+                        return options.inverse(this);
+                    }
+                });
+
+                //$('#listitem').html(myTemplate(result));myTab11
+                $('#myBody1').append(myTemplate(result));
+
+                //获取车辆基本信息
+                GetCarInfo();
+                //获取报告
+                GetInspectionfindings();
+
+
+            }
+        });
+    }
+    //获取车辆基本信息
+    function GetCarInfo() {
+        $.get("/api/Car/GetCarInfoById?id=" + carid, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+            var obj = data.errmsg;
+            $('#carbrand').html(obj.brand_name);
+            $('#mileage').html(obj.mileage);
+            $('#registerdate').html(obj.register_date);
+            $('#carmodel').html(obj.model_name);
+        });
+    }
+
+    //获取报告
+    function GetInspectionfindings() {
+        $.ajax({
+            url: "/api/Auction/GetAuctionCarInspectionResult?id=" + auctionid,
+            type: 'get',
+            datatype: 'application/json',
+            async: false,
+            success: function (result) {
+                var data = result.errmsg;
+                if (data.length > 0) {
+                    $.each(data, function (k, v) {
+                        $('#' + v.inspectiondetailid + 'result').val(v.result);
+                        $('#' + v.inspectiondetailid + 'count').val(v.intactcount);
+                    });
+                }
+                else {
+                    status = 0;
+                }
+
+            }
+        });
+    }
+
+    //提交修改结果
+    function submit() {
+        var data = [];
+        $("label").each(function () {
+            if ($(this).attr('data-value')) {
+                var json = {};
+                var itemid = $(this).attr('data-value');
+                json.carid = carid;
+                json.auctionid = auctionid;
+                json.inspectiondetailid = itemid;
+                json.intactcount = $('#' + itemid + 'count').val();
+                json.result = $('#' + itemid + 'result').val();
+                data.push(json);
+            }
+        });
+        //判断填入的数字项是否满足要求
+        var erritem = "";
+        $('input[data-result="erroritem"]').each(function () {
+            var errcount = 0;
+            if ($(this).val() != "") {
+                errcount = parseInt($(this).val());
+            }
+            if (parseInt($(this).attr("data-count")) < errcount) {
+                erritem = erritem + $(this).attr("data-chname") + ",";
+            }
+        });
+        if (erritem != "") {
+            alert(erritem + "项，填写的错误项多余总检测项！");
+            return false;
+        }
+        if (status == 1)//保存
+        {
+            $.ajax({
+                type: "POST",
+                url: "/api/Auction/EditCarInspection",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.errcode == 0) {
+                        alert("操作成功！");
+                    }
+                    else {
+                        alert("操作失败！");
+                    }
+                }
+            });
+        }
+        else//新增
+        {
+            $.ajax({
+                type: "POST",
+                url: "/api/Auction/AddCarInspection",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data),
+                success: function (result) {
+                    if (result.errcode == 0) {
+                        alert("操作成功！");
+                    }
+                    else {
+                        alert("操作失败！");
+                    }
+                }
+            });
+        }
+
+
+
+    }
+
+    //返回操作
+    function goback() {
+        getBodyHtml('mainbody', '/auction/auction/auctioncaredit?carid=' + carid + '&id=' + auctionid);
+    }
+
+    function InitAuctionInfo() {
+        if (id === "") {
+            return;
+        }
+        console.log(auctionid);
+        $.get("/api/Auction/GetAuctionInfoById?id=" + carid, function (data) {
+
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+                return false;
+            }
+
+            var obj = data.errmsg;
+
+            //认证图片 imgfindings
+            //if (JSON.parse(obj.evaluationpics) != null) {
+            //    $.each(JSON.parse(obj.evaluationpics), function (k, v) {
+            //        $('#imgfindings').append(
+            //                '<div data-val="' + v.title + '" class="imgPreview imgForCar"  data-id="">\
+            //			            <img data-type="img" src="' + getImgUrl(v.imgsrc) + '"  class="loading" width="250px" height="150px">\
+            //		            </div>');
+            //    });
+            //}
+
+        });
+    }
+</script>
+<div class="widget flat radius-bordered">
+    <div class="widget-header bg-themeprimary">
+        <span class="widget-caption">车辆认证报告</span>
+    </div>
+
+    <div class="widget-body">
+        @*<div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>评估检测报告</label>
+                        <div class="controls col-sm-11" id="">
+                            <div id="imgfindings" class="imgs col-xs-12" style="padding:10px 144px 0px 0;width:230px;height:150px;">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        <div class="widget-main ">
+            <div class="tabbable" id="myBody1">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--组装检查项-->
+<script id="table-template" type="text/x-handlebars-template">
+    <ul class="nav nav-tabs tabs-flat" id="myTab11">
+        <li class="active">
+            <a data-toggle="tab" href="#home11">
+                车辆基础资料
+            </a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#listitem">
+                总结报告
+            </a>
+        </li>
+
+        {{#each listitems}}
+        {{#if auctioncarinspectiondetail}}
+        <li>
+            <a data-toggle="tab" href="#{{innerid}}">
+                {{name_zh}}
+            </a>
+        </li>
+        {{/if}}
+        {{/each}}
+
+    </ul>
+    <div class="tab-content tabs-flat" id="myBody">
+        <div id="home11" class="tab-pane in active">
+            <form class="form-horizontal form-bordered" role="form">
+                @*<div class="row form-group">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证时间:</label>
+                                <div class="col-sm-10">
+                                    <input id="" class="form-control" type="text" placeholder="认证时间">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">认证地点:</label>
+                                <div class="col-sm-10">
+                                    <input id="" class="form-control" type="text" placeholder="认证地点">
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="row form-group">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">车辆品牌:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="carbrand"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">上牌日期:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="registerdate"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="txtbuydate" class="col-sm-2 control-label no-padding-right">表显里程:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="mileage"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">车型:</label>
+                            <div class="col-sm-10">
+                                <label class="control-label no-padding-right" id="carmodel"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        @*<div class="form-group">
+                                <label for="txtbuyprice" class="col-sm-2 control-label no-padding-right">车架号:</label>
+                                <div class="col-sm-10">
+                                    <label class="control-label no-padding-right" id="vin"></label>
+                                </div>
+                            </div>*@
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div id="listitem" class="tab-pane">
+            {{#each listitems}}
+            <div class="row form-group">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class=" control-label no-padding-right" data-value="{{innerid}}">{{sort}}、{{name_zh}}：</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="caresc" class="col-sm-1 control-label no-padding-right"></label>
+                        <div class="col-sm-11">
+                            <textarea id="{{innerid}}result" data-type="result" maxlength="200" rows="5" cols="150">{{name_zh}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{#each listitems}}
+        {{#if auctioncarinspectiondetail}}
+        <div id="{{innerid}}" class="tab-pane">
+            <div class="widget-header bordered-bottom bordered-palegreen">
+                <span class="widget-caption">{{name_zh}} {{name_en}}</span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form class="form-horizontal form-bordered" role="form" id="">
+                        {{#compare sort 1}}
+                        {{#with auctioncarinspectiondetail}}
+                        {{#each this}}
+                        <div class="row form-group">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="caresc" class="col-sm-1 control-label no-padding-right" data-value="{{innerid}}">{{name_zh}}</label>
+                                    <div class="col-sm-11">
+                                        <input id="{{innerid}}result" data-type="result" type="text" placeholder="{{name_zh}}" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{/with}}
+                        {{else}}
+                        {{#with auctioncarinspectiondetail}}
+                        {{#each this}}
+                        <div class="row form-group">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class=" control-label no-padding-right">
+                                        {{sort}}、{{name_zh}}
+                                        {{#if inspectioncount}}
+                                        (检测{{inspectioncount}}项)
+                                        {{/if}}
+                                        ：
+                                        {{#if inspectioncount}}
+                                        <span>(异常</span><input type="text" id="{{innerid}}count" data-type="result" data-result="erroritem" data-chname="{{name_zh}}" data-count="{{inspectioncount}}" data-value="{{innerid}}" style="width:30px;" /><span>项)</span>
+                                        {{/if}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="caresc" class="col-sm-1 control-label no-padding-right" data-value="{{innerid}}"></label>
+                                    <div class="col-sm-11">
+                                        <textarea id="{{innerid}}result" data-type="result" maxlength="200" rows="5" cols="150">{{defaultvalue}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{/with}}
+                        {{/compare}}
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+</script>
+
+<div class="row form-group text-center">
+    <div class="col-lg-12">
+        <input id="" type="button" class="btn btn-palegreen shiny" value="保存" onclick="submit();" />
+        <input id="" type="button" class="btn btn-primary shiny" value="返回" onclick="goback();" />
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--组装检查项-->
+@*<script id="table-template" type="text/x-handlebars-template">
+        {{#each listitems}}
+        <div class="row form-group">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label for="" class=" control-label no-padding-right">{{sort}}、{{name_zh}}：</label>
+
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label for="caresc" class="col-sm-1 control-label no-padding-right"></label>
+                    <div class="col-sm-11">
+                        <textarea id="caresc" maxlength="200" rows="5" cols="150" >{{name_zh}}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>*@
+
+@*组装检查明细项*@
+<!--id可以用来唯一确定一个模版,type是模版固定的写法-->
+@*<script id="detail-template" type="text/x-handlebars-template">
+        {{#each listitems}}
+        {{#if auctioncarinspectiondetail}}
+        <div id="{{innerid}}" class="tab-pane">
+            <div class="widget-header bordered-bottom bordered-palegreen">
+                <span class="widget-caption">{{name_zh}} {{name_en}}</span>
+            </div>
+            <div class="widget-body">
+                <div>
+                    <form class="form-horizontal form-bordered" role="form" id="listitem">
+                        {{#with auctioncarinspectiondetail}}
+                        {{#each this}}
+                        <div class="row form-group">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="" class=" control-label no-padding-right">
+                                        {{sort}}、{{name_zh}}
+                                        {{#if inspectioncount}}
+                                        (检测{{inspectioncount}}项)
+                                        {{/if}}
+                                        ：
+                                        {{#if inspectioncount}}
+                                        <span>(异常</span><input type="text" id="" style="width:30px;" /><span>项)</span>
+                                        {{/if}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="caresc" class="col-sm-1 control-label no-padding-right"></label>
+                                    <div class="col-sm-11">
+                                        <textarea id="caresc" maxlength="200" rows="5" cols="150">{{defaultvalue}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{/with}}
+                    </form>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        {{/each}}
+
+    </script>*@
+

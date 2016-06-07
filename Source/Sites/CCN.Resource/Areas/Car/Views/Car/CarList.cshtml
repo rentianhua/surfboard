@@ -15,6 +15,12 @@
             getBodyHtml('mainbody', "/car/car/caredit?custid=" + custid);
             //location.href = "/car/car/caredit?custid=" + custid;
         });
+        if (custid != "") {
+            $("#btnBack").click(function () {
+                getBodyHtmlByMenu('mainbody', '/Customer/Customer/CustomerList', this);
+            });
+        }
+
     });
 
     //初始化品牌
@@ -75,6 +81,7 @@
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.carno + "</td>";
             str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
             str += "<td>" + Dateformat(val.buytime, "yyyy-MM-dd") + "</td>";
             str += "<td>" + (val.buyprice == null ? '' : val.buyprice) + "</td>";
@@ -88,7 +95,8 @@
                 "<a href='javascript:;' onclick=\"DealCar('" + val.Innerid + "',this);\">结案</a> " +
                 "<a href='javascript:;' onclick=\"DeleteCar('" + val.Innerid + "',this);\">删除</a> " +
                 "<a href='javascript:;' onclick=\"RefreshCar('" + val.Innerid + "');\">刷新</a> " +
-                "<a href='javascript:;' onclick=\"DoTopCar('" + val.Innerid + "'," + val.istop + ");\">" + (val.istop == 1 ? "取消置顶" : "置顶") + "</a> " +
+                "<a href='javascript:;' onclick=\"PushUpCar('" + val.Innerid + "');\"> 顶 </a> " +
+                //"<a href='javascript:;' onclick=\"DoTopCar('" + val.Innerid + "'," + val.istop + ");\">" + (val.istop == 1 ? "取消置顶" : "置顶") + "</a> " +
                 "</td>";
             str += "</tr>";
             $("#carlist tbody").append(str);
@@ -98,7 +106,24 @@
     //刷新车辆
     function RefreshCar(id) {
         $.get("/api/Car/RefreshCar?carid=" + id, function (result) {
-            if (result.errcode === 0) {
+            if (result.errcode === 401) {
+                alert("刷新次数已经用完");
+            }
+            else if (result.errcode === 0) {
+                getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
+            } else {
+                alert("操作失败");
+            }
+        });
+    }
+
+    //置顶车辆
+    function PushUpCar(id) {
+        $.get("/api/Car/PushUpCar?carid=" + id, function (result) {
+            if (result.errcode === 401) {
+                alert("置顶次数已经用完");
+            }
+            else if (result.errcode === 0) {
                 getBodyHtml('mainbody', '/car/car/carlist?custid=' + custid);
             } else {
                 alert("操作失败");
@@ -156,11 +181,12 @@
         $(obj).after($("#dealDiv").removeClass("hide"));
 
         $("#dealsubmit").unbind("click").bind("click", function () {
+            var re = /^[0-9]+([.]{1}[0-9]{1,2})?$/;
             if ($.trim($("#dealprice").val()).length > 0 && !re.test($("#dealprice").val())) {
                 alert("价格只能输入数值[最多两位小数]！");
                 return false;
             }
-            if ($("#dealdesc").val() == "" || $("#dealprice").val()=="") {
+            if ($("#dealdesc").val() == "" || $("#dealprice").val() == "") {
                 alert("请将价格和描述填写完整！");
             }
             else {
@@ -184,6 +210,8 @@
                 return "在售";
             case 2:
                 return "已售";
+            case 3:
+                return "在拍卖";
             default:
 
         }
@@ -227,11 +255,12 @@
                         </select>
                         <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                         <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                        <a id="btnBack" href="javascript:;" class="btn btn-palegreen shiny">返回</a>
                     </div>
                 </div>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
-                
+
             </div>
         </div>
     </div>
@@ -240,6 +269,7 @@
         <thead>
             <tr role="row">
                 <th>序号</th>
+                <th>车辆编号</th>
                 <th>车型</th>
                 <th>收购日期</th>
                 <th>收购价格</th>

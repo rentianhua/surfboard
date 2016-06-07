@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -48,7 +49,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("SearchCarPageListTop")]
         [HttpPost]
-        public BasePageList<CarInfoListViewModel> SearchCarPageListTop([FromBody]CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListTop([FromBody]CarGlobalQueryModel query)
         {
             return _carervice.SearchCarPageListTop(query);
         }
@@ -60,7 +61,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("SearchCarPageListEx")]
         [HttpPost]
-        public BasePageList<CarInfoListViewModel> SearchCarPageListEx([FromBody]CarGlobalExQueryModel query)
+        public BasePageList<CarInfoListViewModel> SearchCarPageListEx([FromBody]CarGlobalQueryModel query)
         {
             return _carervice.SearchCarPageListEx(query);
         }
@@ -112,6 +113,17 @@ namespace CCN.WebAPI.ApiControllers
             return _carervice.GetCarViewById(id);
         }
 
+        /// <summary>
+        /// 根据车辆获取车辆信息
+        /// </summary>
+        /// <param name="carno"></param>
+        /// <returns></returns>
+        [Route("GetCarInfoByNo")]
+        [HttpGet]
+        public JResult GetCarInfoByNo(string carno)
+        {
+            return _carervice.GetCarInfoByNo(carno);
+        }
         #region 感兴趣
 
         /// <summary>
@@ -196,7 +208,7 @@ namespace CCN.WebAPI.ApiControllers
 
             return result;
         }
-        
+
         /// <summary>
         /// 后台添加车辆
         /// </summary>
@@ -207,13 +219,13 @@ namespace CCN.WebAPI.ApiControllers
         {
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
@@ -243,7 +255,7 @@ namespace CCN.WebAPI.ApiControllers
                 {
                     custinfo = (CustModel)custservice.GetCustByMobile(model.mobile).errmsg;
                 }
-                
+
                 if (custinfo == null) //会员不存在
                 {
                     var password = RandomUtility.GetRandom(6);
@@ -281,7 +293,7 @@ namespace CCN.WebAPI.ApiControllers
 
                         //发送短信通知
                         var sms = new SMSMSG();
-                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用车信网发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【车信网】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。车信网承诺不会透露用户信息。");
+                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用玖伍淘车发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【玖伍淘车】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。玖伍淘车承诺不会透露用户信息。");
                     });
 
                     return _carervice.AddCar(model);
@@ -293,13 +305,13 @@ namespace CCN.WebAPI.ApiControllers
             //添加车辆
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
@@ -315,7 +327,7 @@ namespace CCN.WebAPI.ApiControllers
             var jresult = custservice.UpdateCustType(custid);
             if (jresult.errcode == 0)
             {
-                var custModel = (CustModel) jresult.errmsg;
+                var custModel = (CustModel)jresult.errmsg;
                 if (!string.IsNullOrWhiteSpace(custModel?.Mobile))
                 {
                     ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>().SendVerification(new BaseVerification
@@ -362,7 +374,7 @@ namespace CCN.WebAPI.ApiControllers
                         LoggerFactories.CreateLogger().Write("车辆删除扣除积分:会员id空", TraceEventType.Warning);
                         return;
                     }
-                    
+
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -406,7 +418,7 @@ namespace CCN.WebAPI.ApiControllers
                     }
 
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
-                    
+
                     rewardsservice.ChangePoint(new CustPointModel
                     {
                         Custid = custid,
@@ -476,7 +488,7 @@ namespace CCN.WebAPI.ApiControllers
                 //获取会员id
                 var custid = ApplicationContext.Current.UserId;
                 Task.Run(() =>
-                {                    
+                {
                     if (string.IsNullOrWhiteSpace(custid))
                     {
                         LoggerFactories.CreateLogger().Write("分享送积分:会员id空", TraceEventType.Warning);
@@ -564,6 +576,18 @@ namespace CCN.WebAPI.ApiControllers
         public JResult RefreshCar(string carid)
         {
             return _carervice.RefreshCar(carid);
+        }
+
+        /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [Route("PushUpCar")]
+        [HttpGet]
+        public JResult PushUpCar(string carid)
+        {
+            return _carervice.PushUpCar(carid);
         }
 
         /// <summary>
@@ -682,6 +706,7 @@ namespace CCN.WebAPI.ApiControllers
         [HttpPost]
         public JResult AddCarPictureList([FromBody]PictureListModel picModel)
         {
+            LoggerFactories.CreateLogger().Write("批量添加图片参数(AddCarPictureKeyList)：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
             return _carervice.AddCarPictureList(picModel);
         }
 
@@ -710,6 +735,33 @@ namespace CCN.WebAPI.ApiControllers
             LoggerFactories.CreateLogger().Write("批量添加+删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
             return _carervice.SaveCarPicture(picModel);
         }
+
+        /// <summary>
+        /// 批量保存图片(wechat webapp)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BatchSaveCarPictureWechat")]
+        [HttpPost]
+        public JResult BatchSaveCarPictureWechat([FromBody] WechatPictureExModel model)
+        {
+            LoggerFactories.CreateLogger().Write("微信端批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPictureWechat(model);
+        }
+
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BatchSaveCarPicture")]
+        [HttpPost]
+        public JResult BatchSaveCarPicture([FromBody] BatchPictureListModel model)
+        {
+            LoggerFactories.CreateLogger().Write("批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPicture(model);
+        }
+
         #endregion
 
         #region 车辆收藏
@@ -765,6 +817,45 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
+        #region 车辆举报
+
+        /// <summary>
+        /// 添加举报
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddTipOff")]
+        [HttpPost]
+        public JResult AddTipOff([FromBody]CarTipOffModel model)
+        {
+            return _carervice.AddTipOff(model);
+        }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetTipOffPageList")]
+        [HttpPost]
+        public BasePageList<CarTipOffModel> GetTipOffPageList([FromBody]CarTipQueryModel query)
+        {
+            return _carervice.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("HandleTipOff")]
+        [HttpPost]
+        public JResult HandleTipOff([FromBody]CarTipHandleModel model)
+        {
+            return _carervice.HandleTipOff(model);
+        }
+        #endregion
+
         #region 车辆悬赏
 
         /// <summary>
@@ -792,6 +883,19 @@ namespace CCN.WebAPI.ApiControllers
         }
 
         /// <summary>
+        /// 更新状态
+        /// </summary>
+        /// <param name="status">状态值</param>
+        /// <param name="innerid">主键</param>
+        /// <returns></returns>
+        [Route("UpdateCarRewardStatus")]
+        [HttpGet]
+        public JResult UpdateCarRewardStatus(int status, string innerid)
+        {
+            return _carervice.UpdateCarRewardStatus(status, innerid);
+        }
+
+        /// <summary>
         /// 车辆悬赏推荐
         /// </summary>
         /// <param name="query"></param>
@@ -802,6 +906,140 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _carervice.GetCarRewardPageList(query);
         }
+        #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 车贷列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCarLoanList")]
+        [HttpPost]
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            return _carervice.GetCarLoanList(query);
+        }
+
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarLoan")]
+        [HttpPost]
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            return _carervice.AddCarLoan(model);
+        }
+
+        #endregion
+        
+        #region 供应商管理
+
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierAll")]
+        public JResult GetSupplierAll()
+        {
+            return _carervice.GetSupplierAll();
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierInfoById")]
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            return _carervice.GetSupplierInfoById(innerid);
+        }
+
+        #endregion
+
+        #region 神秘车源
+
+        /// <summary>
+        /// 查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMysteriousCarPageList")]
+        public BasePageList<CarMysteriousListModel> GetMysteriousCarPageList([FromBody]CarGlobalQueryModel query)
+        {
+            return _carervice.GetMysteriousCarPageList(query);
+        }
+
+        /// <summary>
+        /// 微信定金支付
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("MysteriousUnifiedOrder")]
+        public JResult MysteriousUnifiedOrder([FromBody]PayModel model)
+        {
+            return _carervice.MysteriousUnifiedOrder(model);
+        }
+
+        /// <summary>
+        /// 确认支付
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("DoPay")]
+        public JResult DoPay(string orderNo)
+        {
+            return _carervice.DoPay(orderNo);
+        }
+
+        /// <summary>
+        /// 获取支付记录
+        /// </summary>
+        /// <param name="carid"></param>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetPayRecordById")]
+        public JResult GetPayRecordById(string carid, string custid)
+        {
+            return _carervice.GetPayRecordById(carid, custid);
+        }
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarViewById")]
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            return _carervice.GetMaddenCarViewById(innerid);
+        }
+
+        /// <summary>
+        /// 查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMaddenCarPageList")]
+        public BasePageList<CarMaddenListModel> GetMaddenCarPageList([FromBody]CarMaddenQueryModel query)
+        {
+            return _carervice.GetMaddenCarPageList(query);
+        }
+
         #endregion
     }
 }

@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using CCN.Modules.Base.BusinessEntity;
 using CCN.Modules.Base.DataAccess;
+using Cedar.Core.ApplicationContexts;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Core.IoC;
+using Cedar.Core.Logging;
 using Cedar.Foundation.SMS.Common;
+using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.Weixin.MP.AdvancedAPIs.MerChant;
 
 namespace CCN.Modules.Base.BusinessComponent
 {
@@ -488,6 +495,14 @@ namespace CCN.Modules.Base.BusinessComponent
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            return DataAccess.GetTotalAreaList();
+        }
         #endregion
 
         #region 品牌/车系/车型
@@ -913,6 +928,76 @@ namespace CCN.Modules.Base.BusinessComponent
         }
         #endregion
 
+        #region 更新基础数据
+
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarBrand()
+        {
+            var cheU = new Che300Utility();
+            var json = cheU.GetCarBrandList();
+            var result = DataAccess.UpdateCarBrand(json);
+            return JResult._jResult(0, result);
+        }
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarSeries()
+        {
+            //获取所有品牌
+            var brandList = DataAccess.GetCarBrand().ToList();
+            if (!brandList.Any())
+            {
+                return JResult._jResult(401, "没有品牌");
+            }
+
+            //根据品牌获取车系
+            var cheU = new Che300Utility();
+            foreach (var item in brandList)
+            {
+                if (item.Innerid == null)
+                    continue;
+
+                var jsonSeries = cheU.GetCarSeriesList(item.Innerid.Value);
+                DataAccess.UpdateCarSeries(jsonSeries, item.Innerid.Value);
+            }
+
+            return JResult._jResult(0, "完成");
+        }
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <returns></returns>
+        public JResult UpdateCarModel()
+        {
+            //获取所有品牌
+            var seriesList = DataAccess.GetCarSeries().ToList();
+            if (!seriesList.Any())
+            {
+                return JResult._jResult(401, "没有车系");
+            }
+
+            //根据品牌获取车系
+            var cheU = new Che300Utility();
+            foreach (var item in seriesList)
+            {
+                if (item.Innerid == null)
+                    continue;
+
+                var jsonModel = cheU.GetCarModelList(item.Innerid.Value);
+                DataAccess.UpdateCarModel(jsonModel, item.Innerid.Value);
+            }
+
+            return JResult._jResult(0, "完成");
+        }
+
+        #endregion
+
         #region 获取系统后台基础信息
 
         #region 用户管理
@@ -949,19 +1034,23 @@ namespace CCN.Modules.Base.BusinessComponent
             var userinfo = DataAccess.GetUserInfoByLoginName(model.loginname);
             if (userinfo != null)
             {
-                return new JResult
-                {
-                    errcode = 400,
-                    errmsg = "用户名已存在，请更换用户名！"
-                };
+                return JResult._jResult(400, "用户名已存在，请更换用户名！");
             }
 
+            model.innerid = Guid.NewGuid().ToString();
             var result = DataAccess.AddUser(model);
-            return new JResult
+            switch (result)
             {
-                errcode = 0,
-                errmsg = result
-            };
+                case -1:
+                    return JResult._jResult(401, "编码重复");
+                case 0:
+                    return JResult._jResult(402, "添加失败");
+            }
+
+            var qrcode = GenerateQrCode(model.no);
+            DataAccess.UpdateUserSceneQrCode(qrcode,model.innerid);
+
+            return JResult._jResult(0, result);
         }
 
         /// <summary>
@@ -981,7 +1070,7 @@ namespace CCN.Modules.Base.BusinessComponent
                     errmsg = "用户名已存在，请更换用户名！"
                 };
             }
-
+            model.no = null; //编号不能修改
             var result = DataAccess.UpdateUser(model);
             return new JResult
             {
@@ -1004,6 +1093,27 @@ namespace CCN.Modules.Base.BusinessComponent
                 errcode = 0,
                 errmsg = result
             };
+        }
+
+        /// <summary>
+        /// 生成场景二维码
+        /// </summary>
+        /// <returns></returns>
+        public string GenerateQrCode(string no)
+        {
+            var qcresult = QrCodeApi.CreateByStr(ConfigHelper.GetAppSettings("APPID"), no);
+            //生成二维码位图
+            var logoUrl = HttpContext.Current.Server.MapPath("~/Content/images/logo.png");
+            var bitmap = BarCodeUtility.CreateBarcode(qcresult.url, logoUrl, 380, 380, 48, 48)[1];
+            //var bitmap = BarCodeUtility.CreateBarcode(qcresult.url, 240, 240);
+            var filename = QiniuUtility.GetFileName(Picture.card_qrcode);
+            var stream = BarCodeUtility.BitmapToStream(bitmap);
+            //上传图片到七牛云
+            var qinniu = new QiniuUtility();
+            var qrcode = qinniu.Put(stream, "", filename) ?? Path.GetFileName(filename);
+            stream.Dispose();
+            
+            return qrcode;
         }
 
         /// <summary>
@@ -1037,6 +1147,17 @@ namespace CCN.Modules.Base.BusinessComponent
         {
             var model = DataAccess.GetMenuByUerid(userid);
             return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult GetUserInfo(BaseUserModel model)
+        {
+            var list = DataAccess.GetUserInfo(model);
+            return JResult._jResult(list);
         }
 
 
@@ -1312,5 +1433,102 @@ namespace CCN.Modules.Base.BusinessComponent
 
         #endregion
 
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query)
+        {
+            return DataAccess.GetBannerPageList(query);
+        }
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        public JResult GetBannerList()
+        {
+            var list = DataAccess.GetBannerList();
+            return JResult._jResult(0, list);
+        }
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateBannerStatus(string id, int status)
+        {
+            var result = DataAccess.UpdateBannerStatus(id, status);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteBannerById(string innerid)
+        {
+            var result = DataAccess.DeleteBannerById(innerid);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetBannerById(string innerid)
+        {
+            var model = DataAccess.GetBannerById(innerid);
+            return JResult._jResult(model);
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddBanner(BaseBannerModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+
+            model.Innerid = Guid.NewGuid().ToString();
+            model.Createdtime = DateTime.Now;
+            model.Createrid = ApplicationContext.Current.UserId;
+            model.Modifiedtime = null;
+            model.Modifierid = "";
+            var result = DataAccess.UpdateBanner(model);
+            return JResult._jResult(result);
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateBanner(BaseBannerModel model)
+        {
+            if (string.IsNullOrWhiteSpace(model?.Innerid))
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            model.Createrid = "";
+            model.Createdtime = null;
+            model.Modifiedtime = DateTime.Now;
+            model.Modifierid = ApplicationContext.Current.UserId;
+            var result = DataAccess.UpdateBanner(model);
+            return JResult._jResult(result);
+        }
+
+        #endregion
     }
 }

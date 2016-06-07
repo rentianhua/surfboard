@@ -138,6 +138,16 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 车辆数量
         /// </summary>
         public int? CarNum { get; set; }
+
+        /// <summary>
+        /// VIP有效期
+        /// </summary>
+        public DateTime? expirestime { get; set; }
+
+        /// <summary>
+        /// 是否参与过体验 1已参与 0未参与
+        /// </summary>
+        public int? isbate { get; set; }
     }
 
     /// <summary>
@@ -472,6 +482,27 @@ namespace CCN.Modules.Customer.BusinessEntity
     }
 
     /// <summary>
+    /// 修改密码model
+    /// </summary>
+    public class CustModifyPassword
+    {
+        /// <summary>
+        /// 新密码
+        /// </summary>
+        public string NewPassword { get; set; }
+
+        /// <summary>
+        /// 旧密码
+        /// </summary>
+        public string OldPassword { get; set; }
+
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+    }
+
+    /// <summary>
     /// 会员相关总数信息
     /// </summary>
     public class CustTotalModel
@@ -495,6 +526,62 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// 当前礼券数
         /// </summary>
         public int Currpouponnum { get; set; }
+
+        /// <summary>
+        /// 剩余刷新次数
+        /// </summary>
+        public int Refreshnum { get; set; }
+
+        /// <summary>
+        /// 剩余置顶次数
+        /// </summary>
+        public int Topnum { get; set; }
+    }
+
+    /// <summary>
+    /// 会员相关总数变更记录
+    /// </summary>
+    public class CustTotalRecordModel
+    {
+        /// <summary>
+        /// 内部id
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 数量
+        /// </summary>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// 类型：1.刷新次数，2.置顶数次，3.积分调整
+        /// </summary>
+        public int Type { get; set; }
+        
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Remark { get; set; }
+
+        /// <summary>
+        /// 备注
+        /// </summary>
+        public string Spare1 { get; set; }
+
+        /// <summary>
+        /// 操作人
+        /// </summary>
+        public string Createrid { get; set; }
+
+        /// <summary>
+        /// 操作时间
+        /// </summary>
+        public DateTime? Creatertime { get; set; }
     }
 
     /// <summary>
@@ -543,5 +630,70 @@ namespace CCN.Modules.Customer.BusinessEntity
         /// code列表
         /// </summary>
         public List<string> CodeList { get; set; }
+    }
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CustWxPayModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Innerid { get; set; }
+
+        /// <summary>
+        /// 会员id
+        /// </summary>
+        public string Custid { get; set; }
+
+        /// <summary>
+        /// 订单号
+        /// </summary>
+        public string OrderNo { get; set; }
+
+        /// <summary>
+        /// 统一下单结果信息
+        /// </summary>
+        public string OrderInfo { get; set; }
+
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public int Status { get; set; }
+
+        /// <summary>
+        /// 类型 1、vip会员 2、体验会员
+        /// </summary>
+        public string type { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Remark { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Createdtime { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime? Modifiedtime { get; set; }
+    }
+
+    /// <summary>
+    /// 新粉丝重新绑定会员model
+    /// </summary>
+    public class CustRebindFansModel
+    {
+        /// <summary>
+        /// 手机号
+        /// </summary>
+        public string Mobile { get; set; }
+
+        /// <summary>
+        /// openid
+        /// </summary>
+        public string Openid { get; set; }
     }
 }

@@ -18,6 +18,16 @@ namespace CCN.Modules.Base.BusinessEntity
         public string innerid { get; set; }
 
         /// <summary>
+        /// 编号
+        /// </summary>
+        public string no { get; set; }
+
+        /// <summary>
+        /// 场景二维码
+        /// </summary>
+        public string sceneqrcode { get; set; }
+
+        /// <summary>
         /// 用户名
         /// </summary>
         public string username { get; set; }
@@ -56,6 +66,11 @@ namespace CCN.Modules.Base.BusinessEntity
         /// 所属部门
         /// </summary>
         public string depid { get; set; }
+
+        /// <summary>
+        /// 级别
+        /// </summary>
+        public int? level { get; set; }
 
         /// <summary>
         /// 创建时间

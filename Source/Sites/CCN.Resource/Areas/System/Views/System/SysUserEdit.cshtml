@@ -44,6 +44,8 @@
                 $("#email").val(obj.email);
                 $("#selectstatus").selectVal(obj.status);
                 $("#selectdep").selectVal(obj.depid);
+                $("#selectlevel").selectVal(obj.level);
+                
             }
         });
     }
@@ -93,13 +95,17 @@
             telephone: $("#telephone").val(),
             email: $("#email").val(),
             status: $("#selectstatus").val(),
-            depid: $("#selectdep").val()
+            depid: $("#selectdep").val(),
+            level: $("#selectlevel").val()
         };
         if (id === "") {
             $.post("/api/Base/AddUser", json, function (result) {
-                var str = result.errcode === 0 ? "添加成功" : result.errmsg;
-                alert(str);
-                getBodyHtml('mainbody', '/system/system/SysUserList');
+                if (result.errcode === 0) {
+                    alert("添加成功");
+                    getBodyHtml('mainbody', '/system/system/SysUserList');
+                } else {
+                    alert("添加失败");
+                }
             });
         } else {
             json.Innerid = id;
@@ -306,12 +312,15 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        @*<div class="form-group">
-                                <label for="email" class="col-sm-2 control-label no-padding-right">邮箱：</label>
-                                <div class="controls col-sm-10">
-                                    <input type="email" id="email" class="form-control" placeholder="邮箱" />
-                                </div>
-                            </div>*@
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label no-padding-right">级别：</label>
+                            <div class="controls col-sm-10">
+                                <select id="selectlevel" style="width: 100%;">
+                                    <option value="1">一级</option>
+                                    <option value="2">二级</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row form-group">

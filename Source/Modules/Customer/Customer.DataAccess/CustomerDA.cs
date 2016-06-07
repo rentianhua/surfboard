@@ -7,6 +7,7 @@ using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using CCN.Modules.Customer.BusinessEntity;
 using Cedar.Core.Data;
@@ -54,9 +55,18 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns>0：未被注册，非0：被注册</returns>
         public int CheckMobile(string mobile)
         {
-            const string sql = @"select count(1) from cust_info where mobile=@mobile;";
-            var result = Helper.ExecuteScalar<int>(sql, new { mobile });
-            return result;
+            string sql = $"select count(1) as count from cust_info where mobile='{mobile}';";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Query<int>(sql).FirstOrDefault();
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
@@ -74,6 +84,13 @@ namespace CCN.Modules.Customer.DataAccess
                 var tran = conn.BeginTransaction();
                 try
                 {
+                    //获取销售编号
+                    if (userInfo.Wechat != null)
+                    {
+                        userInfo.RecommendedId = conn.Query<string>("select scenestr from wechat_friend where openid=@openid;", new { openid = userInfo.Wechat.Openid }).FirstOrDefault();
+                    }
+
+                    //插入会员信息
                     conn.Execute(sql, userInfo, tran);
 
                     //插入会员的总数信息
@@ -134,6 +151,12 @@ namespace CCN.Modules.Customer.DataAccess
             if (custModel != null)
             {
                 custModel.Wechat = Helper.Query<CustWechat>("select a.* from wechat_friend as a inner join cust_wechat as b on a.openid=b.openid where b.custid=@custid;", new
+                {
+                    custid = custModel.Innerid
+                }).FirstOrDefault();
+
+                //获取是否参与过会员体验
+                custModel.isbate = Helper.Query<int>("select count(1) from cust_wxpay_info where custid=@custid and type=2;", new
                 {
                     custid = custModel.Innerid
                 }).FirstOrDefault();
@@ -462,6 +485,107 @@ namespace CCN.Modules.Customer.DataAccess
 
         #endregion
 
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public int UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            var sql = "";
+            var o = oper == 1 ? "+" : "-";
+            //刷新
+            if (type == 1)
+            {
+                sql = $"update cust_total_info set refreshnum=refreshnum{o}@count where custid=@custid;";
+            }
+            //置顶
+            else if (type == 2)
+            {
+                sql = $"update cust_total_info set topnum=topnum{o}@count where custid=@custid;";
+            }
+            //积分
+            else if (type == 3)
+            {
+                sql = $"update cust_total_info set currpoint=currpoint{o}@count where custid=@custid;";
+            }
+
+            var result = Helper.Execute(sql, new { count, custid });
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public int SaveTotalRecord(CustTotalRecordModel model)
+        {
+            const string sql = "insert into cust_total_record (innerid, custid, count,type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count,@type, @remark, @spare1, @createrid, @createdtime);";
+            var result = Helper.Execute(sql, model);
+            return result;
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public int SendWelfare(int refreshnum, int topnum)
+        {
+            //try
+            //{
+            //    var dddd = Convert.ToInt32("qqqqq");
+            //}
+            //catch (Exception ex)
+            //{
+            //    LoggerFactories.CreateLogger().Write("dao test", TraceEventType.Error, ex);
+            //}
+
+            //return 1;
+            const string sql =
+                "select custid from cust_total_info where custid not in (select custid from cust_total_record where `type`=100 and date_format(createdtime,'%Y-%m')=date_format(now(),'%Y-%m'));";
+            const string u = "update cust_total_info set refreshnum=refreshnum+@refreshcount,topnum=topnum+@topcount where custid=@custid;";
+            const string i = "insert into cust_total_record (innerid, custid, count, type, remark, spare1, createrid, createdtime) values (@innerid, @custid, @count, @type, @remark, @spare1, @createrid, @createdtime);";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var list = conn.Query<string>(sql).ToList();
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var item in list)
+                    {
+                        //更新刷新和置顶次数
+                        conn.Execute(u, new { refreshcount = refreshnum, topcount = topnum, custid = item }, tran);
+                        //保存更新记录
+                        conn.Execute(i, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            count = 0,
+                            custid = item,
+                            type = 100,
+                            remark = $"发福利记录：刷新次数增加{refreshnum}次，置顶次数增加{topnum}次",
+                            createdtime = DateTime.Now
+                        }, tran);
+                    }
+                    tran.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("发福利异常：" + ex.Message, TraceEventType.Information);
+                }
+            }
+
+            return 1;
+        }
+
+        #endregion
+
         #region 会员认证
 
         /// <summary>
@@ -471,11 +595,13 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int AddAuthentication(CustAuthenticationModel model)
         {
+            //添加认证 自动升级成车商
             const string sqlU = "update cust_info set authstatus=1 where innerid=@innerid;";
             const string sqlI = @"INSERT INTO `cust_authentication`
                                 (innerid, custid, realname, idcard, enterprisename, licencecode, licencearea, organizationcode, taxcode, relevantpicture, createdtime)
                                 VALUES
                                 (uuid(), @custid, @realname, @idcard, @enterprisename, @licencecode, @licencearea, @organizationcode, @taxcode, @relevantpicture, @createdtime);";
+            
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -488,6 +614,7 @@ namespace CCN.Modules.Customer.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("AddAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }
@@ -518,6 +645,7 @@ namespace CCN.Modules.Customer.DataAccess
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("UpdateAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }
@@ -531,9 +659,10 @@ namespace CCN.Modules.Customer.DataAccess
         /// <returns></returns>
         public int AuditAuthentication(CustAuthenticationModel model)
         {
-            const string sql = "update cust_info set authstatus=@authstatus where innerid=@innerid;";
+            const string sql = "update cust_info set authstatus=@authstatus,type=1 where innerid=@innerid;";
             const string sqlau = "update cust_authentication set auditper=@auditper,auditdesc=@auditdesc,audittime=@audittime where custid=@custid;";
-
+            //修改会员的车辆类型成为  1车商车源
+            const string sqlUCar = "update car_info set seller_type=1 where custid=@custid;";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
@@ -551,12 +680,13 @@ namespace CCN.Modules.Customer.DataAccess
                         audittime = model.AuditTime,
                         custid = model.Custid
                     }, tran);
-
+                    conn.Execute(sqlUCar, new { custid = model.Custid }, tran);
                     tran.Commit();
                     return 1;
                 }
                 catch (Exception ex)
                 {
+                    LoggerFactories.CreateLogger().Write("AuditAuthentication Ex:" + ex.Message, TraceEventType.Error);
                     tran.Rollback();
                     return 0;
                 }
@@ -592,8 +722,7 @@ namespace CCN.Modules.Customer.DataAccess
                 }
             }
         }
-
-
+        
         /// <summary>
         /// 获取会员认证信息 by innerid
         /// </summary>
@@ -1120,7 +1249,7 @@ namespace CCN.Modules.Customer.DataAccess
             {
                 int result;
                 const string sqlSelect = "select count(1) from cust_wechat where custid=@custid;";
-                var i = conn.Query<int>(sqlSelect,new { custid }).FirstOrDefault();
+                var i = conn.Query<int>(sqlSelect, new { custid }).FirstOrDefault();
                 if (i == 0)
                 {
                     const string sql = "INSERT INTO cust_wechat(innerid,custid,openid,createdtime) VALUES(uuid(),@custid,@openid,@createdtime);";
@@ -1141,8 +1270,1185 @@ namespace CCN.Modules.Customer.DataAccess
                         modifiedtime = DateTime.Now
                     });
                 }
-               
+
                 return result;
+            }
+        }
+
+        #endregion
+
+        #region 车信评
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public int ImportCompany(DataTable dt)
+        {
+            const string sql = @"INSERT INTO settled_info
+                                (innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES (@innerid, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @spare1, @spare2, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var model = new CompanyModel();
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        model.CompanyName = row["CompanyName"].ToString();
+                        model.Address = row["Address"].ToString();
+                        model.OperName = row["OperName"].ToString();
+                        model.OriginalRegistCapi = row["OriginalRegistCapi"].ToString();
+                        model.Scope = row["Scope"].ToString();
+                        model.CompanyStatus = row["CompanyStatus"].ToString();
+                        model.OfficePhone = row["OfficePhone"].ToString();
+                        model.Innerid = Guid.NewGuid().ToString();
+                        model.Createdtime = DateTime.Now;
+                        model.Createrid = "";
+                        conn.Execute(sql, model, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("导入公司数据失败：" + ex.Message, TraceEventType.Information);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_info as a  left join (select settid,count(1) as setttotal,createdtime from settled_info_applyupdate where status=2 group by settid) as b on b.settid=a.innerid";
+            const string fields = @"innerid, companyname, address, opername, originalregistcapi, companystatus, ifnull(officephone,'') as officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, spare1, spare2, createrid, a.createdtime, modifierid, modifiedtime,b.setttotal,
+(select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
+(select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
+(select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime,b.setttotal desc,b.createdtime asc " : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and address like '%{query.Address}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.City))
+            {
+                sqlWhere.Append($" and (address like '%{query.City}%' or companyname like '%{query.City}%')");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.County))
+            {
+                sqlWhere.Append($" and address like '%{query.County}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Ancestryids))
+            {
+                string str = "";
+                foreach (var item in query.Ancestryids.Split(','))
+                {
+                    str += " locate('" + item + "',ancestryids)>0 or";
+                }
+                str = str.Substring(0, str.Length - 2);
+                sqlWhere.Append(" and (" + str + ")");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Categoryids))
+            {
+                string str = "";
+                foreach (var item in query.Categoryids.Split(','))
+                {
+                    str += " locate('" + item + "',categoryids)>0 or";
+                }
+                str = str.Substring(0, str.Length - 2);
+                sqlWhere.Append(" and (" + str + ")");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CompanyListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CompanyModel GetCompanyModelById(string innerid)
+        {
+            const string sql = @"select * from settled_info as a where innerid=@innerid;";
+            var model = Helper.Query<CompanyModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CompanyViewModel GetCompanyById(string innerid)
+        {
+            const string sql = @"select innerid, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl, introduction,spare1, spare2, createrid, createdtime, modifierid, modifiedtime,
+(select count(innerid) from settled_praiselog where companyid=a.innerid) as PraiseNum,
+(select count(innerid) from settled_comment where companyid=a.innerid) as CommentNum,
+(select avg(score) from settled_comment where companyid=a.innerid) as ScoreNum,
+(select count(1) from settled_info_applyupdate where settid=a.innerid and status=2) as Status,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname
+from settled_info as a where innerid=@innerid;";
+            var model = Helper.Query<CompanyViewModel>(sql, new { innerid }).FirstOrDefault();
+            return model;
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
+        {
+            const string sql = @"INSERT INTO settled_info_applyupdate(innerid, settid, contactmobile,pictures, companyname, address, opername, originalregistcapi, scope, companystatus, officephone, picurl, companytitle, ancestryids, categoryids, customdesc, boutiqueurl,introduction,status, contactsphone,remark,spare1, spare2, createrid, createdtime, modifierid, modifiedtime)
+                                                              VALUES (@innerid, @settid, @contactmobile, @pictures, @companyname, @address, @opername, @originalregistcapi, @scope, @companystatus, @officephone, @picurl, @companytitle, @ancestryids, @categoryids, @customdesc, @boutiqueurl,@introduction,2,@contactsphone,@remark, @spare1, @spare2, @createrid, now(), @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid left join sys_user as c on c.innerid=a.modifierid ";
+            const string fields = @"a.innerid, b.companyname, a.address, b.opername,  b.originalregistcapi, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status,ifnull(a.contactsphone,'') as contactsphone, a.createrid, a.createdtime, ifnull(c.username,'') as modifierid, a.modifiedtime,
+(select group_concat(codename) from base_code where typekey='car_ancestry' and FIND_IN_SET(codevalue,a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey='car_category' and FIND_IN_SET(codevalue,a.categoryids)) as categoryname";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " a.createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 ");
+
+            if (!string.IsNullOrWhiteSpace(query.Settid))
+            {
+                sqlWhere.Append($" and settid='{query.Settid}'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and address like '%{query.Address}%'");
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Address))
+            {
+                sqlWhere.Append($" and officephone like '%{query.OfficePhone}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CompanyUpdateApplyListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateApplyStatus(CompanyApplyUpdateModel model)
+        {
+            const string sql = @"update settled_info_applyupdate set status=@status,remark=@remark,modifierid=@modifierid,modifiedtime=now() where innerid=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public CompanyApplyUpdateViewModel GetUpdateApplyById(string applyid)
+        {
+            const string sqlS = @"select a.innerid,a.settid,a.ContactMobile,a.Pictures, b.companyname, a.address, b.opername, b.originalregistcapi, b.scope, b.companystatus, a.officephone, a.picurl, a.companytitle, a.customdesc, a.boutiqueurl,a.status, a.spare1, a.spare2, a.createrid, a.createdtime, a.modifierid, a.modifiedtime,a.introduction,a.remark,
+(select group_concat(codename) from base_code where typekey = 'car_ancestry' and FIND_IN_SET(codevalue, a.ancestryids)) as ancestryname,
+(select group_concat(codename) from base_code where typekey = 'car_category' and FIND_IN_SET(codevalue, a.categoryids)) as categoryname
+from settled_info_applyupdate as a left join settled_info as b on b.innerid=a.settid where a.innerid = @innerid; ";
+            return Helper.Query<CompanyApplyUpdateViewModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取申请的信息
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public CompanyApplyUpdateModel GetApplyModel(string applyid)
+        {
+            const string sqlS = "select * from settled_info_applyupdate where innerid=@innerid and status=2;";
+            return Helper.Query<CompanyApplyUpdateModel>(sqlS, new { innerid = applyid }).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="pictures"></param>
+        /// <returns></returns>
+        public int UpdateCompanyModel(CompanyModel model, string pictures)
+        {
+            var sqlStr = new StringBuilder("update `settled_info` set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+
+                    const string delPic = "delete from settled_picture where settid=@settid;";
+                    conn.Execute(delPic, new { settid = model.Innerid }, tran);
+
+                    const string addPic = "insert into settled_picture (innerid, settid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+                    var i = 1;
+                    foreach (var item in pictures.Split(','))
+                    {
+                        conn.Execute(addPic, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            settid = model.Innerid,
+                            typeid = 0,
+                            path = item,
+                            sort = i,
+                            createdtime = DateTime.Now
+                        }, tran);
+                        i++;
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新企业信息（后台系统）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCompanyModel(CompanyModel model)
+        {
+            var sqlStr = new StringBuilder("update `settled_info` set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 验证重复评论
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="companyid"></param>
+        /// <returns></returns>
+        public int CheckComment(string ip, string companyid)
+        {
+            const string sql = @"select count(1) from settled_comment where ip=@ip and companyid=@companyid;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { ip, companyid });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 验证重复点赞
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <param name="companyid"></param>
+        /// <returns></returns>
+        public int CheckPraise(string ip, string companyid)
+        {
+            const string sql = @"select count(1) from settled_praiselog where ip=@ip and companyid=@companyid and date(createdtime)=@shortdate;";
+            try
+            {
+                return Helper.ExecuteScalar<int>(sql, new { ip, companyid, shortdate = DateTime.Now.ToShortDateString() });
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int DoComment(CommentModel model)
+        {
+            const string sql = @"insert into settled_comment (innerid, companyid, mobile, headportrait, score, ip, commentdesc, pictures, createdtime, isdelete, deletedtime, deletedesc) 
+                                values (@innerid, @companyid, @mobile, @headportrait, @score, @ip, @commentdesc, @pictures, @createdtime, @isdelete, @deletedtime, @deletedesc);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业评论失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int DoPraise(PraiseModel model)
+        {
+            const string sql = @"insert into settled_praiselog (innerid, companyid, ip, address, spare1, spare2, createdtime) values (@innerid, @companyid, @ip, @address, @spare1, @spare2, @createdtime);";
+            try
+            {
+                Helper.Execute(sql, model);
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("企业点赞失败：" + ex.Message, TraceEventType.Information);
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @" settled_comment as a left join settled_info as b on b.innerid =a.companyid";
+            const string fields = @"a.innerid, a.companyid, ifnull(a.mobile,'') as mobile, a.headportrait, a.score, a.ip, ifnull(a.commentdesc,'') as commentdesc, a.createdtime,b.companyname,a.pictures";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? " createdtime desc" : query.Order;
+            //查詢條件
+            var sqlWhere = new StringBuilder(" 1=1 and (isdelete <>1 or isdelete is null) ");
+            if (!string.IsNullOrWhiteSpace(query.Companyid))
+            {
+                sqlWhere.Append($" and companyid='{query.Companyid}'");
+            }
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                sqlWhere.Append($" and companyname like '%{query.CompanyName}%'");
+            }
+
+            if (query.OnlyLow)
+            {
+                sqlWhere.Append(" and score<=2");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<CommentListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public ScoreListModel GetScoreList(string settid)
+        {
+            const string sql = @"select count(1) as count from settled_comment where companyid=@companyid and score=@num;";
+            var model = new ScoreListModel();
+            using (var conn = Helper.GetConnection())
+            {
+                model.Score1 = conn.Query<int>(sql, new { companyid = settid, num = 1 }).FirstOrDefault();
+                model.Score2 = conn.Query<int>(sql, new { companyid = settid, num = 2 }).FirstOrDefault();
+                model.Score3 = conn.Query<int>(sql, new { companyid = settid, num = 3 }).FirstOrDefault();
+                model.Score4 = conn.Query<int>(sql, new { companyid = settid, num = 4 }).FirstOrDefault();
+                model.Score5 = conn.Query<int>(sql, new { companyid = settid, num = 5 }).FirstOrDefault();
+            }
+
+            return model;
+        }
+
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteComment(string innerid)
+        {
+            var sqlStr = new StringBuilder("update `settled_comment` set `isdelete` =1 where innerid = @innerid ");
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    Helper.ExecuteScalar<int>(sqlStr.ToString(), new { innerid });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public CommentListModel GetCommentViewByID(string innerid)
+        {
+            const string sqlS = "select a.*,b.companyname from settled_comment as a left join settled_info as b on b.innerid =a.companyid where a.innerid=@innerid;";
+            return Helper.Query<CommentListModel>(sqlS, new { innerid = innerid }).FirstOrDefault();
+        }
+
+
+        #region 图片处理
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public IEnumerable<string> GetCompanyPictureListById(string settid)
+        {
+            const string sql = @"select path from settled_picture where settid=@settid;";
+            var list = Helper.Query<string>(sql, new { settid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public IEnumerable<CompanyPictureModel> GetCompanyPictureById(string settid)
+        {
+            const string sql = @"select path,innerid from settled_picture where settid=@settid;";
+            var list = Helper.Query<CompanyPictureModel>(sql, new { settid });
+            return list;
+        }
+
+        /// <summary>
+        /// 获取需要删除的图片列表
+        /// </summary>
+        /// <param name="idList">车辆ids</param>
+        /// <returns></returns>
+        public IEnumerable<CompanyPictureModel> GetCompanyPictureByIds(List<string> idList)
+        {
+            var ids = idList.Aggregate("", (current, it) => current + $"'{it}',").TrimEnd(',');
+            var sql = $"select innerid, settid, typeid, path, sort, createdtime from settled_picture where innerid in ({ids});";
+            try
+            {
+                var list = Helper.Query<CompanyPictureModel>(sql);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("获取需要删除的图片列表：", TraceEventType.Information, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加)
+        /// </summary>
+        /// <param name="pathList"></param>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public int AddCompanyPictureList(List<string> pathList, string settid)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询企业图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from settled_picture where settid=@settid;";                              //查询企业所有图片的最大排序
+            const string sqlIPic = @"insert into settled_picture (innerid, settid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from settled_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取图片
+                var picedList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { settid }).ToList();
+                var number = picedList.Count + pathList.Count;
+                if (number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { settid });
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in pathList)
+                    {
+                        conn.Execute(sqlIPic, new CompanyPictureModel
+                        {
+                            Settid = settid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //表示添加首批图片
+                    if (maxsort == pathList.Count)
+                    {
+                        conn.Execute(sqlUCover, new { settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量添加图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(删除)
+        /// </summary>
+        /// <param name="idList"></param>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public int DelCompanyPictureList(List<string> idList, string settid)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询企业图片
+            const string sqlDPic = @"delete from settled_picture where innerid=@innerid;";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from auction_car_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picedList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { settid }).ToList();
+                var number = picedList.Count - idList.Count;
+                //if (number < 3)
+                //{
+                //    //图片数量控制在>=3 and <=9
+                //    return 402;
+                //}
+
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picedList.First().Innerid;
+                    foreach (var id in idList)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量删除图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int SaveCompanyPicture(CompanyPictureListModel model)
+        {
+            const string sqlSCarPic = "select innerid, settid, typeid, path, sort, createdtime from settled_picture where settid=@settid order by sort;";//查询车辆图片
+            const string sqlSMaxSort = "select ifnull(max(sort),0) as maxsort from settled_picture where carid=@carid;";//查询车辆所有图片的最大排序
+            const string sqlIPic = @"insert into settled_picture (innerid, carid, typeid, path, sort, createdtime) values (@innerid, @settid, @typeid, @path, @sort, @createdtime);";
+            const string sqlDPic = @"delete from settled_picture where innerid=@innerid;";
+            const string sqlUCover = @"update settled_info set pic_url=(select path from settled_picture where settid=@settid order by sort limit 1) where innerid=@settid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                //获取车辆图片
+                var picList = conn.Query<CompanyPictureModel>(sqlSCarPic, new { carid = model.Settid }).ToList();
+                var number = picList.Count + model.AddPaths.Count - model.DelIds.Count;
+                if (number < 3 || number > 9)
+                {
+                    //图片数量控制在>=3 and <=9
+                    return 402;
+                }
+
+                var maxsort = conn.ExecuteScalar<int>(sqlSMaxSort, new { carid = model.Settid });
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    foreach (var path in model.AddPaths)
+                    {
+                        conn.Execute(sqlIPic, new CompanyPictureModel
+                        {
+                            Settid = model.Settid,
+                            Createdtime = DateTime.Now,
+                            Path = path,
+                            Innerid = Guid.NewGuid().ToString(),
+                            Sort = ++maxsort
+                        }, tran); //插入图片
+                    }
+
+                    //标示是否修改封面
+                    var isUCover = false;
+                    //获取封面图片
+                    var coverid = picList.First().Innerid;
+                    foreach (var id in model.DelIds)
+                    {
+                        if (id.Equals(coverid))
+                        {
+                            isUCover = true;
+                        }
+                        conn.Execute(sqlDPic, new { innerid = id }, tran);
+                    }
+
+                    if (isUCover)
+                    {
+                        conn.Execute(sqlUCover, new { carid = model.Settid }, tran);
+                    }
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    LoggerFactories.CreateLogger().Write("批量保存图片异常：" + ex.Message, TraceEventType.Warning);
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+
+        #region C用户管理
+
+        /// <summary>
+        /// 会员注册检查手机号是否被注册
+        /// </summary>
+        /// <param name="mobile">手机号</param>
+        /// <returns>0：未被注册，非0：被注册</returns>
+        public int UserCheckMobile(string mobile)
+        {
+            const string sql = @"select count(1) from user_info where mobile=@mobile;";
+            var result = Helper.ExecuteScalar<int>(sql, new { mobile });
+            return result;
+        }
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        public int AddUser(UserModel userInfo)
+        {
+            //插入账户基本信息
+            const string sql = @"INSERT INTO user_info(innerid, username, password, nickname, mobile, telephone, email,headportrait, realname, status, provid, cityid, countyid, sex, brithday, qq, signature, totalpoints, qrcode, createrid, createdtime, modifierid, modifiedtime)
+                        VALUES (@innerid, @username, @password, @nickname, @mobile, @telephone, @email,@headportrait, @realname, @status, @provid, @cityid, @countyid, @sex, @brithday, @qq, @signature, @totalpoints, @qrcode, @createrid, @createdtime,@modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, userInfo);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户注册：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        public UserViewModel UserLogin(UserLoginInfo loginInfo)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.mobile=@mobile and a.password=@password;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new
+                {
+                    mobile = loginInfo.Mobile,
+                    password = loginInfo.Password
+                }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情1：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public UserViewModel GetUserInfoByMobile(string mobile)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.mobile=@mobile;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new { mobile }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情2：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public UserViewModel GetUserInfoById(string innerid)
+        {
+            const string sql = @"select a.*,b.provname,c.cityname,d.countyname from user_info as a 
+                left join base_province as b on a.provid=b.innerid 
+                left join base_city as c on a.cityid=c.innerid
+                left join base_county as d on a.countyid=d.innerid where a.innerid=@innerid;";
+
+            try
+            {
+                var model = Helper.Query<UserViewModel>(sql, new { innerid }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                LoggerFactories.CreateLogger().Write("C用户获取会员详情：", TraceEventType.Error, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<UserListModel> GetUserPageList(UserQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"user_info";
+            const string fields = "innerid, nickname, mobile, email, headportrait, status, sex, brithday, qq, createdtime";
+            var orderField = string.IsNullOrWhiteSpace(query.Order) ? "createdtime desc" : query.Order;
+            //查询条件 
+            var sqlWhere = new StringBuilder("1=1");
+
+            sqlWhere.Append(query.Status != null
+                ? $" and status={query.Status}"
+                : "");
+
+            //手机号
+            if (!string.IsNullOrWhiteSpace(query.Mobile))
+            {
+                sqlWhere.Append($" and mobile like '%{query.Mobile}%'");
+            }
+            //昵称
+            if (!string.IsNullOrWhiteSpace(query.Nickname))
+            {
+                sqlWhere.Append($" and nickname like '%{query.Nickname}%'");
+            }
+
+            var model = new PagingModel(spName, tableName, fields, orderField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<UserListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public int UpdateUserPassword(UserRetrievePassword mRetrievePassword)
+        {
+            const string sql = "update user_info set password=@password where mobile=@mobile;";
+            var custModel = Helper.Execute(sql, new
+            {
+                password = mRetrievePassword.NewPassword,
+                mobile = mRetrievePassword.Mobile
+            });
+            return custModel;
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateUserInfo(UserModel model)
+        {
+            var sqlStr = new StringBuilder("update user_info set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid = @innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateUserStatus(string innerid, int status)
+        {
+            const string sql = "update user_info set status=@status where innerid=@innerid;";
+            var result = Helper.Execute(sql, new
+            {
+                innerid,
+                status
+            });
+            return result;
+        }
+
+        /// <summary>
+        /// C用户 更新会员二维码
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="qrcode"></param>
+        /// <returns>用户信息</returns>
+        public int UpdateUserQrCode(string innerid, string qrcode)
+        {
+            const string sql = "update user_info set qrcode=@qrcode where innerid=@innerid;";
+            var result = Helper.Execute(sql, new { qrcode, innerid });
+            return result;
+        }
+
+        #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 获取会员的订单
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <returns></returns>
+        public CustWxPayModel CustWeChatPayByCustid(string custid)
+        {
+            const string sqlS = "select innerid, orderno, orderinfo, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where custid=@custid and status=1;";
+            //
+            //const string sqlU = "update user_info set orderinfo=@orderinfo where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                return conn.Query<CustWxPayModel>(sqlS, new { custid }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public CustWxPayModel CustWeChatPayByorderno(string orderno)
+        {
+            const string sqlS = "select innerid, orderno, orderinfo, custid, status, remark, createdtime, modifiedtime from cust_wxpay_info where orderno=@orderno;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                return conn.Query<CustWxPayModel>(sqlS, new { orderno }).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 保存会员的订单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddCustWeChatPay(CustWxPayModel model)
+        {
+            const string sqlI = "insert into cust_wxpay_info (innerid, orderno, orderinfo, custid, status,type, remark, createdtime, modifiedtime) values (@innerid, @orderno, @orderinfo, @custid, @status,@type, @remark, @createdtime, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Execute(sqlI, model);
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 保存会员的订单
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateCustWeChatPay(CustWxPayModel model)
+        {
+            var sqlStr = new StringBuilder("update cust_wxpay_info set ");
+            sqlStr.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sqlStr.Append(" where innerid=@innerid");
+
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sqlStr.ToString(), model);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("C用户修改会员信息：", TraceEventType.Error, ex);
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 支付回调更新会员信息
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public int UpdateCustWeChatPayBack(string orderNo)
+        {
+            var expirestime = DateTime.Now;
+
+            //更新订单状态为已支付
+            const string sqlU = "update cust_wxpay_info set status=2 where orderno=@orderno;";
+            //更新会员状态 level 为 1是正式VIP，2是体验版VIP
+            const string sqlL = "update cust_info set level=@level,expirestime=@expirestime where innerid=@innerid;";
+
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+
+                    const string sqlCust = "select custid,type from cust_wxpay_info where orderno=@orderno;";
+                    var cwp = conn.Query<CustWxPayModel>(sqlCust, new { orderno = orderNo }).FirstOrDefault();
+
+                    if (cwp == null)
+                    {
+                        return 0;
+                    }
+                    if (cwp.type == "1")
+                    {
+                        expirestime = new DateTime(expirestime.AddYears(1).Year, expirestime.Month, expirestime.Day, 23, 59, 59);
+                    }
+                    else
+                    {
+                        var days = 7;
+                        var bateday = ConfigHelper.GetAppSettings("betavip_day");
+                        if (!string.IsNullOrWhiteSpace(bateday))
+                            days = Convert.ToInt32(ConfigHelper.GetAppSettings("betavip_day"));
+
+                        expirestime = new DateTime(expirestime.Year, expirestime.Month, expirestime.AddDays(days).Day, 23, 59, 59);
+                    }
+
+                    //升级VIP
+                    conn.Execute(sqlU, new { orderno = orderNo }, tran);
+                    conn.Execute(sqlL, new { innerid = cwp.Custid, level = cwp.type, expirestime }, tran);
+
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("支付回调更新会员信息异常：", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddSiteAdvice(SiteAdviceModel model)
+        {
+            const string sqlI = "insert into site_advice (innerid, `name`, phone, advice, `column`, createdtime) values (@innerid, @name, @phone, @advice, @column, @createdtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    return conn.Execute(sqlI, model);
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
+        }
+
+
+        #endregion
+
+        #region 粉丝绑定
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int RebindFans(CustRebindFansModel model)
+        {
+            const string sqlS = "select innerid from cust_info where mobile=@mobile;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    var custid = conn.Query<string>(sqlS, new { mobile = model.Mobile }).FirstOrDefault();
+                    if (string.IsNullOrWhiteSpace(custid))
+                    {
+                        //非会员
+                        return 0;
+                    }
+
+                    const string sqlSFans = "select count(1) from cust_wechat where custid=@custid;";
+                    var i = conn.Query<int>(sqlSFans, new { custid }).FirstOrDefault();
+                    if (i == 0)
+                    {
+                        const string sql = "insert into cust_wechat (innerid, custid, openid, createdtime) values (@innerid, @custid, @openid, @createdtime);";
+                        conn.Execute(sql, new
+                        {
+                            innerid = Guid.NewGuid().ToString(),
+                            custid,
+                            model.Openid,
+                            createdtime = DateTime.Now
+                        });
+                    }
+                    else
+                    {
+                        const string sql = "update cust_wechat set openid=@openid,modifiedtime=@modifiedtime where custid=@custid;";
+                        conn.Execute(sql, new
+                        {
+                            custid,
+                            model.Openid,
+                            modifiedtime = DateTime.Now
+                        });
+                    }
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
             }
         }
 

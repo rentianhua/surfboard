@@ -65,6 +65,29 @@ namespace CCN.Midware.Wechat.Controllers
             return _response;
         }
 
+        /// <summary>
+        /// 支付结果通知（扫码支付）
+        /// </summary>
+        [HttpPost]
+        [Route("WxPayBack")]
+        public HttpResponseMessage WxPayBack()
+        {
+            var stream = Request.Content.ReadAsStringAsync().Result;
+            Console.WriteLine($"----------------Start {DateTime.Now}----------------");
+            Console.WriteLine(stream);
+            LoggerFactories.CreateLogger().Write($"WxPayBack: {stream}", TraceEventType.Information);
+            try
+            {
+                Task.Run(() => RequestMessageFactory.HandlePayMessage(stream));
+            }
+            catch (Exception e)
+            {
+                LoggerFactories.CreateLogger().Write($"WxPayBack: {stream}", TraceEventType.Error, e);
+            }
+            Console.WriteLine($"----------------End {DateTime.Now}----------------");
+            return _response;
+        }
+
         [HttpGet]
         [Route("GetTicket/{appid}")]
         public JResult GetTicket(string appid)

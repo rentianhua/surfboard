@@ -26,15 +26,31 @@
     </div>
 </div>
 <script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/common.js"></script>
 <script type="text/javascript">
+
+    //postJson("api/Customer/GetCompanyPageList", { pageindex: 1 }, function (data) {
+    //    console.log(data);
+    //});
+    setCookie("aaaa","bbbb");
+
+    var d = [{ PageIndex: 1 }, { PageIndex: 2 }];
+    var json = JSON.stringify(d);
+
     //$.ajax({
-    //    url: '/api/Base/GetCarModel/568',
-    //    data: {},
-    //    type: 'get',
+    //    url: '/api/Activity/TestPay',
+    //    type: 'post',
     //    datatype: 'json',
+    //    data: json,
+    //    contentType: 'application/json;charset=utf-8',
     //    async: false,
+    //    beforeSend: function (xhr) {
+    //        xhr.setRequestHeader('Authorization', "03919859818ade16d013a84aa64a3be1");
+    //    },
     //    success: function (data) {
     //        console.log(data);
+    //        var key = data.errmsg;            
+    //        $("body").html("<img src='http://7xlopw.com2.z0.glb.qiniucdn.com/" + key + "' />");
     //    }
     //});
 </script>

@@ -1,0 +1,176 @@
+﻿@{
+
+}
+
+<script type="text/javascript">
+
+    //拍卖ID
+    var auctionid = "@ViewBag.Auctionid";
+    var userlevel = "@ViewBag.UserLevel";
+    var userid = "@ViewBag.UserId";
+
+    $(function () {
+        QueryList();
+        $("#btnBack").click(function () {
+            getBodyHtml('mainbody', "/Auction/Auction/AuctionCarList");
+        });
+    });
+
+
+    function QueryList() {
+        var json = {
+            auctionid: auctionid,
+            Mobile: $("#mobile").val(),
+            userno: $("#userno").val(),
+            auctionno: $("#auctionno").val(),
+            status: $("#selectstatus").val()
+        };
+        if (userlevel == 2) {
+            json.operatedid = userid;
+        }
+        $("#auctioncarlist").getPageList(20, "/api/auction/GetAuctionParticipantList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+        $("#auctioncarlist tbody").empty();
+        var str = "";
+
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.auctionno + "</td>";
+            str += "<td>" + (val.model_name == null ? "" : val.model_name.sub(400)) + "</td>";
+            str += "<td>" + (val.lowestprice == null ? "" : val.lowestprice) + "</td>";
+            str += "<td>" + (val.Amount == null ? "" : val.Amount) + "</td>";
+            str += "<td>" + Dateformat(val.Createdtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + (val.username == null ? "" : val.username.sub(400)) + "</td>";
+            str += "<td>" + (val.Mobile == null ? "" : val.Mobile.sub(400)) + "</td>";
+            str += "<td>" + ChangeStatusName(val.status) + "</td>";
+
+            var btn = "<a onclick=\"getBodyHtml('mainbody', '/auction/auction/AuctionRecordEdit?id=" + val.Innerid + "&auctionid=" + val.Auctionid + "');\" href='javascript:;'>查看详情</a> ";
+            str += "<td>" + btn + "</td></tr>";
+            $("#auctioncarlist tbody").append(str);
+        });
+    }
+
+    function ChangeStatusName(status)
+    {
+        switch (status) {
+            case 1:
+                return "待跟进";
+            case 2:
+                return "待付款";
+            case 3:
+                return "已付款";
+            case 4:
+                return "已看车";
+            case 5:
+                return "已成交";
+            case 6:
+                return "已拒绝";
+            case 7:
+                return "拍卖结束";
+            default:
+        }
+        return "";
+    }
+
+
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">竞价列表</div>
+
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-4 control-label no-padding-right searchLayout">车商手机号：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="mobile" placeholder="车商手机号">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-4 control-label no-padding-right searchLayout">拍品编号：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="auctionno" placeholder="拍品编号">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="custname" class="col-sm-4 control-label no-padding-right searchLayout">员工编号：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="userno" placeholder="员工编号">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:5px">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="" class="col-sm-4 control-label no-padding-right searchLayout">状态：</label>
+                    <div class="col-sm-8">
+                        <select id="selectstatus" style="width:100%">
+                            <option>请选择</option>
+                            <option value="1">待跟进</option>
+                            <option value="2">待付款</option>
+                            <option value="3">已付款</option>
+                            <option value="4">已看车</option>
+                            <option value="5">已成交</option>
+                            <option value="6">已拒绝</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+                <a id="btnBack" href="javascript:;" class="btn btn-primary shiny">返回</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover table-bordered" id="auctioncarlist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>拍品编号</th>
+                <th>拍卖车辆(车型)</th>
+                <th>底价（万元）</th>
+                <th>出价（万元）</th>
+                <th>竞拍时间</th>
+                <th>竞拍人</th>
+                <th>联系方式</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+<div id="deleteDiv" class="hide" style="background-color: #ccc; margin-top: 8px;padding: 5px">
+    描述:
+    <input type="text" id="deletedesc" maxlength="200" />
+    <input type="button" value="确定" id="delsubmit" />
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
+</div>
+<div id="dealDiv" class="hide" style="background-color: #ccc; margin-top: 8px; padding: 5px">
+    成交价格:
+    <input type="text" id="dealedprice" maxlength="10" /><br />
+    成交时间:
+    <input type="text" id="dealedtime" maxlength="10" class="Wdate" onclick="WdatePicker({ dateFmt: 'yyyy-MM-dd' })" /><br />
+    成交人手机号:
+    <input type="text" id="dealmobile" maxlength="11" /><br />
+    成交说明:
+    <input type="text" id="dealdesc" maxlength="200" /><br />
+    <input type="button" value="确定" id="dealsubmit" />
+    <input type="button" value="取消" onclick="$(this).parent().addClass('hide')" />
+</div>

@@ -1,8 +1,5 @@
 ﻿
-@{
-//ViewBag.Title = "CarEdit";
-//Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
 <link href="~/Content/cover.css" rel="stylesheet" />
 <link href="~/Plugins/UploadImg/js/highlight/highlight.css" rel="stylesheet" />
 
@@ -13,32 +10,21 @@
 <script src="~/Plugins/UploadImg/js/highlight/highlight.js"></script>
 <script src="~/Plugins/UploadImg/js/multiple.js"></script>
 <link href="~/Plugins/UploadImg/css/uploadImg.css" rel="stylesheet" />
-<script>
 
-    //function showloading() {
-    //    $('.theme-popover-mask').show();
-    //    $('.theme-popover').show();
-    //}
-    //function hideloading() {
-    //    $('.theme-popover-mask').hide();
-    //    $('.theme-popover').hide();
-    //}
-
-</script>
 <script type="text/javascript">
 
     var custid = "@ViewBag.custid";
     var id = "@ViewBag.carid";
 
     var imgs = [];
-    var uploader
+    var uploader;
     $(function () {
         var option = {};
         option.id = "pickfiles2";
         option.container = "container2";
         option.uptoken = "@ViewBag.uptoken";
         option.autostart = false;
-        option.domain = QiuniuHost();
+        option.domain = qiniuurl;
         //初始化七牛上传控件
         uploader = InitQiniuUpload(option);
 
@@ -258,7 +244,7 @@
             $("#caresc").val(obj.remark);
 
             //$("#imgList").append("<div><img style=\"max-width: 180px;max-height:180px;margin-top:5px\" src=\"" + getQiniuUrl(obj.pic_url) + "\" /></div>");
-
+            
             $.get("/api/Car/GetCarPictureByCarid?carid=" + id, function (data) {
                 $.each(data.errmsg, function (k, v) {
                     var strradom = (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -440,7 +426,8 @@
         else {
             uploadercount = uploader.files.length;
         }
-
+        
+        
 
         setTimeout(function () {
             if (id === "") {
@@ -461,7 +448,7 @@
                         uploader.start();
                         var carid = result.errmsg;
                         var m = 0;
-                        debugger
+                        
                         uploader.bind('FileUploaded', function (up, file, info) {
                             var picInfo = JSON.parse(info.response);
                             $.post("/api/Car/AddCarPicture", { Carid: carid, Path: picInfo.key }, function () {
@@ -670,11 +657,10 @@
                         <div class="form-group">
                             <label for="" class="col-sm-1 control-label no-padding-right"><label class="required">*</label>车辆图片</label>
                             <div class="controls col-sm-11" id="imgList">
-                                @*<input type="file" multiple="" id="picture" />*@
                                 <div id="container2">
                                     <a class="btn btn-default btn-lg " id="pickfiles2" href="#">
                                         <i class="glyphicon glyphicon-plus"></i>
-                                        <sapn>选择文件</sapn>
+                                        <span>选择文件</span>
                                     </a><label class="required">只能上传2M以下图片</label>
                                 </div>
                                 <div>
@@ -682,11 +668,6 @@
                                     </div>
                                 </div>
                                 <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
-                                    @*<thead>
-                                            <tr>
-                                                <th class="col-md-4">图片名称</th>
-                                            </tr>
-                                        </thead>*@
                                     <tbody id="fsUploadProgress"></tbody>
                                 </table>
                             </div>

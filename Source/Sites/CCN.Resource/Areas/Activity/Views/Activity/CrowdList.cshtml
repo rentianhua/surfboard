@@ -1,0 +1,89 @@
+﻿@{
+
+}
+<script type="text/javascript">
+
+    var activityid = "@ViewBag.activityid";
+
+    $(function() {
+        QueryList();
+        $("#btnAdd").click(function() {
+            getBodyHtml('mainbody', '/Activity/Activity/CrowdEdit');
+        });
+    });
+
+    function QueryList() {
+        $("#activitylist").getPageList(20, "/api/Activity/GetCrowdActivityPageList", {}, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#activitylist tbody").empty();
+        var str = "";
+        $.each(data, function(key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + val.Flagcode + "</td>";
+            str += "<td>" + val.Title + "</td>";
+            str += "<td>" + Dateformat(val.Enrollstarttime, "yyyy-MM-dd HH:mm:ss") + " - " + Dateformat(val.Enrollendtime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + Dateformat(val.Secrettime, "yyyy-MM-dd HH:mm:ss") + "</td>";
+            str += "<td>" + val.PlayerNum + "</td>";
+            str += "<td>" + val.Upperedtotal.toFormat() + "</td>";
+            str += "<td>" + Status(val.Status) + "</td>";
+            var btn = "";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/CrowdEdit?activityid=" + val.Innerid + "');\"> 修改 </a> ";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/CrowdView?flagcode=" + val.Flagcode + "');\"> 查看详情 </a> ";
+            btn += "<a href='javascript:;' onclick=\"getBodyHtml('mainbody', '/Activity/Activity/CrowdPlayerList?flagcode=" + val.Flagcode + "');\"> 参与人员 </a> ";
+            str += "<td>" + btn + "</td></tr>";
+            $("#activitylist tbody").append(str);
+        });
+    }
+
+    function Status(status) {
+        switch (status) {
+            case 1:
+                return "未开始";
+            case 2:
+                return "参与阶段";
+            case 3:
+                return "待开奖";
+            case 4:
+                return "抽奖中";
+            case 5:
+                return "抽奖结束";
+            default:
+                return "未知";
+        }
+    }
+
+</script>
+<div style="margin: 0 auto;">
+    <div style="font-size: 18px; font-weight: bold; text-align: center">众筹活动列表</div><br />
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-lg-9 col-sm-9 col-xs-9">
+            
+        </div>
+        <div class="col-lg-3 col-sm-3 col-xs-3">
+            <a id="btnAdd" href="javascript:;" class="btn btn-primary shiny">添加</a>
+        </div>
+    </div>
+    <table class="table table-striped table-hover table-bordered" id="activitylist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>活动码</th>
+                <th>活动主题</th>
+                <th>参与时间</th>
+                <th>开奖时间</th>
+                <th>参与人数</th>
+                <th>已筹金额（元）</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>

@@ -22,24 +22,26 @@ namespace CCN.Resource.Common
                 //校验用户是否已经登录
                 if (filterContext.HttpContext.Session["UserInfo"] == null && filterContext.HttpContext.Session["CustModel"] == null)
                 {
-                    if (filterContext.HttpContext.Request.Cookies["type"] == null)
-                    {
-                        //跳转到登陆页
-                        filterContext.HttpContext.Response.Redirect("/Home/BusinessLogin");
-                    }
-                    else
-                    {
-                        if (filterContext.HttpContext.Request.Cookies["type"].Value.ToString() == "1")
-                        {
-                            //跳转到登陆页
-                            filterContext.HttpContext.Response.Redirect("/Home/Login");
-                        }
-                        else
-                        {
-                            //跳转到商户登入
-                            filterContext.HttpContext.Response.Redirect("/Home/BusinessLogin");
-                        }
-                    }
+                    //跳转到登陆页
+                    filterContext.HttpContext.Response.Redirect("/Home/Login");
+                    //if (filterContext.HttpContext.Request.Cookies["type"] == null)
+                    //{
+                    //    //跳转到登陆页
+                    //    filterContext.HttpContext.Response.Redirect("/Home/BusinessLogin");
+                    //}
+                    //else
+                    //{
+                    //    if (filterContext.HttpContext.Request.Cookies["type"].Value.ToString() == "1")
+                    //    {
+                    //        //跳转到登陆页
+                    //        filterContext.HttpContext.Response.Redirect("/Home/Login");
+                    //    }
+                    //    else
+                    //    {
+                    //        //跳转到商户登入
+                    //        filterContext.HttpContext.Response.Redirect("/Home/BusinessLogin");
+                    //    }
+                    //}
                 }
 
                 

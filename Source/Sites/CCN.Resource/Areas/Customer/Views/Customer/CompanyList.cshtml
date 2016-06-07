@@ -1,0 +1,94 @@
+﻿
+@{
+// Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(function () {
+        QueryList();
+    });
+
+    function QueryList() {
+        var json = { CompanyName: $("#companyName").val() };
+        $("#companylist").getPageList(20, "/api/Customer/GetCompanyPageList", json, LoadData);
+    }
+
+    function LoadData(data, index) {
+
+        $("#companylist tbody").empty();
+
+        var str = "";
+    
+        $.each(data, function (key, val) {
+            str = "";
+            str += "<tr>";
+            str += "<td>" + (index + key) + "</td>";
+            str += "<td>" + (val.CompanyName == null ? "" : val.CompanyName.sub(50)) + "</td>";
+            str += "<td>" + (val.Address == null ? "" : val.Address.sub(50)) + "</td>";
+            str += "<td>" + (val.OperName == null ? "" : val.OperName.sub(50)) + "</td>";
+            str += "<td>" + (val.OriginalRegistCapi == null ? "" : val.OriginalRegistCapi.sub(50)) + "</td>";
+            str += "<td>" + (val.CompanyStatus == null ? "" : val.CompanyStatus.sub(50)) + "</td>";
+            str += "<td>" + (val.OfficePhone == null ? "" : val.OfficePhone.sub(50)) + "</td>";
+            str += "<td>";
+            if (val.Setttotal === 1) {
+                str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'><font color='red'>查看修改申请</font></a> ";
+            } else {
+                str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyUpdateList?companyid=" + val.Innerid + "');\" href='javascript:;'>查看修改申请</a> ";
+            }
+            str += "<a onclick=\"getBodyHtml('mainbody', '/customer/customer/CompanyEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>编辑</a> ";
+            str += "</td>";
+            str += "</tr>";
+            $("#companylist tbody").append(str);
+        });
+    }
+
+</script>
+
+<div>
+
+    <div style="padding-bottom:5px">
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                <div class="form-group">
+                    <label for="companyName" class="col-sm-4 control-label no-padding-right searchLayout">公司名称：</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="companyName" placeholder="公司名称">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3">
+                
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3" style="color: orange">
+               注：红色按钮表示有修改申请需要处理
+            </div>
+            <div class="col-lg-3 col-sm-3 col-xs-3 no-padding-right">
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped table-hover table-bordered" id="companylist">
+        <thead>
+            <tr role="row">
+                <th>序号</th>
+                <th>公司名</th>
+                <th>公司地址</th>
+                <th>法人</th>
+                <th>注册资金</th>
+                <th>公司状态</th>
+                <th>联系电话</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr></tr>
+        </tbody>
+    </table>
+</div>
+
+
+

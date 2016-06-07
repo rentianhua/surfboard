@@ -46,6 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="CCN.Modules.Car.BusinessService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\CCN.Modules.Car.BusinessService.dll</HintPath>
@@ -88,6 +92,10 @@
     </Reference>
     <Reference Include="Cedar.Framework.Common.Client">
       <HintPath>..\..\..\Lib\Cedar.Framework.Common.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -194,10 +202,6 @@
       <HintPath>..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Antlr3.Runtime">
-      <Private>True</Private>
-      <HintPath>..\..\..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
       <Private>True</Private>
@@ -205,6 +209,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Activity\Models\" />
+    <Folder Include="Areas\Activity\Views\Shared\" />
+    <Folder Include="Areas\Auction\Models\" />
+    <Folder Include="Areas\Auction\Views\Shared\" />
     <Folder Include="Areas\Base\Models\" />
     <Folder Include="Areas\Base\Views\Shared\" />
     <Folder Include="Areas\Car\Models\" />
@@ -220,6 +228,8 @@
     <Folder Include="TempFile\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiControllers\ActivityController.cs" />
+    <Compile Include="ApiControllers\AuctionController.cs" />
     <Compile Include="ApiControllers\BaseController.cs" />
     <Compile Include="ApiControllers\CarController.cs" />
     <Compile Include="ApiControllers\CustomerController.cs" />
@@ -230,6 +240,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Activity\ActivityAreaRegistration.cs" />
+    <Compile Include="Areas\Activity\Controllers\ActivityController.cs" />
+    <Compile Include="Areas\Auction\AuctionAreaRegistration.cs" />
+    <Compile Include="Areas\Auction\Controllers\AuctionController.cs" />
     <Compile Include="Areas\Base\BaseAreaRegistration.cs" />
     <Compile Include="Areas\Base\Controllers\BaseController.cs" />
     <Compile Include="Areas\Car\CarAreaRegistration.cs" />
@@ -286,13 +300,18 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\cover.css" />
+    <Content Include="Content\images\jia.png" />
     <Content Include="Content\images\loading-bars.gif" />
     <Content Include="Content\images\loading.gif" />
-    <Content Include="Content\cover.css" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="Content\images\multiple-select.png" />
     <Content Include="Content\images\signup.jpg" />
+    <Content Include="Content\images\timg.jpg" />
+    <Content Include="Content\images\winner.jpg" />
     <Content Include="Content\multiple-select.css" />
     <Content Include="Content\Pager.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\Template\css\4095-rtl.min.css" />
     <Content Include="Content\Template\css\4095.min.css" />
     <Content Include="Content\Template\css\animate.min.css" />
@@ -850,24 +869,6 @@
     <Content Include="Areas\Car\Views\web.config" />
     <Content Include="Areas\Car\Views\Car\CarList.cshtml" />
     <Content Include="Areas\Car\Views\Car\CarEdit.cshtml" />
-    <Content Include="Content\Template\fonts\BYekan.woff" />
-    <Content Include="Content\Template\fonts\fontawesome-webfont862f.eot" />
-    <Content Include="Content\Template\fonts\fontawesome-webfont862f.ttf" />
-    <Content Include="Content\Template\fonts\fontawesome-webfont862f.woff" />
-    <Content Include="Content\Template\fonts\fontawesome-webfontd41d.eot" />
-    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\Template\fonts\glyphicons-halflings-regulard41d.eot" />
-    <Content Include="Content\Template\fonts\typicons.eot" />
-    <Content Include="Content\Template\fonts\typicons.ttf" />
-    <Content Include="Content\Template\fonts\typicons.woff" />
-    <Content Include="Content\Template\fonts\typiconsd41d.eot" />
-    <Content Include="Content\Template\fonts\weathericons-regular-webfont.eot" />
-    <Content Include="Content\Template\fonts\weathericons-regular-webfont.ttf" />
-    <Content Include="Content\Template\fonts\weathericons-regular-webfont.woff" />
-    <Content Include="Content\Template\fonts\weathericons-regular-webfontd41d.eot" />
     <Content Include="Areas\System\Views\web.config" />
     <Content Include="Areas\System\Views\System\MenuList.cshtml" />
     <Content Include="Areas\Base\Views\Base\BaseCarBrandList.cshtml" />
@@ -912,7 +913,69 @@
     <Content Include="Plugins\UploadImg\js\jquery.min.map" />
     <Content Include="Areas\System\Views\System\SysManageCityList.cshtml" />
     <Content Include="Areas\System\Views\System\SysManageCityEdit.cshtml" />
-    <Content Include="Areas\Base\Views\Base\LotteryMain.cshtml" />
+    <Content Include="Areas\System\Views\System\SysJob.cshtml" />
+    <Content Include="Areas\Auction\Views\web.config" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarEdit.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarView.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionParticipantList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionDepositList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionDepositEdit.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyEdit.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyUpdateView.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CompanyUpdateList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CommentList.cshtml" />
+    <Content Include="Areas\Customer\Views\Customer\CommentView.cshtml" />
+    <Content Include="Areas\Activity\Views\web.config" />
+    <Content Include="Areas\Activity\Views\Activity\VoteList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteLogList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VotePerView.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\VoteView.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionEvaluationPics.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionRecordList.cshtml" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionRecordEdit.cshtml" />
+    <Content Include="Content\Template\fonts\BYekan.woff" />
+    <Content Include="Content\Template\fonts\fontawesome-webfont862f.eot" />
+    <Content Include="Content\Template\fonts\fontawesome-webfont862f.ttf" />
+    <Content Include="Content\Template\fonts\fontawesome-webfont862f.woff" />
+    <Content Include="Content\Template\fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Template\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\Template\fonts\glyphicons-halflings-regulard41d.eot" />
+    <Content Include="Content\Template\fonts\typicons.eot" />
+    <Content Include="Content\Template\fonts\typicons.ttf" />
+    <Content Include="Content\Template\fonts\typicons.woff" />
+    <Content Include="Content\Template\fonts\typiconsd41d.eot" />
+    <Content Include="Content\Template\fonts\weathericons-regular-webfont.eot" />
+    <Content Include="Content\Template\fonts\weathericons-regular-webfont.ttf" />
+    <Content Include="Content\Template\fonts\weathericons-regular-webfont.woff" />
+    <Content Include="Content\Template\fonts\weathericons-regular-webfontd41d.eot" />
+    <Content Include="Areas\Auction\Views\Auction\AuctionCarAdd.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarLoanList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarLoanEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\FinanceProgrammeList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\FinanceProgrammeAdd.cshtml" />
+    <Content Include="Areas\Car\Views\Car\FinanceProgrammeEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarSupplierList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdPlayerView.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdView.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdGradeList.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdGradeEdit.cshtml" />
+    <Content Include="Areas\Activity\Views\Activity\CrowdPlayerList.cshtml" />
+    <None Include="Areas\Activity\Views\Activity\CrowdEditBak.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMysteriousList.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMysteriousEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMaddenCarEdit.cshtml" />
+    <Content Include="Areas\Car\Views\Car\CarMaddenCarList.cshtml" />
     <None Include="Properties\PublishProfiles\201512221500.pubxml" />
     <None Include="Properties\PublishProfiles\Chinaccn.pubxml" />
     <None Include="Properties\PublishProfiles\Web.pubxml" />
@@ -920,6 +983,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\CCN_Chart.js" />
     <Content Include="Scripts\common.js" />
+    <Content Include="Scripts\handlebars-1.0.0.beta.6.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -997,7 +1061,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -1025,6 +1088,30 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessEntity\Activity.BusinessEntity.csproj">
+      <Project>{22a53eb5-f95a-486a-8ce0-249ba2a05c8b}</Project>
+      <Name>Activity.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.BusinessService\Activity.BusinessService.csproj">
+      <Project>{74b3b875-56ab-44ad-9e10-710624935c88}</Project>
+      <Name>Activity.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Activity\Activity.Interface\Activity.Interface.csproj">
+      <Project>{077aba3a-e911-4b72-a4e9-eb8bdf119738}</Project>
+      <Name>Activity.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessEntity\Auction.BusinessEntity.csproj">
+      <Project>{3848b424-2f7c-4f1c-81b7-4f018e096234}</Project>
+      <Name>Auction.BusinessEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.BusinessService\Auction.BusinessService.csproj">
+      <Project>{a8669bd9-3c5a-4a1e-b1e1-9ebcf291c5df}</Project>
+      <Name>Auction.BusinessService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Modules\Auction\Auction.Interface\Auction.Interface.csproj">
+      <Project>{d2e9e2f4-1ebd-4d3a-8e23-cbb5edf5131a}</Project>
+      <Name>Auction.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Modules\Base\Base.BusinessEntity\Base.BusinessEntity.csproj">
       <Project>{3a30de17-5db9-4c7f-aea1-d8c64d15ad15}</Project>
       <Name>Base.BusinessEntity</Name>

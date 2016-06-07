@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using CCN.Modules.Base.Interface;
@@ -90,9 +91,9 @@ namespace CCN.WebAPI.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+
             var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
-            
+
             //检查验证码
             var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
             if (cresult.errcode != 0)
@@ -110,7 +111,7 @@ namespace CCN.WebAPI.ApiControllers
             if (result.errcode == 0)
             {
                 Task.Run(() =>
-                {                    
+                {
                     var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
                     var pointresult = rewardsservice.ChangePoint(new CustPointModel
                     {
@@ -135,7 +136,7 @@ namespace CCN.WebAPI.ApiControllers
                     //}
                 });
             }
-            
+
             #endregion
 
             return result;
@@ -165,7 +166,7 @@ namespace CCN.WebAPI.ApiControllers
                     errmsg = "手机号不能空"
                 };
             }
-            
+
             var result = _custservice.CustRegister(userInfo);
 
             #region 后台注册送积分
@@ -271,7 +272,7 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.CustLoginByOpenid(openid);
         }
-        
+
         /// <summary>
         /// 判断是否会员
         /// </summary>
@@ -327,7 +328,7 @@ namespace CCN.WebAPI.ApiControllers
         /// <returns></returns>
         [Route("UpdatePassword")]
         [HttpPost]
-        public JResult UpdatePassword(CustRetrievePassword mRetrievePassword)
+        public JResult UpdatePassword([FromBody]CustRetrievePassword mRetrievePassword)
         {
             if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
             {
@@ -347,6 +348,18 @@ namespace CCN.WebAPI.ApiControllers
             }
 
             return _custservice.UpdatePassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdatePwd")]
+        [HttpPost]
+        public JResult UpdatePassword([FromBody]CustModifyPassword model)
+        {
+            return _custservice.UpdatePassword(model);
         }
 
         /// <summary>
@@ -461,13 +474,13 @@ namespace CCN.WebAPI.ApiControllers
                     return;
                 }
 
-                var custmodel = (CustModel) custjresult.errmsg;
+                var custmodel = (CustModel)custjresult.errmsg;
 
                 if (string.IsNullOrWhiteSpace(custmodel?.RecommendedId))
                 {
                     return;
                 }
-                    
+
                 var repointresult = rewardsservice.ChangePoint(new CustPointModel
                 {
                     Custid = custmodel.RecommendedId,
@@ -734,7 +747,7 @@ namespace CCN.WebAPI.ApiControllers
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
 
         /// <summary>
         /// 
@@ -760,6 +773,467 @@ namespace CCN.WebAPI.ApiControllers
         {
             return _custservice.BindOpenid(custid, openid);
         }
+        #endregion
+
+        #region  车信评
+
+        /// <summary>
+        /// 获取企业列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPageList")]
+        [HttpPost]
+        public BasePageList<CompanyListModel> GetCompanyPageList([FromBody]CompanyQueryModel query)
+        {
+            return _custservice.GetCompanyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyById")]
+        [HttpGet]
+        public JResult GetCompanyById(string innerid)
+        {
+            return _custservice.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCompanyApplyUpdate")]
+        [HttpPost]
+        public JResult AddCompanyApplyUpdate([FromBody]CompanyApplyUpdateModel model)
+        {
+            return _custservice.AddCompanyApplyUpdate(model);
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetCompanyPictureListById")]
+        [HttpGet]
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            return _custservice.GetCompanyPictureListById(settid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoComment")]
+        [HttpPost]
+        public JResult DoComment([FromBody]CommentModel model)
+        {
+            //if (model == null)
+            //{
+            //    return JResult._jResult(401, "参数不完整");
+            //}
+            //if (string.IsNullOrWhiteSpace(model.IP))
+            //{
+            //    model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            //}
+
+            return _custservice.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("DoPraise")]
+        [HttpPost]
+        public JResult DoPraise([FromBody]PraiseModel model)
+        {
+            if (model == null)
+            {
+                return JResult._jResult(401, "参数不完整");
+            }
+            if (string.IsNullOrWhiteSpace(model.IP))
+            {
+                model.IP = System.Web.HttpContext.Current.Request.UserHostAddress;
+            }
+            return _custservice.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCommentPageList")]
+        [HttpPost]
+        public BasePageList<CommentListModel> GetCommentPageList([FromBody]CommentQueryModel query)
+        {
+            return _custservice.GetCommentPageList(query);
+        }
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        [Route("GetScoreList")]
+        [HttpGet]
+        public JResult GetScoreList(string settid)
+        {
+            return _custservice.GetScoreList(settid);
+        }
+
+        /// <summary>
+        /// 导入企业信息
+        /// </summary>
+        /// <returns></returns>
+        [Route("ImportCompany")]
+        [HttpGet]
+        public JResult ImportCompany(string filename)
+        {
+            return _custservice.ImportCompany(filename);
+        }
+
+        /// <summary>
+        /// 测试接口
+        /// </summary>
+        /// <returns></returns>
+        [Route("Test")]
+        [HttpGet]
+        public JResult Test()
+        {
+            string str = "江苏省苏州市相城县开泰路18号";
+            string pro = string.Empty;
+            string city = string.Empty;
+            string area = string.Empty;
+            Match m = Regex.Match(str, @"(?<pro>.*?)省(?<city>.*?)市(?<area>.*?)[区,县]");
+            if (m.Success)
+            {
+                pro = m.Groups["pro"].Value;
+                city = m.Groups["city"].Value;
+                area = m.Groups["area"].Value;
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        [NonAction]
+        [Route("UserRegister")]
+        [HttpPost]
+        public JResult UserRegister([FromBody]UserRegModel userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo?.Mobile))
+            {
+                return JResult._jResult(405, "手机号不能空");
+            }
+
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            //检查验证码
+            var cresult = baseservice.CheckVerification(userInfo.Mobile, userInfo.VCode, 1);
+            if (cresult.errcode != 0)
+            {
+                //验证码错误
+                //400 验证码错误
+                //401 验证码过期
+                return cresult;
+            }
+            return _custservice.UserRegister(userInfo);
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        [Route("UserLogin")]
+        [HttpPost]
+        [NonAction]
+        public JResult UserLogin([FromBody]UserLoginInfo loginInfo)
+        {
+            JResult result;
+            //手机号+密码
+            if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.Password))
+            {
+                result = _custservice.UserLogin(loginInfo);
+            }
+            //手机号+验证码
+            else if (!string.IsNullOrWhiteSpace(loginInfo?.Mobile) && !string.IsNullOrWhiteSpace(loginInfo.VCode))
+            {
+                var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+                //检查验证码
+                var cresult = baseservice.CheckVerification(loginInfo.Mobile, loginInfo.VCode, 2);
+                if (cresult.errcode != 0)
+                {
+                    //验证码错误
+                    //400 验证码错误
+                    //401 验证码过期
+                    if (cresult.errcode == 400 || cresult.errcode == 401)
+                    {
+                        return JResult._jResult(405, "验证码错误");
+                    }
+                }
+                //根据手机号获取会员信息
+                result = _custservice.UserLoginByMobile(loginInfo.Mobile);
+            }
+            else
+            {
+                result = JResult._jResult(500, "参数不完整");
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        [Route("GetUserInfoById")]
+        [HttpGet]
+        [NonAction]
+        public JResult GetUserInfoById(string innerid)
+        {
+            return _custservice.GetUserInfoById(innerid);
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        [Route("GetUserInfoByMobile")]
+        [HttpGet]
+        [NonAction]
+        public JResult GetUserInfoByMobile(string mobile)
+        {
+            return _custservice.GetUserInfoByMobile(mobile);
+        }
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetUserPageList")]
+        [HttpPost]
+        [NonAction]
+        public BasePageList<UserListModel> GetUserPageList([FromBody]UserQueryModel query)
+        {
+            return _custservice.GetUserPageList(query);
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        [Route("UpdateUserPassword")]
+        [HttpPost]
+        [NonAction]
+        public JResult UpdateUserPassword([FromBody]UserRetrievePassword mRetrievePassword)
+        {
+            if (string.IsNullOrWhiteSpace(mRetrievePassword?.Mobile))
+            {
+                return JResult._jResult(402, "手机号不能空");
+            }
+
+            var baseservice = ServiceLocatorFactory.GetServiceLocator().GetService<IBaseManagementService>();
+            //检查验证码
+            var cresult = baseservice.CheckVerification(mRetrievePassword.Mobile, mRetrievePassword.VCode, 3);
+            if (cresult.errcode != 0)
+            {
+                //验证码错误
+                //400验证码错误
+                //401验证码过期
+                return cresult;
+            }
+            return _custservice.UpdateUserPassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateUserInfo")]
+        [HttpPost]
+        [NonAction]
+        public JResult UpdateUserInfo([FromBody]UserModel model)
+        {
+            return _custservice.UpdateUserInfo(model);
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [Route("UpdateUserStatus")]
+        [HttpPost]
+        [NonAction]
+        public JResult UpdateUserStatus(string innerid, int status)
+        {
+            return _custservice.UpdateUserStatus(innerid, status);
+        }
+
+        #endregion
+
+        #region APP接口
+
+        /// <summary>
+        /// 用户注册--app端
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns>
+        /// errcode,
+        /// 0.成功
+        /// 402 手机号被其他人注册
+        /// 403 openid已绑定其他手机号
+        /// 404 异常
+        /// 405 手机号不能空
+        /// </returns>
+        [Route("SaveCustomer")]
+        [HttpPost]
+        public JResult SaveCustomer([FromBody] CustModel userInfo)
+        {
+            if (string.IsNullOrWhiteSpace(userInfo.Mobile))
+            {
+                return new JResult
+                {
+                    errcode = 405,
+                    errmsg = "手机号不能空"
+                };
+            }
+
+            var result = _custservice.CustRegister(userInfo);
+
+            #region 注册送积分
+
+            if (result.errcode == 0)
+            {
+                Task.Run(() =>
+                {
+                    var rewardsservice = ServiceLocatorFactory.GetServiceLocator().GetService<IRewardsManagementService>();
+                    var pointresult = rewardsservice.ChangePoint(new CustPointModel
+                    {
+                        Custid = result.errmsg.ToString(),
+                        Type = 1,
+                        Point = 500, //注册+500
+                        Remark = "注册送积分",
+                        Sourceid = 1
+                    });
+                });
+            }
+
+            #endregion
+
+            return result;
+        }
+
+        /// <summary>
+        /// 找回密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        [Route("SaveNewPassword")]
+        [HttpPost]
+        public JResult SaveNewPassword(CustRetrievePassword mRetrievePassword)
+        {
+            if (string.IsNullOrWhiteSpace(mRetrievePassword.Mobile))
+            {
+                return JResult._jResult(402, "手机号不能空");
+            }
+
+            return _custservice.UpdatePassword(mRetrievePassword);
+        }
+        #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <param name="type">类型</param>
+        /// <param name="tradeType"></param>
+        /// <returns></returns>
+        [Route("CustWxPayVip")]
+        [HttpGet]
+        public JResult CustWxPayVip(string custid, string type, string tradeType = "NATIVE")
+        {
+            return _custservice.CustWxPayVip(custid, type, tradeType);
+        }
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        [Route("CustWxPayVipBack")]
+        [HttpGet]
+        public JResult CustWxPayVipBack(string orderno)
+        {
+            return _custservice.CustWxPayVipBack(orderno);
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        [Route("CustWeChatPayByorderno")]
+        [HttpGet]
+        public JResult CustWeChatPayByorderno(string orderno)
+        {
+            return _custservice.CustWeChatPayByorderno(orderno);
+        }
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddSiteAdvice")]
+        [HttpPost]
+        public JResult AddSiteAdvice([FromBody]SiteAdviceModel model)
+        {
+            return _custservice.AddSiteAdvice(model);
+        }
+
+        #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("RebindFans")]
+        [HttpPost]
+        public JResult RebindFans([FromBody]CustRebindFansModel model)
+        {
+            return _custservice.RebindFans(model);
+        }
+
         #endregion
     }
 }

@@ -99,6 +99,13 @@ namespace CCN.Modules.Customer.Interface
         JResult UpdatePassword(CustRetrievePassword mRetrievePassword);
 
         /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdatePassword(CustModifyPassword model);
+
+        /// <summary>
         /// 修改会员信息
         /// </summary>
         /// <param name="model"></param>
@@ -119,6 +126,26 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="innerid"></param>
         /// <returns></returns>
         JResult UpdateCustType(string innerid);
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1);
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        JResult SendWelfare(int refreshnum, int topnum);
 
         #endregion
 
@@ -288,7 +315,7 @@ namespace CCN.Modules.Customer.Interface
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -303,6 +330,267 @@ namespace CCN.Modules.Customer.Interface
         /// <param name="openid"></param>
         /// <returns></returns>
         JResult BindOpenid(string custid, string openid);
+
+        #endregion
+
+        #region 车信评
+
+
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query);
+
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCompanyModelById(string innerid);
+
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCompanyById(string innerid);
+
+        /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateCompanyModel(CompanyModel model);
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddCompanyApplyUpdate(CompanyApplyUpdateModel model);
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query);
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        JResult GetUpdateApplyById(string applyid);
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult HandleApply(CompanyApplyUpdateModel model);
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetCompanyPictureListById(string settid);
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult DoComment(CommentModel model);
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult DoPraise(PraiseModel model);
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query);
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetScoreList(string settid);
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        JResult ImportCompany(string file);
+
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateApplyStatus(CompanyApplyUpdateModel model);
+
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteComment(string innerid);
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetCommentViewByID(string innerid);
+
+        #region 图片处理
+
+        /// <summary>
+        /// 获取企业图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        JResult GetCompanyPictureById(string settid);
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult SaveCompanyPicture(CompanyPictureListModel model);
+
+        #endregion
+
+        #endregion
+
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+
+        JResult UserRegister(UserModel userInfo);
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        JResult UserLogin(UserLoginInfo loginInfo);
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        JResult GetUserInfoById(string innerid);
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        JResult GetUserInfoByMobile(string mobile);
+
+        /// <summary>
+        /// C用户 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        JResult UserLoginByMobile(string mobile);
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        BasePageList<UserListModel> GetUserPageList(UserQueryModel query);
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        JResult UpdateUserPassword(UserRetrievePassword mRetrievePassword);
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateUserInfo(UserModel model);
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateUserStatus(string innerid, int status);
+
+        #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        JResult CustWeChatPayByorderno(string orderno);
+
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <param name="type"></param>
+        /// <param name="tradeType"></param>
+        /// <returns></returns>
+        JResult CustWxPayVip(string custid,string type, string tradeType = "NATIVE");
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        JResult CustWxPayVipBack(string orderno);
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddSiteAdvice(SiteAdviceModel model);
+
+
+        #endregion
+
+        #region 粉丝绑定
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult RebindFans(CustRebindFansModel model);
 
         #endregion
     }

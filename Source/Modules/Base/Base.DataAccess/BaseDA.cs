@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -7,9 +9,11 @@ using System.Threading.Tasks;
 using CCN.Modules.Base.BusinessEntity;
 using Cedar.Core.Data;
 using Cedar.Core.EntLib.Data;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Dapper;
+using Newtonsoft.Json.Linq;
 
 namespace CCN.Modules.Base.DataAccess
 {
@@ -495,6 +499,32 @@ namespace CCN.Modules.Base.DataAccess
             var countyList = Helper.Query<BaseCounty>(sql);
             return countyList;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<BaseProvinceAll> GetTotalAreaList()
+        {
+            var sqlProvince = $"select innerid as provid, provname, initial from base_province where isenabled=1";
+            var sqlCity = $"select innerid as cityid, cityname, initial, provid from base_city where isenabled=1";
+            var sqlCounty = $"select innerid as countyid, countyname, cityid from base_county";
+            var provinceList = Helper.Query<BaseProvinceAll>(sqlProvince).ToList();
+            var cityList = Helper.Query<BaseCityAll>(sqlCity).ToList();
+            var countyList = Helper.Query<BaseCountyAll>(sqlCounty).ToList();
+            
+            foreach (var pitem in provinceList)
+            {
+                pitem.citylist = cityList.Where(x => x.provid == pitem.provid).ToList();
+                foreach (var citem in pitem.citylist)
+                {
+                    citem.countylist = countyList.Where(x => x.cityid == citem.cityid).ToList();
+                }
+            }
+
+            return provinceList;
+        }
+
 
         #endregion
 
@@ -1135,6 +1165,203 @@ namespace CCN.Modules.Base.DataAccess
         }
         #endregion
 
+        #region 更新基础数据
+
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public int UpdateCarBrand(string json)
+        {
+            const string sql = @"INSERT INTO `base_carbrand`
+                                (`innerid`,`brandname`,`initial`,`isenabled`,`remark`,`logurl`,`hot`)
+                                VALUES
+                                (@innerid,@brandname,@initial,@isenabled,@remark,@logurl,@hot);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["brand_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["brand_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carbrand where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            brandname = item["brand_name"].ToString(),
+                            initial = item["initial"].ToString(),
+                            isenabled = 1,
+                            remark = time,
+                            logurl = "",
+                            hot = 0
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新品牌记录, list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("品牌更新失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取品牌
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarBrandModel> GetCarBrand()
+        {
+            var sql = "select innerid, brandname, initial, isenabled, remark, logurl, hot from base_carbrand;";
+            var brandList = Helper.Query<BaseCarBrandModel>(sql);
+            return brandList;
+        }
+        /// <summary>
+        /// 根据品牌id获取车系
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseCarSeriesModel> GetCarSeries()
+        {
+            const string sql = "select innerid, seriesname, seriesgroupname, brandid, isenabled, remark, hot from base_carseries;";
+            var seriesList = Helper.Query<BaseCarSeriesModel>(sql);
+            return seriesList;
+        }
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="brandid"></param>
+        /// <returns></returns>
+        public int UpdateCarSeries(string json,int brandid)
+        {
+            const string sql = @"INSERT INTO `base_carseries`
+                                (`innerid`,`seriesname`,`seriesgroupname`,`brandid`,`isenabled`,`remark`,hot)
+                                VALUES
+                                (@innerid,@seriesname,@seriesgroupname,@brandid,@isenabled,@remark,@hot);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["series_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["series_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carseries where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            seriesname = item["series_name"].ToString(),
+                            seriesgroupname = item["series_group_name"].ToString(),
+                            isenabled = 1,
+                            remark =time,
+                            brandid,
+                            hot = 0
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新车系记录,brandid:{brandid},list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新车系失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <param name="json"></param>
+        /// <param name="seriesid"></param>
+        /// <returns></returns>
+        public int UpdateCarModel(string json, int seriesid)
+        {
+            const string sql = @"INSERT INTO `base_carmodel`
+                                (innerid, modelname, modelprice, modelyear, minregyear, maxregyear, liter, geartype, dischargestandard, seriesid, isenabled, remark)
+                                VALUES
+                                (@innerid, @modelname, @modelprice, @modelyear, @minregyear, @maxregyear, @liter, @geartype, @dischargestandard, @seriesid, @isenabled, @remark);";
+
+            var obj = JObject.Parse(json);
+            var jarr = (JArray)obj["model_list"];
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    var time = DateTime.Now.ToString("yyyy-MM-dd");
+                    var listId = new List<string>();
+                    foreach (var item in jarr)
+                    {
+                        var id = item["model_id"].ToString();
+                        const string sqlSelect = "select 1 from base_carmodel where innerid=@innerid;";
+                        var i = conn.ExecuteScalar<int>(sqlSelect, new { innerid = id });
+                        if (i == 1)
+                        {
+                            continue;
+                        }
+                        conn.Execute(sql, new
+                        {
+                            innerid = id,
+                            modelname = item["model_name"].ToString(),
+                            modelprice = item["model_price"].ToString(),
+                            modelyear = item["model_year"].ToString(),
+                            minregyear = item["min_reg_year"].ToString(),
+                            maxregyear = item["max_reg_year"].ToString(),
+                            liter = item["liter"].ToString(),
+                            geartype = item["gear_type"].ToString(),
+                            dischargestandard = item["discharge_standard"].ToString(),
+                            seriesid,
+                            isenabled = 1,
+                            remark = time
+                        }, tran);
+                        listId.Add(id);
+                    }
+                    tran.Commit();
+                    LoggerFactories.CreateLogger().Write($"更新车型记录,seriesid:{seriesid},list count:{listId.Count} : {string.Join(",", listId)}", TraceEventType.Warning);
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("更新车型失败:", TraceEventType.Error, ex);
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        #endregion
+
         #region 获取系统后台基础信息
 
         #region 用户管理
@@ -1179,7 +1406,7 @@ namespace CCN.Modules.Base.DataAccess
             var list = Helper.ExecutePaging<BaseUserModel>(model, query.Echo);
             return list;
         }
-
+        
         /// <summary>
         /// 添加用户信息 
         /// </summary>
@@ -1188,14 +1415,39 @@ namespace CCN.Modules.Base.DataAccess
         public int AddUser(BaseUserModel model)
         {
             const string sql = @"INSERT INTO `sys_user`
-                                (`innerid`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid)
+                                (`innerid`,`no`, `username`, `loginname`, `password`, `mobile`, `telephone`, `email`, `status`, `createdtime`, `modifiedtime`,depid,`level`)
                                 VALUES
-                                (uuid(), @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid);";
+                                (@innerid,@no, @username, @loginname, @password, @mobile, @telephone, @email, @status, now(), now(),@depid,@level);";
             using (var conn = Helper.GetConnection())
             {
                 var tran = conn.BeginTransaction();
                 try
                 {
+                    //生成编号
+                    var obj = new
+                    {
+                        p_tablename = "sys_user",
+                        p_columnname = "no",
+                        p_prefix = "S",
+                        p_length = 4,
+                        p_hasdate = 0
+                    };
+
+                    var args = new DynamicParameters(obj);
+                    args.Add("p_value", dbType: DbType.String, direction: ParameterDirection.Output);
+                    args.Add("p_errmessage", dbType: DbType.String, direction: ParameterDirection.Output);
+
+                    using (conn.QueryMultiple("sp_automaticnumbering", args, commandType: CommandType.StoredProcedure)) {}
+
+                    model.no = args.Get<string>("p_value");
+
+                    if (string.IsNullOrWhiteSpace(model.no))
+                    {
+                        var msg = args.Get<string>("p_errmessage");
+                        LoggerFactories.CreateLogger().Write("销售编号生成失败：" + msg, TraceEventType.Error);
+                        return -1;
+                    }
+
                     conn.Execute(sql, model, tran);
                     tran.Commit();
                     return 1;
@@ -1228,6 +1480,29 @@ namespace CCN.Modules.Base.DataAccess
                 result = 0;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 更新用户的二维码  
+        /// </summary>
+        /// <param name="qrcode"></param>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int UpdateUserSceneQrCode(string qrcode,string innerid)
+        {
+            const string sql = @"update `sys_user` set sceneqrcode=@sceneqrcode where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                try
+                {
+                    conn.Execute(sql, new { innerid, sceneqrcode = qrcode });
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    return 0;
+                }
+            }
         }
 
         /// <summary>
@@ -1319,6 +1594,16 @@ namespace CCN.Modules.Base.DataAccess
             if (!string.IsNullOrWhiteSpace(model.loginname))
             {
                 sqlWhere.AppendFormat(" and loginname ='{0}' ", model.loginname);
+            }
+            //部门
+            if (!string.IsNullOrWhiteSpace(model.depid))
+            {
+                sqlWhere.AppendFormat(" and depid ='{0}' ", model.depid);
+            }
+            //等级
+            if (model.level.HasValue)
+            {
+                sqlWhere.AppendFormat(" and level ={0} ", model.level);
             }
             sql.Append(sqlWhere.ToString());
             var menuList = Helper.Query<BaseUserModel>(sql.ToString());
@@ -1852,6 +2137,167 @@ namespace CCN.Modules.Base.DataAccess
 
         #endregion  
 
+        #endregion
+
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query)
+        {
+            const string spName = "sp_common_pager";
+            const string tableName = @"base_banner ";
+            const string fields = "innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, isenabled, createrid, createdtime, modifierid, modifiedtime";
+            var oldField = string.IsNullOrWhiteSpace(query.Order) ? " sort asc " : query.Order;
+            var sqlWhere = new StringBuilder("1=1");
+            if (!string.IsNullOrWhiteSpace(query.Title))
+            {
+                sqlWhere.Append($" and title like '%{query.Title}%'");
+            }
+
+            if (query.Isenabled != null)
+            {
+                sqlWhere.Append($" and isenabled = '{query.Isenabled}'");
+            }
+            var model = new PagingModel(spName, tableName, fields, oldField, sqlWhere.ToString(), query.PageSize, query.PageIndex);
+            var list = Helper.ExecutePaging<BaseBannerPageListModel>(model, query.Echo);
+            return list;
+        }
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<BaseBannerListModel> GetBannerList()
+        {
+            const string sql = "select innerid, title, picurl, linkurl from base_banner where isenabled=1 and autoenabletime<=now() and autodisabletime>now() order by sort asc;";
+            var list = Helper.Query<BaseBannerListModel>(sql);
+            return list;
+        }
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public int UpdateBannerStatus(string id, int status)
+        {
+            const string sql = "update base_banner set isenabled=@isenabled where innerid=@innerid";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new { innerid = id, isenabled = status }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public int DeleteBannerById(string innerid)
+        {
+            const string sql = @"delete from base_banner where innerid=@innerid;";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, new {innerid }, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public BaseBannerModel GetBannerById(string innerid)
+        {
+            const string sql = @"select innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, remark, isenabled, createrid, createdtime, modifierid, modifiedtime from base_banner where innerid=@innerid";
+            try
+            {
+                var model = Helper.Query<BaseBannerModel>(sql, new { innerid }).FirstOrDefault();
+                return model;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int AddBanner(BaseBannerModel model)
+        {
+            const string sql = @"INSERT INTO `base_banner`
+                                (innerid, title, picurl, linkurl, autoenabletime, autodisabletime, sort, remark, isenabled, createrid, createdtime, modifierid, modifiedtime)
+                                VALUES
+                                (@innerid, @title, @picurl, @linkurl, @autoenabletime, @autodisabletime, @sort, @remark, @isenabled, @createrid, @createdtime, @modifierid, @modifiedtime);";
+            using (var conn = Helper.GetConnection())
+            {
+                var tran = conn.BeginTransaction();
+                try
+                {
+                    conn.Execute(sql, model, tran);
+                    tran.Commit();
+                    return 1;
+                }
+                catch (Exception ex)
+                {
+                    tran.Rollback();
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public int UpdateBanner(BaseBannerModel model)
+        {
+            var sql = new StringBuilder("update `base_banner` set ");
+            sql.Append(Helper.CreateField(model).Trim().TrimEnd(','));
+            sql.Append(" where innerid = @innerid");
+            int result;
+            try
+            {
+                result = Helper.Execute(sql.ToString(), model);
+            }
+            catch (Exception ex)
+            {
+                result = 0;
+            }
+            return result;
+        }
+        
         #endregion
     }
 }

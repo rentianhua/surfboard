@@ -13,7 +13,7 @@ Purchase: http://wrapbootstrap.com
 <!-- Mirrored from beyondadmin-v1.4.s3-website-us-east-1.amazonaws.com/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 07 May 2015 08:27:13 GMT -->
 <head>
     <meta charset="utf-8" />
-    <title>苏州车信网</title>
+    <title>玖伍淘车</title>
 
     <meta name="description" content="login page" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -67,7 +67,7 @@ Purchase: http://wrapbootstrap.com
         </div>
         <div class="loginbox">
             <div class="loginbox-signup">
-                <div style="margin-top:10px">苏州车信网络科技有限公司</div>
+                <div style="margin-top:10px">苏州快拍立信络科技有限公司</div>
                 <div>©2015-2018 chinaccn.cn 版权所有 <br />ICP证：<a href="http://www.miitbeian.gov.cn">苏ICP备15048490</a></div>
             </div>
         </div>
@@ -102,7 +102,7 @@ Purchase: http://wrapbootstrap.com
     <!--Google Analytics::Demo Only-->
     <script>
         $(function () {
-            setCookie();
+            //setCookie();
             $('[data-toggle="popover"]').popover();
             if ("@ViewBag.type" != "1") {
                 getInfo();
@@ -139,19 +139,14 @@ Purchase: http://wrapbootstrap.com
                             url: actionUrl,
                             data: customerData,
                             success: function (result) {
-                                if (result.code == 1) {
+                                var myDate = new Date();
+                                if ($("#ischecked").prop("checked") == true) {
                                     var myDate = new Date();
-                                    if ($("#ischecked").prop("checked") == true) {
-                                        var myDate = new Date();
-                                        localStorage.setItem("businessname", $("#LoginName").val());
-                                        localStorage.setItem("businesspwd", $("#LoginPwd").val());
-                                        localStorage.setItem("businesstime", myDate.getTime());
-                                    }
-                                    location.href = "@Url.Action("BusinessIndex", "Home")";
+                                    localStorage.setItem("businessname", $("#LoginName").val());
+                                    localStorage.setItem("businesspwd", $("#LoginPwd").val());
+                                    localStorage.setItem("businesstime", myDate.getTime());
                                 }
-                                else {
-                                    location.href = "@Url.Action("BusinessLogin", "Home")";
-                                }
+                                location.href = "@Url.Action("BusinessIndex", "Home")";
                             }
                         });
                     }
@@ -166,6 +161,7 @@ Purchase: http://wrapbootstrap.com
         function getInfo() {
             //判读数据是否存在
             if (localStorage.getItem("businesstime")) {
+                var myDate = new Date();
                 var diffDate = myDate.getTime() - (parseInt(localStorage.getItem("businesstime"), 10) + 24 * 3600 * 1000 * 7);
                 if (diffDate > 0) {
                     localStorage.removeItem("businessname");

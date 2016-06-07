@@ -1,12 +1,17 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using CCN.Modules.Customer.BusinessComponent;
 using CCN.Modules.Customer.BusinessEntity;
 using CCN.Modules.Customer.Interface;
+using Cedar.Core.Logging;
 using Cedar.Framework.Common.Server.BaseClasses;
 using Cedar.Framework.Common.BaseClasses;
 using Cedar.Framework.AuditTrail.Interception;
+using Microsoft.Practices.Unity.InterceptionExtension;
 
 #endregion
 
@@ -16,6 +21,7 @@ namespace CCN.Modules.Customer.BusinessService
     /// </summary>
     public class CustomerManagementService : ServiceBase<CustomerBC>, ICustomerManagementService
     {
+        private readonly object _obj = new object();
         /// <summary>
         /// </summary>
         public CustomerManagementService(CustomerBC bc)
@@ -151,6 +157,16 @@ namespace CCN.Modules.Customer.BusinessService
         }
 
         /// <summary>
+        /// 修改密码（根据手机号和密码修改）
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdatePassword(CustModifyPassword model)
+        {
+            return BusinessComponent.UpdatePassword(model);
+        }
+
+        /// <summary>
         /// 修改会员信息
         /// </summary>
         /// <param name="model"></param>
@@ -179,6 +195,49 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult UpdateCustType(string innerid)
         {
             return BusinessComponent.UpdateCustType(innerid);
+        }
+
+        #endregion
+
+        #region 会员Total
+
+        /// <summary>
+        /// 更新会员的刷新次数
+        /// </summary>
+        /// <param name="custid"></param>
+        /// <param name="type"></param>
+        /// <param name="count"></param>
+        /// <param name="oper">1+ 2-</param>
+        /// <returns>用户信息</returns>
+        public JResult UpdateCustTotalCount(string custid, int type, int count, int oper = 1)
+        {
+            return BusinessComponent.UpdateCustTotalCount(custid, type, count, oper);            
+        }
+
+        /// <summary>
+        /// 发福利
+        /// </summary>
+        /// <returns></returns>
+        public JResult SendWelfare(int refreshnum, int topnum)
+        {
+            lock (_obj)
+            {
+                var mu = new Mutex(false, "MyMutex");
+                mu.WaitOne();
+                try
+                {
+                    return BusinessComponent.SendWelfare(refreshnum, topnum);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactories.CreateLogger().Write("发福利异常BusinessService", TraceEventType.Error, ex);
+                    return JResult._jResult(400, "发福利异常");
+                }
+                finally
+                {
+                    mu.ReleaseMutex();
+                }
+            }
         }
 
         #endregion
@@ -412,7 +471,7 @@ namespace CCN.Modules.Customer.BusinessService
 
         #endregion
 
-        #region cust_wechat
+        #region 微信信息
         /// <summary>
         /// 获取cust_wechat信息列表
         /// </summary>
@@ -432,6 +491,362 @@ namespace CCN.Modules.Customer.BusinessService
         public JResult BindOpenid(string custid, string openid)
         {
             return BusinessComponent.BindOpenid(custid, openid);
+        }
+
+        #endregion
+
+        #region 车信评
+        
+        /// <summary>
+        /// 公司列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyListModel> GetCompanyPageList(CompanyQueryModel query)
+        {
+            return BusinessComponent.GetCompanyPageList(query);
+        }
+        /// <summary>
+        /// 获取公司model
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyModelById(string innerid)
+        {
+            return BusinessComponent.GetCompanyModelById(innerid);
+        }
+        /// <summary>
+        /// 获取公司详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyById(string innerid)
+        {
+            return BusinessComponent.GetCompanyById(innerid);
+        }
+
+        /// <summary>
+        /// 更新企业信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateCompanyModel(CompanyModel model)
+        {
+            return BusinessComponent.UpdateCompanyModel(model);
+        }
+
+        /// <summary>
+        /// 申请企业信息修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddCompanyApplyUpdate(CompanyApplyUpdateModel model)
+        {
+            return BusinessComponent.AddCompanyApplyUpdate(model);
+        }
+
+        /// <summary>
+        /// 修改申请列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CompanyUpdateApplyListModel> GetUpdateApplyPageList(CompanyUpdateApplyQueryModel query)
+        {
+            return BusinessComponent.GetUpdateApplyPageList(query);
+        }
+
+        /// <summary>
+        /// 获取申请的信息view
+        /// </summary>
+        /// <param name="applyid"></param>
+        /// <returns></returns>
+        public JResult GetUpdateApplyById(string applyid)
+        {
+            return BusinessComponent.GetUpdateApplyById(applyid);
+        }
+
+        /// <summary>
+        /// 处理修改申请
+        /// </summary>
+        ///<param name="model"></param>
+        /// <returns></returns>
+        public JResult HandleApply(CompanyApplyUpdateModel model)
+        {
+            return BusinessComponent.HandleApply(model);
+        }
+
+        /// <summary>
+        /// 获取公司图片
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureListById(string settid)
+        {
+            return BusinessComponent.GetCompanyPictureListById(settid);
+        }
+
+        /// <summary>
+        /// 企业评论
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoComment(CommentModel model)
+        {
+            return BusinessComponent.DoComment(model);
+        }
+
+        /// <summary>
+        /// 企业点赞
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult DoPraise(PraiseModel model)
+        {
+            return BusinessComponent.DoPraise(model);
+        }
+
+        /// <summary>
+        /// 评论列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public BasePageList<CommentListModel> GetCommentPageList(CommentQueryModel query)
+        {
+            return BusinessComponent.GetCommentPageList(query);
+        }
+
+        /// <summary>
+        /// 评分列表
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetScoreList(string settid)
+        {
+            return BusinessComponent.GetScoreList(settid);
+        }
+
+        /// <summary>
+        /// 导入公司
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public JResult ImportCompany(string file)
+        {
+            return BusinessComponent.ImportCompany(file);
+        }
+
+        /// <summary>
+        /// 更新申请表状态
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateApplyStatus(CompanyApplyUpdateModel model)
+        {
+            return BusinessComponent.UpdateApplyStatus(model);
+        }
+
+        /// <summary>
+        /// 删除评论（逻辑删除）
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult DeleteComment(string innerid)
+        {
+            return BusinessComponent.DeleteComment(innerid);
+        }
+
+        /// <summary>
+        /// 根据ID获取详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        public JResult GetCommentViewByID(string innerid)
+        {
+            return BusinessComponent.GetCommentViewByID(innerid);
+        }
+
+        #region 图片处理
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settid"></param>
+        /// <returns></returns>
+        public JResult GetCompanyPictureById(string settid)
+        {
+            return BusinessComponent.GetCompanyPictureById(settid);
+        }
+
+        /// <summary>
+        /// 批量保存图片(添加+删除)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult SaveCompanyPicture(CompanyPictureListModel model)
+        {
+            return BusinessComponent.SaveCompanyCarPicture(model);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region C用户管理
+
+        /// <summary>
+        /// C用户 用户注册
+        /// </summary>
+        /// <param name="userInfo">用户信息</param>
+        /// <returns></returns>
+        public JResult UserRegister(UserModel userInfo)
+        {
+            return BusinessComponent.UserRegister(userInfo);
+        }
+
+        /// <summary>
+        /// C用户 用户登录
+        /// </summary>
+        /// <param name="loginInfo">登录账户</param>
+        /// <returns>用户信息</returns>
+        public JResult UserLogin(UserLoginInfo loginInfo)
+        {
+            return BusinessComponent.UserLogin(loginInfo);
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情
+        /// </summary>
+        /// <param name="innerid">会员id</param>
+        /// <returns></returns>
+        public JResult GetUserInfoById(string innerid)
+        {
+            return BusinessComponent.GetUserInfoById(innerid);
+        }
+
+        /// <summary>
+        /// C用户 获取会员详情（根据手机号）
+        /// </summary>
+        /// <param name="mobile">会员手机号</param>
+        /// <returns></returns>
+        public JResult GetUserInfoByMobile(string mobile)
+        {
+            return BusinessComponent.GetUserInfoByMobile(mobile);
+        }
+
+        /// <summary>
+        /// C用户 手机+验证码登录
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public JResult UserLoginByMobile(string mobile)
+        {
+            return BusinessComponent.UserLoginByMobile(mobile);
+        }
+
+        /// <summary>
+        /// C用户 获取会员列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        public BasePageList<UserListModel> GetUserPageList(UserQueryModel query)
+        {
+            return BusinessComponent.GetUserPageList(query);
+        }
+
+        /// <summary>
+        /// C用户 修改密码
+        /// </summary>
+        /// <param name="mRetrievePassword"></param>
+        /// <returns></returns>
+        public JResult UpdateUserPassword(UserRetrievePassword mRetrievePassword)
+        {
+            return BusinessComponent.UpdateUserPassword(mRetrievePassword);
+        }
+
+        /// <summary>
+        /// C用户 修改会员信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult UpdateUserInfo(UserModel model)
+        {
+            return BusinessComponent.UpdateUserInfo(model);
+        }
+
+        /// <summary>
+        /// C用户 修改会员状态(冻结和解冻)
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public JResult UpdateUserStatus(string innerid, int status)
+        {
+            return BusinessComponent.UpdateUserStatus(innerid, status);
+        }
+
+        #endregion
+
+        #region 会员升级
+
+        /// <summary>
+        /// 微信会员费支付
+        /// </summary>
+        /// <param name="custid">会员id</param>
+        /// <param name="type"></param>
+        /// <param name="tradeType"></param>
+        /// <returns></returns>
+        public JResult CustWxPayVip(string custid,string type, string tradeType = "NATIVE")
+        {
+            return BusinessComponent.CustWxPayVip(custid, type, tradeType);
+        }
+
+        /// <summary>
+        /// 微信会员支付回调
+        /// </summary>
+        /// <param name="orderno">会员id</param>
+        /// <returns></returns>
+        public JResult CustWxPayVipBack(string orderno)
+        {
+            return BusinessComponent.CustWxPayVipBack(orderno);
+        }
+
+        /// <summary>
+        /// 根据订单号获取订单信息
+        /// </summary>
+        /// <param name="orderno"></param>
+        /// <returns></returns>
+        public JResult CustWeChatPayByorderno(string orderno)
+        {
+            return BusinessComponent.CustWeChatPayByorderno(orderno);
+        }
+
+        #endregion
+
+        #region 投诉建议
+
+        /// <summary>
+        /// 保存投诉建议
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult AddSiteAdvice(SiteAdviceModel model)
+        {
+
+            return BusinessComponent.AddSiteAdvice(model);
+        }
+
+
+        #endregion
+
+        #region 粉丝绑定
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public JResult RebindFans(CustRebindFansModel model)
+        {
+            return BusinessComponent.RebindFans(model);
         }
 
         #endregion

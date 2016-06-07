@@ -4,18 +4,20 @@
     //Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
 }
 <script type="text/javascript">
-    $(function () {
+    $(function() {
         QueryList();
     });
+
     function QueryList() {
         var json = { brandname: $("#carbrand").val() };
         $("#carbrandlist").getPageList(20, "/api/Base/GetCarBrandList", json, LoadData);
     }
-    function LoadData(data,index) {
+
+    function LoadData(data, index) {
         $("#carbrandlist tbody").empty();
 
         var str = "";
-        $.each(data, function (key, val) {
+        $.each(data, function(key, val) {
             str = "";
             str += "<tr>";
             str += "<td>" + (index + key) + "</td>";
@@ -26,36 +28,56 @@
             str += "<td>" + val.Logurl + "</td>";
             str += "<td>" + val.Hot + "</td>";
             str += "<td>" +
-               " <a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
-               "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
-               "<a href='javascript:;' onclick=\"DeleteCarBrand('" + val.Innerid + "');\">删除 </a>" +
-               "<a href='javascript:;' onclick=\"UpdateBrandStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
+                " <a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandEdit?innerid=" + val.Innerid + "');\" href='javascript:;'>修改</a> " +
+                "<a onclick=\"getBodyHtml('mainbody', '/Base/Base/BaseCarBrandView?innerid=" + val.Innerid + "');\" href='javascript:;'>详情 </a>" +
+                "<a href='javascript:;' onclick=\"DeleteCarBrand('" + val.Innerid + "');\">删除 </a>" +
+                "<a href='javascript:;' onclick=\"UpdateBrandStatus('" + val.Innerid + "'," + val.IsEnabled + ");\">" + (val.IsEnabled === 1 ? "禁用 " : "启用 ") + "</a>" +
                 "</td>";
             str += "</tr>";
             $("#carbrandlist tbody").append(str);
         });
     }
+
     function UpdateBrandStatus(carid, status) {
         status = status === 1 ? 0 : 1;
-        $.post("/api/Base/UpdateBrandStatus?carid=" + carid + "&status=" + status, null, function (result) {
+        $.post("/api/Base/UpdateBrandStatus?carid=" + carid + "&status=" + status, null, function(result) {
             alert(result.errmsg);
             getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
         });
     }
+
     function DeleteCarBrand(innerid) {
         if (!confirm("确认删除！")) {
             return;
         }
-        $.post("/api/Base/DeleteCarBrand?innerid=" + innerid, function (result) {
+        $.post("/api/Base/DeleteCarBrand?innerid=" + innerid, function(result) {
             var str = result.errcode === 0 ? "删除成功" : "删除失败";
             if (result.errmsg != 1) {
                 alert(result.errmsg);
-            }
-            else {
+            } else {
                 alert(str);
             }
             getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
         });
+    }
+
+    function UpdateCarBrand() {
+        getJson("/api/Base/UpdateCarBrand", null, function (result) {
+            alert(result.errmsg);
+            getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
+        });
+    }
+    function UpdateCarSeries() {
+        getJson("/api/Base/UpdateCarSeries", null, function (result) {
+            alert(result.errmsg);
+            getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
+        },true);
+    }
+    function UpdateCarModel() {
+        getJson("/api/Base/UpdateCarModel", null, function (result) {
+            alert(result.errmsg);
+            getBodyHtml('mainbody', '/Base/Base/BaseCarBrandList');
+        },true);
     }
 </script>
 <div>
@@ -72,6 +94,9 @@
             <div class="col-lg-3 col-sm-3 col-xs-3">
                 <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="QueryList();">查询</a>
                 <a onclick="getBodyHtml('mainbody', '/Base/Base/BaseCarBrandEdit');" href="javascript:;" class="btn btn-primary shiny">添加</a>
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="UpdateCarBrand();">更新品牌</a>
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="UpdateCarSeries();">更新车系</a>
+                <a href="javascript:void(0);" class="btn btn-palegreen shiny" onclick="UpdateCarModel();">更新车型</a>
             </div>
             <div class="col-lg-3 col-sm-3 col-xs-3">
             </div>

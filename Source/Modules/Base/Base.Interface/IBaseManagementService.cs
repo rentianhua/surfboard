@@ -158,6 +158,11 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult GetProvListEx(string initial);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        List<BaseProvinceAll> GetTotalAreaList();
         #endregion
 
         #region 品牌/车系/车型
@@ -320,7 +325,27 @@ namespace CCN.Modules.Base.Interface
         /// <returns></returns>
         JResult UpdateCarModel(BaseCarModelModel model);
         #endregion
+        #region 更新基础数据
 
+        /// <summary>
+        /// 更新品牌
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarBrand();
+
+        /// <summary>
+        /// 更新车系
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarSeries();
+
+        /// <summary>
+        /// 更新车型
+        /// </summary>
+        /// <returns></returns>
+        JResult UpdateCarModel();
+
+        #endregion
         #region 获取系统后台基础信息
 
         #region 用户管理
@@ -382,6 +407,13 @@ namespace CCN.Modules.Base.Interface
         /// <param name="userid"></param>
         /// <returns></returns>
         JResult GetMenuByUerid(string userid);
+
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult GetUserInfo(BaseUserModel model);
 
         #endregion
 
@@ -551,5 +583,57 @@ namespace CCN.Modules.Base.Interface
 
         #endregion
 
+        #region 广告管理
+
+        /// <summary>
+        /// 获取广告列表--分页
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        BasePageList<BaseBannerPageListModel> GetBannerPageList(BaseBannerQueryModel query);
+
+        /// <summary>
+        /// 获取广告列表
+        /// </summary>
+        /// <returns></returns>
+        JResult GetBannerList();
+
+        /// <summary>
+        /// 更新广告状态
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        JResult UpdateBannerStatus(string id, int status);
+
+        /// <summary>
+        /// 删除广告
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult DeleteBannerById(string innerid);
+
+        /// <summary>
+        /// 获取广告详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        JResult GetBannerById(string innerid);
+
+        /// <summary>
+        /// 添加广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult AddBanner(BaseBannerModel model);
+
+        /// <summary>
+        /// 更新广告
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        JResult UpdateBanner(BaseBannerModel model);
+
+        #endregion
     }
 }

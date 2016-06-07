@@ -131,17 +131,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 品牌
         /// </summary>
-        public int brand_id { get; set; }
+        public int? brand_id { get; set; }
 
         /// <summary>
         /// 车系
         /// </summary>
-        public int series_id { get; set; }
+        public int? series_id { get; set; }
 
         /// <summary>
         /// 车型
         /// </summary>
-        public int model_id { get; set; }
+        public int? model_id { get; set; }
 
         /// <summary>
         /// 里程区间
@@ -161,17 +161,17 @@ namespace CCN.Modules.Car.BusinessEntity
         /// <summary>
         /// 颜色
         /// </summary>
-        public int colorid { get; set; }
+        public int? colorid { get; set; }
 
         /// <summary>
         /// 省份
         /// </summary>
-        public int provid { get; set; }
+        public int? provid { get; set; }
 
         /// <summary>
         /// 城市
         /// </summary>
-        public int cityid { get; set; }
+        public int? cityid { get; set; }
 
         /// <summary>
         /// 状态
@@ -213,5 +213,40 @@ namespace CCN.Modules.Car.BusinessEntity
     /// 车辆悬赏显示实体
     /// </summary>
     public class CarRewardViewModel : CarReward
-    { }
+    {
+        /// <summary>
+        /// 品牌名称
+        /// </summary>
+        public string brandname { get; set; }
+
+        /// <summary>
+        /// 品牌图片
+        /// </summary>
+        public string logurl { get; set; }
+
+        /// <summary>
+        /// 车系名称
+        /// </summary>
+        public string seriesname { get; set; }
+
+        /// <summary>
+        /// 车型
+        /// </summary>
+        public string modelname { get; set; }
+
+        /// <summary>
+        /// 省份名称
+        /// </summary>
+        public string provname { get; set; }
+
+        /// <summary>
+        /// 城市名称
+        /// </summary>
+        public string cityname { get; set; }
+
+        /// <summary>
+        /// 颜色名称
+        /// </summary>
+        public string color { get; set; }
+    }
 }

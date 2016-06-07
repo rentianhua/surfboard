@@ -48,6 +48,18 @@ namespace CCN.Resource.ApiControllers
         }
 
         /// <summary>
+        /// 获取车辆列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [Route("GetAllCarPageList")]
+        [HttpPost]
+        public BasePageList<CarInfoListViewModel> GetAllCarPageList(CarQueryModel query)
+        {
+            return _carervice.GetAllCarPageList(query);
+        }
+
+        /// <summary>
         /// 获取车辆详细信息(info)
         /// </summary>
         /// <param name="id">车辆id</param>
@@ -128,13 +140,13 @@ namespace CCN.Resource.ApiControllers
         {
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
@@ -186,7 +198,7 @@ namespace CCN.Resource.ApiControllers
                     Task.Run(() =>
                     {
                         var sms = new SMSMSG();
-                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用车信网发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【车信网】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。车信网承诺不会透露用户信息。");
+                        sms.PostSms(model.mobile, $"亲爱的用户：感谢您使用玖伍淘车发布车辆！如您是车商，强烈推荐您关注并使用专为车商朋友服务的【玖伍淘车】公众号！已为您自动注册【用户名：{model.mobile}】【初始随机密码：{password}】若需使用建议您尽快修改密码。如无需要，请忽略。玖伍淘车承诺不会透露用户信息。");
                     });
 
                     return _carervice.AddCar(model);
@@ -198,13 +210,13 @@ namespace CCN.Resource.ApiControllers
             //添加车辆
             var jresult = _carervice.AddCar(model);
 
-            if (jresult.errcode == 0)
-            {
-                Task.Run(() =>
-                {
-                    ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
-                });
-            }
+            //if (jresult.errcode == 0)
+            //{
+            //    Task.Run(() =>
+            //    {
+            //        ServiceLocatorFactory.GetServiceLocator().GetService<ICustomerManagementService>().UpdateCustType(model.custid);
+            //    });
+            //}
 
             return jresult;
         }
@@ -231,6 +243,18 @@ namespace CCN.Resource.ApiControllers
         public JResult DeleteCar([FromBody] CarInfoModel model)
         {
             return _carervice.DeleteCar(model);
+        }
+
+        /// <summary>
+        /// 回复车辆
+        /// </summary>
+        /// <param name="model">回复成交model</param>
+        /// <returns>1.操作成功</returns>
+        [Route("RecoveryCar")]
+        [HttpPost]
+        public JResult RecoveryCar([FromBody]CarInfoModel model)
+        {
+            return _carervice.RecoveryCar(model);
         }
 
         /// <summary>
@@ -415,6 +439,18 @@ namespace CCN.Resource.ApiControllers
         {
             return _carervice.RefreshCar(carid);
         }
+        
+        /// <summary>
+        /// 置顶车辆
+        /// </summary>
+        /// <param name="carid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [Route("PushUpCar")]
+        [HttpGet]
+        public JResult PushUpCar(string carid)
+        {
+            return _carervice.PushUpCar(carid);
+        }
 
         /// <summary>
         /// 置顶或取消置顶
@@ -504,32 +540,471 @@ namespace CCN.Resource.ApiControllers
         {
             return _carervice.AddCarPictureList(picModel);
         }
+        
+        /// <summary>
+        /// 批量保存图片(通用，除微信端)
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("BatchSaveCarPicture")]
+        [HttpPost]
+        public JResult BatchSaveCarPicture([FromBody] BatchPictureListModel model)
+        {
+            LoggerFactories.CreateLogger().Write("批量保存图片参数：" + JsonConvert.SerializeObject(model), TraceEventType.Information);
+            return _carervice.BatchSaveCarPicture(model);
+        }
+
+        #endregion
+
+        #region 车辆举报
 
         /// <summary>
-        /// 批量添加车辆图片(添加)(微信端使用)
+        /// 获取举报信息
         /// </summary>
-        /// <param name="picModel">车辆图片信息</param>
+        /// <param name="carid"></param>
         /// <returns></returns>
-        [Route("AddCarPictureList")]
-        [HttpPost]
-        public JResult AddCarPictureList([FromBody]WechatPictureModel picModel)
+        [Route("GetTipOffListByCarId")]
+        [HttpGet]
+        public JResult GetTipOffListByCarId(string carid)
         {
-            LoggerFactories.CreateLogger().Write("批量添加图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
-            return _carervice.AddCarPictureList(picModel);
+            return _carervice.GetTipOffListByCarId(carid);
         }
 
         /// <summary>
-        /// 批量保存图片(添加+删除)
+        /// 添加举报
         /// </summary>
-        /// <param name="picModel"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
-        [Route("SaveCarPicture")]
+        [Route("AddTipOff")]
         [HttpPost]
-        public JResult SaveCarPicture([FromBody] BatchPictureListWeichatModel picModel)
+        public JResult AddTipOff([FromBody]CarTipOffModel model)
         {
-            LoggerFactories.CreateLogger().Write("批量添加+删除图片参数：" + JsonConvert.SerializeObject(picModel), TraceEventType.Information);
-            return _carervice.SaveCarPicture(picModel);
+            return _carervice.AddTipOff(model);
         }
+
+        /// <summary>
+        /// 获取举报
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetTipOffPageList")]
+        [HttpPost]
+        public BasePageList<CarTipOffModel> GetTipOffPageList([FromBody]CarTipQueryModel query)
+        {
+            return _carervice.GetTipOffPageList(query);
+        }
+
+        /// <summary>
+        /// 举报处理
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("HandleTipOff")]
+        [HttpPost]
+        public JResult HandleTipOff([FromBody]CarTipHandleModel model)
+        {
+            return _carervice.HandleTipOff(model);
+        }
+
+        #endregion
+
+        #region 会员车辆
+
+        /// <summary>
+        /// 根据手机号获取会员拥有的车辆
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        [Route("GetCarInfoByMobile")]
+        [HttpGet]
+        public JResult GetCarInfoByMobile(string mobile)
+        {
+            return _carervice.GetCarInfoByMobile(mobile);
+        }
+
+        #endregion
+
+        #region 车贷相关
+
+        /// <summary>
+        /// 获取贷款列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetCarLoanList")]
+        [HttpPost]
+        public BasePageList<CarLoanViewModel> GetCarLoanList(CarLoanQueryModel query)
+        {
+            return _carervice.GetCarLoanList(query);
+        }
+
+        /// <summary>
+        /// 车贷申请
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddCarLoan")]
+        [HttpPost]
+        public JResult AddCarLoan(CarLoanModel model)
+        {
+            return _carervice.AddCarLoan(model);
+        }
+
+        /// <summary>
+        /// 车贷修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateCarLoan")]
+        [HttpPost]
+        public JResult UpdateCarLoan(CarLoanModel model)
+        {
+            return _carervice.UpdateCarLoan(model);
+        }
+
+        /// <summary>
+        /// 根据ID获取贷款信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("CarLoanInfo")]
+        [HttpGet]
+        public JResult CarLoanInfo(string id)
+        {
+            return _carervice.CarLoanInfo(id);
+        }
+
+        /// <summary>
+        /// 添加贷款图片
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddLoanPicture")]
+        [HttpPost]
+        public JResult AddLoanPicture(CarLoanPicture model)
+        {
+            return _carervice.AddLoanPicture(model);
+        }
+
+        /// <summary>
+        /// 根据贷款ID获取对应的图片
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("GetLoanPictureByloanid")]
+        [HttpGet]
+        public JResult GetLoanPictureByloanid(string id)
+        {
+            return _carervice.GetLoanPictureByloanid(id);
+        }
+
+        /// <summary>
+        /// 删除贷款图片
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("DeleteLoanPicture")]
+        [HttpDelete]
+        public JResult DeleteLoanPicture(string innerid)
+        {
+            return _carervice.DeleteLoanPicture(innerid);
+        }
+
+        #endregion
+
+        #region 金融方案
+
+        /// <summary>
+        /// 获取金融方案列表
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeList")]
+        [HttpPost]
+        public BasePageList<FinanceProgrammeViewModel> GetFinanceProgrammeList(FinanceProgrammeQueryModel query)
+        {
+            return _carervice.GetFinanceProgrammeList(query);
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddFinanceProgramme")]
+        [HttpPost]
+        public JResult AddFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return _carervice.AddFinanceProgramme(model);
+        }
+
+        /// <summary>
+        /// 金融方案新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateFinanceProgramme")]
+        [HttpPost]
+        public JResult UpdateFinanceProgramme(FinanceProgrammeModel model)
+        {
+            return _carervice.UpdateFinanceProgramme(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeById")]
+        [HttpGet]
+        public JResult GetFinanceProgrammeById(string innerid)
+        {
+            return _carervice.GetFinanceProgrammeById(innerid);
+        }
+
+        /// <summary>
+        /// 经融方案明细新增
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("AddFinanceProgrammeDetail")]
+        [HttpPost]
+        public JResult AddFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return _carervice.AddFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 金融方案明细修改
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [Route("UpdateFinanceProgrammeDetail")]
+        [HttpPost]
+        public JResult UpdateFinanceProgrammeDetail(FinanceProgrammeDetailModel model)
+        {
+            return _carervice.UpdateFinanceProgrammeDetail(model);
+        }
+
+        /// <summary>
+        /// 根据id获取金融方案明细详情
+        /// </summary>
+        /// <param name="innerid"></param>
+        /// <returns></returns>
+        [Route("GetFinanceProgrammeDetailById")]
+        [HttpGet]
+        public JResult GetFinanceProgrammeDetailById(string innerid)
+        {
+            return _carervice.GetFinanceProgrammeDetailById(innerid);
+        }
+
+        #endregion
+
+        #region 供应商管理
+
+        /// <summary>
+        /// 添加供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddSupplier")]
+        public JResult AddSupplier([FromBody]CarSupplierModel model)
+        {
+            return _carervice.AddSupplier(model);
+        }
+
+        /// <summary>
+        /// 修改供应商
+        /// </summary>
+        /// <param name="model">供应商信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateSupplier")]
+        public JResult UpdateSupplier([FromBody]CarSupplierModel model)
+        {
+            return _carervice.UpdateSupplier(model);
+        }
+
+        /// <summary>
+        /// 删除供应商
+        /// </summary>
+        /// <param name="innerid">供应商model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpDelete]
+        [Route("DeleteSupplier")]
+        public JResult DeleteSupplier(string innerid)
+        {
+            return _carervice.DeleteSupplier(innerid);
+        }
+        /// <summary>
+        /// 供应商列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetSupplierCarPageList")]
+        public BasePageList<CarSupplierModel> GetSupplierCarPageList([FromBody]CarSupplierQueryModel query)
+        {
+            return _carervice.GetSupplierCarPageList(query);
+        }
+        /// <summary>
+        /// 获取会员所有供应商列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierAll")]
+        public JResult GetSupplierAll()
+        {
+            return _carervice.GetSupplierAll();
+        }
+
+        /// <summary>
+        /// 根据id获取供应商的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetSupplierInfoById")]
+        public JResult GetSupplierInfoById(string innerid)
+        {
+            return _carervice.GetSupplierInfoById(innerid);
+        }
+
+        #endregion
+
+        #region 神秘车源
+        
+        /// <summary>
+        /// 后台查询神秘车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMysteriousBackCarPageList")]
+        public BasePageList<CarMysteriousListModel> GetMysteriousBackCarPageList([FromBody]CarGlobalQueryModel query)
+        {
+            return _carervice.GetMysteriousBackCarPageList(query);
+        }
+
+        /// <summary>
+        /// 顶神秘车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [HttpGet]
+        [Route("PushUpMysteriousCar")]
+        public JResult PushUpMysteriousCar(string innerid)
+        {
+            return _carervice.PushUpMysteriousCar(innerid);
+        }
+        #endregion
+
+        #region 劲爆车源
+
+        /// <summary>
+        /// 添加劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("AddMaddenCar")]
+        public JResult AddMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.AddMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 修改劲爆车源
+        /// </summary>
+        /// <param name="model">车源信息</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("UpdateMaddenCar")]
+        public JResult UpdateMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.UpdateMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 删除劲爆车源
+        /// </summary>
+        /// <param name="model">删除model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpDelete]
+        [Route("DeleteMaddenCar")]
+        public JResult DeleteMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.DeleteMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 回复劲爆车辆
+        /// </summary>
+        /// <param name="model">回复model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpPost]
+        [Route("RecoveryMaddenCar")]
+        public JResult RecoveryMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.RecoveryMaddenCar(model);
+        }
+
+        /// <summary>
+        /// 车辆劲爆成交
+        /// </summary>
+        /// <param name="model">车辆model</param>
+        /// <returns>1.操作成功</returns>
+        [HttpPost]
+        [Route("DealMaddenCar")]
+        public JResult DealMaddenCar([FromBody]CarMaddenModel model)
+        {
+            return _carervice.DealMaddenCar(model);
+        }
+        /// <summary>
+        /// 顶劲爆车源
+        /// </summary>
+        /// <param name="innerid">车辆id</param>
+        /// <returns>1.操作成功</returns>
+        [HttpGet]
+        [Route("PushUpMaddenCar")]
+        public JResult PushUpMaddenCar(string innerid)
+        {
+            return _carervice.PushUpMaddenCar(innerid);
+        }
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarInfoById")]
+        public JResult GetMaddenCarInfoById(string innerid)
+        {
+            return _carervice.GetMaddenCarInfoById(innerid);
+        }
+
+        /// <summary>
+        /// 根据id获取劲爆车源的信息
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetMaddenCarViewById")]
+        public JResult GetMaddenCarViewById(string innerid)
+        {
+            return _carervice.GetMaddenCarViewById(innerid);
+        }
+
+        /// <summary>
+        /// 后台查询劲爆车源列表
+        /// </summary>
+        /// <param name="query">查询条件</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("GetMaddenCarBackPageList")]
+        public BasePageList<CarMaddenListModel> GetMaddenCarBackPageList([FromBody]CarMaddenQueryModel query)
+        {
+            return _carervice.GetMaddenCarBackPageList(query);
+        }
+
         #endregion
     }
 }

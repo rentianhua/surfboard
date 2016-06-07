@@ -1,0 +1,175 @@
+﻿
+<script type="text/javascript">
+
+    var id = "@ViewBag.innerid";
+
+    $(function() {
+        Init();
+
+    });
+
+    function Init() {
+
+        if (id === "") {
+            return;
+        }
+
+        getJson("/api/Car/GetSupplierInfoById?innerid=" + id, null, function (data) {
+            if (data.errcode !== 0) {
+                alert("获取数据异常！");
+            }
+
+            var obj = data.errmsg;
+
+            $("#txtSuppliername").val(obj.Suppliername);
+            $("#txtAddress").val(obj.Address);
+            $("#txtContacts").val(obj.Contacts);
+            $("#txtContactsphone").val(obj.Contactsphone);
+            $("#txtIntroduction").val(obj.Introduction);
+            $("#txtRemark").val(obj.Remark);
+
+        }, true);
+    }
+
+    function Submit() {
+        var suppliername = $("#txtSuppliername").val();
+        var address = $("#txtAddress").val();
+        var contacts = $("#txtContacts").val();
+        var contactsphone = $("#txtContactsphone").val();
+        var introduction = $("#txtIntroduction").val();
+        var remark = $("#txtRemark").val();
+
+        if (suppliername === "") {
+            alert("请填写供应商名称！");
+            return false;
+        }
+        if (address === "") {
+            alert("请填写供应商地址！");
+            return false;
+        }
+        if (contacts === "") {
+            alert("请填写联系人！");
+            return false;
+        }
+        if (contactsphone === "") {
+            alert("请填写联系电话！");
+            return false;
+        }
+        if (introduction === "") {
+            alert("请填写简介！");
+            return false;
+        }
+
+        var json = {
+            Suppliername: suppliername,
+            Address: address,
+            Contacts: contacts,
+            Contactsphone: contactsphone,
+            Introduction: introduction,
+            Remark: remark
+        };
+
+        if (id === "") {
+            postJson("/api/Car/AddSupplier", json, function (result) {
+                if (result.errcode === 0) {
+                    alert("添加成功");
+                    goList();
+                } else {
+                    alert("添加失败:" + result.errmsg);
+                }
+            });
+        } else {
+            json.Innerid = id;
+            postJson("/api/Car/UpdateSupplier", json, function (result) {
+                if (result.errcode === 0) {
+                    alert("修改成功");
+                    goList();
+                } else {
+                    alert("修改失败:" + result.errmsg);
+                }
+            });
+        }
+        return false;
+    }
+
+    function goList() {
+        getBodyHtml('mainbody', "/car/car/carsupplierlist");
+    }
+
+</script>
+
+<div class="widget">
+
+    <div class="widget-header bordered-bottom bordered-palegreen">
+        <span class="widget-caption">供应商基本信息</span>
+    </div>
+    <div class="widget-body">
+
+        <form class="form-horizontal form-bordered" role="form">
+
+            <div class="row form-group">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">* </label>供应商名称</label>
+                        <div class="controls col-sm-6">
+                            <input type="text" id="txtSuppliername" placeholder="供应商名称" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">* </label>供应商地址</label>
+                        <div class="controls col-sm-6">
+                            <input type="text" id="txtAddress" placeholder="供应商地址" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">* </label>联系人</label>
+                        <div class="controls col-sm-6">
+                            <input type="text" id="txtContacts" placeholder="联系人" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="" class="col-sm-4 control-label no-padding-right"><label class="required">* </label>联系电话</label>
+                        <div class="controls col-sm-6">
+                            <input type="text" id="txtContactsphone" placeholder="联系电话" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right"><label class="required">* </label>简介</label>
+                        <div class="controls col-sm-10">
+                            <textarea id="txtIntroduction" maxlength="200" rows="5" cols="150" placeholder="简介"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label no-padding-right">备注</label>
+                        <div class="controls col-sm-10">
+                            <textarea id="txtRemark" maxlength="200" rows="5" cols="150" placeholder="备注"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group text-center">
+                <div class="col-lg-12">
+                    <input id="submit" type="button" class="btn btn-palegreen shiny" value="保存" onclick="Submit();" />
+                    <input type="button" class="btn btn-primary shiny" value="返回" onclick="goList();" />
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
